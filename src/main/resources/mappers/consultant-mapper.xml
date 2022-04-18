@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE configuration
-  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-config.dtd">
-<configuration>
-	<settings>
-	        <setting name="jdbcTypeForNull" value="NULL"/>
-	<!--         만약에 null 데이터가 전달되었으면 빈칸이 아닌 NULL로 인사하도록 설정 -->
-	</settings>
-	<typeAliases>
-		<typeAlias type="org.kh.campus.consultant.domain.Consultant" alias="Consultant"/>
-		
-	</typeAliases>
-	<mappers>
-		<mapper resource="mappers/consultant-mapper.xml"/>
-		
-	</mappers>
-</configuration>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ConsultantMapper">
+	<resultMap type="Consultant" id="consultantResultMap">
+		<id property="cons_no" column="" />
+		<result property="cons_student_no" column="" />
+		<result property="cons_student_name" column="" />
+		<result property="cons_sutdent_number" column="" />
+		<result property="cons_title" column="" />
+		<result property="cons_college" column="" />
+		<result property="cons_content" column="" />
+		<result property="cons_date" column="" />
+		<result property="cons_time" column="" />
+		<result property="cons_status" column="" />
+		<result property="cons_counselor" column="" />
+	</resultMap>
+</mapper>

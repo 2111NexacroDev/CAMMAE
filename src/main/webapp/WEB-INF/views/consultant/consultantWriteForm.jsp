@@ -9,7 +9,7 @@
 <body>
 	<h1>상담관리</h1>
 	<h3>상담신청 입력</h3>
-	<form>
+	<form action="/consultant/register.kh" method="post">
 		상담제목 <input type="text" name="cons_title"><br>
 		이름 <input type="text" name="student_name"><br>
 		학번 <input type="text" name="student_no"><br>
