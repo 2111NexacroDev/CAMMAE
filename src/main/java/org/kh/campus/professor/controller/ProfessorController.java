@@ -1,5 +1,6 @@
 package org.kh.campus.professor.controller;
 
+import org.kh.campus.professor.domain.Professor;
 import org.kh.campus.professor.service.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,12 @@ public class ProfessorController {
 	
 	// 교수 정보 조회
 	public NexacroResult printProfessor() {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
+		int professorNo = 0;
+		
+		Professor professor = pService.printProfessor(professorNo);
 		
 		return result;
 	}

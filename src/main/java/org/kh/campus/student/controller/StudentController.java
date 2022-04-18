@@ -24,7 +24,7 @@ public class StudentController {
 		
 		Student student = sService.printStudent(studentNo);
 		
-		result.addDataSet("out_emp", student);
+		result.addDataSet("out_stdInfo", student);
 		result.addVariable("ErrorCode", nErrorCode);
 		result.addVariable("ErrorMsg", strErrorMsg);
 		
@@ -50,7 +50,8 @@ public class StudentController {
 					studentAddress,
 					studentEmail
 					);
-			if( rowType == DataSet.ROW_TYPE_INSERTED) {
+			if( rowType == DataSet.ROW_TYPE_UPDATED) {
+				
 				sService.printStudent(studentNo);
 		}
 		}
