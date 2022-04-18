@@ -2,11 +2,13 @@ package org.kh.campus.consultant.domain;
 
 public class Consultant {
 	
-	private int cons_no; //글번호
-	private int student_no; //학번
-	private String cons_title; //상담제목
-	private String cons_college; //단과대학
-	private String cons_content;  //상담내용
+	private int cons_no; 
+	private int cons_student_no;
+	private String cons_student_name;
+	private String cons_student_number;
+	private String cons_title; 
+	private String cons_college; 
+	private String cons_content;  
 	private String cons_date;
 	private String cons_time;
 	private String cons_status;
@@ -22,12 +24,28 @@ public class Consultant {
 		this.cons_no = cons_no;
 	}
 
-	public int getStudent_no() {
-		return student_no;
+	public int getCons_student_no() {
+		return cons_student_no;
 	}
 
-	public void setStudent_no(int student_no) {
-		this.student_no = student_no;
+	public void setCons_student_no(int cons_student_no) {
+		this.cons_student_no = cons_student_no;
+	}
+
+	public String getCons_student_name() {
+		return cons_student_name;
+	}
+
+	public void setCons_student_name(String cons_student_name) {
+		this.cons_student_name = cons_student_name;
+	}
+
+	public String getCons_student_number() {
+		return cons_student_number;
+	}
+
+	public void setCons_student_number(String cons_student_number) {
+		this.cons_student_number = cons_student_number;
 	}
 
 	public String getCons_title() {
@@ -36,6 +54,14 @@ public class Consultant {
 
 	public void setCons_title(String cons_title) {
 		this.cons_title = cons_title;
+	}
+
+	public String getCons_college() {
+		return cons_college;
+	}
+
+	public void setCons_college(String cons_college) {
+		this.cons_college = cons_college;
 	}
 
 	public String getCons_content() {
@@ -77,26 +103,17 @@ public class Consultant {
 	public void setCons_counselor(String cons_counselor) {
 		this.cons_counselor = cons_counselor;
 	}
-	
-	
-
-	public String getCons_college() {
-		return cons_college;
-	}
-
-	public void setCons_college(String cons_college) {
-		this.cons_college = cons_college;
-	}
 
 	@Override
 	public String toString() {
-		return "Consultant [cons_no=" + cons_no + ", student_no=" + student_no + ", cons_title=" + cons_title
+		return "Consultant [cons_no=" + cons_no + ", cons_student_no=" + cons_student_no + ", cons_student_name="
+				+ cons_student_name + ", cons_student_number=" + cons_student_number + ", cons_title=" + cons_title
 				+ ", cons_college=" + cons_college + ", cons_content=" + cons_content + ", cons_date=" + cons_date
 				+ ", cons_time=" + cons_time + ", cons_status=" + cons_status + ", cons_counselor=" + cons_counselor
 				+ "]";
 	}
 
-	
+
 	
 
 }
