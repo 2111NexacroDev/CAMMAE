@@ -22,44 +22,36 @@ public class ScholarshipController {
 	@Autowired
 	private ScholarshipService sService;
 	
-	@RequestMapping(value="", method=RequestMethod.GET) //¼ºÀûÀåÇÐ±Ý ½ÅÃ»
-	public NexacroResult insertScholarshipInfo(
-			@ParamDataSet(name="in_scholarship") DataSet inScholar
-			, @ParamVariable(name="in_var") String inVar) throws Exception{
-		int nErrorCode = 0;
-		String  strErrorMsg = "START";
-		NexacroResult result = new NexacroResult();
-		int iResult = 0;
-		Scholarship scholarship = new Scholarship();
-		iResult += sService.insertScholar(scholarship);
-		return result;
-	}
-	
-	@RequestMapping(value="", method=RequestMethod.GET) //½ÅÃ»ÇÑ ¼ºÀûÀåÇÐ±Ý °á°ú Á¶È¸
-	public NexacroResult printScholarResult() {
-		List<Scholarship> sList = sService.printScholarResult();
-		return null;
-	}
-	
-	@RequestMapping(value="", method=RequestMethod.GET) // °ü¸®ÀÚ ½ÅÃ»ÀåÇÐ±Ý ¸ñ·Ï Á¶È¸
-	public NexacroResult printAllScholar() {
-		List<Scholarship> sList = sService.printAllScholar();
-		return null;
-	}
-	
-	@RequestMapping(value="", method=RequestMethod.GET) //°ü¸®ÀÚ ¼ºÀûÀåÇÐ±Ý µî·Ï
-	public NexacroResult registerScholar(
-			@ParamDataSet(name="in_admin_scholar") DataSet inAdminScholar
-			, @ParamVariable(name="in_var2") String inVar2) throws Exception {
-		int 	nErrorCode = 0;
-		String  strErrorMsg = "START";
-		NexacroResult result = new NexacroResult();
-		int aResult = 0;
-		Scholarship scholarship = new Scholarship();
-		aResult += sService.registerScholar(scholarship);
-		return result;
-		
-	}
-	
-
+	/*
+	 * @RequestMapping(value="", method=RequestMethod.GET) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½ ï¿½ï¿½Ã» public
+	 * NexacroResult insertScholarshipInfo(
+	 * 
+	 * @ParamDataSet(name="in_scholarship") DataSet inScholar
+	 * , @ParamVariable(name="in_var") String inVar) throws Exception{ int
+	 * nErrorCode = 0; String strErrorMsg = "START"; NexacroResult result = new
+	 * NexacroResult(); int iResult = 0; Scholarship scholarship = new
+	 * Scholarship(); iResult += sService.insertScholar(scholarship); return result;
+	 * }
+	 * 
+	 * @RequestMapping(value="", method=RequestMethod.GET) //ï¿½ï¿½Ã»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
+	 * public NexacroResult printScholarResult() { List<Scholarship> sList =
+	 * sService.printScholarResult(); return null; }
+	 * 
+	 * @RequestMapping(value="", method=RequestMethod.GET) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ð±ï¿½ ï¿½ï¿½ï¿½
+	 * ï¿½ï¿½È¸ public NexacroResult printAllScholar() { List<Scholarship> sList =
+	 * sService.printAllScholar(); return null; }
+	 * 
+	 * @RequestMapping(value="", method=RequestMethod.GET) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½ ï¿½ï¿½ï¿½
+	 * public NexacroResult registerScholar(
+	 * 
+	 * @ParamDataSet(name="in_admin_scholar") DataSet inAdminScholar
+	 * , @ParamVariable(name="in_var2") String inVar2) throws Exception { int
+	 * nErrorCode = 0; String strErrorMsg = "START"; NexacroResult result = new
+	 * NexacroResult(); int aResult = 0; Scholarship scholarship = new
+	 * Scholarship(); aResult += sService.registerScholar(scholarship); return
+	 * result;
+	 * 
+	 * }
+	 * 
+	 */
 }

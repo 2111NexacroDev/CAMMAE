@@ -20,7 +20,7 @@ public class ConsultantController {
 	@Autowired
 	private ConsultantService cService;
 	
-	@RequestMapping(value="", method=RequestMethod.GET)
+	/* @RequestMapping(value="", method=RequestMethod.GET) */
 	public String consultantListView(Model model, @RequestParam(value = "page", required = false) Integer page) {
 		int currentPage = (page != null) ? page : 1;
 		int totalCount = cService.getListCount();
@@ -30,27 +30,39 @@ public class ConsultantController {
 		
 	}
 	
-	@RequestMapping(value="", method=RequestMethod.GET)
-	public String consultantWriteView(Model model, @ModelAttribute Consultant consultant) {
-		int result = cService.insertCons(consultant);
-		return null;
+	@RequestMapping(value="/consultant/writeView.kh", method=RequestMethod.GET)
+	public String consultantWriteView() {
+		return "consultant/consultantWriteForm";
 		
 	}
 	
-	@RequestMapping(value="", method=RequestMethod.GET)
+	@RequestMapping(value="/consultant/register.kh", method=RequestMethod.POST)
+	public String consultantRegister(Model model, @ModelAttribute Consultant consultant) {
+		int result = cService.insertCons(consultant);
+		if(result >0) {
+			return "redirect:/consultant/list.kh";
+		}else {
+			model.addAttribute("msg", "상담신청 등록 실패");
+			return "common/errorPage";
+		}
+		
+		
+	}
+	
+	/* @RequestMapping(value="", method=RequestMethod.GET) */
 	public String consultantAdminReplyWriteView(Model model, @ModelAttribute ConsultantReply consultantreply) {
 		int result = cService.insertAdminConsReply(consultantreply);
 		return null;
 		
 	}
 	
-	@RequestMapping(value="", method=RequestMethod.GET)
+	/* @RequestMapping(value="", method=RequestMethod.GET) */
 	public String consultantDetailView(Model model, @RequestParam("consultant_title")String consultant_title) {
 		Consultant consultant = cService.printDetailCons(consultant_title);
 		return null;
 	}
 	
-	@RequestMapping(value="", method=RequestMethod.GET)
+	/* @RequestMapping(value="", method=RequestMethod.GET) */
 	public String consultantReplyView(Model model, @RequestParam(value = "page", required = false) Integer page) {
 		int currentPage = (page != null) ? page : 1;
 		int totalCount = cService.getListCount();
@@ -59,7 +71,7 @@ public class ConsultantController {
 		return null;
 	}
 	
-	@RequestMapping(value="", method=RequestMethod.GET)
+	/* @RequestMapping(value="", method=RequestMethod.GET) */
 	public String consultantAdminListView(Model model, @RequestParam(value = "page", required = false) Integer page) {
 		int currentPage = (page != null) ? page : 1;
 		int totalCount = cService.getListCount();
@@ -68,7 +80,7 @@ public class ConsultantController {
 		return null;
 	}
 	
-	@RequestMapping(value="", method=RequestMethod.GET)
+	/* @RequestMapping(value="", method=RequestMethod.GET) */
 	public String consultantAdminDetailView(Model model,  @RequestParam("consultant_title")String consultant_title) {
 		
 		Consultant consultant = cService.printAdminDetailCons(consultant_title);
@@ -76,7 +88,7 @@ public class ConsultantController {
 		
 	}
 	
-	@RequestMapping(value="", method=RequestMethod.GET)
+	/* @RequestMapping(value="", method=RequestMethod.GET) */
 	public String consultantAdminWriteReply(Model model, @ModelAttribute ConsultantReply consultantreply) {
 		int result = cService.insertAdminConsReply(consultantreply);
 		return null;
