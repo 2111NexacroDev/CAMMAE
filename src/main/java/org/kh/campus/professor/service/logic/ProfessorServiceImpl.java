@@ -18,9 +18,9 @@ public class ProfessorServiceImpl implements ProfessorService {
 	private SqlSession sqlSession;
 	
 	@Override
-	public List<Professor> printProfessor(Professor professor) {
-		List<Professor> pList = pStore.selectProfessor(sqlSession, professor);
-		return pList;
+	public Professor printProfessor(int professorNo) {
+		Professor professor = pStore.selectProfessor(sqlSession, professorNo);
+		return professor;
 	}
 	@Override
 	public int modifyProfessor(Professor professor) {
