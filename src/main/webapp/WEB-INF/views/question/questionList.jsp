@@ -66,7 +66,10 @@ h3{
 				
 				<tr>
 					<td>${question.questionNo }</td>
-					<td>${question.questionTitle }</td>
+					<c:url var="qDetail" value="/question/detail">
+						<c:param name="questionNo" value="${question.questionNo}"></c:param>
+					</c:url>
+					<td><a href="${qDetail}">${question.questionTitle }</a></td>					
 					<td>${question.questionWriter }</td>
 					<td>${question.questionDate }</td>
 					<td>${question.questionCount }</td>

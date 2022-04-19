@@ -25,6 +25,12 @@ public class QuestionServiceImpl implements QuestionService {
 	}
 	
 	@Override
+	public Question printOneQuestion(int questionNo) {
+		Question question = qStore.selectOneQuestion(sqlSession, questionNo);
+		return question;
+	}
+	
+	@Override
 	public int registerQuestion(Question question) {
 		int result = qStore.insertQuestion(question, sqlSession);
 		return result;

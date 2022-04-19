@@ -22,6 +22,10 @@
 	<select id="selectAllQuestion" resultMap="questionResultMap">
 		SELECT * FROM QUESTION_TBL ORDER BY QUESTION_DATE DESC
 	</select>
+	
+	<select id="selectOneQuestion" resultMap="questionResultMap">
+		SELECT * FROM QUESTION_TBL WHERE QUESTION_NO = #{questionNo}
+	</select>
 
 	<insert id="insertQuestion">
 		INSERT INTO QUESTION_TBL VALUES(SEQ_QUESTION_NO.NEXTVAL, #{professorName}, #{lectureName}, #{questionTitle}, #{questionContent}, #{questionWriter}, DEFAULT, DEFAULT, DEFAULT, #{questionFileName}, #{questionFileReNeme}, #{questionFilePath})
