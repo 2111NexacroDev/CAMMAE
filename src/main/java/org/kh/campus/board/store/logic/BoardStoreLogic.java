@@ -20,14 +20,14 @@ public class BoardStoreLogic implements BoardStore {
 
 	@Override
 	public Board selectOneBoard(SqlSession sqlSession, int boardNo) {
-		Board board = sqlSession.selectOne("NoticeMapper.selectOneMapper", boardNo);
+		Board board = sqlSession.selectOne("BoardMapper.selectOneMapper", boardNo);
 		return board;
 	}
 
 	@Override
 	public List<Board> selectSearchBoard(SqlSession sqlSession, Search search) {
 		List<Board> searchList
-			= sqlSession.selectList("BoderMapper.selectSearchBoder", search);
+			= sqlSession.selectList("BoardMapper.selectSearchBoder", search);
 		return searchList;
 	}
 
@@ -64,14 +64,14 @@ public class BoardStoreLogic implements BoardStore {
 
 	@Override
 	public int updateBoardReply(BoardReply boardReply, SqlSession sqlSession) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = sqlSession.insert("BoardMapper.updateBoardReply", boardReply);
+		return result;
 	}
 
 	@Override
 	public int deleteBoardReply(BoardReply boardReply, SqlSession sqlSession) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = sqlSession.delete("BoardMapper.deleteBoardReply", boardReply);
+		return result;
 	}
 
 }
