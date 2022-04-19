@@ -48,8 +48,9 @@ h3{
 	
 			<h3 id="b-title">질의응답 게시판</h3>
 			<br>
+			<div> <button class="btn">수정</button> <button class="btn">삭제</button> <button class="btn">목록</button> </div>
+			<br>
 			<div class="c-main">
-			<div> <button>수정</button> <button>삭제</button> <button>목록</button> </div>
 				<div class="title">
 					${question.questionTitle }
 				</div>

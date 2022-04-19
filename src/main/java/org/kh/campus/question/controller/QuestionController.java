@@ -37,28 +37,25 @@ public class QuestionController {
 		return mv;
 	}
 
-	// 게시판 상세페이지
-	@RequestMapping(value = "question/detailView")
+	// 게시판 상세페이지 조회
+	@RequestMapping(value = "/question/detail", method = RequestMethod.GET)
 	public ModelAndView questionDetailView(ModelAndView mv, @RequestParam("questionNo") int questionNo) {
 		try {
-
 			Question question = qService.printOneQuestion(questionNo);
-
 			if (question != null) {
 				mv.addObject("question", question);
-				mv.setViewName("question/questionDetail");
+				mv.setViewName("/question/questionDetail");
 			} else {
 				System.out.println("상세조회실패");
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-
 		return mv;
 	}
 
 	// 게시글 등록페이지
-	@RequestMapping(value = "question/registerView")
+	@RequestMapping(value = "/question/registerView")
 	public String questionWriteView(Model model) {
 
 		return "/question/questionWriteForm";
