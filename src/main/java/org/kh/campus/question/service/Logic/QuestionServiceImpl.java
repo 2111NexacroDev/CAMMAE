@@ -1,5 +1,7 @@
 package org.kh.campus.question.service.Logic;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.service.QuestionService;
@@ -17,11 +19,17 @@ public class QuestionServiceImpl implements QuestionService {
 	private QuestionStore qStore;
 
 	@Override
+	public List<Question> printAllQuestion() {
+		List<Question> qList = qStore.selectAllQuestion(sqlSession);
+		return qList;
+	}
+	
+	@Override
 	public int registerQuestion(Question question) {
 		int result = qStore.insertQuestion(question, sqlSession);
 		return result;
 	}
-	
+
 	
 	
 	
