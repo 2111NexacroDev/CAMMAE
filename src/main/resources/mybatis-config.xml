@@ -3,16 +3,21 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	<settings>
-	        <setting name="jdbcTypeForNull" value="NULL"/>
-	<!--         만약에 null 데이터가 전달되었으면 빈칸이 아닌 NULL로 인사하도록 설정 -->
-	</settings>
-	<typeAliases>
-		<typeAlias type="org.kh.campus.consultant.domain.Consultant" alias="Consultant"/>
-		
-	</typeAliases>
-	<mappers>
-		<mapper resource="mappers/consultant-mapper.xml"/>
-		<mapper resource="mappers/board-mapper.xml"/>
-	</mappers>
+   <settings>
+           <setting name="jdbcTypeForNull" value="NULL"/>
+   <!--         만약에 null 데이터가 전달되었으면 빈칸이 아닌 NULL로 인사하도록 설정 -->
+   </settings>
+   <typeAliases>
+      <typeAlias type="org.kh.campus.consultant.domain.Consultant" alias="Consultant"/>
+      <typeAlias type="org.kh.campus.notice.domain.Notice" alias="Notice"/>
+      <typeAlias type="org.kh.campus.student.domain.Student" alias="Student"/>
+      <typeAlias type="org.kh.campus.question.domain.Question" alias="Question"/>
+   
+   </typeAliases>
+   <mappers>
+      <mapper resource="mappers/consultant-mapper.xml"/>
+      <mapper resource="mappers/notice-mapper.xml"/>
+      <mapper resource="mappers/student-mapper.xml"/>
+      <mapper resource="mappers/question-mapper.xml"/>
+   </mappers>
 </configuration>

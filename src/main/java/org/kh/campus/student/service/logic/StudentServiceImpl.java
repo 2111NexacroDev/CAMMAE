@@ -1,6 +1,5 @@
 package org.kh.campus.student.service.logic;
 
-import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.student.domain.Student;

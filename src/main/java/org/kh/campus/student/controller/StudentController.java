@@ -5,6 +5,8 @@ import org.kh.campus.student.domain.Student;
 import org.kh.campus.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.nexacro.uiadapter17.spring.core.annotation.ParamDataSet;
 import com.nexacro.uiadapter17.spring.core.data.NexacroResult;
@@ -13,9 +15,10 @@ import com.nexacro17.xapi.data.DataSet;
 @Controller
 public class StudentController {
 	@Autowired
-	private static StudentService sService;
+	private StudentService sService;
 	
 	// 학생 정보 조회
+	@RequestMapping(value="/student/stdInfo.kh", method=RequestMethod.GET)
 	public NexacroResult printStudent() {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
@@ -32,6 +35,7 @@ public class StudentController {
 	}
 	
 	// 학생 정보 수정
+	@RequestMapping(value="/student/stdUpdate.kh", method=RequestMethod.POST)
 	public NexacroResult modifyStudent(
 			 @ParamDataSet(name="in_std") 	DataSet inStd
 			) throws Exception {
@@ -40,21 +44,20 @@ public class StudentController {
 		NexacroResult result = new NexacroResult();
 		int studentNo = 0;
 		
-		for(int i = 0; i < inStd.getRowCount(); i++) {
-			int rowType = inStd.getRowType(i);
-			String studentPhonenumber = dsGet(inStd, i, "studentPhonenumber");
-			String studentAddress = dsGet(inStd, i, "studentAddress");
-			String studentEmail = dsGet(inStd, i, "studentEmail");
-			Student studnt = new Student(
+			String studentPhonenumber = dsGet(inStd, 0, "studentPhonenumber");
+			String studentAddress = dsGet(inStd, 0, "studentAddress");
+			String studentEmail = dsGet(inStd, 0, "studentEmail");
+			Student student = new Student(
 					studentPhonenumber,
 					studentAddress,
 					studentEmail
 					);
-			if( rowType == DataSet.ROW_TYPE_UPDATED) {
+			student.setStudentNo(studentNo);
+			
+			sService.modifyStudent(student);
 				
-				sService.printStudent(studentNo);
-		}
-		}
+				
+	
 		return result;
 	}
 	

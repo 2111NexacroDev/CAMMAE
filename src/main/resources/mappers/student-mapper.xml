@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StudentMapper">
+	<resultMap type="Student" id="studentResultMap">
+		<id property="studentNo" column="STUDENT_NO"/>
+		<result property="universityCollege" column="UNIVERSITY_COLLEGE"/>
+		<result property="departmentName" column="DEPARTMENT_NAME"/>
+		<result property="studentName" column="STUDENT_NAME"/>
+		<result property="studentGrade" column="STUDENT_GRADE"/>
+		<result property="studentBirth" column="STUDENT_BIRTH"/>
+		<result property="studentAddress" column="STUDENT_ADDRESS"/>
+		<result property="studentPhonenumber" column="STUDENT_PHONENUMBER"/>
+		<result property="studentEmail" column="STUDENT_EMAIL"/>
+		<result property="studentPassword" column="STUDENT_PASSWORD"/>
+		<result property="professorNo" column="PROFESSOR_NO"/>
+		<result property="studentState" column="STUDENT_STATE"/>
+		<result property="professorName" column="PROFESSOR_NAME"/>
+	</resultMap>
+	
+	<select id="selectStudentInfoOne" resultMap="studentResultMap">
+		SELECT * FROM STUDENT_TBL WHERE STUDENT_NO = #{studentNo}
+	</select>
+	
+	<update id="updateStudentInfo">
+		UPDATE STUDENT_TBL SET
+		STUDENT_EMAIL = #{studentEmail},
+		STUDENT_ADDRESS = #{studentAddress},
+		STUDENT_PHONENUMBER = #{studentPhonenumber}
+		WHERE STUDENT_NO = #{studentNo}
+	</update>
+</mapper>
