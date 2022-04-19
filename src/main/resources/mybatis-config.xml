@@ -13,6 +13,6 @@
 	</typeAliases>
 	<mappers>
 		<mapper resource="mappers/consultant-mapper.xml"/>
-		
+		<mapper resource="mappers/board-mapper.xml"/>
 	</mappers>
 </configuration>
