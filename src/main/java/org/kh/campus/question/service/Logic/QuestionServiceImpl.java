@@ -1,5 +1,28 @@
 package org.kh.campus.question.service.Logic;
 
-public class QuestionServiceImpl {
+import org.apache.ibatis.session.SqlSession;
+import org.kh.campus.question.domain.Question;
+import org.kh.campus.question.service.QuestionService;
+import org.kh.campus.question.store.QuestionStore;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
+public class QuestionServiceImpl implements QuestionService {
+
+	@Autowired
+	private SqlSession sqlSession;
+	
+	@Autowired
+	private QuestionStore qStore;
+
+	@Override
+	public int registerQuestion(Question question) {
+		int result = qStore.insertQuestion(question, sqlSession);
+		return result;
+	}
+	
+	
+	
+	
 }
