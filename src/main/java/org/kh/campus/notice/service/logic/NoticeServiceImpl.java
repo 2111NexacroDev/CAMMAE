@@ -30,4 +30,10 @@ public class NoticeServiceImpl implements NoticeService{
 		return nList;
 	}
 
+	@Override
+	public Notice printOneNotice(int noticeNo) {
+		Notice notice = nStore.selectOneNotice(sqlSession,noticeNo);
+		return notice;
+	}
+
 }

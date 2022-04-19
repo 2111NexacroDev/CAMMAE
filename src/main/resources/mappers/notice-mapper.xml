@@ -15,8 +15,13 @@
 		<result property="noticeFileRename" column="NOTICE_FILE_RENAME"/>
 		<result property="noticeFilePath" column="NOTICE_FILE_PATH"/>
 	</resultMap>
+	
 	<select id="selectAllNotice" resultMap="noticeResultMap">
 		SELECT * FROM NOTICE_TBL ORDER BY NOTICE_DATE DESC
+	</select>
+	
+	<select id="selectOneNotice" resultMap="noticeResultMap">
+		SELECT * FROM NOTICE_TBL WHERE NOTICE_NO = #{noticeNo}
 	</select>
 	
 	<insert id="insertNotice" parameterType="Notice">
