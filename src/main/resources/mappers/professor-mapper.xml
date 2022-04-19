@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProfessorMapper">
+
+	<resultMap type="Professor" id="professorResultMap">
+		<id property="professorNo" column="PROFESSOR_NO"/>
+		<result property="departmentName" column="DEPARTMENT_NAME"/>
+		<result property="professorName" column="PROFESSOR_NAME"/>
+		<result property="professorBirth" column="PROFESSOR_BIRTH"/>
+		<result property="professorAddress" column="PROFESSOR_ADDRESS"/>
+		<result property="professorPhonenumber" column="PROFESSOR_PHONENUMBER"/>
+		<result property="professorEmail" column="PROFESSOR_EMAIL"/>
+		<result property="professorPassword" column="PROFESSOR_PASSWORD"/>
+	</resultMap>
+	
+	<select id="selectProfessorInfoOne" resultMap="professorResultMap">
+		SELECT * FROM Professor_TBL WHERE PROFESSOR_NO = #{professorNo}
+	</select>
+	
+</mapper>

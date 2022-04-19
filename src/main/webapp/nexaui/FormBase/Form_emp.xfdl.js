@@ -90,15 +90,46 @@
 
         this.frm_emp_onload = function(obj,e)
         {
-        	this.transaction(
-        		"std_info"// 1.ID
-        		,"CmURL::student/stdInfo.kh"// 2.URL
+        // 학생정보
+        // 	this.transaction(
+        // 		"std_info"// 1.ID
+        // 		,"CmURL::student/stdInfo.kh"// 2.URL
+        // 		,"" // 3.InDs : F->S jsp(I,U,D)
+        // 		,"ds_stdInfo=out_stdInfo" // 4.OutDs : S->F jsp(SELECT)
+        // 		,"" // 5.InVar : F->S(var)
+        // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        // 	);
+        // 교수 정보
+        // 	this.transaction(
+        // 		"prf_info"// 1.ID
+        // 		,"CmURL::professor/prfInfo.kh"// 2.URL
+        // 		,"" // 3.InDs : F->S jsp(I,U,D)
+        // 		,"ds_stdInfo=out_prfInfo" // 4.OutDs : S->F jsp(SELECT)
+        // 		,"" // 5.InVar : F->S(var)
+        // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        // 	);
+        // 관리자 학생 정보
+        // this.transaction(
+        // 		"mag_info"// 1.ID
+        // 		,"CmURL::manager/stdInfo.kh"// 2.URL
+        // 		,"" // 3.InDs : F->S jsp(I,U,D)
+        // 		,"ds_stdInfo=out_stdAllInfo" // 4.OutDs : S->F jsp(SELECT)
+        // 		,"" // 5.InVar : F->S(var)
+        // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        // 	);
+
+        // 관리자 교수 정보
+        this.transaction(
+        		"mag_info"// 1.ID
+        		,"CmURL::manager/prfInfo.kh"// 2.URL
         		,"" // 3.InDs : F->S jsp(I,U,D)
-        		,"ds_stdInfo=out_stdInfo" // 4.OutDs : S->F jsp(SELECT)
+        		,"ds_stdInfo=out_prfAllInfo" // 4.OutDs : S->F jsp(SELECT)
         		,"" // 5.InVar : F->S(var)
         		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
         	);
         };
+
+
 
         this.btn_delete_onclick = function(obj,e)
         {

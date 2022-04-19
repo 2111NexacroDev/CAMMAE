@@ -11,7 +11,7 @@ public class ProfessorStoreLogic implements ProfessorStore {
 
 	@Override
 	public Professor selectProfessor(SqlSession sqlSession, int professorNo) {
-		Professor professor = sqlSession.selectOne("");
+		Professor professor = sqlSession.selectOne("ProfessorMapper.selectProfessorInfoOne", professorNo);
 		return professor;
 	}
 

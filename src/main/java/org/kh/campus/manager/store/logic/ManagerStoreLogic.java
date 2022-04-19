@@ -12,9 +12,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ManagerStoreLogic implements ManagerStore {
 
+	// 학생
 	@Override
 	public List<Student> selectAllStudent(SqlSession sqlSession) {
-		List<Student> sList = sqlSession.selectList("");
+		List<Student> sList = sqlSession.selectList("ManagerMapper.selectStudentList");
 		return sList;
 	}
 
@@ -36,9 +37,10 @@ public class ManagerStoreLogic implements ManagerStore {
 		return result;
 	}
 
+	// 교수
 	@Override
 	public List<Professor> selectAllProfessor(SqlSession sqlSession) {
-		List<Professor> pList = sqlSession.selectList("");
+		List<Professor> pList = sqlSession.selectList("ManagerMapper.selectProfessorList");
 		return pList;
 	}
 
@@ -60,9 +62,10 @@ public class ManagerStoreLogic implements ManagerStore {
 		return result;
 	}
 
+	// 관리자
 	@Override
 	public List<Manager> selectAllManager(SqlSession sqlSession) {
-		List<Manager> mList = sqlSession.selectList("");
+		List<Manager> mList = sqlSession.selectList("ManagerMapper.selectManagerList");
 		return mList;
 	}
 
