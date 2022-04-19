@@ -75,6 +75,40 @@ public class QuestionController {
 
 		return mv;
 	}
+	
+	//게시판 수정페이지
+	@RequestMapping(value="/question/modifyView", method = RequestMethod.GET)
+	public ModelAndView questionModifyView (ModelAndView mv, @RequestParam("questionNo") int questionNo) {
+		
+		try {
+		Question question = qService.printOneQuestion(questionNo);
+		if(question != null) {
+			mv.addObject("question", question);
+			mv.setViewName("question/questionUpdateView");
+		}else {
+			System.out.println("데이터 없음");
+		}
+		}catch(Exception e){
+			System.out.println(e.toString());
+		}
+		return mv;
+	}
+	
+	
+	//게시글 수정
+	@RequestMapping(value="/question/update", method=RequestMethod.POST)
+	public ModelAndView questionUpdate(ModelAndView mv, @ModelAttribute Question question) {
+		
+		
+		int result = qService.modifyQuestion(question);
+		if(result>0) {
+			mv.setViewName("redirect:/question/detail?questionNo=" + question.getQuestionNo());
+		}else {
+			System.out.println("수정실패");
+		}
+		return mv;
+	}
+	
 
 	// 게시글 삭제
 	@RequestMapping(value = "/question/delete", method = RequestMethod.GET)

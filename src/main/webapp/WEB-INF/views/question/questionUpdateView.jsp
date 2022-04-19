@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,8 +49,9 @@ h3{
 <body>
 	<div class="left">1</div>
 	<div class="center">
-		<form action="/question/register" method="POST"
+		<form action="/question/update" method="POST"
 			enctype="multipart/form-data">
+			<input type="hidden" name="questionNo" value="${question.questionNo }">
 			<h3 id="b-title">질의응답 게시판</h3>
 			<br>
 			<div class="c-main">
@@ -66,29 +67,29 @@ h3{
 					</select>
 				</div>
 				<div class="title">
-					<input type="text" size="50" name="questionTitle"
-						placeholder="제목을 입력하세요" style="border: none; padding: 10px;">
+				<input type="text" size="50" name="questionTitle"
+						style="border: none; padding: 10px;" value="${question.questionTitle }">
+						
 				</div>
-
 				<hr style="width: 585px; text-align: center;">
 				<div class="content" style="padding: 10px;">
-					<textarea rows="20" cols="75" id="questionContent"
-						name="questionContent" placeholder="내용을 입력하세요"></textarea>
+				<textarea rows="20" cols="75" id="questionContent"
+						name="questionContent">	${question.questionContent }</textarea>
 				</div>
 
 				<div style="padding: 10px;">
 					<input type="file" id="uploadfile" name="uploadFile">
+					${question.questionFileName}
 				</div>
 
 				<hr style="width: 585px; text-align: center;">
 				<div align="center" style="padding: 15px;">
-					<button class="btn" type="submit">등록</button>
+					<button class="btn" type="submit">수정</button>
 					<button class="btn" type="reset">취소</button>
 				</div>
 			</div>
 		</form>
 
 	</div>
-<!-- 	<div class="right">3</div> -->
 </body>
 </html>

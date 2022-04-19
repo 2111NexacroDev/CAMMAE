@@ -49,12 +49,15 @@ h3{
 			<h3 id="b-title">질의응답 게시판</h3>
 			<br>
 			<div> 
-				<button class="btn">수정</button> 
+				<c:url var="qModify" value="/question/modifyView">
+					<c:param name="questionNo" value="${question.questionNo }"></c:param>
+				</c:url>
+				<button class="btn" onclick="location.href='${qModify }'">수정</button> 
 				<c:url var="qDelete" value="/question/delete">
 				<c:param name="questionNo" value="${question.questionNo }"></c:param>
 				</c:url>
 				<button class="btn" onclick="location.href='${qDelete }'">삭제</button> 
-				<button class="btn">목록</button> 
+				<button class="btn" onclick="location.href='/question/list'">목록</button> 
 			</div>
 			<br>
 			<div class="c-main">
