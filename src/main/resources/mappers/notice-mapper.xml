@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="NoticeMapper">
-<!-- 	<resultMap type="Notice" id="noticeResultMap">
+ 	<resultMap type="Notice" id="noticeResultMap">
 		<id property="noticeNo" column="NOTICE_NO"/>
 		<result property="noticeTitle" column="NOTICE_TITLE"/>
 		<result property="noticeContent" column="NOTICE_CONTENT"/>
@@ -14,7 +14,11 @@
 		<result property="noticeFileName" column="NOTICE_FILE_NAME"/>
 		<result property="noticeFileRename" column="NOTICE_FILE_RENAME"/>
 		<result property="noticeFilePath" column="NOTICE_FILE_PATH"/>
-	</resultMap> -->
+	</resultMap>
+	<select id="selectAllNotice" resultMap="noticeResultMap">
+		SELECT * FROM NOTICE_TBL ORDER BY NOTICE_DATE DESC
+	</select>
+	
 	<insert id="insertNotice" parameterType="Notice">
 		INSERT INTO NOTICE_TBL VALUES(SEQ_NOTICE_NO.NEXTVAL
 		, #{noticeTitle}

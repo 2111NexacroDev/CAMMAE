@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,6 +24,28 @@ public class NoticeController {
 
 	@Autowired
 	private NoticeService nService;
+	
+	//공지사항 목록 조회
+	@RequestMapping(value="/notice/list.kh", method=RequestMethod.GET)
+	public ModelAndView noticeListView(ModelAndView mv) {
+		try {
+			List<Notice> nList = nService.printAllNotice();
+			if(!nList.isEmpty()) {
+				mv.addObject("nList", nList);
+				mv.setViewName("notice/noticeList");
+			}else {
+				mv.addObject("msg","공지사항 조회 실패");
+				mv.setViewName("common/errorPage");
+			}
+		}catch(Exception e){
+			mv.addObject("msg", e.toString());
+			mv.setViewName("common/errorPage");
+		}
+		return mv;
+	}
+	
+	
+	
 	
 	//관리자 공지사항 등록화면
 	@RequestMapping(value="/notice/writeView.kh", method=RequestMethod.GET)
@@ -84,6 +107,8 @@ public class NoticeController {
 		}
 		return fileMap;
 	}
+	
+
 	
 	
 	

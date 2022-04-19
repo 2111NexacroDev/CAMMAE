@@ -1,5 +1,7 @@
 package org.kh.campus.notice.service.logic;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.notice.domain.Notice;
 import org.kh.campus.notice.service.NoticeService;
@@ -20,6 +22,12 @@ public class NoticeServiceImpl implements NoticeService{
 	public int registerNotice(Notice notice) {
 		int result = nStore.insertNotice(notice, sqlSession);
 		return result;
+	}
+
+	@Override
+	public List<Notice> printAllNotice() {
+		List<Notice> nList = nStore.selectAllNotice(sqlSession);
+		return nList;
 	}
 
 }
