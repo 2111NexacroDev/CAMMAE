@@ -9,5 +9,6 @@ public interface NoticeStore {
 	
 	public int insertNotice(Notice notice, SqlSession sqlSession);
 	public List<Notice> selectAllNotice(SqlSession sqlSession);
+	public Notice selectOneNotice(SqlSession sqlSession, int noticeNo);
 
 }

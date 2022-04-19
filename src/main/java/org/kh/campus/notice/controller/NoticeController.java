@@ -44,6 +44,24 @@ public class NoticeController {
 		return mv;
 	}
 	
+	//공지사항 상세조회
+	@RequestMapping(value="/notice/detail.kh", method=RequestMethod.GET)
+	public ModelAndView noticeOneView(ModelAndView mv, @RequestParam("noticeNo")int noticeNo) {
+		try {
+			Notice notice = nService.printOneNotice(noticeNo);
+			if(notice != null) {
+				mv.addObject("notice",notice);
+				mv.setViewName("notice/noticeDetail");
+			}else {
+				mv.addObject("msg", "공지사항 상세조회 실패");
+				mv.setViewName("common/errorPage");
+			}
+		}catch(Exception e) {
+			mv.addObject("msg", e.toString());
+			mv.setViewName("common/errorPage");
+		}
+		return mv;
+	}
 	
 	
 	

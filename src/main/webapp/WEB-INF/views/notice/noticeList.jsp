@@ -10,7 +10,7 @@
 <body>
 	<h1>공지사항 목록 조회</h1>
 	<br><br>
-	<div><button onclick="locatioin.href='/notice/writeView.kh'">글쓰기</button></div>
+	<div><button onclick="location.href='/notice/writeView.kh'">글쓰기</button></div>
 	<table align="center" width="600" border="1">
 		<tr>
 			<th>번호</th>
