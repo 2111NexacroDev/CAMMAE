@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class QuestionController {
 	
 
-	
+	//게시글 등록페이지
 	@RequestMapping(value="question/registerView")
 	public String questionWriteView(Model model) {
 		
