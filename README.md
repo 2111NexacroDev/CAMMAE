@@ -1,4 +1,4 @@
-# C
+# CAMPUS MANAGER
 
 ## 팀 소개
 ##### 새내기
