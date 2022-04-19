@@ -10,11 +10,13 @@
 	<typeAliases>
 		<typeAlias type="org.kh.campus.consultant.domain.Consultant" alias="Consultant"/>
 		<typeAlias type="org.kh.campus.notice.domain.Notice" alias="Notice"/>
+		<typeAlias type="org.kh.campus.student.domain.Student" alias="Student"/>
 	
 	</typeAliases>
 	<mappers>
 		<mapper resource="mappers/consultant-mapper.xml"/>
 		<mapper resource="mappers/notice-mapper.xml"/>
+		<mapper resource="mappers/student-mapper.xml"/>
 		
 	</mappers>
 </configuration>
