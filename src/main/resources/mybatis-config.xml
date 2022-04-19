@@ -9,10 +9,12 @@
 	</settings>
 	<typeAliases>
 		<typeAlias type="org.kh.campus.consultant.domain.Consultant" alias="Consultant"/>
-		
+		<typeAlias type="org.kh.campus.notice.domain.Notice" alias="Notice"/>
+	
 	</typeAliases>
 	<mappers>
 		<mapper resource="mappers/consultant-mapper.xml"/>
+		<mapper resource="mappers/notice-mapper.xml"/>
 		
 	</mappers>
 </configuration>
