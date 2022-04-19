@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="QuestionMapper">
+	<resultMap type="Question" id="questionResultMap">
+		<id property="questionNo" column="QUESTION_NO"/>
+		<result property="professorName" column="PROFESSOR_NAME"/>
+		<result property="lectureName" column="LECTURE_NAME"/>
+		<result property="questionTitle" column="QUESTION_TITLE"/>
+		<result property="questionContent" column="QUESTION_CONTENT"/>
+		<result property="questionWriter" column="QUESTION_WRITER"/>
+		<result property="questionDate" column="QUESTION_DATE"/>
+		<result property="questionUpdateDate" column="QUESTION_UPDATEDATE"/>
+		<result property="questionCount" column="QUESTION_COUNT"/>
+		<result property="questionFileName" column="QUESTION_FILENAME"/>
+		<result property="questionFileReNeme" column="QUESTION_FILERENAME"/>
+		<result property="questionFilePath" column="QUESTION_FILEPATH"/>
+		
+	</resultMap>
+
+	<select id="selectAllQuestion" resultMap="questionResultMap">
+		SELECT * FROM QUESTION_TBL ORDER BY QUESTION_DATE DESC
+	</select>
+
+	<insert id="insertQuestion">
+		INSERT INTO QUESTION_TBL VALUES(SEQ_QUESTION_NO.NEXTVAL, #{professorName}, #{lectureName}, #{questionTitle}, #{questionContent}, #{questionWriter}, DEFAULT, DEFAULT, DEFAULT, #{questionFileName}, #{questionFileReNeme}, #{questionFilePath})
+	</insert>
+
+</mapper>

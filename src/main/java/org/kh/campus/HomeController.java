@@ -24,10 +24,12 @@ public class HomeController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/home.kh", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		NexacroResult result = new NexacroResult();
-		return "redirect:/nexaui/index.html";
+
+	@RequestMapping(value = "/main.kh", method = RequestMethod.GET)
+	public String home() {
+		
+	
+		return "main";
 	}
 	
 }
