@@ -12,6 +12,8 @@ public interface QuestionService {
 	public Question printOneQuestion(int questionNo);
 	//게시글 등록
 	public int registerQuestion(Question question);
+	//게시글 수정
+	public int modifyQuestion(Question question);
 	//게시글 삭제
 	public int removeQuestion(int questionNo);
 
