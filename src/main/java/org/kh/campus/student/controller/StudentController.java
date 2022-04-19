@@ -48,15 +48,16 @@ public class StudentController {
 			String studentAddress = dsGet(inStd, 0, "studentAddress");
 			String studentEmail = dsGet(inStd, 0, "studentEmail");
 			Student student = new Student(
-					studentPhonenumber,
 					studentAddress,
+					studentPhonenumber,
 					studentEmail
 					);
 			student.setStudentNo(studentNo);
 			
 			sService.modifyStudent(student);
-				
-				
+
+			result.addVariable("ErrorCode", nErrorCode);
+			result.addVariable("ErrorMsg", strErrorMsg);
 	
 		return result;
 	}
