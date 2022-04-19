@@ -8,6 +8,7 @@ import org.kh.campus.question.domain.Question;
 public interface QuestionStore {
 
 	public List<Question> selectAllQuestion(SqlSession sqlSession);
+	public Question selectOneQuestion(SqlSession sqlSession, int questionNo);
 	public int insertQuestion(Question question, SqlSession sqlSession);
 
 

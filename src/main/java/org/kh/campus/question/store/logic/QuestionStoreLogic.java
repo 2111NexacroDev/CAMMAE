@@ -15,12 +15,18 @@ public class QuestionStoreLogic implements QuestionStore {
 		List<Question> qList = sqlSession.selectList("QuestionMapper.selectAllQuestion");
 		return qList;
 	}
+	@Override
+	public Question selectOneQuestion(SqlSession sqlSession, int questionNo) {
+		Question question = sqlSession.selectOne("QuestionMapper.selectOneQuestion", questionNo);
+		return question;
+	}
 	
 	@Override
 	public int insertQuestion(Question question, SqlSession sqlSession) {
 		int result = sqlSession.insert("QuestionMapper.insertQuestion", question);
 		return result;
 	}
+
 
 
 }

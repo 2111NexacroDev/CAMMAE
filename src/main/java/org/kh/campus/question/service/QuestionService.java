@@ -8,6 +8,8 @@ public interface QuestionService {
 	
 	//공지사항 조회
 	public List<Question> printAllQuestion();
+	//공지사항 상세 조회
+	public Question printOneQuestion(int questionNo);
 	//공지사항 등록
 	public int registerQuestion(Question question);
 
