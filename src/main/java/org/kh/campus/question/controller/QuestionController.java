@@ -76,4 +76,20 @@ public class QuestionController {
 		return mv;
 	}
 
+	// 게시글 삭제
+	@RequestMapping(value = "/question/delete", method = RequestMethod.GET)
+	public ModelAndView questionDelete(ModelAndView mv, @RequestParam("questionNo") int questionNo) {
+
+		try {
+			int result = qService.removeQuestion(questionNo);
+			if (result > 0) {
+				mv.setViewName("redirect:/question/list");
+			} else {
+				System.out.println("삭제 실패");
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return mv;
+	}
 }

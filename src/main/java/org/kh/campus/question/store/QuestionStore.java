@@ -10,6 +10,7 @@ public interface QuestionStore {
 	public List<Question> selectAllQuestion(SqlSession sqlSession);
 	public Question selectOneQuestion(SqlSession sqlSession, int questionNo);
 	public int insertQuestion(Question question, SqlSession sqlSession);
+	public int deleteQuestion(int questionNo, SqlSession sqlSession);
 
 
 }

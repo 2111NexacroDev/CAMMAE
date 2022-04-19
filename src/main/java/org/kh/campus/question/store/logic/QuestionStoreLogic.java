@@ -26,6 +26,12 @@ public class QuestionStoreLogic implements QuestionStore {
 		int result = sqlSession.insert("QuestionMapper.insertQuestion", question);
 		return result;
 	}
+	
+	@Override
+	public int deleteQuestion(int questionNo, SqlSession sqlSession) {
+		int result = sqlSession.delete("QuestionMapper.deleteQuestion", questionNo);
+		return result;
+	}
 
 
 

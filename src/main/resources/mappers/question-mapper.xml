@@ -30,5 +30,9 @@
 	<insert id="insertQuestion">
 		INSERT INTO QUESTION_TBL VALUES(SEQ_QUESTION_NO.NEXTVAL, #{professorName}, #{lectureName}, #{questionTitle}, #{questionContent}, #{questionWriter}, DEFAULT, DEFAULT, DEFAULT, #{questionFileName}, #{questionFileReNeme}, #{questionFilePath})
 	</insert>
+	
+	<delete id="deleteQuestion">
+		DELETE FROM QUESTION_TBL WHERE QUESTION_NO = #{questionNo}
+	</delete>
 
 </mapper>
