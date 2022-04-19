@@ -22,4 +22,10 @@ public class NoticeStoreLogic implements NoticeStore{
 		return nList;
 	}
 
+	@Override
+	public Notice selectOneNotice(SqlSession sqlSession, int noticeNo) {
+		Notice notice = sqlSession.selectOne("NoticeMapper.selectOneNotice",noticeNo);
+		return notice;
+	}
+
 }

@@ -8,5 +8,6 @@ public interface NoticeService {
 	
 	public int registerNotice(Notice notice);
 	public List<Notice> printAllNotice();
+	public Notice printOneNotice(int noticeNo);
 
 }
