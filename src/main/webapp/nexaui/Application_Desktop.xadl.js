@@ -43,9 +43,9 @@
         
         this.mainframe_createBodyFrame = function()
         {
-            var frame0 = new ChildFrame("ChildFrame00",null,null,null,null,null,null,"FormBase::Form_emp.xfdl",this);
+            var frame0 = new ChildFrame("ChildFrame00",null,null,null,null,null,null,"FormBase::Form_std.xfdl",this);
             this.addChild(frame0.name, frame0);
-            frame0.set_formurl("FormBase::Form_emp.xfdl");
+            frame0.set_formurl("FormBase::Form_std.xfdl");
 
             this.frame=frame0;
         };

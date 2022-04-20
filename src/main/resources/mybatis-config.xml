@@ -11,6 +11,8 @@
       <typeAlias type="org.kh.campus.consultant.domain.Consultant" alias="Consultant"/>
       <typeAlias type="org.kh.campus.notice.domain.Notice" alias="Notice"/>
       <typeAlias type="org.kh.campus.student.domain.Student" alias="Student"/>
+      <typeAlias type="org.kh.campus.professor.domain.Professor" alias="Professor"/>
+		  <typeAlias type="org.kh.campus.manager.domain.Manager" alias="Manager"/>
       <typeAlias type="org.kh.campus.question.domain.Question" alias="Question"/>
       <typeAlias type="org.kh.campus.question.domain.QuestionReply" alias="QuestionReply"/>
       <typeAlias type="org.kh.campus.board.domain.Board" alias="Board"/>
@@ -21,6 +23,8 @@
       <mapper resource="mappers/consultant-mapper.xml"/>
       <mapper resource="mappers/notice-mapper.xml"/>
       <mapper resource="mappers/student-mapper.xml"/>
+      <mapper resource="mappers/professor-mapper.xml"/>
+		  <mapper resource="mappers/manager-mapper.xml"/>
       <mapper resource="mappers/question-mapper.xml"/>
       <mapper resource="mappers/board-mapper.xml"/>
    </mappers>

@@ -55,7 +55,7 @@
         };
         
         // User Script
-        this.registerScript("Form_emp.xfdl", function() {
+        this.registerScript("Form_std.xfdl", function() {
         /********************************************************************
             created:	  2022/02/18
             filename: 	C:\KH_edu17.1\Work\frm_emp.xfdl
@@ -91,14 +91,14 @@
         this.frm_emp_onload = function(obj,e)
         {
         //학생정보
-        // 	this.transaction(
-        // 		"std_info"// 1.ID
-        // 		,"CmURL::student/stdInfo.kh"// 2.URL
-        // 		,"" // 3.InDs : F->S jsp(I,U,D)
-        // 		,"ds_stdInfo=out_stdInfo" // 4.OutDs : S->F jsp(SELECT)
-        // 		,"" // 5.InVar : F->S(var)
-        // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
-        // 	);
+        	this.transaction(
+        		"std_info"// 1.ID
+        		,"CmURL::student/stdInfo.kh"// 2.URL
+        		,"" // 3.InDs : F->S jsp(I,U,D)
+        		,"ds_stdInfo=out_stdInfo" // 4.OutDs : S->F jsp(SELECT)
+        		,"" // 5.InVar : F->S(var)
+        		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        	);
         // 교수 정보
         // 	this.transaction(
         // 		"prf_info"// 1.ID
@@ -128,14 +128,14 @@
         // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
         // 	);
         // 관리자 관리자 정보
-        this.transaction(
-        		"mag_info"// 1.ID
-        		,"CmURL::manager/magInfo.kh"// 2.URL
-        		,"" // 3.InDs : F->S jsp(I,U,D)
-        		,"ds_stdInfo=out_magAllInfo" // 4.OutDs : S->F jsp(SELECT)
-        		,"" // 5.InVar : F->S(var)
-        		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
-        	);
+        // this.transaction(
+        // 		"mag_info"// 1.ID
+        // 		,"CmURL::manager/magInfo.kh"// 2.URL
+        // 		,"" // 3.InDs : F->S jsp(I,U,D)
+        // 		,"ds_stdInfo=out_magAllInfo" // 4.OutDs : S->F jsp(SELECT)
+        // 		,"" // 5.InVar : F->S(var)
+        // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        // 	);
         };
 
 
@@ -167,7 +167,7 @@
             this.btn_delete.addEventHandler("onclick",this.btn_delete_onclick,this);
             this.btn_save.addEventHandler("onclick",this.btn_save_onclick,this);
         };
-        this.loadIncludeScript("Form_emp.xfdl");
+        this.loadIncludeScript("Form_std.xfdl");
         this.loadPreloadList();
         
         // Remove Reference

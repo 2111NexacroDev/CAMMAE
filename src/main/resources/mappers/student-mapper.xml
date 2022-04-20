@@ -25,9 +25,9 @@
 	
 	<update id="updateStudentInfo">
 		UPDATE STUDENT_TBL SET
-		STUDENT_EMAIL = #{studentEmail},
 		STUDENT_ADDRESS = #{studentAddress},
-		STUDENT_PHONENUMBER = #{studentPhonenumber}
+		STUDENT_PHONENUMBER = #{studentPhonenumber},
+		STUDENT_EMAIL = #{studentEmail}
 		WHERE STUDENT_NO = #{studentNo}
 	</update>
 </mapper>
