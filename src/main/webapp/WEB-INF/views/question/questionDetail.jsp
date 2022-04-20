@@ -103,13 +103,13 @@ h3 {
 			<hr style="width: 585px; text-align: center;">
 			<!-- 댓글 조회 -->
 			<div id="replyArea">
-			<table align="center" width="600px" border="1" id="rtb">
+			<table align="center" width="600px" id="rtb">
 				<thead>
 				</thead>
 				<tbody>
 				</tbody>
 			</table>
-				<hr style="width: 585px; text-align: center;">
+
 			</div>
 		</div>
 	</div>
@@ -162,7 +162,8 @@ h3 {
 					}
 				},
 				error : function() {
-					alert("ajax 실패");
+					var $tableBody = $("#rtb tbody");
+					$tableBody.html(""); //기존댓글 내용 비우기
 				}
 			});
 		} 
@@ -175,7 +176,7 @@ h3 {
 				data : {"questionNo" : questionNo , "questionReplyNo" : questionReplyNo },
 				success : function(data) {
 					if(data == "success"){
-					getQuestionReplyList();						
+						getQuestionReplyList();						
 					}else{
 						alert("댓글 삭제 실패")
 					}
