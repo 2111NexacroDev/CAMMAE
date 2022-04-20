@@ -273,6 +273,18 @@ public class QuestionController {
 		return "";
 	}
 	
+	//댓글 수정
+	@ResponseBody
+	@RequestMapping(value="/question/replyModify", method=RequestMethod.POST)
+	public String questionReplyModify(@ModelAttribute QuestionReply questionReply) {
+		int result = qService.modifyQuestionReply(questionReply);
+		if(result>0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
 	//댓글 삭제
 	@ResponseBody
 	@RequestMapping(value="/question/replyDelete", method=RequestMethod.GET)

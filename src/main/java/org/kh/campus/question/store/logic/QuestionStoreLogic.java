@@ -69,10 +69,17 @@ public class QuestionStoreLogic implements QuestionStore {
 	}
 
 	@Override
+	public int updateReply(QuestionReply questionReply, SqlSession sqlSession) {
+		int result = sqlSession.update("QuestionMapper.updateReply", questionReply);
+		return result;
+	}
+
+	@Override
 	public int deleteReply(QuestionReply questionReply, SqlSession sqlSession) {
 		int result = sqlSession.delete("QuestionMapper.deleteReply", questionReply);
 		return result;
 	}
+
 
 
 

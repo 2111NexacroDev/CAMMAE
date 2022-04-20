@@ -78,7 +78,12 @@ public class QuestionServiceImpl implements QuestionService {
 		return result;
 	}
 
-
+	@Override
+	public int modifyQuestionReply(QuestionReply questionReply) {
+		int result = qStore.updateReply(questionReply, sqlSession);
+		return result;
+	}
+	
 	@Override
 	public int removeQuestionReply(QuestionReply questionReply) {
 		int result = qStore.deleteReply(questionReply, sqlSession);

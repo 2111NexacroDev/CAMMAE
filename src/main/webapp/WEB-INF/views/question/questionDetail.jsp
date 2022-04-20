@@ -152,7 +152,7 @@ h3 {
 					var $rContent = $("<td>").text(data[i].questionReplyContent);
 					var $rDate = $("<td width='100'>").text(data[i].questionReplyDate);
 					var $btnArea = $("<td width='80'>")
-					.append("<a href='#'>수정</a> ")
+					.append("<a href='javascript:void(0)' onclick='modifyReplyView(this,"+data[i].questionNo+", "+data[i].questionReplyNo+", \""+data[i].questionReplyContent+"\");'>수정</a> ")
 					.append("<a href='javascript:void(0)' onclick='removeReply("+data[i].questionNo+","+data[i].questionReplyNo+");'>삭제</a>");
 					$tr.append($rWriter);
 					$tr.append($rContent);
@@ -168,7 +168,7 @@ h3 {
 			});
 		} 
 		
-		
+		/* 댓글 삭제 */
 		function removeReply(questionNo, questionReplyNo) {
 			$.ajax({
 				url : "/question/replyDelete",
@@ -185,10 +185,44 @@ h3 {
 			});
 		}
 		
+		/* 댓글 수정 */
+		function modifyReplyView (obj ,questionNo, questionReplyNo, questionReplyContent){
+			var $trModify = $("<tr>");
+			var $tdModify = $("<td colspan='3'>");
+			var $tdModifyBtn = $("<td>");
+			$tdModify.append("<input type='text' size='50' value='"+questionReplyContent+"' id='modifyData'>");
+			$tdModifyBtn.append("<button onclick='modifyReply("+questionNo+","+questionReplyNo+");'>수정완료</button>");
+			$trModify.append($tdModify);
+			$trModify.append($tdModifyBtn);
+			$(obj).parent().parent().after($trModify);
+		}
+		
+		function modifyReply(questionNo, questionReplyNo){
+			var modifyData = $("#modifyData").val();
+			$.ajax({
+				url : "/question/replyModify",
+				type : "post",
+				data : {"questionNo" : questionNo , "questionReplyNo" : questionReplyNo, "questionReplyContent": modifyData },
+				success : function(data) {
+					if(data == "success"){
+						getQuestionReplyList();						
+					}else{
+						alert("댓글 수정 실패")
+					}
+				},
+				error : function(data) { alert("ajax 실패")}
+			});
+		}
 	</script>
 
 </body>
 </html>
+
+
+
+
+
+
 
 
 
