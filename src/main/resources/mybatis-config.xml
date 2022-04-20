@@ -12,6 +12,7 @@
 		<typeAlias type="org.kh.campus.notice.domain.Notice" alias="Notice"/>
 		<typeAlias type="org.kh.campus.student.domain.Student" alias="Student"/>
 		<typeAlias type="org.kh.campus.professor.domain.Professor" alias="Professor"/>
+		<typeAlias type="org.kh.campus.manager.domain.Manager" alias="Manager"/>
 	
 	</typeAliases>
 	<mappers>

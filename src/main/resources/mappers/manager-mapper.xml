@@ -38,18 +38,18 @@
 		SELECT * FROM Professor_TBL
 	</select>
 	
-	<resultMap type="Manager" id="ManagerResultMap">
-		<id property="professorNo" column="PROFESSOR_NO"/>
-		<result property="departmentName" column="DEPARTMENT_NAME"/>
-		<result property="professorName" column="PROFESSOR_NAME"/>
-		<result property="professorBirth" column="PROFESSOR_BIRTH"/>
-		<result property="professorAddress" column="PROFESSOR_ADDRESS"/>
-		<result property="professorPhonenumber" column="PROFESSOR_PHONENUMBER"/>
-		<result property="professorEmail" column="PROFESSOR_EMAIL"/>
-		<result property="professorPassword" column="PROFESSOR_PASSWORD"/>
+	<resultMap type="Manager" id="managerResultMap">
+		<id property="managerNo" column="MANAGER_NO"/>
+		<result property="managerName" column="MANAGER_NAME"/>
+		<result property="managerBirth" column="MANAGER_BIRTH"/>
+		<result property="managerAddress" column="MANAGER_ADDRESS"/>
+		<result property="managerPhonenumber" column="MANAGER_PHONENUMBER"/>
+		<result property="managerEmail" column="MANAGER_EMAIL"/>
+		<result property="managerPassword" column="MANAGER_PASSWORD"/>
+		<result property="managerTeam" column="MANAGER_TEAM"/>
 	</resultMap>
 	
-	<select id="selectManagerList" resultMap="managerrResultMap">
+	<select id="selectManagerList" resultMap="managerResultMap">
 		SELECT * FROM Manager_TBL
 	</select>
 </mapper>

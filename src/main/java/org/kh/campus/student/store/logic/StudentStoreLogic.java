@@ -18,9 +18,6 @@ public class StudentStoreLogic implements StudentStore {
 	@Override
 	public int updateStudent(Student student, SqlSession sqlSession) {
 		int result = sqlSession.update("StudentMapper.updateStudentInfo", student);
-		System.out.println(student.getStudentEmail());
-		System.out.println(student.getStudentPhonenumber());
-		System.out.println(student.getStudentAddress());
 		return result;
 	}
 

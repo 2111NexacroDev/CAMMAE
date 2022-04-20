@@ -17,7 +17,7 @@ public class ProfessorStoreLogic implements ProfessorStore {
 
 	@Override
 	public int updateProfessor(SqlSession sqlSession, Professor professor) {
-		int result = sqlSession.update("");
+		int result = sqlSession.update("ProfessorMapper.updateProfessorInfo", professor);
 		return result;
 	}
 

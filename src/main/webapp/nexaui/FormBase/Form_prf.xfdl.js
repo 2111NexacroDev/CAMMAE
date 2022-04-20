@@ -17,8 +17,8 @@
             }
             
             // Object(Dataset, ExcelExportObject) Initialize
-            obj = new Dataset("ds_stdInfo", this);
-            obj._setContents("<ColumnInfo><Column id=\"departmentName\" type=\"STRING\" size=\"256\"/><Column id=\"studentNo\" type=\"STRING\" size=\"256\"/><Column id=\"studentName\" type=\"STRING\" size=\"256\"/><Column id=\"studentGrade\" type=\"STRING\" size=\"256\"/><Column id=\"studentBirth\" type=\"STRING\" size=\"256\"/><Column id=\"studentAddress\" type=\"STRING\" size=\"256\"/><Column id=\"studentPhonenumber\" type=\"STRING\" size=\"256\"/><Column id=\"studentEmail\" type=\"STRING\" size=\"256\"/><Column id=\"studentState\" type=\"STRING\" size=\"256\"/><Column id=\"professorName\" type=\"STRING\" size=\"256\"/></ColumnInfo><Rows><Row/></Rows>");
+            obj = new Dataset("ds_prfInfo", this);
+            obj._setContents("<ColumnInfo><Column id=\"professorNo\" type=\"STRING\" size=\"256\"/><Column id=\"departmentName\" type=\"STRING\" size=\"256\"/><Column id=\"professorName\" type=\"STRING\" size=\"256\"/><Column id=\"professorBirth\" type=\"STRING\" size=\"256\"/><Column id=\"professorAddress\" type=\"STRING\" size=\"256\"/><Column id=\"professorPhonenumber\" type=\"STRING\" size=\"256\"/><Column id=\"professorEmail\" type=\"STRING\" size=\"256\"/><Column id=\"professorPassword\" type=\"STRING\" size=\"256\"/></ColumnInfo><Rows><Row/></Rows>");
             this.addChild(obj.name, obj);
             
             // UI Components Initialize
@@ -32,10 +32,11 @@
             obj.set_text("저장");
             this.addChild(obj.name, obj);
 
-            obj = new Grid("Grid00","60","95","616","455",null,null,null,null,null,null,this);
+            obj = new Grid("Grid00","64","93","616","455",null,null,null,null,null,null,this);
             obj.set_taborder("2");
-            obj.set_binddataset("ds_stdInfo");
-            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"departmentName\"/><Cell col=\"1\" text=\"studentNo\"/><Cell col=\"2\" text=\"studentName\"/><Cell col=\"3\" text=\"studentGrade\"/><Cell col=\"4\" text=\"studentBirth\"/><Cell col=\"5\" text=\"studentAddress\"/><Cell col=\"6\" text=\"studentPhonenumber\"/><Cell col=\"7\" text=\"studentEmail\"/><Cell col=\"8\" text=\"studentState\"/><Cell col=\"9\" text=\"professorName\"/></Band><Band id=\"body\"><Cell text=\"bind:departmentName\"/><Cell col=\"1\" text=\"bind:studentNo\"/><Cell col=\"2\" text=\"bind:studentName\"/><Cell col=\"3\" text=\"bind:studentGrade\"/><Cell col=\"4\" text=\"bind:studentBirth\"/><Cell col=\"5\" text=\"bind:studentAddress\" displaytype=\"normal\" edittype=\"text\"/><Cell col=\"6\" text=\"bind:studentPhonenumber\" edittype=\"text\"/><Cell col=\"7\" text=\"bind:studentEmail\" edittype=\"text\"/><Cell col=\"8\" text=\"bind:studentState\"/><Cell col=\"9\" text=\"bind:professorName\"/></Band></Format></Formats>");
+            obj.set_binddataset("ds_prfInfo");
+            obj.set_autofittype("col");
+            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"professorNo\"/><Cell col=\"1\" text=\"departmentName\"/><Cell col=\"2\" text=\"professorName\"/><Cell col=\"3\" text=\"professorBirth\"/><Cell col=\"4\" text=\"professorAddress\"/><Cell col=\"5\" text=\"professorPhonenumber\"/><Cell col=\"6\" text=\"professorEmail\"/><Cell col=\"7\" text=\"professorPassword\"/></Band><Band id=\"body\"><Cell text=\"bind:professorNo\"/><Cell col=\"1\" text=\"bind:departmentName\"/><Cell col=\"2\" text=\"bind:professorName\"/><Cell col=\"3\" text=\"bind:professorBirth\"/><Cell col=\"4\" text=\"bind:professorAddress\" edittype=\"text\"/><Cell col=\"5\" text=\"bind:professorPhonenumber\" edittype=\"text\"/><Cell col=\"6\" text=\"bind:professorEmail\" edittype=\"text\"/><Cell col=\"7\" text=\"bind:professorPassword\"/></Band></Format></Formats>");
             this.addChild(obj.name, obj);
             // Layout Functions
             //-- Default Layout : this
@@ -55,7 +56,7 @@
         };
         
         // User Script
-        this.registerScript("Form_emp.xfdl", function() {
+        this.registerScript("Form_prf.xfdl", function() {
         /********************************************************************
             created:	  2022/02/18
             filename: 	C:\KH_edu17.1\Work\frm_emp.xfdl
@@ -100,14 +101,14 @@
         // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
         // 	);
         // 교수 정보
-        // 	this.transaction(
-        // 		"prf_info"// 1.ID
-        // 		,"CmURL::professor/prfInfo.kh"// 2.URL
-        // 		,"" // 3.InDs : F->S jsp(I,U,D)
-        // 		,"ds_stdInfo=out_prfInfo" // 4.OutDs : S->F jsp(SELECT)
-        // 		,"" // 5.InVar : F->S(var)
-        // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
-        // 	);
+        	this.transaction(
+        		"prf_info"// 1.ID
+        		,"CmURL::professor/prfInfo.kh"// 2.URL
+        		,"" // 3.InDs : F->S jsp(I,U,D)
+        		,"ds_prfInfo=out_prfInfo" // 4.OutDs : S->F jsp(SELECT)
+        		,"" // 5.InVar : F->S(var)
+        		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        	);
         // 관리자 학생 정보
         // this.transaction(
         // 		"mag_info"// 1.ID
@@ -128,14 +129,14 @@
         // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
         // 	);
         // 관리자 관리자 정보
-        this.transaction(
-        		"mag_info"// 1.ID
-        		,"CmURL::manager/magInfo.kh"// 2.URL
-        		,"" // 3.InDs : F->S jsp(I,U,D)
-        		,"ds_stdInfo=out_magAllInfo" // 4.OutDs : S->F jsp(SELECT)
-        		,"" // 5.InVar : F->S(var)
-        		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
-        	);
+        // this.transaction(
+        // 		"mag_info"// 1.ID
+        // 		,"CmURL::manager/magInfo.kh"// 2.URL
+        // 		,"" // 3.InDs : F->S jsp(I,U,D)
+        // 		,"ds_stdInfo=out_magAllInfo" // 4.OutDs : S->F jsp(SELECT)
+        // 		,"" // 5.InVar : F->S(var)
+        // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        // 	);
         };
 
 
@@ -148,9 +149,9 @@
         this.btn_save_onclick = function(obj,e)
         {
         	this.transaction(
-        		"std_update"// 1.ID
-        		,"CmURL::student/stdUpdate.kh"// 2.URL
-        		,"in_std=ds_stdInfo:U" // 3.InDs : F->S jsp(I,U,D)
+        		"prf_update"// 1.ID
+        		,"CmURL::professor/prfUpdate.kh"// 2.URL
+        		,"in_prf=ds_prfInfo:U" // 3.InDs : F->S jsp(I,U,D)
         		,"" // 4.OutDs : S->F jsp(SELECT)
         		,""// 5.InVar : F->S(var)
         		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
@@ -167,7 +168,7 @@
             this.btn_delete.addEventHandler("onclick",this.btn_delete_onclick,this);
             this.btn_save.addEventHandler("onclick",this.btn_save_onclick,this);
         };
-        this.loadIncludeScript("Form_emp.xfdl");
+        this.loadIncludeScript("Form_prf.xfdl");
         this.loadPreloadList();
         
         // Remove Reference

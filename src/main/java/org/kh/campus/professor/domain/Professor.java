@@ -25,6 +25,15 @@ public class Professor {
 		this.professorPassword = professorPassword;
 	}
 
+	
+	
+	public Professor(String professorAddress, String professorPhonenumber, String professorEmail) {
+		super();
+		this.professorAddress = professorAddress;
+		this.professorPhonenumber = professorPhonenumber;
+		this.professorEmail = professorEmail;
+	}
+
 	@Override
 	public String toString() {
 		return "Professor [professorNo=" + professorNo + ", departmentName=" + departmentName + ", professorName="

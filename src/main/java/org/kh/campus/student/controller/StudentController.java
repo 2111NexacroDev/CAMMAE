@@ -44,20 +44,20 @@ public class StudentController {
 		NexacroResult result = new NexacroResult();
 		int studentNo = 0;
 		
-			String studentPhonenumber = dsGet(inStd, 0, "studentPhonenumber");
-			String studentAddress = dsGet(inStd, 0, "studentAddress");
-			String studentEmail = dsGet(inStd, 0, "studentEmail");
-			Student student = new Student(
-					studentAddress,
-					studentPhonenumber,
-					studentEmail
-					);
-			student.setStudentNo(studentNo);
+		String studentPhonenumber = dsGet(inStd, 0, "studentPhonenumber");
+		String studentAddress = dsGet(inStd, 0, "studentAddress");
+		String studentEmail = dsGet(inStd, 0, "studentEmail");
+		Student student = new Student(
+				studentAddress,
+				studentPhonenumber,
+				studentEmail
+				);
+		student.setStudentNo(studentNo);
 			
-			sService.modifyStudent(student);
+		sService.modifyStudent(student);
 
-			result.addVariable("ErrorCode", nErrorCode);
-			result.addVariable("ErrorMsg", strErrorMsg);
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
 	
 		return result;
 	}

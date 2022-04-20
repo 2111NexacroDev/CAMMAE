@@ -19,4 +19,11 @@
 		SELECT * FROM Professor_TBL WHERE PROFESSOR_NO = #{professorNo}
 	</select>
 	
+	<update id="updateProfessorInfo">
+		UPDATE PROFESSOR_TBL SET
+		PROFESSOR_ADDRESS = #{professorAddress},
+		PROFESSOR_PHONENUMBER = #{professorPhonenumber},
+		PROFESSOR_EMAIL = #{professorEmail}
+		WHERE PROFESSOR_NO = #{professorNo}
+	</update>
 </mapper>

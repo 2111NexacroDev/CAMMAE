@@ -7,7 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.nexacro.uiadapter17.spring.core.annotation.ParamDataSet;
 import com.nexacro.uiadapter17.spring.core.data.NexacroResult;
+import com.nexacro17.xapi.data.DataSet;
 
 @Controller
 public class ProfessorController {
@@ -33,9 +35,42 @@ public class ProfessorController {
 	}
 	
 	// 교수 정보 수정
-	public NexacroResult modifyProfessor() {
+	@RequestMapping(value="/professor/prfUpdate.kh", method=RequestMethod.POST)
+	public NexacroResult modifyProfessor(
+			@ParamDataSet(name="in_prf") 	DataSet inPrf
+			) throws Exception {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
+		int professorNo = 0;
+		
+		String professorAddress = dsGet(inPrf, 0, "professorAddress");
+		String professorPhonenumber = dsGet(inPrf, 0, "professorPhonenumber");
+		String professorEmail = dsGet(inPrf, 0, "professorEmail");
+		Professor professor = new Professor(
+				professorAddress,
+				professorPhonenumber,
+				professorEmail
+				);
+		professor.setProfessorNo(professorNo);
+		
+		pService.modifyProfessor(professor);
+		
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
+		
 		
 		return result;
 	}
+	
+	// Dataset value
+			public String dsGet(DataSet ds, int rowno, String colid) throws Exception
+			{
+			    String value;
+			    value = ds.getString(rowno, colid);
+			    if( value == null )
+			        return "";
+			    else
+			        return value;
+			} 
 }
