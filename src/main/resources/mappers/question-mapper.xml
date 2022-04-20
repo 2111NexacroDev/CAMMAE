@@ -91,6 +91,10 @@
 		INSERT INTO QUESTIONREPLY_TBL VALUES(SEQ_QUESTIONREPLY_NO.NEXTVAL, #{questionNo}, #{questionReplyWriter}, #{questionReplyContent}, DEFAULT, DEFAULT)
 	</insert>
 	
+	<delete id="deleteReply">
+		DELETE FROM QUESTIONREPLY_TBL WHERE QUESTION_NO=#{questionNo} AND QUESTIONREPLY_NO=#{questionReplyNo}
+	</delete>
+	
 	
 	
 	

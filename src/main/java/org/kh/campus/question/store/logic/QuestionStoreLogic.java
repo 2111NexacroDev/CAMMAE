@@ -68,6 +68,12 @@ public class QuestionStoreLogic implements QuestionStore {
 		return result;
 	}
 
+	@Override
+	public int deleteReply(QuestionReply questionReply, SqlSession sqlSession) {
+		int result = sqlSession.delete("QuestionMapper.deleteReply", questionReply);
+		return result;
+	}
+
 
 
 

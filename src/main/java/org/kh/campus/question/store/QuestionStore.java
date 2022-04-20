@@ -20,6 +20,7 @@ public interface QuestionStore {
 	//댓글
 	public List<QuestionReply> selectAllReply(int questionNo, SqlSession sqlSession);
 	public int insertReply(QuestionReply questionReply, SqlSession sqlSession);
+	public int deleteReply(QuestionReply questionReply, SqlSession sqlSession);
 
 
 }

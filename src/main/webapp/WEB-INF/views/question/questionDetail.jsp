@@ -117,6 +117,7 @@ h3 {
 	
 	<!-- 댓글동작  -->
 	<script>
+		getQuestionReplyList(); //페이지가 로드 시 함수 동작
 		$("#rbtn").on("click", function(){
 			var questionNo = $("#questionNo").val(); /* 어떤 게시글에 대한 댓글인지 알기 위함 */
 			var rContents = $("#rContents").val();
@@ -150,7 +151,9 @@ h3 {
 					var $rWriter = $("<td width='100'>").text(data[i].questionReplyWriter);
 					var $rContent = $("<td>").text(data[i].questionReplyContent);
 					var $rDate = $("<td width='100'>").text(data[i].questionReplyDate);
-					var $btnArea = $("<td width='80'>").append("<a href='#'>수정</a>").append("<a href='#' onclick='removeReply();'>삭제</a>");
+					var $btnArea = $("<td width='80'>")
+					.append("<a href='#'>수정</a> ")
+					.append("<a href='javascript:void(0)' onclick='removeReply("+data[i].questionNo+","+data[i].questionReplyNo+");'>삭제</a>");
 					$tr.append($rWriter);
 					$tr.append($rContent);
 					$tr.append($rDate);
@@ -158,7 +161,26 @@ h3 {
 					$tableBody.append($tr);
 					}
 				},
-				error : function() {}
+				error : function() {
+					alert("ajax 실패");
+				}
+			});
+		} 
+		
+		
+		function removeReply(questionNo, questionReplyNo) {
+			$.ajax({
+				url : "/question/replyDelete",
+				type : "get",
+				data : {"questionNo" : questionNo , "questionReplyNo" : questionReplyNo },
+				success : function(data) {
+					if(data == "success"){
+					getQuestionReplyList();						
+					}else{
+						alert("댓글 삭제 실패")
+					}
+				},
+				error : function(data) { alert("ajax 실패")}
 			});
 		}
 		

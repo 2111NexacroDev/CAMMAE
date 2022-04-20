@@ -30,5 +30,7 @@ public interface QuestionService {
 	public List<QuestionReply> printAllQuetionReply(int questionNo);
 	//댓글 등록
 	public int registerReply(QuestionReply questionReply);
+	//댓글 삭제
+	public int removeQuestionReply(QuestionReply questionReply);
 
 }

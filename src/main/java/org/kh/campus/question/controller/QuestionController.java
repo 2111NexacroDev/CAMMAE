@@ -273,6 +273,19 @@ public class QuestionController {
 		return "";
 	}
 	
+	//댓글 삭제
+	@ResponseBody
+	@RequestMapping(value="/question/replyDelete", method=RequestMethod.GET)
+	public String questionReplyDelete(@ModelAttribute QuestionReply questionReply) {
+	
+		int result = qService.removeQuestionReply(questionReply);
+		if(result>0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
 	
 	
 	
