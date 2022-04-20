@@ -77,7 +77,7 @@ h3{
 				</div>
 
 				<div style="padding: 10px;">
-					<input type="file" id="uploadfile" name="uploadFile">
+					<input type="file" id="fileArea" name="uploadFile">
 				</div>
 
 				<hr style="width: 585px; text-align: center;">

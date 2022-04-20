@@ -20,7 +20,7 @@
 	</resultMap>
 
 	<select id="selectAllQuestion" resultMap="questionResultMap">
-		SELECT * FROM QUESTION_TBL ORDER BY QUESTION_DATE DESC
+		SELECT * FROM QUESTION_TBL ORDER BY QUESTION_NO DESC
 	</select>
 	
 	<select id="selectOneQuestion" resultMap="questionResultMap">
@@ -32,7 +32,7 @@
 	</insert>
 	
 	<update id="updateQuestion">
-		UPDATE QUESTION_TBL SET QUESTION_TITLE = #{questionTitle}, QUESTION_CONTENT = #{questionContent}, QUESTION_UPDATEDATE = DEFAULT WHERE QUESTION_NO = #{questionNo}
+		UPDATE QUESTION_TBL SET PROFESSOR_NAME = #{professorName}, LECTURE_NAME = #{lectureName}, QUESTION_TITLE = #{questionTitle}, QUESTION_CONTENT = #{questionContent}, QUESTION_UPDATEDATE = DEFAULT, QUESTION_FILENAME = #{questionFileName}, QUESTION_FILERENAME = #{questionFileReNeme}, QUESTION_FILEPATH = #{questionFilePath} WHERE QUESTION_NO = #{questionNo}
 		
 	</update>
 	

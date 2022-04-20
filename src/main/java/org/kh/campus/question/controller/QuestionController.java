@@ -75,7 +75,7 @@ public class QuestionController {
 			HttpServletRequest request) {
 		try {
 
-			if(uploadFile != null && !uploadFile.getOriginalFilename().equals("")) {
+			if (uploadFile != null && !uploadFile.getOriginalFilename().equals("")) {
 				HashMap<String, String> fileMap = saveFile(uploadFile, request);
 				String filePath = fileMap.get("filePath");
 				String fileRename = fileMap.get("fileName");
@@ -85,7 +85,7 @@ public class QuestionController {
 					question.setQuestionFilePath(filePath);
 				}
 			}
-			
+
 			int result = qService.registerQuestion(question);
 			if (result > 0) {
 				mv.setViewName("redirect:/question/list");
@@ -154,16 +154,46 @@ public class QuestionController {
 
 	// 게시글 수정
 	@RequestMapping(value = "/question/update", method = RequestMethod.POST)
-	public ModelAndView questionUpdate(ModelAndView mv, @ModelAttribute Question question) {
+	public ModelAndView questionUpdate(ModelAndView mv, @ModelAttribute Question question, 
+			@RequestParam(value = "reloadFile", required = false) MultipartFile reloadFile,
+			HttpServletRequest request) {
 
-		int result = qService.modifyQuestion(question);
-		if (result > 0) {
-			mv.setViewName("redirect:/question/detail?questionNo=" + question.getQuestionNo());
-		} else {
-			System.out.println("수정실패");
+		try {
+			if(reloadFile != null && !reloadFile.isEmpty()) {
+				// 기존 파일 삭제 (파일 이름 필요)
+				deleteFile(question.getQuestionFilePath(), request); // 해당파일 이름 삭제
+				// 새로운 파일 업로드
+				HashMap<String, String> fileMap = saveFile(reloadFile, request);// 새롭게 저장
+				String savePath = fileMap.get("filePath");
+				String fileRename = fileMap.get("fileName");
+				if (savePath != null) {
+					question.setQuestionFileName(reloadFile.getOriginalFilename()); // 파일이름이 저장
+					question.setQuestionFileReNeme(fileRename);
+					question.setQuestionFilePath(savePath); // 새로운 경로로 업데이트
+				}
+			}
+			
+			int result = qService.modifyQuestion(question);
+			if (result > 0) {
+				mv.setViewName("redirect:/question/detail?questionNo=" + question.getQuestionNo());
+			} else {
+				System.out.println("수정실패");
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
 		}
 		return mv;
 	}
+	
+	public void deleteFile(String filePath, HttpServletRequest request) {
+		// 저장 폴더 선택
+		File deleteFile = new File(filePath);
+		if (deleteFile.exists()) {
+			// 파일이 존재하면 파일 삭제
+			deleteFile.delete();
+		}
+	}
+
 
 	// 게시글 삭제
 	@RequestMapping(value = "/question/delete", method = RequestMethod.GET)
