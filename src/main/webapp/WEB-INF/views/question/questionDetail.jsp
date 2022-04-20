@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>질의응답게시판 상세페이지</title>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <style>
 .left {
 	width: 32%;
@@ -40,17 +41,17 @@ h3 {
 }
 
 /* 댓글 */
-#rWriter {
+#rQuestionWriter {
 	width: 80%;
 	float: left;
 }
 
-#rDate {
+#rQuestionDate {
 	width: 20%;
 	float: left;
 }
 
-#rContent {
+#rQuestionContent {
 	width: 80%;
 	float: left;
 }
@@ -95,27 +96,79 @@ h3 {
 			<hr style="width: 585px; text-align: center;">
 			<!-- 댓글 입력 -->
 			<div>
-				<textarea rows="3" cols="70" id="questionContent"
-					name="questionContent" placeholder="내용을 입력하세요"></textarea>
-				<button class="btn">등록</button>
+				<input type="hidden" id="questionNo" value="${question.questionNo }">
+				<textarea rows="3" cols="70" id="rContents"></textarea>
+				<button class="btn" id="rbtn">등록</button>
 			</div>
 			<hr style="width: 585px; text-align: center;">
 			<!-- 댓글 조회 -->
-			<div>
-				<div id="rWriter">11</div>
-				<div id="rDate">11</div>
-				<div id="rContent">11</div>
-				<div id="rTag">
-					<a>수정</a> <a>삭제</a>
-				</div>
+			<div id="replyArea">
+			<table align="center" width="600px" border="1" id="rtb">
+				<thead>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
 				<hr style="width: 585px; text-align: center;">
 			</div>
 		</div>
 	</div>
-
+	
+	
+	<!-- 댓글동작  -->
+	<script>
+		$("#rbtn").on("click", function(){
+			var questionNo = $("#questionNo").val(); /* 어떤 게시글에 대한 댓글인지 알기 위함 */
+			var rContents = $("#rContents").val();
+			$.ajax({
+				url : "/question/replyAdd",
+				type : "post",
+				data : {"questionNo" : questionNo , "questionReplyContent" : rContents }, //json형태
+				success : function(data) {
+					getQuestionReplyList();
+					//성공시 작성된 내용 초기화
+					$("#rContents").val("");
+				},
+				error : function(data) { alert("ajax 실패")}
+			});
+		})
+		
+		//댓글 불러오는 함수
+		function getQuestionReplyList(){
+				var questionNo = $("#questionNo").val();
+			$.ajax({
+				url : "/question/replyList",
+				type : "get",
+				data : { 
+					"questionNo" : questionNo 
+					},
+				success : function(data) {
+					var $tableBody = $("#rtb tbody");
+					$tableBody.html("");
+					for(var i = 0; i<data.length; i++){
+					var $tr = $("<tr>");
+					var $rWriter = $("<td width='100'>").text(data[i].questionReplyWriter);
+					var $rContent = $("<td>").text(data[i].questionReplyContent);
+					var $rDate = $("<td width='100'>").text(data[i].questionReplyDate);
+					var $btnArea = $("<td width='80'>").append("<a href='#'>수정</a>").append("<a href='#' onclick='removeReply();'>삭제</a>");
+					$tr.append($rWriter);
+					$tr.append($rContent);
+					$tr.append($rDate);
+					$tr.append($btnArea);
+					$tableBody.append($tr);
+					}
+				},
+				error : function() {}
+			});
+		}
+		
+	</script>
 
 </body>
 </html>
+
+
+
 
 
 

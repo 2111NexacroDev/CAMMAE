@@ -12,6 +12,7 @@
       <typeAlias type="org.kh.campus.notice.domain.Notice" alias="Notice"/>
       <typeAlias type="org.kh.campus.student.domain.Student" alias="Student"/>
       <typeAlias type="org.kh.campus.question.domain.Question" alias="Question"/>
+      <typeAlias type="org.kh.campus.question.domain.QuestionReply" alias="QuestionReply"/>
       <typeAlias type="org.kh.campus.board.domain.Board" alias="Board"/>
       
    

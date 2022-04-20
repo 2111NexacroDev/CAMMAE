@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.question.domain.Question;
+import org.kh.campus.question.domain.QuestionReply;
 import org.kh.campus.question.domain.QuestionSearch;
 import org.kh.campus.question.service.QuestionService;
 import org.kh.campus.question.store.QuestionStore;
@@ -61,6 +62,23 @@ public class QuestionServiceImpl implements QuestionService {
 		int result = qStore.deleteQuestion(questionNo, sqlSession);
 		return result;
 	}
+
+	
+	//댓글
+	
+	@Override
+	public List<QuestionReply> printAllQuetionReply(int questionNo) {
+		List<QuestionReply> qReplyList = qStore.selectAllReply(questionNo, sqlSession);
+		return qReplyList;
+	}
+
+	@Override
+	public int registerReply(QuestionReply questionReply) {
+		int result = qStore.insertReply(questionReply, sqlSession);
+		return result;
+	}
+
+
 
 
 
