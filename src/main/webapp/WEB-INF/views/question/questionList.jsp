@@ -52,7 +52,7 @@ h3{
 	<div class="center">
 			<h3 id="b-title">질의응답 게시판</h3>
 			<br>
-			<div><button class="btn" onclick="location.href='/question/writeView'">글쓰기</button></div>
+			<div><button class="btn" onclick="location.href='/question/registerView'">글쓰기</button></div>
 			<br>
 			<table width="600px" border="1">
 				<tr>
@@ -63,17 +63,34 @@ h3{
 					<th>조회수</th>
 				</tr>
 				<c:forEach items="${qList }" var="question">
-				
 				<tr>
 					<td>${question.questionNo }</td>
-					<td>${question.questionTitle }</td>
+					<c:url var="qDetail" value="/question/detail">
+						<c:param name="questionNo" value="${question.questionNo}"></c:param>
+					</c:url>
+					<td><a href="${qDetail}">${question.questionTitle }</a></td>					
 					<td>${question.questionWriter }</td>
 					<td>${question.questionDate }</td>
 					<td>${question.questionCount }</td>
 				</tr>
-			
 				</c:forEach>
 			</table>
+			<br>
+			<div>
+				<form action="/question/search.kh" method="get">
+					<select name="searchCondition">
+						<option value="all">전체</option>
+						<option value="professor">교수</option>
+						<option value="lecture">강의</option>
+						<option value="title">제목</option>
+						<option value="contents">내용</option>
+						<option value="writer">작성자</option>
+					</select>
+				<input type="text" name="searchValue">
+			<input class="btn" type="submit" value="검색">
+		</form>
+	</div>
+			
 
 	</div>
 </body>
