@@ -1,6 +1,5 @@
 package org.kh.campus.professor.service.logic;
 
-import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.professor.domain.Professor;
@@ -22,6 +21,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 		Professor professor = pStore.selectProfessor(sqlSession, professorNo);
 		return professor;
 	}
+	
 	@Override
 	public int modifyProfessor(Professor professor) {
 		int result = pStore.updateProfessor(sqlSession, professor);

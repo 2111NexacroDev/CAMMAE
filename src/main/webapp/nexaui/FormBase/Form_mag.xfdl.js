@@ -17,8 +17,8 @@
             }
             
             // Object(Dataset, ExcelExportObject) Initialize
-            obj = new Dataset("ds_stdInfo", this);
-            obj._setContents("<ColumnInfo><Column id=\"departmentName\" type=\"STRING\" size=\"256\"/><Column id=\"studentNo\" type=\"STRING\" size=\"256\"/><Column id=\"studentName\" type=\"STRING\" size=\"256\"/><Column id=\"studentGrade\" type=\"STRING\" size=\"256\"/><Column id=\"studentBirth\" type=\"STRING\" size=\"256\"/><Column id=\"studentAddress\" type=\"STRING\" size=\"256\"/><Column id=\"studentPhonenumber\" type=\"STRING\" size=\"256\"/><Column id=\"studentEmail\" type=\"STRING\" size=\"256\"/><Column id=\"studentState\" type=\"STRING\" size=\"256\"/><Column id=\"professorName\" type=\"STRING\" size=\"256\"/></ColumnInfo><Rows><Row/></Rows>");
+            obj = new Dataset("ds_magInfo", this);
+            obj._setContents("<ColumnInfo><Column id=\"managerNo\" type=\"STRING\" size=\"256\"/><Column id=\"managerName\" type=\"STRING\" size=\"256\"/><Column id=\"managerBirth\" type=\"STRING\" size=\"256\"/><Column id=\"managerAddress\" type=\"STRING\" size=\"256\"/><Column id=\"managerPhonenumber\" type=\"STRING\" size=\"256\"/><Column id=\"managerEmail\" type=\"STRING\" size=\"256\"/><Column id=\"managerTeam\" type=\"STRING\" size=\"256\"/></ColumnInfo>");
             this.addChild(obj.name, obj);
             
             // UI Components Initialize
@@ -34,8 +34,8 @@
 
             obj = new Grid("Grid00","60","95","616","455",null,null,null,null,null,null,this);
             obj.set_taborder("2");
-            obj.set_binddataset("ds_stdInfo");
-            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"departmentName\"/><Cell col=\"1\" text=\"studentNo\"/><Cell col=\"2\" text=\"studentName\"/><Cell col=\"3\" text=\"studentGrade\"/><Cell col=\"4\" text=\"studentBirth\"/><Cell col=\"5\" text=\"studentAddress\"/><Cell col=\"6\" text=\"studentPhonenumber\"/><Cell col=\"7\" text=\"studentEmail\"/><Cell col=\"8\" text=\"studentState\"/><Cell col=\"9\" text=\"professorName\"/></Band><Band id=\"body\"><Cell text=\"bind:departmentName\"/><Cell col=\"1\" text=\"bind:studentNo\"/><Cell col=\"2\" text=\"bind:studentName\"/><Cell col=\"3\" text=\"bind:studentGrade\"/><Cell col=\"4\" text=\"bind:studentBirth\"/><Cell col=\"5\" text=\"bind:studentAddress\" displaytype=\"normal\" edittype=\"text\"/><Cell col=\"6\" text=\"bind:studentPhonenumber\" edittype=\"text\"/><Cell col=\"7\" text=\"bind:studentEmail\" edittype=\"text\"/><Cell col=\"8\" text=\"bind:studentState\"/><Cell col=\"9\" text=\"bind:professorName\"/></Band></Format></Formats>");
+            obj.set_binddataset("ds_magInfo");
+            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row band=\"head\" size=\"24\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"managerNo\"/><Cell col=\"1\" text=\"managerName\"/><Cell col=\"2\" text=\"managerBirth\"/><Cell col=\"3\" text=\"managerAddress\"/><Cell col=\"4\" text=\"managerPhonenumber\"/><Cell col=\"5\" text=\"managerEmail\"/><Cell col=\"6\" text=\"managerTeam\"/></Band><Band id=\"body\"><Cell text=\"bind:managerNo\"/><Cell col=\"1\" text=\"bind:managerName\"/><Cell col=\"2\" text=\"bind:managerBirth\"/><Cell col=\"3\" text=\"bind:managerAddress\"/><Cell col=\"4\" text=\"bind:managerPhonenumber\"/><Cell col=\"5\" text=\"bind:managerEmail\"/><Cell col=\"6\" text=\"bind:managerTeam\"/></Band></Format></Formats>");
             this.addChild(obj.name, obj);
             // Layout Functions
             //-- Default Layout : this
@@ -55,7 +55,7 @@
         };
         
         // User Script
-        this.registerScript("Form_emp.xfdl", function() {
+        this.registerScript("Form_mag.xfdl", function() {
         /********************************************************************
             created:	  2022/02/18
             filename: 	C:\KH_edu17.1\Work\frm_emp.xfdl
@@ -132,7 +132,7 @@
         		"mag_info"// 1.ID
         		,"CmURL::manager/magInfo.kh"// 2.URL
         		,"" // 3.InDs : F->S jsp(I,U,D)
-        		,"ds_stdInfo=out_magAllInfo" // 4.OutDs : S->F jsp(SELECT)
+        		,"ds_magInfo=out_magAllInfo" // 4.OutDs : S->F jsp(SELECT)
         		,"" // 5.InVar : F->S(var)
         		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
         	);
@@ -167,7 +167,7 @@
             this.btn_delete.addEventHandler("onclick",this.btn_delete_onclick,this);
             this.btn_save.addEventHandler("onclick",this.btn_save_onclick,this);
         };
-        this.loadIncludeScript("Form_emp.xfdl");
+        this.loadIncludeScript("Form_mag.xfdl");
         this.loadPreloadList();
         
         // Remove Reference

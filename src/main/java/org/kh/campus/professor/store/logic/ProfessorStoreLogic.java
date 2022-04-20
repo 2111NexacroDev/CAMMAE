@@ -11,13 +11,13 @@ public class ProfessorStoreLogic implements ProfessorStore {
 
 	@Override
 	public Professor selectProfessor(SqlSession sqlSession, int professorNo) {
-		Professor professor = sqlSession.selectOne("");
+		Professor professor = sqlSession.selectOne("ProfessorMapper.selectProfessorInfoOne", professorNo);
 		return professor;
 	}
 
 	@Override
 	public int updateProfessor(SqlSession sqlSession, Professor professor) {
-		int result = sqlSession.update("");
+		int result = sqlSession.update("ProfessorMapper.updateProfessorInfo", professor);
 		return result;
 	}
 
