@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.kh.campus.question.domain.Question;
+import org.kh.campus.question.domain.QuestionReply;
 import org.kh.campus.question.domain.QuestionSearch;
 import org.kh.campus.question.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 public class QuestionController {
@@ -232,4 +237,70 @@ public class QuestionController {
 		}
 		return mv;
 	}
+	
+	
+	//댓글
+	
+	// 댓글 등록
+	@ResponseBody
+	@RequestMapping(value="/question/replyAdd", method = RequestMethod.POST)
+	public String questionReplyAdd(@ModelAttribute QuestionReply questionReply) {
+		//로그인 완성 후 변경 예정
+		String questionReplyWriter = "교수"; 
+		questionReply.setQuestionReplyWriter(questionReplyWriter);
+		
+		int result = qService.registerReply(questionReply);
+		if(result>0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	} 
+	
+	//댓글 조회(전달값 1개 ->Requestparam)
+	@ResponseBody
+	@RequestMapping(value="/question/replyList", method = RequestMethod.GET
+			, produces="application/json;charset=utf-8")
+	public String questionReplyList(@RequestParam("questionNo") int questionNo) {
+		
+		List<QuestionReply> qReplyList = qService.printAllQuetionReply(questionNo);
+		
+		if(!qReplyList.isEmpty()) {
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			return gson.toJson(qReplyList); //list->json
+		}
+		
+		return "";
+	}
+	
+	//댓글 수정
+	@ResponseBody
+	@RequestMapping(value="/question/replyModify", method=RequestMethod.POST)
+	public String questionReplyModify(@ModelAttribute QuestionReply questionReply) {
+		int result = qService.modifyQuestionReply(questionReply);
+		if(result>0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	//댓글 삭제
+	@ResponseBody
+	@RequestMapping(value="/question/replyDelete", method=RequestMethod.GET)
+	public String questionReplyDelete(@ModelAttribute QuestionReply questionReply) {
+	
+		int result = qService.removeQuestionReply(questionReply);
+		if(result>0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	
+	
+	
+	
+	
 }

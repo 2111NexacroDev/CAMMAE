@@ -3,6 +3,7 @@ package org.kh.campus.question.service;
 import java.util.List;
 
 import org.kh.campus.question.domain.Question;
+import org.kh.campus.question.domain.QuestionReply;
 import org.kh.campus.question.domain.QuestionSearch;
 
 public interface QuestionService {
@@ -21,5 +22,17 @@ public interface QuestionService {
 	public int questionCountUpdate(int questionNo);
 	//게시글 삭제
 	public int removeQuestion(int questionNo);
+	
+	
+	//댓글
+	
+	//댓글 조회
+	public List<QuestionReply> printAllQuetionReply(int questionNo);
+	//댓글 등록
+	public int registerReply(QuestionReply questionReply);
+	//댓글 수정
+	public int modifyQuestionReply(QuestionReply questionReply);
+	//댓글 삭제
+	public int removeQuestionReply(QuestionReply questionReply);
 
 }

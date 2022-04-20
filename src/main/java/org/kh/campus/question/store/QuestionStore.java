@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.question.domain.Question;
+import org.kh.campus.question.domain.QuestionReply;
 import org.kh.campus.question.domain.QuestionSearch;
 
 public interface QuestionStore {
@@ -15,6 +16,12 @@ public interface QuestionStore {
 	public int updateQuestion(Question question, SqlSession sqlSession);
 	public int updateCount(int questionNo, SqlSession sqlSession);
 	public int deleteQuestion(int questionNo, SqlSession sqlSession);
+	
+	//댓글
+	public List<QuestionReply> selectAllReply(int questionNo, SqlSession sqlSession);
+	public int insertReply(QuestionReply questionReply, SqlSession sqlSession);
+	public int updateReply(QuestionReply questionReply, SqlSession sqlSession);
+	public int deleteReply(QuestionReply questionReply, SqlSession sqlSession);
 
 
 }

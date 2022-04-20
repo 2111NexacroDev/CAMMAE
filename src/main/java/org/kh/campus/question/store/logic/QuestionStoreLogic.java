@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.question.domain.Question;
+import org.kh.campus.question.domain.QuestionReply;
 import org.kh.campus.question.domain.QuestionSearch;
 import org.kh.campus.question.store.QuestionStore;
 import org.springframework.stereotype.Repository;
@@ -52,6 +53,34 @@ public class QuestionStoreLogic implements QuestionStore {
 		int result = sqlSession.delete("QuestionMapper.deleteQuestion", questionNo);
 		return result;
 	}
+	
+	//댓글
+
+	@Override
+	public List<QuestionReply> selectAllReply(int questionNo, SqlSession sqlSession) {
+		List<QuestionReply> qReplyList = sqlSession.selectList("QuestionMapper.selectAllReply", questionNo);
+		return qReplyList;
+	}
+	
+	@Override
+	public int insertReply(QuestionReply questionReply, SqlSession sqlSession) {
+		int result = sqlSession.insert("QuestionMapper.insertReply", questionReply);
+		return result;
+	}
+
+	@Override
+	public int updateReply(QuestionReply questionReply, SqlSession sqlSession) {
+		int result = sqlSession.update("QuestionMapper.updateReply", questionReply);
+		return result;
+	}
+
+	@Override
+	public int deleteReply(QuestionReply questionReply, SqlSession sqlSession) {
+		int result = sqlSession.delete("QuestionMapper.deleteReply", questionReply);
+		return result;
+	}
+
+
 
 
 

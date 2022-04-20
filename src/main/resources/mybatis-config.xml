@@ -14,6 +14,7 @@
       <typeAlias type="org.kh.campus.professor.domain.Professor" alias="Professor"/>
 		  <typeAlias type="org.kh.campus.manager.domain.Manager" alias="Manager"/>
       <typeAlias type="org.kh.campus.question.domain.Question" alias="Question"/>
+      <typeAlias type="org.kh.campus.question.domain.QuestionReply" alias="QuestionReply"/>
       <typeAlias type="org.kh.campus.board.domain.Board" alias="Board"/>
       
    
