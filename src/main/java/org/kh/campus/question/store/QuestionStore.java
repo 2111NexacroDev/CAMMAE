@@ -11,6 +11,7 @@ public interface QuestionStore {
 	public Question selectOneQuestion(SqlSession sqlSession, int questionNo);
 	public int insertQuestion(Question question, SqlSession sqlSession);
 	public int updateQuestion(Question question, SqlSession sqlSession);
+	public int updateCount(int questionNo, SqlSession sqlSession);
 	public int deleteQuestion(int questionNo, SqlSession sqlSession);
 
 

@@ -43,10 +43,17 @@ public class QuestionServiceImpl implements QuestionService {
 	}
 	
 	@Override
+	public int questionCountUpdate(int questionNo) {
+		int result = qStore.updateCount(questionNo, sqlSession);
+		return result;
+	}
+
+	@Override
 	public int removeQuestion(int questionNo) {
 		int result = qStore.deleteQuestion(questionNo, sqlSession);
 		return result;
 	}
+
 
 
 	

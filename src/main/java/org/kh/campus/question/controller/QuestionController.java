@@ -50,8 +50,12 @@ public class QuestionController {
 		try {
 			Question question = qService.printOneQuestion(questionNo);
 			if (question != null) {
+				//조회수 증가
+				qService.questionCountUpdate(question.getQuestionNo());
+				
 				mv.addObject("question", question);
 				mv.setViewName("/question/questionDetail");
+				
 			} else {
 				System.out.println("상세조회실패");
 			}
