@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ManagerMapper">
+	<!-- 학생 -->
 	<resultMap type="Student" id="studentResultMap">
 		<id property="studentNo" column="STUDENT_NO"/>
 		<result property="universityCollege" column="UNIVERSITY_COLLEGE"/>
@@ -23,6 +24,12 @@
 		SELECT * FROM STUDENT_TBL
 	</select>
 	
+	<delete id="deleteStudent" parameterType="int">
+		DELETE FROM STUDENT_TBL
+		WHERE STUDENT_NO = #{studentNo}
+	</delete>
+	
+	<!-- 교수 -->
 	<resultMap type="Professor" id="professorResultMap">
 		<id property="professorNo" column="PROFESSOR_NO"/>
 		<result property="departmentName" column="DEPARTMENT_NAME"/>
@@ -38,6 +45,7 @@
 		SELECT * FROM Professor_TBL
 	</select>
 	
+	<!-- 관리자 -->
 	<resultMap type="Manager" id="managerResultMap">
 		<id property="managerNo" column="MANAGER_NO"/>
 		<result property="managerName" column="MANAGER_NAME"/>

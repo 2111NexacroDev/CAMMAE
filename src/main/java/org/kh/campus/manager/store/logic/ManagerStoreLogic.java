@@ -33,7 +33,7 @@ public class ManagerStoreLogic implements ManagerStore {
 
 	@Override
 	public int deleteStudent(SqlSession sqlSession, int studentNo) {
-		int result = sqlSession.delete("");
+		int result = sqlSession.delete("ManagerMapper.deleteStudent", studentNo);
 		return result;
 	}
 
