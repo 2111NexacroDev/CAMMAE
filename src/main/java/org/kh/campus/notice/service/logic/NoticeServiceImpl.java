@@ -36,4 +36,10 @@ public class NoticeServiceImpl implements NoticeService{
 		return notice;
 	}
 
+	@Override
+	public int modifyNotice(Notice notice) {
+		int result = nStore.updateNotice(notice, sqlSession);
+		return result;
+	}
+
 }
