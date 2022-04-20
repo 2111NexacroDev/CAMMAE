@@ -20,7 +20,34 @@
 	</resultMap>
 
 	<select id="selectAllQuestion" resultMap="questionResultMap">
-		SELECT * FROM QUESTION_TBL ORDER BY QUESTION_DATE DESC
+		SELECT * FROM QUESTION_TBL ORDER BY QUESTION_NO DESC
+	</select>
+	
+	<select id="selectSearchQuestion" resultMap="questionResultMap">
+		SELECT * FROM QUESTION_TBL
+		<if test="searchCondition.toString() == 'writer'">
+			WHERE QUESTION_WRITER LIKE '%' || #{searchValue} || '%'
+		</if>
+		<if test="searchCondition.toString() == 'title'">
+			WHERE QUESTION_TITLE LIKE '%' || #{searchValue} || '%'
+		</if>
+		<if test="searchCondition.toString() == 'contents'">
+			WHERE QUESTION_CONTENT LIKE '%' || #{searchValue} || '%'
+		</if>
+		<if test="searchCondition.toString() == 'all'">
+			WHERE QUESTION_CONTENT LIKE '%' || #{searchValue} || '%'
+			OR
+			QUESTION_TITLE LIKE '%' || #{searchValue} || '%'
+			OR QUESTION_WRITER LIKE
+			'%' || #{searchValue} || '%'
+		</if>
+		<if test="searchCondition.toString() == 'professor'">
+			WHERE PROFESSOR_NAME LIKE '%' || #{searchValue} || '%'		
+		</if>
+		<if test="searchCondition.toString() == 'lecture'">
+			WHERE LECTURE_NAME LIKE '%' || #{searchValue} || '%'		
+		</if>
+		ORDER BY QUESTION_NO DESC
 	</select>
 	
 	<select id="selectOneQuestion" resultMap="questionResultMap">
@@ -32,8 +59,11 @@
 	</insert>
 	
 	<update id="updateQuestion">
-		UPDATE QUESTION_TBL SET QUESTION_TITLE = #{questionTitle}, QUESTION_CONTENT = #{questionContent}, QUESTION_UPDATEDATE = DEFAULT WHERE QUESTION_NO = #{questionNo}
-		
+		UPDATE QUESTION_TBL SET PROFESSOR_NAME = #{professorName}, LECTURE_NAME = #{lectureName}, QUESTION_TITLE = #{questionTitle}, QUESTION_CONTENT = #{questionContent}, QUESTION_UPDATEDATE = DEFAULT, QUESTION_FILENAME = #{questionFileName}, QUESTION_FILERENAME = #{questionFileReNeme}, QUESTION_FILEPATH = #{questionFilePath} WHERE QUESTION_NO = #{questionNo}
+	</update>
+	
+	<update id="updateCount">
+		UPDATE QUESTION_TBL SET QUESTION_COUNT = QUESTION_COUNT + 1 WHERE QUESTION_NO = #{questionNo}
 	</update>
 	
 	<delete id="deleteQuestion">
