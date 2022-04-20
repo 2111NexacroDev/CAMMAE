@@ -52,7 +52,7 @@ h3{
 	<div class="center">
 			<h3 id="b-title">질의응답 게시판</h3>
 			<br>
-			<div><button class="btn" onclick="location.href='/question/writeView'">글쓰기</button></div>
+			<div><button class="btn" onclick="location.href='/question/registerView'">글쓰기</button></div>
 			<br>
 			<table width="600px" border="1">
 				<tr>
