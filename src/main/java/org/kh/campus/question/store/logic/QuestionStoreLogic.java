@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.question.domain.Question;
+import org.kh.campus.question.domain.QuestionSearch;
 import org.kh.campus.question.store.QuestionStore;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,13 @@ public class QuestionStoreLogic implements QuestionStore {
 		List<Question> qList = sqlSession.selectList("QuestionMapper.selectAllQuestion");
 		return qList;
 	}
+	
+	@Override
+	public List<Question> selectSearchQuestion(QuestionSearch questionSearch, SqlSession sqlSession) {
+		List<Question> qList = sqlSession.selectList("QuestionMapper.selectSearchQuestion", questionSearch);
+		return qList;
+	}
+	
 	@Override
 	public Question selectOneQuestion(SqlSession sqlSession, int questionNo) {
 		Question question = sqlSession.selectOne("QuestionMapper.selectOneQuestion", questionNo);

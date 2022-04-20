@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.kh.campus.question.domain.Question;
+import org.kh.campus.question.domain.QuestionSearch;
 import org.kh.campus.question.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,22 @@ public class QuestionController {
 				System.out.println("조회 실패");
 			}
 		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return mv;
+	}
+	
+	// 게시글 검색
+	@RequestMapping(value="/question/search", method = RequestMethod.GET)
+	public ModelAndView questionSearchList(ModelAndView mv, @ModelAttribute QuestionSearch questionSearch) {
+		
+		try {
+			List<Question> searchList = qService.printSearchQuestion(questionSearch);
+			if(!searchList.isEmpty()) {
+				mv.addObject("qList", searchList);
+				mv.setViewName("question/questionList");
+			}
+		}catch(Exception e) {
 			System.out.println(e.toString());
 		}
 		return mv;

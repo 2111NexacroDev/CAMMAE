@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.question.domain.Question;
+import org.kh.campus.question.domain.QuestionSearch;
 import org.kh.campus.question.service.QuestionService;
 import org.kh.campus.question.store.QuestionStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,13 @@ public class QuestionServiceImpl implements QuestionService {
 	public List<Question> printAllQuestion() {
 		List<Question> qList = qStore.selectAllQuestion(sqlSession);
 		return qList;
+	}
+	
+
+	@Override
+	public List<Question> printSearchQuestion(QuestionSearch questionSearch) {
+		List<Question> searchList = qStore.selectSearchQuestion(questionSearch, sqlSession); 
+		return searchList;
 	}
 	
 	@Override

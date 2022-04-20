@@ -3,11 +3,14 @@ package org.kh.campus.question.service;
 import java.util.List;
 
 import org.kh.campus.question.domain.Question;
+import org.kh.campus.question.domain.QuestionSearch;
 
 public interface QuestionService {
 	
-	//게식글 조회
+	//게시글 조회
 	public List<Question> printAllQuestion();
+	//게시글 검색 조회
+	public List<Question> printSearchQuestion(QuestionSearch questionSearch);
 	//게시글 상세 조회
 	public Question printOneQuestion(int questionNo);
 	//게시글 등록
