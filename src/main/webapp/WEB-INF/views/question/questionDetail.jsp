@@ -38,6 +38,22 @@ h3 {
 	font-weight: bold;
 	margin-right: 5px;
 }
+
+/* 댓글 */
+#rWriter {
+	width: 80%;
+	float: left;
+}
+
+#rDate {
+	width: 20%;
+	float: left;
+}
+
+#rContent {
+	width: 80%;
+	float: left;
+}
 </style>
 </head>
 
@@ -70,17 +86,34 @@ h3 {
 				<c:if test="${not empty question.questionFileReNeme }">
 					<br>
 					<span> <img
-						src="/resources/questionUploadFiles/${question.questionFileReNeme }" style="width:500px;">
+						src="/resources/questionUploadFiles/${question.questionFileReNeme }"
+						style="width: 500px;">
 					</span>
 				</c:if>
-
 			</div>
-
+			<br> 댓글
 			<hr style="width: 585px; text-align: center;">
-
+			<!-- 댓글 입력 -->
+			<div>
+				<textarea rows="3" cols="70" id="questionContent"
+					name="questionContent" placeholder="내용을 입력하세요"></textarea>
+				<button class="btn">등록</button>
+			</div>
+			<hr style="width: 585px; text-align: center;">
+			<!-- 댓글 조회 -->
+			<div>
+				<div id="rWriter">11</div>
+				<div id="rDate">11</div>
+				<div id="rContent">11</div>
+				<div id="rTag">
+					<a>수정</a> <a>삭제</a>
+				</div>
+				<hr style="width: 585px; text-align: center;">
+			</div>
 		</div>
-
 	</div>
+
+
 </body>
 </html>
 
