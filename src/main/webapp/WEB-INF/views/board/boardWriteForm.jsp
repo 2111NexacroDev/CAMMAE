@@ -49,7 +49,7 @@ h3{
 <body>
 	<div class="left">1</div>
 	<div class="center">
-		<form action="/board/register" method="POST"
+		<form action="/board/register.kh" method="POST"
 			enctype="multipart/form-data">
 			<h3 id="b-title">학과 게시판</h3>
 			<br>
@@ -73,8 +73,7 @@ h3{
 				<hr style="width: 585px; text-align: center;">
 				<div align="center" style="padding: 15px;">
 					<button class="btn" type="submit">등록</button>
-					<button class="btn" type="reset">수정</button>
-					<button class="btn" type="delete">삭제</button>
+					
 				</div>
 			</div>
 		</form>
