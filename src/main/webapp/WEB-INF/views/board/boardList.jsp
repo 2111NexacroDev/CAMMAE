@@ -48,7 +48,6 @@ h3{
 </head>
 
 <body>
-	<div class="left">1</div>
 	<div class="center">
 			<h3 id="b-title">학과게시판</h3>
 			<br>
@@ -65,10 +64,10 @@ h3{
 				<c:forEach items="${bList }" var="board">
 				
 				<tr>
-					<td>${board.questionNo }</td>
-					<td>${board.questionTitle }</td>
-					<td>${board.questionWriter }</td>
-					<td>${board.questionDate }</td>
+					<td>${board.boardNo }</td>
+					<td>${board.boardTitle }</td>
+					<td>${board.boardWriter }</td>
+					<td>${board.boardDate }</td>
 					
 				</tr>
 			

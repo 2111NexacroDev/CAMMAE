@@ -34,7 +34,7 @@ public class BoardController {
 			List<Board> bList = service.printAllBoard();
 			if (!bList.isEmpty()) {
 				mv.addObject("bList", bList);
-				mv.setViewName("notice/noticeList");
+				mv.setViewName("board/boardList");
 			} else {
 				mv.addObject("msg", "학과게시판 조회 실패");
 				mv.setViewName("common/errorPage");
