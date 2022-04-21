@@ -15,4 +15,8 @@ public interface LectureStore {
 
 	int deleteLecture(SqlSession sqlSession, int lectureNo);
 
+	Lecture selectOneLecture(SqlSession sqlSession, int lectureNo);
+
+
+
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.lecture.service.LectureService;
+import org.kh.campus.notice.domain.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class LectureController {
@@ -49,13 +51,29 @@ public class LectureController {
 		}
 	}
 	
-	/* @RequestMapping(value = "", method = RequestMethod.GET) */
-	public String lectureModify(Model model, @RequestParam("lectureNo") int lectureNo) {
-		int result = lService.modifyLecture(lectureNo);
-		
-		return "";
+//	@RequestMapping(value = "/lecture/modify.kh", method = RequestMethod.GET)
+//	public String lectureModify(Model model, 
+//			@RequestParam("lectureNo") int lectureNo) {
+//		Lecture lecture = lService.modifyLecture(lectureNo);
+//		if(lecture != null ) {
+//			model.addAttribute("lecture", lecture );
+//			return "lecture/lecture";
+//		}else {
+//			return "";
+//		}
+//	}
+	@RequestMapping(value="/lecture/Detail.kh", method = RequestMethod.GET)
+	public String lectureDetail(Model model, @RequestParam("lectureNo")int lectureNo) {
+		Lecture lecture = lService.printOneLecture(lectureNo);
+		if(lecture != null) {
+			model.addAttribute("lecture", lecture);
+			return "lecture/lectureDetailView";
+		}else {
+			model.addAttribute("msg", "디테일 조회 실패");
+			return "common/errorPage";
+		}
 	}
-
+	
 	// 강의 삭제
 	@RequestMapping(value = "/lecture/remove.kh", method = RequestMethod.GET)
 	public String lectureRemove(Model model, @RequestParam("lectureNo") int lectureNo) {
