@@ -3,6 +3,7 @@ package org.kh.campus.question.service.Logic;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.kh.campus.question.domain.PageInfo;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.domain.QuestionReply;
 import org.kh.campus.question.domain.QuestionSearch;
@@ -21,8 +22,8 @@ public class QuestionServiceImpl implements QuestionService {
 	private QuestionStore qStore;
 
 	@Override
-	public List<Question> printAllQuestion() {
-		List<Question> qList = qStore.selectAllQuestion(sqlSession);
+	public List<Question> printAllQuestion(PageInfo pi) {
+		List<Question> qList = qStore.selectAllQuestion(sqlSession, pi);
 		return qList;
 	}
 	
@@ -62,6 +63,14 @@ public class QuestionServiceImpl implements QuestionService {
 		int result = qStore.deleteQuestion(questionNo, sqlSession);
 		return result;
 	}
+	
+	//페이징
+	@Override
+	public int getListCount() {
+		int totalCount = qStore.selectListCount(sqlSession);
+		return totalCount;
+	}
+
 
 	
 	//댓글
@@ -89,6 +98,8 @@ public class QuestionServiceImpl implements QuestionService {
 		int result = qStore.deleteReply(questionReply, sqlSession);
 		return result;
 	}
+
+
 
 
 
