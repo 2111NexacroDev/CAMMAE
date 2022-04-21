@@ -23,6 +23,11 @@
 		SELECT * FROM QUESTION_TBL ORDER BY QUESTION_NO DESC
 	</select>
 	
+	<!-- 페이지 -->
+	<select id="selectListCount" resultType="_int">
+		SELECT COUNT(*) FROM QUESTION_TBL
+	</select>
+	
 	<select id="selectSearchQuestion" resultMap="questionResultMap">
 		SELECT * FROM QUESTION_TBL
 		<if test="searchCondition.toString() == 'writer'">
