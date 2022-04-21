@@ -117,10 +117,63 @@ public class MangerController {
 		return result;
 	}
 	// 교수 정보 등록 수정 삭제
-	public NexacroResult changeAllProfessor() {
+	@RequestMapping(value="/manager/mPrfUpdate.kh", method=RequestMethod.POST)
+	public NexacroResult changeAllProfessor(
+			@ParamDataSet(name="in_prf") 	DataSet inPrf
+			) throws Exception {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
+		int 	i;
 		
-		return result;
+		// DELETE
+		// 삭제했던 로우가 있으면 for문으로 반복해서 삭제
+		for(i = 0; i < inPrf.getRemovedRowCount(); i++) {
+			int sPrfNo = (Integer)inPrf.getRemovedData(i,  "professorNo");
+			mService.deleteProfessor(sPrfNo);
+			}
+		
+		// INSERT, UPDATE
+		// RowType에 따라서 INSERT OR UPDATE
+				int iResult = 0;
+				int uResult = 0;
+				for(i = 0; i < inPrf.getRowCount(); i++) {
+					int rowType = inPrf.getRowType(i);
+					int professorNo 	 = Integer.parseInt(dsGet(inPrf, i, "professorNo"));
+					String departmentName = dsGet(inPrf, i, "departmentName");
+					String professorName = dsGet(inPrf, i, "professorName");
+					String professorBirth 	 = dsGet(inPrf, i, "professorBirth");
+					String professorAddress 	 = dsGet(inPrf, i, "professorAddress");
+					String professorPhonenumber 	 = dsGet(inPrf, i, "professorPhonenumber");
+					String professorEmail = dsGet(inPrf, i, "professorEmail");
+					String professorPassword 	 = dsGet(inPrf, i, "professorNo");
+					Professor professor = new Professor(
+							professorNo
+							,	departmentName
+							, 	professorName
+							, 	professorBirth
+							, 	professorAddress
+							, 	professorPhonenumber
+							, 	professorEmail
+							, 	professorPassword);
+					if( rowType == DataSet.ROW_TYPE_INSERTED) {
+						iResult += mService.registerProfessor(professor);
+					}else if( rowType == DataSet.ROW_TYPE_UPDATED) {
+						String sPrfNo = inPrf.getSavedData(i, "professorNo").toString();
+						professor.setProfessorNo(Integer.parseInt(sPrfNo));
+						uResult += mService.modifyrProfessor(professor);
+					}
+				}
+				if(iResult < 0 && uResult < 0) {
+					nErrorCode = -1;
+					strErrorMsg = "FAIL";
+				}else {
+					nErrorCode 	= 0;
+					strErrorMsg = "SUCC";
+				}
+				result.addVariable("ErrorCode", nErrorCode);
+				result.addVariable("ErrorMsg", strErrorMsg);
+				return result;
 	}
 	
 	// 관리자 정보 조회
@@ -140,10 +193,63 @@ public class MangerController {
 	}
 	
 	// 관리자 정보 등록 수정 삭제
-	public NexacroResult changeAllManager() {
+	@RequestMapping(value="/manager/magUpdate.kh", method=RequestMethod.POST)
+	public NexacroResult changeAllManager(
+			@ParamDataSet(name="in_mag") 	DataSet inMag
+			) throws Exception {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
+		int 	i;
 		
-		return result;
+		// DELETE
+		// 삭제했던 로우가 있으면 for문으로 반복해서 삭제
+		for(i = 0; i < inMag.getRemovedRowCount(); i++) {
+			int sMagNo = (Integer)inMag.getRemovedData(i,  "managerNo");
+			mService.deleteManager(sMagNo);
+			}
+		
+		// INSERT, UPDATE
+		// RowType에 따라서 INSERT OR UPDATE
+				int iResult = 0;
+				int uResult = 0;
+				for(i = 0; i < inMag.getRowCount(); i++) {
+					int rowType = inMag.getRowType(i);
+					int managerNo 	 = Integer.parseInt(dsGet(inMag, i, "managerNo"));
+					String managerName = dsGet(inMag, i, "managerName");
+					String managerBirth = dsGet(inMag, i, "managerBirth");
+					String managerAddress 	 = dsGet(inMag, i, "managerAddress");
+					String managerPhonenumber 	 = dsGet(inMag, i, "managerPhonenumber");
+					String managerEmail 	 = dsGet(inMag, i, "managerEmail");
+					String managerPassword = dsGet(inMag, i, "managerPassword");
+					String managerTeam 	 = dsGet(inMag, i, "managerTeam");
+					Manager manager = new Manager(
+							managerNo
+							,	managerName
+							, 	managerBirth
+							, 	managerAddress
+							, 	managerPhonenumber
+							, 	managerEmail
+							, 	managerPassword
+							, 	managerTeam);
+					if( rowType == DataSet.ROW_TYPE_INSERTED) {
+						iResult += mService.registerManager(manager);
+					}else if( rowType == DataSet.ROW_TYPE_UPDATED) {
+						String sMagNo = inMag.getSavedData(i, "managerNo").toString();
+						manager.setManagerNo(Integer.parseInt(sMagNo));
+						uResult += mService.modifyrManager(manager);
+					}
+				}
+				if(iResult < 0 && uResult < 0) {
+					nErrorCode = -1;
+					strErrorMsg = "FAIL";
+				}else {
+					nErrorCode 	= 0;
+					strErrorMsg = "SUCC";
+				}
+				result.addVariable("ErrorCode", nErrorCode);
+				result.addVariable("ErrorMsg", strErrorMsg);
+				return result;
 	}
 	
 	// Dataset value

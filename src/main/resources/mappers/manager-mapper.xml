@@ -67,6 +67,27 @@
 		SELECT * FROM Professor_TBL
 	</select>
 	
+	<insert id="insertProfessor">
+		INSERT INTO PROFESSOR_TBL VALUES(#{professorNo}, #{departmentName}, #{professorName}, #{professorBirth}
+		, #{professorAddress}, #{professorPhonenumber}, #{professorEmail}, #{professorPassword})
+	</insert>
+	
+	<update id="updateProfessor">
+		UPDATE PROFESSOR_TBL
+		SET DEPARTMENT_NAME = #{departmentName},
+		PROFESSOR_NAME = #{professorName},
+		PROFESSOR_BIRTH = #{professorBirth},
+		PROFESSOR_ADDRESS = #{professorAddress},
+		PROFESSOR_PHONENUMBER = #{professorPhonenumber},
+		PROFESSOR_EMAIL = #{professorEmail}
+		WHERE PROFESSOR_NO = #{professorNo}
+	</update>
+	
+	<delete id="deleteProfessor" parameterType="int">
+		DELETE FROM PROFESSOR_TBL
+		WHERE PROFESSOR_NO = #{professorNo}
+	</delete>
+	
 	<!-- 관리자 -->
 	<resultMap type="Manager" id="managerResultMap">
 		<id property="managerNo" column="MANAGER_NO"/>
@@ -78,6 +99,27 @@
 		<result property="managerPassword" column="MANAGER_PASSWORD"/>
 		<result property="managerTeam" column="MANAGER_TEAM"/>
 	</resultMap>
+	
+	<insert id="insertManager">
+		INSERT INTO MANAGER_TBL VALUES(#{managerNo}, #{managerName}, #{managerBirth}, #{managerAddress}
+		, #{managerPhonenumber}, #{managerEmail}, #{managerPassword}, #{managerTeam})
+	</insert>
+	
+	<update id="updateManager">
+		UPDATE MANAGER_TBL
+		SET MANAGER_NAME = #{managerName},
+		MANAGER_BIRTH = #{managerBirth},
+		MANAGER_ADDRESS = #{managerAddress},
+		MANAGER_PHONENUMBER = #{managerPhonenumber},
+		MANAGER_EMAIL = #{managerEmail},
+		MANAGER_TEAM = #{managerTeam}
+		WHERE MANAGER_NO = #{managerNo}
+	</update>
+	
+	<delete id="deleteManager" parameterType="int">
+		DELETE FROM MANAGER_TBL
+		WHERE MANAGER_NO = #{managerNo}
+	</delete>
 	
 	<select id="selectManagerList" resultMap="managerResultMap">
 		SELECT * FROM Manager_TBL
