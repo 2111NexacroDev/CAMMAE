@@ -6,11 +6,13 @@ import org.kh.campus.notice.domain.Notice;
 
 public interface NoticeService {
 	
-	public List<Notice> printAllNotice();
-	public Notice printOneNotice(int noticeNo);
+	public List<Notice> printAllNotice();//공지사항 전체 조회
+	public Notice printOneNotice(int noticeNo);//공지사항 상세조회
 	
 	
-	public int registerNotice(Notice notice);
-	public int modifyNotice(Notice notice);
+	public int registerNotice(Notice notice);//공지사항 등록
+	public int modifyNotice(Notice notice);//공지사항 수정
+	public int noticeCountUpdate(int noticeNo);//공지사항 조회수
+	public int removeNotice(int noticeNo);//공지사항 삭제
 
 }

@@ -35,4 +35,17 @@ public class NoticeStoreLogic implements NoticeStore{
 		return result;
 	}
 
+	@Override
+	public int updateCountNotice(int noticeNo, SqlSession sqlSession) {
+		int result = sqlSession.update("NoticeMapper.updateCountNotice", noticeNo);
+		return result;
+	}
+	
+	@Override
+	public int deleteNotice(int noticeNo, SqlSession sqlSession) {
+		int result = sqlSession.delete("NoticeMapper.deleteNotice", noticeNo);
+		return result;
+	}
+
+
 }
