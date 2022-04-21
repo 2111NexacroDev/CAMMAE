@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LectureMapper">
+	<resultMap type="Lecture"  id="lectureResultMap">
+		<id property="lectureNo" column="LECTURE_NO" />
+		<result property ="professorNo" column= "PROFESSOR_NO" />
+		<result property="universityCollege" column="UNIVERSITY_COLLEGE" />
+		<result property="lectureDepartment" column="LECTURE_DEPARTMENT" />
+		<result property="lectureName" column="LECTURE_NAME" />
+		<result property="professorName" column="PROFESSOR_NAME" />
+		<result property="lectureDivision" column="LECTURE_DIVISION" />
+		<result property="lectureGrade" column="LECTURE_GRADE" />
+		<result property="lectureRoom" column="LECTURE_ROOM" />
+		<result property="lecturePeople" column="LECTURE_PEOPLE" />
+		<result property="lectureTime" column="LECTURE_TIME" />
+	</resultMap>
+	
+	<insert id="insertLecture"  parameterType="Lecture">
+	INSERT INTO LECTURE_TBL VALUES(SEQ_LEC_NO.NEXTVAL, NULL, NULL, #{lectureDepartment}, #{lectureName}, #{professorName}, #{lectureDivision}, #{lectureGrade}, #{lectureRoom}, #{lecturePeople}, #{lectureTime})
+	</insert>
+</mapper>
