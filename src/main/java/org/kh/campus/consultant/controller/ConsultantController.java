@@ -52,7 +52,7 @@ public class ConsultantController {
 	public String consultantRegister(Model model, @ModelAttribute Consultant consultant) {
 		int result = cService.insertCons(consultant);
 		if(result >0) {
-			return "redirect:/consultant/list.kh";
+			return "consultant";
 		}else {
 			model.addAttribute("msg", "상담신청 등록 실패");
 			return "common/errorPage";
