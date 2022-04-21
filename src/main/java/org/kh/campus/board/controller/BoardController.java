@@ -163,7 +163,7 @@ public class BoardController {
 			return "common.errorPage";
 		}
 	}
-//	//수정
+	//수정
 //	@RequestMapping(value="/board/update.kh", method=RequestMethod.POST)
 //	public ModelAndView boardUpdate(
 //			ModelAndView mv
@@ -173,7 +173,11 @@ public class BoardController {
 //		try {
 //			if(reloadFile != null && !reloadFile.isEmpty()) {
 //			deleteFile(board.getBoardFilePath(), request);
+//			HashMap<String, String> fileMap = saveFile(reloadFile, request);
+//			String savePath != null {
+//				board.set
+//			}
 //			}
 //		}
-//	}
+//}
 }
