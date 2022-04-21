@@ -10,7 +10,7 @@
 <body>
 	<h1 align="center">수강개설목록</h1>
 	<br><br>
-	<table align="center" width="600" border="1">
+	<table align="center" width="600" border="2">
 		<tr>
 			<th>과목코드</th>
 			<th>교수코드</th>
@@ -37,7 +37,14 @@
 				<td>${lecture.lectureRoom }</td>
 				<td>${lecture.lecturePeople }</td>
 				<td>${lecture.lectureTime }</td>
-			</tr>		
+			</tr>	
+			<tr>
+				<td colspan="13" align="right">
+				<c:url var="lRemove" value="/lecture/remove.kh">
+					<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
+				</c:url>
+				<a href="${lRemove }">삭제</a>
+			</tr>	
 		</c:forEach>
 	</table>
 </body>

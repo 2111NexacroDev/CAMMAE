@@ -2,6 +2,7 @@ package org.kh.campus.lecture.domain;
 
 public class Lecture {
 	private int lectureNo;
+	private int professorNo;
 	private String universityCollege;
 	private String lectureDepartment;
 	private String lectureName;
@@ -11,7 +12,6 @@ public class Lecture {
 	private String lectureRoom;
 	private int lecturePeople;
 	private String lectureTime;
-	private int professorNo;
 	
 	public Lecture() {}
 

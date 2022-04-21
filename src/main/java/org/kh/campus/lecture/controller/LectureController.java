@@ -56,11 +56,26 @@ public class LectureController {
 		return "";
 	}
 
-	/* @RequestMapping(value = "", method = RequestMethod.GET) */
+	// 강의 삭제
+	@RequestMapping(value = "/lecture/remove.kh", method = RequestMethod.GET)
 	public String lectureRemove(Model model, @RequestParam("lectureNo") int lectureNo) {
+	try {
 		int result = lService.removeLecture(lectureNo);
+		if(result > 0 ) {
+			return "redirect:/lecture/list.kh";
+		} else {
+			model.addAttribute("msg", "과목 삭제 실패");
+			return "common/errorPage";
+		}
 		
-		return "";
+	} catch (Exception e) {
+		model.addAttribute("msg",e.toString());
+		return "common/errorPage";
 	}
+	}
+	
+	
+	
+	
 
 }
