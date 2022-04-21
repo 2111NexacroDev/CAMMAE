@@ -34,4 +34,10 @@ public class LectureStoreLogic implements LectureStore{
 		return result;
 	}
 
+	@Override
+	public Lecture selectOneLecture(SqlSession sqlSession, int lectureNo) {
+		Lecture lecture = sqlSession.selectOne("LectureMapper.selectOneLecture", lectureNo);
+		return lecture;
+	}
+
 }

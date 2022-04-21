@@ -23,28 +23,31 @@
 			<th>강의실</th>
 			<th>강의인원</th>
 			<th>강의시간</th>
+			<th></th>
 		</tr>
 		<c:forEach items="${lList }" var="lecture">
 			<tr>
+			<c:url var="lDetail" value="/lecture/Detail.kh">
+						<c:param name="lectureNo" value="${lecture.lectureNo}"></c:param>
+			</c:url>
+											
 				<td>${lecture.lectureNo }</td>
 				<td>${lecture.professorNo }</td>
 				<td>${lecture.universityCollege }</td>
 				<td>${lecture.lectureDepartment }</td>
-				<td>${lecture.lectureName }</td>
+				<td><a href="${lDetail}">${lecture.lectureName }</a></td>
 				<td>${lecture.professorName }</td>
 				<td>${lecture.lectureDivision }</td>
 				<td>${lecture.lectureGrade }</td>
 				<td>${lecture.lectureRoom }</td>
 				<td>${lecture.lecturePeople }</td>
 				<td>${lecture.lectureTime }</td>
-			</tr>	
-			<tr>
-				<td colspan="13" align="right">
-				<c:url var="lRemove" value="/lecture/remove.kh">
+				<td><c:url var="lRemove" value="/lecture/remove.kh">
 					<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
 				</c:url>
-				<a href="${lRemove }">삭제</a>
+				<a href="${lRemove }">삭제</a></td>
 			</tr>	
+		
 		</c:forEach>
 	</table>
 </body>
