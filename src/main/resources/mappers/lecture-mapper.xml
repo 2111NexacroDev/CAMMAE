@@ -20,4 +20,8 @@
 	<insert id="insertLecture"  parameterType="Lecture">
 	INSERT INTO LECTURE_TBL VALUES(SEQ_LEC_NO.NEXTVAL, NULL, NULL, #{lectureDepartment}, #{lectureName}, #{professorName}, #{lectureDivision}, #{lectureGrade}, #{lectureRoom}, #{lecturePeople}, #{lectureTime})
 	</insert>
+	
+	<select id="selectAllLecture" resultMap="lectureResultMap">
+	SELECT * FROM LECTURE_TBL 
+	</select>
 </mapper>

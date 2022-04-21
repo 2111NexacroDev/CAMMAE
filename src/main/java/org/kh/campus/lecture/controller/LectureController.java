@@ -17,12 +17,13 @@ public class LectureController {
 	@Autowired
 	private LectureService lService;
 	
-	/* @RequestMapping(value="" ) */
+	// 수강개설 조회
+	@RequestMapping(value="/lecture/list.kh", method=RequestMethod.GET )
 	public String lectureListView(Model model){
 		List<Lecture> lList = lService.printAllLecture();
 		if(!lList.isEmpty()) {
 			model.addAttribute("lList", lList);
-			return "";
+			return "lecture/lectureListView";
 		}else {
 			model.addAttribute("msg", "과목개설 실패");
 			return "common/errorPage";
@@ -30,12 +31,13 @@ public class LectureController {
 	
 		
 	}
-	
+	// 수강개설 페이지
 	@RequestMapping(value = "/lecture/writeView.kh", method = RequestMethod.GET)
 	public String lectureWriteView() {
 		return  "lecture/lectureWriteView";
-		
 	}
+	
+	//수강 개설 등록 실행
 	@RequestMapping(value="/lecture/register.kh", method=RequestMethod.POST)
 	public String lectureRegister(Model model, @ModelAttribute Lecture lecture) {
 		int result = lService.registerLecture(lecture);
