@@ -21,13 +21,13 @@ public class ManagerStoreLogic implements ManagerStore {
 
 	@Override
 	public int insertStudent(SqlSession sqlSession, Student student) {
-		int result = sqlSession.insert("");
+		int result = sqlSession.insert("ManagerMapper.insertStudent", student);
 		return result;
 	}
 
 	@Override
 	public int updateStudent(SqlSession sqlSession, Student student) {
-		int result = sqlSession.update("");
+		int result = sqlSession.update("ManagerMapper.updateStudent", student);
 		return result;
 	}
 

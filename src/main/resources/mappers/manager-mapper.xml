@@ -24,6 +24,28 @@
 		SELECT * FROM STUDENT_TBL
 	</select>
 	
+	<insert id="insertStudent">
+		INSERT INTO STUDENT_TBL VALUES(#{studentNo}, #{universityCollege}, #{departmentName}, #{studentName}
+		, #{studentGrade}, #{studentBirth}, #{studentAddress}, #{studentEmail}, #{studentPassword}, #{professorNo}
+		, #{studentState}, #{studentState}, #{professorName})
+	</insert>
+	
+	<update id="updateStudent">
+		UPDATE STUDENT_TBL
+		SET UNIVERSITY_COLLEGE = #{universityCollege},
+		DEPARTMENT_NAME = #{departmentName},
+		STUDENT_NAME = #{studentName},
+		STUDENT_GRADE = #{studentGrade},
+		STUDENT_BIRTH = #{studentBirth},
+		STUDENT_ADDRESS = #{studentAddress},
+		STUDENT_PHONENUMBER = #{studentPhonenumber},
+		STUDENT_EMAIL = #{studentEmail},
+		PROFESSOR_NO = #{professorNo},
+		STUDENT_STATE = #{studentState},
+		PROFESSOR_NAME = #{professorName}
+		WHERE STUDENT_NO = #{studentNo}
+	</update>
+	
 	<delete id="deleteStudent" parameterType="int">
 		DELETE FROM STUDENT_TBL
 		WHERE STUDENT_NO = #{studentNo}
