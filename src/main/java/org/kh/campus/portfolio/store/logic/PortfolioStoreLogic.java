@@ -47,8 +47,8 @@ public class PortfolioStoreLogic implements PortfolioStore {
 	}
 
 	@Override
-	public Portfolio selectprintAdminDetailPort(SqlSession sqlSession, String port_title) {
-		Portfolio portfolio = sqlSession.selectOne("PortfolioMapper.selectprintAdminDetailPort", port_title);
+	public Portfolio selectprintAdminDetailPort(SqlSession sqlSession, int port_no) {
+		Portfolio portfolio = sqlSession.selectOne("PortfolioMapper.selectprintAdminDetailPort", port_no);
 		return portfolio;
 	}
 
@@ -57,6 +57,32 @@ public class PortfolioStoreLogic implements PortfolioStore {
 		int totalCount = sqlSession.selectOne("PortfolioMapper.selectListCount");
 		return totalCount;
 	}
+
+	@Override
+	public Portfolio selectprintDetailPort(SqlSession sqlSession, int port_no) {
+		Portfolio portfolio = sqlSession.selectOne("PortfolioMapper.selectprintDetailPort", port_no);
+		return portfolio;
+	}
+
+	@Override
+	public Portfolio selectprintOneByNo(SqlSession sqlSession, Integer port_no) {
+		Portfolio portfolio = sqlSession.selectOne("PortfolioMapper.selectprintOneByNo", port_no);
+		return portfolio;
+	}
+
+	@Override
+	public int updatePortfolio(SqlSession sqlSession) {
+		int result = sqlSession.update("PortfolioMapper.updatePortfolio");
+		return result;
+	}
+
+	@Override
+	public int deletePortfolio(SqlSession sqlSession, int port_no) {
+		int result = sqlSession.delete("PortfolioMapper.deletePortfolio", port_no);
+		return result;
+	}
+
+
 	
 
 }
