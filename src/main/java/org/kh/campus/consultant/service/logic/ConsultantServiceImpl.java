@@ -3,9 +3,9 @@ package org.kh.campus.consultant.service.logic;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
-import org.kh.campus.common.PageInfo;
 import org.kh.campus.consultant.domain.Consultant;
 import org.kh.campus.consultant.domain.ConsultantReply;
+import org.kh.campus.consultant.domain.PageInfo;
 import org.kh.campus.consultant.service.ConsultantService;
 import org.kh.campus.consultant.store.ConsultantStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class ConsultantServiceImpl implements ConsultantService {
 		
 	@Override
 	public List<Consultant> printAllCons(PageInfo pi) {
-		List<Consultant>cList = cStore.selectAllCons(sqlSession);
+		List<Consultant>cList = cStore.selectAllCons(sqlSession, pi);
 		return cList;
 	}
 
@@ -37,20 +37,14 @@ public class ConsultantServiceImpl implements ConsultantService {
 	}
 
 	@Override
-	public List<ConsultantReply> printByConReply(PageInfo pi) {
-		List<ConsultantReply> crList = cStore.selectByConReply(sqlSession);
-		return crList;
-	}
-
-	@Override
 	public List<Consultant> printAdminAllCons(PageInfo pi) {
-		List<Consultant> cList = cStore.selectAdminAllCons(sqlSession);
+		List<Consultant> cList = cStore.selectAdminAllCons(sqlSession, pi);
 		return cList;
 	}
 
 	@Override
-	public Consultant printAdminDetailCons(String consultant_title) {
-		Consultant consultant = cStore.selectAdminDetailCons(sqlSession, consultant_title);
+	public Consultant printAdminDetailCons(Integer consultant_no) {
+		Consultant consultant = cStore.selectAdminDetailCons(sqlSession, consultant_no);
 		return consultant;
 	}
 
@@ -67,5 +61,12 @@ public class ConsultantServiceImpl implements ConsultantService {
 		int totalCount = cStore.selectListCount(sqlSession);
 		return totalCount;
 	}
+
+	@Override
+	public List<ConsultantReply> printAllAdminReply(int cons_no) {
+		List<ConsultantReply>crList = cStore.selectAllAdminReply(sqlSession,cons_no);
+		return crList;
+	}
+
 
 }

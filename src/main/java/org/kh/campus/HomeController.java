@@ -1,7 +1,5 @@
 package org.kh.campus;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 import org.slf4j.Logger;
@@ -25,11 +23,10 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 
-	@RequestMapping(value = "/main.kh", method = RequestMethod.GET)
-	public String home() {
-		
-	
-		return "main";
+	@RequestMapping(value = "/home.kh", method = RequestMethod.GET)
+	public String home(Locale locale, Model model) {
+		NexacroResult result = new NexacroResult();
+		return "redirect:/nexaui/index.html";
 	}
 	
 }

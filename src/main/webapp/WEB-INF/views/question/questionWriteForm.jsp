@@ -77,13 +77,13 @@ h3{
 				</div>
 
 				<div style="padding: 10px;">
-					<input type="file" id="uploadfile" name="uploadFile">
+					<input type="file" id="fileArea" name="uploadFile">
 				</div>
 
 				<hr style="width: 585px; text-align: center;">
 				<div align="center" style="padding: 15px;">
 					<button class="btn" type="submit">등록</button>
-					<button class="btn" type="reset">수정</button>
+					<button class="btn" type="reset">취소</button>
 				</div>
 			</div>
 		</form>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PortfolioMapper">
+	<resultMap type="Portfolio" id="portfolioResultMap">
+		<id property="port_no" column="PORT_NO" />
+		<result property="port_title" column="PORT_TITLE" />
+		<result property="port_name" column="PORT_NAME" />
+		<result property="port_student_no" column="PORT_STUDENT_NO" />
+		<result property="port_college" column="PORT_COLLEGE" />
+		<result property="port_student_number" column="PORT_STUDENT_NUMBER" />
+		<result property="port_license" column="PORT_LICENSE" />
+		<result property="port_licenseRename" column="PORT_LICENSERENAME" />
+		<result property="port_award_history" column="PORT_AWARD_HISTORY" />
+		<result property="port_award_historyRename" column="PORT_AWARD_HISTORY_RENAME" />
+		<result property="port_writerDate" column="PORT_WRITEDATE" />
+		<result property="port_content" column="PORT_CONTENT" />
+		<result property="port_licenseFilePath" column = "PORT_LICENSE_FILEPATH" />
+		<result property="port_awardFilePath" column = "PORT_AWARD_HISTORY_FILEPATH" />
+		
+	</resultMap>
+	<insert id="insertPort" parameterType="Portfolio">
+		INSERT INTO PORTFOLIO_TBL VALUES(SEQ_PORT_NO.NEXTVAL,#{port_title}, #{port_name}, #{port_student_no}, #{port_college}, #{port_student_number}, #{port_license},#{port_licenseRename}, #{port_award_history}, #{port_award_historyRename}, DEFAULT, #{port_content}, #{port_licenseFilePath}, #{port_awardFilePath})
+	</insert>
+	
+	<select id="selectAdminAllPort" resultMap="portfolioResultMap">
+		SELECT PORT_NO, PORT_TITLE, PORT_STUDENT_NO,  PORT_NAME, PORT_COLLEGE, PORT_STUDENT_NUMBER, PORT_LICENSE, PORT_AWARD_HISTORY, PORT_WRITEDATE, PORT_CONTENT
+		FROM PORTFOLIO_TBL
+	</select>
+	
+	<select id="selectprintOneByNo" resultMap="portfolioResultMap">
+		SELECT * FROM PORTFOLIO_TBL WHERE PORT_NO = #{port_no}
+	</select>
+	
+	<update id="updatePortfolio" parameterType="Portfolio">
+		UPDATE PORTFOLIO_TBL SET PORT_TITLE = #{port_title}, PORT_NAME = #{port_name}, PORT_STUDENT_NO = #{port_student_no}, PORT_COLLEGE = #{port_college}, PORT_STUDENT_NUMBER = #{port_student_number}, 
+		PORT_LICENSE = #{port_license}, PORT_AWARD_HISTORY = #{port_award_history}, PORT_WRITEDATE = #{port_writerDate}, PORT_CONTENT = #{port_content}
+		WHERE PORT_NO = #{port_no}
+	</update>
+	
+	
+	<select id="selectListCount" resultType="_int">
+		SELECT COUNT(*) FROM PORTFOLIO_TBL
+	</select>
+	
+	<select id="selectprintAdminDetailPort" resultMap="portfolioResultMap">
+		SELECT PORT_NO, PORT_TITLE, PORT_STUDENT_NO,  PORT_NAME, PORT_COLLEGE, PORT_STUDENT_NUMBER, PORT_LICENSE, PORT_AWARD_HISTORY, PORT_WRITEDATE, PORT_CONTENT
+		FROM PORTFOLIO_TBL WHERE PORT_NO = #{port_no}
+	</select>
+	
+	<select id="selectAllPort" resultMap="portfolioResultMap">
+		SELECT PORT_NO, PORT_TITLE, PORT_NAME, PORT_LICENSE, PORT_AWARD_HISTORY, PORT_WRITEDATE, PORT_CONTENT FROM PORTFOLIO_TBL
+	</select>
+</mapper>

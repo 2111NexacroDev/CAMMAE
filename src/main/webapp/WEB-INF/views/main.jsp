@@ -16,6 +16,7 @@
         <!-- gnb = global navigation bar  -->
         <div id="gnb">   
             <div class="inner">
+            
                 <a href="/login.kh" class="btn_gnb_home">
                  
                     HOME
@@ -41,7 +42,7 @@
                     <li><a href="#" class="btn_lnb_dep1">게시판</a></li>
                     <li><a href="#" class="btn_lnb_dep1">수강신청</a></li>
                     <li><a href="#" class="btn_lnb_dep1">캠퍼스매니저</a></li>
-                    <li><a href="#" class="btn_lnb_dep1">취업지원센터</a></li>
+                    <li><a href="/notice/list.kh" class="btn_lnb_dep1">취업지원센터</a></li>
                 </ul>
             </div>
         </div>

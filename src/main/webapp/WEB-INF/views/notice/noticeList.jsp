@@ -8,9 +8,9 @@
 <title>공지사항</title>
 </head>
 <body>
-	<h1>공지사항 목록 조회</h1>
+	<h1 align="center">공지사항</h1>
 	<br><br>
-	<div><button onclick="locatioin.href='/notice/writeView.kh'">글쓰기</button></div>
+	<div><button onclick="location.href='/notice/writeView.kh'">글쓰기</button></div>
 	<table align="center" width="600" border="1">
 		<tr>
 			<th>번호</th>
@@ -32,5 +32,36 @@
 			</tr>		
 		</c:forEach>
 	</table>
+	<div class="paging">
+
+								<c:if test="${pi.startNavi ==1 }">
+
+									<a href="/notice/list.kh?page=1"></a>
+
+								</c:if>
+								<c:if test="${pi.prev}">
+
+									<a href="/notice/list.kh?page=${pi.startNavi-1}"> 
+									</a>
+								</c:if>
+
+								<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
+									<c:url var="pagination" value="/notice/list.kh">
+										<c:param name="page" value="${p }"></c:param>
+									</c:url>
+
+									<a href="${pagination }"><button class="on1">${p }</button></a>&nbsp;
+																		
+									</c:forEach>
+
+
+								<c:if test="${pi.next && pi.endNavi > 0}">
+
+									<a href="/notice/list.kh?page=${pi.endNavi+1}">
+									</a>
+
+								</c:if>
+
+							</div>
 </body>
 </html>

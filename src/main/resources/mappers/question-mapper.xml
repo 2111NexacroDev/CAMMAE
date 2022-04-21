@@ -20,11 +20,95 @@
 	</resultMap>
 
 	<select id="selectAllQuestion" resultMap="questionResultMap">
-		SELECT * FROM QUESTION_TBL ORDER BY QUESTION_DATE DESC
+		SELECT * FROM QUESTION_TBL ORDER BY QUESTION_NO DESC
+	</select>
+	
+	<!-- 페이지 -->
+	<select id="selectListCount" resultType="_int">
+		SELECT COUNT(*) FROM QUESTION_TBL
+	</select>
+	
+	<select id="selectSearchQuestion" resultMap="questionResultMap">
+		SELECT * FROM QUESTION_TBL
+		<if test="searchCondition.toString() == 'writer'">
+			WHERE QUESTION_WRITER LIKE '%' || #{searchValue} || '%'
+		</if>
+		<if test="searchCondition.toString() == 'title'">
+			WHERE QUESTION_TITLE LIKE '%' || #{searchValue} || '%'
+		</if>
+		<if test="searchCondition.toString() == 'contents'">
+			WHERE QUESTION_CONTENT LIKE '%' || #{searchValue} || '%'
+		</if>
+		<if test="searchCondition.toString() == 'all'">
+			WHERE QUESTION_CONTENT LIKE '%' || #{searchValue} || '%'
+			OR
+			QUESTION_TITLE LIKE '%' || #{searchValue} || '%'
+			OR QUESTION_WRITER LIKE
+			'%' || #{searchValue} || '%'
+		</if>
+		<if test="searchCondition.toString() == 'professor'">
+			WHERE PROFESSOR_NAME LIKE '%' || #{searchValue} || '%'		
+		</if>
+		<if test="searchCondition.toString() == 'lecture'">
+			WHERE LECTURE_NAME LIKE '%' || #{searchValue} || '%'		
+		</if>
+		ORDER BY QUESTION_NO DESC
+	</select>
+	
+	<select id="selectOneQuestion" resultMap="questionResultMap">
+		SELECT * FROM QUESTION_TBL WHERE QUESTION_NO = #{questionNo}
 	</select>
 
 	<insert id="insertQuestion">
 		INSERT INTO QUESTION_TBL VALUES(SEQ_QUESTION_NO.NEXTVAL, #{professorName}, #{lectureName}, #{questionTitle}, #{questionContent}, #{questionWriter}, DEFAULT, DEFAULT, DEFAULT, #{questionFileName}, #{questionFileReNeme}, #{questionFilePath})
 	</insert>
+	
+	<update id="updateQuestion">
+		UPDATE QUESTION_TBL SET PROFESSOR_NAME = #{professorName}, LECTURE_NAME = #{lectureName}, QUESTION_TITLE = #{questionTitle}, QUESTION_CONTENT = #{questionContent}, QUESTION_UPDATEDATE = DEFAULT, QUESTION_FILENAME = #{questionFileName}, QUESTION_FILERENAME = #{questionFileReNeme}, QUESTION_FILEPATH = #{questionFilePath} WHERE QUESTION_NO = #{questionNo}
+	</update>
+	
+	<update id="updateCount">
+		UPDATE QUESTION_TBL SET QUESTION_COUNT = QUESTION_COUNT + 1 WHERE QUESTION_NO = #{questionNo}
+	</update>
+	
+	<delete id="deleteQuestion">
+		DELETE FROM QUESTION_TBL WHERE QUESTION_NO = #{questionNo}
+	</delete>
+	
+	
+	<!-- 댓글 -->
+	<resultMap type="QuestionReply" id="qReplyResult">
+		<id property="questionReplyNo" column="QUESTIONREPLY_NO"></id>
+		<result property="questionNo" column="QUESTION_NO"/>
+		<result property="questionReplyWriter" column="QUESTIONREPLY_WRITER"/>
+		<result property="questionReplyContent" column="QUESTIONREPLY_CONTENT"/>
+		<result property="questionReplyDate" column="QUESTIONREPLY_DATE"/>
+		<result property="questionReplyUpdateDate" column="QUESTIONREPLY_UPDATEDATE"/>
+	</resultMap>
+	
+	
+	
+	<select id="selectAllReply" resultMap="qReplyResult">
+		SELECT * FROM QUESTIONREPLY_TBL WHERE QUESTION_NO = #{questionNo}
+	</select>
+	
+	<insert id="insertReply">
+		INSERT INTO QUESTIONREPLY_TBL VALUES(SEQ_QUESTIONREPLY_NO.NEXTVAL, #{questionNo}, #{questionReplyWriter}, #{questionReplyContent}, DEFAULT, DEFAULT)
+	</insert>
+	
+	<update id="updateReply">
+		UPDATE QUESTIONREPLY_TBL SET QUESTIONREPLY_CONTENT = #{questionReplyContent} WHERE QUESTION_NO = #{questionNo} AND QUESTIONREPLY_NO = #{questionReplyNo}
+	</update>
+	
+	<delete id="deleteReply">
+		DELETE FROM QUESTIONREPLY_TBL WHERE QUESTION_NO=#{questionNo} AND QUESTIONREPLY_NO=#{questionReplyNo}
+	</delete>
+	
+	
+	
+	
+	
+	
+	
 
 </mapper>

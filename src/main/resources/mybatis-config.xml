@@ -3,24 +3,48 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-   <settings>
-           <setting name="jdbcTypeForNull" value="NULL"/>
-   <!--         만약에 null 데이터가 전달되었으면 빈칸이 아닌 NULL로 인사하도록 설정 -->
-   </settings>
-   <typeAliases>
-      <typeAlias type="org.kh.campus.consultant.domain.Consultant" alias="Consultant"/>
-      <typeAlias type="org.kh.campus.notice.domain.Notice" alias="Notice"/>
-      <typeAlias type="org.kh.campus.student.domain.Student" alias="Student"/>
-      <typeAlias type="org.kh.campus.question.domain.Question" alias="Question"/>
-      <typeAlias type="org.kh.campus.board.domain.Board" alias="Board"/>
-      
-   
-   </typeAliases>
-   <mappers>
-      <mapper resource="mappers/consultant-mapper.xml"/>
-      <mapper resource="mappers/notice-mapper.xml"/>
-      <mapper resource="mappers/student-mapper.xml"/>
-      <mapper resource="mappers/question-mapper.xml"/>
-      <mapper resource="mappers/board-mapper.xml"/>
-   </mappers>
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+		<!-- 만약에 null 데이터가 전달되었으면 빈칸이 아닌 NULL로 인사하도록 설정 -->
+	</settings>
+	<typeAliases>
+		<typeAlias type="org.kh.campus.notice.domain.Notice"
+			alias="Notice" />
+		<typeAlias type="org.kh.campus.student.domain.Student"
+			alias="Student" />
+		<typeAlias type="org.kh.campus.professor.domain.Professor"
+			alias="Professor" />
+		<typeAlias type="org.kh.campus.manager.domain.Manager"
+			alias="Manager" />
+		<typeAlias type="org.kh.campus.question.domain.Question"
+			alias="Question" />
+		<typeAlias
+			type="org.kh.campus.question.domain.QuestionReply"
+			alias="QuestionReply" />
+		<typeAlias type="org.kh.campus.board.domain.Board"
+			alias="Board" />
+		<typeAlias type="org.kh.campus.lecture.domain.Lecture"
+			alias="Lecture" />
+
+		<typeAlias type="org.kh.campus.consultant.domain.Consultant"
+			alias="Consultant" />
+		<typeAlias
+			type="org.kh.campus.consultant.domain.ConsultantReply"
+			alias="ConsultantReply" />
+		<typeAlias type="org.kh.campus.portfolio.domain.Portfolio"
+			alias="Portfolio" />
+
+	</typeAliases>
+	<mappers>
+
+		<mapper resource="mappers/notice-mapper.xml" />
+		<mapper resource="mappers/student-mapper.xml" />
+		<mapper resource="mappers/professor-mapper.xml" />
+		<mapper resource="mappers/manager-mapper.xml" />
+		<mapper resource="mappers/question-mapper.xml" />
+		<mapper resource="mappers/board-mapper.xml" />
+		<mapper resource="mappers/lecture-mapper.xml" />
+		<mapper resource="mappers/consultant-mapper.xml" />
+		<mapper resource="mappers/portfolio-mapper.xml" />
+	</mappers>
 </configuration>
