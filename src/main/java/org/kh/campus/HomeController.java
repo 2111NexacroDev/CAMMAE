@@ -23,6 +23,10 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 
+	@RequestMapping(value="/main.kh" ,method = RequestMethod.GET)
+	public String Main() {
+		return "main";
+	}
 	@RequestMapping(value = "/home.kh", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		NexacroResult result = new NexacroResult();
