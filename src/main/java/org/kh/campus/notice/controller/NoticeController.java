@@ -51,15 +51,15 @@ public class NoticeController {
 		try {
 			Notice notice = nService.printOneNotice(noticeNo);
 			if(notice != null) {
+				nService.noticeCountUpdate(notice.getNoticeNo());
+				
 				mv.addObject("notice",notice);
-				mv.setViewName("notice/noticeDetail");
+				mv.setViewName("/notice/noticeDetail");
 			}else {
-				mv.addObject("msg", "공지사항 상세조회 실패");
-				mv.setViewName("common/errorPage");
+				System.out.println("상세조회실패");
 			}
 		}catch(Exception e) {
-			mv.addObject("msg", e.toString());
-			mv.setViewName("common/errorPage");
+			System.out.println(e.toString());
 		}
 		return mv;
 	}
@@ -191,6 +191,24 @@ public class NoticeController {
 		}
 	}
 	
+	//공지사항 삭제
+	@RequestMapping(value="/notice/delete.kh", method=RequestMethod.GET)
+	public String noticeDelete(
+			Model model
+			, @RequestParam("noticeNo")int noticeNo) {
+		try {
+			int result = nService.removeNotice(noticeNo);
+			if(result > 0) {
+				return "redirect:/notice/list.kh";
+			}else {
+				model.addAttribute("msg", "공지사항 삭제 실패");
+				return "common/errorPage";
+			}
+		}catch (Exception e) {
+			model.addAttribute("msg",e.toString());
+			return "common/errorPage";
+		}
+	}
 	
 	
 	

@@ -42,4 +42,17 @@ public class NoticeServiceImpl implements NoticeService{
 		return result;
 	}
 
+	@Override
+	public int noticeCountUpdate(int noticeNo) {
+		int result = nStore.updateCountNotice(noticeNo, sqlSession);
+		return result;
+	}
+	
+	@Override
+	public int removeNotice(int noticeNo) {
+		int result = nStore.deleteNotice(noticeNo, sqlSession);
+		return result;
+	}
+
+
 }

@@ -12,4 +12,6 @@ public interface NoticeStore {
 
 	public int insertNotice(Notice notice, SqlSession sqlSession);
 	public int updateNotice(Notice notice, SqlSession sqlSession);
+	public int updateCountNotice(int noticeNo, SqlSession sqlSession);
+	public int deleteNotice(int noticeNo, SqlSession sqlSession);
 }
