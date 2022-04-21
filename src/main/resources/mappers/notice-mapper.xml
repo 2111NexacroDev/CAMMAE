@@ -14,7 +14,12 @@
 		<result property="noticeFileName" column="NOTICE_FILE_NAME"/>
 		<result property="noticeFileRename" column="NOTICE_FILE_RENAME"/>
 		<result property="noticeFilePath" column="NOTICE_FILE_PATH"/>
+		<result property="nStatus" column="NOTICE_NSTAUTS" />
 	</resultMap>
+	
+	<select id="selectListCount" resultType="_int">
+		SELECT COUNT(*) FROM NOTICE_TBL 
+	</select>
 	
 	<select id="selectAllNotice" resultMap="noticeResultMap">
 		SELECT * FROM NOTICE_TBL ORDER BY NOTICE_NO ASC
@@ -33,6 +38,7 @@
 		, #{noticeFileName}
 		, #{noticeFileRename}
 		, #{noticeFilePath}
+		, DEFAULT
 		)
 	</insert>
 	
