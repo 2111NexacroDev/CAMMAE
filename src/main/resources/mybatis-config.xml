@@ -34,6 +34,10 @@
 		<typeAlias type="org.kh.campus.portfolio.domain.Portfolio"
 			alias="Portfolio" />
 
+		<typeAlias
+			type="org.kh.campus.recruitment.domain.Recruitment"
+			alias="Recruitment" />
+
 	</typeAliases>
 	<mappers>
 
@@ -46,5 +50,6 @@
 		<mapper resource="mappers/lecture-mapper.xml" />
 		<mapper resource="mappers/consultant-mapper.xml" />
 		<mapper resource="mappers/portfolio-mapper.xml" />
+		<mapper resource="mappers/recruitment-mapper.xml" />
 	</mappers>
 </configuration>
