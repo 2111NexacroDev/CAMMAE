@@ -17,10 +17,6 @@
 		<result property="lectureTime" column="LECTURE_TIME" />
 	</resultMap>
 	
-	<insert id="insertLecture"  parameterType="Lecture">
-	INSERT INTO LECTURE_TBL VALUES(SEQ_LEC_NO.NEXTVAL, NULL, NULL, #{lectureDepartment}, #{lectureName}, #{professorName}, #{lectureDivision}, #{lectureGrade}, #{lectureRoom}, #{lecturePeople}, #{lectureTime})
-	</insert>
-	
 	<select id="selectAllLecture" resultMap="lectureResultMap">
 	SELECT * FROM LECTURE_TBL  
 	</select>
@@ -29,11 +25,34 @@
 	SELECT * FROM LECTURE_TBL WHERE LECTURE_NO = #{lectureNo}
 	</select>
 	
+	<insert id="insertLecture"  parameterType="Lecture">
+	INSERT INTO LECTURE_TBL VALUES(SEQ_LEC_NO.NEXTVAL
+	, NULL
+	, NULL
+	, #{lectureDepartment}
+	, #{lectureName}
+	, #{professorName}
+	, #{lectureDivision}
+	, #{lectureGrade}
+	, #{lectureRoom}
+	, #{lecturePeople}
+	, #{lectureTime}
+	)
+	</insert>
+			
+	<update id="updateLecture">
+		UPDATE LECTURE_TBL 
+		SET LECTURE_DEPARTMENT = #{lectureDepartment}
+		,LECTURE_NAME = #{lectureName}
+		, PROFESSOR_NAME = #{professorName}
+		, LECTURE_DIVISION = #{lectureDivision}
+		, LECTURE_GRADE = #{lectureGrade}
+		, LECTURE_ROOM = #{lectureRoom}
+		, LECTURE_PEOPLE =  #{lecturePeople}
+		, LECTURE_TIME  = #{lectureTime} 
+		WHERE LECTURE_NO = #{lectureNo} 
+	</update>
 	<delete id="deleteLecture">
 		DELETE FROM LECTURE_TBL WHERE LECTURE_NO = #{lectureNo}
 	</delete>
-	
-	<update id="updateLecture">
-		UPDATE LECTURE_TBL SET PROFESSOR_NO= #{professorNo}, UNIVERSITY_COLLEGE = #{universityCollege},LECTURE_DEPARTMENT = #{lectureDepartment}, LECTURE_NAME = #{lectureName}, PROFESSOR_NAME = #{professorName}, LECTURE_DIVISION = #{lectureDivision}, LECTURE_GRADE = #{lectureGrade}, LECTURE_ROOM = #{lectureRoom}, LECTURE_PEOPLE =  #{lecturePeople}, LECTURE_TIME  = #{lectureTime} WHERE LECTURE_NO = #{lectureNo} 
-	</update>
 </mapper>
