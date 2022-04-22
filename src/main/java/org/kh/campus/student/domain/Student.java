@@ -38,6 +38,24 @@ public class Student {
 	
 	
 
+	public Student(int studentNo, String universityCollege, String departmentName, String studentName, int studentGrade,
+			String studentBirth, String studentAddress, String studentPhonenumber, String studentEmail,
+			String professorNo, String studentState, String professorName) {
+		super();
+		this.studentNo = studentNo;
+		this.universityCollege = universityCollege;
+		this.departmentName = departmentName;
+		this.studentName = studentName;
+		this.studentGrade = studentGrade;
+		this.studentBirth = studentBirth;
+		this.studentAddress = studentAddress;
+		this.studentPhonenumber = studentPhonenumber;
+		this.studentEmail = studentEmail;
+		this.professorNo = professorNo;
+		this.studentState = studentState;
+		this.professorName = professorName;
+	}
+
 	public Student(String studentAddress, String studentPhonenumber, String studentEmail) {
 		super();
 		this.studentAddress = studentAddress;

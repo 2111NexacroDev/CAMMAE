@@ -7,10 +7,10 @@ import org.kh.campus.student.domain.Student;
 
 public interface LoginStore {
 
-	public Student selectStudent(SqlSession sqlSession, Student student);
+	public int selectStudent(SqlSession sqlSession, Student student);
 
-	public Professor selectProfessor(SqlSession sqlSession, Professor professor);
+	public int selectProfessor(SqlSession sqlSession, Professor professor);
 
-	public Manager selectManager(SqlSession sqlSession, Manager manager);
+	public int selectManager(SqlSession sqlSession, Manager manager);
 
 }

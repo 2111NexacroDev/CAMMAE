@@ -45,6 +45,7 @@
 		<mapper resource="mappers/student-mapper.xml" />
 		<mapper resource="mappers/professor-mapper.xml" />
 		<mapper resource="mappers/manager-mapper.xml" />
+    <mapper resource="mappers/login-mapper.xml"/>
 		<mapper resource="mappers/question-mapper.xml" />
 		<mapper resource="mappers/board-mapper.xml" />
 		<mapper resource="mappers/lecture-mapper.xml" />
