@@ -10,16 +10,18 @@ public class Recruitment {
 	private String recruitmentType;
 	private int recruitmentSalary;
 	private String recruitmentRegion;
+	private String recruitmentDate;
 	private String recruitmentStartDate;
 	private String recruitmentEndDate;
 	private String recruitmentWriter;
+	private int recruitmentCount;
 	
 	public Recruitment() {}
 
 	public Recruitment(int recruitmentNo, String recruitmentTitle, String recruitmentCompanyName,
 			String recruitmentCareer, String recruitmentEducation, String recruitmentPrefer, String recruitmentType,
-			int recruitmentSalary, String recruitmentRegion, String recruitmentStartDate, String recruitmentEndDate,
-			String recruitmentWriter) {
+			int recruitmentSalary, String recruitmentRegion, String recruitmentDate, String recruitmentStartDate,
+			String recruitmentEndDate, String recruitmentWriter, int recruitmentCount) {
 		super();
 		this.recruitmentNo = recruitmentNo;
 		this.recruitmentTitle = recruitmentTitle;
@@ -30,9 +32,11 @@ public class Recruitment {
 		this.recruitmentType = recruitmentType;
 		this.recruitmentSalary = recruitmentSalary;
 		this.recruitmentRegion = recruitmentRegion;
+		this.recruitmentDate = recruitmentDate;
 		this.recruitmentStartDate = recruitmentStartDate;
 		this.recruitmentEndDate = recruitmentEndDate;
 		this.recruitmentWriter = recruitmentWriter;
+		this.recruitmentCount = recruitmentCount;
 	}
 
 	public int getRecruitmentNo() {
@@ -107,6 +111,14 @@ public class Recruitment {
 		this.recruitmentRegion = recruitmentRegion;
 	}
 
+	public String getRecruitmentDate() {
+		return recruitmentDate;
+	}
+
+	public void setRecruitmentDate(String recruitmentDate) {
+		this.recruitmentDate = recruitmentDate;
+	}
+
 	public String getRecruitmentStartDate() {
 		return recruitmentStartDate;
 	}
@@ -131,16 +143,27 @@ public class Recruitment {
 		this.recruitmentWriter = recruitmentWriter;
 	}
 
+	public int getRecruitmentCount() {
+		return recruitmentCount;
+	}
+
+	public void setRecruitmentCount(int recruitmentCount) {
+		this.recruitmentCount = recruitmentCount;
+	}
+
 	@Override
 	public String toString() {
 		return "Recruitment [recruitmentNo=" + recruitmentNo + ", recruitmentTitle=" + recruitmentTitle
 				+ ", recruitmentCompanyName=" + recruitmentCompanyName + ", recruitmentCareer=" + recruitmentCareer
 				+ ", recruitmentEducation=" + recruitmentEducation + ", recruitmentPrefer=" + recruitmentPrefer
 				+ ", recruitmentType=" + recruitmentType + ", recruitmentSalary=" + recruitmentSalary
-				+ ", recruitmentRegion=" + recruitmentRegion + ", recruitmentStartDate=" + recruitmentStartDate
-				+ ", recruitmentEndDate=" + recruitmentEndDate + ", recruitmentWriter=" + recruitmentWriter + "]";
+				+ ", recruitmentRegion=" + recruitmentRegion + ", recruitmentDate=" + recruitmentDate
+				+ ", recruitmentStartDate=" + recruitmentStartDate + ", recruitmentEndDate=" + recruitmentEndDate
+				+ ", recruitmentWriter=" + recruitmentWriter + ", recruitmentCount=" + recruitmentCount + "]";
 	}
 
+	
+	
 
 
 	
