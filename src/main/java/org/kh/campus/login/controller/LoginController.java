@@ -1,6 +1,5 @@
 package org.kh.campus.login.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.kh.campus.login.service.LoginService;
@@ -31,7 +30,7 @@ public class LoginController {
 	// 타입에 따라 로그인
 	@RequestMapping(value="/login/login.kh", method=RequestMethod.POST)
 	public ModelAndView login(ModelAndView mv
-			, HttpServletRequest request
+			, HttpSession session
 			, @RequestParam("user-id") int id
 			, @RequestParam("user-pwd") String pw
 			, @RequestParam(value = "login_type", required = false) String type) {
@@ -44,11 +43,9 @@ public class LoginController {
 				int stdNo = 0;
 				stdNo = lService.loginStudent(student);
 				
-				if(stdNo != 0) {
-					HttpSession session = request.getSession();
-					session.setAttribute("login", "std");
-					session.setAttribute("id", stdNo);
-				}
+				
+				session.setAttribute("login", "std");
+				session.setAttribute("id", stdNo);
 				// 교수
 			} else if(type.equals("professor")) {
 				Professor professor = new Professor();
@@ -57,11 +54,8 @@ public class LoginController {
 				int prfNo = 0;
 				prfNo = lService.loginProfessor(professor);
 				
-				if(prfNo != 0) {
-					HttpSession session = request.getSession();
-					session.setAttribute("login", "prf");
-					session.setAttribute("id", prfNo);
-				}
+				session.setAttribute("login", "prf");
+				session.setAttribute("id", prfNo);
 				// 관리자
 			} else {
 				Manager manager = new Manager();
@@ -70,14 +64,11 @@ public class LoginController {
 				int magNo = 0;
 				magNo = lService.loginManager(manager);
 				
-				if(magNo != 0) {
-					HttpSession session = request.getSession();
-					session.setAttribute("login", "mag");
-					session.setAttribute("id", magNo);
-				}
+				session.setAttribute("login", "mag");
+				session.setAttribute("id", magNo);
 			}
 			
-			mv.setViewName("login/login");
+			mv.setViewName("redirect:/main.kh");
 		} catch (Exception e) {
 			mv.addObject("msg", e.toString());
 			mv.setViewName("common/errorPage");
