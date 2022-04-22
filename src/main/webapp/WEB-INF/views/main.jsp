@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -17,16 +18,22 @@
         <div id="gnb">   
             <div class="inner">
             
-                <a href="/login.kh" class="btn_gnb_home">
+                <a href="/main.kh" class="btn_gnb_home">
                  
                     HOME
                 </a>
-                
-                <a href="/login.kh" class="btn_gnb_login">
-                 
-                    LOGIN
-                </a>
-              
+                <c:if test="${empty sessionScope}">
+	                <a href="/login/loginPage.kh" class="btn_gnb_login">
+	                 
+	                    LOGIN
+	                </a>
+              	</c:if>
+              	<c:if test="${not empty sessionScope}">
+              		<a href="/login/logout.kh" class="btn_gnb_login">
+
+	                    LOGOUT
+	                </a>
+	           </c:if>
             </div>
         </div>  
         <!-- local navigation bar -->

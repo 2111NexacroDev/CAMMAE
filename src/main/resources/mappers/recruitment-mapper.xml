@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RecruitmentMapper">
+	<resultMap type="Recruitment" id="recruitmentResultMap">
+		<id property="recruitmentNo" column="RECRUITMENT_NO"/>
+		<result property="recruitmentTitle" column="RECRUITMENT_TITLE"/>
+		<result property="recruitmentCompanyName" column="RECRUITMENT_COMPANY_NAME"/>
+		<result property="recruitmentCareer" column="RECRUITMENT_CAREER"/>
+		<result property="recruitmentEducation" column="RECRUITMENT_EDUCATION"/>
+		<result property="recruitmentPrefer" column="RECRUITMENT_PREFER"/>
+		<result property="recruitmentType" column="RECRUITMENT_TYPE"/>
+		<result property="recruitmentSalary" column="RECRUITMENT_SALARY"/>
+		<result property="recruitmentRegion" column="RECRUITMENT_REGION"/>
+		<result property="recruitmentStartDate" column="RECRUITMENT_START_DATE"/>
+		<result property="recruitmentEndDate" column="RECRUITMENT_END_DATE"/>
+		<result property="recruitmentWriter" column="RECRUITMENT_WRITER"/>		
+	</resultMap>
+	
+	<insert id="insertRecruitment" parameterType="Recruitment">
+		INSERT INTO RECRUITMENT_TBL VALUES(SEQ_RECRUITMENT_NO.NEXTVAL
+		, #{recruitmentTitle}
+		, #{recruitmentCompanyName}
+		, #{recruitmentCareer}
+		, #{recruitmentEducation}
+		, #{recruitmentPrefer}
+		, #{recruitmentType}
+		, #{recruitmentSalary}
+		, #{recruitmentRegion}
+		, #{recruitmentStartDate}
+		, #{recruitmentEndDate}
+		, #{recruitmentWriter}
+		)		
+	</insert>
+</mapper>

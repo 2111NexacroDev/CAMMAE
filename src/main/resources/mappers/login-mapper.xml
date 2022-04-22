@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LoginMapper">
+	<select id="studentLogin" resultType="_int">
+		SELECT STUDENT_NO FROM STUDENT_TBL WHERE STUDENT_NO = #{studentNo} AND STUDENT_PASSWORD = #{studentPassword}
+	</select>
+	
+	<select id="professorLogin" resultType="_int">
+		SELECT PROFESSOR_NO FROM PROFESSOR_TBL WHERE PROFESSOR_NO = #{professorNo} AND PROFESSOR_PASSWORD = #{professorPassword}
+	</select>
+	
+	<select id="managerLogin" resultType="_int">
+		SELECT MANAGER_NO FROM MANAGER_TBL WHERE MANAGER_NO = #{managerNo} AND MANAGER_PASSWORD = #{managerPassword}
+	</select>
+</mapper>

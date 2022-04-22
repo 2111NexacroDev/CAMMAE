@@ -36,12 +36,20 @@
 
 								<c:if test="${pi.startNavi ==1 }">
 
-									<a href="/notice/list.kh?page=1"></a>
+									<a href="/notice/list.kh?page=1"> <i
+										class="fas fa-angle-left">
+											<button class="on">
+									</i>
+									</button></a>
 
 								</c:if>
 								<c:if test="${pi.prev}">
 
-									<a href="/notice/list.kh?page=${pi.startNavi-1}"> 
+									<a href="/notice/list.kh?page=${pi.startNavi-1}"> <i
+										class="fas fa-angle-left">
+											<button class="on">
+									</i>
+									</button>
 									</a>
 								</c:if>
 
@@ -57,7 +65,11 @@
 
 								<c:if test="${pi.next && pi.endNavi > 0}">
 
-									<a href="/notice/list.kh?page=${pi.endNavi+1}">
+									<a href="/notice/list.kh?page=${pi.endNavi+1}"> <i
+										class="fas fa-angle-right">
+											<button class="on2">
+									</i>
+									</button>
 									</a>
 
 								</c:if>
