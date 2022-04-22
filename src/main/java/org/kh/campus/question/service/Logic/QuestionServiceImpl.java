@@ -3,6 +3,7 @@ package org.kh.campus.question.service.Logic;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.question.domain.PageInfo;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.domain.QuestionReply;
@@ -46,6 +47,19 @@ public class QuestionServiceImpl implements QuestionService {
 		return result;
 	}
 
+	@Override
+	public List<Lecture> printAllPro() {
+		List<Lecture> lList = qStore.selectAllPro(sqlSession);
+		return lList;
+	}
+	
+	@Override
+	public List<Lecture> printAllLec(String professorName) {
+		List<Lecture> lList = qStore.selectAllLec(professorName,sqlSession);
+		return lList;
+	}
+
+	
 	@Override
 	public int modifyQuestion(Question question) {
 		int result = qStore.updateQuestion(question, sqlSession);
@@ -98,6 +112,9 @@ public class QuestionServiceImpl implements QuestionService {
 		int result = qStore.deleteReply(questionReply, sqlSession);
 		return result;
 	}
+
+
+
 
 
 
