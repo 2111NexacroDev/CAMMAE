@@ -64,7 +64,7 @@ public class LectureController {
 		}
 	}
 	
-	//강의 수 정 실 행(실패)
+	//강의 수 정 실 행(수정예정)
 	@RequestMapping(value = "/lecture/update.kh", method=RequestMethod.POST)
 	public String lectureUpdate(Model model,
 			@ModelAttribute  Lecture lecture) {
