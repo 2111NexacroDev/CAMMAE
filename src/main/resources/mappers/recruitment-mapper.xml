@@ -13,10 +13,28 @@
 		<result property="recruitmentType" column="RECRUITMENT_TYPE"/>
 		<result property="recruitmentSalary" column="RECRUITMENT_SALARY"/>
 		<result property="recruitmentRegion" column="RECRUITMENT_REGION"/>
+		<result property="recruitmentDate" column="RECRUITMENT_DATE"/>
 		<result property="recruitmentStartDate" column="RECRUITMENT_START_DATE"/>
 		<result property="recruitmentEndDate" column="RECRUITMENT_END_DATE"/>
-		<result property="recruitmentWriter" column="RECRUITMENT_WRITER"/>		
+		<result property="recruitmentWriter" column="RECRUITMENT_WRITER"/>
+		<result property="recruitmentCount" column="RECRUITMENT_COUNT"/>		
 	</resultMap>
+	
+	<!-- 전체 조회 -->
+	<select id="selectAllRecruitment" resultMap="recruitmentResultMap">
+		SELECT * FROM RECRUITMENT_TBL ORDER BY RECRUITMENT_NO DESC
+	</select> 
+	<!-- 상세 조회 -->
+	<select id="selectOneRecruitment" resultMap="recruitmentResultMap">
+		SELECT * FROM RECRUITMENT_TBL WHERE RECRUITMENT_NO = #{recruitmentNo}
+	</select>
+	<!-- 검색 -->
+	<select id="selectSearchRecruitment" resultMap="recruitmentResultMap">
+		SELECT * FROM RECRUITMENT_TBL
+		<if test="searchCondition.toString() == 'title'">
+			WHERE RECRUITMENT_WRITER LIKE '%' || #{searchValue} || '%'
+		</if>
+	</select>
 	
 	<insert id="insertRecruitment" parameterType="Recruitment">
 		INSERT INTO RECRUITMENT_TBL VALUES(SEQ_RECRUITMENT_NO.NEXTVAL
@@ -28,9 +46,15 @@
 		, #{recruitmentType}
 		, #{recruitmentSalary}
 		, #{recruitmentRegion}
+		, DEFAULT
 		, #{recruitmentStartDate}
 		, #{recruitmentEndDate}
 		, #{recruitmentWriter}
+		, DEFAULT
 		)		
 	</insert>
+	
+	<update id="updateCountRecruitment">
+		UPDATE RECRUITMENT_TBL SET RECRUITMENT_COUNT = RECRUITMENT_COUNT + 1 WHERE RECRUITMENT_NO = #{recruitmentNo}
+	</update>
 </mapper>
