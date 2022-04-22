@@ -58,6 +58,7 @@ h3 {
 		<table width="600px" border="1">
 			<tr>
 				<th>번호</th>
+				<th>담당교수 및 강의명</th>
 				<th>제목</th>
 				<th>작성자</th>
 				<th>작성일</th>
@@ -66,6 +67,7 @@ h3 {
 			<c:forEach items="${qList }" var="question">
 				<tr>
 					<td>${question.questionNo }</td>
+					<td align="center">${question.professorName }_${question.lectureName }</td>
 					<c:url var="qDetail" value="/question/detail">
 						<c:param name="questionNo" value="${question.questionNo}"></c:param>
 					</c:url>
@@ -81,8 +83,8 @@ h3 {
 			<form action="/question/search.kh" method="get">
 				<select name="searchCondition">
 					<option value="all">전체</option>
-					<option value="professor">교수</option>
-					<option value="lecture">강의</option>
+					<option value="professor">담당교수</option>
+					<option value="lecture">강의명</option>
 					<option value="title">제목</option>
 					<option value="contents">내용</option>
 					<option value="writer">작성자</option>
