@@ -76,4 +76,16 @@ public class LoginController {
 		
 		return mv;
 	}
+	
+	// 로그아웃
+	@RequestMapping(value="/login/logout.kh", method=RequestMethod.GET)
+	public ModelAndView logout(ModelAndView mv
+			,HttpSession session) {
+		if(session != null) {
+			session.invalidate();
+			mv.setViewName("redirect:/main.kh");
+		}
+		
+		return mv;
+	}
 }
