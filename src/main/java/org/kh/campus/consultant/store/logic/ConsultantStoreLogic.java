@@ -2,9 +2,11 @@ package org.kh.campus.consultant.store.logic;
 
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.consultant.domain.Consultant;
 import org.kh.campus.consultant.domain.ConsultantReply;
+import org.kh.campus.consultant.domain.PageInfo;
 import org.kh.campus.consultant.store.ConsultantStore;
 import org.springframework.stereotype.Repository;
 
@@ -12,8 +14,12 @@ import org.springframework.stereotype.Repository;
 public class ConsultantStoreLogic implements ConsultantStore {
 
 	@Override
-	public List<Consultant> selectAllCons(SqlSession sqlSession) {
-		List<Consultant> cList=  sqlSession.selectList("ConsultantMapper.selectAllCons" );
+	public List<Consultant> selectAllCons(SqlSession sqlSession, PageInfo pi) {
+		int limit = pi.getConsultantLimit();
+		int currentPage = pi.getCurrentPage();
+		int offset = (currentPage -1) * limit ;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		List<Consultant> cList=  sqlSession.selectList("ConsultantMapper.selectAllCons",pi, rowBounds);
 		return cList;
 	}
 
@@ -30,26 +36,24 @@ public class ConsultantStoreLogic implements ConsultantStore {
 	}
 
 	@Override
-	public List<ConsultantReply> selectByConReply(SqlSession sqlSession) {
-		List<ConsultantReply>crReply = sqlSession.selectList("ConsultantReplyMapper.selectByConReply");
-		return crReply;
-	}
-
-	@Override
-	public List<Consultant> selectAdminAllCons(SqlSession sqlSession) {
-		List<Consultant> cList = sqlSession.selectList("ConsultantMapper.selectAdminAllCons");
+	public List<Consultant> selectAdminAllCons(SqlSession sqlSession, PageInfo pi) {
+		int limit = pi.getConsultantLimit();
+		int currentPage = pi.getCurrentPage();
+		int offset = (currentPage -1) * limit ;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		List<Consultant> cList = sqlSession.selectList("ConsultantMapper.selectAdminAllCons" ,pi, rowBounds);
 		return cList;
 	}
 
 	@Override
 	public int insertAdminConsReply(SqlSession sqlSession, ConsultantReply consultantReply) {
-		int result = sqlSession.insert("ConsultantReplyMapper.insertAdminConsReply", consultantReply);
+		int result = sqlSession.insert("ConsultantMapper.insertAdminConsReply", consultantReply);
 		return result;
 	}
 
 	@Override
-	public Consultant selectAdminDetailCons(SqlSession sqlSession, String consultant_title) {
-		Consultant consultant = sqlSession.selectOne("ConsultantMapper.selectAdminDetailCons");
+	public Consultant selectAdminDetailCons(SqlSession sqlSession, Integer consultant_no) {
+		Consultant consultant = sqlSession.selectOne("ConsultantMapper.selectAdminDetailCons", consultant_no);
 		return consultant;
 	}
 
@@ -57,6 +61,12 @@ public class ConsultantStoreLogic implements ConsultantStore {
 	public int selectListCount(SqlSession sqlSession) {
 		int totalCount = sqlSession.selectOne("ConsultantMapper.selectListCount");
 		return totalCount;
+	}
+
+	@Override
+	public List<ConsultantReply> selectAllAdminReply(SqlSession sqlSession, int cons_no) {
+		List<ConsultantReply>crList = sqlSession.selectList("ConsultantMapper.selectAllAdminReply", cons_no);
+		return crList;
 	}
 
 }

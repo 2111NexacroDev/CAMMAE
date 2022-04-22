@@ -8,7 +8,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.kh.campus.question.domain.PageInfo;
+import org.kh.campus.question.domain.Pagination;
 import org.kh.campus.question.domain.Question;
+import org.kh.campus.question.domain.QuestionReply;
 import org.kh.campus.question.domain.QuestionSearch;
 import org.kh.campus.question.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +21,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 public class QuestionController {
@@ -29,9 +36,18 @@ public class QuestionController {
 
 	// 게시글 리스트조회
 	@RequestMapping(value = "/question/list", method = RequestMethod.GET)
-	public ModelAndView questionListView(ModelAndView mv) {
+	public ModelAndView questionListView(ModelAndView mv,
+			@RequestParam(value = "page", required = false) Integer page) {
 
-		List<Question> qList = qService.printAllQuestion();
+		int currentPage = (page != null) ? page : 1;
+
+		int totalCount = qService.getListCount();
+
+		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
+
+		mv.addObject("pi", pi);
+
+		List<Question> qList = qService.printAllQuestion(pi);
 		try {
 			if (!qList.isEmpty()) {
 				mv.addObject("qList", qList);
@@ -44,18 +60,18 @@ public class QuestionController {
 		}
 		return mv;
 	}
-	
+
 	// 게시글 검색
-	@RequestMapping(value="/question/search", method = RequestMethod.GET)
+	@RequestMapping(value = "/question/search", method = RequestMethod.GET)
 	public ModelAndView questionSearchList(ModelAndView mv, @ModelAttribute QuestionSearch questionSearch) {
-		
+
 		try {
 			List<Question> searchList = qService.printSearchQuestion(questionSearch);
-			if(!searchList.isEmpty()) {
+			if (!searchList.isEmpty()) {
 				mv.addObject("qList", searchList);
 				mv.setViewName("question/questionList");
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
 		return mv;
@@ -67,12 +83,12 @@ public class QuestionController {
 		try {
 			Question question = qService.printOneQuestion(questionNo);
 			if (question != null) {
-				//조회수 증가
+				// 조회수 증가
 				qService.questionCountUpdate(question.getQuestionNo());
-				
+
 				mv.addObject("question", question);
 				mv.setViewName("/question/questionDetail");
-				
+
 			} else {
 				System.out.println("상세조회실패");
 			}
@@ -175,12 +191,12 @@ public class QuestionController {
 
 	// 게시글 수정
 	@RequestMapping(value = "/question/update", method = RequestMethod.POST)
-	public ModelAndView questionUpdate(ModelAndView mv, @ModelAttribute Question question, 
+	public ModelAndView questionUpdate(ModelAndView mv, @ModelAttribute Question question,
 			@RequestParam(value = "reloadFile", required = false) MultipartFile reloadFile,
 			HttpServletRequest request) {
 
 		try {
-			if(reloadFile != null && !reloadFile.isEmpty()) {
+			if (reloadFile != null && !reloadFile.isEmpty()) {
 				// 기존 파일 삭제 (파일 이름 필요)
 				deleteFile(question.getQuestionFilePath(), request); // 해당파일 이름 삭제
 				// 새로운 파일 업로드
@@ -193,7 +209,7 @@ public class QuestionController {
 					question.setQuestionFilePath(savePath); // 새로운 경로로 업데이트
 				}
 			}
-			
+
 			int result = qService.modifyQuestion(question);
 			if (result > 0) {
 				mv.setViewName("redirect:/question/detail?questionNo=" + question.getQuestionNo());
@@ -205,7 +221,7 @@ public class QuestionController {
 		}
 		return mv;
 	}
-	
+
 	public void deleteFile(String filePath, HttpServletRequest request) {
 		// 저장 폴더 선택
 		File deleteFile = new File(filePath);
@@ -214,7 +230,6 @@ public class QuestionController {
 			deleteFile.delete();
 		}
 	}
-
 
 	// 게시글 삭제
 	@RequestMapping(value = "/question/delete", method = RequestMethod.GET)
@@ -232,4 +247,63 @@ public class QuestionController {
 		}
 		return mv;
 	}
+
+	// 댓글
+
+	// 댓글 등록
+	@ResponseBody
+	@RequestMapping(value = "/question/replyAdd", method = RequestMethod.POST)
+	public String questionReplyAdd(@ModelAttribute QuestionReply questionReply) {
+		// 로그인 완성 후 변경 예정
+		String questionReplyWriter = "교수";
+		questionReply.setQuestionReplyWriter(questionReplyWriter);
+
+		int result = qService.registerReply(questionReply);
+		if (result > 0) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
+
+	// 댓글 조회(전달값 1개 ->Requestparam)
+	@ResponseBody
+	@RequestMapping(value = "/question/replyList", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+	public String questionReplyList(@RequestParam("questionNo") int questionNo) {
+
+		List<QuestionReply> qReplyList = qService.printAllQuetionReply(questionNo);
+
+		if (!qReplyList.isEmpty()) {
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			return gson.toJson(qReplyList); // list->json
+		}
+
+		return "";
+	}
+
+	// 댓글 수정
+	@ResponseBody
+	@RequestMapping(value = "/question/replyModify", method = RequestMethod.POST)
+	public String questionReplyModify(@ModelAttribute QuestionReply questionReply) {
+		int result = qService.modifyQuestionReply(questionReply);
+		if (result > 0) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
+
+	// 댓글 삭제
+	@ResponseBody
+	@RequestMapping(value = "/question/replyDelete", method = RequestMethod.GET)
+	public String questionReplyDelete(@ModelAttribute QuestionReply questionReply) {
+
+		int result = qService.removeQuestionReply(questionReply);
+		if (result > 0) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
+
 }

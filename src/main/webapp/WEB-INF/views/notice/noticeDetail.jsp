@@ -20,6 +20,10 @@
 			<td>${notice.noticeTitle }</td>
 		</tr>
 		<tr>
+			<td>내용</td>
+			<td>${notice.noticeContent }</td>
+		</tr>
+		<tr>
 			<td>작성자</td>
 			<td>${notice.noticeWriter }</td>
 		</tr>
@@ -28,13 +32,9 @@
 			<td>${notice.noticeDate }</td>
 		</tr>
 		<tr>
-			<td>내용</td>
-			<td>${notice.noticeContent }</td>
-		</tr>
-		<tr>
 			<td>첨부파일</td>
 			<td>
-				<a href="../../../resources/nuploadFile/${notice.noticeFileRename }" download>
+				<a href="../../../resources/nuploadFiles/${notice.noticeFileRename }" download>
 				${notice.noticeFileName }
 				</a>
 			</td>
@@ -47,8 +47,9 @@
 				<c:url var="nDelete" value="/notice/delete.kh">
 					<c:param name="noticeNo" value="${notice.noticeNo }"></c:param>
 				</c:url>
-				<a href="${nModify }">수정페이지로 이동</a>
-            	<a href="${nDelete }">삭제하기</a>
+				<button onclick="location.href='/notice/list.kh'">목록</button>
+				<a href="${nModify }">수정</a>
+            	<a href="${nDelete }">삭제</a>
 			</td>
 		</tr>
 	</table>

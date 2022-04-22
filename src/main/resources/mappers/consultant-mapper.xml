@@ -4,16 +4,51 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ConsultantMapper">
 	<resultMap type="Consultant" id="consultantResultMap">
-		<id property="cons_no" column="" />
-		<result property="cons_student_no" column="" />
-		<result property="cons_student_name" column="" />
-		<result property="cons_sutdent_number" column="" />
-		<result property="cons_title" column="" />
-		<result property="cons_college" column="" />
-		<result property="cons_content" column="" />
-		<result property="cons_date" column="" />
-		<result property="cons_time" column="" />
-		<result property="cons_status" column="" />
-		<result property="cons_counselor" column="" />
+		<id property="cons_no" column="CONS_NO" />
+		<result property="cons_student_no" column="CONS_STUDENT_NO" />
+		<result property="cons_student_name" column="CONS_STUDENT_NAME" />
+		<result property="cons_student_number" column="CONS_STUDENT_NUMBER" />
+		<result property="cons_title" column="CONS_TITLE" />
+		<result property="cons_college" column="CONS_COLLEGE" />
+		<result property="cons_content" column="CONS_CONTENT" />
+		<result property="cons_date" column="CONS_DATE" />
+		<result property="cons_time" column="CONS_TIME" />
+		<result property="cons_status" column="CONS_STATUS" />
+		<result property="cons_counselor" column="CONS_COUNSELOR" />
 	</resultMap>
+	<select id="selectListCount" resultType="_int">
+		SELECT COUNT(*) FROM CONSULTANT_TBL WHERE CONS_STATUS = 'N'
+	</select>
+	
+	<insert id="insertCons" parameterType="Consultant">
+	 INSERT INTO CONSULTANT_TBL VALUES(SEQ_CONS_NO.NEXTVAL, #{cons_student_no}, #{cons_student_name}, #{cons_student_number},#{cons_title}, #{cons_college},#{cons_content}, #{cons_date}, #{cons_time}, default, #{cons_counselor}  )
+	</insert>
+	
+	<select id="selectAdminAllCons" resultMap="consultantResultMap">
+	 SELECT * FROM CONSULTANT_TBL
+	</select>
+	
+	<select id="selectAdminDetailCons" resultMap="consultantResultMap">
+	 SELECT * FROM CONSULTANT_TBL WHERE CONS_NO = #{cons_no}
+	</select>
+	
+	<select id="selectAllCons" resultMap="consultantResultMap">
+	 SELECT * FROM CONSULTANT_TBL
+	</select>
+	
+	<resultMap type="ConsultantReply" id="ConsultantReplyResultMap">
+		<id property="cons_reply_no" column="CONS_REPLY_NO"></id>
+		<result property="cons_no" column="CONS_NO" />
+		<result property="cons_reply_date" column="CONS_REPLY_DATE" />
+		<result property="cons_reply_writer" column="CONS_REPLY_WRITER" />
+		<result property="cons_reply_content" column="CONS_REPLY_CONTENT" />
+	</resultMap>
+		<insert id="insertAdminConsReply">
+		 	INSERT INTO CONSULTANT_REPLY_TBL VALUES(SEQ_CONS_REPLY_NO.NEXTVAL,#{cons_no}, DEFAULT, #{cons_reply_writer}, #{cons_reply_content})
+		</insert>
+		
+		<select id="selectAllAdminReply" resultMap="ConsultantReplyResultMap">
+			SELECT * FROM CONSULTANT_REPLY_TBL WHERE CONS_NO = #{cons_no} ORDER BY CONS_REPLY_NO DESC 
+		</select>
 </mapper>
+

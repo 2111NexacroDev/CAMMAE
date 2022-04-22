@@ -8,7 +8,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 import org.kh.campus.notice.domain.Notice;
+import org.kh.campus.notice.domain.PageInfo;
+import org.kh.campus.notice.domain.Pagination;
 import org.kh.campus.notice.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,11 +31,15 @@ public class NoticeController {
 	
 	//공지사항 목록 조회
 	@RequestMapping(value="/notice/list.kh", method=RequestMethod.GET)
-	public ModelAndView noticeListView(ModelAndView mv) {
+	public ModelAndView noticeListView(ModelAndView mv, @RequestParam(value = "page", required = false)Integer page) {
 		try {
-			List<Notice> nList = nService.printAllNotice();
+			int currentPage = (page != null) ? page : 1;
+			int totalCount = nService.getListCount();
+			PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
+			List<Notice> nList = nService.printAllNotice(pi);
 			if(!nList.isEmpty()) {
 				mv.addObject("nList", nList);
+				mv.addObject("pi", pi);
 				mv.setViewName("notice/noticeList");
 			}else {
 				mv.addObject("msg","공지사항 조회 실패");
@@ -51,15 +58,15 @@ public class NoticeController {
 		try {
 			Notice notice = nService.printOneNotice(noticeNo);
 			if(notice != null) {
+				nService.noticeCountUpdate(notice.getNoticeNo());
+				
 				mv.addObject("notice",notice);
-				mv.setViewName("notice/noticeDetail");
+				mv.setViewName("/notice/noticeDetail");
 			}else {
-				mv.addObject("msg", "공지사항 상세조회 실패");
-				mv.setViewName("common/errorPage");
+				System.out.println("상세조회실패");
 			}
 		}catch(Exception e) {
-			mv.addObject("msg", e.toString());
-			mv.setViewName("common/errorPage");
+			System.out.println(e.toString());
 		}
 		return mv;
 	}
@@ -191,6 +198,24 @@ public class NoticeController {
 		}
 	}
 	
+	//공지사항 삭제
+	@RequestMapping(value="/notice/delete.kh", method=RequestMethod.GET)
+	public String noticeDelete(
+			Model model
+			, @RequestParam("noticeNo")int noticeNo) {
+		try {
+			int result = nService.removeNotice(noticeNo);
+			if(result > 0) {
+				return "redirect:/notice/list.kh";
+			}else {
+				model.addAttribute("msg", "공지사항 삭제 실패");
+				return "common/errorPage";
+			}
+		}catch (Exception e) {
+			model.addAttribute("msg",e.toString());
+			return "common/errorPage";
+		}
+	}
 	
 	
 	

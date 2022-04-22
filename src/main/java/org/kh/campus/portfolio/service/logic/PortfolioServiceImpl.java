@@ -3,7 +3,7 @@ package org.kh.campus.portfolio.service.logic;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
-import org.kh.campus.common.PageInfo;
+import org.kh.campus.portfolio.domain.PageInfo;
 import org.kh.campus.portfolio.domain.Portfolio;
 import org.kh.campus.portfolio.service.PortfolioService;
 import org.kh.campus.portfolio.store.PortfolioStore;
@@ -54,8 +54,8 @@ public class PortfolioServiceImpl implements PortfolioService {
 	}
 
 	@Override
-	public Portfolio printAdminDetailPort(String port_title) {
-		Portfolio portfolio = pStore.selectprintAdminDetailPort(sqlSession, port_title);
+	public Portfolio printAdminDetailPort(int port_no) {
+		Portfolio portfolio = pStore.selectprintAdminDetailPort(sqlSession, port_no);
 		return portfolio;
 	}
 
@@ -65,5 +65,31 @@ public class PortfolioServiceImpl implements PortfolioService {
 		return totalCount;
 		
 	}
+
+	@Override
+	public Portfolio printDetailPort(int port_no) {
+		Portfolio portfolio = pStore.selectprintDetailPort(sqlSession, port_no);
+		return portfolio;
+	}
+
+	@Override
+	public Portfolio printOneByNo(Integer port_no) {
+		Portfolio portfolio = pStore.selectprintOneByNo(sqlSession, port_no);
+		return portfolio;
+	}
+
+	@Override
+	public int modifyPortfolio(Portfolio portfolio) {
+		int result = pStore.updatePortfolio(sqlSession);
+		return result;
+	}
+
+	@Override
+	public int deletePortfolio(int port_no) {
+		int result = pStore.deletePortfolio(sqlSession, port_no);
+		return result;
+	}
+
+
 
 }

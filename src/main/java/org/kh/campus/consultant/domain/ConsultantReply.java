@@ -5,6 +5,7 @@ public class ConsultantReply {
 	private int cons_no;
 	private String cons_reply_date;
 	private String cons_reply_writer;
+	private String cons_reply_content;
 	
 	public ConsultantReply() {}
 
@@ -40,11 +41,20 @@ public class ConsultantReply {
 		this.cons_reply_writer = cons_reply_writer;
 	}
 
+	public String getCons_reply_content() {
+		return cons_reply_content;
+	}
+
+	public void setCons_reply_content(String cons_reply_content) {
+		this.cons_reply_content = cons_reply_content;
+	}
+
 	@Override
 	public String toString() {
 		return "ConsultantReply [cons_reply_no=" + cons_reply_no + ", cons_no=" + cons_no + ", cons_reply_date="
-				+ cons_reply_date + ", cons_reply_writer=" + cons_reply_writer + "]";
+				+ cons_reply_date + ", cons_reply_writer=" + cons_reply_writer + ", cons_reply_content="
+				+ cons_reply_content + "]";
 	}
-	
-	
+
+
 }

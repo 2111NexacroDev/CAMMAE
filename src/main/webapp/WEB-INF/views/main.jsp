@@ -16,6 +16,7 @@
         <!-- gnb = global navigation bar  -->
         <div id="gnb">   
             <div class="inner">
+            
                 <a href="/login.kh" class="btn_gnb_home">
                  
                     HOME
