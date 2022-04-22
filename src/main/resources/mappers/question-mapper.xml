@@ -16,7 +16,6 @@
 		<result property="questionFileName" column="QUESTION_FILENAME"/>
 		<result property="questionFileReNeme" column="QUESTION_FILERENAME"/>
 		<result property="questionFilePath" column="QUESTION_FILEPATH"/>
-		
 	</resultMap>
 
 	<select id="selectAllQuestion" resultMap="questionResultMap">
@@ -75,6 +74,29 @@
 		DELETE FROM QUESTION_TBL WHERE QUESTION_NO = #{questionNo}
 	</delete>
 	
+	
+	<!-- 교수 및 강의목록  -->
+	<resultMap type="lecture" id="lectureResultMap">
+		<id property="lectureNo" column="LECTURE_NO"/>
+		<result property="professorNo" column="PROFESSOR_NO"/>
+		<result property="universityCollege" column="UNIVERSITY_COLLEGE"/>
+		<result property="lectureDepartment" column="LECTURE_DEPARTMENT"/>
+		<result property="lectureName" column="LECTURE_NAME"/>
+		<result property="professorName" column="PROFESSOR_NAME"/>
+		<result property="lectureDivision" column="LECTURE_DIVISION"/>
+		<result property="lectureGrade" column="LECTURE_GRADE"/>
+		<result property="lectureRoom" column="LECTURE_ROOM"/>
+		<result property="lecturePeople" column="LECTURE_PEOPLE"/>
+		<result property="lectureTime" column="LECTURE_TIME"/>
+	</resultMap>
+	
+	<select id="selectAllPro" resultMap="lectureResultMap">
+		SELECT DISTINCT PROFESSOR_NAME FROM LECTURE_TBL ORDER BY PROFESSOR_NAME ASC
+	</select>
+	
+	<select id="selectAllLec" resultMap="lectureResultMap">
+		SELECT LECTURE_NAME FROM LECTURE_TBL WHERE PROFESSOR_NAME = #{professorName} ORDER BY LECTURE_NAME ASC
+	</select>
 	
 	<!-- 댓글 -->
 	<resultMap type="QuestionReply" id="qReplyResult">

@@ -2,6 +2,7 @@ package org.kh.campus.question.service;
 
 import java.util.List;
 
+import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.question.domain.PageInfo;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.domain.QuestionReply;
@@ -17,6 +18,10 @@ public interface QuestionService {
 	public Question printOneQuestion(int questionNo);
 	//게시글 등록
 	public int registerQuestion(Question question);
+	//게시글 등록(교수선택)
+	public List<Lecture> printAllPro();
+	//게시글 등록 (수업 선택)
+	public List<Lecture> printAllLec(String professorName);
 	//게시글 수정
 	public int modifyQuestion(Question question);
 	//게시판 조회수

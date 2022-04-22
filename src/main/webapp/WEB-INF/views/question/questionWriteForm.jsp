@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>질의응답 게시판</title>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <style>
 .left {
 	width: 32%;
@@ -16,7 +18,6 @@
 	float: left;
 }
 
-
 .c-main {
 	border: 1px solid #ccc;
 	border-radius: 5px;
@@ -24,11 +25,11 @@
 	padding: 30px 30px 30px 30px;
 }
 
-h3{
-	color : #10412C;
+h3 {
+	color: #10412C;
 }
 
-.btn{
+.btn {
 	border: 1px solid #10412C;
 	background-color: #10412C;
 	color: white;
@@ -55,15 +56,18 @@ h3{
 			<br>
 			<div class="c-main">
 				<div class="selectBox" style="padding: 10px;">
-					<select name="selectProfessor" style="border: none; width: 250px;">
-						<option value="" selected="selected">교수를 선택하세요</option>
-						<option value="">교수1</option>
+					<select id="professorName" name="professorName" onchange="getProName()"
+					 style="border: none; width: 250px;">
+						<option value="">교수를 선택하세요</option>
+							<c:forEach var="lList" items="${lList}">
+								<option value="${lList.professorName }">${lList.professorName }</option>
+							</c:forEach>
+					</select> 
+					&emsp;&emsp; 
+					<select id="lectureName" name="lectureName"  style="border: none; width: 250px;">
+						<option value="">수업을 선택하세요</option>
 					</select>
-					&emsp;&emsp;
-					<select name="selectLecture" style="border: none; width: 250px;">
-						<option value="" selected="selected">수업을 선택하세요</option>
-						<option value="">수업1</option>
-					</select>
+					
 				</div>
 				<div class="title">
 					<input type="text" size="50" name="questionTitle"
@@ -89,6 +93,38 @@ h3{
 		</form>
 
 	</div>
-<!-- 	<div class="right">3</div> -->
+	<!-- 	<div class="right">3</div> -->
+				
+				
+				
+
+
+					
+<script>
+
+function getProName(){
+	var professorName = $("#professorName").val();
+	var target = $("#lectureName");
+	$.ajax({
+		url : "/question/selectLeture",
+		type : "get",
+		data : {"professorName" : professorName},
+		success : function(data) {
+			for(var i =0; i<data.length; i++){
+                 $("#lectureName").append("<option value="+data[i].lectureName+">"+data[i].lectureName+"</option>");
+			}
+		},
+		error : function () {
+			alert("ajax 실패");
+		}	
+	})
+	
+}
+
+
+	
+	
+		
+</script>
 </body>
 </html>

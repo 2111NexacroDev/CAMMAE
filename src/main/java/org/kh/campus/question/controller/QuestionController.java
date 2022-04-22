@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.question.domain.PageInfo;
 import org.kh.campus.question.domain.Pagination;
 import org.kh.campus.question.domain.Question;
@@ -101,10 +102,30 @@ public class QuestionController {
 	// 게시글 등록페이지
 	@RequestMapping(value = "/question/registerView")
 	public String questionWriteView(Model model) {
-
-		return "/question/questionWriteForm";
+		
+		List<Lecture> lList = qService.printAllPro();
+		if(!lList.isEmpty()) {
+			model.addAttribute("lList", lList);
+		}
+		return "question/questionWriteForm";
 	}
 
+	//게시판 셀렉트박스
+	@ResponseBody
+	@RequestMapping(value = "/question/selectLeture", method =RequestMethod.GET, produces = "application/json;charset=utf-8") 
+	public String questionProList(@RequestParam("professorName") String professorName) {
+	  List<Lecture> lList = qService.printAllLec(professorName);
+	  
+	  if (!lList.isEmpty()) { 
+		 Gson gson = new Gson();
+		 return gson.toJson(lList);
+	  }
+	  
+	  return null;
+	  }
+	 
+	
+	
 	// 게시글 등록
 	@RequestMapping(value = "/question/register", method = RequestMethod.POST)
 	public ModelAndView questionRegister(ModelAndView mv, @ModelAttribute Question question,
