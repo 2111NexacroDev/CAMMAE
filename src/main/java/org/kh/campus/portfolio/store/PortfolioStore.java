@@ -13,7 +13,12 @@ public interface PortfolioStore {
 	public int updatePort(SqlSession sqlSession, String port_title);
 	public int deletePort(SqlSession sqlSession, String port_title);
 	public List<Portfolio> selectAdminAllPort(SqlSession sqlSession);
-	public Portfolio selectprintAdminDetailPort(SqlSession sqlSession, String port_title);
+	public Portfolio selectprintAdminDetailPort(SqlSession sqlSession, int port_no);
 	public int selectListCount(SqlSession sqlSession);
+	public Portfolio selectprintDetailPort(SqlSession sqlSession, int port_no);
+	public Portfolio selectprintOneByNo(SqlSession sqlSession, Integer port_no);
+	public int updatePortfolio(SqlSession sqlSession);
+	public int deletePortfolio(SqlSession sqlSession, int port_no);
+	
 
 }

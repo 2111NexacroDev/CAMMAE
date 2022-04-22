@@ -41,5 +41,11 @@ public class LectureServiceImpl implements LectureService{
 		return result;
 	}
 
+	@Override
+	public Lecture printOneLecture(int lectureNo) {
+		Lecture lecture =  lStore.selectOneLecture(sqlSession,lectureNo);
+		return lecture;
+	}
+
 
 }

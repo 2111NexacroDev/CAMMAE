@@ -2,6 +2,7 @@ package org.kh.campus.question.service;
 
 import java.util.List;
 
+import org.kh.campus.question.domain.PageInfo;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.domain.QuestionReply;
 import org.kh.campus.question.domain.QuestionSearch;
@@ -9,7 +10,7 @@ import org.kh.campus.question.domain.QuestionSearch;
 public interface QuestionService {
 	
 	//게시글 조회
-	public List<Question> printAllQuestion();
+	public List<Question> printAllQuestion(PageInfo pi);
 	//게시글 검색 조회
 	public List<Question> printSearchQuestion(QuestionSearch questionSearch);
 	//게시글 상세 조회
@@ -22,7 +23,8 @@ public interface QuestionService {
 	public int questionCountUpdate(int questionNo);
 	//게시글 삭제
 	public int removeQuestion(int questionNo);
-	
+	//페이징
+	public int getListCount();
 	
 	//댓글
 	
