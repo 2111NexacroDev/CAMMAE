@@ -44,24 +44,50 @@ public class LectureController {
 	public String lectureRegister(Model model, @ModelAttribute Lecture lecture) {
 		int result = lService.registerLecture(lecture);
 		if(result >0 ) {
-			return "main.kh";
+			return "redirect:/lecture/list.kh";
 		}else {
 			model.addAttribute("msg", "과목개설 실패");
 			return "common/errorPage";
 		}
 	}
+	// 강의 수정 페이지
+	@RequestMapping(value = "/lecture/modifyView.kh", method = RequestMethod.GET)
+	public String lectureModify(Model model, 
+			@RequestParam("lectureNo") int lectureNo) {
+		Lecture lecture = lService.printOneLecture(lectureNo);
+		if(lecture != null ) {
+			model.addAttribute("lecture", lecture );
+			return "lecture/lectureUpdateView";
+		}else {
+			model.addAttribute("msg", "과목 수정 실패");
+			return "common/errorPage";
+		}
+	}
 	
-//	@RequestMapping(value = "/lecture/modify.kh", method = RequestMethod.GET)
-//	public String lectureModify(Model model, 
-//			@RequestParam("lectureNo") int lectureNo) {
-//		Lecture lecture = lService.modifyLecture(lectureNo);
-//		if(lecture != null ) {
-//			model.addAttribute("lecture", lecture );
-//			return "lecture/lecture";
-//		}else {
-//			return "";
-//		}
-//	}
+	//강의 수 정 실 행(실패)
+	@RequestMapping(value = "/lecture/update.kh", method=RequestMethod.POST)
+	public String lectureUpdate(Model model,
+			@ModelAttribute  Lecture lecture) {
+		try {
+			lecture.setLectureNo(lecture.getLectureNo());
+			lecture.setLectureDepartment(lecture.getLectureDepartment());
+			lecture.setLectureName(lecture.getLectureName());
+			lecture.setProfessorName(lecture.getProfessorName());
+			lecture.setLectureDivision(lecture.getLectureDivision());
+			lecture.setLectureRoom(lecture.getLectureRoom());
+			lecture.setLecturePeople(lecture.getLecturePeople());
+			lecture.setLectureTime(lecture.getLectureTime());
+			
+			model.addAttribute("msg", "강의 수정 완료");
+			return "redirect:/lecture/list.kh";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "redirect:/main.kh";
+		}
+	}
+	
+	
+	// 강의 상세 조회
 	@RequestMapping(value="/lecture/Detail.kh", method = RequestMethod.GET)
 	public String lectureDetail(Model model, @RequestParam("lectureNo")int lectureNo) {
 		Lecture lecture = lService.printOneLecture(lectureNo);

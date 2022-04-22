@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,5 +20,9 @@
 강의실<span>${lecture.lectureRoom }</span><br>
 강의인원<span>${lecture.lecturePeople }</span><br>
 강의시간<span>${lecture.lectureTime }</span>
+<c:url var="lModify" value="/lecture/modifyView.kh">
+					<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
+				</c:url>
+<a href="${lModify }">수정</a>
 </body>
 </html>
