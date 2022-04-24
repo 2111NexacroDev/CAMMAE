@@ -18,6 +18,8 @@
 			alias="Manager" />
 		<typeAlias type="org.kh.campus.question.domain.Question"
 			alias="Question" />
+		<typeAlias type="org.kh.campus.market.domain.Market"
+			alias="Market" />
 		<typeAlias
 			type="org.kh.campus.question.domain.QuestionReply"
 			alias="QuestionReply" />
@@ -45,8 +47,9 @@
 		<mapper resource="mappers/student-mapper.xml" />
 		<mapper resource="mappers/professor-mapper.xml" />
 		<mapper resource="mappers/manager-mapper.xml" />
-    <mapper resource="mappers/login-mapper.xml"/>
+		<mapper resource="mappers/login-mapper.xml" />
 		<mapper resource="mappers/question-mapper.xml" />
+		<mapper resource="mappers/market-mapper.xml" />
 		<mapper resource="mappers/board-mapper.xml" />
 		<mapper resource="mappers/lecture-mapper.xml" />
 		<mapper resource="mappers/consultant-mapper.xml" />
