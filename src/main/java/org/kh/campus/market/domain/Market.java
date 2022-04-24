@@ -10,12 +10,12 @@ public class Market {
 	private String marketWriter;
 	private String marketDate;
 	private String marketUpdateDate;
-	private String marketCount;
+	private int marketCount;
 	
 	public Market() {}
 
 	public Market(int marketNo, String marketType, String marketGoods, String marketPrice, String marketTitle,
-			String marketContent, String marketWriter, String marketDate, String marketUpdateDate, String marketCount) {
+			String marketContent, String marketWriter, String marketDate, String marketUpdateDate, int marketCount) {
 		super();
 		this.marketNo = marketNo;
 		this.marketType = marketType;
@@ -101,11 +101,11 @@ public class Market {
 		this.marketUpdateDate = marketUpdateDate;
 	}
 
-	public String getMarketCount() {
+	public int getMarketCount() {
 		return marketCount;
 	}
 
-	public void setMarketCount(String marketCount) {
+	public void setMarketCount(int marketCount) {
 		this.marketCount = marketCount;
 	}
 
@@ -116,6 +116,8 @@ public class Market {
 				+ ", marketWriter=" + marketWriter + ", marketDate=" + marketDate + ", marketUpdateDate="
 				+ marketUpdateDate + ", marketCount=" + marketCount + "]";
 	}
+
+
 	
 	
 }
