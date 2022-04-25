@@ -30,6 +30,8 @@
 
 		<typeAlias type="org.kh.campus.consultant.domain.Consultant"
 			alias="Consultant" />
+		<typeAlias type="org.kh.campus.board.domain.BoardReply"
+			alias="BoardReply" />
 		<typeAlias
 			type="org.kh.campus.consultant.domain.ConsultantReply"
 			alias="ConsultantReply" />

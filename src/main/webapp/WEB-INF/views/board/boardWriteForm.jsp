@@ -47,14 +47,15 @@ h3{
 </head>
 
 <body>
-	<div class="left">1</div>
+	
 	<div class="center">
 		<form action="/board/register.kh" method="POST"
 			enctype="multipart/form-data">
 			<h3 id="b-title">학과 게시판</h3>
 			<br>
 			<div class="c-main">
-				
+			<!-- 
+				<input type="hidden" name="boardWriter" > -->
 				<div class="title">
 					<input type="text" size="50" name="boardTitle"
 						placeholder="제목을 입력하세요" style="border: none; padding: 10px;">
