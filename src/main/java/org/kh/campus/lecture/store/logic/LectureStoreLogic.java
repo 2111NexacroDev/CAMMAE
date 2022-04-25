@@ -23,8 +23,8 @@ public class LectureStoreLogic implements LectureStore{
 	}
 
 	@Override
-	public int updateLecture(SqlSession sqlSession, int lectureNo) {
-		int result = sqlSession.update("LectureMapper.updateLecture", lectureNo);
+	public int updateLecture(SqlSession sqlSession,Lecture lecture) {
+		int result = sqlSession.update("LectureMapper.updateLecture", lecture);
 		return result;
 	}
 
