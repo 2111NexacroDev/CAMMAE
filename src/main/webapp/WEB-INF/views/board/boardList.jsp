@@ -51,7 +51,7 @@ h3{
 	<div class="center">
 			<h3 id="b-title">학과게시판</h3>
 			<br>
-			<div><button class="btn" onclick="location.href='/board/writeView'">글쓰기</button></div>
+			<div><button class="btn" onclick="location.href='/board/writeView.kh'">글쓰기</button></div>
 			<br>
 			<table width="600px" border="1">
 				<thead>
