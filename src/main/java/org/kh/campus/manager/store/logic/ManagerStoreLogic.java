@@ -21,13 +21,13 @@ public class ManagerStoreLogic implements ManagerStore {
 
 	@Override
 	public int insertStudent(SqlSession sqlSession, Student student) {
-		int result = sqlSession.insert("");
+		int result = sqlSession.insert("ManagerMapper.insertStudent", student);
 		return result;
 	}
 
 	@Override
 	public int updateStudent(SqlSession sqlSession, Student student) {
-		int result = sqlSession.update("");
+		int result = sqlSession.update("ManagerMapper.updateStudent", student);
 		return result;
 	}
 
@@ -46,19 +46,19 @@ public class ManagerStoreLogic implements ManagerStore {
 
 	@Override
 	public int insertProfessor(SqlSession sqlSession, Professor professor) {
-		int result = sqlSession.insert("");
+		int result = sqlSession.insert("ManagerMapper.insertProfessor", professor);
 		return result;
 	}
 
 	@Override
 	public int updateProfessor(SqlSession sqlSession, Professor professor) {
-		int result = sqlSession.update("");
+		int result = sqlSession.update("ManagerMapper.updateProfessor", professor);
 		return result;
 	}
 
 	@Override
 	public int deleteProfessor(SqlSession sqlSession, int professorNo) {
-		int result = sqlSession.delete("");
+		int result = sqlSession.delete("ManagerMapper.deleteProfessor", professorNo);
 		return result;
 	}
 
@@ -71,19 +71,19 @@ public class ManagerStoreLogic implements ManagerStore {
 
 	@Override
 	public int insertManager(SqlSession sqlSession, Manager manager) {
-		int result = sqlSession.insert("");
+		int result = sqlSession.insert("ManagerMapper.insertManager", manager);
 		return result;
 	}
 
 	@Override
 	public int updateManager(SqlSession sqlSession, Manager manager) {
-		int result = sqlSession.update("");
+		int result = sqlSession.update("ManagerMapper.updateManager", manager);
 		return result;
 	}
 
 	@Override
 	public int deleteManager(SqlSession sqlSession, int managerNo) {
-		int result = sqlSession.delete("");
+		int result = sqlSession.delete("ManagerMapper.deleteManager", managerNo);
 		return result;
 	}
 

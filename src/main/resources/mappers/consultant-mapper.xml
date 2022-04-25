@@ -33,7 +33,7 @@
 	</select>
 	
 	<select id="selectAllCons" resultMap="consultantResultMap">
-	 SELECT * FROM CONSULTANT_TBL WHERE CONS_STUDENT_NAME = #{cons_student_name}
+	 SELECT * FROM CONSULTANT_TBL
 	</select>
 	
 	<resultMap type="ConsultantReply" id="ConsultantReplyResultMap">

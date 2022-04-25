@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
+import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.question.domain.PageInfo;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.domain.QuestionReply;
@@ -43,6 +44,20 @@ public class QuestionStoreLogic implements QuestionStore {
 		int result = sqlSession.insert("QuestionMapper.insertQuestion", question);
 		return result;
 	}
+	
+	@Override
+	public List<Lecture> selectAllPro(SqlSession sqlSession) {
+		List<Lecture> lList = sqlSession.selectList("QuestionMapper.selectAllPro");
+		return lList;
+	}
+	
+	@Override
+	public List<Lecture> selectAllLec(String professorName, SqlSession sqlSession) {
+		List<Lecture> lList = sqlSession.selectList("QuestionMapper.selectAllLec", professorName );
+		return lList;
+	}
+
+
 	
 	@Override
 	public int updateQuestion(Question question, SqlSession sqlSession) {
@@ -93,6 +108,8 @@ public class QuestionStoreLogic implements QuestionStore {
 		int result = sqlSession.delete("QuestionMapper.deleteReply", questionReply);
 		return result;
 	}
+
+
 
 
 

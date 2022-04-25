@@ -77,7 +77,7 @@ h3 {
 		</div>
 		<br>
 		<div class="c-main">
-			<div class="title">${question.questionTitle }</div>
+			<div class="title">[${question.professorName }교수 _ ${question.lectureName }] ${question.questionTitle }</div>
 			<br>
 			<div>${question.questionWriter }${question.questionDate }</div>
 

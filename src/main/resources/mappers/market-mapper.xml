@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MarketMapper">
+	<resultMap type="Market" id="marketResultMap">
+		<id property="marketNo" column="MARKET_NO"></id>
+		<result property="marketType" column="MARKET_TYPE"></result>
+		<result property="marketGoods" column="MARKET_GOODS"></result>
+		<result property="marketPrice" column="MARKET_PRICE"></result>
+		<result property="marketTitle" column="MARKET_TITLE"></result>
+		<result property="marketContent" column="MARKET_CONTENT"></result>
+		<result property="marketWriter" column="MARKET_WRITER"></result>
+		<result property="marketDate" column="MARKET_DATE"></result>
+		<result property="marketUpdateDate" column="MARKET_UPDATEDATE"></result>
+		<result property="marketCount" column="MARKET_COUNT"></result>
+	</resultMap>
+
+	<select id="selectAllMarket" resultMap="marketResultMap">
+		SELECT * FROM MARKET_TBL
+		ORDER BY MARKET_NO DESC
+	</select>
+
+	<select id="selectOneMarket" resultMap="marketResultMap">
+		SELECT * FROM MARKET_TBL
+		WHERE MARKET_NO = #{marketNo}
+	</select>
+
+	<select id="selectSearchMarket" resultMap="marketResultMap">
+		SELECT * FROM MARKET_TBL
+		<if test="searchCondition.toString() == 'writer'">
+			WHERE MARKET_WRITER LIKE '%' || #{searchValue} || '%'
+		</if>
+		<if test="searchCondition.toString() == 'title'">
+			WHERE MARKET_TITLE LIKE '%' || #{searchValue} || '%'
+		</if>
+		<if test="searchCondition.toString() == 'contents'">
+			WHERE MARKET_CONTENT LIKE '%' || #{searchValue} || '%'
+		</if>
+		<if test="searchCondition.toString() == 'all'">
+			WHERE MARKET_CONTENT LIKE '%' || #{searchValue} || '%'
+			OR
+			MARKET_TITLE LIKE '%' || #{searchValue} || '%'
+			OR MARKET_WRITER
+			LIKE
+			'%' || #{searchValue} || '%'
+		</if>
+		ORDER BY MARKET_NO DESC
+	</select>
+
+	<!-- 페이지 -->
+	<select id="selectListCount" resultType="_int">
+		SELECT COUNT(*) FROM
+		MARKET_TBL
+	</select>
+
+	<insert id="insertMarket">
+		INSERT INTO MARKET_TBL VALUES(SEQ_MARKET_NO.NEXTVAL,
+		#{marketType}, #{marketGoods}, #{marketPrice}, #{marketTitle},
+		#{marketContent}, #{marketWriter}, DEFAULT, DEFAULT,DEFAULT)
+	</insert>
+
+	<update id="updateCount">
+		UPDATE MARKET_TBL SET MARKET_COUNT = MARKET_COUNT + 1
+		WHERE MARKET_NO = #{marketNo}
+	</update>
+
+	<update id="updateMarket">
+		UPDATE MARKET_TBL SET MARKET_TYPE =
+		#{marketType},
+		MARKET_GOODS = #{marketGoods}, MARKET_PRICE = #{marketPrice},
+		MARKET_TITLE =
+		#{marketTitle}, MARKET_CONTENT = #{marketContent},
+		MARKET_UPDATEDATE = DEFAULT WHERE MARKET_NO =
+		#{marketNo}
+	</update>
+
+	<delete id="deleteMarket">
+		DELETE FROM MARKET_TBL WHERE MARKET_NO = #{marketNo}
+	</delete>
+
+</mapper>
