@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,8 +64,8 @@
 				<c:url var="rModify" value="/recruitment/modifyView.kh">
 					<c:param name="recruitmentNo" value="${recruitment.recruitmentNo }"></c:param>
 				</c:url>
-				<c:url var="nDelete" value="/recruitment/delete.kh">
-					<c:param var="recruitmentNo" value="${recruitment.recruitmentNo }"></c:param>
+				<c:url var="rDelete" value="/recruitment/delete.kh">
+					<c:param name="recruitmentNo" value="${recruitment.recruitmentNo }"></c:param>
 				</c:url>
 				<button onclick="location.href='/recruitment/list.kh'">목록</button>
 				<a href="${rModify }">수정하기</a>

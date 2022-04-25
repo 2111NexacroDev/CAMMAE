@@ -2,11 +2,16 @@ package org.kh.campus.recruitment.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.kh.campus.recruitment.domain.PageInfo;
+import org.kh.campus.recruitment.domain.Pagination;
 import org.kh.campus.recruitment.domain.Recruitment;
 import org.kh.campus.recruitment.domain.RecruitmentSearch;
 import org.kh.campus.recruitment.service.RecruitmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,11 +27,15 @@ public class RecruitmentController {
 	
 	//채용공고 목록 조회
 	@RequestMapping(value="/recruitment/list.kh", method=RequestMethod.GET)
-	public ModelAndView recruitmentListView(ModelAndView mv) {
+	public ModelAndView recruitmentListView(ModelAndView mv, @RequestParam(value = "page", required = false)Integer page) {
 		try {
-			List<Recruitment> rList = rService.printAllRecruitment();
+			int currentPage = (page != null) ? page : 1;
+			int totalCount = rService.getListCount();
+			PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
+			List<Recruitment> rList = rService.printAllRecruitment(pi);
 			if(!rList.isEmpty()) {
 				mv.addObject("rList", rList);
+				mv.addObject("pi", pi);
 				mv.setViewName("recruitment/recruitmentList");
 			}else {
 				mv.addObject("msg","공지사항 조회 실패");
@@ -97,4 +106,95 @@ public class RecruitmentController {
 		}
 		return mv;
 	}
+	
+	//채용공고 수정
+	@RequestMapping(value="/recruitment/modifyView.kh", method=RequestMethod.GET)
+	public String recruitmentModifyView(Model model
+			, @RequestParam("recruitmentNo")int recruitmentNo) {
+		try {
+			Recruitment recruitment = rService.printOneRecruitment(recruitmentNo);
+			if(recruitment != null) {
+				model.addAttribute("recruitment", recruitment);
+				return "recruitment/recruitmentUpdateView";
+			}else {
+				model.addAttribute("msg","No Data");
+				return "common/errorPage";
+			}
+		}catch(Exception e) {
+			return null;
+		}
+	}
+	
+	//채용공고 수정 실행
+	@RequestMapping(value="/recruitment/update.kh", method=RequestMethod.POST)
+	public ModelAndView recruitmentUpdate(
+			ModelAndView mv
+			, @ModelAttribute Recruitment recruitment
+			, HttpServletRequest request) {
+		try {
+			int result = rService.modifyRecruitment(recruitment);
+			if(result > 0) {
+				mv.setViewName("recruitment/recruitmentDetail");
+			}else {
+				mv.addObject("msg","채용공고 수정 실패");
+				mv.setViewName("common/errorPage");
+			}
+		}catch(Exception e) {
+			mv.addObject("msg", e.toString());
+			mv.setViewName("common/errorPage");
+		}
+		return mv;
+	}
+	
+	
+	
+	//채용공고 삭제
+	@RequestMapping(value="/recruitment/delete.kh", method=RequestMethod.GET)
+	public String recruitmentDelete(
+			Model model
+			, @RequestParam("recruitmentNo")int recruitmentNo) {
+		try {
+			int result = rService.removeRecruitment(recruitmentNo);
+			if(result > 0) {
+				return "redirect:/recruitment/list.kh";
+			}else {
+				model.addAttribute("msg", "채용공고 삭제 실패");
+				return "common/errorPage";
+			}
+		}catch(Exception e) {
+			model.addAttribute("msg", e.toString());
+			return "common/errorPage";
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

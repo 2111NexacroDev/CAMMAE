@@ -22,10 +22,6 @@
 				<td><input type="text" name="noticeTitle" value="${notice.noticeTitle }"></td>
 			</tr>
 			<tr>
-				<td>작성자</td>
-				<td><input type="text" name="noticeWriter" value="${notice.noticeWriter }"></td>
-			</tr>
-			<tr>
 				<td>내용</td>
 				<td><textarea cols="50" name="noticeContent" value="${notice.noticeContent }"></textarea></td>
 			</tr>
