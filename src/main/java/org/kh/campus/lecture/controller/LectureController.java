@@ -2,6 +2,8 @@ package org.kh.campus.lecture.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.lecture.service.LectureService;
 import org.kh.campus.notice.domain.Notice;
@@ -65,25 +67,24 @@ public class LectureController {
 	}
 	
 	//강의 수 정 실 행(수정예정)
-	@RequestMapping(value = "/lecture/update.kh", method=RequestMethod.POST)
-	public String lectureUpdate(Model model,
-			@ModelAttribute  Lecture lecture) {
+	@RequestMapping(value="/lecture/update.kh", method=RequestMethod.POST)
+	public ModelAndView lectureUpdate(ModelAndView mv
+			, @ModelAttribute Lecture lecture
+			, HttpServletRequest request) {
 		try {
-			lecture.setLectureNo(lecture.getLectureNo());
-			lecture.setLectureDepartment(lecture.getLectureDepartment());
-			lecture.setLectureName(lecture.getLectureName());
-			lecture.setProfessorName(lecture.getProfessorName());
-			lecture.setLectureDivision(lecture.getLectureDivision());
-			lecture.setLectureRoom(lecture.getLectureRoom());
-			lecture.setLecturePeople(lecture.getLecturePeople());
-			lecture.setLectureTime(lecture.getLectureTime());
-			
-			model.addAttribute("msg", "강의 수정 완료");
-			return "redirect:/lecture/list.kh";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "redirect:/main.kh";
+			int result = lService.modifyLecture(lecture);
+			if(result > 0) {
+				mv.setViewName("lecture/lectureDetailView");
+			} else {
+				mv.addObject("msg", "수강개설 수정 실패!");
+				mv.setViewName("common/errorPage");
+			}
+		}catch (Exception e) {
+			mv.addObject("msg", e.toString());
+			mv.setViewName("common/errorPage");
 		}
+		
+		return mv;
 	}
 	
 	
