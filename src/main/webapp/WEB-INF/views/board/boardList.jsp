@@ -54,6 +54,7 @@ h3{
 			<div><button class="btn" onclick="location.href='/board/writeView'">글쓰기</button></div>
 			<br>
 			<table width="600px" border="1">
+				<thead>
 				<tr>
 					<th>번호</th>
 					<th>제목</th>
@@ -61,17 +62,24 @@ h3{
 					<th>작성일</th>
 					
 				</tr>
-				<c:forEach items="${bList }" var="board">
+				<thead>
+				<tbody>
 				
+				<c:forEach items="${bList }" var="board">
 				<tr>
-					<td>${board.boardNo }</td>
-					<td>${board.boardTitle }</td>
+				<td class="ta" id="no">${board.boardNo}</td>
+				<c:url var="bDetail" value="/board/detail.kh">
+					<c:param name="boardNo" value="${board.boardNo}"></c:param>
+				</c:url>
+
+					<td><a href="${bDetail}">${board.boardTitle }</a></td>
 					<td>${board.boardWriter }</td>
 					<td>${board.boardDate }</td>
 					
 				</tr>
 			
 				</c:forEach>
+				</tbody>
 			</table>
 	<div class="paging">
 

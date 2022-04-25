@@ -26,7 +26,7 @@ public class BoardStoreLogic implements BoardStore {
 
 	@Override
 	public Board selectOneBoard(SqlSession sqlSession, int boardNo) {
-		Board board = sqlSession.selectOne("BoardMapper.selectOneMapper", boardNo);
+		Board board = sqlSession.selectOne("BoardMapper.selectOneBoard", boardNo);
 		return board;
 	}
 
@@ -58,7 +58,7 @@ public class BoardStoreLogic implements BoardStore {
 	@Override
 	public List<BoardReply> selectAllBoardReply(int boardNo, SqlSession sqlSession) {
 		List<BoardReply> bReplyList
-			= sqlSession.selectList("BoardMapper.selectAllReply", boardNo);
+			= sqlSession.selectList("BoardMapper.selectAllBoardReply", boardNo);
 		return bReplyList;
 	}
 
@@ -76,7 +76,7 @@ public class BoardStoreLogic implements BoardStore {
 
 	@Override
 	public int deleteBoardReply(BoardReply boardReply, SqlSession sqlSession) {
-		int result = sqlSession.delete("BoardMapper.deleteBoardReply", boardReply);
+		int result = sqlSession.delete("BoardMapper.deleteReply", boardReply);
 		return result;
 	}
 

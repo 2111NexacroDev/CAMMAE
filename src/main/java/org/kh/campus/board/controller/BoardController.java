@@ -15,6 +15,8 @@ import org.kh.campus.board.domain.PageInfo;
 import org.kh.campus.board.domain.Pagination;
 import org.kh.campus.board.domain.Search;
 import org.kh.campus.board.service.BoardService;
+import org.kh.campus.consultant.domain.ConsultantReply;
+import org.kh.campus.question.domain.QuestionReply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,7 +68,7 @@ public class BoardController {
 			Board board = service.printOneBoard(boardNo);
 			if (board != null) {
 				mv.addObject("board", board);
-				mv.setViewName("board/boardDetail");
+				mv.setViewName("board/board");
 			} else {
 				mv.addObject("msg", " 학과게시판 상세조회 실패");
 				mv.setViewName("common/errorPage");
@@ -256,17 +258,26 @@ public class BoardController {
 			return "fail";
 		}
 	}
-
 	@ResponseBody
-	@RequestMapping(value="/board/replyList.kh", method=RequestMethod.GET
-					, produces="application/json,charset=utf-8")
-	public String boardReplyList(@RequestParam("BoardNo")int boardNo) {
-		List<BoardReply> bReplyList = service.printAllBoardReply(boardNo);
-		if(!bReplyList.isEmpty()) {
+	@RequestMapping(value = "/board/replyList.kh", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+	public String boardReplyList(@RequestParam("boardNo") int boardNo) {
+		List<BoardReply> bList = service.printAllBoardReply(boardNo);
+		if (!bList.isEmpty()) {
 			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-			return gson.toJson(bReplyList);
+			return gson.toJson(bList);
 		}
-		return "";
+		return null;
 	}
-			
+
+	//댓글 수정
+	@ResponseBody
+	@RequestMapping(value = "/board/replyModify", method = RequestMethod.POST)
+	public String boardReplyModify(@ModelAttribute BoardReply boardReply) {
+		int result = service.modifyBoardReply(boardReply);
+		if (result > 0) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
 }
