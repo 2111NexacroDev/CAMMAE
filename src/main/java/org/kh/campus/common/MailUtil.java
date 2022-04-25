@@ -26,7 +26,7 @@ public void sendEmail(String email, String name) throws Exception{
 		msg +="<p>임시 비밀번호:";
 		msg +="as145" + "</p></div>";
 		
-		//email전송
+		//email전송 주석
 		String mailRecipient= email;//받는 사람 이메일 주소
 		try {
 			//객체 선언
