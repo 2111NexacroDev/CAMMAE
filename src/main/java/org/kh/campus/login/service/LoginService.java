@@ -8,6 +8,7 @@ public interface LoginService {
 	public int loginStudent(Student student);
 	public int loginProfessor(Professor professor);
 	public int loginManager(Manager manager);
+	public String findPwdStd(Student std);
 	
 	
 }
