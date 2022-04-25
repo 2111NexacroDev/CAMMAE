@@ -2,9 +2,11 @@ package org.kh.campus.board.store.logic;
 
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
+import org.kh.campus.board.domain.PageInfo;
 import org.kh.campus.board.domain.Search;
 import org.kh.campus.board.store.BoardStore;
 import org.springframework.stereotype.Repository;
@@ -13,8 +15,12 @@ import org.springframework.stereotype.Repository;
 public class BoardStoreLogic implements BoardStore {
 
 	@Override
-	public List<Board> selectAllBoard(SqlSession sqlSession) {
-		List<Board> bList = sqlSession.selectList("BoardMapper.selectAllBoard");
+	public List<Board> selectAllBoard(SqlSession sqlSession, PageInfo pi) {
+		int limit = pi.getBoardLimit();
+		int currentPage = pi.getCurrentPage();
+		int offset = (currentPage -1) * limit ;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		List<Board> bList = sqlSession.selectList("BoardMapper.selectAllBoard", pi, rowBounds);
 		return bList;
 	}
 
@@ -72,6 +78,12 @@ public class BoardStoreLogic implements BoardStore {
 	public int deleteBoardReply(BoardReply boardReply, SqlSession sqlSession) {
 		int result = sqlSession.delete("BoardMapper.deleteBoardReply", boardReply);
 		return result;
+	}
+
+	@Override
+	public int selectListCount(SqlSession sqlSession) {
+		int totalCount = sqlSession.selectOne("BoardMapper.selectListCount");
+		return totalCount;
 	}
 
 }

@@ -1,52 +1,57 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>질의응답게시판 상세페이지</title>
-<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
-<style>
-.left {
-	width: 32%;
-	float: left;
-}
-.center {
-	width: 50%;
-	float: left;
-}
-.c-main {
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	width: 600px;
-	padding: 30px 30px 30px 30px;
-}
-h3 {
-	color: #10412C;
-}
-.btn {
-	border: 1px solid #10412C;
-	background-color: #10412C;
-	color: white;
-	border-radius: 5px;
-	padding: 5px 10px;
-	font-size: 13px;
-	font-weight: bold;
-	margin-right: 5px;
-}
-/* 댓글 */
-#rQuestionWriter {
-	width: 80%;
-	float: left;
-}
-#rQuestionDate {
-	width: 20%;
-	float: left;
-}
-#rQuestionContent {
-	width: 80%;
-	float: left;
-}
-</style>
+<title>공지사항 상세 목록 조회</title>
 </head>
+<body>
+	<h1 align="center">${board.boardNo }</h1>
+	<br><br>
+	<table align="center" width="500" border="1">
+	   <tr>
+          <td>번호</td>
+          <td>${board.boardeNo }</td>
+        </tr>
+		<tr>
+			<td>제목</td>
+			<td>${board.boardTitle }</td>
+		</tr>
+		<tr>
+			<td>내용</td>
+			<td>${board.boardContent }</td>
+		</tr>
+		<tr>
+			<td>작성자</td>
+			<td>${board.boardWriter }</td>
+		</tr>
+		<tr>
+			<td>작성일</td>
+			<td>${board.boardDate }</td>
+		</tr>
+		<tr>
+			<td>첨부파일</td>
+			<td>
+				<a href="../../../resources/nuploadFiles/${board.boardFileRename }" download>
+				${board.boardFileName }
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<c:url var="bModify" value="/board/modifyView.kh">
+					<c:param name="boardeNo" value="${board.boardeNo }"></c:param>
+				</c:url>
+				<c:url var="bDelete" value="/board/delete.kh">
+					<c:param name="boardeNo" value="${board.boardeNo }"></c:param>
+				</c:url>
+				<button onclick="location.href='/board/list.kh'">목록</button>
+				<a href="${bModify }">수정</a>
+            	<a href="${bDelete }">삭제</a>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

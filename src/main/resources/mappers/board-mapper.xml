@@ -17,7 +17,9 @@
 	
 
   	</resultMap>
-  
+  	<select id="selectListCount" resultType="_int">
+  		SELECT COUNT(*) FROM BOARD_TBL
+  	</select>
   	<select id="selectAllBoard" resultMap="boardResultMap">
   		SELECT*FROM BOARD_TBL ORDER BY BOARD_NO ASC
   	</select>
