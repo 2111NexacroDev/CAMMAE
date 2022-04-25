@@ -30,8 +30,8 @@ public class LectureServiceImpl implements LectureService{
 	}
 
 	@Override
-	public int modifyLecture(int lectureNo) {
-		int result = lStore.updateLecture(sqlSession, lectureNo);
+	public int modifyLecture(Lecture lecture) {
+		int result = lStore.updateLecture(sqlSession, lecture);
 		return result;
 	}
 

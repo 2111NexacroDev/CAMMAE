@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
+import org.kh.campus.board.domain.PageInfo;
 import org.kh.campus.board.domain.Search;
 import org.kh.campus.board.service.BoardService;
 import org.kh.campus.board.store.BoardStore;
@@ -22,8 +23,8 @@ public class BoardServiceImpl implements BoardService{
 	
 	//게시판 목록조회
 	@Override
-	public List<Board> printAllBoard() {
-		List<Board> bList = bStore.selectAllBoard(sqlSession);
+	public List<Board> printAllBoard(PageInfo pi) {
+		List<Board> bList = bStore.selectAllBoard(sqlSession, pi);
 		return bList;
 	}
 	//게시판 검색기능
@@ -79,6 +80,11 @@ public class BoardServiceImpl implements BoardService{
 	public int removeBoardReply(BoardReply boardReply) {
 		int result = bStore.deleteBoardReply(boardReply, sqlSession);
 		return result;
+	}
+	@Override
+	public int getListCount() {
+		int totalCount = bStore.selectListCount(sqlSession);
+		return totalCount;
 	}
 	
 

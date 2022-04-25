@@ -11,7 +11,7 @@ public interface LectureStore {
 
 	int insertLecture(SqlSession sqlSession, Lecture lecture);
 
-	int updateLecture(SqlSession sqlSession, int lectureNo);
+	int updateLecture(SqlSession sqlSession, Lecture lecture);
 
 	int deleteLecture(SqlSession sqlSession, int lectureNo);
 

@@ -50,5 +50,9 @@
 		
 		</c:forEach>
 	</table>
+	<c:url var="lWrite" value="/lecture/writeView.kh">
+					<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
+				</c:url>
+				<a href="${lWrite }">등록하기</a>
 </body>
 </html>

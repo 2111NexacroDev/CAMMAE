@@ -20,6 +20,10 @@
 		<result property="recruitmentCount" column="RECRUITMENT_COUNT"/>		
 	</resultMap>
 	
+	<!-- 페이징 -->
+	<select id="selectListCount" resultType="_int">
+		SELECT COUNT(*) FROM RECRUITMENT_TBL
+	</select>
 	<!-- 전체 조회 -->
 	<select id="selectAllRecruitment" resultMap="recruitmentResultMap">
 		SELECT * FROM RECRUITMENT_TBL ORDER BY RECRUITMENT_NO DESC
@@ -54,7 +58,44 @@
 		)		
 	</insert>
 	
+	<update id="updateRecruitment">
+		UPDATE RECRUITMENT_TBL
+		 SET RECRUITMENT_TITLE	 	= #{recruitmentTitle}
+		, RECRUITMENT_COMPANY_NAME  = #{recruitmentCompanyName}
+		, RECRUITMENT_CAREER		= #{recruitmentCareer}
+		, RECRUITMENT_EDUCATION		= #{recruitmentEducation}
+		, RECRUITMENT_PREFER		= #{recruitmentPrefer}
+		, RECRUITMENT_TYPE			= #{recruitmentType}
+		, RECRUITMENT_SALARY		= #{recruitmentSalary}
+		, RECRUITMENT_REGION		= #{recruitmentRegion}
+		, RECRUITMENT_DATE			= DEFAULT
+		, RECRUITMENT_START_DATE	= #{recruitmentStartDate}
+		, RECRUITMENT_END_DATE		= #{recruitmentEndDate}
+		WHERE RECRUITMENT_NO		= ${recruitmentNo}
+	</update>
+	
 	<update id="updateCountRecruitment">
 		UPDATE RECRUITMENT_TBL SET RECRUITMENT_COUNT = RECRUITMENT_COUNT + 1 WHERE RECRUITMENT_NO = #{recruitmentNo}
 	</update>
+	
+	<delete id="deleteRecruitment">
+		DELETE FROM RECRUITMENT_TBL WHERE RECRUITMENT_NO = #{recruitmentNo}
+	</delete>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </mapper>

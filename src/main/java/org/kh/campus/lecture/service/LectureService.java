@@ -10,7 +10,7 @@ public interface LectureService {
 	public Lecture printOneLecture(int lectureNo); //  강의 상세조회
 	
 	public int registerLecture(Lecture lecture); // 강의 등록
-	public int modifyLecture(int lectureNo); // 강의 수정
+	public int modifyLecture(Lecture lecture); // 강의 수정
 	public int removeLecture(int lectureNo); // 강의 삭제
 	
 }

@@ -42,8 +42,9 @@
 			
 	<update id="updateLecture">
 		UPDATE LECTURE_TBL 
-		SET LECTURE_DEPARTMENT = #{lectureDepartment}
-		,LECTURE_NAME = #{lectureName}
+		SET 
+		LECTURE_NAME = #{lectureName}
+		,LECTURE_DEPARTMENT = #{lectureDepartment}
 		, PROFESSOR_NAME = #{professorName}
 		, LECTURE_DIVISION = #{lectureDivision}
 		, LECTURE_GRADE = #{lectureGrade}

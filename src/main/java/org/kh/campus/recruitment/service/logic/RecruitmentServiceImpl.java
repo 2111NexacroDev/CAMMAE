@@ -3,8 +3,10 @@ package org.kh.campus.recruitment.service.logic;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.kh.campus.recruitment.domain.PageInfo;
 import org.kh.campus.recruitment.domain.Recruitment;
 import org.kh.campus.recruitment.domain.RecruitmentSearch;
+
 import org.kh.campus.recruitment.service.RecruitmentService;
 import org.kh.campus.recruitment.store.RecruitmentStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +22,8 @@ public class RecruitmentServiceImpl implements RecruitmentService{
 	private RecruitmentStore rStore;
 	
 	@Override
-	public List<Recruitment> printAllRecruitment() {
-		List<Recruitment> rList = rStore.selectAllRecruitment(sqlSession);
+	public List<Recruitment> printAllRecruitment(PageInfo pi) {
+		List<Recruitment> rList = rStore.selectAllRecruitment(sqlSession, pi);
 		return rList;
 	}
 	
@@ -36,6 +38,13 @@ public class RecruitmentServiceImpl implements RecruitmentService{
 		int result = rStore.insertRecruitment(recruitment, sqlSession);
 		return result;
 	}
+	
+	@Override
+	public int modifyRecruitment(Recruitment recruitment) {
+		int result = rStore.updateRecruitment(recruitment, sqlSession);
+		return result;
+	}
+
 
 	@Override
 	public Recruitment printOneRecruitment(int recruitmentNo) {
@@ -49,6 +58,19 @@ public class RecruitmentServiceImpl implements RecruitmentService{
 		return result;
 	}
 
+	@Override
+	public int getListCount() {
+		int totalCount = rStore.selectListCount(sqlSession);
+		return totalCount;
+	}
+
+	@Override
+	public int removeRecruitment(int recruitmentNo) {
+		int result = rStore.deleteRecruitment(recruitmentNo, sqlSession);
+		return result;
+	}
+
+	
 	
 
 
