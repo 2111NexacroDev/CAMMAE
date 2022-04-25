@@ -3,11 +3,14 @@ package org.kh.campus.cart.service;
 import java.util.List;
 
 import org.kh.campus.cart.domain.Cart;
+import org.kh.campus.lecture.domain.Lecture;
 
 public interface CartService {
 
-	public List<Cart>printAllCart();  
-	public int registerCart(Cart cart);
+	public List<Lecture>printAllCart();  
+
+	public int registerCart(int lectureNo);
+	
 	public int removeCart(int lectureNo);
 
 
