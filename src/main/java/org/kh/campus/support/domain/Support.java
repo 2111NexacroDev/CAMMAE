@@ -9,11 +9,15 @@ public class Support {
 	private String supFileName;
 	private String supFileRename;
 	private String supFilePath;
+	private String supPortFileName;
+	private String supPortFileRename;
+	private String supPortFilePath;
 	
 	public Support () {}
 
 	public Support(int supportNo, int recruitmentNo, String recruitmentTitle, int studentNo, String supportDate,
-			String supFileName, String supFileRename, String supFilePath) {
+			String supFileName, String supFileRename, String supFilePath, String supPortFileName,
+			String supPortFileRename, String supPortFilePath) {
 		super();
 		this.supportNo = supportNo;
 		this.recruitmentNo = recruitmentNo;
@@ -23,6 +27,9 @@ public class Support {
 		this.supFileName = supFileName;
 		this.supFileRename = supFileRename;
 		this.supFilePath = supFilePath;
+		this.supPortFileName = supPortFileName;
+		this.supPortFileRename = supPortFileRename;
+		this.supPortFilePath = supPortFilePath;
 	}
 
 	public int getSupportNo() {
@@ -89,13 +96,38 @@ public class Support {
 		this.supFilePath = supFilePath;
 	}
 
+	public String getSupPortFileName() {
+		return supPortFileName;
+	}
+
+	public void setSupPortFileName(String supPortFileName) {
+		this.supPortFileName = supPortFileName;
+	}
+
+	public String getSupPortFileRename() {
+		return supPortFileRename;
+	}
+
+	public void setSupPortFileRename(String supPortFileRename) {
+		this.supPortFileRename = supPortFileRename;
+	}
+
+	public String getSupPortFilePath() {
+		return supPortFilePath;
+	}
+
+	public void setSupPortFilePath(String supPortFilePath) {
+		this.supPortFilePath = supPortFilePath;
+	}
+
 	@Override
 	public String toString() {
 		return "Support [supportNo=" + supportNo + ", recruitmentNo=" + recruitmentNo + ", recruitmentTitle="
 				+ recruitmentTitle + ", studentNo=" + studentNo + ", supportDate=" + supportDate + ", supFileName="
-				+ supFileName + ", supFileRename=" + supFileRename + ", supFilePath=" + supFilePath + "]";
+				+ supFileName + ", supFileRename=" + supFileRename + ", supFilePath=" + supFilePath
+				+ ", supPortFileName=" + supPortFileName + ", supPortFileRename=" + supPortFileRename
+				+ ", supPortFilePath=" + supPortFilePath + "]";
 	}
-	
-	
 
+	
 }

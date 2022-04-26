@@ -50,6 +50,10 @@
 		<typeAlias
 			type="org.kh.campus.scholarship.domain.Scholarship"
 			alias="Scholarship" />
+			
+		<typeAlias
+			type="org.kh.campus.support.domain.Support"
+			alias="Support" />
 
 	</typeAliases>
 	<mappers>
@@ -68,5 +72,6 @@
 		<mapper resource="mappers/recruitment-mapper.xml" />
 		<mapper resource="mappers/cart-mapper.xml" />
 		<mapper resource="mappers/scholarship-mapper.xml" />
+		<mapper resource="mappers/support-mapper.xml" />
 	</mappers>
 </configuration>

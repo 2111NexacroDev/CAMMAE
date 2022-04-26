@@ -189,7 +189,7 @@
 				                <div class="content">
 				                    <p>이력서 지원</p>
 				                    <input  type="file" size="50" name="uploadFile"><br>
-				                    <input  type="file" size="50" name="uploadFile"><br>
+				                    <input  type="file" size="50" name="uploadFile1"><br>
 				                    <button type="submit" id="completion">완료</button>
 				                </div>
 				        </div>

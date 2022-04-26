@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SupportMapper">
+	<resultMap type="Support" id="supportResultMap">
+		<id property="supporNo" column="SUPPORT_NO"/>
+		<result property="recruitmentNo" column="RECRUITMENT_NO"/>
+		<result property="recruitmentTitle" column="RECRUITMENT_TITLE"/>
+		<result property="studentNo" column="STUDENT_NO"/>
+		<result property="supportDate" column="SUPPORT_DATE"/>
+		<result property="supFileName" column="SUP_FILE_NAME"/>
+		<result property="supFileRename" column="SUP_FILE_RENAME"/>
+		<result property="supFilePath" column="SUP_FILE_PATH"/>
+		<result property="supPortFileName" column="SUP_PORT_FILE_NAME"/>
+		<result property="supPortFileRename" column="SUP_PORT_FILE_RENAME"/>
+		<result property="supPortFilePath" column="SUP_PORT_FILE_PATH"/>
+	</resultMap>
+	
+	<insert id="insertSupport" parameterType="Support">
+		INSERT INTO SUPPORT_TBL VALUES(SEQ_SUPPORT_NO.NEXTVAL
+		, #{recruitmentNo} 
+		,#{recruitmentTitle} 
+		,#{studentNo} 
+		,#{supportDate} 
+		,#{supFileName} 
+		,#{supFileRename} 
+		,#{supFilePath} 
+		,#{supPortFileName} 
+		,#{supPortFileRename} 
+		,#{supPortFilePath})
+	</insert>
+</mapper>
