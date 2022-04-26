@@ -68,8 +68,10 @@ if (!nexacro.Device || nexacro._OS == "Windows" || nexacro._OS == "Android" || n
 
 	if (!nexacro.LiteDBConnection) {
 		nexacro.LiteDBConnection = function (id, parent) {
-			nexacro._EventSinkObject.call(this, id, parent);
-
+			this.id = this.name = id;
+			if (parent) {
+				this.parent = parent;
+			}
 			this.sqlstatement = "";
 			this.busytimeout = 60000;
 			this.openflag = 1;
@@ -94,6 +96,9 @@ if (!nexacro.Device || nexacro._OS == "Windows" || nexacro._OS == "Android" || n
 
 		var _pLiteDBConnection = nexacro.LiteDBConnection.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.LiteDBConnection);
 		_pLiteDBConnection._type_name = "LiteDBConnection";
+
+		_pLiteDBConnection.on_created = function () {
+		};
 
 		_pLiteDBConnection.destroy = function () {
 			if (this.handle) {
@@ -427,7 +432,10 @@ if (!nexacro.Device || nexacro._OS == "Windows" || nexacro._OS == "Android" || n
 
 	if (!nexacro.LiteDBStatement) {
 		nexacro.LiteDBStatement = function (id, parent) {
-			nexacro._EventSinkObject.call(this, id, parent);
+			this.id = this.name = id;
+			if (parent) {
+				this.parent = parent;
+			}
 
 			this.query = "";
 			this.ldbconnection = "";
@@ -448,6 +456,9 @@ if (!nexacro.Device || nexacro._OS == "Windows" || nexacro._OS == "Android" || n
 		};
 		var _pLiteDBStatement = nexacro.LiteDBStatement.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.LiteDBStatement);
 		_pLiteDBStatement._type_name = "LiteDBStatement";
+
+		_pLiteDBStatement.on_created = function () {
+		};
 
 		_pLiteDBStatement.destroy = function () {
 			if (this.handle) {

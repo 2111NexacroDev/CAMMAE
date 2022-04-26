@@ -30,9 +30,13 @@ if (!nexacro.DomParser) {
 
 	delete _pDomParseErrorEventInfo;
 
+
 	nexacro.DomParser = function (id, parent) {
-		nexacro._EventSinkObject.call(this, id, parent);
+		this.id = this.name = id;
+		this.parent = parent;
 	};
+
+
 
 	var _pDomParser = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.DomParser);
 	nexacro.DomParser.prototype = _pDomParser;
@@ -42,6 +46,7 @@ if (!nexacro.DomParser) {
 		"onerror" : 1
 	};
 
+	_pDomParser.on_created = nexacro._emptyFn;
 	_pDomParser.parseFromString = function (strText, strMineType) {
 		if (!strMineType || strMineType == "text/xml") {
 			var xmlDoc = nexacro._parseXMLDocument(strText);
@@ -76,6 +81,7 @@ if (!nexacro.DomParser) {
 
 	var _pXmlSerializer = nexacro._createPrototype(nexacro.Object, nexacro.XmlSerializer);
 	nexacro.XmlSerializer.prototype = _pXmlSerializer;
+	_pXmlSerializer.on_created = nexacro._emptyFn;
 
 	_pXmlSerializer.serializeToString = function (xmldoc) {
 		return nexacro._documentToXml(xmldoc);

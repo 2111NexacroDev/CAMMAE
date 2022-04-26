@@ -80,8 +80,7 @@ if (!nexacro.PopupDiv) {
 		"oncontextmenu" : 1, 
 		"ontouchstart" : 1, 
 		"ontouchmove" : 1, 
-		"ontouchend" : 1, 
-		"ondevicebuttonup" : 1
+		"ontouchend" : 1
 	};
 
 	_pPopupDiv.on_create_control_element = function (parent_elem) {
@@ -180,8 +179,8 @@ if (!nexacro.PopupDiv) {
 	};
 
 
-	_pPopupDiv.on_fire_user_onkeydown = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key) {
-		return nexacro.Form.prototype.on_fire_user_onkeydown.call(this, keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
+	_pPopupDiv.on_fire_user_onkeydown = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp) {
+		return nexacro.Form.prototype.on_fire_user_onkeydown.call(this, keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
 	};
 
 	_pPopupDiv.set_visible = function (v) {
@@ -191,10 +190,6 @@ if (!nexacro.PopupDiv) {
 	};
 
 	_pPopupDiv.trackPopup = function (left, top, width, height, callbackfn, bcapture) {
-		if (this._is_trackpopup) {
-			return;
-		}
-
 		this.returnvalue = "";
 		this._track_capture = bcapture === false ? false : true;
 
@@ -289,10 +284,6 @@ if (!nexacro.PopupDiv) {
 	};
 
 	_pPopupDiv.trackPopupByComponent = function (obj, left, top, width, height, callbackfn, bcapture) {
-		if (this._is_trackpopup) {
-			return;
-		}
-
 		this.returnvalue = "";
 		this._track_capture = bcapture === false ? false : true;
 
@@ -387,8 +378,6 @@ if (!nexacro.PopupDiv) {
 		return false;
 	};
 
-	_pPopupDiv.isPopup = nexacro.PopupControl.prototype._is_popup;
-
 	_pPopupDiv._on_init = function () {
 		this._eventclear_flag = true;
 		nexacro.FormBase.prototype._on_init.apply(this, arguments);
@@ -413,7 +402,7 @@ if (!nexacro.PopupDiv) {
 		return ret;
 	};
 
-	_pPopupDiv._on_bubble_mousewheel = function (elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bScroll, meta_key) {
+	_pPopupDiv._on_bubble_mousewheel = function (elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bScroll) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -427,13 +416,13 @@ if (!nexacro.PopupDiv) {
 
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
-				event_bubbles = this.on_fire_user_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[0], this, refer_comp, meta_key);
+				event_bubbles = this.on_fire_user_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[0], this, refer_comp);
 
 				pThis = this._getFromComponent(this);
 
 				if (event_bubbles !== true) {
 					if (!pThis.onmousewheel || (pThis.onmousewheel && !pThis.onmousewheel.defaultprevented)) {
-						ret = this.on_fire_sys_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[0], this, refer_comp, meta_key);
+						ret = this.on_fire_sys_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[0], this, refer_comp);
 
 						if (ret) {
 							return;
@@ -480,10 +469,10 @@ if (!nexacro.PopupDiv) {
 							canvasY = canvas[1];
 
 							if (this._is_subcontrol) {
-								return this.parent._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bScroll, meta_key);
+								return this.parent._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bScroll);
 							}
 							else {
-								return this.parent._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bScroll, meta_key);
+								return this.parent._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bScroll);
 							}
 						}
 					}
@@ -494,13 +483,13 @@ if (!nexacro.PopupDiv) {
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
-				event_bubbles = this.on_fire_user_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[0], fire_comp, refer_comp, meta_key);
+				event_bubbles = this.on_fire_user_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[0], fire_comp, refer_comp);
 
 				pThis = this._getFromComponent(this);
 
 				if (event_bubbles !== true) {
 					if (!pThis.onmousewheel || (pThis.onmousewheel && !pThis.onmousewheel.defaultprevented)) {
-						ret = this.on_fire_sys_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[0], fire_comp, refer_comp, meta_key);
+						ret = this.on_fire_sys_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[0], fire_comp, refer_comp);
 
 						if (ret) {
 							return;
@@ -539,7 +528,7 @@ if (!nexacro.PopupDiv) {
 						if (this.parent && !this.parent._is_application) {
 							canvasX += this._adjust_left - this._scroll_left || 0;
 							canvasY += this._adjust_top - this._scroll_top || 0;
-							return this.parent._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bScroll, meta_key);
+							return this.parent._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bScroll);
 						}
 					}
 				}
@@ -549,7 +538,8 @@ if (!nexacro.PopupDiv) {
 
 	_pPopupDiv.on_fire_onpopup = function (obj) {
 		if (this.onpopup && this.onpopup._has_handlers) {
-			var evt = new nexacro.EventInfo(obj, "onpopup");
+			var evt = new nexacro.EventInfo(obj);
+			evt.eventid = "onpopup";
 			return this.onpopup._fireEvent(this, evt);
 		}
 		return false;
@@ -575,33 +565,11 @@ if (!nexacro.PopupDiv) {
 		return false;
 	};
 
-	_pPopupDiv.on_fire_sys_onslidestart = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp) {
-		return true;
-	};
-
-	_pPopupDiv.on_fire_sys_onslide = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp) {
-		return true;
-	};
-
-	_pPopupDiv.on_fire_sys_onslideend = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp) {
-		return true;
-	};
-
-	_pPopupDiv.on_fire_sys_onflingstart = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp) {
-		return true;
-	};
-
-	_pPopupDiv.on_fire_sys_onfling = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp) {
-		return true;
-	};
-
-	_pPopupDiv.on_fire_sys_onflingend = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp) {
-		return true;
-	};
-
 	_pPopupDiv._detach = function (comp) {
 		this._attached_comp = null;
 	};
+
+	_pPopupDiv.isPopup = nexacro.PopupControl.prototype._is_popup;
 
 	_pPopupDiv._popup = nexacro.PopupControl.prototype._popup;
 

@@ -145,7 +145,7 @@ if (!nexacro.Animation) {
 				return /^hsl/.test(a);
 			}, 
 			col : function (a) {
-				return (is.hex(a) || is.rgb(a) || is.hsl(a) || nexacro._xreNamedColorList.hasOwnProperty(a));
+				return (is.hex(a) || is.rgb(a) || is.hsl(a) || isNamedColor(a));
 			}
 		};
 
@@ -154,20 +154,20 @@ if (!nexacro.Animation) {
 			var kSampleStepSize = 1.0 / (kSplineTableSize - 1.0);
 
 			function A (aA1, aA2) {
-				return 1.0 - 3.0 *  aA2 + 3.0 *  aA1;
+				return 1.0 - 3.0 * aA2 + 3.0 * aA1;
 			}
 			function B (aA1, aA2) {
-				return 3.0 *  aA2 - 6.0 *  aA1;
+				return 3.0 * aA2 - 6.0 * aA1;
 			}
 			function C (aA1) {
-				return 3.0 *  aA1;
+				return 3.0 * aA1;
 			}
 
 			function calcBezier (aT, aA1, aA2) {
-				return ((A(aA1, aA2) *  aT + B(aA1, aA2)) *  aT + C(aA1)) *  aT;
+				return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT;
 			}
 			function getSlope (aT, aA1, aA2) {
-				return 3.0 *  A(aA1, aA2) *  aT *  aT + 2.0 *  B(aA1, aA2) *  aT + C(aA1);
+				return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1);
 			}
 
 			function binarySubdivide (aX, aA, aB, mX1, mX2) {
@@ -205,7 +205,7 @@ if (!nexacro.Animation) {
 
 				if (mX1 !== mY1 || mX2 !== mY2) {
 					for (var i = 0; i < kSplineTableSize; ++i) {
-						sampleValues[i] = calcBezier(i *  kSampleStepSize, mX1, mX2);
+						sampleValues[i] = calcBezier(i * kSampleStepSize, mX1, mX2);
 					}
 				}
 
@@ -220,7 +220,7 @@ if (!nexacro.Animation) {
 					--currentSample;
 
 					var dist = (aX - sampleValues[currentSample]) / (sampleValues[currentSample + 1] - sampleValues[currentSample]);
-					var guessForT = intervalStart + dist *  kSampleStepSize;
+					var guessForT = intervalStart + dist * kSampleStepSize;
 					var initialSlope = getSlope(guessForT, mX1, mX2);
 
 					if (initialSlope >= 0.001) {
@@ -254,24 +254,24 @@ if (!nexacro.Animation) {
 			var names = ['Quad', 'Cubic', 'Quart', 'Quint', 'Sine', 'Expo', 'Circ', 'Back', 'Elastic', 'Bounce'];
 
 			function elastic (t, p) {
-				return t === 0 || t === 1 ? t : -Math.pow(2, 10 *  (t - 1)) *  Math.sin((((t - 1) - (p / (Math.PI *  2.0) *  Math.asin(1))) *  (Math.PI *  2)) / p);
+				return t === 0 || t === 1 ? t : -Math.pow(2, 10 * (t - 1)) * Math.sin((((t - 1) - (p / (Math.PI * 2.0) * Math.asin(1))) * (Math.PI * 2)) / p);
 			}
 
 			function bounce (t) {
 				if (t < (1 / 2.75)) {
-					return (7.5625 *  t *  t);
+					return (7.5625 * t * t);
 				}
 				else if (t < (2 / 2.75)) {
 					t -= (1.5 / 2.75);
-					return (7.5625 *  (t) *  t + 0.75);
+					return (7.5625 * (t) * t + 0.75);
 				}
 				else if (t < (2.5 / 2.75)) {
 					t -= (2.25 / 2.75);
-					return (7.5625 *  (t) *  t + .9375);
+					return (7.5625 * (t) * t + .9375);
 				}
 				else {
 					t -= (2.625 / 2.75);
-					return (7.5625 *  (t) *  t + .984375);
+					return (7.5625 * (t) * t + .984375);
 				}
 			}
 
@@ -284,9 +284,9 @@ if (!nexacro.Animation) {
 				}, bounce
 				], 
 				InOut : [[0.455, 0.030, 0.515, 0.955], [0.645, 0.045, 0.355, 1.000], [0.770, 0.000, 0.175, 1.000], [0.860, 0.000, 0.070, 1.000], [0.445, 0.050, 0.550, 0.950], [1.000, 0.000, 0.000, 1.000], [0.785, 0.135, 0.150, 0.860], [0.680, -0.550, 0.265, 1.550], function (t, f) {
-					return t < .5 ? elastic(t *  2, f) / 2 : 1 - elastic(t *  -2 + 2, f) / 2;
+					return t < .5 ? elastic(t * 2, f) / 2 : 1 - elastic(t * -2 + 2, f) / 2;
 				}, function (t) {
-					return t < .5 ? (1 - bounce(1 - (t *  2))) *  0.5 : bounce(t *  2 - 1) *  0.5 + 0.5;
+					return t < .5 ? (1 - bounce(1 - (t * 2))) * 0.5 : bounce(t * 2 - 1) * 0.5 + 0.5;
 				}]
 			};
 
@@ -424,13 +424,13 @@ if (!nexacro.Animation) {
 					t -= 1;
 				}
 				if (t < 1 / 6) {
-					return p + (q - p) *  6 *  t;
+					return p + (q - p) * 6 * t;
 				}
 				if (t < 1 / 2) {
 					return q;
 				}
 				if (t < 2 / 3) {
-					return p + (q - p) *  (2 / 3 - t) *  6;
+					return p + (q - p) * (2 / 3 - t) * 6;
 				}
 				return p;
 			}
@@ -439,17 +439,13 @@ if (!nexacro.Animation) {
 				r = g = b = l;
 			}
 			else {
-				var q = l < 0.5 ? l *  (1 + s) : l + s - l *  s;
-				var p = 2 *  l - q;
+				var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+				var p = 2 * l - q;
 				r = hue2rgb(p, q, h + 1 / 3);
 				g = hue2rgb(p, q, h);
 				b = hue2rgb(p, q, h - 1 / 3);
 			}
-			return 'rgba(' + (r *  255) + ',' + (g *  255) + ',' + (b *  255) + ',' + a + ')';
-		}
-
-		function isNamedColor (val) {
-			return nexacro._xreNamedColorList.hasOwnProperty(val);
+			return 'rgba(' + (r * 255) + ',' + (g * 255) + ',' + (b * 255) + ',' + a + ')';
 		}
 
 		function colorToRgb (val) {
@@ -565,7 +561,7 @@ if (!nexacro.Animation) {
 				case '-':
 					return x - y;
 				case '*':
-					return x *  y;
+					return x * y;
 			}
 		}
 
@@ -582,6 +578,10 @@ if (!nexacro.Animation) {
 			return is.obj(val) && objectHas(val, 'totalLength');
 		}
 
+		function isNamedColor (val) {
+			return nexacro._xreNamedColorList.hasOwnProperty(val);
+		}
+
 		function setDashoffset (el) {
 			var pathLength = el.getTotalLength();
 			el.setAttribute('stroke-dasharray', pathLength);
@@ -595,7 +595,7 @@ if (!nexacro.Animation) {
 				return {
 					el : el, 
 					property : prop, 
-					totalLength : el.getTotalLength() *  (p / 100)
+					totalLength : el.getTotalLength() * (p / 100)
 				};
 			};
 		}
@@ -614,7 +614,7 @@ if (!nexacro.Animation) {
 				case 'y':
 					return p.y;
 				case 'angle':
-					return Math.atan2(p1.y - p0.y, p1.x - p0.x) *  180 / Math.PI;
+					return Math.atan2(p1.y - p0.y, p1.x - p0.x) * 180 / Math.PI;
 			}
 		}
 
@@ -839,6 +839,25 @@ if (!nexacro.Animation) {
 		function anime (params) {
 			var now, startTime, lastTime = 0;
 			var instance = createNewInstance(params);
+			instance._rafTarget = params._rafTarget;
+
+
+			instance.reset = function () {
+				var direction = instance.direction;
+				var loops = instance.loop;
+				instance.currentTime = 0;
+				instance.progress = 0;
+				instance.paused = true;
+				instance.began = false;
+				instance.completed = false;
+				instance.reversed = direction === 'reverse';
+				instance.remaining = direction === 'alternate' && loops === 1 ? 2 : loops;
+				for (var i = arrayLength(instance.children); i--; ) {
+					var child = instance.children[i];
+					child.seek(child.offset);
+					child.reset();
+				}
+			};
 
 			function toggleInstanceDirection () {
 				instance.reversed = !instance.reversed;
@@ -892,14 +911,14 @@ if (!nexacro.Animation) {
 						var toNumber = tween.to.numbers[n];
 						var fromNumber = tween.from.numbers[n];
 						if (!tween.isPath) {
-							value = fromNumber + (eased *  (toNumber - fromNumber));
+							value = fromNumber + (eased * (toNumber - fromNumber));
 						}
 						else {
-							value = getPathProgress(tween.value, eased *  toNumber);
+							value = getPathProgress(tween.value, eased * toNumber);
 						}
 						if (round) {
 							if (!(tween.isColor && n > 2)) {
-								value = Math.round(value *  round) / round;
+								value = Math.round(value * round) / round;
 							}
 						}
 						numbers.push(value);
@@ -953,7 +972,7 @@ if (!nexacro.Animation) {
 					}
 				}
 				instance.currentTime = insTime;
-				instance.progress = (insTime / instance.duration) *  100;
+				instance.progress = (insTime / instance.duration) * 100;
 			}
 
 			function setCallback (cb) {
@@ -978,66 +997,28 @@ if (!nexacro.Animation) {
 				if (instance.children) {
 					syncInstanceChildren(insTime);
 				}
-				if (insReversed) {
-					if (insCurrentTime !== 0 || (insCurrentTime === 0 && engineTime == insCurrentTime)) {
-						if (insCurrentTime === 0) {
-							countIteration();
-						}
-						setAnimationsProgress(insTime);
-						if (!instance.began && insTime >= insDelay) {
-							instance.began = true;
-							setCallback('begin');
-						}
-						setCallback('run');
+				if (insTime >= (insOffset + insDelay) && insTime < insDuration) {
+					setAnimationsProgress(insTime);
+					if (!instance.began && insTime >= insDelay) {
+						instance.began = true;
+						setCallback('begin');
 					}
-					else {
-						if (insCurrentTime === 0 && instance.remaining && instance._refobject._reverse) {
-							setAnimationsProgress(insTime);
-							countIteration();
-						}
-
-						if (insTime <= insOffset && insCurrentTime !== 0) {
-							setAnimationsProgress(0);
-							if (insReversed) {
-								countIteration();
-							}
-						}
-						if (insTime >= insDuration && insCurrentTime !== insDuration) {
-							setAnimationsProgress(insDuration);
-							if (!insReversed) {
-								countIteration();
-							}
-						}
-					}
+					setCallback('run');
 				}
 				else {
-					if (insTime >= (insOffset + insDelay) && insTime < insDuration) {
-						setAnimationsProgress(insTime);
-						if (!instance.began && insTime >= insDelay) {
-							instance.began = true;
-							setCallback('begin');
+					if (insTime <= insOffset && insCurrentTime !== 0) {
+						setAnimationsProgress(0);
+						if (insReversed) {
+							countIteration();
 						}
-						setCallback('run');
 					}
-					else {
-						if (insTime <= insOffset && insCurrentTime !== 0) {
-							setAnimationsProgress(0);
-							if (insReversed) {
-								countIteration();
-							}
-						}
-						if (insTime >= insDuration && insCurrentTime !== insDuration) {
-							setAnimationsProgress(insDuration);
-							if (!insReversed) {
-								countIteration();
-							}
-						}
-						if (insCurrentTime === insDuration) {
+					if (insTime >= insDuration && insCurrentTime !== insDuration) {
+						setAnimationsProgress(insDuration);
+						if (!insReversed) {
 							countIteration();
 						}
 					}
 				}
-
 				if (engineTime >= insDuration) {
 					if (instance.remaining) {
 						startTime = now;
@@ -1058,48 +1039,12 @@ if (!nexacro.Animation) {
 				setCallback('update');
 			}
 
-			instance._rafTarget = params._rafTarget;
-			instance.equalInstance = function (instanceProp, params) {
-				var temp_instance = createNewInstance(params);
-
-				if (instanceProp == "tweens") {
-					for (var i = 0; i < this.animations.length; i++) {
-						var org_animation = this.animations[i];
-						var temp_animation = temp_instance.animations[i];
-
-						var org_tweens = org_animation.tweens;
-						var temp_tweens = temp_animation.tweens;
-
-						if (org_tweens.length != temp_tweens.length) {
-							return false;
-						}
-
-						for (var j = 0; j < org_tweens.length; j++) {
-							var org_from = org_tweens[j].from.original;
-							var org_to = org_tweens[j].to.original;
-
-							var temp_from = temp_tweens[j].from.original;
-							var temp_to = temp_tweens[j].to.original;
-
-							if (org_from != temp_from) {
-								return false;
-							}
-							if (org_to != temp_to) {
-								return false;
-							}
-						}
-					}
-
-					return true;
-				}
-			};
-
 			instance.tick = function (t) {
 				now = t;
 				if (!startTime) {
 					startTime = now;
 				}
-				var engineTime = (lastTime + now - startTime) *  anime.speed;
+				var engineTime = (lastTime + now - startTime) * anime.speed;
 				setInstanceProgress(engineTime);
 			};
 
@@ -1140,31 +1085,11 @@ if (!nexacro.Animation) {
 				instance.reset();
 				instance.play();
 			};
-
 			instance.destroy = function () {
 				if (raf) {
 					raf.stop();
 					raf.destroy();
 					raf = 0;
-				}
-			};
-
-			instance.reset = function () {
-				var direction = instance.direction;
-				var loops = instance.loop;
-
-				instance.currentTime = 0;
-				instance.progress = 0;
-				instance.paused = true;
-				instance.began = false;
-				instance.completed = false;
-				instance.reversed = direction === 'reverse';
-				instance.remaining = direction === 'alternate' && loops === 1 ? 2 : loops;
-
-				for (var i = arrayLength(instance.children); i--; ) {
-					var child = instance.children[i];
-					child.seek(child.offset);
-					child.reset();
 				}
 			};
 			instance.reset();
@@ -1237,7 +1162,7 @@ if (!nexacro.Animation) {
 		anime.easings = easings;
 		anime.timeline = timeline;
 		anime.random = function (min, max) {
-			return Math.floor(nexacro._random() *  (max - min + 1)) + min;
+			return Math.floor(Math.random() * (max - min + 1)) + min;
 		};
 
 		return anime;
@@ -1268,12 +1193,7 @@ if (!nexacro.Animation) {
 		this.fromobject = this.fromreferenceobject = obj;
 
 		this.direction = obj._anime.reversed ? "reverse" : "normal";
-		if (obj.loop) {
-			this.loopcount = obj.loopcount - obj._anime.remaining + 1;
-		}
-		else {
-			this.loopcount = 1;
-		}
+		this.loopcount = (obj._anime.loop === true && obj._anime.remaining === true) ? 0 : (obj._anime.loop === false ? 1 : obj.loopcount - obj._anime.remaining + 1);
 		this.reversed = obj._anime.reversed;
 		this.paused = obj._anime.paused;
 		this.currenttime = obj._anime.currentTime;
@@ -1286,30 +1206,24 @@ if (!nexacro.Animation) {
 		nexacro._EventSinkObject.call(this, id, parent);
 
 		this.items = new nexacro.Collection();
-
-		this._anime_task = [];
 	};
-
 	var _pAnimation = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.Animation);
 	nexacro.Animation.prototype = _pAnimation;
 	_pAnimation._type_name = "Animation";
 
-
-	_pAnimation.beziercurve = "";
-	_pAnimation.delay = 0;
-	_pAnimation.direction = "normal";
-	_pAnimation._reverse = false;
-	_pAnimation.duration = 1000;
-	_pAnimation.easing = "easeOutElastic";
-	_pAnimation.elasticity = 0;
+	_pAnimation.enableevent = true;
 	_pAnimation.items = null;
 	_pAnimation.loop = false;
 	_pAnimation.loopcount = undefined;
+	_pAnimation.direction = "normal";
+	_pAnimation.duration = 1000;
+	_pAnimation.delay = 0;
+	_pAnimation.easing = "easeOutElastic";
+	_pAnimation.beziercurve = "";
+	_pAnimation.elasticity = 0;
 
 
 	_pAnimation._anime = null;
-	_pAnimation._is_alive = true;
-	_pAnimation.enableevent = true;
 
 
 	_pAnimation._event_list = {
@@ -1319,80 +1233,37 @@ if (!nexacro.Animation) {
 		"oncomplete" : 1
 	};
 
+
 	_pAnimation.on_created = function () {
 		this._createAnimeJSObject();
 	};
 
 	_pAnimation.destroy = function () {
-		this._is_alive = false;
-
-		if (this.parent && this.parent.removeChild) {
-			this.parent.removeChild(this.id);
-		}
-
-		nexacro._EventSinkObject.prototype.destroy.call(this);
-
+		nexacro.Object.prototype.destroy.call(this);
 		if (this._anime) {
-			this._anime.pause();
+			this.pause();
 			this._anime.destroy();
-			this._anime = null;
 		}
-
-		if (this.parent) {
-			this.parent = null;
-		}
-
-		return true;
+		this._anime = null;
 	};
 
-
-	_pAnimation.set_beziercurve = function (v) {
-		var beziercurve = nexacro._toString(v);
-
-		if (this.beziercurve != beziercurve) {
-			this.beziercurve = beziercurve;
+	_pAnimation.set_enableevent = function (v) {
+		v = nexacro._toBoolean(v);
+		if (this.enableevent != v) {
+			this.enableevent = v;
 		}
 	};
 
-	_pAnimation.set_delay = function (v) {
-		var delay = nexacro._toInt(v);
-
-		if (this.delay != delay) {
-			this.delay = delay;
-		}
+	_pAnimation.setTargets = function (obj) {
+		this.targets = obj;
 	};
 
-	_pAnimation.set_direction = function (v) {
-		var direction = nexacro._toString(v);
-
-		if (this.direction != direction) {
-			this.direction = direction;
+	_pAnimation.set_targets = function (v) {
+		if (nexacro._isObject(v)) {
+			this.setTargets(v);
 		}
-
-		this._reverse = direction == "reverse";
-	};
-
-	_pAnimation.set_duration = function (v) {
-		var duration = nexacro._toInt(v);
-
-		if (this.duration != duration) {
-			this.duration = duration;
-		}
-	};
-
-	_pAnimation.set_easing = function (v) {
-		var easing = nexacro._toString(v);
-
-		if (this.easing != easing) {
-			this.easing = easing;
-		}
-	};
-
-	_pAnimation.set_elasticity = function (v) {
-		var elasticity = nexacro._toInt(v);
-
-		if (this.elasticity != elasticity) {
-			this.elasticity = elasticity;
+		else {
+			this.targets = nexacro._toString(v);
 		}
 	};
 
@@ -1412,11 +1283,11 @@ if (!nexacro.Animation) {
 		}
 	};
 
-	_pAnimation.set_enableevent = function (v) {
-		v = nexacro._toBoolean(v);
+	_pAnimation.set_direction = function (v) {
+		var direction = nexacro._toString(v);
 
-		if (this.enableevent != v) {
-			this.enableevent = v;
+		if (this.direction != direction) {
+			this.direction = direction;
 		}
 	};
 
@@ -1428,6 +1299,45 @@ if (!nexacro.Animation) {
 		}
 	};
 
+	_pAnimation.set_duration = function (v) {
+		var duration = nexacro._toInt(v);
+
+		if (this.duration != duration) {
+			this.duration = duration;
+		}
+	};
+
+	_pAnimation.set_delay = function (v) {
+		var delay = nexacro._toInt(v);
+
+		if (this.delay != delay) {
+			this.delay = delay;
+		}
+	};
+
+	_pAnimation.set_easing = function (v) {
+		var easing = nexacro._toString(v);
+
+		if (this.easing != easing) {
+			this.easing = easing;
+		}
+	};
+
+	_pAnimation.set_beziercurve = function (v) {
+		var beziercurve = nexacro._toString(v);
+		if (this.beziercurve != beziercurve) {
+			this.beziercurve = beziercurve;
+		}
+	};
+
+	_pAnimation.set_elasticity = function (v) {
+		var elasticity = nexacro._toInt(v);
+
+		if (this.elasticity != elasticity) {
+			this.elasticity = elasticity;
+		}
+	};
+
 	_pAnimation.set_round = function (v) {
 		var round = nexacro._toInt(v);
 
@@ -1436,38 +1346,94 @@ if (!nexacro.Animation) {
 		}
 	};
 
-	_pAnimation.set_targets = function (v) {
-		if (nexacro._isObject(v)) {
-			this.targets = v;
-		}
-		else {
-			this.targets = nexacro._toString(v);
-		}
-	};
-
 	_pAnimation.set_targetprops = function (v) {
+		this.targetprops = nexacro._toString(v);
 	};
 
-	_pAnimation.addTarget = function (id, compobj, props) {
-		var ret = -1;
-		var item = this.items[id];
-
-		if (!item) {
-			item = new nexacro.AnimationItem(id, compobj._unique_id, props);
-			ret = this.addChild(compobj._unique_id, compobj);
-			if (ret == 0) {
-				ret = this.items.add_item(id, item);
-			}
-
-			if (this._anime) {
-				if (this._anime_task.length == 0 && this.parent) {
-					nexacro._OnceCallbackTimer.callonce(this, this._runAnimeTask, 1);
-				}
-				this._setAnimeTask("changeAnimationItem");
-			}
+	_pAnimation.play = function () {
+		if (!this._anime) {
+			this.reset();
+		}
+		else if (!(this.getPausedStatus() && this.getBeginStatus()) || this.getCompletedStatus()) {
+			this.pause();
+			this.reset();
 		}
 
-		return ret;
+		this._anime.play();
+	};
+
+	_pAnimation.stop = function () {
+		this.pause();
+		this.seek(0);
+		this.reset();
+	};
+
+	_pAnimation.pause = function () {
+		if (this._anime) {
+			this._anime.pause();
+		}
+	};
+
+	_pAnimation.restart = function () {
+		if (this._anime) {
+			this._anime.restart();
+		}
+	};
+
+	_pAnimation.seek = function (time) {
+		this.play();
+		this.pause();
+		if (this._anime) {
+			this._anime.seek(time);
+		}
+	};
+
+	_pAnimation.reverse = function () {
+		if (this._anime) {
+			this._anime.reverse();
+		}
+	};
+
+	_pAnimation.reset = function () {
+		if (this._anime) {
+			this._anime.reset();
+		}
+		this._createAnimeJSObject();
+	};
+
+	_pAnimation.getReversedStatus = function () {
+		if (this._anime) {
+			return this._anime.reversed;
+		}
+		return false;
+	};
+
+	_pAnimation.getCurrentTime = function () {
+		if (this._anime) {
+			return this._anime.currentTime;
+		}
+		return 0;
+	};
+
+	_pAnimation.getPausedStatus = function () {
+		if (this._anime) {
+			return this._anime.paused;
+		}
+		return false;
+	};
+
+	_pAnimation.getBeginStatus = function () {
+		if (this._anime) {
+			return this._anime.began;
+		}
+		return false;
+	};
+
+	_pAnimation.getCompletedStatus = function () {
+		if (this._anime) {
+			return this._anime.completed;
+		}
+		return false;
 	};
 
 	_pAnimation.removeTarget = function (id) {
@@ -1478,253 +1444,25 @@ if (!nexacro.Animation) {
 			ret = item;
 			this.removeChild(item.componentid);
 			this.items.remove_item(id);
-			if (this._anime) {
-				if (this._anime_task.length == 0 && this.parent) {
-					nexacro._OnceCallbackTimer.callonce(this, this._runAnimeTask, 1);
-				}
-				this._setAnimeTask("changeAnimationItem");
-			}
 		}
 
 		return ret;
 	};
 
-	_pAnimation.pause = function () {
-		if (this._anime) {
-			if (this._anime_task.length > 0) {
-				this._setAnimeTask("pause");
-			}
-			else {
-				this._anime.pause();
-			}
 
-			return true;
-		}
+	_pAnimation.addTarget = function (id, compobj, props) {
+		var ret = -1;
+		var item = this.items[id];
 
-		return false;
-	};
-
-	_pAnimation.play = function () {
-		if (this._anime) {
-			if (this._anime_task.length > 0) {
-				this._setAnimeTask("play");
-			}
-			else {
-				var curTime = this.getCurrentTime();
-
-				this._anime.loop = (this.loop === true && this.loopcount > 1) ? this.loopcount : 1;
-				this._anime.reset();
-
-				if (this.getCompletedStatus()) {
-					if (this._reverse) {
-						if (curTime <= 0) {
-							this._anime.seek(this._anime.duration);
-						}
-						else {
-							this._anime.seek(curTime);
-						}
-
-						if (!this.getReversedStatus()) {
-							this._anime.reverse();
-						}
-
-						this._anime.play();
-					}
-					else {
-						this._anime.seek(0);
-
-						if (this.getReversedStatus()) {
-							this._anime.reverse();
-						}
-
-						this._anime.play();
-					}
-				}
-				else {
-					if (this.getPausedStatus()) {
-						if (this._reverse) {
-							if (curTime <= 0) {
-								this._anime.seek(this._anime.duration);
-							}
-							else {
-								this._anime.seek(curTime);
-							}
-
-							if (!this.getReversedStatus()) {
-								this._anime.reverse();
-							}
-
-							this._anime.play();
-						}
-						else {
-							this._anime.seek(0);
-
-							if (this.getReversedStatus()) {
-								this._anime.reverse();
-							}
-
-							this._syncTweens();
-
-							this._anime.play();
-						}
-					}
-					else {
-						this._anime.pause();
-						this._anime.seek(0);
-
-						this._createAnimeJSObject();
-
-						this._anime.play();
-					}
-				}
-			}
-		}
-		else {
-			this._createAnimeJSObject();
-			if (this._reverse) {
-				this._anime.seek(this._anime.duration);
-				if (!this.getReversedStatus()) {
-					this._anime.reverse();
-				}
-			}
-
-			this._anime.play();
-		}
-
-		return true;
-	};
-
-	_pAnimation.reverse = function () {
-		if (this._anime) {
-			if (this._anime_task.length > 0) {
-				this._setAnimeTask("reverse");
-			}
-			else {
-				if (this.getBeginStatus()) {
-					this._reverse = !this._reverse;
-					if (this.getPausedStatus() || this.getCompletedStatus()) {
-						this._anime.reverse();
-					}
-					else {
-						this._anime.pause();
-						this._anime.reverse();
-						this._anime.play();
-					}
-
-					return true;
-				}
+		if (!item) {
+			item = new nexacro.AnimationItem(id, compobj.id, props);
+			ret = this.addChild(compobj.id, compobj);
+			if (ret == 0) {
+				ret = this.items.add_item(id, item);
 			}
 		}
 
-		return false;
-	};
-
-	_pAnimation.seek = function (time) {
-		if (this._anime) {
-			if (this._anime_task.length > 0) {
-				this._setAnimeTask("seek", [time]);
-			}
-			else {
-				if (this.getBeginStatus()) {
-					if (this.getPausedStatus() || this.getCompletedStatus()) {
-						this._anime.seek(time);
-					}
-					else {
-						this._anime.pause();
-						this._anime.seek(time);
-						this._anime.play();
-					}
-				}
-				else {
-					this._anime.seek(time);
-				}
-			}
-		}
-		else {
-			this._createAnimeJSObject();
-
-			this._anime.seek(time);
-		}
-
-		return true;
-	};
-
-	_pAnimation.stop = function () {
-		if (this._anime) {
-			if (this._anime_task.length > 0) {
-				this._setAnimeTask("stop");
-			}
-			else {
-				if (this.getBeginStatus() && !this.getCompletedStatus()) {
-					this._anime.pause();
-					this._anime.seek(0);
-					this._anime.reset();
-
-					this._createAnimeJSObject();
-
-					return true;
-				}
-			}
-		}
-
-		return false;
-	};
-
-	_pAnimation.reset = function () {
-	};
-	_pAnimation.restart = function () {
-	};
-
-	_pAnimation._on_begin = function () {
-		if (this._refobject && this._refobject.enableevent) {
-			this._refobject.on_fire_begin();
-		}
-	};
-
-	_pAnimation._on_complete = function () {
-		if (this._refobject && this._refobject.enableevent) {
-			this._refobject.on_fire_complete();
-		}
-	};
-
-	_pAnimation._on_run = function () {
-		if (this._refobject && this._refobject.enableevent) {
-			this._refobject.on_fire_run();
-		}
-	};
-
-	_pAnimation._on_update = function () {
-		if (this._refobject && this._refobject.enableevent) {
-			this._refobject.on_fire_update();
-		}
-	};
-
-	_pAnimation.on_fire_begin = function () {
-		if (this.onbegin && this.onbegin._has_handlers) {
-			var evt = new nexacro.AnimationEventInfo(this, "onbegin");
-			this.onbegin._fireEvent(this, evt);
-		}
-	};
-
-	_pAnimation.on_fire_complete = function () {
-		if (this.oncomplete && this.oncomplete._has_handlers) {
-			var evt = new nexacro.AnimationEventInfo(this, "oncomplete");
-			this.oncomplete._fireEvent(this, evt);
-		}
-	};
-
-	_pAnimation.on_fire_run = function () {
-		if (this.onrun && this.onrun._has_handlers) {
-			var evt = new nexacro.AnimationEventInfo(this, "onrun");
-			this.onrun._fireEvent(this, evt);
-		}
-	};
-
-	_pAnimation.on_fire_update = function () {
-		if (this.onupdate && this.onupdate._has_handlers) {
-			var evt = new nexacro.AnimationEventInfo(this, "onupdate");
-			this.onupdate._fireEvent(this, evt);
-		}
+		return ret;
 	};
 
 	_pAnimation.addChild = function (id, obj) {
@@ -1744,6 +1482,9 @@ if (!nexacro.Animation) {
 		return 0;
 	};
 
+
+
+
 	_pAnimation.removeChild = function (id) {
 		if (!id || id.length <= 0) {
 			return null;
@@ -1758,11 +1499,63 @@ if (!nexacro.Animation) {
 		return obj;
 	};
 
-	_pAnimation._makeParamsObject = function (isReset, offset) {
+	_pAnimation._on_update = function () {
+		if (this._refobject && this._refobject.enableevent) {
+			this._refobject.on_fire_update();
+		}
+	};
+
+	_pAnimation.on_fire_update = function () {
+		if (this.onupdate && this.onupdate._has_handlers) {
+			var evt = new nexacro.AnimationEventInfo(this, "onupdate");
+			this.onupdate._fireEvent(this, evt);
+		}
+	};
+
+	_pAnimation._on_begin = function () {
+		if (this._refobject && this._refobject.enableevent) {
+			this._refobject.on_fire_begin();
+		}
+	};
+
+	_pAnimation.on_fire_begin = function () {
+		if (this.onbegin && this.onbegin._has_handlers) {
+			var evt = new nexacro.AnimationEventInfo(this, "onbegin");
+			this.onbegin._fireEvent(this, evt);
+		}
+	};
+
+	_pAnimation._on_run = function () {
+		if (this._refobject && this._refobject.enableevent) {
+			this._refobject.on_fire_run();
+		}
+	};
+
+	_pAnimation.on_fire_run = function () {
+		if (this.onrun && this.onrun._has_handlers) {
+			var evt = new nexacro.AnimationEventInfo(this, "onrun");
+			this.onrun._fireEvent(this, evt);
+		}
+	};
+
+	_pAnimation._on_complete = function () {
+		if (this._refobject && this._refobject.enableevent) {
+			this._refobject.on_fire_complete();
+		}
+	};
+
+	_pAnimation.on_fire_complete = function () {
+		if (this.oncomplete && this.oncomplete._has_handlers) {
+			var evt = new nexacro.AnimationEventInfo(this, "oncomplete");
+			this.oncomplete._fireEvent(this, evt);
+		}
+	};
+
+	_pAnimation._makeParamsObject = function (offset) {
 		var objParams = {
 		};
 
-		if (isReset) {
+		if (this._anime) {
 			this._anime = null;
 		}
 
@@ -1773,29 +1566,22 @@ if (!nexacro.Animation) {
 		var targets = [];
 		var props = {
 		};
-		var prop_obj, prop_str;
 		for (var i = 0, n = items.length; i < n; i++) {
 			var item = items[i];
 			if (item) {
 				targets.push(this[item.componentid]);
-
-				prop_str = item.props;
-				prop_obj = new Function('return {' + prop_str + '}')();
-
-				var compid = item.componentid;
-				if (compid) {
-					compid = compid.substring(compid.lastIndexOf(".") + 1, compid.length);
-				}
-
-				props[compid] = prop_obj;
+				eval('var prop = {' + item.props + '}');
+				props[item.componentid] = prop;
 			}
 		}
 		objParams.targets = targets;
 		objParams.props = props;
-		objParams.loop = 1;
 
-		if (this.loop === true && this.loopcount > 0) {
+		if (this.loop === true && this.loopcount > 1) {
 			objParams.loop = this.loopcount;
+		}
+		else {
+			objParams.loop = this.loop;
 		}
 
 		if (this.direction.length > 0) {
@@ -1837,7 +1623,7 @@ if (!nexacro.Animation) {
 	};
 
 	_pAnimation._createAnimeJSObject = function () {
-		var _anime = anime(this._makeParamsObject(true));
+		var _anime = anime(this._makeParamsObject());
 		this._anime = _anime;
 		_anime._refobject = this;
 
@@ -1845,100 +1631,6 @@ if (!nexacro.Animation) {
 		_anime.begin = this._on_begin;
 		_anime.run = this._on_run;
 		_anime.complete = this._on_complete;
-	};
-
-	_pAnimation._setAnimeTask = function (task, params) {
-		this._anime_task.push({
-			"action" : task, 
-			"params" : params
-		});
-	};
-
-	_pAnimation._runAnimeTask = function (id) {
-		var task = this._anime_task.splice(0);
-		var curr_task, next_task;
-
-		for (var i = 0; i < task.length; i++) {
-			curr_task = task[i];
-			next_task = task[i + 1];
-
-			switch (task[i].action) {
-				case "changeAnimationItem":
-					if (next_task && next_task.action == "changeAnimationItem") {
-						continue;
-					}
-
-					this._createAnimeJSObject();
-					break;
-				case "pause":
-					this.pause();
-					break;
-				case "play":
-					this.play();
-					break;
-				case "reverse":
-					this.reverse();
-					break;
-				case "seek":
-					this.seek(curr_task.params[0]);
-					break;
-				case "stop":
-					this.stop();
-					break;
-			}
-		}
-
-		this._anime_task = [];
-	};
-
-	_pAnimation._syncTweens = function () {
-		if (!this._anime) {
-			return true;
-		}
-
-		var isEqual = this._anime.equalInstance("tweens", this._makeParamsObject(false));
-		if (!isEqual) {
-			this._createAnimeJSObject();
-		}
-	};
-
-	_pAnimation.getReversedStatus = function () {
-		if (this._anime) {
-			return this._anime.reversed;
-		}
-		return false;
-	};
-
-	_pAnimation.getCurrentTime = function () {
-		if (this._anime) {
-			return this._anime.currentTime;
-		}
-		return 0;
-	};
-
-	_pAnimation.getPausedStatus = function () {
-		if (this._anime) {
-			return this._anime.paused;
-		}
-		return false;
-	};
-
-	_pAnimation.getBeginStatus = function () {
-		if (this._anime) {
-			return this._anime.began;
-		}
-		return false;
-	};
-
-	_pAnimation.getCompletedStatus = function () {
-		if (this._anime) {
-			return this._anime.completed;
-		}
-		return false;
-	};
-
-	_pAnimation._getReferenceContext = function () {
-		return this.parent;
 	};
 
 	nexacro.AnimationTimelineItem = function (id, animationid, offset) {
@@ -1966,11 +1658,11 @@ if (!nexacro.Animation) {
 	nexacro.AnimationTimeline.prototype = _pAnimationTimeline;
 	_pAnimationTimeline._type_name = "AnimationTimeline";
 
-	_pAnimationTimeline._makeParamsObject = function (isReset) {
+	_pAnimationTimeline._makeParamsObject = function () {
 		var objParams = {
 		};
 
-		if (isReset) {
+		if (this._anime) {
 			this._anime = null;
 		}
 
@@ -2009,12 +1701,12 @@ if (!nexacro.Animation) {
 	};
 
 	_pAnimationTimeline._createAnimeJSObject = function () {
-		this._anime = anime.timeline(this._makeParamsObject(true));
+		this._anime = anime.timeline(this._makeParamsObject());
 		this._anime._refobject = this;
 
 		for (var i = 0, len = this.items.length; i < len; i++) {
 			var item = this.items[i];
-			this._anime.add(this[item.animationid]._makeParamsObject(true, item.offset));
+			this._anime.add(this[item.animationid]._makeParamsObject(item.offset));
 		}
 		this._anime.update = this._on_update;
 		this._anime.begin = this._on_begin;

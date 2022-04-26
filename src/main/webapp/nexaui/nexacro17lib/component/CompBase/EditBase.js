@@ -22,8 +22,8 @@ if (!nexacro.InputEventInfo) {
 
 	delete InputEventInfo;
 
-	nexacro.EditClickEventInfo = function (obj, id, caretpos, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		nexacro.ClickEventInfo.call(this, obj, id || "oneditclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
+	nexacro.EditClickEventInfo = function (obj, id, caretpos, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		nexacro.ClickEventInfo.call(this, obj, id || "oneditclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
 		this.caretpos = (caretpos == null) ? 0 : caretpos;
 	};
 
@@ -740,7 +740,6 @@ if (!nexacro.InputEventInfo) {
 		this.limittype = "none";
 		this.maskchar = "";
 		this.fillchar = "";
-		this.postfixtext = "";
 
 		this._is_editing = false;
 		this._input_mode = "text";
@@ -782,12 +781,6 @@ if (!nexacro.InputEventInfo) {
 	_pMaskType.setEditStatus = function (v) {
 		if (this._is_editing != v) {
 			this._is_editing = v;
-		}
-	};
-
-	_pMaskType.setPostfixtext = function (v) {
-		if (this.postfixtext != v) {
-			this.postfixtext = v;
 		}
 	};
 
@@ -936,7 +929,7 @@ if (!nexacro.InputEventInfo) {
 			return;
 		}
 
-		var reg_valid = /(^[\+\-\!]?\s*[#09,]*(?:$|\.[#09]*)|^\.[#09]*$)/;
+		var reg_valid = /(^[\+\-\!]?\s*[#09]{1,}[#09,]*(?:$|\.[#09]*)|^\.[#09]*$)/;
 		if (!reg_valid.test(mask)) {
 			return;
 		}
@@ -1018,8 +1011,10 @@ if (!nexacro.InputEventInfo) {
 			}
 		}
 
+		var idx, prev_idx = int_part.length - 1;
 		var thousands_sep = this._mask_thousands_sep;
-		if (mask.indexOf(thousands_sep) > -1) {
+
+		if (int_part.lastIndexOf(thousands_sep, prev_idx) > -1) {
 			this.setUseGrouping(true);
 		}
 		else {
@@ -1031,7 +1026,7 @@ if (!nexacro.InputEventInfo) {
 		var int_digits = int_part.length;
 		this._int_digits_max = int_digits;
 
-		var idx = int_part.indexOf('0');
+		idx = int_part.indexOf('0');
 		if (idx > -1) {
 			this._int_digits_min = int_digits - idx;
 		}
@@ -1135,7 +1130,6 @@ if (!nexacro.InputEventInfo) {
 
 		var pos = 0;
 		var len = text.length;
-		var postfixtext = this.postfixtext;
 
 		var bmask = (this._int_digits_max == -1 && this._dec_digits_max == -1) ? false : true;
 
@@ -1235,10 +1229,6 @@ if (!nexacro.InputEventInfo) {
 		masked_text += int_part;
 
 		if (this._is_integer_mask) {
-			if (postfixtext && !this._is_editing) {
-				masked_text += postfixtext;
-			}
-
 			return masked_text;
 		}
 
@@ -1283,10 +1273,6 @@ if (!nexacro.InputEventInfo) {
 		}
 		else if (this._is_editing && point_idx > -1) {
 			masked_text += this._decimal_point;
-		}
-
-		if (postfixtext && !this._is_editing) {
-			masked_text += postfixtext;
 		}
 
 		return masked_text;
@@ -1673,13 +1659,7 @@ if (!nexacro.InputEventInfo) {
 		this._masked_empty_text = "";
 		this._mask_buf = [];
 		this._value_buf = [];
-
-		if (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge") {
-			this._input_mode = "search";
-		}
-		else {
-			this._input_mode = "text";
-		}
+		this._input_mode = "text";
 		this._is_filled = false;
 		this._is_mismatch = false;
 	};
@@ -1844,12 +1824,7 @@ if (!nexacro.InputEventInfo) {
 		}
 
 		if (bNumberMaskOnly) {
-			if (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge") {
-				this._input_mode = "search";
-			}
-			else {
-				this._input_mode = "number";
-			}
+			this._input_mode = "number";
 		}
 
 		this._masked_empty_text = empty_buf.join('');
@@ -1875,14 +1850,12 @@ if (!nexacro.InputEventInfo) {
 		var value_buf = this._value_buf;
 		var char_buf = this._char_buf;
 		var result_buf = [];
-		var masked_text = "";
 
 		var ch, mask, val;
 		var bufpos = 0, txtpos = 0;
 
 		var maskchar = this.maskchar;
 		var fillchar = this.fillchar;
-		var postfixtext = this.postfixtext;
 
 		var is_filled = true;
 		while ((mask = mask_buf[bufpos])) {
@@ -1933,19 +1906,7 @@ if (!nexacro.InputEventInfo) {
 		}
 		this._is_filled = is_filled;
 
-		masked_text = result_buf.join('');
-
-		var resultval = "";
-		var strval = nexacro._toString(value);
-		if (strval) {
-			resultval = strval.replace(/(\s*)/g, "");
-		}
-
-		if (postfixtext && !this._is_editing && resultval) {
-			masked_text += postfixtext;
-		}
-
-		return masked_text;
+		return result_buf.join('');
 	};
 
 	_pMaskTypeString.arrangeMask = function (input_text, begin, end) {
@@ -2180,15 +2141,7 @@ if (!nexacro.InputEventInfo) {
 		this.maskchar = " ";
 		this.date = "";
 		this.editmask = "";
-		this.editmask_logical = "";
 		this.datemask = "";
-
-		this._cnt_editformat_year = 0;
-		this._cnt_editformat_month = 0;
-		this._cnt_editformat_day = 0;
-		this._cnt_editformat_hour = 0;
-		this._cnt_editformat_minute = 0;
-		this._cnt_editformat_second = 0;
 
 		this._input_mode = "number";
 		this._is_filled = false;
@@ -2336,75 +2289,10 @@ if (!nexacro.InputEventInfo) {
 
 	_pMaskTypeDate.setEditMask = function (mask) {
 		if (this.editmask != mask) {
-			this.editmask_logical = "";
-			this._cnt_editformat_month = 0;
-			this._cnt_editformat_day = 0;
-			this._cnt_editformat_hour = 0;
-			this._cnt_editformat_minute = 0;
-			this._cnt_editformat_second = 0;
-
 			this.editmask = mask;
-
 			this._parseEditMask(mask);
-
 			if (this.date) {
 				this._parseDate(this.date);
-			}
-
-			var type_buf = this._edit_type_buf;
-			var mask_buf = this._edit_mask_buf;
-			var cur_buf, cur_mask, cur_type;
-			for (var i = 0, len = this._editmask.length; i < len; i++) {
-				cur_mask = this._editmask[i].mask;
-				cur_type = this.changeTypeToDate(this._editmask[i].type);
-
-				switch (cur_type) {
-					case "YEAR":
-						this._cnt_editformat_year = cur_mask.length;
-						break;
-					case "MONTH":
-						this._cnt_editformat_month = cur_mask.length;
-						break;
-					case "DAY":
-						this._cnt_editformat_day = cur_mask.length;
-						break;
-					case "HOUR":
-						this._cnt_editformat_hour = cur_mask.length;
-						break;
-					case "MINUTE":
-						this._cnt_editformat_minute = cur_mask.length;
-						break;
-					case "SECOND":
-						this._cnt_editformat_second = cur_mask.length;
-						break;
-				}
-			}
-
-			for (i = 0, len = type_buf.length; i < len; i++) {
-				cur_buf = type_buf[i];
-
-				if (cur_buf >= 0 && cur_buf < 10) {
-					cur_mask = "y";
-				}
-				else if (cur_buf >= 10 && cur_buf < 20) {
-					cur_mask = "M";
-				}
-				else if (cur_buf >= 20 && cur_buf < 30) {
-					cur_mask = "d";
-				}
-				else if (cur_buf >= 30 && cur_buf < 40) {
-					cur_mask = "H";
-				}
-				else if (cur_buf >= 40 && cur_buf < 50) {
-					cur_mask = "m";
-				}
-				else if (cur_buf >= 50 && cur_buf < 60) {
-					cur_mask = "s";
-				}
-				else {
-					cur_mask = mask_buf[i];
-				}
-				this.editmask_logical += cur_mask;
 			}
 		}
 	};
@@ -2428,7 +2316,7 @@ if (!nexacro.InputEventInfo) {
 		var empty_buf = [];
 
 		var info = this._editmask;
-		var ch, str, next_ch;
+		var ch, str;
 		var type;
 		var updateinfos = [];
 		var updateinfo = {
@@ -2471,32 +2359,6 @@ if (!nexacro.InputEventInfo) {
 				empty_buf.push(maskchar);
 				value_buf.push('$1');
 				mask_buf.push(/\d/);
-
-				next_ch = mask[pos + 1];
-				if (str.length == 1 && this.isMaskChar(next_ch) && ch != next_ch) {
-					type = this.changeMaskToType(str);
-					info.push({
-						mask : str, 
-						type : type
-					});
-
-					if ((type >= 10 && type <= 69) && ((type % 10) > 0)) {
-						updateinfos.push({
-							pos : pos + 1, 
-							type : type
-						});
-					}
-
-					for (idx; idx < pos + 1; idx++) {
-						if (str == "dddd" || str == "MMMM") {
-							mask_buf[idx] = str[0];
-							value_buf[idx] = "";
-						}
-						type_buf[idx] = type;
-					}
-
-					str = "";
-				}
 			}
 			else {
 				if (str) {
@@ -2727,17 +2589,11 @@ if (!nexacro.InputEventInfo) {
 			return value;
 		}
 
-		value = nexacro._toString(value);
-
 		if (this.date != value) {
 			this.setDate(value);
 		}
 
 		this._parseDate(this.date);
-
-		if (this._is_editing) {
-			this._edit_char_buf = [];
-		}
 
 		if (!value) {
 			if (this._is_editing) {
@@ -2746,6 +2602,10 @@ if (!nexacro.InputEventInfo) {
 			else {
 				return this._datemasked_empty_text;
 			}
+		}
+
+		if (this._is_editing) {
+			this._edit_char_buf = [];
 		}
 
 		var pos = 0;
@@ -2753,96 +2613,6 @@ if (!nexacro.InputEventInfo) {
 		var infos = this._is_editing ? this._editmask : this._datemask;
 		var tmpStr = "";
 		var resultStr = "";
-
-		while (info = infos[pos]) {
-			mask = info.mask;
-			type = info.type;
-			if (type >= 0) {
-				tmpStr = this._appliedMaskString(info);
-
-				if (this._is_editing) {
-					if (type == 12 || type == 70 || type == 71) {
-						tmpStr = mask;
-					}
-					else if (type > 10 && type < 69) {
-						tmpStr = tmpStr.length == 1 ? " " + tmpStr : tmpStr;
-					}
-				}
-			}
-			else {
-				tmpStr = mask;
-			}
-
-			resultStr += tmpStr;
-
-			if (this._is_editing) {
-				this._edit_char_buf = this._edit_char_buf.concat(tmpStr.split(''));
-			}
-
-			pos++;
-		}
-
-		return resultStr;
-	};
-
-	_pMaskTypeDate.applyMaskEx = function (value) {
-		if (!this.datemask || !this.editmask) {
-			return value;
-		}
-
-		value = nexacro._toString(value);
-
-		if (this.date != value) {
-			this.setDate(value);
-		}
-
-		this._parseDate(this.date);
-
-		if (!value) {
-			if (this._is_editing) {
-				return this._editmasked_empty_text;
-			}
-			else {
-				return this._datemasked_empty_text;
-			}
-		}
-
-		if (this._is_editing) {
-			this._edit_char_buf = [];
-		}
-
-		var pos = 0;
-		var info, mask, type;
-		var infos = this._editmask.slice();
-		var tmpStr = "";
-		var resultStr = "";
-
-		for (var i = 0, len = infos.length; i < len; i++) {
-			if (infos[i].mask == "M") {
-				infos[i] = {
-					mask : "MM", 
-					type : 10
-				};
-			}
-			else if (infos[i].mask == "d") {
-				infos[i] = {
-					mask : "dd", 
-					type : 20
-				};
-			}
-			else if (infos[i].mask == "H") {
-				infos[i] = {
-					mask : "HH", 
-					type : 30
-				};
-			}
-			else if (infos[i].mask == "m") {
-				infos[i] = {
-					mask : "mm", 
-					type : 40
-				};
-			}
-		}
 
 		while (info = infos[pos]) {
 			mask = info.mask;
@@ -3079,28 +2849,12 @@ if (!nexacro.InputEventInfo) {
 		var tmp_str = "";
 		var result_buf = [];
 		var pos = 0, type = 0, ch = "";
-		var cur_type = -1, prev_type = -1;
 
 		do {
 			if (type_buf[pos] > -1) {
-				cur_type = parseInt(type_buf[pos] / 10);
-
-				if (type_buf[pos - 1] != -1 && type_buf[pos - 1] != type_buf[pos]) {
-					if (tmp_str !== "") {
-						result_buf[type] = this._getRemoveMaskString(type, tmp_str);
-						tmp_str = "";
-					}
-				}
-
-				for (var i = prev_type + 1; i < cur_type; i++) {
-					var empty_type = i *  10;
-					result_buf[empty_type] = this._getRemoveMaskString(empty_type, "");
-				}
-
 				ch = char_buf[pos] ? char_buf[pos] : "";
 				if (tmp_str === "") {
 					type = type_buf[pos];
-					prev_type = cur_type;
 				}
 				tmp_str = tmp_str.concat(ch);
 			}
@@ -3177,32 +2931,24 @@ if (!nexacro.InputEventInfo) {
 		return false;
 	};
 
-	_pMaskTypeDate.isFilterChar = function (ch, pos_begin, pos_end, skip_maxday) {
+	_pMaskTypeDate.isFilterChar = function (ch, pos_begin, pos_end) {
 		if (!/[0-9]/.test(ch)) {
 			return true;
 		}
 
 		var char_buf = this._edit_char_buf.slice(0);
-
-		var nomaskch = ch.replace(/[^0-9]/g, '');
-
+		var ch_len = ch.length;
 		var buf_len = char_buf.length;
-		var i;
-		var idx = 0;
+		var i, j;
+
 		var changed_type;
 		var changed_str = "";
 		var changed_buf = {
 		};
-		var regexp_num = /^[0-9]/;
-		if (nomaskch.length > 1) {
-			for (i = pos_begin; i < buf_len; i++) {
-				if (idx == nomaskch.length) {
-					break;
-				}
-				if (regexp_num.test(char_buf[i])) {
-					char_buf[i] = nomaskch[idx];
-					idx++;
-				}
+
+		if (ch.length > 1) {
+			for (i = pos_begin, j = 0; j < ch_len; i++, j++) {
+				char_buf[i] = ch[j];
 			}
 		}
 		else {
@@ -3250,15 +2996,10 @@ if (!nexacro.InputEventInfo) {
 				d = val.substr(6, 2);
 				break;
 			case 1:
-				var n = 8;
-				if (this._edit_type_buf[0] < 40) {
-					h = val.substr(n, 2);
-					n = 10;
-				}
-				m = val.substr(n, 2);
-				s = val.substr(n + 2, 2);
-				ss = val.substr(n + 2, 3);
-
+				h = val.substr(0, 2);
+				m = val.substr(2, 2);
+				s = val.substr(4, 2);
+				ss = val.substr(6, 3);
 				break;
 			case 2:
 				y = val.substr(0, 4);
@@ -3290,666 +3031,8 @@ if (!nexacro.InputEventInfo) {
 
 		var maxDay = this.getEndDay(y, M);
 
-		if (!skip_maxday && ((editmask_type != 1 && !maxDay) || (M && (+M > 12)) || (d && (+d > maxDay)) || (h && (+h >= 24)) || (m && (+m >= 60)) || (s && (+s >= 60)) || (ss && (+ss >= 1000)))) {
+		if ((editmask_type != 1 && !maxDay) || (M && (+M > 12)) || (d && (+d > maxDay)) || (h && (+h >= 24)) || (m && (+m >= 60)) || (s && (+s >= 60)) || (ss && (+ss >= 1000))) {
 			return true;
-		}
-
-		return false;
-	};
-
-	_pMaskTypeDate.isFilterCharEx = function (ch, pos_begin, pos_end) {
-		var _date = {
-		};
-		_date.ret = false;
-		_date.date = "";
-		_date.pos = pos_begin;
-
-		if (!/[0-9]/.test(ch)) {
-			_date.ret = true;
-			return _date;
-		}
-
-		var char_buf = this._edit_char_buf.slice(0);
-
-		var nomaskch = ch.replace(/[^0-9]/g, '');
-
-		var buf_len = char_buf.length;
-		var i;
-		var idx = 0;
-		var changed_type;
-		var changed_str = "";
-		var changed_buf = {
-		};
-		var regexp_num = /^[0-9]/;
-		if (nomaskch.length > 1) {
-			for (i = pos_begin; i < buf_len; i++) {
-				if (idx == nomaskch.length) {
-					break;
-				}
-				if (regexp_num.test(char_buf[i])) {
-					char_buf[i] = nomaskch[idx];
-					idx++;
-				}
-			}
-		}
-		else {
-			char_buf[pos_begin] = ch;
-
-			changed_str = ch;
-			changed_type = this._edit_type_buf[pos_begin];
-
-			for (i = pos_begin - 1; i >= 0; i--) {
-				if (changed_type == this._edit_type_buf[i]) {
-					changed_str = char_buf[i] + changed_str;
-				}
-				else {
-					break;
-				}
-			}
-			for (i = pos_begin + 1; i < char_buf.length; i++) {
-				if (changed_type == this._edit_type_buf[i]) {
-					changed_str += char_buf[i];
-				}
-				else {
-					break;
-				}
-			}
-
-			changed_buf[this.changeTypeToDate(changed_type)] = changed_str;
-		}
-
-		var y, M, M1, M2, d, d1, d2;
-		var _y;
-		var h, h1, h2, m, m1, m2, s, s1, s2, ss, H;
-		var editmask_type = this.getEditFormatType();
-		var curr_mask = "";
-
-		var _pos_begin = pos_begin;
-		var val = this.removeMask(char_buf);
-
-		if (editmask_type != 1) {
-			var input_val = ch;
-			var _msk = this.editmask_logical.substr(pos_begin, 1);
-
-			if (_msk == "M") {
-				var _msk1 = this.editmask_logical.substr(pos_begin + 1, 1);
-				if (_msk1 == "M") {
-					if (input_val > 1) {
-						char_buf[pos_begin + 1] = (char_buf[pos_begin + 1] == " " || char_buf[pos_begin + 1] == undefined) ? "0" : char_buf[pos_begin + 1];
-						_pos_begin = pos_begin + 1;
-					}
-				}
-			}
-			else if (_msk == "d") {
-				y = val.substr(0, 4);
-				M = val.substr(4, 2);
-
-				var _maxday = this.getEndDay(y, M);
-				if (input_val > _maxday / 10) {
-					char_buf[pos_begin + 1] = (char_buf[pos_begin + 1] == " " || char_buf[pos_begin + 1] == undefined) ? "0" : char_buf[pos_begin + 1];
-					_pos_begin = pos_begin + 1;
-				}
-			}
-			else if (_msk == "H") {
-				y = val.substr(0, 4);
-				M = val.substr(4, 2);
-				d = val.substr(6, 2);
-
-				var _msk1 = this.editmask_logical.substr(pos_begin + 1, 1);
-				if (_msk1 == "H") {
-					if (input_val > 2) {
-						char_buf[pos_begin + 1] = (char_buf[pos_begin + 1] == " " || char_buf[pos_begin + 1] == undefined) ? "0" : char_buf[pos_begin + 1];
-						_pos_begin = pos_begin + 1;
-					}
-				}
-			}
-			else if (_msk == "m") {
-				y = val.substr(0, 4);
-				M = val.substr(4, 2);
-				d = val.substr(6, 2);
-				H = val.substr(8, 2);
-
-				var _msk1 = this.editmask_logical.substr(pos_begin + 1, 1);
-				if (_msk1 == "m") {
-					if (input_val > 5) {
-						char_buf[pos_begin + 1] = (char_buf[pos_begin + 1] == " " || char_buf[pos_begin + 1] == undefined) ? "0" : char_buf[pos_begin + 1];
-						_pos_begin = pos_begin + 1;
-					}
-				}
-			}
-			else if (_msk == "s") {
-				y = val.substr(0, 4);
-				M = val.substr(4, 2);
-				d = val.substr(6, 2);
-				H = val.substr(8, 2);
-				m = val.substr(10, 2);
-
-				var _msk1 = this.editmask_logical.substr(pos_begin + 1, 1);
-				if (_msk1 == "s") {
-					if (input_val > 5) {
-						char_buf[pos_begin + 1] = (char_buf[pos_begin + 1] == " " || char_buf[pos_begin + 1] == undefined) ? "0" : char_buf[pos_begin + 1];
-						_pos_begin = pos_begin + 1;
-					}
-				}
-			}
-		}
-		else if (editmask_type == 1) {
-			var input_val = ch;
-			var _msk = this.editmask_logical.substr(pos_begin, 1);
-
-			if (_msk == "H") {
-				var _msk1 = this.editmask_logical.substr(pos_begin, 1);
-				if (_msk1 == "H") {
-					if (input_val > 2) {
-						char_buf[pos_begin + 1] = (char_buf[pos_begin + 1] == " " || char_buf[pos_begin + 1] == undefined) ? "0" : char_buf[pos_begin + 1];
-						_pos_begin = pos_begin + 1;
-					}
-				}
-			}
-			else if (_msk == "m") {
-				H = val.substr(8, 2);
-
-				var _msk1 = this.editmask_logical.substr(pos_begin, 1);
-				if (_msk1 == "m") {
-					if (input_val > 5) {
-						char_buf[pos_begin + 1] = (char_buf[pos_begin + 1] == " " || char_buf[pos_begin + 1] == undefined) ? "0" : char_buf[pos_begin + 1];
-						_pos_begin = pos_begin + 1;
-					}
-				}
-			}
-			else if (_msk == "s") {
-				H = val.substr(8, 2);
-				m = val.substr(10, 2);
-
-				var _msk1 = this.editmask_logical.substr(pos_begin, 1);
-				if (_msk1 == "s") {
-					if (input_val > 5) {
-						char_buf[pos_begin + 1] = (char_buf[pos_begin + 1] == " " || char_buf[pos_begin + 1] == undefined) ? "0" : char_buf[pos_begin + 1];
-						_pos_begin = pos_begin + 1;
-					}
-				}
-			}
-		}
-
-		if (pos_end && pos_begin < pos_end) {
-			for (i = (_pos_begin + 1); i < pos_end && i < buf_len; i++) {
-				char_buf[i] = "";
-			}
-		}
-
-		val = this.removeMask(char_buf);
-
-		switch (editmask_type) {
-			case 0:
-				y = val.substr(0, 4);
-				M = val.substr(4, 2);
-				M1 = val.substr(4, 1);
-				M2 = val.substr(5, 1);
-				d = val.substr(6, 2);
-				d1 = val.substr(6, 1);
-				d2 = val.substr(7, 1);
-				break;
-			case 1:
-				var n = 8;
-				if (this._edit_type_buf[0] < 40) {
-					h = val.substr(n, 2);
-					h1 = val.substr(n, 1);
-					h2 = val.substr(n + 1, 1);
-					n = 10;
-				}
-				m = val.substr(n, 2);
-				m1 = val.substr(n, 1);
-				m2 = val.substr(n + 1, 1);
-				s = val.substr(n + 2, 2);
-				s1 = val.substr(n + 2, 1);
-				s2 = val.substr(n + 3, 1);
-				ss = val.substr(n + 4, 3);
-				break;
-			case 2:
-				y = val.substr(0, 4);
-				M = val.substr(4, 2);
-				M1 = val.substr(4, 1);
-				M2 = val.substr(5, 1);
-				d = val.substr(6, 2);
-				d1 = val.substr(6, 1);
-				d2 = val.substr(7, 1);
-				h = val.substr(8, 2);
-				h1 = val.substr(8, 1);
-				h2 = val.substr(9, 1);
-				m = val.substr(10, 2);
-				m1 = val.substr(10, 1);
-				m2 = val.substr(11, 1);
-				s = val.substr(12, 2);
-				s1 = val.substr(12, 1);
-				s2 = val.substr(13, 1);
-				ss = val.substr(14, 3);
-				break;
-		}
-
-		for (i in changed_buf) {
-			if (i == "MONTH") {
-				if ((changed_str == "00") && (M == "00")) {
-					_date.ret = true;
-					return _date;
-				}
-			}
-			else if (i == "DAY") {
-				if ((changed_str == "00") && (d == "00")) {
-					_date.ret = true;
-					return _date;
-				}
-			}
-		}
-
-		if ((y && isNaN(_y = +y)) || (M && isNaN(M = +M)) || (d && isNaN(d = +d)) || (h && isNaN(h = +h)) || (m && isNaN(m = +m)) || (s && isNaN(s = +s)) || (ss && isNaN(ss = +ss))) {
-			_date.ret = true;
-			return _date;
-		}
-
-		var maxDay = this.getEndDay(y, M);
-
-		if (((editmask_type != 1 && !maxDay) || (M && (+M > 12)) || (d && (+d > maxDay)) || (h && (+h >= 24)) || (m && (+m >= 60)) || (s && (+s >= 60)) || (ss && (+ss >= 1000)))) {
-			_date.ret = true;
-			_date.date = y;
-
-			var _mask = this.editmask_logical.substr(pos_begin, 1);
-			var _find_pos = false;
-			var _add_pos = 0;
-			for (var i = pos_begin + 1, len = this.editmask_logical.length; i < len; i++) {
-				curr_mask = this.editmask_logical[i];
-				if (this.isMaskChar(curr_mask) && _mask == curr_mask) {
-					_date.pos = i;
-					_find_pos = true;
-				}
-				else if (this.isMaskChar(curr_mask) && _mask != curr_mask) {
-					break;
-				}
-				else {
-					_add_pos++;
-				}
-			}
-
-			if (!_find_pos) {
-				_date.pos = i;
-			}
-
-			if (_mask == "y") {
-				if (M) {
-					_date.date += (M1 + M2);
-				}
-
-				var _maxday = this.getEndDay(y, M);
-				if (d > _maxday) {
-					_date.date += _maxday;
-				}
-				else {
-					_date.date += (d1 + d2);
-				}
-
-				if (h) {
-					_date.date += (h1 + h2);
-				}
-
-				if (m) {
-					_date.date += (m1 + m2);
-				}
-
-				if (s) {
-					_date.date += (s1 + s2);
-				}
-			}
-			else if (_mask == "M") {
-				var _M = M;
-				if (M) {
-					var _mask1 = this.editmask_logical.substr(pos_begin + 1, 1);
-
-					if (+M > 12) {
-						if (M1 > 1) {
-							if (this._cnt_editformat_month == 2) {
-								_date.date += ("0" + M1);
-							}
-							else {
-								_date.date += (" " + M1);
-							}
-
-							_date.pos += _add_pos + 1;
-							_M = M1;
-						}
-						else {
-							if (this._cnt_editformat_month == 2) {
-								if (_mask1 == "M") {
-									_date.date += (M1 + " ");
-									_date.pos = pos_begin + 1;
-									_M = M1;
-								}
-								else {
-									_date.date += ("0" + M2);
-									_M = M2;
-								}
-							}
-							else {
-								if (M1 == ch) {
-									_date.date += (M1 + " ");
-									_date.pos = pos_begin + 1;
-									_M = M1;
-								}
-								else {
-									_date.date += (" " + M2);
-									_date.pos = pos_begin + 2;
-									_M = M2;
-								}
-							}
-						}
-					}
-					else if (+M >= 10) {
-						_date.date += M;
-					}
-					else if (+M >= 1) {
-						if (_mask1 == "M") {
-							if (this._cnt_editformat_month == 2) {
-								_date.date += ("0" + M1);
-							}
-							else {
-								_date.date += (" " + M1);
-							}
-						}
-						else {
-							if (this._cnt_editformat_month == 2) {
-								_date.date += ("0" + M2);
-							}
-							else {
-								_date.date += (" " + M2);
-							}
-						}
-					}
-				}
-
-				var _maxday = this.getEndDay(y, _M);
-				if (d > _maxday) {
-					_date.date += _maxday;
-				}
-				else {
-					if (this._cnt_editformat_day == 2) {
-						_date.date += (d1 + d2);
-					}
-					else {
-						if (d && d < 10) {
-							_date.date += (" " + d2);
-						}
-						else {
-							_date.date += (d1 + d2);
-						}
-					}
-				}
-
-				if (h) {
-					_date.date += (h1 + h2);
-				}
-
-				if (m) {
-					_date.date += (m1 + m2);
-				}
-
-				if (s) {
-					_date.date += (s1 + s2);
-				}
-			}
-
-			else if (_mask == "d") {
-				if (M) {
-					if (this._cnt_editformat_month == 2) {
-						_date.date += (M1 + M2);
-					}
-					else {
-						if (M < 10) {
-							_date.date += (" " + M2);
-						}
-						else {
-							_date.date += (M1 + M2);
-						}
-					}
-				}
-
-				if (d && (+d > maxDay)) {
-					if (d1 > maxDay / 10) {
-						if (this._cnt_editformat_day == 2) {
-							_date.date += ("0" + d1);
-						}
-						else {
-							_date.date += (" " + d1);
-						}
-
-						_date.pos += _add_pos + 1;
-					}
-					else {
-						if (this._cnt_editformat_day == 2) {
-							var _mask1 = this.editmask_logical.substr(pos_begin + 1, 1);
-
-							if (_mask1 == "d") {
-								_date.date += (d1 + " ");
-								_date.pos = pos_begin + 1;
-							}
-							else {
-								_date.date += ("0" + d2);
-							}
-						}
-						else {
-							if (curr_mask == "d" && d1 == ch) {
-								_date.date += (d1 + " ");
-							}
-							else {
-								_date.date += (" " + d2);
-							}
-						}
-					}
-				}
-
-				if (h) {
-					_date.date += (h1 + h2);
-				}
-
-				if (m) {
-					_date.date += (m1 + m2);
-				}
-
-				if (s) {
-					_date.date += (s1 + s2);
-				}
-			}
-			else if (_mask == "H") {
-				if (!_date.date) {
-					_date.date = "";
-				}
-
-				if (M) {
-					if (this._cnt_editformat_month == 2) {
-						_date.date += (M1 + M2);
-					}
-					else {
-						if (M < 10) {
-							_date.date += (" " + M2);
-						}
-						else {
-							_date.date += (M1 + M2);
-						}
-					}
-				}
-
-				if (d) {
-					if (this._cnt_editformat_day == 2) {
-						_date.date += (d1 + d2);
-					}
-					else {
-						if (d < 10) {
-							_date.date += (" " + d2);
-						}
-						else {
-							_date.date += (d1 + d2);
-						}
-					}
-				}
-
-				var _h = h;
-				if (h && (+h >= 24)) {
-					if (h1 > 2) {
-						if (this._cnt_editformat_hour == 2) {
-							_date.date += ("0" + h1);
-						}
-						else {
-							_date.date += (" " + h1);
-						}
-
-						_date.pos += _add_pos + 1;
-						_h = h1;
-					}
-					else {
-						if (this._cnt_editformat_hour == 2) {
-							var _mask1 = this.editmask_logical.substr(pos_begin + 1, 1);
-							if (_mask1 == "H") {
-								_date.date += (h1 + " ");
-								_date.pos = pos_begin + 1;
-								_h = h1;
-							}
-							else {
-								_date.date += ("0" + h2);
-								_h = h2;
-							}
-						}
-						else {
-							if (h1 == ch) {
-								_date.date += (h1 + " ");
-								_date.pos = pos_begin + 1;
-								_h = h1;
-							}
-							else {
-								_date.date += (" " + h2);
-								_date.pos = pos_begin + 2;
-								_h = h2;
-							}
-						}
-					}
-				}
-
-				if (m) {
-					_date.date += (m1 + m2);
-				}
-
-				if (s) {
-					_date.date += (s1 + s2);
-				}
-			}
-			else if (_mask == "m") {
-				if (!_date.date) {
-					_date.date = "";
-				}
-
-				if (M) {
-					if (this._cnt_editformat_month == 2) {
-						_date.date += (M1 + M2);
-					}
-					else {
-						if (M < 10) {
-							_date.date += (" " + M2);
-						}
-						else {
-							_date.date += (M1 + M2);
-						}
-					}
-				}
-
-				if (d) {
-					if (this._cnt_editformat_day == 2) {
-						_date.date += (d1 + d2);
-					}
-					else {
-						if (d < 10) {
-							_date.date += (" " + d2);
-						}
-						else {
-							_date.date += (d1 + d2);
-						}
-					}
-				}
-
-				if (h) {
-					_date.date += (h1 + h2);
-				}
-
-				var _m = m;
-				if (m && (+m >= 60)) {
-					if (m1 > 5) {
-						if (this._cnt_editformat_minute == 2) {
-							_date.date += ("0" + m1);
-						}
-						else {
-							_date.date += (" " + m1);
-						}
-
-						_date.pos += _add_pos + 1;
-						_m = m1;
-					}
-				}
-
-				if (s) {
-					_date.date += (s1 + s2);
-				}
-			}
-
-			else if (_mask == "s") {
-				if (!_date.date) {
-					_date.date = "";
-				}
-
-				if (M) {
-					if (this._cnt_editformat_month == 2) {
-						_date.date += (M1 + M2);
-					}
-					else {
-						if (M < 10) {
-							_date.date += (" " + M2);
-						}
-						else {
-							_date.date += (M1 + M2);
-						}
-					}
-				}
-
-				if (d) {
-					if (this._cnt_editformat_day == 2) {
-						_date.date += (d1 + d2);
-					}
-					else {
-						if (d < 10) {
-							_date.date += (" " + d2);
-						}
-						else {
-							_date.date += (d1 + d2);
-						}
-					}
-				}
-
-				if (h) {
-					_date.date += (h1 + h2);
-				}
-
-				if (m) {
-					_date.date += (m1 + m2);
-				}
-
-				if (s && (+s >= 60)) {
-					if (s1 > 5) {
-						if (this._cnt_editformat_second == 2) {
-							_date.date += ("0" + s1);
-						}
-						else {
-							_date.date += (" " + s1);
-						}
-						_date.pos += _add_pos + 1;
-					}
-				}
-			}
-
-			return _date;
 		}
 
 		return false;
