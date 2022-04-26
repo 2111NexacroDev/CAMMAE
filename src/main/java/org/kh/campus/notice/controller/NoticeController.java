@@ -79,7 +79,7 @@ public class NoticeController {
 		return "notice/noticeWriteForm";
 	}
 	
-	//관리자 공지사항 등록
+	//관리자 공지사항 등록 실행
 	@RequestMapping(value="/notice/register.kh", method=RequestMethod.POST)
 	public ModelAndView noticeRegister(ModelAndView mv
 			,@ModelAttribute Notice notice
