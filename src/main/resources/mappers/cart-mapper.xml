@@ -34,16 +34,5 @@
 		SELECT * FROM LECTURE_TBL  
 	</select>
 	
-	<insert id="insertCart" parameterType="Lecture" >
-		INSERT INTO CART_TBL VALUES(SEQ_CART_NO.NEXTVAL
-		, #{lectureNo}
-		, NULL
-		, DEFAULT
-		, '1학기')	
-	</insert>
 
-	<select id="selectMyCart" resultMap="totalResultMap">
-	<!-- SELECT LECTURE_NO FROM LECTURE_TBL FULL OUTER JOIN CART_TBL WHERE CART_NO -->
-	SELECT * FROM CART_TBL LEFT OUTER JOIN LECTURE_TBL ON LECTURE_TBL.LECTURE_NO = CART_TBL.LECTURE_NO 
-	</select>
  </mapper>
