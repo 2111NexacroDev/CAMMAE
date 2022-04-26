@@ -125,8 +125,6 @@ if (!nexacro._ListViewCellControl) {
 	};
 
 	_pListViewCellControl.on_killfocus_basic_action = function (new_focus, new_refer_focus) {
-		nexacro.Component.prototype.on_killfocus_basic_action.call(this);
-
 		nexacro._CellControl.prototype.on_killfocus_basic_action.call(this, new_focus, new_refer_focus);
 
 		this._actionEditCell(this._getActionCell(this), "killfocus");
@@ -154,18 +152,11 @@ if (!nexacro._ListViewCellControl) {
 
 		switch (trigger) {
 			case "setfocus":
-				if (autoenter == "select" && cell.selected) {
-					if (cell._hasEditor() && cell._isEditable()) {
-						cell._showEditor();
-					}
-					else {
-						cell._setSubControlFocus(true);
-					}
+				if (autoenter == "select" && cell.selected && cell._hasEditor() && cell._isEditable()) {
+					cell._showEditor();
 				}
 				break;
 			case "killfocus":
-				cell._setSubControlFocus(false);
-
 				if (cell._isShowEditor()) {
 					cell._applyEditor(true);
 					cell._hideEditor();
@@ -177,13 +168,8 @@ if (!nexacro._ListViewCellControl) {
 				cell.setFocus(false, true);
 
 				if (autoenter != "select") {
-					if (show) {
-						if (cell._hasEditor() && cell._isEditable()) {
-							cell._showEditor();
-						}
-					}
-					else {
-						cell._setSubControlFocus(true);
+					if (show && cell._hasEditor() && cell._isEditable()) {
+						cell._showEditor();
 					}
 				}
 				break;
@@ -193,37 +179,23 @@ if (!nexacro._ListViewCellControl) {
 				if (cell._hasEditor() && cell._isEditable()) {
 					cell._showEditor();
 				}
-				else {
-					cell._setSubControlFocus(true);
-				}
 				break;
 			case "enterkey":
 				if (cell._isEnterDownable()) {
+					cell._applyEditor(true);
+
 					if (cell._editor) {
 						acceptsenter = nexacro._toBoolean(cell._editor._cellinfo._getAttrValue(cell._editor._cellinfo.textareaacceptsenter));
 
+						cell.on_fire_onenterdown(cell._editor);
 
-						if (cell._refinfo._getEdittype() == "textarea") {
-							if (acceptsenter) {
-								cell.on_fire_onenterdown(cell._editor);
-							}
-							else {
-								cell._applyEditor(true);
-								cell.on_fire_onenterdown(cell._editor);
-								cell._hideEditor();
-							}
-						}
-						else {
-							cell._applyEditor(true);
-							cell.on_fire_onenterdown(cell._editor);
+						if (!(cell._refinfo._getEdittype() == "textarea" && acceptsenter)) {
 							cell._hideEditor();
 						}
 					}
 					else {
-						cell._applyEditor(true);
 						cell.on_fire_onenterdown(cell);
 					}
-					cell._setSubControlFocus(true);
 				}
 				else if (cell._hasEditor() && cell._isEditable()) {
 					if (!this._getWindow()._modal_frame_stack.length) {
@@ -231,34 +203,22 @@ if (!nexacro._ListViewCellControl) {
 							cell._showEditor();
 						}, 50);
 					}
-				}
-				else {
-					cell._setSubControlFocus(true);
 				}
 				break;
 			case "ctrlenterkey":
 				if (cell._isEnterDownable()) {
+					cell._applyEditor(true);
+
 					if (cell._editor) {
 						acceptsenter = nexacro._toBoolean(cell._editor._cellinfo._getAttrValue(cell._editor._cellinfo.textareaacceptsenter));
 
-						if (cell._refinfo._getEdittype() == "textarea") {
-							if (!acceptsenter) {
-								cell.on_fire_onenterdown(cell._editor);
-							}
-							else {
-								cell._applyEditor(true);
-								cell.on_fire_onenterdown(cell._editor);
-								cell._hideEditor();
-							}
-						}
-						else {
-							cell._applyEditor(true);
-							cell.on_fire_onenterdown(cell._editor);
+						cell.on_fire_onenterdown(cell._editor);
+
+						if (!(cell._refinfo._getEdittype() == "textarea" && !acceptsenter)) {
 							cell._hideEditor();
 						}
 					}
 					else {
-						cell._applyEditor(true);
 						cell.on_fire_onenterdown(cell);
 					}
 				}
@@ -268,9 +228,6 @@ if (!nexacro._ListViewCellControl) {
 							cell._showEditor();
 						}, 50);
 					}
-				}
-				else {
-					cell._setSubControlFocus(true);
 				}
 				break;
 			case "charkey":
@@ -279,9 +236,6 @@ if (!nexacro._ListViewCellControl) {
 						cell._showEditor();
 						cell._editor.set_value("");
 					}
-				}
-				else {
-					cell._setSubControlFocus(true);
 				}
 				break;
 		}
@@ -343,54 +297,15 @@ if (!nexacro._ListViewCellControl) {
 		return this._refinfo._getValue(this._getDataRow());
 	};
 
-	_pListViewCellControl._checkProcessedKey = function (keycode, alt_key, ctrl_key, shift_key, check_comp, refer_comp, meta_key) {
+	_pListViewCellControl._checkProcessedKey = function (keycode, alt_key, ctrl_key, shift_key, check_comp, refer_comp) {
 		return check_comp && refer_comp && refer_comp._isEditableComponent() && refer_comp._isEnable() && check_comp._isEnable();
 	};
 	_pListViewCellControl._getPositionInRootComponent = null;
 	delete _pListViewCellControl;
 }
 
-if (!nexacro._ListViewBandExpandbarControl) {
-	nexacro._ListViewBandExpandbarControl = function (id, left, top, width, height, right, bottom, minwidth, maxwidth, minheight, maxheight, parent) {
-		nexacro.Button.call(this, id, left, top, width, height, right, bottom, minwidth, maxwidth, minheight, maxheight, parent);
-
-		if (nexacro._has_listview_expand_status) {
-			this._use_selected_status = false;
-			this._use_pushed_status = false;
-		}
-		else {
-			this._use_selected_status = true;
-			this._use_pushed_status = true;
-		}
-	};
-	var _ListViewBandExpandbarControl = nexacro._createPrototype(nexacro.Button, nexacro._ListViewBandExpandbarControl);
-	nexacro._ListViewBandExpandbarControl.prototype = _ListViewBandExpandbarControl;
-	_ListViewBandExpandbarControl._type_name = "ListViewBandExpandbarControl";
-
-	_ListViewBandExpandbarControl._is_subcontrol = true;
-
-	_ListViewBandExpandbarControl.on_getIDCSSSelector = function () {
-		return "expandbar";
-	};
-
-	_ListViewBandExpandbarControl.on_changeUserStatus = function (changestatus, value, applyuserstatus, currentstatus, currentuserstatus) {
-		if (nexacro._has_listview_expand_status) {
-			return changestatus;
-		}
-		else {
-			return nexacro.Component.prototype.on_changeUserStatus.call(this, changestatus, value, applyuserstatus, currentstatus, currentuserstatus);
-		}
-	};
-
-	delete _ListViewBandExpandbarControl;
-}
-
 if (!nexacro._ListViewBandControl) {
 	nexacro._ListViewBandControl = function (id, left, top, width, height, right, bottom, minwidth, maxwidth, minheight, maxheight, parent) {
-		if (id && id.match("detail")) {
-			this._setControl("ListViewDetailBandControl");
-		}
-
 		nexacro.ComplexComponent.call(this, id, left, top, width, height, right, bottom, minwidth, maxwidth, minheight, maxheight, parent);
 	};
 
@@ -399,7 +314,6 @@ if (!nexacro._ListViewBandControl) {
 
 	_pListViewBandControl._type_name = "ListViewBandControl";
 	_pListViewBandControl._is_subcontrol = true;
-	_pListViewBandControl._not_use_scrollLeft = true;
 
 	_pListViewBandControl._use_readonly_status = true;
 
@@ -419,12 +333,6 @@ if (!nexacro._ListViewBandControl) {
 		this._setUseScrollTimer(300, 300, 600, 300, 0);
 
 		this._setUseExpand(true, true);
-		if (nexacro._has_listview_expand_status) {
-			this._setUseExpandStatus(true);
-		}
-		else {
-			this._setUseExpandStatus(false);
-		}
 
 		this._setUseBind(false, false, false, false, false);
 		this._setUseExpr(false, false);
@@ -459,23 +367,6 @@ if (!nexacro._ListViewBandControl) {
 						child._updateAll();
 					}
 				}
-			}
-		}
-	};
-
-	_pListViewBandControl._onResetUserStatus = function () {
-		if (this._is_expandable && this._use_expand_status) {
-			this._onResetUserExpand();
-		}
-	};
-
-	_pListViewBandControl._onResetUserExpand = function () {
-		if (this.expandbar) {
-			if (this._view && this._view.getBandExpandStatus(this._rowidx)) {
-				this.expandbar._changeUserStatus("expand", true);
-			}
-			else {
-				this.expandbar._changeUserStatus("collapse", true);
 			}
 		}
 	};
@@ -527,11 +418,11 @@ if (!nexacro._ListViewBandControl) {
 	};
 
 	_pListViewBandControl.on_notify_child_onclick = function (obj, e) {
-		this.on_fire_onclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, this, e.fromobject, e.metakey, e.clickitem);
+		this.on_fire_onclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, this, e.fromobject, e.clickitem);
 	};
 
 	_pListViewBandControl.on_notify_child_ondblclick = function (obj, e) {
-		this.on_fire_ondblclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, this, e.fromobject, e.metakey, e.clickitem);
+		this.on_fire_ondblclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, this, e.fromobject, e.clickitem);
 	};
 
 	_pListViewBandControl.on_notify_child_onfocus = function (obj, e) {
@@ -542,7 +433,13 @@ if (!nexacro._ListViewBandControl) {
 		this.on_fire_oninput();
 	};
 
-	_pListViewBandControl.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key, clickitem) {
+	_pListViewBandControl._on_basic_onexpand = function (obj, e) {
+	};
+
+	_pListViewBandControl._on_default_onexpand = function (obj, e) {
+	};
+
+	_pListViewBandControl.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, clickitem) {
 		if (this.onclick && this.onclick._has_handlers) {
 			var canvas = this._getRecalcCanvasXY(from_refer_comp._control_element, canvasX, canvasY);
 			canvasX = canvas[0];
@@ -552,7 +449,7 @@ if (!nexacro._ListViewBandControl) {
 			clientX = clientXY[0];
 			clientY = clientXY[1];
 
-			var evt = new nexacro.ClickEventInfo(this, "onclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
+			var evt = new nexacro.ClickEventInfo(this, "onclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
 			evt.clickitem = clickitem;
 
 			return this.onclick._fireEvent(this, evt);
@@ -560,8 +457,8 @@ if (!nexacro._ListViewBandControl) {
 		return false;
 	};
 
-	_pListViewBandControl.on_fire_ondblclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key, clickitem) {
-		nexacro._fireBeforeDblclick(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
+	_pListViewBandControl.on_fire_ondblclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, clickitem) {
+		nexacro._fireBeforeDblclick(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
 
 		if (this.ondblclick && this.ondblclick._has_handlers) {
 			var canvas = this._getRecalcCanvasXY(from_refer_comp._control_element, canvasX, canvasY);
@@ -572,7 +469,7 @@ if (!nexacro._ListViewBandControl) {
 			clientX = clientXY[0];
 			clientY = clientXY[1];
 
-			var evt = new nexacro.ClickEventInfo(this, "ondblclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
+			var evt = new nexacro.ClickEventInfo(this, "ondblclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
 			evt.clickitem = clickitem;
 
 			return this.ondblclick._fireEvent(this, evt);
@@ -604,33 +501,8 @@ if (!nexacro._ListViewBandControl) {
 		};
 	};
 
-	_pListViewBandControl._onGetExpandCtrlSet = function () {
-		return "custom";
-	};
-	_pListViewBandControl._createExpandBarCustom = function (ctrlname, left, top, width, height) {
-		if (this.expandbar && this.expandbar._type_name != "ListViewBandExpandbarControl") {
-			this._destroyExpandBar();
-		}
-
-		if (this.expandbar == null) {
-			return new nexacro._ListViewBandExpandbarControl(ctrlname, left, top, width, height, null, null, null, null, null, null, this);
-		}
-		else {
-			return this.expandbar;
-		}
-	};
-
 	_pListViewBandControl.on_getIDCSSSelector = function () {
 		return this._band;
-	};
-
-	_pListViewBandControl._getItemTypeName = function () {
-		if (this._band == "body") {
-			return "ListViewBandControl";
-		}
-		else if (this._band == "detail") {
-			return "ListViewDetailBandControl";
-		}
 	};
 
 	_pListViewBandControl._setAddedCreateInfo = function (comp, ctxt, seq) {
@@ -678,8 +550,8 @@ if (!nexacro.ListView) {
 	nexacro.ListViewBandStatusEventInfo.prototype = _pListViewBandStatusEventInfo;
 	_pListViewBandStatusEventInfo._type_name = "ListViewBandStatusEventInfo";
 
-	nexacro.ListViewClickEventInfo = function (obj, id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, bandid, cellid, row, clickitem, meta_key) {
-		nexacro.ClickEventInfo.call(this, obj, id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
+	nexacro.ListViewClickEventInfo = function (obj, id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, bandid, cellid, row, clickitem) {
+		nexacro.ClickEventInfo.call(this, obj, id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
 
 		this.fromobject = obj;
 		this.fromreferenceobject = from_refer_comp;
@@ -694,8 +566,8 @@ if (!nexacro.ListView) {
 	nexacro.ListViewClickEventInfo.prototype = _pListViewClickEventInfo;
 	_pListViewClickEventInfo._type_name = "ListViewClickEventInfo";
 
-	nexacro.ListViewDragEventInfo = function (obj, id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, bandid, cellid, row, meta_key) {
-		nexacro.DragEventInfo.call(this, obj, id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, null, null, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
+	nexacro.ListViewDragEventInfo = function (obj, id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, bandid, cellid, row) {
+		nexacro.DragEventInfo.call(this, obj, id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, null, null, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
 
 		this.fromobject = obj;
 		this.fromreferenceobject = from_refer_comp;
@@ -709,8 +581,8 @@ if (!nexacro.ListView) {
 	nexacro.ListViewDragEventInfo.prototype = _pListViewDragEventInfo;
 	_pListViewDragEventInfo._type_name = "ListViewDragEventInfo";
 
-	nexacro.ListViewMouseEventInfo = function (obj, id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, bandid, cellid, row, meta_key) {
-		nexacro.MouseEventInfo.call(this, obj, id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
+	nexacro.ListViewMouseEventInfo = function (obj, id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, bandid, cellid, row) {
+		nexacro.MouseEventInfo.call(this, obj, id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
 
 		this.fromobject = obj;
 		this.fromreferenceobject = from_refer_comp;
@@ -760,30 +632,12 @@ if (!nexacro.ListView) {
 	nexacro.ListViewEditEventInfo.prototype = _pListViewEditEventInfo;
 	_pListViewEditEventInfo._type_name = "ListViewEditEventInfo";
 
-	nexacro.ListViewKeyEventInfo = function (obj, id, row, bandid, cellid, alt_key, ctrl_key, shift_key, key_code, from_refer_comp) {
-		this.id = this.eventid = id || "onlistviewkeyevent";
-		this.fromobject = obj;
-		this.fromreferenceobject = from_refer_comp;
-		this.row = row;
-		this.bandid = bandid;
-		this.cellid = cellid;
-
-		this.altkey = alt_key;
-		this.ctrlkey = ctrl_key;
-		this.shiftkey = shift_key;
-		this.keycode = key_code;
-	};
-	var _pListViewKeyEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.ListViewKeyEventInfo);
-	nexacro.ListViewKeyEventInfo.prototype = _pListViewKeyEventInfo;
-	_pListViewKeyEventInfo._type_name = "ListViewKeyEventInfo";
-
 	delete _pListViewBandStatusEventInfo;
 	delete _pListViewClickEventInfo;
 	delete _pListViewDragEventInfo;
 	delete _pListViewMouseEventInfo;
 	delete _pListViewSelectEventInfo;
 	delete _pListViewEditEventInfo;
-	delete _pListViewKeyEventInfo;
 
 
 
@@ -819,7 +673,6 @@ if (!nexacro.ListView) {
 
 	_pListView._use_readonly_status = true;
 	_pListView._is_locale_control = true;
-	_pListView._selectscrollmode = (nexacro._isTouchInteraction) ? "scroll" : "select";
 
 	_pListView._setInnerFlags = function () {
 		this._setUseItems(true, false, true, true, false);
@@ -835,7 +688,6 @@ if (!nexacro.ListView) {
 		this._setUseScrollTimer(300, 300, 600, 300, 0);
 
 		this._setUseExpand(false, false);
-		this._setUseExpandStatus(false);
 
 		this._setUseBind(true, false, false, false, true);
 		this._setUseExpr(true, true);
@@ -890,37 +742,29 @@ if (!nexacro.ListView) {
 
 	_pListView._resetScrollInfo = function (rowposition) {
 		var currrow;
-		var slot_top = 0;
-
-		if (this.rowcount > 0) {
-			if ((rowposition !== null || rowposition !== undefined) && rowposition > -1) {
-				currrow = rowposition;
-			}
-			else {
-				currrow = this.getSelect().row;
-			}
-
-			var panel_slot = this._getPanelSlot(currrow);
-			if (panel_slot) {
-				slot_top = panel_slot._getSlotCalcTop();
-			}
+		if (rowposition && rowposition > -1) {
+			currrow = rowposition;
+		}
+		else {
+			currrow = this.getSelect().row;
 		}
 
-		this._updateItemVScrollInfo(slot_top, "trackinit", true);
+		var panel_slot = this._getPanelSlot(currrow);
+		if (panel_slot) {
+			var slot_top = panel_slot._getSlotCalcTop();
+			this._updateItemVScrollInfo(slot_top, "trackinit", true);
+		}
 	};
 
 	_pListView._resetSelectInfo = function (rowposition) {
 		var currsel = this.getSelect();
-
-		this._onClearCurrentSelect();
-
-		if (this.rowcount > 0) {
-			if ((rowposition !== null || rowposition !== undefined) && rowposition > -1) {
-				this._onSetCurrentSelect(this._onGetSelectArgument(rowposition, currsel.band, currsel.cell));
-			}
-			else {
-				this._onSetCurrentSelect(this._onGetSelectArgument(currsel.row, currsel.band, currsel.cell));
-			}
+		if (rowposition && rowposition > -1) {
+			this._onClearCurrentSelect();
+			this._onSetCurrentSelect(this._onGetSelectArgument(rowposition, currsel.band, currsel.cell));
+		}
+		else {
+			this._onClearCurrentSelect();
+			this._onSetCurrentSelect(this._onGetSelectArgument(currsel.row, currsel.band, currsel.cell));
 		}
 	};
 
@@ -997,8 +841,8 @@ if (!nexacro.ListView) {
 			var headcount = this._head_count && this._use_headitem ? this._head_count : 0;
 			var bodycount = this._body_count ? this._body_count : 1;
 
-			var previdx = prevslot *  bodycount + headcount;
-			var nextidx = nextslot *  bodycount + headcount;
+			var previdx = prevslot * bodycount + headcount;
+			var nextidx = nextslot * bodycount + headcount;
 
 			if (this._use_partitem) {
 				if (this._body_count > 1) {
@@ -1386,6 +1230,7 @@ if (!nexacro.ListView) {
 					this.addSelect(select);
 				}
 
+				this.setSelect(select);
 				this._focusItem(select);
 
 				break;
@@ -2079,7 +1924,7 @@ if (!nexacro.ListView) {
 		var w = cell2_x - cell1_x;
 		var h = cell2_y - cell1_y;
 		var distance = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2));
-		var angle = 180 *  Math.atan2(w, -h) / Math.PI;
+		var angle = 180 * Math.atan2(w, -h) / Math.PI;
 		var dir = new Array(2);
 
 		if (angle < -45 && angle > -135) {
@@ -2273,18 +2118,52 @@ if (!nexacro.ListView) {
 	_pListView._onInitPopupSubPanelItemsLayout = function (parent, startindex, startlevel) {
 	};
 
-	_pListView._calcItemScrollViewStart = function (pos, row, col, rowfirst) {
+	_pListView._getItemViewCountRow = function (rowfirst) {
+		var expandtype = this.bandexpandtype;
+		if (expandtype == "expand" || expandtype == "accordion") {
+			var rc = 0;
+			var start = this._getItemScrollViewStart();
+			if (start < 0) {
+				start = 0;
+			}
+
+
+
+			var ch = this._getClientHeight();
+			if (ch <= 0) {
+				return 0;
+			}
+			var ih;
+			var itemsize = this._getItemHeight(start, -9);
+			if (itemsize <= 0) {
+				return rc > 0 ? rc : 1;
+			}
+
+			while (ch >= itemsize) {
+				start++;
+				ih = this._getItemHeight(start, -9);
+				if (ih > 0) {
+					itemsize += ih;
+					rc++;
+				}
+				else {
+					break;
+				}
+			}
+			if (!rowfirst) {
+				rc++;
+			}
+
+			return rc > 0 ? rc : 1;
+		}
+		else {
+			return nexacro.ComplexComponent.prototype._getItemViewCountRow.call(this, rowfirst);
+		}
+	};
+	_pListView._calcItemScrollViewStart = function (pos, row, col, rowfirst, oldstart) {
 		var expandtype = this.bandexpandtype;
 		if (expandtype == "expand" || expandtype == "accordion") {
 			if (this._use_scrollmanager && this._scrollmanager) {
-				var start = this._getItemScrollViewStart();
-				if (start < 0) {
-					start = 0;
-				}
-
-				var calc_row = rowfirst ? (start / row) : (start / col);
-				var scroll_direction = "forward";
-
 				if (rowfirst) {
 					var iw = this._getItemWidth(0);
 
@@ -2292,99 +2171,80 @@ if (!nexacro.ListView) {
 						return 0;
 					}
 					else {
-						return Math.floor(pos / iw) *  (row ? row : 1);
+						return Math.floor(pos / iw) * (row ? row : 1);
 					}
 				}
 				else {
-					var bind_count = this._getBindCount();
+					var item = this._getItem(oldstart);
+					var reverse = false;
+					var start = 0;
+					var ih;
+					var rc = 0;
+					var itemsize = this._getItemHeight(start, -9);
 
-					var i = 0;
-					var len = start + col > bind_count ? bind_count : start + col;
-					var item_top = 0;
-					var item_bottom = 0;
-					var item_maxheight_row = 0;
+					if (itemsize <= 0) {
+						return rc;
+					}
 
-					for (i = start; i < len; i++) {
-						var item = this._getItem(i);
-						if (item) {
-							item_maxheight_row = Math.max(item_maxheight_row, this._getItemHeight(i, -9));
+					if (item) {
+						start = rc = oldstart;
+						if (nexacro._isArray(item)) {
+							itemsize = item[0].top;
+						}
+						else {
+							itemsize = item.top;
+						}
+						if (pos == itemsize) {
+							return start;
+						}
+						itemsize += this._getItemHeight(start, -9);
 
-							if (i === start) {
-								if (nexacro._isArray(item)) {
-									item_top = item[0].top;
-								}
-								else {
-									item_top = item.top;
-								}
-							}
+
+						if (pos < itemsize) {
+							reverse = true;
 						}
 					}
-
-					if (item_maxheight_row <= 0) {
-						return start;
-					}
-
-					if (pos == item_top) {
-						return start;
-					}
-
-					item_bottom = item_top + item_maxheight_row;
-
-					if (pos < item_bottom) {
-						scroll_direction = "backward";
-					}
-
-					if (scroll_direction == "forward") {
-						while (pos >= item_bottom) {
-							start += col;
-							item_maxheight_row = 0;
-
-							for (i = start; i < start + col; i++) {
-								item_maxheight_row = Math.max(item_maxheight_row, this._getItemHeight(i, -9));
-							}
-
-							if (item_maxheight_row > 0) {
-								item_bottom += item_maxheight_row;
-								calc_row++;
+					if (!reverse) {
+						while (pos > itemsize) {
+							start++;
+							ih = this._getItemHeight(start, -9);
+							if (ih > 0) {
+								itemsize += ih;
+								rc++;
 							}
 							else {
 								break;
 							}
 						}
+
+						return rc * (col ? col : 1);
 					}
 					else {
-						while (pos < item_top) {
-							start -= col;
-							item_maxheight_row = 0;
-
-							for (i = start; i < start + col; i++) {
-								item_maxheight_row = Math.max(item_maxheight_row, this._getItemHeight(i, -9));
-							}
-
-							if (item_maxheight_row > 0) {
-								item_top -= item_maxheight_row;
-								calc_row--;
+						while (itemsize > pos) {
+							start--;
+							ih = this._getItemHeight(start, -9);
+							if (ih > 0) {
+								itemsize -= ih;
+								rc--;
 							}
 							else {
 								break;
 							}
 						}
+
+						return rc * (col ? col : 1);
 					}
 				}
-				return calc_row *  (col ? col : 1);
 			}
 		}
 		else {
 			return nexacro.ComplexComponent.prototype._calcItemScrollViewStart.call(this, pos, row, col, rowfirst);
 		}
 	};
-
 	_pListView._calcItemScrollViewCount = function (pos, row, col, rowfirst) {
 		var expandtype = this.bandexpandtype;
 		if (expandtype == "expand" || expandtype == "accordion") {
 			if (this._use_scrollmanager && this._scrollmanager) {
-				var bindcount = this._getBindCount();
-
 				if (rowfirst) {
 					var cw = this._getClientWidth();
 					var iw = this._getItemArrWidth(0, -9, cw);
@@ -2393,33 +2253,27 @@ if (!nexacro.ListView) {
 						return 0;
 					}
 					else {
-						return Math.ceil(cw / iw) *  (row ? row : 1);
+						return Math.ceil(cw / iw) * (row ? row : 1);
 					}
 				}
 				else {
 					var rc = 0;
 
+					var start = 0;
+					if (pos > 0) {
+						start = pos;
+					}
 					var ch = this._getClientHeight();
 					var ih = 0;
-
-					var ii = pos > 0 ? pos : 0;
-					var itemsize = this._getItemArrHeight(ii, -9, ch);
+					var itemsize = this._getItemArrHeight(start, -9, ch);
 
 					if (ch <= 0 || itemsize <= 0) {
 						return 0;
 					}
 					else {
 						while (ch >= itemsize) {
-							for (var i = 0; i < col; i++) {
-								ii++;
-								if (ii >= bindcount) {
-									ih = Math.max(ih, this._getItemArrHeight(0, -9, ch));
-								}
-								else {
-									ih = Math.max(ih, this._getItemArrHeight(ii, -9, ch));
-								}
-							}
-
+							start++;
+							ih = this._getItemArrHeight(start, -9, ch);
 							if (ih > 0) {
 								itemsize += ih;
 								rc++;
@@ -2431,7 +2285,7 @@ if (!nexacro.ListView) {
 
 						rc++;
 
-						return rc *  (col ? col : 1);
+						return rc * (col ? col : 1);
 					}
 				}
 			}
@@ -2440,7 +2294,6 @@ if (!nexacro.ListView) {
 			return nexacro.ComplexComponent.prototype._calcItemScrollViewCount.call(this, pos, row, col, rowfirst);
 		}
 	};
-
 	_pListView._calcItemScrollInfo = function (pos, rowfirst) {
 		if (this._use_scrollmanager) {
 			var cn = this._getItemViewCountRow(rowfirst);
@@ -2462,12 +2315,15 @@ if (!nexacro.ListView) {
 			var overc;
 
 			if (pos >= 0 && viewc >= 0) {
-				var newps = this._calcItemScrollViewStart(pos, cn, co, rowfirst);
+				var newps = this._calcItemScrollViewStart(pos, cn, co, rowfirst, start);
 				var expandtype = this.bandexpandtype;
 				if (expandtype == "expand" || expandtype == "accordion") {
 					viewc = this._calcItemScrollViewCount(newps, cn, co, rowfirst);
 				}
 				var diffc = newps - start;
+				if (diffc == 0) {
+					return 0;
+				}
 
 				start = newps;
 
@@ -2520,12 +2376,12 @@ if (!nexacro.ListView) {
 					}
 
 					viewc = this._calcItemScrollViewCount(-1, cn, co, rowfirst);
-					nextc = viewc *  (this._add_partitem + 1);
+					nextc = viewc * (this._add_partitem + 1);
 					prevc = 0;
 				}
 				else {
-					viewc = cn *  co;
-					prevc = nextc = viewc *  this._add_partitem;
+					viewc = cn * co;
+					prevc = nextc = viewc * this._add_partitem;
 				}
 
 				index = start - prevc;
@@ -2596,7 +2452,7 @@ if (!nexacro.ListView) {
 
 			for (var i = 0; i < bindcount; i++) {
 				slot = panel._getPanelSlot(i);
-				slot_empty = slot ? !slot._isNonEmptyTarget(slot._getSlotTarget()) : false;
+				slot_empty = !slot._isNonEmptyTarget(slot._getSlotTarget());
 				if (!slot_empty) {
 					if (i < slotindex || i >= slotcount) {
 						slot_movable_idxArr.push(i);
@@ -2669,11 +2525,7 @@ if (!nexacro.ListView) {
 	};
 
 	_pListView._apperPanelItemSlot = function (action, over) {
-		if (isNaN(+over) === true) {
-			over = null;
-		}
-
-		this._callbackApper(over);
+		this._callbackApper(over ? over : null);
 	};
 
 	_pListView._readyPanelItemSlot = function (action) {
@@ -2778,19 +2630,15 @@ if (!nexacro.ListView) {
 		postvpos = (postvpos = (parseInt(postvpos) | 0)) < 0 ? 0 : postvpos;
 
 		var bChangeVpos = prevpos != postvpos;
+		var bChangeHpos = prehpos != posthpos;
 
 		if (bChangeVpos) {
-			if (evtkind) {
-				if (evtkind.indexOf("mousewheel") > -1) {
-					this._updateItemVScrollInfo(postvpos, "trackwheel", true);
-					this._changeItemVScrollInfo(postvpos, "trackwheel", false);
-				}
-			}
-			else {
-				this._updateItemVScrollInfo(postvpos, "none", true);
-				this._changeItemVScrollInfo(postvpos, "none", false);
+			if (evtkind && evtkind.indexOf("mousewheel") > -1) {
+				this._updateItemVScrollInfo(postvpos, "trackwheel", true);
+				this._changeItemVScrollInfo(postvpos, "trackwheel", false);
 			}
 		}
+
 
 		return true;
 	};
@@ -3070,7 +2918,7 @@ if (!nexacro.ListView) {
 		var ret = false;
 		var binddata = this._getBindDataSet();
 		if (binddata) {
-			ret = itemidx == binddata._setRowPosition(itemidx, 51);
+			ret = itemidx == binddata._setRowPosition(itemidx, undefined, 51);
 		}
 
 		if (this._finalChangeRowPosition()) {
@@ -3093,19 +2941,8 @@ if (!nexacro.ListView) {
 	};
 
 	_pListView._on_basic_onselectedchange = function (oldvalue, newvalue) {
-		var item;
-
-		var bind_data;
-		var bind_count = this._getBindCount();
-
-		for (var i = 0; i < bind_count; i++) {
-			item = this._getItem(i);
-			if (item) {
-				bind_data = this._getBindData(i);
-				this._setBindItemInfo(item, bind_data, i);
-			}
-		}
 	};
+
 
 	_pListView._on_fire_onselectedchange = function (oldvalue, newvalue) {
 		if (this.onselectchanged && this.onselectchanged._has_handlers) {
@@ -3168,7 +3005,6 @@ if (!nexacro.ListView) {
 				return true;
 			}
 		}
-		return false;
 	};
 
 	_pListView._onCheckSelectable = function () {
@@ -3194,28 +3030,12 @@ if (!nexacro.ListView) {
 			return;
 		}
 
-		var rowcount = this._getBindCount();
-		if (rowidx >= rowcount) {
-			return;
-		}
-
 		if (rowidx.length) {
 		}
 
 		if (rowidx == this._DEFAULT_ROWINDEX) {
 		}
 		else {
-			var item = this._getItem(rowidx);
-			if (!item) {
-				var panel = this._getPanel();
-				if (panel) {
-					var slot = panel._getPanelSlot(rowidx);
-					var slot_pos_top = slot ? slot._getSlotCachedPos()[1] : 0;
-					var scroll_top = slot_pos_top - this._adjust_height;
-
-					this.scrollTo(0, scroll_top);
-				}
-			}
 			this._setItemArraySelect(this._getItem(rowidx), status);
 
 			if (show != false) {
@@ -3301,12 +3121,6 @@ if (!nexacro.ListView) {
 				this.hscrollbar._setEnable(v);
 			}
 		}
-	};
-
-	_pListView._enable = true;
-	_pListView._isEnable = function () {
-		this._enable = nexacro.ComplexComponent.prototype._isEnable.call(this);
-		return this._enable;
 	};
 
 	_pListView._onGetDlgCode = function (keycode, altKey, ctrlKey, shiftKey) {
@@ -3402,10 +3216,6 @@ if (!nexacro.ListView) {
 							}
 						}
 					}
-
-					if (bandidx == -1) {
-						bandidx = 0;
-					}
 				}
 				else {
 					band = this._getCurrentBand(rowidx, 0);
@@ -3463,8 +3273,10 @@ if (!nexacro.ListView) {
 			if (resize_flag || move_flag || update) {
 				var vscrollpos = this._getViewStartScrollPos();
 
+				this._recreateItems();
+
+				this.scrollTo(0, vscrollpos);
 				this._updateItemVScrollInfo(vscrollpos, "trackinit", true);
-				this._changeItemVScrollInfo(vscrollpos, "trackinit", true);
 
 				var cell = this._getCurrentCell();
 				if (cell && cell._editor && cell._editor._isPopupVisible()) {
@@ -3667,15 +3479,13 @@ if (!nexacro.ListView) {
 				var child;
 
 				if (nexacro._isArray(nullctxt)) {
-					for (var i = 0; i >= nullctxt.length; i++) {
-						if (nullctxt[i]) {
-							child = nullctxt[i]._items[0];
-							if (child) {
-								child["text"] = this.nodatatext;
+					for (var i in nullctxt) {
+						child = nullctxt[i]._items[0];
+						if (child) {
+							child["text"] = this.nodatatext;
 
-								if (child._setts["text"]) {
-									child._setts["text"].call(nullctrl, this.nodatatext);
-								}
+							if (child._setts["text"]) {
+								child._setts["text"].call(nullctrl, this.nodatatext);
 							}
 						}
 					}
@@ -3718,9 +3528,6 @@ if (!nexacro.ListView) {
 
 				if (nexacro._isArray(nullctxt)) {
 					for (var i in nullctxt) {
-						if (!nullctxt.hasOwnProperty(i)) {
-							continue;
-						}
 						child = nullctxt[i]._items[0];
 						if (child) {
 							child["background"] = "transparent " + this.nodataimage + " center center no-repeat";
@@ -3760,15 +3567,14 @@ if (!nexacro.ListView) {
 	};
 
 	_pListView.set_selectscrollmode = function (v) {
-		switch (v) {
-			case "select":
-			case "scroll":
-				this._selectscrollmode = this.selectscrollmode = v;
-				break;
-			case "default":
-				this.selectscrollmode = v;
-				this._selectscrollmode = (nexacro._isTouchInteraction) ? "scroll" : "select";
-				break;
+		if (this.selectscrollmode != v) {
+			switch (v) {
+				case "select":
+				case "scroll":
+				case "default":
+					this.selectscrollmode = v;
+					break;
+			}
 		}
 	};
 
@@ -4179,7 +3985,7 @@ if (!nexacro.ListView) {
 				var line_gap = 5;
 
 				var label_w = 120;
-				var editor_w = label_w *  1.5;
+				var editor_w = label_w * 1.5;
 				var contents_w = label_gap + label_w + editor_gap + editor_w;
 
 				var target_w = this._adjust_width;
@@ -4229,18 +4035,6 @@ if (!nexacro.ListView) {
 		return ret;
 	};
 
-	_pListView.getFormatIdList = function () {
-		if (!this._formats || !this._formats._format_items) {
-			return [];
-		}
-
-		var list = [];
-		for (var formatid in this._formats._format_items) {
-			list.push(formatid);
-		}
-		return list;
-	};
-
 	_pListView.getHeadValue = nexacro._emptyFn;
 
 	_pListView.getBandProperty = function (bandid, propid) {
@@ -4252,7 +4046,6 @@ if (!nexacro.ListView) {
 			return false;
 		}
 
-		this._resetBindInfo();
 		this._recreateItems();
 
 		return true;
@@ -4446,18 +4239,6 @@ if (!nexacro.ListView) {
 			if (bandstatus != (bandstatus = slot._getSlotStatusBand())) {
 				this._on_fire_onbandstatuschanged(rowindex, bandstatus, this, this);
 			}
-
-			var items = this._getItem(rowindex);
-			if (items) {
-				if (nexacro._isArray(items)) {
-					for (var i = 0; i < items.length; i++) {
-						items[i]._resetStatus();
-					}
-				}
-				else {
-					items._resetStatus();
-				}
-			}
 		}
 	};
 
@@ -4476,18 +4257,6 @@ if (!nexacro.ListView) {
 
 			if (bandstatus != (bandstatus = slot._getSlotStatusBand())) {
 				this._on_fire_onbandstatuschanged(rowindex, bandstatus, this, this);
-			}
-
-			var items = this._getItem(rowindex);
-			if (items) {
-				if (nexacro._isArray(items)) {
-					for (var i = 0; i < items.length; i++) {
-						items[i]._resetStatus();
-					}
-				}
-				else {
-					items._resetStatus();
-				}
 			}
 		}
 	};
@@ -4654,51 +4423,6 @@ if (!nexacro.ListView) {
 		return;
 	};
 
-	_pListView.getEditingText = function () {
-		var cell = this._getCurrentCell();
-
-		if (cell == null) {
-			return;
-		}
-
-		if (cell._editor) {
-			var editComp = cell._editor;
-			if (editComp) {
-				return editComp._getEditingText();
-			}
-		}
-	};
-
-	_pListView.getEditingValue = function () {
-		var cell = this._getCurrentCell();
-
-		if (cell == null) {
-			return;
-		}
-
-		if (cell._editor) {
-			var editComp = cell._editor;
-			if (editComp) {
-				return editComp._getEditingValue();
-			}
-		}
-	};
-
-	_pListView.setEditingValue = function (value) {
-		var cell = this._getCurrentCell();
-
-		if (cell == null) {
-			return;
-		}
-
-		if (cell._editor) {
-			var editComp = cell._editor;
-			if (editComp) {
-				return editComp._setEditingValue(value);
-			}
-		}
-	};
-
 	_pListView.getDatasetRow = function (nRowIndex) {
 		if (nRowIndex >= 0) {
 			if (this.rowcount > nRowIndex) {
@@ -4810,7 +4534,6 @@ if (!nexacro.ListView) {
 		this._event_list["ondropdown"] = 1;
 		this._event_list["oncloseup"] = 1;
 		this._event_list["onenterdown"] = 1;
-		this._event_list["oncellimeaction"] = 1;
 	};
 
 	_pListView.on_notify_band_onclick = function (obj, e) {
@@ -4844,7 +4567,7 @@ if (!nexacro.ListView) {
 		this._actionSelectItem(itemindex, itemsubindex, itemcellindex, "bandclick");
 
 		if (!showEditclick) {
-			this.on_fire_onclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, e.fromobject, e.fromreferenceobject, e.metakey, itemindex, itembandid, itemcellid, itemcell, e.clickitem || "");
+			this.on_fire_onclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, e.fromobject, e.fromreferenceobject, itemindex, itembandid, itemcellid, itemcell, e.clickitem || "");
 		}
 	};
 
@@ -4874,7 +4597,7 @@ if (!nexacro.ListView) {
 		}
 
 		if (showEditclick == false) {
-			this.on_fire_ondblclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, e.fromobject, e.fromobject, e.metakey, itemindex, itembandid, itemcellid, itemcell, e.clickitem || "");
+			this.on_fire_ondblclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, e.fromobject, e.fromobject, itemindex, itembandid, itemcellid, itemcell, e.clickitem || "");
 		}
 	};
 
@@ -4905,7 +4628,7 @@ if (!nexacro.ListView) {
 		var itemcell = this._getActionItemCell(e);
 		var itemcellid = item ? item._getChildId(itemcell) : "";
 
-		this.on_fire_onclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, e.fromobject, e.fromobject, e.metakey, itemindex, itembandid, itemcellid, itemcell, "");
+		this.on_fire_onclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, e.fromobject, e.fromobject, itemindex, itembandid, itemcellid, itemcell, "");
 	};
 
 	_pListView._on_listview_onlbuttondown = function (obj, e) {
@@ -4936,7 +4659,7 @@ if (!nexacro.ListView) {
 		}
 	};
 
-	_pListView._on_basic_onclick = function (button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key, meta_key) {
+	_pListView._on_basic_onclick = function (button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY) {
 	};
 
 	_pListView._on_basic_onexpand = function (obj, e) {
@@ -4965,17 +4688,18 @@ if (!nexacro.ListView) {
 		}
 	};
 
-	_pListView.on_lbuttondown_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
-		nexacro.ComplexComponent.prototype.on_lbuttondown_basic_action.call(this, elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
+	_pListView.on_lbuttondown_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp) {
+		nexacro.ComplexComponent.prototype.on_lbuttondown_basic_action.call(this, elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
 
 		var cell = nexacro._ListViewCellControl.prototype._getActionCell(refer_comp);
+
 		if (cell) {
 			cell._autoenter_selected = cell.selected;
 		}
 	};
 
-	_pListView.on_lbuttonup_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
-		nexacro.ComplexComponent.prototype.on_lbuttonup_basic_action.call(this, elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
+	_pListView.on_lbuttonup_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp) {
+		nexacro.ComplexComponent.prototype.on_lbuttonup_basic_action.call(this, elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
 
 		var cell = nexacro._ListViewCellControl.prototype._getActionCell(refer_comp);
 		if (cell) {
@@ -4983,16 +4707,7 @@ if (!nexacro.ListView) {
 		}
 	};
 
-	_pListView.on_touchstart_basic_action = function (touch_manager, touchinfos, changedtouchinfos, refer_comp) {
-		nexacro.ComplexComponent.prototype.on_touchstart_basic_action.call(this, touch_manager, touchinfos, changedtouchinfos, refer_comp);
-
-		var cell = nexacro._ListViewCellControl.prototype._getActionCell(refer_comp);
-		if (cell) {
-			cell._autoenter_selected = cell.selected;
-		}
-	};
-
-	_pListView._on_default_onclick = function (button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
+	_pListView._on_default_onclick = function (button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY) {
 	};
 
 	_pListView._on_default_onexpand = function (obj, e) {
@@ -5009,12 +4724,10 @@ if (!nexacro.ListView) {
 			if (bandstatus != (bandstatus = slot._getSlotStatusBand())) {
 				this._on_fire_onbandstatuschanged(itemindex, bandstatus, this, e.fromreferenceobject);
 			}
-
-			item._resetStatus();
 		}
 	};
 
-	_pListView.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key, itemindex, itembandid, itemcellid, itemcell, clickitem) {
+	_pListView.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itemindex, itembandid, itemcellid, itemcell, clickitem) {
 		var evt;
 
 		var canvas = this._getRecalcCanvasXY(from_refer_comp._control_element, canvasX, canvasY);
@@ -5027,7 +4740,7 @@ if (!nexacro.ListView) {
 
 		if (clickitem == "expandbutton") {
 			if (this.oncellexpandclick && this.oncellexpandclick._has_handlers) {
-				evt = new nexacro.ListViewClickEventInfo(this, "oncellexpandclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", itemcellid || "", itemindex, clickitem, meta_key);
+				evt = new nexacro.ListViewClickEventInfo(this, "oncellexpandclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", itemcellid || "", itemindex, clickitem);
 				return this.oncellexpandclick._fireEvent(this, evt);
 			}
 		}
@@ -5045,7 +4758,7 @@ if (!nexacro.ListView) {
 			}
 
 			if (this.oncellclick && this.oncellclick._has_handlers) {
-				evt = new nexacro.ListViewClickEventInfo(this, "oncellclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", itemcellid || "", itemindex, clickitem, meta_key);
+				evt = new nexacro.ListViewClickEventInfo(this, "oncellclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", itemcellid || "", itemindex, clickitem);
 				return this.oncellclick._fireEvent(this, evt);
 			}
 			return true;
@@ -5053,7 +4766,7 @@ if (!nexacro.ListView) {
 
 		if (itemcell instanceof nexacro.Button && itemcellid == "expandbar") {
 			if (this.onbandexpandclick && this.onbandexpandclick._has_handlers) {
-				evt = new nexacro.ListViewClickEventInfo(this, "onbandexpandclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", itemcellid, itemindex, clickitem, meta_key);
+				evt = new nexacro.ListViewClickEventInfo(this, "onbandexpandclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", itemcellid, itemindex, clickitem);
 				return this.onbandexpandclick._fireEvent(this, evt);
 			}
 			return true;
@@ -5061,13 +4774,13 @@ if (!nexacro.ListView) {
 
 		if (itemindex >= 0) {
 			if (this.onbandclick && this.onbandclick._has_handlers) {
-				evt = new nexacro.ListViewClickEventInfo(this, "onbandclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", "", itemindex, clickitem, meta_key);
+				evt = new nexacro.ListViewClickEventInfo(this, "onbandclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", "", itemindex, clickitem);
 				return this.onbandclick._fireEvent(this, evt);
 			}
 		}
 		else if (itemindex == -1) {
 			if (this.onheadclick && this.onheadclick._has_handlers) {
-				evt = new nexacro.ListViewClickEventInfo(this, "onheadclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", "", -1, clickitem, meta_key);
+				evt = new nexacro.ListViewClickEventInfo(this, "onheadclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", "", -1, clickitem);
 				return this.onheadclick._fireEvent(this, evt);
 			}
 		}
@@ -5077,13 +4790,13 @@ if (!nexacro.ListView) {
 
 			if (clientX < 0 || clientY < 0 || clientX > cw || clientY > ch) {
 				if (this.onclick && this.onclick._has_handlers) {
-					evt = new nexacro.ListViewClickEventInfo(this, "onclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, "none", "", this._DEFAULT_ROWINDEX, clickitem, meta_key);
+					evt = new nexacro.ListViewClickEventInfo(this, "onclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, "none", "", this._DEFAULT_ROWINDEX, clickitem);
 					return this.onclick._fireEvent(this, evt);
 				}
 			}
 			else {
 				if (this.onnodataareaclick && this.onnodataareaclick._has_handlers) {
-					evt = new nexacro.ListViewClickEventInfo(this, "onnodataareaclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, "none", "", this._DEFAULT_ROWINDEX, clickitem, meta_key);
+					evt = new nexacro.ListViewClickEventInfo(this, "onnodataareaclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, "none", "", this._DEFAULT_ROWINDEX, clickitem);
 					return this.onnodataareaclick._fireEvent(this, evt);
 				}
 			}
@@ -5092,7 +4805,7 @@ if (!nexacro.ListView) {
 		return true;
 	};
 
-	_pListView.on_fire_ondblclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key, itemindex, itembandid, itemcellid, itemcell, clickitem) {
+	_pListView.on_fire_ondblclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itemindex, itembandid, itemcellid, itemcell, clickitem) {
 		var evt;
 
 		var canvas = this._getRecalcCanvasXY(from_refer_comp._control_element, canvasX, canvasY);
@@ -5105,25 +4818,25 @@ if (!nexacro.ListView) {
 
 		if (itemcell instanceof nexacro._ListViewCellControl) {
 			if (this.oncelldblclick && this.oncelldblclick._has_handlers) {
-				evt = new nexacro.ListViewClickEventInfo(this, "oncelldblclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", itemcellid || "", itemindex, clickitem, meta_key);
+				evt = new nexacro.ListViewClickEventInfo(this, "oncelldblclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", itemcellid || "", itemindex, clickitem);
 				return this.oncelldblclick._fireEvent(this, evt);
 			}
 		}
 		if (itemindex >= 0) {
 			if (this.onbanddblclick && this.onbanddblclick._has_handlers) {
-				evt = new nexacro.ListViewClickEventInfo(this, "onbanddblclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", "", itemindex, clickitem, meta_key);
+				evt = new nexacro.ListViewClickEventInfo(this, "onbanddblclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", "", itemindex, clickitem);
 				return this.onbanddblclick._fireEvent(this, evt);
 			}
 		}
 		if (itemindex == -1) {
 			if (this.onheaddblclick && this.onheaddblclick._has_handlers) {
-				evt = new nexacro.ListViewClickEventInfo(this, "onheaddblclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, "none", "", this._DEFAULT_ROWINDEX, clickitem, meta_key);
+				evt = new nexacro.ListViewClickEventInfo(this, "onheaddblclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, "none", "", this._DEFAULT_ROWINDEX, clickitem);
 				return this.onheaddblclick._fireEvent(this, evt);
 			}
 		}
 		if (itemindex == null) {
 			if (this.onnodataareadblclick && this.onnodataareadblclick._has_handlers) {
-				evt = new nexacro.ListViewClickEventInfo(this, "onnodataareadblclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", itemcellid || "", -1, clickitem, meta_key);
+				evt = new nexacro.ListViewClickEventInfo(this, "onnodataareadblclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, itembandid || "none", itemcellid || "", -1, clickitem);
 				return this.onnodataareadblclick._fireEvent(this, evt);
 			}
 		}
@@ -5131,8 +4844,8 @@ if (!nexacro.ListView) {
 		return true;
 	};
 
-	_pListView.on_fire_user_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
-		var ret = nexacro.SimpleComponent.prototype.on_fire_user_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
+	_pListView.on_fire_user_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+		var ret = nexacro.SimpleComponent.prototype.on_fire_user_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
 
 		if (key_code == nexacro.Event.KEY_TAB) {
 			if (!shift_key) {
@@ -5149,7 +4862,10 @@ if (!nexacro.ListView) {
 	_pListView.on_tap_basic_action_before = function (elem, canvaxX, canvaxY, screenX, screenY, refer_comp) {
 		var cell = nexacro._ListViewCellControl.prototype._getActionCell(refer_comp);
 		if (cell) {
+			cell._autoenter_selected = cell.selected;
+
 			var autoenter = cell._getAutoEnter();
+
 			if (autoenter != "select") {
 				if (cell._autoenter_selected == true) {
 					cell._actionEditCell(cell, "lbuttondown");
@@ -5161,24 +4877,23 @@ if (!nexacro.ListView) {
 		}
 	};
 
-	_pListView.on_fire_sys_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		var cell = nexacro._ListViewCellControl.prototype._getActionCell(from_refer_comp);
-		if (cell) {
-			var autoenter = cell._getAutoEnter();
+	_pListView.on_fire_sys_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.onlbuttondown && this.onlbuttondown._has_handlers) {
+			var cell = nexacro._ListViewCellControl.prototype._getActionCell(from_refer_comp);
+			if (cell) {
+				var autoenter = cell._getAutoEnter();
 
-			if (autoenter != "select") {
-				if (cell._autoenter_selected == true) {
+				if (autoenter != "select") {
+					if (cell._autoenter_selected == true) {
+						cell._actionEditCell(cell, "lbuttondown");
+					}
+				}
+				else {
 					cell._actionEditCell(cell, "lbuttondown");
 				}
 			}
-			else {
-				cell._actionEditCell(cell, "lbuttondown");
-			}
-		}
-
-		if (this.onlbuttondown && this.onlbuttondown._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onlbuttondown._fireSysEvent(this, evt);
 		}
@@ -5186,30 +4901,30 @@ if (!nexacro.ListView) {
 		return false;
 	};
 
-	_pListView.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onlbuttondown && this.onlbuttondown._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onlbuttondown._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_sys_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
+	_pListView.on_fire_sys_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onlbuttonup && this.onlbuttonup._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onlbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onlbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onlbuttonup._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
+	_pListView.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onlbuttonup && this.onlbuttonup._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onlbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onlbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onlbuttonup._fireUserEvent(this, evt);
 		}
@@ -5217,10 +4932,10 @@ if (!nexacro.ListView) {
 		return false;
 	};
 
-	_pListView.on_fire_sys_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_sys_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onrbuttondown && this.onrbuttondown._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onrbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onrbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onrbuttondown._fireSysEvent(this, evt);
 		}
@@ -5228,261 +4943,220 @@ if (!nexacro.ListView) {
 		return false;
 	};
 
-	_pListView.on_fire_user_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_user_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onrbuttondown && this.onrbuttondown._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onrbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onrbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onrbuttondown._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_sys_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
+	_pListView.on_fire_sys_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onrbuttonup && this.onrbuttonup._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onrbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onrbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onrbuttonup._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_user_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
+	_pListView.on_fire_user_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onrbuttonup && this.onrbuttonup._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onrbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onrbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onrbuttonup._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_sys_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_sys_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onmouseenter && this.onmouseenter._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onmouseenter", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onmouseenter", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 			return this.onmouseenter._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_user_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_user_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onmouseenter && this.onmouseenter._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onmouseenter", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onmouseenter", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 			return this.onmouseenter._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_sys_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_sys_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onmouseleave && this.onmouseleave._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onmouseleave", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onmouseleave", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 			return this.onmouseleave._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_user_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_user_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onmouseleave && this.onmouseleave._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onmouseleave", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onmouseleave", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 			return this.onmouseleave._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_sys_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_sys_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onmousedown && this.onmousedown._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onmousedown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onmousedown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onmousedown._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_user_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_user_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onmousedown && this.onmousedown._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onmousedown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onmousedown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onmousedown._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_sys_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_sys_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onmouseup && this.onmouseup._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onmouseup._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_user_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_user_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onmouseup && this.onmouseup._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onmouseup._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_sys_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_sys_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onmousemove && this.onmousemove._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onmousemove", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onmousemove", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onmousemove._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_user_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_user_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onmousemove && this.onmousemove._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewMouseEventInfo(this, "onmousemove", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewMouseEventInfo(this, "onmousemove", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, obj.bandid, obj.cellid, obj.rowidx);
 
 			return this.onmousemove._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_sys_ondrag = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, refer_comp, self_refer_comp, meta_key) {
+	_pListView.on_fire_sys_ondrag = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, refer_comp, self_refer_comp) {
 		if (this.ondrag && this.ondrag._has_handlers) {
 			var dragData = this._getDragData();
 			var obj = this._makeEventInfo(self_refer_comp);
-			var evt = new nexacro.ListViewDragEventInfo(this, "ondrag", dragData, null, "text", null, this, self_refer_comp, from_comp, refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewDragEventInfo(this, "ondrag", dragData, null, "text", null, this, self_refer_comp, from_comp, refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx);
 			return [this.ondrag._fireSysEvent(this, evt), this, self_refer_comp, dragData, evt.userdata];
 		}
 		return [false];
 	};
-	_pListView._noFireDragFlag = false;
-	_pListView.on_fire_user_ondrag = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, refer_comp, self_refer_comp, meta_key) {
-		this._noFireDragFlag = false;
 
-
-		var evt = null;
-		var userdata = null;
-		var dragData = this._getDragData();
-		var ret = [false];
-		var obj = null;
+	_pListView.on_fire_user_ondrag = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, refer_comp, self_refer_comp) {
 		if (this.ondrag && this.ondrag._has_handlers) {
-			obj = this._makeEventInfo(self_refer_comp);
-			evt = new nexacro.ListViewDragEventInfo(this, "ondrag", dragData, null, "text", null, this, self_refer_comp, from_comp, refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var dragData = this._getDragData();
+			var obj = this._makeEventInfo(self_refer_comp);
+			var evt = new nexacro.ListViewDragEventInfo(this, "ondrag", dragData, null, "text", null, this, self_refer_comp, from_comp, refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx);
+			return [this.ondrag._fireUserEvent(this, evt), this, self_refer_comp, dragData, evt.userdata];
 		}
-		if (this._selectscrollmode !== "scroll") {
-			if (evt) {
-				if (this.ondrag._fireUserEvent(this, evt) == true) {
-					return [true, this, self_refer_comp, dragData, evt.userdata];
-				}
-				else if (this.ondrag.defaultprevented == true) {
-					return [false, this, self_refer_comp, dragData, evt.userdata];
-				}
-			}
-		}
-		else {
-			this._noFireDragFlag = true;
-		}
-		if (this._noFireDragFlag == true) {
-			var dragInfo = nexacro._cur_drag_info;
-			if (dragInfo) {
-				dragInfo.isSelfAction = true;
-			}
-		}
-		ret = [this._noFireDragFlag, this, self_refer_comp, dragData, userdata];
-		return ret;
+		return [false];
 	};
 
-	_pListView.on_fire_sys_ondragenter = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_sys_ondragenter = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.ondragenter && this.ondragenter._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewDragEventInfo(this, "ondragenter", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewDragEventInfo(this, "ondragenter", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx);
 			return this.ondragenter._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_user_ondragenter = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this._noFireDragFlag == true || (src_comp && src_comp._selectscrollmode && (src_comp._selectscrollmode == "scroll"))) {
-			return true;
-		}
-
+	_pListView.on_fire_user_ondragenter = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.ondragenter && this.ondragenter._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewDragEventInfo(this, "ondragenter", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewDragEventInfo(this, "ondragenter", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx);
 			return this.ondragenter._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_sys_ondragleave = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_sys_ondragleave = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.ondragleave && this.ondragleave._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewDragEventInfo(this, "ondragleave", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewDragEventInfo(this, "ondragleave", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx);
 			return this.ondragleave._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_user_ondragleave = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this._noFireDragFlag == true || (src_comp && src_comp._selectscrollmode && (src_comp._selectscrollmode == "scroll"))) {
-			return true;
-		}
+	_pListView.on_fire_user_ondragleave = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.ondragleave && this.ondragleave._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewDragEventInfo(this, "ondragleave", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewDragEventInfo(this, "ondragleave", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx);
 			return this.ondragleave._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_sys_ondrop = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListView.on_fire_sys_ondrop = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.ondrop && this.ondrop._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewDragEventInfo(this, "ondrop", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewDragEventInfo(this, "ondrop", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx);
 			return this.ondrop._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_user_ondrop = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this._noFireDragFlag == true || (src_comp && src_comp._selectscrollmode && (src_comp._selectscrollmode == "scroll"))) {
-			if (src_comp && src_comp._noFireDragFlag) {
-				src_comp._noFireDragFlag = false;
-			}
-			this._noFireDragFlag = false;
-			return true;
-		}
-
+	_pListView.on_fire_user_ondrop = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.ondrop && this.ondrop._has_handlers) {
 			var obj = this._makeEventInfo(from_refer_comp);
-			var evt = new nexacro.ListViewDragEventInfo(this, "ondrop", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx, meta_key);
+			var evt = new nexacro.ListViewDragEventInfo(this, "ondrop", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx);
 			return this.ondrop._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pListView.on_fire_sys_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, xdeltavalue, ydeltavalue, meta_key) {
-		return nexacro.Component.prototype.on_fire_sys_ondragmove.call(this, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, xdeltavalue, ydeltavalue, meta_key);
+	_pListView.on_fire_sys_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.ondragmove && this.ondragmove._has_handlers) {
+			var obj = this._makeEventInfo(from_refer_comp);
+			var evt = new nexacro.ListViewDragEventInfo(this, "ondragmove", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx);
+			return this.ondragmove._fireSysEvent(this, evt);
+		}
+		return false;
 	};
 
-	_pListView.on_fire_user_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (!src_comp || !src_comp._selectscrollmode || src_comp._selectscrollmode && (src_comp._selectscrollmode !== "scroll")) {
-			if (this.ondragmove && this.ondragmove._has_handlers) {
-				var obj = this._makeEventInfo(from_refer_comp);
-				var evt = new nexacro.ListViewDragEventInfo(this, "ondragmove", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx, meta_key);
-				return this.ondragmove._fireUserEvent(this, evt);
-			}
-		}
-		else {
-			return true;
+	_pListView.on_fire_user_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.ondragmove && this.ondragmove._has_handlers) {
+			var obj = this._makeEventInfo(from_refer_comp);
+			var evt = new nexacro.ListViewDragEventInfo(this, "ondragmove", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, obj.bandid, obj.cellid, obj.rowidx);
+			return this.ondragmove._fireUserEvent(this, evt);
 		}
 		return false;
 	};
@@ -5586,20 +5260,6 @@ if (!nexacro.ListView) {
 			return this.onenterdown._fireEvent(this, evt);
 		}
 		return true;
-	};
-
-	_pListView.on_fire_onimeaction = function (from_refer_comp, key_code, alt_key, ctrl_key, shift_key, from_comp, meta_key) {
-		if (!this.enable) {
-			return true;
-		}
-
-		if (this.oncellimeaction && this.oncellimeaction._has_handlers) {
-			var obj = this._makeEventInfo(from_refer_comp);
-
-			var evt = new nexacro.ListViewKeyEventInfo(this, "oncellimeaction", obj.rowidx, obj.bandid, obj.cellid, alt_key, ctrl_key, shift_key, key_code, from_refer_comp, meta_key);
-			return this.oncellimeaction._fireEvent(this, evt);
-		}
-		return false;
 	};
 
 	_pListView._setSubgroup = function (expandtype, expandstatus) {
@@ -5830,7 +5490,6 @@ if (!nexacro.ListView) {
 		switch (currow) {
 			case -1:
 				type = "head";
-
 				break;
 			case -2:
 				type = "tail";
@@ -5838,21 +5497,13 @@ if (!nexacro.ListView) {
 		}
 
 		var bodyband = bands[type];
-
-		if (!bodyband && type == "body") {
-			var checkdetail = "detail";
-			if (bands[checkdetail]) {
-				type = checkdetail;
-				bodyband = bands[type];
-			}
-		}
 		if (!bodyband) {
 			return null;
 		}
 
-		if (type == "body" || type == "detail") {
+		if (type == "body") {
 			if (this._items.length > currow) {
-				band = this._items[currow *  slotcnt + curband];
+				band = this._items[currow * slotcnt + curband];
 			}
 		}
 		return band;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="ScholarshipMapper">
+  	<resultMap type="Scholarship" id="scholarshipResultMap">
+  	<id property="scholarship_inno" column="SCHOLARSHIP_INNO"></id>
+  	<result property="scholarship_avg_grade" column="SCHOLARSHIP_AVG_GRADE"/>
+  	<result property="scholarship_year" column="SCHOLARSHIP_YEAR"/>
+  	<result property="scholarship_term" column="SCHOLARSHIP_TEAM"/>
+  	<result property="scholarship_status" column="SCHOLARSHIP_STATUS"/>
+  	<result property="scholarship_amount" column="SCHOLARSHIP_AMOUNT"/>
+  	<result property="scholarship_name" column="SCHOLARSHIP_NAME"/>
+  	<result property="scholarship_phonenumber" column="SCHOLARSHIP_PHONENUMBER"/>
+  	<result property="scholarship_college" column="SCHOLARSHIP_COLLEGE"/>		
+  
+  	</resultMap>
+  	<insert id="registerScholar" parameterType="Scholarship">
+  	 INSERT INTO SCHOLARSHIP_TBL VALUES(SEQ_SCHOLARSHIP_NO.NEXTVAL, #{scholarship_avg_grade},  #{scholarship_year},  #{scholarship_term},  DEFAULT,  #{scholarship_amount},  #{scholarship_name}, #{scholarship_phonenumber}, #{scholarship_college})
+  	</insert>
+  	<select id="selectAllScholar" resultMap="scholarshipResultMap">
+  	 SELECT * FROM SCHOLARSHIP_TBL
+  	</select>
+  	
+  	</mapper>
