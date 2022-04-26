@@ -40,8 +40,6 @@ if (!nexacro.GroupBox) {
 	_pGroupBox._event_list = {
 		"onlbuttondown" : 1, 
 		"onlbuttonup" : 1, 
-		"onrbuttondown" : 1, 
-		"onrbuttonup" : 1, 
 		"onmouseenter" : 1, 
 		"onmouseleave" : 1, 
 		"onmousemove" : 1, 
@@ -52,8 +50,7 @@ if (!nexacro.GroupBox) {
 		"oncontextmenu" : 1, 
 		"ontouchstart" : 1, 
 		"ontouchmove" : 1, 
-		"ontouchend" : 1, 
-		"ondevicebuttonup" : 1
+		"ontouchend" : 1
 	};
 
 

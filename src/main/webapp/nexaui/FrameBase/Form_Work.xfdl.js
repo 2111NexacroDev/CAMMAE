@@ -24,15 +24,13 @@
             obj.set_taborder("0");
             obj.set_text("Check");
             this.addChild(obj.name, obj);
+
             // Layout Functions
             //-- Default Layout : this
             obj = new Layout("default","Desktop_screen",720,720,this,function(p){});
             this.addLayout(obj.name, obj);
             
             // BindItem Information
-
-            
-            // TriggerItem Information
 
         };
         
@@ -71,6 +69,7 @@
         {
             this.btn_check.addEventHandler("onclick",this.btn_check_onclick,this);
         };
+
         this.loadIncludeScript("Form_Work.xfdl");
         this.loadPreloadList();
         

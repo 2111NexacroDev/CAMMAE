@@ -25,7 +25,7 @@ if (!nexacro.FileUpload) {
 
 	delete _pEventFileUploadItemEventInfo;
 
-	nexacro.FileUploadMouseEventInfo = function (obj, id, strButton, altKey, ctrlKey, shiftKey, index, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, metaKey) {
+	nexacro.FileUploadMouseEventInfo = function (obj, id, strButton, altKey, ctrlKey, shiftKey, index, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		this.id = this.eventid = id || "onmouse";
 
 		this.fromobject = from_comp;
@@ -33,7 +33,6 @@ if (!nexacro.FileUpload) {
 		this.altkey = altKey || false;
 		this.ctrlkey = ctrlKey || false;
 		this.shiftkey = shiftKey || false;
-		this.metakey = metaKey || false;
 		this.button = strButton || "";
 		this.index = index;
 		this.screenx = screenX || -1;
@@ -406,7 +405,7 @@ if (!nexacro.FileUpload) {
 		var control_elem = this.getElement();
 		if (control_elem) {
 			var scrollWidth = this._getClientWidth();
-			var scrollHeight = this.itemcount *  this._getItemHeight();
+			var scrollHeight = this.itemcount * this._getItemHeight();
 
 			if (scrollHeight > this._getClientHeight()) {
 				var vscroll = this.vscrollbar;
@@ -758,7 +757,6 @@ if (!nexacro.FileUpload) {
 			if (cur_index == idx) {
 				this.index = -1;
 				this.value = undefined;
-				this._setText("");
 			}
 
 			this.itemcount--;
@@ -919,30 +917,17 @@ if (!nexacro.FileUpload) {
 			var i;
 
 			if (nexacro._Browser == "Runtime" && nexacro._OS != "Android") {
-				var bUseFileInfoArray = false;
-				var _total_fileIndex = 0;
 				var fileinfo = [];
 				var idx = 0;
 				for (i = 0; i < len; i++) {
 					if (items[i]._files) {
-						var sub_file_index = items[i]._files.length;
-						while (sub_file_index > 0) {
-							sub_file_index--;
-							items[i]._files[sub_file_index].id = "upfile" + _total_fileIndex;
-							_total_fileIndex++;
-
-							if (items[i]._files[sub_file_index] instanceof nexacro.VirtualFile) {
-								bUseFileInfoArray = true;
-							}
-						}
-
 						fileinfo[idx] = items[i]._files;
 						idx++;
 					}
 				}
 				for (i = 0; i < len; i++) {
 					if (items[i] && items[i].value) {
-						if (bUseFileInfoArray == true) {
+						if (items[i]._files && (items[i]._files[0] instanceof nexacro.VirtualFile)) {
 							nexacro._submit(this._unique_id, uploadurl, this._hidden_frame_handle, null, items[i].value, fileinfo);
 						}
 						else {
@@ -1020,14 +1005,14 @@ if (!nexacro.FileUpload) {
 				for (i = 0; i < len; i++) {
 					if (items[i].value && items[i]._files) {
 						for (var file_item in items[i]._files) {
-							fileinfo[items[i].id] = items[i]._files[file_item];
-							ret = true;
+							fileinfo[fileinfo_offset++] = items[i]._files[file_item];
 						}
 					}
 				}
 
-				if (ret) {
+				if (fileinfo.length > 0) {
 					nexacro._uploadTransferXHR(fileinfo, "", uploadurl, _on_manager_onload());
+					ret = true;
 				}
 			}
 			else {
@@ -1112,8 +1097,8 @@ if (!nexacro.FileUpload) {
 					}
 
 					var result = null;
-					if (nexacro._Deserializer[date_type]) {
-						result = nexacro._Deserializer[date_type](data);
+					if (nexacro.Deserializer[date_type]) {
+						result = nexacro.Deserializer[date_type](data);
 					}
 
 					if (result) {
@@ -1436,25 +1421,25 @@ if (!nexacro.FileUpload) {
 		return true;
 	};
 
-	_pFileUpload.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pFileUpload.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.onlbuttondown && this.onlbuttondown._has_handlers) {
 			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.FileUploadMouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, evtinfo_control.index, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
+			var evt = new nexacro.FileUploadMouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, evtinfo_control.index, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
 			return this.onlbuttondown._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pFileUpload.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
+	_pFileUpload.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem) {
 		if (this.onlbuttonup && this.onlbuttonup._has_handlers) {
 			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.FileUploadMouseEventInfo(this, "onlbuttonup", button, alt_key, ctrl_key, shift_key, evtinfo_control.index, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
+			var evt = new nexacro.FileUploadMouseEventInfo(this, "onlbuttonup", button, alt_key, ctrl_key, shift_key, evtinfo_control.index, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
 			return this.onlbuttonup._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pFileUpload.on_fire_user_onkeydown = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key) {
+	_pFileUpload.on_fire_user_onkeydown = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp) {
 		var items = this._items;
 		var idx = this.index;
 		var E = nexacro.Event;
@@ -1571,7 +1556,7 @@ if (!nexacro.FileUpload) {
 				}
 			}
 		}
-		return nexacro.Component.prototype.on_fire_user_onkeydown.call(this, keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
+		return nexacro.Component.prototype.on_fire_user_onkeydown.call(this, keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
 	};
 	_pFileUpload._on_focus = function (self_flag, evt_name, lose_focus, refer_lose_focus, new_focus, refer_new_focus) {
 		nexacro.Component.prototype._on_focus.call(this, self_flag, evt_name, lose_focus, refer_lose_focus, new_focus, refer_new_focus);
@@ -1734,7 +1719,7 @@ if (!nexacro.FileUpload) {
 		var item_height = this._getItemHeight();
 
 		for (var i = 0; i < item_len; i++) {
-			item_top = item_height *  i;
+			item_top = item_height * i;
 
 			items[i].move(item_left, item_top, item_width, item_height, null, null);
 		}
@@ -1746,7 +1731,7 @@ if (!nexacro.FileUpload) {
 			files = this._items[i]._files;
 			if (files) {
 				for (var j = 0, files_len = files.length, vfile; j < files_len; j++) {
-					vfile = new nexacro.VirtualFile("upfile" + i + "-" + j, "", files[j]);
+					vfile = new nexacro.VirtualFile("uploadfile" + i + "-" + j, "", files[j]);
 
 					vfile._setFullPath(files[j].fullpath || "");
 					vfile._setPath(files[j].path || "");
@@ -1840,6 +1825,7 @@ if (!nexacro.FileUpload) {
 
 	_pFileUploadItemControl._oldvalue = "";
 	_pFileUploadItemControl._newvalue = "";
+	_pFileUploadItemControl.value = "";
 	_pFileUploadItemControl.index = 0;
 	_pFileUploadItemControl.accessibilityrole = "none";
 
@@ -2160,7 +2146,7 @@ if (!nexacro.FileUpload) {
 			this._files.length = files.length;
 			var v_file;
 			for (var loopI = 0; loopI < this._files.length; loopI++) {
-				v_file = new nexacro.VirtualFile("upfile" + this.index + "-" + loopI);
+				v_file = new nexacro.VirtualFile("uploadfile" + loopI);
 				var filename = files[loopI];
 				var nIdx = filename.lastIndexOf("\\");
 				if (nIdx > 0) {
@@ -2236,8 +2222,8 @@ if (!nexacro.FileUpload) {
 		return label;
 	};
 
-	_pFileUploadItemButtonControl.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
-		var ret = nexacro.Component.prototype.on_fire_sys_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
+	_pFileUploadItemButtonControl.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+		var ret = nexacro.Component.prototype.on_fire_sys_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
 		var window = this._getWindow();
 		var elem = window._cur_ldown_elem || window._keydown_element;
 

@@ -28,7 +28,7 @@ if (!nexacro._MenuItemControl) {
 	_pMenuItemControl._id = "";
 	_pMenuItemControl.enable = true;
 	_pMenuItemControl.level = "";
-	_pMenuItemControl.userdata = undefined;
+	_pMenuItemControl.userdata = null;
 	_pMenuItemControl.accessibilityrole = "menuitem";
 	_pMenuItemControl._is_simple_control = false;
 
@@ -38,47 +38,39 @@ if (!nexacro._MenuItemControl) {
 	};
 
 	_pMenuItemControl.on_tap_basic_action = function (elem, canvasX, canvasY, screenX, screenY, refer_comp) {
-		var p_popupmenu = this.parent;
-		var curr_popupmenu = p_popupmenu._popupmenu;
-		var root_comp = this._getRootComponent(this);
-
-		if (curr_popupmenu) {
-			if (curr_popupmenu._is_popup()) {
-				if (p_popupmenu._previtemindex != this.index) {
-					var prev_item = p_popupmenu._items[p_popupmenu._previtemindex];
-					if (prev_item) {
-						prev_item._changeUserStatus("selected", false);
-					}
-					p_popupmenu._previtemindex = this.index;
+		var parent = this.parent;
+		var popupmenu = parent._popupmenu;
+		if (popupmenu) {
+			if (popupmenu._is_popup()) {
+				if (parent._previtemindex != this.index) {
+					parent._previtemindex = this.index;
 				}
-
-				curr_popupmenu.cancelPopup();
-
-				p_popupmenu._menuitemindex = this.index;
-				p_popupmenu._popupitemindex = -1;
+				popupmenu.cancelPopup();
+				parent._menuitemindex = this.index;
+				parent._popupitemindex = -1;
 			}
 		}
 
-
+		var rootComp = this._getRootComponent(this);
 		if (this._canExpand && this._isEnable()) {
-			p_popupmenu._showPopup(this);
+			parent._showPopup(this);
 
-			if (root_comp instanceof nexacro.Menu) {
-				root_comp._popupitemindex = this.index;
+			if (rootComp instanceof nexacro.Menu) {
+				rootComp._popupitemindex = this.index;
 			}
 		}
 		else {
-			if (this.enable == false || root_comp.popuptype == "none") {
+			var popuptype = rootComp.popuptype;
+
+			if (this.enable == false || popuptype == "none") {
 				return;
 			}
 
-			if (root_comp.onmenuclick && root_comp.onmenuclick._has_handlers) {
-				root_comp._popupitemindex = -1;
+			if (rootComp.onmenuclick && rootComp.onmenuclick._has_handlers) {
+				rootComp.on_fire_onitemclick(rootComp, this._id, this.userdata);
+				rootComp._popupitemindex = -1;
 			}
-
-			if (root_comp._isPopupVisible()) {
-				root_comp._closePopup(true);
-			}
+			rootComp._closePopup(true);
 		}
 		return nexacro.Component.prototype.on_tap_basic_action.call(this, elem, canvasX, canvasY, screenX, screenY, refer_comp);
 	};
@@ -87,50 +79,10 @@ if (!nexacro._MenuItemControl) {
 		return "menuitem";
 	};
 
-	_pMenuItemControl._on_getFitSize = function () {
-		var elem = this.getElement();
-		if (elem) {
-			var total_w = 0;
-			var total_h = 0;
 
-			var border = this._getCurrentStyleBorder();
-			var padding = this._getCurrentStylePadding();
 
-			if (border) {
-				total_w += border._getBorderWidth();
-				total_h += border._getBorderHeight();
-			}
-
-			if (padding) {
-				total_w += padding.left + padding.right;
-				total_h += padding.top + padding.bottom;
-			}
-			var textsize = this._getTextSize(this.text);
-			total_w += Math.ceil(textsize[0]);
-			total_h += Math.ceil(textsize[1]);
-
-			return [total_w, total_h];
-		}
-		return [this._adjust_width, this._adjust_height];
-	};
-
-	_pMenuItemControl._apply_setfocus = function (evt_name) {
-		var control_elem = this._control_element;
-		if (control_elem) {
-			var selffocus = ((evt_name == "lbutton") ? false : nexacro._enableaccessibility);
-			control_elem.setElementFocus(selffocus);
-		}
-
-		this._on_apply_selected(true);
-
-		var menu = this.parent;
-		if (menu) {
-			menu._menuitemindex = this.index;
-		}
-	};
-
-	_pMenuItemControl._on_dragleave = function (elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
-		var ret = nexacro.Component.prototype._on_dragleave.call(this, elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key);
+	_pMenuItemControl._on_dragleave = function (elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
+		var ret = nexacro.Component.prototype._on_dragleave.call(this, elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp);
 
 		var rootComp = this._getRootComponent(this);
 		if (rootComp.ondragleave) {
@@ -143,7 +95,7 @@ if (!nexacro._MenuItemControl) {
 
 	_pMenuItemControl._getTextSize = function (text) {
 		var font = this._getCurrentStyleInheritValue("font");
-		return nexacro._getTextSize(text, font, false, undefined, this.wordWrap, this._getCurrentStyleInheritValue("wordSpacing"), this._getCurrentStyleInheritValue("letterSpacing"));
+		return nexacro._getTextSize(text, font, undefined, undefined, this.wordWrap, this._getCurrentStyleInheritValue("wordSpacing"), this._getCurrentStyleInheritValue("letterSpacing"));
 	};
 
 	_pMenuItemControl._on_apply_mouseover = function (isovered) {
@@ -181,19 +133,15 @@ if (!nexacro._MenuItemControl) {
 		}
 	};
 
-	_pMenuItemControl._isSelected = function () {
-		return this._userstatus == "selected" ? true : false;
-	};
-
 	delete _pMenuItemControl;
 }
 
 if (!nexacro.Menu) {
-	nexacro.MenuClickEventInfo = function (obj, id, itemid, itemuserdata, index, level, refobj) {
+	nexacro.MenuClickEventInfo = function (obj, id, itemid, itemuserdata, index, level) {
 		this.eventid = id || "onmenuclick";
 		this.id = itemid;
 		this.fromobject = obj;
-		this.fromreferenceobject = refobj ? refobj : obj;
+		this.fromreferenceobject = obj;
 		this.index = index;
 		this.level = level;
 
@@ -205,7 +153,7 @@ if (!nexacro.Menu) {
 
 	delete _pMenuClickEventInfo;
 
-	nexacro.MenuDragEventInfo = function (obj, id, itemid, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, level, index, bindindex, meta_key) {
+	nexacro.MenuDragEventInfo = function (obj, id, itemid, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, level, index, bindindex) {
 		this.id = itemid;
 		this.eventid = id || "onmenudrag";
 
@@ -227,7 +175,6 @@ if (!nexacro.Menu) {
 		this.ctrlkey = ctrl_key || false;
 		this.button = button || "";
 		this.shiftkey = shift_key || false;
-		this.metakey = meta_key || false;
 		this.screenx = screenX || -1;
 		this.screeny = screenY || -1;
 		this.canvasx = canvasX || -1;
@@ -245,7 +192,7 @@ if (!nexacro.Menu) {
 
 	delete _pEventMenuDragEventInfo;
 
-	nexacro.MenuMouseEventInfo = function (obj, id, itemid, strButton, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, level, index, bindindex, metaKey) {
+	nexacro.MenuMouseEventInfo = function (obj, id, itemid, strButton, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, level, index, bindindex) {
 		this.id = itemid;
 		this.eventid = id || "onmenumouse";
 		this.cancelable = true;
@@ -257,7 +204,6 @@ if (!nexacro.Menu) {
 		this.ctrlkey = ctrlKey || false;
 		this.button = strButton || "";
 		this.shiftkey = shiftKey || false;
-		this.metakey = metaKey || false;
 		this.screenx = screenX || -1;
 		this.screeny = screenY || -1;
 		this.canvasx = canvasX || -1;
@@ -340,7 +286,6 @@ if (!nexacro.Menu) {
 		index : -1, 
 		level : -1
 	};
-	_pMenu._is_item_selected = false;
 
 	_pMenu._event_list = 
 		{
@@ -377,7 +322,7 @@ if (!nexacro.Menu) {
 
 
 	_pMenu.on_create_contents = function () {
-		this._createMenu();
+		this._createMenu(true);
 	};
 
 	_pMenu.on_created_contents = function () {
@@ -399,14 +344,15 @@ if (!nexacro.Menu) {
 				this.on_apply_enablecolumn();
 			}
 			var hotkey_list = this._hot_key_list;
-			if (hotkey_list && this.autohotkey == true) {
+			if (hotkey_list) {
 				for (i = 0, len = hotkey_list.length; i < len; i++) {
 					this._registerItemHotkey(hotkey_list[i].key);
 				}
 			}
-			this._recalcLayout();
+			this._relayout();
 		}
 	};
+
 
 	_pMenu.on_create_contents_command = function () {
 		var str = "";
@@ -434,12 +380,12 @@ if (!nexacro.Menu) {
 			this.on_apply_enablecolumn();
 		}
 		var hotkey_list = this._hot_key_list;
-		if (this.autohotkey && hotkey_list) {
+		if (hotkey_list) {
 			for (i = 0, len = hotkey_list.length; i < len; i++) {
 				this._registerItemHotkey(hotkey_list[i].key);
 			}
 		}
-		this._recalcLayout();
+		this._relayout();
 	};
 
 	_pMenu.on_destroy_contents = function () {
@@ -462,9 +408,7 @@ if (!nexacro.Menu) {
 			for (i = hotkey_list.length - 1; i > -1; i--) {
 				var item = hotkey_list[i];
 				this._unregisterItemHotkey(item.key);
-				item.obj = null;
 			}
-			this._hot_key_list = [];
 		}
 
 		if (this._items_width) {
@@ -473,6 +417,17 @@ if (!nexacro.Menu) {
 		}
 
 		this._removeEventHandlerToInnerDataset();
+	};
+
+	_pMenu._removeEventHandlerToInnerDataset = function () {
+		if (this._innerdataset) {
+			this._innerdataset._removeEventHandler("onload", this._callbackFromDataset, this);
+			this._innerdataset._removeEventHandler("onrowposchanged", this._callbackFromDataset, this);
+			this._innerdataset._removeEventHandler("oncolumnchanged", this._callbackFromDataset, this);
+			this._innerdataset._removeEventHandler("onrowsetchanged", this._callbackFromDataset, this);
+			this._innerdataset._removeEventHandler("onvaluechanged", this._callback_onvaluechanged, this);
+			this._innerdataset = null;
+		}
 	};
 
 	_pMenu.on_change_containerRect = function (width, height) {
@@ -497,8 +452,6 @@ if (!nexacro.Menu) {
 			for (var i = 0; i < len; i++) {
 				var item = items[i];
 				var item_width = items_width[i];
-				height = height != undefined ? height : item.height;
-				item._applyElementVisible(true);
 				if (move_flag) {
 					item.move(left, 0, item_width, height);
 					left += item_width;
@@ -510,63 +463,8 @@ if (!nexacro.Menu) {
 		}
 	};
 
-	_pMenu._apply_setfocus = function (evt_name) {
-		var control_elem = this._control_element;
-		if (control_elem) {
-			var selffocus = ((evt_name == "lbutton") ? false : nexacro._enableaccessibility);
-			control_elem.setElementFocus(selffocus);
-		}
-
-		var item = this._items[0];
-		if (item && evt_name != "lbuttondown") {
-			this._select_menuitem(0);
-		}
-	};
-
-	_pMenu._on_getFitSize = function () {
-		var elem = this.getElement();
-		if (elem) {
-			var total_w = 0;
-			var total_h = 0;
-
-			var border = this._getCurrentStyleBorder();
-			var padding = this._getCurrentStylePadding();
-
-			if (border) {
-				total_w += border._getBorderWidth();
-				total_h += border._getBorderHeight();
-			}
-
-			if (padding) {
-				total_w += padding.left + padding.right;
-				total_h += padding.top + padding.bottom;
-			}
-
-			var items = this._items;
-			var item_len = items.length;
-			if (item_len) {
-				var item;
-
-				var itemwidth = 0;
-				var itemheight = 0;
-				var items_width = this._items_width = [];
-				var itemsize = null;
-
-				for (var i = 0, n = this._items.length; i < n; i++) {
-					item = items[i];
-					itemsize = item._on_getFitSize();
-					itemwidth = Math.ceil(itemsize[0]);
-					items_width.push(itemwidth);
-					total_w += itemwidth;
-					itemheight = Math.max(itemheight, itemsize[1]);
-				}
-
-				total_h += itemheight;
-			}
-
-			return [total_w, total_h];
-		}
-		return [this._adjust_width, this._adjust_height];
+	_pMenu.on_get_accessibility_label = function () {
+		return this.text ? this.text : this.id;
 	};
 
 	_pMenu._on_hotkey = function (keycode, altKey, ctrlKey, shiftKey) {
@@ -583,22 +481,16 @@ if (!nexacro.Menu) {
 		}
 
 		for (var i = 0; i < len; i++) {
-			var listitem = list[i];
-			key = listitem.key;
-			var obj = listitem.obj;
+			key = list[i].key;
 			if (key._keycode == keycode) {
 				modifykey = key._modifierkey;
 				if (altKey == ((modifykey & 0x02) == 0x02) && ctrlKey == ((modifykey & 0x01) == 0x01) && shiftKey == ((modifykey & 0x04) == 0x04)) {
 					this.setFocus();
-					this.on_fire_onitemclick(this, listitem.id, "", obj.index, obj.parent.level, obj);
+					this.on_fire_onitemclick(this, list[i].id, "");
 					break;
 				}
 			}
 		}
-	};
-
-	_pMenu.on_get_accessibility_label = function () {
-		return this.text ? this.text : this.id;
 	};
 
 	_pMenu._unregisterItemHotkey = function (hotkey) {
@@ -610,11 +502,13 @@ if (!nexacro.Menu) {
 			var owner_frame = this.getOwnerFrame();
 			if (owner_frame) {
 				nexacro._unregisterHotkeyComp(owner_frame, this, hotkey);
+				this._hot_key_list.pop();
 			}
 		}
 		else {
 			if (_form) {
 				nexacro._unregisterHotkeyComp(_form, this, hotkey);
+				this._hot_key_list.pop();
 			}
 		}
 	};
@@ -640,20 +534,6 @@ if (!nexacro.Menu) {
 		}
 	};
 
-	_pMenu._getDlgCode = function (keycode) {
-		var E = nexacro.Event;
-		var want_tab = this._want_tab;
-		var want_arrow = !(nexacro._enableaccessibility && (keycode == E.KEY_DOWN || keycode == E.KEY_UP));
-		this._want_tab = want_tab;
-
-		return {
-			want_tab : want_tab, 
-			want_return : true, 
-			want_escape : false, 
-			want_chars : false, 
-			want_arrows : want_arrow
-		};
-	};
 
 	_pMenu.set_autohotkey = function (v) {
 		var val = nexacro._toBoolean(v);
@@ -665,26 +545,36 @@ if (!nexacro.Menu) {
 
 	_pMenu.on_apply_autohotkey = function (autohotkey) {
 		var popupmenu = this._popupmenu;
-		var hotkey_list, item;
 		var i;
 
 		if (popupmenu) {
 			popupmenu.set_autohotkey(autohotkey);
 		}
 		if (autohotkey == true) {
-			hotkey_list = this._hot_key_list;
-			if (hotkey_list && hotkey_list.length > -1) {
-				for (i = hotkey_list.length - 1; i > -1; i--) {
-					item = hotkey_list[i];
-					this._registerItemHotkey(item.key);
+			var ds = this._innerdataset;
+			if (ds) {
+				var len = ds.getRowCount();
+				for (i = 0; i < len; i++) {
+					var id = ds.getColumn(i, this.idcolumn);
+					var hotkey = ds.getColumn(i, this.hotkeycolumn);
+					var level = ds.getColumn(i, this.levelcolumn);
+					var is_expand = true;
+
+					if (i == (len - 1) || level >= ds.getColumn(i + 1, this.levelcolumn)) {
+						is_expand = false;
+					}
+
+					if (this.autohotkey && hotkey && !is_expand) {
+						this._set_hotkey(id, hotkey);
+					}
 				}
 			}
 		}
 		else {
-			hotkey_list = this._hot_key_list;
+			var hotkey_list = this._hot_key_list;
 			if (hotkey_list && hotkey_list.length > -1) {
 				for (i = hotkey_list.length - 1; i > -1; i--) {
-					item = hotkey_list[i];
+					var item = hotkey_list[i];
 					this._unregisterItemHotkey(item.key);
 				}
 			}
@@ -761,45 +651,10 @@ if (!nexacro.Menu) {
 		}
 	};
 
-	_pMenu.on_apply_prop_enable = function (v) {
-		var popupemenu = this._popupmenu;
-		if (popupemenu) {
-			popupemenu._setEnable(v);
-		}
-
-		var menuitems = this._items;
-		for (var i = 0, len = menuitems.length; i < len; i++) {
-			var item = menuitems[i];
-			item._setEnable(v);
-		}
-
-		var nextbutton = this.nextbutton;
-		if (nextbutton) {
-			nextbutton._setEnable(v);
-			if (v && this._end_navigation_index == len) {
-				nextbutton._changeStatus("disabled", true);
-			}
-		}
-
-		var prevbutton = this.prevbutton;
-		if (prevbutton) {
-			prevbutton._setEnable(v);
-			if (v && this._start_navigation_index == 0) {
-				prevbutton._changeStatus("disabled", true);
-			}
-		}
-	};
-
 	_pMenu.on_apply_prop_cssclass = function () {
 		var popupemenu = this._popupmenu;
 		if (popupemenu) {
 			popupemenu.on_apply_cssclass();
-		}
-
-		var menuitems = this._items;
-		for (var i = 0, len = menuitems.length; i < len; i++) {
-			var item = menuitems[i];
-			item.on_apply_cssclass();
 		}
 	};
 
@@ -818,10 +673,7 @@ if (!nexacro.Menu) {
 
 	_pMenu.on_apply_captioncolumn = function () {
 		if (this._innerdataset) {
-			if (this._is_created) {
-				this._createMenu();
-			}
-
+			this._createMenu(false);
 			var items = this._items;
 			var len = items.length;
 			for (var i = 0; i < len; i++) {
@@ -844,7 +696,7 @@ if (!nexacro.Menu) {
 
 		if (val != this.checkboxcolumn) {
 			this.checkboxcolumn = val;
-			this._createMenu();
+			this._createMenu(false);
 		}
 	};
 
@@ -857,7 +709,19 @@ if (!nexacro.Menu) {
 
 	_pMenu.on_apply_enablecolumn = function () {
 		if (this._innerdataset) {
-			this._createMenu();
+			this._createMenu(false);
+
+			var items = this._items;
+			var len = items.length;
+			for (var i = 0; i < len; i++) {
+				var enabletext = this._innerdataset.getColumn(items[i].datarow, this.enablecolumn);
+				if (enabletext) {
+					items[i].set_enable(enabletext);
+				}
+				else {
+					items[i].set_enable(true);
+				}
+			}
 		}
 		if (this._popupmenu) {
 			this._popupmenu.set_enablecolumn(this.enablecolumn);
@@ -872,31 +736,19 @@ if (!nexacro.Menu) {
 
 		if (v != this.hotkeycolumn) {
 			this.hotkeycolumn = v;
-			this._createMenu();
+			this._createMenu(false);
 		}
 	};
 
 	_pMenu.set_iconcolumn = function (v) {
-		if (v != this.iconcolumn) {
-			this.iconcolumn = v;
-			this.on_apply_iconcolumn(v);
-		}
-	};
-
-	_pMenu.on_apply_iconcolumn = function (v) {
-		var items = this._items;
-		if (items) {
-			var item = items[this._menuitemindex];
-			if (item) {
-				item._changeUserStatus("selected", true);
-			}
-		}
-		if (this._is_created) {
-			this._recalcLayout();
-		}
 		var popupmenu = this._popupmenu;
 		if (popupmenu) {
 			popupmenu.set_iconcolumn(v);
+		}
+
+		if (v != this.iconcolumn) {
+			this.iconcolumn = v;
+			this._createMenu(false);
 		}
 	};
 
@@ -914,9 +766,7 @@ if (!nexacro.Menu) {
 
 	_pMenu.on_apply_idcolumn = function () {
 		if (this._innerdataset) {
-			if (this._is_created) {
-				this._createMenu();
-			}
+			this._createMenu(false);
 
 			var items = this._items;
 			var len = items.length;
@@ -942,9 +792,7 @@ if (!nexacro.Menu) {
 
 	_pMenu.on_apply_levelcolumn = function () {
 		if (this._innerdataset) {
-			if (this._is_created) {
-				this._createMenu();
-			}
+			this._createMenu(false);
 
 			var items = this._items;
 			var len = items.length;
@@ -970,9 +818,7 @@ if (!nexacro.Menu) {
 
 	_pMenu.on_apply_userdatacolumn = function () {
 		if (this._innerdataset) {
-			if (this._is_created) {
-				this._recalcLayout();
-			}
+			this._createMenu(false);
 
 			var items = this._items;
 			var len = items.length;
@@ -1049,12 +895,18 @@ if (!nexacro.Menu) {
 		if (popupmenu) {
 			popupmenu.set_innerdataset(this.innerdataset);
 		}
-
-		this._setEventHandlerToInnerDataset();
-
+		var ds = this._innerdataset;
+		if (ds) {
+			var callback = this._callbackFromDataset;
+			ds._setEventHandler("onload", callback, this);
+			ds._setEventHandler("onrowposchanged", callback, this);
+			ds._setEventHandler("oncolumnchanged", callback, this);
+			ds._setEventHandler("onrowsetchanged", callback, this);
+			ds._setEventHandler("onvaluechanged", this._callback_onvaluechanged, this);
+		}
 		var control = this.getElement();
 		if (control && this.innerdataset) {
-			this._createMenu();
+			this._createMenu(true);
 
 			this._last_focused = null;
 		}
@@ -1086,17 +938,16 @@ if (!nexacro.Menu) {
 		this._createMenu();
 	};
 
+
 	_pMenu.isPopup = function () {
 		return this._isPopupVisible();
 	};
-
 	_pMenu.trackPopup = function (index, x, y, bcapture) {
 		index = parseInt(index);
 		this._track_capture = bcapture == undefined ? true : nexacro._toBoolean(bcapture);
 		var items = this._items;
-		var item = items[index];
-		if (items && item) {
-			this._showPopup(item, x - item._adjust_left, y, this._track_capture);
+		if (items) {
+			this._showPopup(items[index], x, y, bcapture);
 			this._menuitemindex = items[index].index;
 			return true;
 		}
@@ -1113,10 +964,287 @@ if (!nexacro.Menu) {
 		return true;
 	};
 
-	_pMenu._callback_onvaluechanged = function (obj, e) {
-		if (this._is_created) {
-			this.on_fire_oninnerdatachanged(obj, e.oldvalue, e.newvalue, e.columnid, e.col, e.row);
+	_pMenu.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.onlbuttondown && this.onlbuttondown._has_handlers) {
+			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
+			var evt = new nexacro.MenuMouseEventInfo(this, "onlbuttondown", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex);
+			return this.onlbuttondown._fireUserEvent(this, evt);
 		}
+		return false;
+	};
+
+	_pMenu.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.onlbuttonup && this.onlbuttonup._has_handlers) {
+			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
+			var evt = new nexacro.MenuMouseEventInfo(this, "onlbuttonup", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex);
+			return this.onlbuttonup._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pMenu.on_fire_user_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.onrbuttondown && this.onrbuttondown._has_handlers) {
+			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
+			var evt = new nexacro.MenuMouseEventInfo(this, "onrbuttondown", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex);
+			return this.onrbuttondown._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pMenu.on_fire_user_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.onrbuttonup && this.onrbuttonup._has_handlers) {
+			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
+			var evt = new nexacro.MenuMouseEventInfo(this, "onrbuttonup", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex);
+			return this.onrbuttonup._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pMenu.on_fire_user_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.onmouseup && this.onmouseup._has_handlers) {
+			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
+			var evt = new nexacro.MenuMouseEventInfo(this, "onmouseup", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex);
+			return this.onmouseup._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pMenu.on_fire_user_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.onmousedown && this.onmousedown._has_handlers) {
+			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
+			var evt = new nexacro.MenuMouseEventInfo(this, "onmousedown", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex);
+			return this.onmousedown._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pMenu.on_fire_user_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.onmouseenter && this.onmouseenter._has_handlers) {
+			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
+			var evt = new nexacro.MenuMouseEventInfo(this, "onmouseenter", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex);
+			return this.onmouseenter._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pMenu.on_fire_user_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.onmouseleave && this.onmouseleave._has_handlers) {
+			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
+			var evt = new nexacro.MenuMouseEventInfo(this, "onmouseleave", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, this._last_mouseleave_iteminfo.level, this._last_mouseleave_iteminfo.index, this._last_mouseleave_iteminfo.bindindex);
+			return this.onmouseleave._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pMenu.on_fire_user_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.onmousemove && this.onmousemove._has_handlers) {
+			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
+			var evt = new nexacro.MenuMouseEventInfo(this, "onmousemove", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex);
+			return this.onmousemove._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pMenu.on_fire_user_ondrag = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, refer_comp, self_refer_comp) {
+		if (this.ondrag && this.ondrag._has_handlers) {
+			var dragData = this._getDragData();
+			var evtinfo_control = this._getEventInfoComponent(self_refer_comp);
+			var evt = new nexacro.MenuDragEventInfo(this, "ondrag", evtinfo_control.id, dragData, null, "text", null, this, self_refer_comp, from_comp, refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex);
+			return [this.ondrag._fireUserEvent(this, evt), this, self_refer_comp, dragData, evt.userdata];
+		}
+		return [false];
+	};
+
+	_pMenu._getEventInfoComponent = function (refer_comp) {
+		while (!refer_comp._is_eventinfo_control) {
+			refer_comp = refer_comp.parent;
+		}
+		return refer_comp;
+	};
+
+	_pMenu.on_fire_user_ondrop = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.ondrop && this.ondrop._has_handlers) {
+			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
+			var evt = new nexacro.MenuDragEventInfo(this, "ondrop", evtinfo_control.id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, evtinfo_control, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex);
+			return this.ondrop._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pMenu.on_fire_user_ondragenter = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.ondragenter && this.ondragenter._has_handlers) {
+			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
+			var evt = new nexacro.MenuDragEventInfo(this, "ondragenter", evtinfo_control.id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, evtinfo_control, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex);
+			return this.ondragenter._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pMenu.on_fire_user_ondragleave = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.ondragleave && this.ondragleave._has_handlers) {
+			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
+			var evt = new nexacro.MenuDragEventInfo(this, "ondragleave", evtinfo_control.id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, evtinfo_control, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, this._last_mouseleave_iteminfo.level, this._last_mouseleave_iteminfo.index, this._last_mouseleave_iteminfo.bindindex);
+
+			return this.ondragleave._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pMenu.on_fire_user_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		if (this.ondragmove && this.ondragmove._has_handlers) {
+			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
+			var evt = new nexacro.MenuDragEventInfo(this, "ondragmove", evtinfo_control.id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, evtinfo_control, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex);
+			return this.ondragmove._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+
+	_pMenu.on_fire_sys_onkeydown = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp) {
+		var pThis = this._popupmenu_find(this);
+		var item;
+		var popupvisible = this._is_popupmenu_visible(this);
+		var menuitem = this._items;
+		var menuexpand;
+
+		if (menuitem[this._menuitemindex]) {
+			menuexpand = this._popupmenuitem_extend(menuitem[this._menuitemindex]);
+		}
+
+		var E = nexacro.Event;
+		var is_accessibility = nexacro._enableaccessibility;
+		var previouse_item_index;
+
+		switch (keycode) {
+			case E.KEY_UP:
+				if (is_accessibility) {
+					break;
+				}
+				if (!popupvisible) {
+					if (menuexpand) {
+						item = this._items[this._menuitemindex];
+						if (item) {
+							this._showPopup(item);
+						}
+					}
+				}
+				else {
+					this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+				}
+				break;
+			case E.KEY_DOWN:
+				if (is_accessibility) {
+					break;
+				}
+				if (!popupvisible && this._menuitemindex > -1) {
+					if (menuexpand) {
+						item = this._items[this._menuitemindex];
+						if (item) {
+							this._showPopup(item);
+							this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+						}
+					}
+				}
+				else {
+					this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+				}
+				break;
+			case E.KEY_LEFT:
+				if (!popupvisible && this._menuitemindex <= -1) {
+					if (this._isNavigationVisible()) {
+						previouse_item_index = this._menuitemindex;
+						if (previouse_item_index == 0 || previouse_item_index <= this._start_navigation_index) {
+							this._navigationprev(true);
+						}
+					}
+					previouse_item_index = this._menuitemindex;
+					this._select_menuitem(this._getItemIndex(-1), previouse_item_index, popupvisible);
+				}
+				else if (!is_accessibility) {
+					if (this._menuitemindex > -1 && nexacro._isNull(this._popupmenu)) {
+						previouse_item_index = this._menuitemindex;
+						this._select_menuitem(this._getItemIndex(-1), previouse_item_index, true);
+					}
+					else {
+						this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+					}
+				}
+				break;
+			case E.KEY_RIGHT:
+				if (!popupvisible && this._menuitemindex <= -1) {
+					if (this._isNavigationVisible()) {
+						previouse_item_index = this._menuitemindex;
+						if (previouse_item_index + 1 >= this._end_navigation_index) {
+							this._navigationnext(true);
+						}
+					}
+					previouse_item_index = this._menuitemindex;
+					this._select_menuitem(this._getItemIndex(1), previouse_item_index, popupvisible);
+				}
+				else if (!is_accessibility) {
+					if (this._menuitemindex > -1 && nexacro._isNull(this._popupmenu)) {
+						previouse_item_index = this._menuitemindex;
+						this._select_menuitem(this._getItemIndex(1), previouse_item_index, true);
+					}
+					else {
+						this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+					}
+				}
+				break;
+			case E.KEY_ENTER:
+				if (!popupvisible) {
+					item = this._items[this._menuitemindex];
+					if (menuexpand) {
+						if (item && item._isEnable()) {
+							this._showPopup(item);
+						}
+						this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+					}
+					else {
+						if (item) {
+							var bselected = item._userstatus == "selected" ? true : false;
+							this.on_notify_menuitem_onclick(item);
+							if (bselected) {
+								item._changeUserStatus("selected", false);
+							}
+							else {
+								item._changeUserStatus("selected", true);
+							}
+						}
+					}
+				}
+				else if (!is_accessibility) {
+					this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+				}
+				break;
+			case E.KEY_ESC:
+				if (popupvisible) {
+					this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+				}
+				else {
+					item = this._items[this._menuitemindex];
+					if (refer_comp.parent == pThis) {
+						this._item_killfocus(item);
+						item._on_apply_selected(false);
+						this._menuitemindex = -1;
+					}
+					else {
+						item._on_focus(false);
+					}
+				}
+				break;
+			default:
+				break;
+		}
+		return nexacro.Component.prototype.on_fire_sys_onkeydown.call(this, keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+	};
+
+	_pMenu.on_fire_oninnerdatachanged = function (obj, oldvalue, newvalue, columnid, col, row) {
+		if (this.oninnerdatachanged && this.oninnerdatachanged._has_handlers) {
+			var evt = new nexacro.InnerdataChangedEventInfo(obj, "oninnerdatachanged", oldvalue, newvalue, columnid, col, row);
+			return this.oninnerdatachanged._fireEvent(this, evt);
+		}
+		return true;
 	};
 
 	_pMenu.on_notify_menuitem_onmouseleave = function (obj) {
@@ -1127,50 +1255,69 @@ if (!nexacro.Menu) {
 		};
 	};
 
+	_pMenu._select_menuitem = function (nextitemindex, previtemindex, popupvisible) {
+		var next_item = this._items[nextitemindex > -1 ? nextitemindex : this._menuitemindex];
+		var prev_item = this._items[previtemindex];
+		this._closePopup();
+
+		if (prev_item && nextitemindex != previtemindex) {
+			prev_item._on_apply_selected(false);
+			this._do_defocus(prev_item, false);
+		}
+		this._previtemindex = this._menuitemindex = nextitemindex;
+		if (popupvisible) {
+			this._showPopup(next_item);
+			next_item._on_focus(false);
+			var popupmenu = this._popupmenu;
+			if (popupmenu) {
+				popupmenu._select_menuitem(popupmenu._getItemIndex(0));
+			}
+		}
+		this._item_focus(next_item, true);
+		next_item._on_apply_selected(true);
+	};
+
+	_pMenu._fire_on_Popupmenu = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp) {
+		var popupmenu = this._popupmenu;
+		if (popupmenu) {
+			popupmenu.on_fire_sys_onkeydown(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+		}
+	};
+
 	_pMenu.on_notify_menuitem_onmouseenter = function (obj) {
 		var popupmenu = this._popupmenu;
-		var item;
 		this._menuitemonmouseenter = obj;
 		if (popupmenu) {
 			if (popupmenu._is_popup() || this._menuitemindex > -1) {
 				if (this._previtemindex != obj.index) {
 					popupmenu.cancelPopup();
-					if (this._is_item_selected) {
-						this._showPopup(obj);
-						obj._on_apply_selected(true);
-						this._item_focus(obj, true);
-						this._menuitemindex = obj.index;
-					}
-
-					item = this._items[this._previtemindex];
+					this._showPopup(obj);
+					obj._on_apply_selected(true);
+					this._item_focus(obj, true);
+					var item = this._items[this._previtemindex];
 					if (item) {
 						item._on_apply_selected(false);
 						item._changeStatus("focused", false);
 					}
-					this._previtemindex = obj.index;
+					this._previtemindex = this._menuitemindex = obj.index;
 				}
 			}
 		}
 		else {
-			if (this._previtemindex != obj.index) {
-				item = this._items[this._previtemindex];
-				if (item) {
-					item._on_apply_selected(false);
-					item._changeStatus("focused", false);
+			if (this._menuitemindex > -1 && obj.enable) {
+				if (this._previtemindex != obj.index) {
+					var item = this._items[this._previtemindex];
+					if (item) {
+						item._on_apply_selected(false);
+						item._changeStatus("focused", false);
+					}
+					this._showPopup(obj);
+					this._item_focus(obj, true);
+					obj._on_apply_selected(true);
+					this._previtemindex = this._menuitemindex = obj.index;
 				}
 			}
-
-			if (this._is_item_selected && this._menuitemindex > -1 && obj.enable) {
-				this._showPopup(obj);
-				this._item_focus(obj, true);
-				obj._on_apply_selected(true);
-				this._previtemindex = this._menuitemindex = obj.index;
-			}
-			else if (this._menuitemindex != obj.index) {
-				this._menuitemindex = -1;
-			}
 		}
-		this._popupitemindex = obj.index;
 		return true;
 	};
 
@@ -1197,20 +1344,13 @@ if (!nexacro.Menu) {
 			}
 			this._previtemindex = obj.index;
 		}
-		if (this._isEnable() && this.enableevent && obj._isEnable()) {
+		if (this.visible && this._isEnable() && this.enableevent && obj._isEnable()) {
 			var rootComp = this._getRootComponent(obj);
 
 			if (!obj._canExpand) {
-				this.on_fire_onitemclick(rootComp, obj._id, obj.userdata, obj.index, obj.parent.level, obj);
+				this.on_fire_onitemclick(rootComp, obj._id, obj.userdata);
 			}
-		}
-		this._item_focus(obj, false);
-		if (this._isPopupVisible()) {
-			obj._on_apply_selected(true);
-		}
-
-		if (this._menuitemindex > -1) {
-			this._is_item_selected = true;
+			this._item_focus(obj, false);
 		}
 	};
 
@@ -1225,8 +1365,7 @@ if (!nexacro.Menu) {
 		if (popupmenu) {
 			if (popupmenu._is_popup()) {
 				popupmenu.cancelPopup();
-				this._popupitemindex = obj.index;
-				this._is_item_selected = false;
+				this._popupitemindex = -1;
 				this._item_focus(obj, false);
 				return;
 			}
@@ -1242,360 +1381,86 @@ if (!nexacro.Menu) {
 		else if (this._menuitemindex > -1) {
 			this._item_focus(obj, false);
 			obj._on_apply_selected(false);
+			this._previtemindex = 0;
 			this._menuitemindex = -1;
-			this._is_item_selected = false;
 			return;
 		}
-
-		if (this._menuitemindex != obj.index) {
-			this._item_focus(obj, true);
-			obj._on_apply_selected(true);
-		}
-
+		this._item_focus(obj, true);
+		obj._on_apply_selected(true);
 		this._previtemindex = this._menuitemindex = obj.index;
 	};
 
-	_pMenu.on_notify_navigationnext_onclick = function () {
-		this._closePopup();
-		this._navigationNext();
-	};
-
-	_pMenu.on_notify_navigationprev_onclick = function () {
-		this._closePopup();
-		this._navigationPrev();
-	};
-
-	_pMenu.on_notify_onclosepopup = function (obj) {
-		var _window = this._getWindow();
-		if (_window && this._track_capture) {
-			_window._releaseCaptureLock(this);
-		}
-
-		var items = this._items;
-		if (items) {
-			var prev_sel_menu = this._previtemindex;
-			var item = items[prev_sel_menu];
-			if (item) {
-				item._on_apply_selected(false);
-			}
-			this._popupitemindex = this._menuitemindex = -1;
-		}
-	};
-
-	_pMenu.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this.onlbuttondown && this.onlbuttondown._has_handlers) {
-			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.MenuMouseEventInfo(this, "onlbuttondown", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex, meta_key);
-			return this.onlbuttondown._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pMenu.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this.onlbuttonup && this.onlbuttonup._has_handlers) {
-			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.MenuMouseEventInfo(this, "onlbuttonup", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex, meta_key);
-			return this.onlbuttonup._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pMenu.on_fire_user_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this.onrbuttondown && this.onrbuttondown._has_handlers) {
-			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.MenuMouseEventInfo(this, "onrbuttondown", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex, meta_key);
-			return this.onrbuttondown._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pMenu.on_fire_user_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this.onrbuttonup && this.onrbuttonup._has_handlers) {
-			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.MenuMouseEventInfo(this, "onrbuttonup", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex, meta_key);
-			return this.onrbuttonup._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pMenu.on_fire_user_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this.onmouseup && this.onmouseup._has_handlers) {
-			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.MenuMouseEventInfo(this, "onmouseup", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex, meta_key);
-			return this.onmouseup._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pMenu.on_fire_user_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this.onmousedown && this.onmousedown._has_handlers) {
-			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.MenuMouseEventInfo(this, "onmousedown", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex, meta_key);
-			return this.onmousedown._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pMenu.on_fire_user_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this.onmouseenter && this.onmouseenter._has_handlers) {
-			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.MenuMouseEventInfo(this, "onmouseenter", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex, meta_key);
-			return this.onmouseenter._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pMenu.on_fire_user_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this.onmouseleave && this.onmouseleave._has_handlers) {
-			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.MenuMouseEventInfo(this, "onmouseleave", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, this._last_mouseleave_iteminfo.level, this._last_mouseleave_iteminfo.index, this._last_mouseleave_iteminfo.bindindex, meta_key);
-			return this.onmouseleave._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pMenu.on_fire_user_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this.onmousemove && this.onmousemove._has_handlers) {
-			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.MenuMouseEventInfo(this, "onmousemove", evtinfo_control.id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, evtinfo_control, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex, meta_key);
-			return this.onmousemove._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pMenu.on_fire_user_ondrag = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, refer_comp, self_refer_comp, meta_key) {
-		if (this.ondrag && this.ondrag._has_handlers) {
-			var dragData = this._getDragData();
-			var evtinfo_control = this._getEventInfoComponent(self_refer_comp);
-			var evt = new nexacro.MenuDragEventInfo(this, "ondrag", evtinfo_control.id, dragData, null, "text", null, this, self_refer_comp, from_comp, refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex, meta_key);
-			return [this.ondrag._fireUserEvent(this, evt), this, self_refer_comp, dragData, evt.userdata];
-		}
-		return [false];
-	};
-
-	_pMenu.on_fire_user_ondrop = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this.ondrop && this.ondrop._has_handlers) {
-			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.MenuDragEventInfo(this, "ondrop", evtinfo_control.id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, evtinfo_control, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex, meta_key);
-			return this.ondrop._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pMenu.on_fire_user_ondragenter = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this.ondragenter && this.ondragenter._has_handlers) {
-			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.MenuDragEventInfo(this, "ondragenter", evtinfo_control.id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, evtinfo_control, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex, meta_key);
-			return this.ondragenter._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pMenu.on_fire_user_ondragleave = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this.ondragleave && this.ondragleave._has_handlers) {
-			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.MenuDragEventInfo(this, "ondragleave", evtinfo_control.id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, evtinfo_control, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, this._last_mouseleave_iteminfo.level, this._last_mouseleave_iteminfo.index, this._last_mouseleave_iteminfo.bindindex, meta_key);
-
-			return this.ondragleave._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pMenu.on_fire_user_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		if (this.ondragmove && this.ondragmove._has_handlers) {
-			var evtinfo_control = this._getEventInfoComponent(from_refer_comp);
-			var evt = new nexacro.MenuDragEventInfo(this, "ondragmove", evtinfo_control.id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, evtinfo_control, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, evtinfo_control.level, evtinfo_control.index, evtinfo_control._bindindex, meta_key);
-			return this.ondragmove._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pMenu.on_fire_sys_onkeydown = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key) {
-		var is_accessibility = nexacro._enableaccessibility;
-		var pThis = this._popupmenu_find(this);
-		var item;
-		var popupvisible = this._isPopupmenuVisible(this);
-		var menuitemindex = this._menuitemindex > -1 ? this._menuitemindex : this._popupitemindex;
-		var menuitem = this._items;
-		var can_menuexpand;
-		if (menuitem[menuitemindex]) {
-			can_menuexpand = this._popupmenuitem_extend(menuitem[menuitemindex]);
-		}
-
-		var E = nexacro.Event;
-		var previouse_item_index;
-
-		switch (keycode) {
-			case E.KEY_UP:
-				if (is_accessibility) {
-					break;
-				}
-				if (!popupvisible) {
-					if (can_menuexpand) {
-						item = this._items[menuitemindex];
-						if (item) {
-							this._showPopup(item);
-						}
-					}
-				}
-				else {
-					this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
-				}
-				break;
-			case E.KEY_DOWN:
-				if (is_accessibility) {
-					break;
-				}
-				if (!popupvisible) {
-					if (can_menuexpand && menuitemindex > -1) {
-						item = this._items[menuitemindex];
-						if (item) {
-							this._showPopup(item);
-							this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
-						}
-					}
-					else if (menuitemindex == -1) {
-						this._select_menuitem(0);
-					}
-				}
-				else {
-					this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
-				}
-				break;
-			case E.KEY_LEFT:
-				if (is_accessibility && !popupvisible && this._menuitemindex <= -1) {
-					if (this._isNavigationVisible()) {
-						this._start_navigation_index = 0;
-						this._rearrangeMenuItems(false, 1);
-					}
-					previouse_item_index = menuitemindex;
-					this._select_menuitem(this._getItemIndex(-1), previouse_item_index, popupvisible, "prev");
-				}
-				else if (!is_accessibility) {
-					if (menuitemindex == -1) {
-						this._select_menuitem(0);
-					}
-					else if (menuitemindex > -1 && (!popupvisible || (nexacro._isNull(this._popupmenu)) || this._popupmenu._popupitemindex < 0)) {
-						this._select_menuitem(this._getItemIndex(-1), menuitemindex, popupvisible, "prev");
-					}
-					else {
-						this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
-					}
-				}
-				break;
-			case E.KEY_RIGHT:
-				if (is_accessibility && !popupvisible && this._menuitemindex <= -1) {
-					if (this._isNavigationVisible()) {
-						this._start_navigation_index = 0;
-						this.nextbutton._changeStatus("disabled", false);
-						this.prevbutton._changeStatus("disabled", true);
-						this._rearrangeMenuItems(false, -1);
-					}
-					previouse_item_index = menuitemindex;
-					this._select_menuitem(this._getItemIndex(1), previouse_item_index, popupvisible);
-				}
-				else if (!is_accessibility) {
-					if (menuitemindex == -1) {
-						this._select_menuitem(0);
-					}
-					else if (menuitemindex > -1 && (!popupvisible || !can_menuexpand)) {
-						this._select_menuitem(this._getItemIndex(1), menuitemindex, popupvisible, "next");
-					}
-					else {
-						this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
-					}
-				}
-				break;
-			case E.KEY_ENTER:
-				if (!popupvisible) {
-					item = this._items[this._menuitemindex];
-					if (can_menuexpand) {
-						if (item && item._isEnable()) {
-							this._showPopup(item);
-						}
-						this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
-					}
-					else {
-						if (item) {
-							var bselected = item._userstatus == "selected" ? true : false;
-							this.on_notify_menuitem_onclick(item);
-							if (bselected) {
-								item._changeUserStatus("selected", false);
-								this._is_item_selected = false;
-							}
-							else {
-								item._changeUserStatus("selected", true);
-							}
-						}
-					}
-				}
-				else if (!is_accessibility) {
-					this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
-				}
-				break;
-			case E.KEY_ESC:
-				if (popupvisible) {
-					this._fire_on_Popupmenu(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
-				}
-				else {
-					item = this._items[this._menuitemindex];
-					if (refer_comp.parent == pThis) {
-						this._item_killfocus(item);
-						item._on_apply_selected(false);
-						this._menuitemindex = -1;
-					}
-					else {
-						item._on_focus(false);
-					}
-				}
-				break;
-			default:
-				break;
-		}
-		return nexacro.Component.prototype.on_fire_sys_onkeydown.call(this, keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
-	};
-
-	_pMenu.on_fire_oninnerdatachanged = function (obj, oldvalue, newvalue, columnid, col, row) {
-		if (this.oninnerdatachanged && this.oninnerdatachanged._has_handlers) {
-			var evt = new nexacro.InnerdataChangedEventInfo(obj, "oninnerdatachanged", oldvalue, newvalue, columnid, col, row);
-			return this.oninnerdatachanged._fireEvent(this, evt);
-		}
-		return true;
-	};
-
-	_pMenu.on_fire_onkillfocus = function (obj, fromObj) {
-		this._closePopup();
-		var cur_index = this._menuitemindex;
-		if (cur_index > -1) {
-			var item = this._items[cur_index];
-			if (item) {
-				item._on_apply_selected(false);
-			}
-		}
-		var lastfocuseditem = this._last_focused;
-		if (lastfocuseditem && lastfocuseditem != obj) {
-			this._do_defocus(lastfocuseditem, true);
-			this._popupitemindex = -1;
-			this._menuitemindex = -1;
-			this._last_focused = null;
-		}
-		this._is_item_selected = false;
-		nexacro.Component.prototype.on_fire_onkillfocus.call(this, obj, fromObj);
-	};
-
-	_pMenu.on_fire_onitemclick = function (obj, itemid, itemuserdata, index, level, refobj) {
+	_pMenu.on_fire_onitemclick = function (obj, itemid, itemuserdata) {
 		if (this.onmenuclick && this.onmenuclick._has_handlers) {
-			var evt = new nexacro.MenuClickEventInfo(obj, "onmenuclick", itemid, itemuserdata, index, level, refobj);
+			var evt = new nexacro.MenuClickEventInfo(obj, "onmenuclick", itemid, itemuserdata);
 			this.onmenuclick._fireEvent(this, evt);
 		}
 	};
 
-	_pMenu._fire_on_Popupmenu = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key) {
-		var popupmenu = this._popupmenu;
-		if (popupmenu) {
-			popupmenu.on_fire_sys_onkeydown(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
-		}
+	_pMenu.on_notify_navigationnext_onclick = function () {
+		this._closePopup();
+		this._navigationnext();
 	};
+
+	_pMenu.on_notify_navigationprev_onclick = function () {
+		this._closePopup();
+		this._navigationprev();
+	};
+
+
+	_pMenu._on_getFitSize = function () {
+		var elem = this.getElement();
+		if (elem) {
+			var total_w = 0;
+			var total_h = 0;
+
+			var border = this._getCurrentStyleBorder();
+			var padding = this._getCurrentStylePadding();
+
+			if (border) {
+				total_w += border._getBorderWidth();
+				total_h += border._getBorderHeight();
+			}
+
+			if (padding) {
+				total_w += padding.left + padding.right;
+				total_h += padding.top + padding.bottom;
+			}
+
+			var items = this._items;
+			var item_len = items.length;
+			if (item_len) {
+				var item = items[0];
+				var itemborder = item._getCurrentStyleBorder();
+				var itempadding = item._getCurrentStylePadding();
+
+				var itemwidth = 0;
+				var itemheight = 0;
+				var items_width = this._items_width = [];
+				var itemsize = null;
+				for (var i = 0, n = this._items.length; i < n; i++) {
+					item = items[i];
+					itemsize = item._on_getFitSize();
+					itemwidth = Math.ceil(itemsize[0]);
+					items_width.push(itemwidth);
+					total_w += itemwidth;
+					itemheight = Math.max(itemheight, itemsize[1]);
+				}
+				if (itemborder) {
+					total_h += itemborder._getBorderHeight();
+				}
+				if (itempadding) {
+					total_h += itempadding.top + itempadding.bottom;
+				}
+
+				total_h += itemheight;
+			}
+
+			return [total_w, total_h];
+		}
+		return [this._adjust_width, this._adjust_height];
+	};
+
 
 	_pMenu._createMenu = function () {
 		var control = this.getElement();
@@ -1605,13 +1470,11 @@ if (!nexacro.Menu) {
 
 			if (ds && this.captioncolumn && this.captioncolumn && this.idcolumn) {
 				var left = 0;
-				var height = 0;
 				var index = 0;
 				var len = ds.getRowCount();
 				var text, enable, hotkey, id, level, userdata;
 				var item;
 				var is_expanditem = true;
-				var menu_height = this._getMenuHeight();
 				for (var i = 0; i < len; i++) {
 					hotkey = ds.getColumn(i, this.hotkeycolumn);
 					id = ds.getColumn(i, this.idcolumn);
@@ -1619,6 +1482,10 @@ if (!nexacro.Menu) {
 
 					if (i == (len - 1) || level >= ds.getColumn(i + 1, this.levelcolumn)) {
 						is_expanditem = false;
+					}
+
+					if (this.autohotkey && hotkey && !is_expanditem) {
+						this._set_hotkey(id, hotkey);
 					}
 
 					if (level == 0) {
@@ -1658,11 +1525,8 @@ if (!nexacro.Menu) {
 							}
 						}
 
-						item.set_enable(enable == false || enable == "false" || enable == 0 || enable == "0" ? false : true);
+						item.set_enable(enable == false || enable == "false" ? false : true);
 						item.createComponent();
-					}
-					if (hotkey && !is_expanditem) {
-						this._setHotkey(id, hotkey, item);
 					}
 				}
 
@@ -1670,25 +1534,34 @@ if (!nexacro.Menu) {
 					this._update_position();
 				}
 
-				if (this._items.length) {
-					this._items_width = [];
+				var items_width = this._items_width = [];
+				var items_total_width = this._items_total_width;
+				var size, width, height;
+				var itemborder, itempadding, itemfont, itemwordwrap, itemwordspace, itemletterspace;
+				for (i = 0; i < this._items.length; i++) {
+					item = this._items[i];
 
-					var itemsize;
-					var itemborder = this._items[0]._getCurrentStyleBorder();
+					itemfont = item._getCurrentStyleInheritValue("font");
+					itemwordwrap = item.wordWrap || item._getCSSStyleValue("wordWrap");
+					itemborder = item._border || item._getCSSStyleValue("border");
+					itempadding = item._padding || item._getCSSStyleValue("padding");
+					itemwordspace = this._wordspacing || item._wordspacing || item._getCSSStyleValue("wordSpacing");
+					itemletterspace = this._letterspacing || item._letterspacing || item._getCSSStyleValue("letterSpacing");
 
-					for (i = 0; i < this._items.length; i++) {
-						item = this._items[i];
+					size = nexacro._getTextSize(item.text, itemfont, true, undefined, itemwordwrap, itemwordspace, itemletterspace);
+					width = Math.ceil(size[0]) + (itemborder ? itemborder.left._width + itemborder.right._width : 0);
 
-						itemsize = item._on_getFitSize();
+					width += (itempadding ? itempadding.left + itempadding.right : 0);
+					height = this._adjust_height - (itemborder ? itemborder.top._width + itemborder.bottom._width : 0);
+					item.move(left, 0, width, height);
+					items_width.push(width);
+					items_total_width += width;
 
-						height = menu_height - (itemborder ? itemborder.top._width + itemborder.bottom._width : 0);
+					left += width;
+				}
 
-						item.move(left, 0, itemsize[0], height);
-						this._items_width.push(itemsize[0]);
-						this._items_total_width += itemsize[0];
-
-						left += itemsize[0];
-					}
+				if (items_total_width) {
+					this._items_total_width = items_total_width;
 				}
 			}
 		}
@@ -1714,118 +1587,44 @@ if (!nexacro.Menu) {
 				items[i].destroy();
 				items[i] = null;
 			}
+
 			this._items = [];
 		}
 	};
 
-	_pMenu._createNavigationButton = function () {
-		var navagationprevbutton = new nexacro.Button("prevbutton", 0, 0, 0, 0, null, null, null, null, null, null, this);
-		navagationprevbutton._setControl("ButtonControl");
-		navagationprevbutton.createComponent();
-		navagationprevbutton.set_visible(true);
-		navagationprevbutton._setEventHandler("onclick", this.on_notify_navigationprev_onclick, this);
-		navagationprevbutton.on_created();
-		navagationprevbutton._changeStatus("disabled", true);
-		this.prevbutton = navagationprevbutton;
-
-		var navagationnextbutton = new nexacro.Button("nextbutton", 0, 0, 0, 0, null, null, null, null, null, null, this);
-		navagationnextbutton._setControl("ButtonControl");
-		navagationnextbutton.createComponent();
-		navagationnextbutton.set_visible(true);
-		navagationnextbutton._setEventHandler("onclick", this.on_notify_navigationnext_onclick, this);
-		navagationnextbutton.on_created();
-		this.nextbutton = navagationnextbutton;
-	};
-
-	_pMenu._recalcLayout = function () {
-		if (this._isNavigationVisible()) {
-			this._showNavigationButton(true);
-		}
-		else {
-			this._showNavigationButton(false);
-		}
-		this._rearrangeMenuItems();
-	};
-
-	_pMenu._showNavigationButton = function (navigation_visible) {
-		this._is_navigation_visible = navigation_visible;
-		var prevbutton, nextbutton;
-		if (navigation_visible) {
-			if (!this.nextbutton || !this.prevbutton) {
-				this._createNavigationButton();
-			}
-			if (!this.nextbutton._is_created) {
-				this.nextbutton.on_created();
-			}
-			if (!this.prevbutton._is_created) {
-				this.prevbutton.on_created();
-			}
-			nextbutton = this.nextbutton;
-			prevbutton = this.prevbutton;
-			var buttonsize = this.navigationbuttonsize;
-			var prevbutton_width = 0;
-			var nextbutton_width = 0;
-
-			if (!buttonsize) {
-				var navigationbutton_width = this._getNavigationbuttonWidth(prevbutton, nextbutton);
-				prevbutton_width = navigationbutton_width[0];
-				nextbutton_width = navigationbutton_width[1];
-			}
-			else {
-				prevbutton_width = buttonsize;
-				nextbutton_width = buttonsize;
-			}
-			var client_width = this._getClientWidth();
-			var client_height = this._getClientHeight();
-			prevbutton.set_visible(true);
-			prevbutton.move(0, 0, prevbutton_width, client_height);
-			nextbutton.set_visible(true);
-			nextbutton.move(client_width - nextbutton_width, 0, nextbutton_width, client_height);
-		}
-		else {
-			nextbutton = this.nextbutton;
-			if (nextbutton) {
-				nextbutton.set_visible(false);
-				nextbutton.move(0, 0, 0, 0);
-			}
-
-			prevbutton = this.prevbutton;
-			if (prevbutton) {
-				prevbutton.set_visible(false);
-				prevbutton.move(0, 0, 0, 0);
-			}
-		}
-	};
 
 	_pMenu._rearrangeMenuItems = function (need_calc, dir) {
-		var i, end;
-		var items = this._items;
-		var items_width = this._items_width;
-		var items_len = items_width.length;
-
 		var start_navigation_index = this._start_navigation_index;
-		var end_navigation_index = this._end_navigation_index;
-
+		var items_width = this._items_width;
 		var client_width = this._getClientWidth();
-
-		var left = this._is_navigation_visible ? (this.navigationbuttonsize || this._prev_width || 0) : 0;
-		var navigationnext_width = this._is_navigation_visible ? (this.navigationbuttonsize || this._next_width || 0) : 0;
-
+		var items = this._items;
+		var left = this.navigationbuttonsize || this._prev_width || 0;
+		var navigationnext_width = this.navigationbuttonsize || this._next_width || 0;
 		var sum_itemwidth = left + navigationnext_width;
-		var height = 0;
-
-		if (this.fittocontents == "height" || this.fittocontents == "both") {
-			if (items[0]) {
-				height = items[0]._on_getFitSize()[1];
+		var height = this.height ? parseInt(this.height) : this._adjust_height;
+		var len = items_width.length;
+		var end_navigation_index = this._end_navigation_index;
+		var padding = this._getCSSStyleValue("padding", this._status);
+		var border = this._getCSSStyleValue("border", this._status);
+		if (padding) {
+			sum_itemwidth += padding.left + padding.right;
+		}
+		if (border) {
+			if (border._single) {
+				sum_itemwidth += border.top._width + border.top._width;
+			}
+			else {
+				sum_itemwidth = border.left._width + border.right._width;
 			}
 		}
-		else {
-			height = this._getMenuHeight();
-		}
+
+		var i, end;
+		var item, item_width;
 
 		if (need_calc) {
 			for (i = end_navigation_index - 1; i >= 0; i--) {
-				sum_itemwidth += items_width[i];
+				item_width = items_width[i];
+				sum_itemwidth += item_width;
 				start_navigation_index = i;
 				if (i == end_navigation_index - 1 || sum_itemwidth > client_width) {
 					break;
@@ -1833,37 +1632,42 @@ if (!nexacro.Menu) {
 			}
 
 			for (i = 0, end = start_navigation_index; i < end; i++) {
-				if (items[i]) {
-					items[i]._applyElementVisible(false);
+				item = items[i];
+				if (item) {
+					item.move(0, 0, 0, 0);
 				}
 			}
 			for (i = start_navigation_index; i < end_navigation_index; i++) {
-				if (items[i]) {
-					items[i]._applyElementVisible(true);
-					items[i].move(left, 0, items_width[i], height);
+				item = items[i];
+				item_width = items_width[i];
+				if (item) {
+					item.move(left, 0, item_width, height);
 				}
-				left += items_width[i];
+				left += item_width;
 			}
-			if (end_navigation_index > 0 && end_navigation_index < items_len) {
-				for (i = end_navigation_index + 1; i < items_len; i++) {
-					if (items[i]) {
-						items[i]._applyElementVisible(false);
+			if (end_navigation_index > 0 && end_navigation_index < len) {
+				for (i = end_navigation_index + 1; i < len; i++) {
+					item = items[i];
+					if (item) {
+						item.move(0, 0, 0, 0);
 					}
 				}
 			}
 		}
 		else {
 			for (i = 0, end = start_navigation_index; i < end; i++) {
-				if (items[i]) {
-					items[i]._applyElementVisible(false);
+				item = items[i];
+				if (item) {
+					item.move(0, 0, 0, 0);
 				}
 			}
-			for (i = start_navigation_index; i < items_len; i++) {
-				sum_itemwidth += items_width[i];
-				if (i == start_navigation_index || sum_itemwidth <= client_width) {
-					if (items[i]) {
-						items[i]._applyElementVisible(true);
-						items[i].move(left, 0, items_width[i], height);
+			for (i = start_navigation_index; i < len; i++) {
+				item = items[i];
+				item_width = items_width[i];
+				sum_itemwidth += item_width;
+				if (i == start_navigation_index || sum_itemwidth < client_width) {
+					if (item) {
+						item.move(left, 0, item_width, height);
 					}
 				}
 				else {
@@ -1873,71 +1677,33 @@ if (!nexacro.Menu) {
 					break;
 				}
 				end_navigation_index = i + 1;
-				left += items_width[i];
+				left += item_width;
 			}
 
-			if (end_navigation_index > 0 && end_navigation_index < items_len) {
-				for (i = end_navigation_index; i < items_len; i++) {
-					items[i]._applyElementVisible(false);
+			if (end_navigation_index > 0 && end_navigation_index < len) {
+				for (i = end_navigation_index; i < len; i++) {
+					items[i].move(0, 0, 0, 0);
 				}
 			}
 		}
-
 		this._start_navigation_index = start_navigation_index;
 		this._end_navigation_index = end_navigation_index;
 	};
 
-	_pMenu._navigationNext = function (bKeyaction) {
-		var threshold = this._items.length;
-		var end_index = this._end_navigation_index;
-		var need_calc_start_index = false;
-		if (end_index < threshold) {
-			if (this._start_navigation_index == 0) {
-				this.prevbutton._changeStatus("disabled", false);
-			}
-			this._start_navigation_index++;
-		}
-		if (bKeyaction && end_index >= threshold) {
-			this._start_navigation_index = 0;
-			this.nextbutton._changeStatus("disabled", false);
-			this.prevbutton._changeStatus("disabled", true);
-		}
 
-		var b = this._rearrangeMenuItems(need_calc_start_index, -1);
-		if (b) {
-			this._navigationNext();
-		}
+	_pMenu._getDlgCode = function (keycode) {
+		var E = nexacro.Event;
+		var want_tab = this._want_tab;
+		var want_arrow = !(nexacro._enableaccessibility && (keycode == E.KEY_DOWN || keycode == E.KEY_UP));
+		this._want_tab = want_tab;
 
-		if (this._end_navigation_index == threshold) {
-			this.nextbutton._changeStatus("disabled", true);
-		}
-	};
-
-	_pMenu._navigationPrev = function (bKeyaction) {
-		var start_index = this._start_navigation_index;
-		var item_len = this._items.length;
-		var need_calc_start_index = false;
-		if (start_index > 0) {
-			start_index--;
-			if (start_index == 0) {
-				this.prevbutton._changeStatus("disabled", true);
-			}
-		}
-		else if (bKeyaction && start_index <= 0) {
-			this._end_navigation_index = item_len;
-			this.nextbutton._changeStatus("disabled", true);
-			this.prevbutton._changeStatus("disabled", false);
-			need_calc_start_index = true;
-		}
-		this._start_navigation_index = start_index;
-
-		var b = this._rearrangeMenuItems(need_calc_start_index, 1);
-		if (b) {
-			this._navigationPrev(true);
-		}
-		if (item_len > this._end_navigation_index) {
-			this.nextbutton._changeStatus("disabled", false);
-		}
+		return {
+			want_tab : want_tab, 
+			want_return : true, 
+			want_escape : false, 
+			want_chars : false, 
+			want_arrows : want_arrow
+		};
 	};
 
 	_pMenu._showPopup = function (obj, x, y, bcapture) {
@@ -1950,7 +1716,6 @@ if (!nexacro.Menu) {
 			if (popupmenu == null) {
 				popupmenu = this._popupmenu = new nexacro.PopupMenu("menupopupmenu", 0, 0, 0, 0, null, null, null, null, null, null, this);
 				popupmenu._setControl();
-				popupmenu._is_focus_accept = false;
 				this._setPopupContains(true);
 
 				var color = this._color ? this._color : this._getCurrentStyleInheritValue("color");
@@ -1998,7 +1763,7 @@ if (!nexacro.Menu) {
 			popupmenu.popuptype = this.popuptype;
 			popupmenu._track_capture = bcapture;
 			popupmenu._trackPopup(obj, "vertical", x, y);
-			this._is_item_selected = true;
+
 			if (popupmenu._is_popup()) {
 				var _window = this._getWindow();
 				if (_window) {
@@ -2013,186 +1778,48 @@ if (!nexacro.Menu) {
 		}
 	};
 
-	_pMenu._closePopup = function () {
-		var popup = this._popupmenu;
-
-		if (popup) {
-			popup.cancelPopup();
-
-			var _window = this._getWindow();
-			if (_window && this._track_capture) {
-				_window._releaseCaptureLock(this);
+	_pMenu._showNavigationButton = function (navigation_visible) {
+		this._is_navigation_visible = navigation_visible;
+		var prevbutton, nextbutton;
+		if (navigation_visible) {
+			if (!this.nextbutton || !this.prevbutton) {
+				this._createNavigationButton();
 			}
-		}
-		var cur_index = this._menuitemindex;
-		{
+			nextbutton = this.nextbutton;
+			prevbutton = this.prevbutton;
+			var buttonsize = this.navigationbuttonsize;
+			var prevbutton_width = 0;
+			var nextbutton_width = 0;
 
-			var item = this._items[cur_index];
-			if (item) {
-				item._on_apply_selected(false);
-			}
-		}
-		this._popupitemindex = -1;
-		this._menuitemindex = -1;
-	};
-
-	_pMenu._setContents = function (str) {
-		var doc = nexacro._parseXMLDocument(str);
-		var node = doc.getElementsByTagName("Dataset")[0];
-
-		if (!node) {
-			return false;
-		}
-
-		var idstr = node.attributes[0].value;
-
-		var normalDataset = new nexacro.NormalDataset(idstr, this);
-
-		if (node.firstChild) {
-			var childnode = node.firstChild;
-
-			var strXML = "";
-			while (childnode) {
-				if (node.nodeType == 1) {
-					strXML += nexacro._documentToXml(childnode);
-				}
-				childnode = childnode.nextSibling;
-			}
-			normalDataset._setContents(strXML);
-		}
-
-		this.set_innerdataset(normalDataset);
-
-		return true;
-	};
-
-	_pMenu._callbackFromDataset = function (obj, e) {
-		var reason = e.reason;
-		if (reason == 91) {
-			this._deleteMenu();
-		}
-		else {
-			this._createMenu();
-
-			if (this._is_created) {
-				this._recalcLayout();
-			}
-		}
-	};
-
-	_pMenu._item_focus = function (obj, bflag) {
-		var lastfocuedobj = this._last_focused;
-		if (lastfocuedobj && lastfocuedobj != obj) {
-			this._do_defocus(lastfocuedobj, false);
-		}
-
-		if (lastfocuedobj != obj) {
-			if (nexacro._enableaccessibility) {
-				if (obj instanceof nexacro._PopupMenuItemControl) {
-					obj._on_focus(false, "downkey");
-				}
-				else {
-					obj._on_focus(true, "downkey");
-				}
+			if (!buttonsize) {
+				var navigationbutton_width = this._getNavigationbuttonWidth(prevbutton, nextbutton);
+				prevbutton_width = navigationbutton_width[0];
+				nextbutton_width = navigationbutton_width[1];
 			}
 			else {
-				obj._on_focus(false, "");
+				prevbutton_width = buttonsize;
+				nextbutton_width = buttonsize;
 			}
-
-			if (!(obj instanceof nexacro._PopupMenuItemControl)) {
-				this._last_focused = obj;
-			}
-		}
-	};
-
-	_pMenu._item_killfocus = function (obj) {
-		if (obj) {
-			if (nexacro._enableaccessibility) {
-				var _window = this._getWindow();
-				if (_window) {
-					_window._removeFromCurrentFocusPath(obj, true);
-				}
-			}
-		}
-	};
-
-	_pMenu._select_menuitem = function (nextitemindex, previtemindex, popupvisible, direction) {
-		var next_item = this._items[nextitemindex > -1 ? nextitemindex : this._menuitemindex];
-		var prev_item = this._items[previtemindex];
-		this._closePopup();
-
-		if (prev_item && nextitemindex != previtemindex) {
-			prev_item._on_apply_selected(false);
-			this._do_defocus(prev_item, false);
-		}
-
-		if (this._isNavigationVisible() && direction) {
-			if (direction == "next") {
-				if (nextitemindex < this._previtemindex || nextitemindex >= this._end_navigation_index) {
-					this._navigationNext(true);
-				}
-			}
-			else if (direction == "prev") {
-				if (nextitemindex > this._previtemindex || nextitemindex < this._start_navigation_index) {
-					this._navigationPrev(true);
-				}
-			}
-		}
-
-		this._previtemindex = this._menuitemindex = nextitemindex;
-		if (this._is_item_selected) {
-			this._showPopup(next_item);
-			next_item._on_focus(false);
-			var popupmenu = this._popupmenu;
-			if (popupmenu) {
-				popupmenu._select_menuitem(popupmenu._getItemIndex(0));
-			}
-		}
-		this._item_focus(next_item, true);
-		next_item._on_apply_selected(true);
-	};
-
-	_pMenu._getItemIndex = function (inc) {
-		if (inc === undefined) {
-			inc = 0;
-		}
-		var menuitemindex = this._menuitemindex > -1 ? this._menuitemindex : this._popupitemindex;
-		menuitemindex += inc;
-		var menuitem_len = this._items ? this._items.length - 1 : 0;
-		if (menuitemindex > menuitem_len) {
-			menuitemindex = 0;
-		}
-		else if (menuitemindex < 0) {
-			menuitemindex = menuitem_len;
-		}
-		var item = this._items[menuitemindex];
-		if (!nexacro._enableaccessibility && item && item.enable == false && inc < 5 && inc > -5) {
-			return this._getItemIndex(inc + inc);
-		}
-
-		return menuitemindex;
-	};
-
-	_pMenu._getMenuHeight = function () {
-		var height = 0;
-		if (this.fittocontents == "height" || this.fittocontents == "both") {
-			height = this._on_getFitSize()[1];
+			var client_width = this._getClientWidth();
+			var client_height = this._getClientHeight();
+			prevbutton.set_visible(true);
+			prevbutton.move(0, 0, prevbutton_width, client_height);
+			nextbutton.set_visible(true);
+			nextbutton.move(client_width - nextbutton_width, 0, nextbutton_width, client_height);
 		}
 		else {
-			var total_h = 0;
-			var border = this._getCurrentStyleBorder();
-			var padding = this._getCurrentStylePadding();
-
-			if (border) {
-				total_h += border._getBorderHeight();
+			nextbutton = this.nextbutton;
+			if (nextbutton) {
+				nextbutton.set_visible(false);
+				nextbutton.move(0, 0, 0, 0);
 			}
 
-			if (padding) {
-				total_h += padding.top + padding.bottom;
+			prevbutton = this.prevbutton;
+			if (prevbutton) {
+				prevbutton.set_visible(false);
+				prevbutton.move(0, 0, 0, 0);
 			}
-			height = this._adjust_height - total_h;
 		}
-		return height;
 	};
 
 	_pMenu._getNavigationbuttonWidth = function (prevbutton, nextbutton) {
@@ -2245,40 +1872,67 @@ if (!nexacro.Menu) {
 		return [prev_width, next_width];
 	};
 
-	_pMenu._getPopupControl = function () {
-		return this._getRootComponent(this)._popupmenu;
-	};
+	_pMenu._setContents = function (str) {
+		var doc = nexacro._parseXMLDocument(str);
+		var node = doc.getElementsByTagName("Dataset")[0];
 
-	_pMenu._getEventInfoComponent = function (refer_comp) {
-		while (!refer_comp._is_eventinfo_control) {
-			refer_comp = refer_comp.parent;
+		if (!node) {
+			return false;
 		}
-		return refer_comp;
-	};
 
-	_pMenu._setEventHandlerToInnerDataset = function () {
-		if (this._innerdataset) {
-			this._innerdataset._setEventHandler("onload", this._callbackFromDataset, this);
-			this._innerdataset._setEventHandler("onrowposchanged", this._callbackFromDataset, this);
-			this._innerdataset._setEventHandler("oncolumnchanged", this._callbackFromDataset, this);
-			this._innerdataset._setEventHandler("onrowsetchanged", this._callbackFromDataset, this);
-			this._innerdataset._setEventHandler("onvaluechanged", this._callback_onvaluechanged, this);
+		var idstr = node.attributes[0].value;
+
+		var normalDataset = new nexacro.NormalDataset(idstr, this);
+
+		if (node.firstChild) {
+			var childnode = node.firstChild;
+
+			var strXML = "";
+			while (childnode) {
+				if (node.nodeType == 1) {
+					strXML += nexacro._documentToXml(childnode);
+				}
+				childnode = childnode.nextSibling;
+			}
+			normalDataset._setContents(strXML);
 		}
+
+		this.set_innerdataset(normalDataset);
+
+		return true;
 	};
 
-	_pMenu._removeEventHandlerToInnerDataset = function () {
-		if (this._innerdataset) {
-			this._innerdataset._removeEventHandler("onload", this._callbackFromDataset, this);
-			this._innerdataset._removeEventHandler("onrowposchanged", this._callbackFromDataset, this);
-			this._innerdataset._removeEventHandler("oncolumnchanged", this._callbackFromDataset, this);
-			this._innerdataset._removeEventHandler("onrowsetchanged", this._callbackFromDataset, this);
-			this._innerdataset._removeEventHandler("onvaluechanged", this._callback_onvaluechanged, this);
-			this._innerdataset = null;
+
+	_pMenu._getItemIndex = function (inc) {
+		if (inc === undefined) {
+			inc = 0;
+		}
+		var menuitemindex = this._menuitemindex + inc;
+		var menuitem_len = this._items ? this._items.length - 1 : 0;
+		if (menuitemindex > menuitem_len) {
+			menuitemindex = 0;
+		}
+		else if (menuitemindex < 0) {
+			menuitemindex = menuitem_len;
+		}
+		var item = this._items[menuitemindex];
+		if (!nexacro._enableaccessibility && item && item.enable == false && inc < 5 && inc > -5) {
+			return this._getItemIndex(inc + inc);
+		}
+
+		return menuitemindex;
+	};
+
+	_pMenu._do_defocus = function (target, bParent) {
+		var _window = this._getWindow();
+		_window._removeFromCurrentFocusPath(target, true);
+		target._changeStatus("focused", false);
+		if (bParent) {
+			_window._removeFromCurrentFocusPath(this, false);
 		}
 	};
 
 	_pMenu._setFocus = function (bResetScroll, dir) {
-		var previtemindex = this._previtemindex;
 		if (dir > -1 || dir < 4) {
 			this._focus_direction = dir;
 		}
@@ -2289,12 +1943,6 @@ if (!nexacro.Menu) {
 		var retn = this.setFocus(bResetScroll);
 		var menuitem = this._items;
 		var menuitem_len = menuitem.length - 1;
-
-		if (this._isNavigationVisible()) {
-			this._previtemindex = 0;
-			this._start_navigation_index = 0;
-			this._rearrangeMenuItems(false, 1);
-		}
 
 		if (menuitem_len > 0) {
 			if (dir >= 2) {
@@ -2310,8 +1958,7 @@ if (!nexacro.Menu) {
 				}
 				this._focus_obj = menuitem[this._menuitemindex];
 				this._menuitemonmouseenter = this._focus_obj;
-
-				this._select_menuitem(0, previtemindex);
+				this._item_focus(this._focus_obj, true);
 			}
 		}
 		else {
@@ -2329,24 +1976,6 @@ if (!nexacro.Menu) {
 		return retn;
 	};
 
-	_pMenu._setHotkey = function (id, v, item) {
-		var hotkey = new nexacro._HotKey(v);
-		if (hotkey._isEmpty()) {
-			delete hotkey;
-		}
-		else {
-			if (this._is_created) {
-				this._registerItemHotkey(hotkey);
-			}
-		}
-
-		var list = {
-			id : id, 
-			key : hotkey, 
-			obj : item
-		};
-		this._hot_key_list.push(list);
-	};
 
 	_pMenu._loaded_expImage = function (imgurl, w, h) {
 		this._expImage_width = w;
@@ -2385,22 +2014,237 @@ if (!nexacro.Menu) {
 		}
 	};
 
-	_pMenu._isPopupVisible = function () {
-		return this._popupmenu ? this._popupmenu._is_popup() : false;
-	};
-
-	_pMenu._isPopupmenuVisible = function (obj) {
-		if (obj._popupmenu == null || obj._popupmenu.visible == false) {
-			return false;
-		}
-		return true;
-	};
-
 	_pMenu._isNavigationVisible = function () {
-		if (this._items_total_width > this._getClientWidth()) {
+		if (this._items_total_width > this._adjust_width) {
 			return true;
 		}
 		return false;
+	};
+
+	_pMenu._navigationnext = function (bKeyaction) {
+		var threshold = this._items.length;
+		var end_index = this._end_navigation_index;
+		var need_calc_start_index = false;
+		if (end_index < threshold) {
+			if (this._start_navigation_index == 0) {
+				this.prevbutton._changeStatus("disabled", false);
+			}
+			this._start_navigation_index++;
+		}
+		if (bKeyaction && end_index >= threshold) {
+			this._start_navigation_index = 0;
+			this.nextbutton._changeStatus("disabled", false);
+			this.prevbutton._changeStatus("disabled", true);
+		}
+
+		var b = this._rearrangeMenuItems(need_calc_start_index, -1);
+		if (b) {
+			this._navigationnext();
+		}
+
+		if (this._end_navigation_index == threshold) {
+			this.nextbutton._changeStatus("disabled", true);
+		}
+	};
+
+	_pMenu._navigationprev = function (bKeyaction) {
+		var start_index = this._start_navigation_index;
+		var item_len = this._items.length;
+		var need_calc_start_index = false;
+		if (start_index > 0) {
+			start_index--;
+			if (start_index == 0) {
+				this.prevbutton._changeStatus("disabled", true);
+			}
+		}
+		else if (bKeyaction && start_index <= 0) {
+			this._end_navigation_index = item_len;
+			this.nextbutton._changeStatus("disabled", true);
+			this.prevbutton._changeStatus("disabled", false);
+			need_calc_start_index = true;
+		}
+		this._start_navigation_index = start_index;
+
+		var b = this._rearrangeMenuItems(need_calc_start_index, 1);
+		if (b) {
+			this._navigationprev(true);
+		}
+		if (item_len > this._end_navigation_index) {
+			this.nextbutton._changeStatus("disabled", false);
+		}
+	};
+
+	_pMenu._createNavigationButton = function () {
+		var navagationprevbutton = new nexacro.Button("prevbutton", 0, 0, 0, 0, null, null, null, null, null, null, this);
+		navagationprevbutton._setControl("ButtonControl");
+		navagationprevbutton.createComponent();
+		navagationprevbutton.set_visible(true);
+		navagationprevbutton._setEventHandler("onclick", this.on_notify_navigationprev_onclick, this);
+		navagationprevbutton.on_created();
+		navagationprevbutton._changeStatus("disabled", true);
+		this.prevbutton = navagationprevbutton;
+
+		var navagationnextbutton = new nexacro.Button("nextbutton", 0, 0, 0, 0, null, null, null, null, null, null, this);
+		navagationnextbutton._setControl("ButtonControl");
+		navagationnextbutton.createComponent();
+		navagationnextbutton.set_visible(true);
+		navagationnextbutton._setEventHandler("onclick", this.on_notify_navigationnext_onclick, this);
+		navagationnextbutton.on_created();
+		this.nextbutton = navagationnextbutton;
+	};
+
+
+	_pMenu._getPopupControl = function () {
+		var rootcomp = this._getRootComponent(this);
+		return rootcomp._popupmenu;
+	};
+
+	_pMenu._isPopupVisible = function () {
+		var popupmenu = this._popupmenu;
+		return popupmenu ? popupmenu._is_popup() : false;
+	};
+
+	_pMenu._callbackFromDataset = function (obj, e) {
+		var _reason = e.reason;
+		if (_reason == 91) {
+			this._deleteMenu();
+		}
+		else {
+			this._createMenu();
+			if (this._is_created) {
+				this._relayout();
+			}
+		}
+	};
+
+	_pMenu._callback_onvaluechanged = function (obj, e) {
+		if (this._is_created) {
+			this.on_fire_oninnerdatachanged(obj, e.oldvalue, e.newvalue, e.columnid, e.col, e.row);
+		}
+	};
+
+	_pMenu._relayout = function () {
+		if (this._isNavigationVisible()) {
+			this._showNavigationButton(true);
+			this._rearrangeMenuItems();
+		}
+		else {
+			this._showNavigationButton(false);
+		}
+	};
+
+	_pMenu._closePopup = function () {
+		var popup = this._popupmenu;
+
+		if (popup) {
+			popup.cancelPopup();
+
+			var _window = this._getWindow();
+			if (_window && this._track_capture) {
+				_window._releaseCaptureLock(this);
+			}
+		}
+		var cur_index = this._menuitemindex;
+		{
+
+			var item = this._items[cur_index];
+			if (item) {
+				item._on_apply_selected(false);
+			}
+		}
+		this._popupitemindex = -1;
+		this._menuitemindex = -1;
+	};
+
+	_pMenu.on_fire_onkillfocus = function (obj, fromObj) {
+		this._closePopup();
+		var cur_index = this._menuitemindex;
+		if (cur_index > -1) {
+			var item = this._items[cur_index];
+			if (item) {
+				item._on_apply_selected(false);
+			}
+		}
+		var lastfocuseditem = this._last_focused;
+		if (lastfocuseditem && lastfocuseditem != obj) {
+			this._do_defocus(lastfocuseditem, true);
+		}
+		nexacro.Component.prototype.on_fire_onkillfocus.call(this, obj, fromObj);
+	};
+
+	_pMenu.on_notify_onclosepopup = function (obj) {
+		var _window = this._getWindow();
+		if (_window && this._track_capture) {
+			_window._releaseCaptureLock(this);
+		}
+
+		var items = this._items;
+		if (items) {
+			var prev_sel_menu = this._previtemindex;
+			var item = items[prev_sel_menu];
+			if (item) {
+				item._on_apply_selected(false);
+			}
+			this._popupitemindex = this._menuitemindex = -1;
+		}
+	};
+
+
+	_pMenu._set_hotkey = function (id, v) {
+		var hotkey = new nexacro._HotKey(v);
+		if (hotkey._isEmpty()) {
+			delete hotkey;
+		}
+		else {
+			if (this._is_created) {
+				this._registerItemHotkey(hotkey);
+			}
+		}
+
+		var list = {
+			id : id, 
+			key : hotkey
+		};
+		this._hot_key_list.push(list);
+	};
+
+	_pMenu._item_focus = function (obj, bflag) {
+		var lastfocuedobj = this._last_focused;
+		if (lastfocuedobj && lastfocuedobj != obj) {
+			this._do_defocus(lastfocuedobj, false);
+		}
+		var evt_name = "";
+		if (nexacro._enableaccessibility) {
+			evt_name = "downkey";
+		}
+		if (lastfocuedobj != obj) {
+			if (nexacro._enableaccessibility) {
+				if (obj instanceof nexacro._PopupMenuItemControl) {
+					obj._on_focus(false, evt_name);
+				}
+				else {
+					obj._on_focus(true, evt_name);
+				}
+			}
+			else {
+				obj._on_focus(false, evt_name);
+			}
+
+			if (!(obj instanceof nexacro._PopupMenuItemControl)) {
+				this._last_focused = obj;
+			}
+		}
+	};
+
+	_pMenu._item_killfocus = function (obj) {
+		if (obj) {
+			if (nexacro._enableaccessibility) {
+				var _window = this._getWindow();
+				if (_window) {
+					_window._removeFromCurrentFocusPath(obj, true);
+				}
+			}
+		}
 	};
 
 	_pMenu._item_find = function (obj) {
@@ -2408,6 +2252,13 @@ if (!nexacro.Menu) {
 			return obj._items;
 		}
 		return obj._popupmenu._items;
+	};
+
+	_pMenu._is_popupmenu_visible = function (obj) {
+		if (obj._popupmenu == null || obj._popupmenu.visible == false) {
+			return false;
+		}
+		return true;
 	};
 
 	_pMenu._popupmenu_find = function (obj) {
@@ -2423,15 +2274,6 @@ if (!nexacro.Menu) {
 
 	_pMenu._popupmenuitem_extend = function (obj) {
 		return obj._canExpand;
-	};
-
-	_pMenu._do_defocus = function (target, bParent) {
-		var _window = this._getWindow();
-		_window._removeFromCurrentFocusPath(target, true);
-		target._changeStatus("focused", false);
-		if (bParent) {
-			_window._removeFromCurrentFocusPath(this, false);
-		}
 	};
 
 	delete _pMenu;

@@ -12,25 +12,25 @@ public class ScholarshipStoreLogic implements ScholarshipStore {
 
 	@Override
 	public List<Scholarship> selectAllScholar(SqlSession sqlSession) {
-		List<Scholarship> sList = sqlSession.selectList("ScholarMapper.selectAllScholar");
+		List<Scholarship> sList = sqlSession.selectList("ScholarshipMapper.selectAllScholar");
 		return sList;
 	}
 
 	@Override
 	public int insertScholar(SqlSession sqlSession, Scholarship scholarship) {
-		int result = sqlSession.insert("ScholarMapper.insertScholar", scholarship);
+		int result = sqlSession.insert("ScholarshipMapper.insertScholar", scholarship);
 		return result;
 	}
 
 	@Override
 	public List<Scholarship> selectResult(SqlSession sqlSession) {
-		List<Scholarship>sList = sqlSession.selectList("ScholarMapper.selectResult");
+		List<Scholarship>sList = sqlSession.selectList("ScholarshipMapper.selectResult");
 		return sList;
 	}
 
 	@Override
 	public int registerScholar(SqlSession sqlSession, Scholarship scholarship) {
-		int result = sqlSession.insert("ScholarMapper.registerScholar", scholarship);
+		int result = sqlSession.insert("ScholarshipMapper.registerScholar", scholarship);
 		return result;
 	}
 

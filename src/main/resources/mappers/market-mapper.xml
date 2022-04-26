@@ -78,5 +78,48 @@
 	<delete id="deleteMarket">
 		DELETE FROM MARKET_TBL WHERE MARKET_NO = #{marketNo}
 	</delete>
+	
+	
+	<!-- 댓글 -->
+	<resultMap type="MarketReply" id="mReplyResult">
+		<id property="marketReplyNo" column="MARKETREPLY_NO"></id>
+		<result property="marketNo" column="MARKET_NO"/>
+		<result property="mReplyWriter" column="M_REPLY_WRITER"/>
+		<result property="mReplyContent" column="M_REPLY_CONTENT"/>
+		<result property="mReplyDate" column="M_REPLY_DATE"/>
+		<result property="mReplyUpdateDat" column="M_REPLY_UPDATEDATE"/>
+	</resultMap>
+	
+	
+	
+	<select id="selectAllReply" resultMap="mReplyResult">
+		SELECT * FROM MARKETREPLY_TBL WHERE MARKET_NO = #{marketNo}
+	</select>
+	
+	<insert id="insertReply">
+		INSERT INTO MARKETREPLY_TBL VALUES(SEQ_MARKETREPLY_NO.NEXTVAL, #{marketNo}, #{mReplyWriter}, #{mReplyContent}, DEFAULT, DEFAULT)
+	</insert>
+	
+	<update id="updateReply">
+		UPDATE MARKETREPLY_TBL SET M_REPLY_CONTENT = #{mReplyContent} WHERE MARKET_NO = #{marketNo} AND MARKETREPLY_NO = #{marketReplyNo}
+	</update>
+	
+	<delete id="deleteReply">
+		DELETE FROM MARKETREPLY_TBL WHERE MARKET_NO=#{marketNo} AND MARKETREPLY_NO=#{marketReplyNo}
+	</delete>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 </mapper>

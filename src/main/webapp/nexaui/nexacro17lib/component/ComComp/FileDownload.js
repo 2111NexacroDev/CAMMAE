@@ -145,18 +145,15 @@ if (!nexacro.FileDownload) {
 			targetpath = nexacro._toString(targetpath);
 		}
 
-		var owner_frame = this._getOwnerFrame();
-		var is_popup_frame = owner_frame ? owner_frame._is_popup_frame : false;
-
 		if (url != undefined) {
 			url = nexacro._toString(url);
 			url = nexacro._getImageLocation(url);
 
-			ret = nexacro._download(url, is_popup_frame, this._hidden_frame_handle, initname, targetpath, this.filefilter, this.filefilterindex);
+			ret = nexacro._download(url, this._hidden_frame_handle, initname, targetpath, this.filefilter, this.filefilterindex);
 		}
 		else if (downloadurl != undefined && downloadurl != "") {
 			downloadurl = nexacro._getServiceLocation(downloadurl);
-			ret = nexacro._download(downloadurl, is_popup_frame, this._hidden_frame_handle, initname, targetpath, this.filefilter, this.filefilterindex);
+			ret = nexacro._download(downloadurl, this._hidden_frame_handle, initname, targetpath, this.filefilter, this.filefilterindex);
 		}
 		return ret === null ? false : true;
 	};
@@ -172,8 +169,8 @@ if (!nexacro.FileDownload) {
 		}
 	};
 
-	_pFileDownload.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
-		var ret = nexacro.Component.prototype.on_fire_sys_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
+	_pFileDownload.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+		var ret = nexacro.Component.prototype.on_fire_sys_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
 
 		if (key_code == 13 || key_code == 32) {
 			this.on_fire_onclick("none", false, false, false, -1, -1, -1, -1, -1, -1, this, this);
@@ -206,8 +203,8 @@ if (!nexacro.FileDownload) {
 		}
 	};
 
-	_pFileDownload.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		var ret = nexacro.Component.prototype.on_fire_onclick.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
+	_pFileDownload.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		var ret = nexacro.Component.prototype.on_fire_onclick.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
 		this.download();
 		return ret;
 	};

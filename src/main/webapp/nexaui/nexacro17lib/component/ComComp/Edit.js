@@ -39,7 +39,6 @@ if (!nexacro.Edit) {
 	_pEdit.inputmode = "normal";
 	_pEdit.inputfilter = "none";
 	_pEdit.inputtype = "normal";
-	_pEdit.imeaction = "none";
 	_pEdit.imemode = "none";
 	_pEdit.useime = "global";
 	_pEdit.text = "";
@@ -51,7 +50,6 @@ if (!nexacro.Edit) {
 	_pEdit._inputfilter_obj = null;
 	_pEdit._inputtype_obj = null;
 	_pEdit._undostack = null;
-	_pEdit._is_undo = false;
 
 	_pEdit._default_value = undefined;
 	_pEdit._default_text = "";
@@ -60,27 +58,24 @@ if (!nexacro.Edit) {
 
 	_pEdit._processing_updateToDataset = false;
 	_pEdit._result_updateToDataset = true;
-	_pEdit._processing_canchange = false;
 
 	_pEdit._onlydisplay = false;
 	_pEdit._apply_client_padding = false;
 	_pEdit._has_inputElement = true;
-	_pEdit._change_value = false;
-	_pEdit._processing_autoskip = false;
 
 
 	_pEdit._is_simple_control = true;
 	_pEdit._is_editable_control = true;
 	_pEdit._use_readonly_status = true;
 
-	if (nexacro._Browser == "IE" || nexacro._Browser == "Runtime") {
+	if ((nexacro._Browser == "IE" && nexacro._BrowserType != "Edge") || nexacro._Browser == "Runtime") {
 		_pEdit._set_node_value = false;
 	}
 	else {
 		_pEdit._set_node_value = true;
 	}
 
-	if ((nexacro._Browser == "IE" && nexacro._BrowserVersion < 10) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+	if ((nexacro._Browser == "IE" && nexacro._BrowserVersion < 10) || nexacro._BrowserType == "Edge") {
 		_pEdit._use_focus_caret = true;
 		_pEdit._caret_pos = -1;
 	}
@@ -116,12 +111,10 @@ if (!nexacro.Edit) {
 		"canchange" : 1, 
 		"onchanged" : 1, 
 		"oninput" : 1, 
-		"onimeaction" : 1, 
 		"oncontextmenu" : 1, 
 		"ontouchstart" : 1, 
 		"ontouchmove" : 1, 
-		"ontouchend" : 1, 
-		"ondevicebuttonup" : 1
+		"ontouchend" : 1
 	};
 
 
@@ -137,7 +130,6 @@ if (!nexacro.Edit) {
 				input_elem.setElementAutoSelect(this.autoselect);
 				input_elem.setElementUseIme(this.useime);
 				input_elem.setElementImeMode(this.imemode);
-				input_elem.setElementImeAction(this.imeaction);
 				input_elem.setElementReadonly(this.readonly);
 				input_elem.setElementDisplayNullText(this.displaynulltext);
 				input_elem.setElementMaxLength(this.maxlength);
@@ -245,17 +237,18 @@ if (!nexacro.Edit) {
 
 		var input_elem = this._input_element;
 		if (input_elem) {
+			input_elem.on_apply_imeSet();
+			input_elem.on_apply_force_imeSet();
+
+
+			if (evt_name) {
+				this._default_value = this.value;
+				this._default_text = this.text;
+			}
+
+			this._changeUserStatus("nulltext", false);
+
 			if (!this._onlydisplay) {
-				input_elem.on_apply_imeSet();
-				input_elem.on_apply_force_imeSet();
-
-				if (evt_name) {
-					this._default_value = this.value;
-					this._default_text = this.text;
-				}
-
-				this._changeUserStatus("nulltext", false);
-
 				input_elem.setElementFocus(evt_name, self_flag);
 
 				var text = input_elem.getElementText();
@@ -274,33 +267,10 @@ if (!nexacro.Edit) {
 					}
 					else {
 						if (this._caret_pos == -1) {
-							if (this._change_value) {
-								input_elem.setElementSetSelect(this.value ? this.value.length : 0);
-							}
-							else {
-								if (nexacro._isDesktop() || input_elem._is_sys_focused) {
-									if (nexacro._Browser != "Runtime" && evt_name == "focus") {
-										input_elem._use_timer = true;
-									}
-
-									input_elem.setElementSetSelect(0, 0);
-
-									if (nexacro._Browser != "Runtime" && evt_name == "focus") {
-										input_elem._use_timer = false;
-									}
-								}
-							}
+							input_elem.setElementSetSelect(0, 0);
 						}
 					}
 				}
-			}
-			else {
-				if (evt_name) {
-					this._default_value = this.value;
-					this._default_text = this.text;
-				}
-
-				this._changeUserStatus("nulltext", false);
 			}
 		}
 	};
@@ -320,7 +290,7 @@ if (!nexacro.Edit) {
 		}
 	};
 
-	_pEdit.on_init_bindSource = function (columnid, propid, ds) {
+	_pEdit.on_init_bindSource = function (columnid, propid) {
 		if (propid == "value") {
 			if (this._undostack) {
 				this._undostack.clear();
@@ -333,6 +303,11 @@ if (!nexacro.Edit) {
 	_pEdit.on_change_bindSource = function (propid, ds, row, col) {
 		if (propid == "value") {
 			var input_elem = this._input_element;
+			if (input_elem) {
+				if (!this._onlydisplay) {
+					input_elem.setCompositionComplete();
+				}
+			}
 
 			var v = ds.getColumn(row, col);
 			v = this._convertValueType(v, true);
@@ -402,13 +377,7 @@ if (!nexacro.Edit) {
 				total_h += padding.top + padding.bottom;
 			}
 
-			var text;
-			if (this._displaytext && this._displaytext !== "") {
-				text = this._displaytext;
-			}
-			else {
-				text = this.text;
-			}
+			var text = this.text;
 			if (text) {
 				var font = this._getCurrentStyleInheritValue("font");
 				var wordspace = this._getCurrentStyleInheritValue("wordSpacing");
@@ -447,9 +416,7 @@ if (!nexacro.Edit) {
 			var text = this.text;
 			value = (this.value ? this.text : this.value);
 
-			var _form = this._getForm();
-			var _cur_focus = _form ? _form.getFocus() : null;
-			if (this._is_created && nexacro._isNull(this.value) && _cur_focus !== this) {
+			if (this._is_created && nexacro._isNull(this.value)) {
 				this._changeUserStatus("nulltext", true);
 			}
 			else {
@@ -489,9 +456,6 @@ if (!nexacro.Edit) {
 			pos = input_elem.getElementCaretPos();
 			if (pos && pos != -1) {
 				this._caret_pos = pos;
-			}
-			else {
-				this._change_value = this._is_created ? true : false;
 			}
 		}
 	};
@@ -654,33 +618,6 @@ if (!nexacro.Edit) {
 			}
 
 			input_elem.setElementInputType(this.password ? "password" : this._keypad_type);
-		}
-	};
-
-	_pEdit.set_imeaction = function (v) {
-		if (v) {
-			var imeaction_arr = v.split(',');
-			var imeaction_enum = ["none", "done", "go", "search", "send", "next", "previous"];
-			for (var i = 0, len = imeaction_arr.length; i < len; i++) {
-				if (imeaction_enum.indexOf(imeaction_arr[i]) == -1) {
-					return;
-				}
-			}
-		}
-		else {
-			return;
-		}
-
-		if (this.imeaction != v) {
-			this.imeaction = v;
-			this.on_apply_imeaction(v);
-		}
-	};
-
-	_pEdit.on_apply_imeaction = function (imeaction) {
-		var input_elem = this._input_element;
-		if (input_elem && !this._onlydisplay) {
-			input_elem.setElementImeAction(imeaction);
 		}
 	};
 
@@ -943,19 +880,6 @@ if (!nexacro.Edit) {
 					return "";
 				}
 
-				var new_v = "";
-				if (this._inputtype_obj) {
-					var v_len = v.length;
-					for (var i = 0; i < v_len; i++) {
-						var ch = v[i];
-						if (this._inputtype_obj.test(ch)) {
-							new_v += ch;
-						}
-					}
-
-					v = new_v;
-				}
-
 				var insertlen = v.length;
 				var src = this.text.substring(start, end);
 				var newtext = this.text;
@@ -966,7 +890,7 @@ if (!nexacro.Edit) {
 				newtext = newtext.substring(0, start) + v + newtext.substring(end);
 
 				if (this.text != newtext) {
-					this.set_value(newtext);
+					this._setValue(newtext);
 					input_elem.setElementSetSelect(start, start + insertlen);
 				}
 
@@ -991,9 +915,7 @@ if (!nexacro.Edit) {
 	_pEdit.on_deactivate_process = function () {
 		var input_elem = this._input_element;
 		if (input_elem) {
-			if (!this._onlydisplay) {
-				input_elem.setCompositionComplete();
-			}
+			input_elem.setCompositionComplete();
 		}
 	};
 
@@ -1008,6 +930,7 @@ if (!nexacro.Edit) {
 
 		this.on_deactivate_process.call(this);
 	};
+
 
 	_pEdit._on_value_change = function (pretext, prevalue, posttext, postvalue) {
 		if (!this.on_fire_canchange(this, pretext, prevalue, posttext, postvalue)) {
@@ -1029,9 +952,6 @@ if (!nexacro.Edit) {
 			return false;
 		}
 		else if (!this.applyto_bindSource("value", postvalue)) {
-			this._default_value = prevalue;
-			this._default_text = pretext;
-
 			return false;
 		}
 
@@ -1047,7 +967,6 @@ if (!nexacro.Edit) {
 		var input_elem = this._input_element;
 		if (input_elem) {
 			if (item) {
-				this._is_undo = true;
 				var caret = item.end;
 				if (item.value && item.value.length > caret) {
 					caret = item.value.length;
@@ -1074,16 +993,12 @@ if (!nexacro.Edit) {
 		}
 	};
 
-	_pEdit.on_keydown_basic_before_process = function (keycode, alt_key, ctrl_key, shift_key, meta_key) {
+	_pEdit.on_keydown_basic_before_process = function (keycode, alt_key, ctrl_key, shift_key) {
 		return true;
 	};
 
-	_pEdit.on_keydown_basic_specialkey_process = function (keycode, alt_key, ctrl_key, shift_key, meta_key) {
+	_pEdit.on_keydown_basic_specialkey_process = function (keycode, alt_key, ctrl_key, shift_key) {
 		var input_elem = this._input_element;
-
-		if (nexacro._OS == "Mac OS" || nexacro._OS == "OSX" || nexacro._OS == "iOS") {
-			ctrl_key = meta_key;
-		}
 
 		if (keycode == nexacro.KeyCode_ImeInput && this._imedisable) {
 			input_elem.stopSysEvent();
@@ -1114,7 +1029,7 @@ if (!nexacro.Edit) {
 		return true;
 	};
 
-	_pEdit.on_keydown_basic_process = function (keycode, alt_key, ctrl_key, shift_key, meta_key) {
+	_pEdit.on_keydown_basic_process = function (keycode, alt_key, ctrl_key, shift_key) {
 		var input_elem = this._input_element;
 		if (this._undostack && !input_elem.isComposing()) {
 			var pos = input_elem.getElementCaretPos();
@@ -1126,31 +1041,29 @@ if (!nexacro.Edit) {
 		return true;
 	};
 
-	_pEdit.on_keydown_basic_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pEdit.on_keydown_basic_action = function (keycode, alt_key, ctrl_key, shift_key) {
 		if (this.readonly || !this._isEnable()) {
 			return;
 		}
 
 		var input_elem = this._input_element;
 		if (input_elem) {
-			if (!this.on_keydown_basic_before_process.call(this, keycode, alt_key, ctrl_key, shift_key, meta_key)) {
+			if (!this.on_keydown_basic_before_process.call(this, keycode, alt_key, ctrl_key, shift_key)) {
 				return;
 			}
-			if (!this.on_keydown_basic_specialkey_process.call(this, keycode, alt_key, ctrl_key, shift_key, meta_key)) {
+			if (!this.on_keydown_basic_specialkey_process.call(this, keycode, alt_key, ctrl_key, shift_key)) {
 				return;
 			}
 
-			this.on_keydown_basic_process.call(this, keycode, alt_key, ctrl_key, shift_key, meta_key);
+			this.on_keydown_basic_process.call(this, keycode, alt_key, ctrl_key, shift_key);
 		}
 	};
 
 	_pEdit.on_keydown_default_before_process = function (keycode) {
 		return true;
 	};
-
 	_pEdit.on_keydown_default_specialkey_process = function (keycode) {
 		var input_elem = this._input_element;
-		var pos = input_elem.getElementCaretPos();
 
 		if (keycode == nexacro.Event.KEY_RETURN) {
 			if (input_elem.isComposing()) {
@@ -1165,22 +1078,6 @@ if (!nexacro.Edit) {
 
 			if (pre_value != cur_value) {
 				if (!this._on_value_change(pre_text, pre_value, cur_text, cur_value)) {
-					var cur_text_len = cur_text ? cur_text.length : 0;
-					var pre_text_len = pre_text ? pre_text.length : 0;
-					if (pos != -1) {
-						if (cur_text_len - pre_text_len >= 0) {
-							pos.begin = pos.end = pos.begin - (cur_text_len - pre_text_len);
-						}
-
-						if (pos.begin < 0) {
-							pos.begin = pos.end = 0;
-						}
-					}
-
-					if (pos && pos != -1) {
-						this._caret_pos = pos;
-					}
-
 					this.value = pre_value;
 					this.text = pre_text;
 
@@ -1248,7 +1145,7 @@ if (!nexacro.Edit) {
 		charcode = charcode || keycode;
 
 		var input_elem = this._input_element;
-		if (!ctrl_key && !alt_key && charcode) {
+		if (!ctrl_key && !alt_key && charcode && !input_elem.isComposing()) {
 			var inputChar = String.fromCharCode(charcode);
 			if (inputChar.length > 0 && this._isFilterChar(inputChar)) {
 				input_elem.stopSysEvent();
@@ -1353,31 +1250,29 @@ if (!nexacro.Edit) {
 
 			var pos = input_elem.getElementCaretPos();
 			if (pre_value != cur_value) {
-				if (!this._processing_canchange) {
-					if (!this._on_value_change(pre_text, pre_value, cur_text, cur_value)) {
-						var cur_text_len = cur_text ? cur_text.length : 0;
-						var pre_text_len = pre_text ? pre_text.length : 0;
-						if (pos != -1) {
-							if (cur_text_len - pre_text_len >= 0) {
-								pos.begin = pos.end = pos.begin - (cur_text_len - pre_text_len);
-							}
-
-							if (pos.begin < 0) {
-								pos.begin = pos.end = 0;
-							}
-
-							this._caret_pos = pos;
-						}
-						else {
-							this._caret_pos.begin = this._caret_pos.end = pre_value ? pre_value.length : 0;
+				if (!this._on_value_change(pre_text, pre_value, cur_text, cur_value)) {
+					var cur_text_len = cur_text ? cur_text.length : 0;
+					var pre_text_len = pre_text ? pre_text.length : 0;
+					if (pos != -1) {
+						if (cur_text_len - pre_text_len >= 0) {
+							pos.begin = pos.end = pos.begin - (cur_text_len - pre_text_len);
 						}
 
-						this.value = pre_value;
-						this.text = pre_text;
+						if (pos.begin < 0) {
+							pos.begin = pos.end = 0;
+						}
 
-						input_elem.setElementValue(pre_value);
-						input_elem.setElementSetSelect(this._caret_pos.begin, this._caret_pos.end);
+						this._caret_pos = pos;
 					}
+					else {
+						this._caret_pos.begin = this._caret_pos.end = pre_value ? pre_value.length : 0;
+					}
+
+					this.value = pre_value;
+					this.text = pre_text;
+
+					input_elem.setElementValue(pre_value);
+					input_elem.setElementSetSelect(this._caret_pos.begin, this._caret_pos.end);
 				}
 			}
 			else {
@@ -1408,8 +1303,6 @@ if (!nexacro.Edit) {
 	};
 
 	_pEdit.on_killfocus_basic_action = function () {
-		nexacro.Component.prototype.on_killfocus_basic_action.call(this);
-
 		var input_elem = this._input_element;
 		if (input_elem) {
 			if (!this._onlydisplay) {
@@ -1438,12 +1331,12 @@ if (!nexacro.Edit) {
 		}
 	};
 
-	_pEdit.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pEdit.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY) {
 		if (this.oneditclick && this.oneditclick._has_handlers) {
 			var caretpos = this.getCaretPos();
 			var clientXY = this._getClientXY(canvasX, canvasY);
 
-			var evt = new nexacro.EditClickEventInfo(this, "oneditclick", caretpos, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, this, meta_key);
+			var evt = new nexacro.EditClickEventInfo(this, "oneditclick", caretpos, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, this);
 			return this.oneditclick._fireEvent(this, evt);
 		}
 
@@ -1453,12 +1346,7 @@ if (!nexacro.Edit) {
 	_pEdit.on_fire_canchange = function (obj, pretext, prevalue, posttext, postvalue) {
 		if (this.canchange && this.canchange._has_handlers) {
 			var evt = new nexacro.ChangeEventInfo(obj, "canchange", pretext, prevalue, posttext, postvalue);
-
-			this._processing_canchange = true;
-			var ret = this.canchange._fireCheckEvent(this, evt);
-			this._processing_canchange = false;
-
-			return ret;
+			return this.canchange._fireCheckEvent(this, evt);
 		}
 
 		return true;
@@ -1508,7 +1396,9 @@ if (!nexacro.Edit) {
 		}
 	};
 
-	_pEdit._setDefaultCaret = nexacro._emptyFn;
+	_pEdit._setDefaultCaret = function () {
+		this.setCaretPos(0);
+	};
 
 	_pEdit._setFocusToNextComponent = function () {
 		var root_comp = this._getRootComponent(this);
@@ -1690,11 +1580,11 @@ if (!nexacro.Edit) {
 		}
 	};
 
-	_pEdit._on_input_compositionend = function (value, _pos) {
+	_pEdit._on_input_compositionend = function (value) {
 		var input_elem = this._input_element;
 		if (input_elem) {
 			if (this._undostack) {
-				var pos = _pos ? _pos : input_elem.getElementCaretPos();
+				var pos = input_elem.getElementCaretPos();
 				if (pos && pos != -1) {
 					this._undostack.push(value, pos.begin, pos.end);
 				}

@@ -39,6 +39,27 @@ h3 {
 	font-weight: bold;
 	margin-right: 5px;
 }
+
+/* 댓글 */
+#rMarketWriter {
+	width: 80%;
+	float: left;
+}
+
+#rMarketDate {
+	width: 20%;
+	float: left;
+}
+
+#rMarketContent {
+	width: 80%;
+	float: left;
+}
+
+
+
+
+
 </style>
 </head>
 
@@ -85,8 +106,125 @@ h3 {
 				${market.marketContent }</div>
 			<br> 댓글
 			<hr style="width: 585px; text-align: center;">
+<!-- 댓글 입력 -->
+			<div>
+				<input type="hidden" id="marketNo" value="${market.marketNo }">
+				<textarea rows="3" cols="70" id="rContents"></textarea>
+				<button class="btn" id="rbtn">등록</button>
+			</div>
+			<hr style="width: 585px; text-align: center;">
+			<!-- 댓글 조회 -->
+			<div id="replyArea">
+			<table align="center" width="600px" id="rtb">
+				<thead>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
 
+			</div>
 		</div>
 	</div>
+	
+	
+	<!-- 댓글동작  -->
+	<script>
+		getMarketReplyList(); //페이지가 로드 시 함수 동작
+		$("#rbtn").on("click", function(){
+			var marketNo = $("#marketNo").val(); /* 어떤 게시글에 대한 댓글인지 알기 위함 */
+			var rContents = $("#rContents").val();
+			$.ajax({
+				url : "/market/replyAdd",
+				type : "post",
+				data : {"marketNo" : marketNo , "mReplyContent" : rContents }, //json형태
+				success : function(data) {
+					getMarketReplyList();
+					//성공시 작성된 내용 초기화
+					$("#rContents").val("");
+				},
+				error : function(data) { alert("ajax 실패")}
+			});
+		})
+		
+		//댓글 불러오는 함수
+		function getMarketReplyList(){
+				var marketNo = $("#marketNo").val();
+			$.ajax({
+				url : "/market/replyList",
+				type : "get",
+				data : { 
+					"marketNo" : marketNo 
+					},
+				success : function(data) {
+					var $tableBody = $("#rtb tbody");
+					$tableBody.html("");
+					for(var i = 0; i<data.length; i++){
+					var $tr = $("<tr>");
+					var $rWriter = $("<td width='100'>").text(data[i].mReplyWriter);
+					var $rContent = $("<td>").text(data[i].mReplyContent);
+					var $rDate = $("<td width='100'>").text(data[i].mReplyDate);
+					var $btnArea = $("<td width='80'>")
+					.append("<a href='javascript:void(0)' onclick='modifyReplyView(this,"+data[i].marketNo+", "+data[i].marketReplyNo+", \""+data[i].mReplyContent+"\");'>수정</a> ")
+					.append("<a href='javascript:void(0)' onclick='removeReply("+data[i].marketNo+","+data[i].marketReplyNo+");'>삭제</a>");
+					$tr.append($rWriter);
+					$tr.append($rContent);
+					$tr.append($rDate);
+					$tr.append($btnArea);
+					$tableBody.append($tr);
+					}
+				},
+				error : function() {
+					var $tableBody = $("#rtb tbody");
+					$tableBody.html(""); //기존댓글 내용 비우기
+				}
+			});
+		} 
+		
+		/* 댓글 삭제 */
+		function removeReply(marketNo, marketReplyNo) {
+			$.ajax({
+				url : "/market/replyDelete",
+				type : "get",
+				data : {"marketNo" : marketNo , "marketReplyNo" : marketReplyNo },
+				success : function(data) {
+					if(data == "success"){
+						getMarketReplyList();						
+					}else{
+						alert("댓글 삭제 실패")
+					}
+				},
+				error : function(data) { alert("ajax 실패")}
+			});
+		}
+		
+		/* 댓글 수정 */
+		function modifyReplyView (obj ,marketNo, marketReplyNo, mReplyContent){
+			var $trModify = $("<tr>");
+			var $tdModify = $("<td colspan='3'>");
+			var $tdModifyBtn = $("<td>");
+			$tdModify.append("<input type='text' size='50' value='"+mReplyContent+"' id='modifyData'>");
+			$tdModifyBtn.append("<button onclick='modifyReply("+marketNo+","+marketReplyNo+");'>수정완료</button>");
+			$trModify.append($tdModify);
+			$trModify.append($tdModifyBtn);
+			$(obj).parent().parent().after($trModify);
+		}
+		
+		function modifyReply(marketNo, marketReplyNo){
+			var modifyData = $("#modifyData").val();
+			$.ajax({
+				url : "/market/replyModify",
+				type : "post",
+				data : {"marketNo" : marketNo , "marketReplyNo" : marketReplyNo, "mReplyContent": modifyData },
+				success : function(data) {
+					if(data == "success"){
+						getMarketReplyList();						
+					}else{
+						alert("댓글 수정 실패")
+					}
+				},
+				error : function(data) { alert("ajax 실패")}
+			});
+		}
+	</script>
 </body>
 </html>

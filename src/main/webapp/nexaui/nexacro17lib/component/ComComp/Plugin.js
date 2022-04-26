@@ -68,18 +68,6 @@ if (!nexacro.Plugin) {
 		if (control_elem) {
 			var obj_elem = this._obj_elem = new nexacro.PluginElement(control_elem);
 			obj_elem.setElementSize(this._getClientWidth(), this._getClientHeight());
-
-			var params = this._params;
-			var i, param_cnt = params.length;
-			for (i = 0; i < param_cnt; i++) {
-				obj_elem.setElementParam(params.get_id(i), params.get_item(i));
-			}
-
-			var events = this._events;
-			var event_cnt = events.length;
-			for (i = 0; i < event_cnt; i++) {
-				obj_elem.addEventHandler(events.get_id(i), events.get_item(i));
-			}
 		}
 
 		this.on_apply_classid();
@@ -109,7 +97,6 @@ if (!nexacro.Plugin) {
 
 	_pPlugin.on_attach_contents_handle = function (win) {
 		if (this._obj_elem) {
-			this._obj_elem.component = this;
 			this._obj_elem.attachHandle(win);
 		}
 	};
@@ -118,6 +105,18 @@ if (!nexacro.Plugin) {
 		var obj_elem = this._obj_elem;
 		if (obj_elem) {
 			obj_elem.component = this;
+
+			var params = this._params;
+			var i, param_cnt = params.length;
+			for (i = 0; i < param_cnt; i++) {
+				obj_elem.setElementParam(params.get_id(i), params.get_item(i));
+			}
+
+			var events = this._events;
+			var event_cnt = events.length;
+			for (i = 0; i < event_cnt; i++) {
+				obj_elem.addEventHandler(events.get_id(i), events.get_item(i));
+			}
 
 			obj_elem.create(win);
 			obj_elem.setElementVisible(this.visible);
@@ -157,8 +156,8 @@ if (!nexacro.Plugin) {
 	};
 
 	_pPlugin._setContents = function (str) {
-		if (str && str.length) {
-			if (str.indexOf("<Contents/>") != 0 && str.indexOf("<Contents>") != 0) {
+		if (str.length) {
+			if (str.indexOf("<Contents>") != 0) {
 				str = "<Contents>" + str + "</Contents>";
 			}
 			var doc = nexacro._parseXMLDocument(str);
@@ -179,26 +178,6 @@ if (!nexacro.Plugin) {
 						}
 						else {
 							this._params.add_item(name, value);
-						}
-					}
-				}
-
-				elems = doc.getElementsByTagName("_persistdata");
-				if (elems) {
-					var len = elems.length;
-					for (var i = 0; i < len; i++) {
-						var data_node = elems[i];
-						if (data_node.childNodes && data_node.childNodes.length > 0) {
-							var name = "__persistdata";
-							var value = data_node.childNodes[0].source;
-
-							var obj_elem = this._obj_elem;
-							if (obj_elem) {
-								obj_elem.setElementParam(name, value);
-							}
-							else {
-								this._params.add_item(name, value);
-							}
 						}
 					}
 				}
@@ -392,13 +371,6 @@ if (!nexacro.Plugin) {
 		this.on_apply_usepersistdata();
 	};
 
-	_pPlugin.get_usepersistdata = function (v) {
-		var elem = this._obj_elem;
-		if (elem) {
-			return elem.getElementUsePersistData();
-		}
-	};
-
 	_pPlugin.on_apply_usepersistdata = function () {
 		var elem = this._obj_elem;
 		if (elem) {
@@ -475,14 +447,24 @@ if (!nexacro.Plugin) {
 					obj_elem.setElementPluginSrc(val);
 					obj_elem.setElementPluginMIMEType("application/x-shockwave-flash");
 				}
+				obj_elem.setElementParam(propId, val);
 			}
-
-			this._setParam(propId, val);
+			else {
+				this._params.add_item(propId, val);
+			}
 		}
 	};
 
 	_pPlugin.getProperty = function (propId) {
-		var val = this._getParam(propId);
+		var val;
+		var obj_elem = this._obj_elem;
+		if (obj_elem) {
+			val = obj_elem.getElementParam(propId);
+		}
+		else {
+			this._params.get_item(propId);
+		}
+
 		if (val == null) {
 			val = this[propId];
 		}
@@ -502,7 +484,7 @@ if (!nexacro.Plugin) {
 				}
 			}
 
-			return this._callMethod.apply(this, conv_args);
+			return obj_elem.callMethod.apply(obj_elem, conv_args);
 		}
 	};
 
@@ -521,10 +503,6 @@ if (!nexacro.Plugin) {
 	};
 
 	_pPlugin.addEventHandler = function (evt_id, func, target) {
-		if (!func) {
-			return;
-		}
-
 		var ret = false;
 		var obj_elem = this._obj_elem;
 		if (obj_elem) {
@@ -552,35 +530,6 @@ if (!nexacro.Plugin) {
 			this._events.delete_item(evt_id);
 		}
 		return nexacro.Component.prototype.removeEventHandler.call(this, evt_id, func, target);
-	};
-
-	_pPlugin._getParam = function (propId) {
-		var val;
-		var obj_elem = this._obj_elem;
-		if (obj_elem) {
-			val = obj_elem.getElementParam(propId);
-		}
-		else {
-			val = this._params.get_item(propId);
-		}
-		return val;
-	};
-
-	_pPlugin._setParam = function (propId, val) {
-		var obj_elem = this._obj_elem;
-		if (obj_elem) {
-			obj_elem.setElementParam(propId, val);
-		}
-		else {
-			this._params.add_item(propId, val);
-		}
-	};
-
-	_pPlugin._callMethod = function () {
-		var _obj_elem = this._obj_elem;
-		if (_obj_elem) {
-			return _obj_elem.callMethod.apply(_obj_elem, arguments);
-		}
 	};
 
 	delete _pPlugin;
