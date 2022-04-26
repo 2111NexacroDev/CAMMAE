@@ -40,6 +40,13 @@ h3 {
 	margin-right: 5px;
 }
 
+/* 게시물 이미지 */
+.content img{
+		max-width : 300px;
+		height : auto;
+	}
+
+
 /* 댓글 */
 #rMarketWriter {
 	width: 80%;
