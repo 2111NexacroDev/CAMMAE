@@ -1,14 +1,15 @@
 package org.kh.campus.market.controller;
 
-import java.util.HashMap;
+
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+
 
 import org.kh.campus.market.domain.Market;
+import org.kh.campus.market.domain.MarketReply;
 import org.kh.campus.market.domain.Search;
 import org.kh.campus.market.service.MarketService;
-import org.kh.campus.question.domain.Question;
+import org.kh.campus.question.domain.QuestionReply;
 import org.kh.campus.market.domain.PageInfo;
 import org.kh.campus.market.domain.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 public class MarketController {
@@ -168,4 +172,77 @@ public class MarketController {
 		}
 		return mv;
 	}
-}
+
+	// 댓글
+
+		// 댓글 등록
+		@ResponseBody
+		@RequestMapping(value = "/market/replyAdd", method = RequestMethod.POST)
+		public String questionReplyAdd(@ModelAttribute MarketReply marketReply) {
+			// 로그인 완성 후 변경 예정
+			String mReplyWriter = "학생";
+			marketReply.setmReplyWriter(mReplyWriter);
+
+			int result = mService.registerReply(marketReply);
+			if (result > 0) {
+				return "success";
+			} else {
+				return "fail";
+			}
+		}
+
+		// 댓글 조회(전달값 1개 ->Requestparam)
+		@ResponseBody
+		@RequestMapping(value = "/market/replyList", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+		public String marketReplyList(@RequestParam("marketNo") int marketNo) {
+
+			List<MarketReply> mReplyList = mService.printAllMarketReply(marketNo);
+
+			if (!mReplyList.isEmpty()) {
+				Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+				return gson.toJson(mReplyList); // list->json
+			}
+
+			return "";
+		}
+
+		// 댓글 수정
+		@ResponseBody
+		@RequestMapping(value = "/market/replyModify", method = RequestMethod.POST)
+		public String questionReplyModify(@ModelAttribute MarketReply marketReply) {
+			int result = mService.modifyMarketReply(marketReply);
+			if (result > 0) {
+				return "success";
+			} else {
+				return "fail";
+			}
+		}
+
+		// 댓글 삭제
+		@ResponseBody
+		@RequestMapping(value = "/market/replyDelete", method = RequestMethod.GET)
+		public String questionReplyDelete(@ModelAttribute MarketReply marketReply) {
+
+			int result = mService.removeMarketReply(marketReply);
+			if (result > 0) {
+				return "success";
+			} else {
+				return "fail";
+			}
+		}
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

@@ -53,7 +53,10 @@ if (!nexacro.FileUpTransfer) {
 	delete _pFileUpTransferProgressEventInfo;
 
 	nexacro.FileUpTransfer = function (id, parent) {
-		nexacro._EventSinkObject.call(this, id, parent);
+		this.id = this.name = id;
+		if (parent) {
+			this.parent = parent;
+		}
 
 		this.filelist = new nexacro.Collection();
 		this.postdatalist = new nexacro.Collection();
@@ -82,6 +85,8 @@ if (!nexacro.FileUpTransfer) {
 		"onerror" : 1, 
 		"onprogress" : 1
 	};
+
+	_pFileUpTransfer.on_created = nexacro._emptyFn;
 
 	_pFileUpTransfer.destroy = function () {
 		if (this.filelist) {

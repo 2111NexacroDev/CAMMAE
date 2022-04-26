@@ -44,8 +44,6 @@ if (!nexacro.MaskEdit) {
 	_pMaskEdit.usecontextmenu = true;
 	_pMaskEdit.locale = "";
 	_pMaskEdit.usesoftkeyboard = true;
-	_pMaskEdit.postfixtext = "";
-	_pMaskEdit.imeaction = "none";
 
 
 	_pMaskEdit._input_element = null;
@@ -60,20 +58,16 @@ if (!nexacro.MaskEdit) {
 
 	_pMaskEdit._processing_updateToDataset = false;
 	_pMaskEdit._result_updateToDataset = true;
-	_pMaskEdit._processing_canchange = false;
 
 	_pMaskEdit._onlydisplay = false;
 	_pMaskEdit._apply_client_padding = false;
 	_pMaskEdit._has_inputElement = true;
-	_pMaskEdit._processing_autoskip = false;
 
 
 	_pMaskEdit._is_simple_control = true;
 	_pMaskEdit._is_editable_control = true;
 	_pMaskEdit._is_locale_control = true;
 	_pMaskEdit._use_readonly_status = true;
-
-	_pMaskEdit._caret_pos = -1;
 
 	_pMaskEdit._event_list = {
 		"oneditclick" : 1, 
@@ -100,12 +94,10 @@ if (!nexacro.MaskEdit) {
 		"canchange" : 1, 
 		"onchanged" : 1, 
 		"oninput" : 1, 
-		"onimeaction" : 1, 
 		"oncontextmenu" : 1, 
 		"ontouchstart" : 1, 
 		"ontouchmove" : 1, 
-		"ontouchend" : 1, 
-		"ondevicebuttonup" : 1
+		"ontouchend" : 1
 	};
 
 
@@ -121,7 +113,6 @@ if (!nexacro.MaskEdit) {
 				input_elem.setElementAutoSelect(this.autoselect);
 				input_elem.setElementUseIme("none");
 				input_elem.setElementImeMode("disabled");
-				input_elem.setElementImeAction(this.imeaction);
 				input_elem.setElementReadonly(this.readonly);
 			}
 			else {
@@ -152,7 +143,6 @@ if (!nexacro.MaskEdit) {
 			this.on_apply_maskchar(this.maskchar);
 			this._on_apply_format(this.format);
 			this.on_apply_locale(this._getLocale());
-			this.on_apply_postfixtext(this.postfixtext);
 			this.on_apply_value(this.value);
 
 			input_elem.create(win);
@@ -205,9 +195,7 @@ if (!nexacro.MaskEdit) {
 			this.on_apply_maskchar(this.maskchar);
 			this._on_apply_format(this.format);
 			this.on_apply_locale(this._getLocale());
-			this.on_apply_postfixtext(this.postfixtext);
 			this.on_apply_value(this.value);
-			this.on_apply_prop_enable(this._real_enable);
 
 			return input_elem.createCommand();
 		}
@@ -289,10 +277,6 @@ if (!nexacro.MaskEdit) {
 						input_elem.setElementValue(null);
 					}
 					else {
-						if (this._isInvalidValue(value)) {
-							input_elem.setElementDefaultValue(emptytext);
-						}
-
 						input_elem.setElementValue(text);
 					}
 				}
@@ -324,7 +308,7 @@ if (!nexacro.MaskEdit) {
 		}
 	};
 
-	_pMaskEdit.on_init_bindSource = function (columnid, propid, ds) {
+	_pMaskEdit.on_init_bindSource = function (columnid, propid) {
 		if (propid == "value") {
 			if (this._undostack) {
 				this._undostack.clear();
@@ -412,13 +396,7 @@ if (!nexacro.MaskEdit) {
 				total_h += padding.top + padding.bottom;
 			}
 
-			var text;
-			if (this._displaytext && this._displaytext !== "") {
-				text = this._displaytext;
-			}
-			else {
-				text = this.text;
-			}
+			var text = this.text;
 			if (text) {
 				var font = this._getCurrentStyleInheritValue("font");
 				var wordspace = this._getCurrentStyleInheritValue("wordSpacing");
@@ -551,12 +529,7 @@ if (!nexacro.MaskEdit) {
 				this.on_apply_value(this.value);
 			}
 			else {
-				if (displaynulltext == "") {
-					input_elem.setElementDisplayNullText(displaynulltext, this._getEmptyText());
-				}
-				else {
-					input_elem.setElementDisplayNullText(displaynulltext);
-				}
+				input_elem.setElementDisplayNullText(displaynulltext);
 				this._displaytext = input_elem.getElementText();
 			}
 		}
@@ -855,61 +828,8 @@ if (!nexacro.MaskEdit) {
 		}
 	};
 
-	_pMaskEdit.set_postfixtext = function (v) {
-		v = nexacro._toString(v);
-
-		if (this.postfixtext != v) {
-			this.postfixtext = v;
-			this.on_apply_postfixtext(v);
-		}
-	};
-
-	_pMaskEdit.on_apply_postfixtext = function (v) {
-		var maskobj = this._masktypeobj;
-		if (maskobj) {
-			maskobj.setPostfixtext(v);
-			this.on_apply_value(this.value);
-		}
-	};
-
-	_pMaskEdit.set_imeaction = function (v) {
-		if (v) {
-			var imeaction_arr = v.split(',');
-			var imeaction_enum = ["none", "done", "go", "search", "send", "next", "previous"];
-			for (var i = 0, len = imeaction_arr.length; i < len; i++) {
-				if (imeaction_enum.indexOf(imeaction_arr[i]) == -1) {
-					return;
-				}
-			}
-		}
-		else {
-			return;
-		}
-
-		if (this.imeaction != v) {
-			this.imeaction = v;
-			this.on_apply_imeaction(v);
-		}
-	};
-
-	_pMaskEdit.on_apply_imeaction = function (imeaction) {
-		var input_elem = this._input_element;
-		if (input_elem && !this._onlydisplay) {
-			input_elem.setElementImeAction(imeaction);
-		}
-	};
-
 	_pMaskEdit.getLength = function () {
-		var val = this.value;
-
-		if (this.type == "number") {
-			var regExp = /[.,\-+]/gi;
-			if (regExp.test(val)) {
-				val = val.replace(regExp, "");
-			}
-		}
-
-		return val ? val.length : 0;
+		return (this.value ? this.value.length : 0);
 	};
 
 	_pMaskEdit.getCaretPos = function () {
@@ -1057,14 +977,12 @@ if (!nexacro.MaskEdit) {
 			}
 
 			if (ret) {
-				this._default_text = posttext;
-				if (this.text != posttext) {
-					var input_elem = this._input_element;
-					var pos = input_elem.getElementCaretPos();
-
-					input_elem.setElementValue(posttext);
-					input_elem.setElementSetSelect(pos.begin, pos.end);
+				var maskobj = this._getMaskObj();
+				if (maskobj) {
+					posttext = (this.trimtype != "none") ? maskobj.applyMask(postvalue) : posttext;
 				}
+
+				this._default_text = posttext;
 				this.text = posttext;
 				this.on_fire_onchanged(this, pretext, prevalue, posttext, postvalue);
 				this._updateAccessibilityLabel();
@@ -1117,13 +1035,9 @@ if (!nexacro.MaskEdit) {
 		}
 	};
 
-	_pMaskEdit.on_keydown_basic_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pMaskEdit.on_keydown_basic_action = function (keycode, alt_key, ctrl_key, shift_key) {
 		if (this.readonly || !this._isEnable()) {
 			return;
-		}
-
-		if (nexacro._OS == "Mac OS" || nexacro._OS == "OSX" || nexacro._OS == "iOS") {
-			ctrl_key = meta_key;
 		}
 
 		var input_elem = this._input_element;
@@ -1166,12 +1080,6 @@ if (!nexacro.MaskEdit) {
 			var idx, ch;
 
 			if (keycode == nexacro.KeyCode_ImeInput && this._imedisable) {
-				var input_handle = input_elem.handle;
-
-				if (nexacro._Browser == "Chrome" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) {
-					input_handle.blur();
-					input_handle.focus();
-				}
 				input_elem.stopSysEvent();
 			}
 			else if (keycode == nexacro.Event.KEY_RETURN) {
@@ -1180,10 +1088,6 @@ if (!nexacro.MaskEdit) {
 
 				var cur_value = this.value;
 				var cur_text = this.text;
-
-				if (maskobj && this.type == "string") {
-					cur_text = maskobj.applyMask(cur_value);
-				}
 
 				if (pre_value != cur_value || cur_text != pre_text) {
 					if (!this._on_value_change(pre_text, pre_value, cur_text, cur_value)) {
@@ -1343,8 +1247,6 @@ if (!nexacro.MaskEdit) {
 	};
 
 	_pMaskEdit.on_killfocus_basic_action = function (new_focus, new_refer_focus) {
-		nexacro.Component.prototype.on_killfocus_basic_action.call(this);
-
 		var root_comp = this._getRootComponent(this);
 		if (root_comp == new_focus) {
 			if (this.parent && (!this.parent._is_subcontrol || this.parent == new_refer_focus.parent)) {
@@ -1354,25 +1256,21 @@ if (!nexacro.MaskEdit) {
 
 		var input_elem = this._input_element;
 		if (input_elem) {
-			var maskobj = this._getMaskObj();
 			var pre_value = this._default_value;
 			var pre_text = this._default_text;
 
 			var cur_value = this.value;
-			var cur_text = maskobj ? maskobj.applyMask(cur_value) : this.text;
+			var cur_text = this.text;
 
 			if (pre_value != cur_value || cur_text != pre_text) {
-				if (!this._processing_canchange) {
-					if (!this._on_value_change(pre_text, pre_value, cur_text, cur_value)) {
-						this.value = pre_value;
-					}
+				if (!this._on_value_change(pre_text, pre_value, cur_text, cur_value)) {
+					this.value = pre_value;
 				}
 			}
 
-			this._caret_pos = input_elem.getElementCaretPos();
-
 			cur_value = this.value;
 
+			var maskobj = this._getMaskObj();
 			var is_invalidvalue = this._isInvalidValue(cur_value);
 			if (maskobj) {
 				maskobj.setEditStatus(false);
@@ -1421,12 +1319,6 @@ if (!nexacro.MaskEdit) {
 						this._changeUserStatus("invalidtext", false);
 					}
 				}
-
-				var _sel = input_elem.getElementSelectionRange();
-				if (_sel[0] == _sel[1]) {
-					input_elem._setElementLastSelectionRange();
-				}
-
 				if (nexacro._enableaccessibility && nexacro._Browser == "Runtime" && nexacro._accessibilitytype == 5) {
 					this._setAccessibilityStatKillFocus();
 				}
@@ -1453,12 +1345,12 @@ if (!nexacro.MaskEdit) {
 		}
 	};
 
-	_pMaskEdit.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pMaskEdit.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY) {
 		if (this.oneditclick && this.oneditclick._has_handlers) {
 			var caretpos = this.getCaretPos();
 			var clientXY = this._getClientXY(canvasX, canvasY);
 
-			var evt = new nexacro.EditClickEventInfo(this, "oneditclick", caretpos, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, this, meta_key);
+			var evt = new nexacro.EditClickEventInfo(this, "oneditclick", caretpos, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, this);
 			return this.oneditclick._fireEvent(this, evt);
 		}
 		return true;
@@ -1476,12 +1368,7 @@ if (!nexacro.MaskEdit) {
 	_pMaskEdit.on_fire_canchange = function (obj, pretext, prevalue, posttext, postvalue) {
 		if (this.canchange && this.canchange._has_handlers) {
 			var evt = new nexacro.ChangeEventInfo(obj, "canchange", pretext, prevalue, posttext, postvalue);
-
-			this._processing_canchange = true;
-			var ret = this.canchange._fireCheckEvent(this, evt);
-			this._processing_canchange = false;
-
-			return ret;
+			return this.canchange._fireCheckEvent(this, evt);
 		}
 
 		return true;
@@ -1542,7 +1429,9 @@ if (!nexacro.MaskEdit) {
 		}
 	};
 
-	_pMaskEdit._setDefaultCaret = nexacro._emptyFn;
+	_pMaskEdit._setDefaultCaret = function () {
+		this.setCaretPos(0);
+	};
 
 	_pMaskEdit._setFocusToNextComponent = function () {
 		var root_comp = this._getRootComponent(this);
@@ -1815,7 +1704,6 @@ if (!nexacro.MaskEdit) {
 
 	_pMaskEdit._beforeinput_process_with_NexacroInputEvent = function (value, status, begin, end) {
 		var input_elem = this._input_element;
-		var bPaste = input_elem._paste_caret_pos ? true : false;
 		var input_text = value ? value : "";
 
 		var maskobj = this._getMaskObj();
@@ -1827,11 +1715,6 @@ if (!nexacro.MaskEdit) {
 			}
 			else {
 				var input_pos = maskobj.findNearEditablePos(result.pos, 1);
-
-				if (bPaste && result.text == this.text) {
-					input_elem._event_stop = true;
-					input_pos = begin;
-				}
 
 				if (result.text != input_text || result.pos != input_pos) {
 					input_elem.updateElementText(result.text, input_pos);

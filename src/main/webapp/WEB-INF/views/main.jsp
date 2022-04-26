@@ -46,7 +46,7 @@
                     <span id="lnb_subtitle">DAILE UNIVERSITY</span>
                 </h1>
                 <ul class="lnb_nav_dep1">
-                    <li><a href="#" class="btn_lnb_dep1">게시판</a></li>
+                    <li><a href="/board/list.kh" class="btn_lnb_dep1">게시판</a></li>
                     <li><a href="#" class="btn_lnb_dep1">수강신청</a></li>
                     <li><a href="#" class="btn_lnb_dep1">캠퍼스매니저</a></li>
                     <li><a href="/notice/list.kh" class="btn_lnb_dep1">취업지원센터</a></li>
@@ -68,8 +68,8 @@
                 </div>
                 
                 <div id="submenu2">
-                    <div id="submenu2_1"><a href="#" style="color:white">학과게시판</a></div>
-                    <div id="submenu2_2"><a href="#"><span class="material-icons" style="font-size:50px; color: rgba(255, 255, 255, 0.5);">school</span></a></div>
+                    <div id="submenu2_1"><a href="/board/list.kh" style="color:white">학과게시판</a></div>
+                    <div id="submenu2_2"><a href="/board/list.kh"><span class="material-icons" style="font-size:50px; color: rgba(255, 255, 255, 0.5);">school</span></a></div>
                 </div>
 
                 <div id="submenu3">
@@ -78,13 +78,13 @@
                 </div>
 
             <div id="submenu4">
-                <div id="submenu4_1"> <a href="#"><span class="material-icons" style="font-size:50px; color: rgba(255, 255, 255, 0.5);">person_search</span></a></div>
-                <div id="submenu4_2"><a href="#" style="color:white">채용공고</a></div>
+                <div id="submenu4_1"><a href="/recruitment/list.kh"><span class="material-icons" style="font-size:50px; color: rgba(255, 255, 255, 0.5);">person_search</span></a></div>
+                <div id="submenu4_2"><a href="/recruitment/list.kh" style="color:white">채용공고</a></div>
             </div>
 
             <div id="submenu5">
-                <div id="submenu5_1"><a href="#" style="color:white">취업지원센터</a></div>
-                <div id="submenu5_2"><a href="#"><span class="material-icons" style="font-size:40px; color: rgba(255, 255, 255, 0.5);">arrow_right_alt</span></a></div> 
+                <div id="submenu5_1"><a href="/notice/list.kh" style="color:white">취업지원센터</a></div>
+                <div id="submenu5_2"><a href="/notice/list.kh"><span class="material-icons" style="font-size:40px; color: rgba(255, 255, 255, 0.5);">arrow_right_alt</span></a></div> 
             </div>
 
             <div id="submenu6">
@@ -93,13 +93,13 @@
             </div>
 
             <div id="submenu7">
-                <div id="submenu7_1"><a href="#" style="color:white">중고거래</a></div>
-                <div id="submenu7_2"><a href="#"><span class="material-icons" style="font-size:40px; color: rgba(255, 255, 255, 0.5);">arrow_right_alt</span></a></div> 
+                <div id="submenu7_1"><a href="/market/list" style="color:white">중고거래</a></div>
+                <div id="submenu7_2"><a href="/market/list"><span class="material-icons" style="font-size:40px; color: rgba(255, 255, 255, 0.5);">arrow_right_alt</span></a></div> 
             </div>
 
             <div id="submenu8">
-                <div id="submenu8_1"><a href="#" style="color:white">질의응답</a></div>
-                <div id="submenu8_2"><a href="#"><span class="material-icons" style="font-size:40px; color: rgba(255, 255, 255, 0.5);">arrow_right_alt</span></a></div> 
+                <div id="submenu8_1"><a href="/question/list" style="color:white">질의응답</a></div>
+                <div id="submenu8_2"><a href="/question/list"><span class="material-icons" style="font-size:40px; color: rgba(255, 255, 255, 0.5);">arrow_right_alt</span></a></div> 
             </div>
 
             <div id="yt">

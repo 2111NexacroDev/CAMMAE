@@ -5,11 +5,12 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
+import org.kh.campus.board.domain.PageInfo;
 import org.kh.campus.board.domain.Search;
 
 public interface BoardStore {
 
-	public	List<Board> selectAllBoard(SqlSession sqlSession);
+	public	List<Board> selectAllBoard(SqlSession sqlSession, PageInfo pi);
 
 	public Board selectOneBoard(SqlSession sqlSession, int boardNo);
 
@@ -28,5 +29,7 @@ public interface BoardStore {
 	public int updateBoardReply(BoardReply boardReply, SqlSession sqlSession);
 
 	public int deleteBoardReply(BoardReply boardReply, SqlSession sqlSession);
+
+	public int selectListCount(SqlSession sqlSession);
 
 }

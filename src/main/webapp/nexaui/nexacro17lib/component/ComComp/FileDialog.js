@@ -25,7 +25,7 @@ if (!nexacro.FileDialog) {
 	_pFileDialogEventInfo = null;
 
 	nexacro.FileDialog = function (id, parent) {
-		nexacro._EventSinkObject.call(this, id);
+		this.id = this.name = id;
 		this.EnvironmentPath = 1;
 
 		this._handle = nexacro._createFileDialogHandle(this);
@@ -51,6 +51,8 @@ if (!nexacro.FileDialog) {
 	nexacro.FileDialog.SAVE = 2;
 	nexacro.FileDialog.MULTILOAD = 3;
 	nexacro.FileDialog.SELFOLDER = 4;
+
+	_pFileDialog.on_created = nexacro._emptyFn;
 
 	_pFileDialog.destroy = function () {
 		nexacro._destroyFileDialogHandle(this);

@@ -84,10 +84,6 @@ if (nexacro._OS == "iOS" && (window.location.pathname.split("/").pop() == "Run.h
 		var iosFilePath = "";
 		if (rootPathCheck.toLowerCase() == "%userapp%") {
 			iosFilePath = strAlias.substring(9, strAlias.length);
-			if (iosFilePath.charAt(0) != "/") {
-				iosFilePath = "/" + iosFilePath;
-			}
-
 			return nexacro.System.userapppath + iosFilePath;
 		}
 		else {
@@ -98,7 +94,6 @@ if (nexacro._OS == "iOS" && (window.location.pathname.split("/").pop() == "Run.h
 	nexacro._closeWindowHandle = function (_win_handle) {
 		if (nexacro._getMainWindowHandle() == _win_handle) {
 			nexacro._destroyManagerFrame(_win_handle);
-			nexacro._destroyManagerShadow(_win_handle);
 			nexacro.Device.exit();
 			_win_handle.open("", "_self");
 		}
@@ -115,32 +110,6 @@ if (nexacro._OS == "iOS" && (window.location.pathname.split("/").pop() == "Run.h
 
 	nexacro._isHybrid = function () {
 		return nexacro.Device._isHybrid();
-	};
-
-	nexacro._checkDevicePermission = function (permission_types) {
-		if (permission_types === undefined || permission_types === null) {
-			return;
-		}
-
-		var params = '{"permissions":' + JSON.stringify(permission_types) + '}';
-		var jsonstr = '{"id":null, "div":"Permission", "method":"checkDevicePermission", "params":' + params + '}';
-		nexacro.Device.exec(jsonstr);
-	};
-
-	nexacro._requestDevicePermission = function (permission_types, description) {
-		if (permission_types === undefined || permission_types === null) {
-			return;
-		}
-
-		var params;
-		if (description === undefined || description === null) {
-			params = '{"permissions":' + JSON.stringify(permission_types) + ',"description":null}';
-		}
-		else {
-			params = '{"permissions":' + JSON.stringify(permission_types) + ',"description":"' + description + '"}';
-		}
-		var jsonstr = '{"id":null, "div":"Permission", "method":"requestDevicePermission", "params":' + params + '}';
-		nexacro.Device.exec(jsonstr);
 	};
 
 	nexacro._convertDatasetSSVToBIN = function (ssvdata) {
@@ -188,8 +157,18 @@ if (nexacro._OS == "iOS" && (window.location.pathname.split("/").pop() == "Run.h
 		return true;
 	};
 
-	nexacro._execDefaultBrowser = function (url) {
-		return nexacro._execBrowser(url);
+	nexacro._on_activate = function () {
+		var mainframe = nexacro.getApplication().mainframe;
+		var _win = mainframe._window;
+
+		var focuslist = _win.getCurrentFocusPaths();
+		var len = focuslist.length;
+		if (len > 0) {
+			var last_focused_comp = focuslist[len - 1];
+			var form = last_focused_comp._findForm(last_focused_comp);
+
+			form._on_activate();
+		}
 	};
 
 	nexacro._setPreferencesValue = function (key, value) {

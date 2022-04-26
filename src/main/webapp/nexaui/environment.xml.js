@@ -1,16 +1,19 @@
 if (nexacro.Environment)
 {
     var env = nexacro._environment = new nexacro.Environment();
+
     env.on_init = function ()
     {
         this.set_themeid("theme::default");
         this.set_datatyperule("2.0");
     };
+
     env.on_initEvent = function ()
     {
         // add event handler
 
     };
+
     env.loadTypeDefinition = function ()
     {
         nexacro._setTypeDefinitionURL("typedefinition.xml");
@@ -22,9 +25,11 @@ if (nexacro.Environment)
         nexacro._addService("Base", "form", "./Base/", "session", null, "", "0", "0");
         nexacro._addService("FrameBase", "form", "./FrameBase/", "session", null, "", "0", "0");
         nexacro._addService("FormBase", "form", "./FormBase/", "session", null, "", "0", "0");
-        nexacro._addService("CmURL", "JSP", "http://127.0.0.1:8889", "session", null, "", "0", "0");
+        nexacro._addService("CmURL", "JSP", "http://127.0.0.1:8888", "session", null, "", "0", "0");
+
     	nexacro._component_uri = (nexacro._arg_compurl ? nexacro._arg_compurl : "./nexacro17lib/component/");
     	nexacro._theme_uri = "./_resource_/_theme_/";
+
     	// load components
         var registerclass = [
         		{"id":"Button", "classname":"nexacro.Button", "type":"JavaScript"},
@@ -49,27 +54,32 @@ if (nexacro.Environment)
         		{"id":"ProgressBar", "classname":"nexacro.ProgressBar", "type":"JavaScript"},
         		{"id":"Plugin", "classname":"nexacro.Plugin", "type":"JavaScript"},
         		{"id":"Dataset", "classname":"nexacro.NormalDataset", "type":"JavaScript"},
-        		{"id":"ListView", "classname":"nexacro.ListView", "type":"JavaScript"},
-        		{"id":"DataObject", "classname":"nexacro.DataObject", "type":"JavaScript"}
+        		{"id":"ListView", "classname":"nexacro.ListView", "type":"JavaScript"}
         ];
     	nexacro._addClasses(registerclass);
     };
+
     env.on_loadVariables = function ()
     {
         // Variables
 
+
         // Cookies
+
 
         // HTTP Header
 
     };
+
 	env.on_loadDeviceAdaptors = function ()
 	{
         // load device adatpor
 
 	};
+
     // User Script
 
 					
     env = null;
 }
+

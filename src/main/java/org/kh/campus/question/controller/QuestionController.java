@@ -114,7 +114,7 @@ public class QuestionController {
 	@ResponseBody
 	@RequestMapping(value = "/question/selectLeture", method =RequestMethod.GET, produces = "application/json;charset=utf-8") 
 	public String questionProList(@RequestParam("professorName") String professorName) {
-	  List<Lecture> lList = qService.printAllLec(professorName);
+		List<Lecture> lList = qService.printAllLec(professorName);
 	  
 	  if (!lList.isEmpty()) { 
 		 Gson gson = new Gson();

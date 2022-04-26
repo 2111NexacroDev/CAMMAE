@@ -17,7 +17,9 @@
 	
 
   	</resultMap>
-  
+  	<select id="selectListCount" resultType="_int">
+  		SELECT COUNT(*) FROM BOARD_TBL
+  	</select>
   	<select id="selectAllBoard" resultMap="boardResultMap">
   		SELECT*FROM BOARD_TBL ORDER BY BOARD_NO ASC
   	</select>
@@ -46,4 +48,31 @@
   	<delete id="deleteBoard">
   		DELETE FROM BOARD_TBL WHERE BOARD_NO = #{boardNo}
   	</delete>
+  	
+  	<resultMap type="BoardReply" id="boardReplyResultMap">
+  	<id property="boardreplyNo" column="BOARDREPLY_NO"></id>
+  	<result property="boardNo" column="BOARD_NO"/>
+  	<result property="boardreplyWriter" column="BOARDREPLY_WRITER"/>
+  	<result property="boardreplyContent" column="BOARDREPLY_CONTENT"/>
+  	<result property="boardreplyDate" column="BOARDREPLY_DATE"/>
+  	<result property="boardreplyUpdatedate" column="BOARDREPLY_UPDATEDATE"/>
+  	</resultMap>
+  	
+  	<insert id="insertBoardReply" parameterType="BoardReply">
+  	 INSERT INTO BOARDREPLY_TBL VALUES(SEQ_BOARDREPLY_NO.NEXTVAL, #{boardNo}, #{boardreplyWriter}, #{boardreplyContent}, #{boardreplyDate}, #{boardreplyUpdatedate})
+  	</insert>
+  	
+  	<select id="selectAllBoardReply" resultMap= "boardReplyResultMap">
+  		SELECT * FROM BOARDREPLY_TBL WHERE BOARD_NO = #{boardNo}
+  	</select>
+  	
+  	<update id="updateBoardReply">
+		UPDATE BOARDREPLY_TBL SET BOARDREPLY_CONTENT = #{boardreplyContent}
+		 WHERE BOARD_NO = #{boardNo} AND BOARDREPLY_NO = #{boardreplyNo}
+	</update>
+  	
+  	<delete id="deleteReply">
+		DELETE FROM BOARDREPLY_TBL WHERE BOARDREPLY_NO=#{boardreplyNo} AND BOARD_NO=#{boardNo}
+	</delete>
+  	
   </mapper>

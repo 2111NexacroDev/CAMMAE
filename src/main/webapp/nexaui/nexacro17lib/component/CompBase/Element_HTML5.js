@@ -171,10 +171,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 	_pElement._removeElementHandle = function () {
 		var handle = this.handle;
-		var linked_control = this.linkedcontrol;
-		if (linked_control && linked_control._is_main) {
-			handle = this.dest_handle;
-		}
 		if (handle) {
 			var dest_handle;
 			handle._linked_element = null;
@@ -577,12 +573,15 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			nexacro.__setDOMStyle_Display(handle_style, "none");
 		}
 
-		if (this._use_translate_move) {
-			nexacro.__setDOMStyle_Pos(handle_style, 0, 0, bPositionRtl);
-			nexacro.__setDOMStyle_Translate(handle_style, this.left, this.top, this.rtl);
-		}
-		else {
-			nexacro.__setDOMStyle_Pos(handle_style, this.left, this.top, bPositionRtl);
+		{
+
+			if (this._use_translate_move) {
+				nexacro.__setDOMStyle_Pos(handle_style, 0, 0, bPositionRtl);
+				nexacro.__setDOMStyle_Translate(handle_style, this.left, this.top, this.rtl);
+			}
+			else {
+				nexacro.__setDOMStyle_Pos(handle_style, this.left, this.top, bPositionRtl);
+			}
 		}
 
 		var linked_control = this.linkedcontrol;
@@ -1004,31 +1003,31 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 			if (edgex > half_width) {
 				if (test_img_offset_x < 0) {
-					test_img_offset_x = test_img_offset_x *  -1;
+					test_img_offset_x = test_img_offset_x * -1;
 				}
-				img_offset_x = Math.round(edgex *  ((width - edgex - edgex) / (test_img_offset_x)) - width + edgex);
+				img_offset_x = Math.round(edgex * ((width - edgex - edgex) / (test_img_offset_x)) - width + edgex);
 			}
 			else {
 				if (test_img_offset_x == 0) {
-					img_offset_x = Math.round(edgex *  ((width - edgex - edgex + 1) / (img_width - edgex - edgex + 1)) - edgex);
+					img_offset_x = Math.round(edgex * ((width - edgex - edgex + 1) / (img_width - edgex - edgex + 1)) - edgex);
 				}
 				else {
-					img_offset_x = Math.round(edgex *  ((width - edgex - edgex) / (img_width - edgex - edgex)) - edgex);
+					img_offset_x = Math.round(edgex * ((width - edgex - edgex) / (img_width - edgex - edgex)) - edgex);
 				}
 			}
 
 			if (edgey > half_height) {
 				if (test_img_offset_y < 0) {
-					test_img_offset_y = test_img_offset_y *  -1;
+					test_img_offset_y = test_img_offset_y * -1;
 				}
-				img_offset_y = Math.round(edgey *  ((height - edgey - edgey) / (test_img_offset_y)) - height + edgey);
+				img_offset_y = Math.round(edgey * ((height - edgey - edgey) / (test_img_offset_y)) - height + edgey);
 			}
 			else {
 				if (test_img_offset_y == 0) {
-					img_offset_y = Math.round(edgey *  ((height - edgey - edgey + 1) / (img_height - edgey - edgey + 1)) - edgey);
+					img_offset_y = Math.round(edgey * ((height - edgey - edgey + 1) / (img_height - edgey - edgey + 1)) - edgey);
 				}
 				else {
-					img_offset_y = Math.round(edgey *  ((height - edgey - edgey) / (img_height - edgey - edgey)) - edgey);
+					img_offset_y = Math.round(edgey * ((height - edgey - edgey) / (img_height - edgey - edgey)) - edgey);
 				}
 			}
 
@@ -1221,19 +1220,21 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 	_pTextBoxElement._type_name = "TextBoxElement";
 	_pTextBoxElement.typeselector = "nexacontentsbox";
 
-	_pTextBoxElement._box_node = null;
-
 	_pTextBoxElement.text = "";
+	_pTextBoxElement._use_decoration = false;
 	_pTextBoxElement.padding = null;
 	_pTextBoxElement.textAlign = null;
 	_pTextBoxElement.verticalAlign = null;
 	_pTextBoxElement.wordWrap = null;
-	_pTextBoxElement.pointerEvent = "";
-
-	_pTextBoxElement._use_decoration = false;
 	_pTextBoxElement._wordwrap_info = null;
 
+
+	_pTextBoxElement._box_node = null;
 	_pTextBoxElement._created = false;
+
+	_pTextBoxElement.on_apply_imeSet = nexacro._emptyFn;
+	_pTextBoxElement.on_apply_force_imeSet = nexacro._emptyFn;
+
 
 	if (nexacro._Browser == "IE" && nexacro._BrowserVersion <= 7) {
 		_pTextBoxElement._createTextElementHandle = function (_doc) {
@@ -1313,17 +1314,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		};
 	}
 
-	_pTextBoxElement._is_accept_touch = function (win) {
-		if (nexacro._OS === 'iOS' && win) {
-			var lastfocus_elem = win._last_focused_elem;
-			if (lastfocus_elem && lastfocus_elem.isInputElement()) {
-				if (this !== lastfocus_elem && lastfocus_elem.isComposing()) {
-					return false;
-				}
-			}
-		}
-		return true;
-	};
+
 	_pTextBoxElement._getComputedStyleAlign = function (noflush) {
 		var align = {
 			textAlign : "", 
@@ -1367,6 +1358,11 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			nexacro.__appendDOMNode(owner_elem.dest_handle, handle);
 		}
 	};
+
+
+
+
+
 
 	_pTextBoxElement.create = function (win) {
 		var owner_elem = this.parent_elem.getContainerElement(this.position_step);
@@ -1441,6 +1437,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				if (this.text) {
 					var handle_style = this._getCommonStyleStr();
 					var box_style = "";
+					var pointereventsstyle = "";
 
 					if (this.textAlign) {
 						box_style += nexacro.__getHTMLStyle_textAlign(this.textAlign, this.rtl);
@@ -1448,14 +1445,15 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					if (this.verticalAlign) {
 						box_style += nexacro.__getHTMLStyle_verticalAlign(this.verticalAlign);
 					}
-					if (this.pointerEvent) {
-						box_style += nexacro.__getHTMLStyle_PointerEvents(this.pointerEvent);
-					}
 
 					var classname = this._getElementClassName();
 					var str = "<div id='" + this.name + "' class='" + classname + "'";
 
-					str += (handle_style || box_style) ? (" style='" + handle_style + box_style + "'>") : ">";
+					if (nexacro._Browser == "IE" && nexacro._BrowserVersion == 11 && this._use_decoration) {
+						pointereventsstyle = "pointer-events:visiblePainted";
+					}
+
+					str += (handle_style || box_style) ? (" style='" + handle_style + box_style + pointereventsstyle + "'>") : ">";
 
 					if (this._use_decoration) {
 						str += nexacro.__getHTMLAttr_DecorateText(this.text);
@@ -1492,7 +1490,11 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		this._created = false;
 	};
 
-	_pTextBoxElement.setElementPadding = nexacro._emptyFn;
+
+
+	_pTextBoxElement.setElementPadding = function () {
+	};
+
 
 	_pTextBoxElement.setElementTextAlign = function (textalign) {
 		if (this.textAlign != textalign) {
@@ -1573,24 +1575,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		}
 	};
 
-	if (nexacro._Browser == "IE" && nexacro._BrowserVersion == 11) {
-		_pTextBoxElement.setElementPointerEvents = function (pointerevent) {
-			pointerevent = this._use_decoration ? "visiblePainted" : "";
-
-			if (this.pointerEvent != pointerevent) {
-				this.pointerEvent = pointerevent;
-				var handle = this.handle;
-				if (handle) {
-					nexacro.__setDOMNodeStylePointerEvents(handle.style, pointerevent);
-				}
-			}
-		};
-	}
-	else {
-		_pTextBoxElement.setElementPointerEvents = nexacro._emptyFn;
-	}
-
-
 	_pTextBoxElement.setElementCSSMapInfo = function (wordwrap) {
 		if (this._wordwrap_info != wordwrap) {
 			var oldwordwrap = this.wordWrap || this._wordwrap_info;
@@ -1603,6 +1587,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 		}
 	};
+
+
 
 	nexacro.IconElement = function (parent_elem, id) {
 		this.parent = parent_elem;
@@ -1878,9 +1864,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				if (!this._icon_node) {
 					icon_node = _doc.createElement("img");
 					nexacro.__setDOMNode_ClassName(icon_node, this._getElementNexaClassName("nexaiconitem"));
-					if (nexacro._enableaccessibility) {
-						nexacro.__setDOMNode_Alt(icon_node, this.parent_elem.accessibilitylabel ? this.parent_elem.accessibilitylabel : "");
-					}
 					this._icon_node = icon_node;
 
 					text_node = _doc.createElement("div");
@@ -2059,11 +2042,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 						str += (box_style) ? (" style='" + box_style + "'>") : ">";
 
 						if (this.iconPos == "left" || this.iconPos == "top") {
-							str += "<img ";
-							if (nexacro._enableaccessibility) {
-								str += nexacro.__getDOMNode_Alt("");
-							}
-							str += " class='" + this._getElementNexaClassName("nexaiconitem") + "' src='" + this.icon._sysurl + "'/>";
+							str += "<img class='" + this._getElementNexaClassName("nexaiconitem") + "' src='" + this.icon._sysurl + "'/>";
 							str += "<div class='" + this._getElementNexaClassName("nexatextitem") + "'";
 							if (text_style) {
 								str += " style='" + text_style + "'";
@@ -2076,11 +2055,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 								str += " style='" + text_style + "'";
 							}
 							str += ">" + value_str + "</div>";
-							str += "<img ";
-							if (nexacro._enableaccessibility) {
-								str += nexacro.__getDOMNode_Alt("");
-							}
-							str += " class='" + this._getElementNexaClassName("nexaiconitem") + "' src='" + this.icon._sysurl + "'/>";
+							str += "<img class='" + this._getElementNexaClassName("nexaiconitem") + "' src='" + this.icon._sysurl + "'/>";
 						}
 
 						str += "</td></tr></tbody></table>";
@@ -2204,11 +2179,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 						str += (handle_style || box_style) ? (" style='" + handle_style + box_style + "'>") : ">";
 
 						if (this.iconPos == "left" || this.iconPos == "top") {
-							str += "<img ";
-							if (nexacro._enableaccessibility) {
-								str += nexacro.__getDOMNode_Alt("");
-							}
-							str += " class='" + this._getElementNexaClassName("nexaiconitem") + "' src='" + this.icon._sysurl + "'/>";
+							str += "<img class='" + this._getElementNexaClassName("nexaiconitem") + "' src='" + this.icon._sysurl + "'/>";
 							str += "<div class='" + this._getElementNexaClassName("nexatextitem") + "'";
 							str += (text_style) ? (" style='" + text_style + "'>") : ">";
 							str += value_str + "</div>";
@@ -2217,11 +2188,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 							str += "<div class='" + this._getElementNexaClassName("nexatextitem") + "'";
 							str += (text_style) ? (" style='" + text_style + "'>") : ">";
 							str += value_str + "</div>";
-							str += "<img ";
-							if (nexacro._enableaccessibility) {
-								str += nexacro.__getDOMNode_Alt("");
-							}
-							str += " class='" + this._getElementNexaClassName("nexaiconitem") + "' src='" + this.icon._sysurl + "'/>";
+							str += "<img class='" + this._getElementNexaClassName("nexaiconitem") + "' src='" + this.icon._sysurl + "'/>";
 						}
 
 						str += "</div>";
@@ -2583,18 +2550,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		}
 	};
 
-	_pIconTextElement._is_accept_touch = function (win) {
-		if (nexacro._OS === "iOS" && win) {
-			var lastfocus_elem = win._last_focused_elem;
-			if (lastfocus_elem && lastfocus_elem.isInputElement()) {
-				if (this !== lastfocus_elem && lastfocus_elem.isComposing()) {
-					return false;
-				}
-			}
-		}
-		return true;
-	};
-
 	nexacro.ImageElement = function (parent_elem, id) {
 		this.parent = parent_elem;
 		this.parent_elem = parent_elem;
@@ -2622,9 +2577,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				handle._linked_element = this;
 
 				this.handle = handle;
-				if (nexacro._enableaccessibility) {
-					nexacro.__setDOMNode_Alt(handle, this.parent_elem.accessibilitylabel ? this.parent_elem.accessibilitylabel : this.parent_elem.linkedcontrol.id);
-				}
+				nexacro.__setDOMNode_Alt(handle, this.parent_elem.accessibilitylabel ? this.parent_elem.accessibilitylabel : this.parent_elem.linkedcontrol.id);
 				var handle_style = handle.style;
 
 				this._refreshCommonStyleProps(handle_style);
@@ -2656,11 +2609,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 			if (this.image) {
 				var handle_style = this._getCommonStyleStr();
-				var str = "<img ";
-				if (nexacro._enableaccessibility) {
-					str += nexacro.__getDOMNode_Alt("");
-				}
-				str += " id='" + this.name + "' class='" + this._getElementNexaClassName("nexaimagebox") + "'";
+				var str = "<img id='" + this.name + "' class='" + this._getElementNexaClassName("nexaimagebox") + "'";
 				str += " src='" + this.image._sysurl + "'";
 				str += (handle_style) ? (" style='" + handle_style + "'/>") : "/>";
 				return str;
@@ -2803,8 +2752,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 	_pInputElement._forced_fire_event_list = [];
 	_pInputElement._paste_caret_pos = null;
 
-	_pInputElement._use_timer = false;
-
 	_pInputElement._status_csspseudoclass = {
 		AUTOFILL : 0
 	};
@@ -2826,21 +2773,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 	_pInputElement._skip_check_imelocale = false;
 	_pInputElement._force_focus = false;
 
-	if (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge") {
-		_pInputElement._undo_value_updateimelocale = true;
-	}
-	else {
-		_pInputElement._undo_value_updateimelocale = false;
-	}
-
-	if (nexacro._OSVersion == "5.2" && nexacro._BrowserVersion == 8) {
-		_pInputElement._force_fire_propertychange = true;
-	}
-	else {
-		_pInputElement._force_fire_propertychange = false;
-	}
-
-	if ((nexacro._Browser == "Chrome" && nexacro._BrowserVersion >= 60) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) {
+	if (nexacro._Browser == "Chrome" && nexacro._BrowserVersion >= 60) {
 		_pInputElement._use_event_beforeinput = true;
 	}
 	else {
@@ -2861,9 +2794,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		_pInputElement._evtorder_compositionend_is_last = false;
 	}
 
-	if ((nexacro._Browser == "IE" && nexacro._BrowserVersion == 9) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge") || nexacro._OS == "iOS" || (nexacro._OS == "Mac OS" && nexacro._Browser == "Safari" && (function (version_arr) {
-		return (((version_arr[0] | 0) === 10 && (version_arr[1] | 0) >= 14) || (version_arr[0] | 0) > 10);
-	})(nexacro._OSVersion.split('.')))) {
+	if ((nexacro._Browser == "IE" && (nexacro._BrowserType == "Edge" || nexacro._BrowserVersion == 9)) || nexacro._OS == "iOS") {
 		_pInputElement._evtfire_oninput_after_compositionend = false;
 	}
 	else {
@@ -2889,6 +2820,20 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 	}
 	else {
 		_pInputElement._evtfire_oninput_only_when_backspacekey = false;
+	}
+	if (nexacro._Browser == "IE") {
+		if (nexacro._BrowserVersion > 9 || nexacro._BrowserType == "Edge") {
+			_pInputElement._use_scroll_referesh = true;
+		}
+		else {
+			_pInputElement._use_scroll_referesh = false;
+		}
+	}
+	else if (nexacro._OS == "iOS") {
+		_pInputElement._use_scroll_referesh = true;
+	}
+	else {
+		_pInputElement._use_scroll_referesh = false;
 	}
 
 	if (nexacro._OS == "iOS" && (nexacro._SystemType == "iphone" || nexacro._SystemType == "ipad")) {
@@ -2953,8 +2898,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					handle_attr += nexacro.__getHTMLAttr_MaxLength(this.maxlength);
 				}
 
-				var str = nexacro.__getDOMAccessibilityStr_Labelfor(this.name, this.value);
-				str += "<input id='" + this.name + "' class='" + this._getElementClassName() + "' ";
+				var str = "<input id='" + this.name + "' class='" + this._getElementClassName() + "' ";
 				str += (handle_style) ? (" style='" + handle_style + "' ") : "";
 				if (!nexacro._isNull(this.value) || this.value === "") {
 					if (this._is_invalid_value && !nexacro._isNull(this.displayinvalidtext)) {
@@ -3041,13 +2985,10 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 
 			if (nexacro._enableaccessibility) {
-				var label_handle = this._label_handle = nexacro.__createLabelElementHandle(_doc, this.name, this.value);
-				if (label_handle) {
-					nexacro.__appendDOMNode(owner_elem.dest_handle, label_handle);
-				}
 				nexacro.__setDOMAccessibility_LabelBy(handle, owner_elem.name);
+
 				if (nexacro._accessibilitytype == 4 || nexacro._accessibilitytype == 5) {
-					nexacro.__setDOMAccessibility_Role(handle, owner_elem.accessibilityrole);
+					nexacro.__setDOMAccessibility_Role(handle, owner_elem.name);
 				}
 			}
 
@@ -3081,14 +3022,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		}
 	};
 
-	_pInputElement._destroyLabelHandle = function () {
-		if (this._label_handle) {
-			var dest_handle = (this.owner_elem ? this.owner_elem.dest_handle : null);
-			nexacro.__removeDOMNode(dest_handle, this._label_handle);
-			this._label_handle = null;
-		}
-	};
-
 	_pInputElement.destroy = function () {
 		if (this._restore_scrollpos_timer > 0) {
 			clearTimeout(this._restore_scrollpos_timer);
@@ -3099,10 +3032,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		this._unbindSysEvent();
 
 		this._destroyInputHandle();
-
-		if (nexacro._enableaccessibility) {
-			this._destroyLabelHandle();
-		}
 
 		return nexacro.Element.prototype.destroy.call(this);
 	};
@@ -3144,8 +3073,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				handle_attr += nexacro.__getHTMLAttr_MaxLength(this.maxlength);
 			}
 
-			var str = nexacro.__getDOMAccessibilityStr_Labelfor(this.name, this.value);
-			str += "<input id='" + this.name + "' class='" + this._getElementClassName() + "' ";
+			var str = "<input id='" + this.name + "' class='" + this._getElementClassName() + "' ";
 			str += (handle_style) ? (" style='" + handle_style + "' ") : "";
 			if (!nexacro._isNull(this.value) || this.value === "") {
 				if (this._is_invalid_value && !nexacro._isNull(this.displayinvalidtext)) {
@@ -3191,10 +3119,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			this.handle._linked_element = this;
 
 			this._bindSysEvent();
-
-			if (nexacro._enableaccessibility) {
-				this._label_handle = win._doc.getElementById(this.name + ":label");
-			}
 		}
 	};
 
@@ -3539,7 +3463,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		}
 	};
 
-	_pInputElement.setElementDisplayNullText = function (nulltext, applytext) {
+	_pInputElement.setElementDisplayNullText = function (nulltext) {
 		var input_handle = this.handle;
 
 		if (this.displaynulltext == nulltext) {
@@ -3550,12 +3474,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 		if (input_handle) {
 			if (nexacro._isNull(this.value) && !this._is_focused) {
-				if (applytext != "" && applytext != undefined) {
-					this._updateInputValue(applytext);
-				}
-				else {
-					this._updateInputValue(this.displaynulltext);
-				}
+				this._updateInputValue(this.displaynulltext);
 			}
 		}
 	};
@@ -3674,7 +3593,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 	};
 
 	_pInputElement._setElementUseMaxLength = function (v) {
-		if ((nexacro._Browser != "IE" && nexacro._Browser != "Gecko")) {
+		if ((nexacro._Browser != "IE" && nexacro._Browser != "Gecko" && nexacro._BrowserExtra != "SamsungBrowser")) {
 			this._use_html_maxlength = v;
 		}
 		else {
@@ -3691,7 +3610,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		}
 	};
 
-	if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+	if (nexacro._Browser == "IE") {
 		if (nexacro._BrowserVersion <= 8) {
 			_pInputElement._updateInputValue = function (value, fireevent, selectionStart, selectionEnd) {
 				var input_handle = this.handle;
@@ -3774,7 +3693,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		_pInputElement._updateInputValue = function (value, fireevent, selectionStart, selectionEnd) {
 			var input_handle = this.handle;
 			if (input_handle) {
-				if (nexacro._Browser == "Chrome" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) {
+				if (nexacro._Browser == "Chrome") {
 					if (this._composer && this._composer.isComposing()) {
 						this._composer.setStatus(nexacro._CompositionState.END, selectionEnd);
 					}
@@ -3811,9 +3730,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		else if (type == "date") {
 			type = "date";
 		}
-		else if (type == "search") {
-			type = "search";
-		}
+
 		else if (type != "password") {
 			type = "text";
 		}
@@ -3856,8 +3773,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 		}
 	};
-
-	_pInputElement.setElementImeAction = nexacro._emptyFn;
 
 	if (nexacro._OS == "iOS" && nexacro._SystemType == "iphone") {
 		_pInputElement._change_to_keypad_type = function () {
@@ -3947,7 +3862,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		_pInputElement._restore_keypad_type = nexacro._emptyFn;
 	}
 
-	if ((nexacro._Browser == "IE" && nexacro._BrowserVersion > 8) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+	if (nexacro._Browser == "IE" && nexacro._BrowserVersion > 8) {
 		_pInputElement._fireHTMLEvent = function (handle, name, onname) {
 			if (!handle) {
 				return;
@@ -4003,9 +3918,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		if (input_handle) {
 			if (!this._is_focused) {
 				this._is_focused = true;
-				this._trigger_type = trigger_type;
+
 				this._applyMaxlength();
-				this._trigger_type = "";
 			}
 
 			if (!this._is_sys_focused) {
@@ -4016,12 +3930,27 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					}
 				}
 
-				if (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge") {
+				if (nexacro._BrowserType == "Edge") {
 					if (self_flag !== true || trigger_type != "lbuttondown") {
 						nexacro.__setInputDOMNodeFocus(input_handle);
+						if (!this.autoselect && trigger_type != undefined && trigger_type != "lbutton") {
+							_doc = this._getRootWindowHandle();
+							if (_doc) {
+								nexacro.__setDOMNode_SetSelect(_doc, input_handle, 0, 0);
+							}
+						}
 					}
 				}
 				else {
+					if (nexacro._Browser == "Chrome") {
+						if (!trigger_type) {
+							_doc = this._getRootWindowHandle();
+							if (_doc) {
+								nexacro.__setDOMNode_SetSelect(_doc, input_handle, 0, 0);
+							}
+						}
+					}
+
 					if (!(nexacro._OS == "iOS" && this.inputtype == "date")) {
 						nexacro.__setInputDOMNodeFocus(input_handle, trigger_type);
 					}
@@ -4029,11 +3958,9 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					this._restore_keypad_type();
 				}
 			}
-			else {
-				if (nexacro._Browser == "IE") {
-					if (trigger_type == "focus" && this.inputtype != "date") {
-						nexacro.__setInputDOMNodeFocus(input_handle);
-					}
+			else if (nexacro._Browser == "IE" && nexacro._BrowserType != "Edge" && trigger_type == "focus") {
+				if (this.inputtype != "date") {
+					nexacro.__setInputDOMNodeFocus(input_handle);
 				}
 			}
 			nexacro.__setLastFocusedElement(this);
@@ -4047,7 +3974,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			var pThis;
 
 			if (_doc && (nexacro._Browser != "IE" || (nexacro._Browser == "IE" && nexacro._BrowserVersion >= 11))) {
-				if (!(nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+				if (nexacro._BrowserType != "Edge") {
 					if (this.inputtype != "date") {
 						if (nexacro._Browser != "MobileSafari") {
 							if (!(nexacro._enableaccessibility && nexacro._accessibilitytype == 5)) {
@@ -4069,14 +3996,14 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				var text = (nexacro._isNull(this.value) ? this.defaultvalue : (this.value + ""));
 				var value = this._getInputValue();
 				if (text != value) {
-					this._updateInputValue(text);
+					this._updateInputValue(value);
 				}
 			}
 
 			if (this._is_focused) {
 				this._is_focused = false;
 
-				if (nexacro._Browser != "Gecko" && !(nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+				if (nexacro._BrowserType != "Edge" && nexacro._Browser != "Gecko") {
 					if (this._is_sys_focused) {
 						nexacro.__setDOMNode_Blur(input_handle);
 					}
@@ -4140,15 +4067,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 						nexacro.__setDOMNode_SetSelect(_doc, input_handle, start, end);
 					}
 					else {
-						if (this._use_timer) {
-							setTimeout(function () {
-								input_handle.focus();
-								nexacro.__setDOMNode_Select(_doc, input_handle);
-							}, 1);
-						}
-						else {
-							nexacro.__setDOMNode_Select(_doc, input_handle);
-						}
+						nexacro.__setDOMNode_Select(_doc, input_handle);
 					}
 				}
 				else {
@@ -4206,15 +4125,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		var input_handle = this.handle;
 		if (input_handle) {
 			if (this._is_focused) {
-				if (this.displaynulltext) {
-					if ((nexacro._Browser == "IE" || nexacro._BrowserVersion == 11) && this._trigger_type) {
-						var v = nexacro.__getDOMNodeValue(input_handle);
-						if (!v) {
-							return input_handle.defaultValue;
-						}
-					}
-				}
-
 				return nexacro.__getDOMNodeValue(input_handle);
 			}
 			else {
@@ -4223,13 +4133,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 						return nexacro.__getDOMNodeValue(input_handle);
 					}
 					else {
-						var bMobile = (nexacro._isTouchInteraction && nexacro._SupportTouch);
-						if (bMobile) {
-							return nexacro.__getDOMNodeValue(input_handle);
-						}
-						else {
-							return this._input_text;
-						}
+						return this._input_text;
 					}
 				}
 				else {
@@ -4261,7 +4165,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		var pos = this.getElementCaretPos();
 
 		var value = this._getInputValue();
-		var _is_composing = is_composing ? is_composing : this._composer.isComposing();
+		var _is_composing = this._composer.isComposing();
 		if (_is_composing) {
 			this._composer.setStatus(nexacro._CompositionState.END, pos.end);
 			this._updateInputValue(value, !this._processing_oninput);
@@ -4279,7 +4183,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 	};
 
 	_pInputElement.setCompositionCancel_process = function (end_pos, is_composing) {
-		var _is_composing = is_composing ? is_composing : this._composer.isComposing();
+		var _is_composing = this._composer.isComposing();
 		if (_is_composing) {
 			var value = this._getInputValue();
 			var offset = this._composer.getOffset();
@@ -4373,10 +4277,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				if (newfocus_comp[0] instanceof nexacro.Form && newfocus_comp[0]._last_focused) {
 					var win = form._getWindow();
 					win._removeFromCurrentFocusPath(newfocus_comp[0]._last_focused);
-				}
-
-				if (newfocus_comp[0]._has_inputElement) {
-					newfocus_comp[0]._processing_autoskip = true;
 				}
 
 				newfocus_comp[0]._setFocus(true, 0, true);
@@ -4519,14 +4419,14 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 	};
 
 	_pInputElement.on_sys_keydown_specialkey_process = function (evt) {
-		if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+		if (nexacro._Browser == "IE") {
 			var input_handle = (evt.target || evt.srcElement);
 			var pThis = input_handle._linked_element;
 			var keycode = nexacro._getSysEventKey(evt);
 
 			if (nexacro._BrowserVersion == 8) {
 				if (keycode == nexacro.Event.KEY_TAB) {
-					pThis.setCompositionComplete(0, true);
+					pThis.setCompositionComplete();
 				}
 			}
 			else if (nexacro._BrowserVersion == 9) {
@@ -4648,13 +4548,9 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		var comp = pThis.parent_elem.linkedcontrol;
 		var _win = comp._getRootWindow();
 
-		if (_win && _win._keydown_element && nexacro._Browser == "Gecko") {
+		if (_win && _win._keydown_element) {
 			if (_win._keydown_element !== pThis) {
-				if ((!comp._grid && comp._processing_autoskip) || (comp._grid && !comp._processing_autoskip && comp._grid.autoenter != "key")) {
-					comp._processing_autoskip = false;
-					nexacro._stopSysEvent(evt);
-					return false;
-				}
+				return false;
 			}
 		}
 
@@ -4696,12 +4592,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		}
 	};
 
-
 	_pInputElement._is_accept_touch = function (win) {
-		if (!win && nexacro._Browser == "MobileSafari" && this.isComposing()) {
-			return false;
-		}
-		else if (nexacro._OS === 'iOS' && win) {
+		if (nexacro._OS === 'iOS' && win) {
 			var lastfocus_elem = win._last_focused_elem;
 			if (lastfocus_elem && lastfocus_elem.isInputElement()) {
 				if (this !== lastfocus_elem && lastfocus_elem.isComposing()) {
@@ -4778,27 +4670,22 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 		var pos = pThis.getElementCaretPos();
 		var value = pThis._getInputValue();
-		var val = (evt.data || evt.key) || value.substr(pos.end - 1, 1);
-		var alpha = /[a-zA-Z]/;
-		if (nexacro._OS == "Android" && alpha.test(val)) {
-			return;
-		}
 
-		pThis._imelocale.updateLocale(val);
+		pThis._imelocale.updateLocale((evt.data || evt.key) || value.substr(pos.end - 1, 1));
 		if (pThis._imelocale.IsChangeLocale()) {
 			pThis.on_apply_imeSet(evt);
 		}
 
-		if (comp._inputtype_obj && comp._inputtype_obj._imedisable) {
-			if (!nexacro._is_hangul(val) && nexacro._Browser != "IE") {
-				pThis.on_apply_force_imeSet.call(pThis, evt);
-			}
-		}
+		pThis.on_apply_force_imeSet.call(pThis, evt);
 	};
 
 	_pInputElement._updateImeLocale = function (evt) {
 		var input_handle = (evt.target || evt.srcElement);
 		var pThis = input_handle._linked_element;
+
+		if (pThis._skip_check_imelocale) {
+			return true;
+		}
 
 		var comp = pThis.parent_elem.linkedcontrol;
 		var e_data;
@@ -4821,20 +4708,12 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				}
 				else {
 					if (comp instanceof nexacro.MaskEdit) {
+						pThis._skip_check_imelocale = true;
 						return true;
 					}
 
 					if ((prev_status == nexacro._CompositionState.NONE && composing_status == nexacro._CompositionState.START) || (prev_status == nexacro._CompositionState.END && composing_status == nexacro._CompositionState.START)) {
 						pThis._updateLocale(evt);
-					}
-				}
-			}
-			else {
-				if (comp instanceof nexacro.MaskEdit) {
-					if (composing_status == nexacro._CompositionState.END) {
-						input_handle.blur();
-						input_handle.focus();
-						return true;
 					}
 				}
 			}
@@ -4867,15 +4746,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				if (!pThis.isComposing()) {
 				}
 				else {
-					if (pThis.isComposing() && comp instanceof nexacro.MaskEdit && this._undo_value_updateimelocale) {
-						input_handle.blur();
-						input_handle.focus();
-
-						pThis._updateInputValue(comp.text, false);
-
-						return false;
-					}
-
 					if (prev_status == nexacro._CompositionState.NONE && nexacro._CompositionState.START || 
 						prev_status == nexacro._CompositionState.END && nexacro._CompositionState.START || 
 						prev_status == nexacro._CompositionState.START && nexacro._CompositionState.COMPOSING || (pThis._check_imetype_composing_status && prev_status == nexacro._CompositionState.COMPOSING && composing_status == nexacro._CompositionState.COMPOSING)) {
@@ -5118,7 +4988,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		var ret;
 		var pThis = input_handle._linked_element;
 
-		if (nexacro._Browser == "IE") {
+		if (nexacro._Browser == "IE" && nexacro._BrowserType != "Edge") {
 			var timestamp = evt.timeStamp;
 			var len = pThis._forced_fire_event_list.length;
 			var idx = (len > 0) ? pThis._forced_fire_event_list.indexOf(timestamp) : -1;
@@ -5153,13 +5023,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 	_pInputElement._on_sys_keyinput_forward = function (evt) {
 		var input_handle = (evt.target || evt.srcElement);
-
 		if (input_handle) {
 			var pThis = input_handle._linked_element;
-
-			if ((nexacro._Browser == "Chrome" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) && !evt.inputype && pThis._skip_sys_keyinput) {
-				pThis._skip_sys_keyinput = false;
-			}
 
 			if (!pThis.on_sys_keyinput_forward_before_process(evt)) {
 				return false;
@@ -5218,15 +5083,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			value = pThis._getInputValue();
 			pos = pThis.getElementCaretPos();
 
-			if (comp._is_undo && this.maxlength > 0) {
-				var check = pThis._checkMaxLength(value, pos.end);
-				if (check && check.ismax) {
-					value = value.substring(0, check.pos);
-					pThis._updateInputValue(value, false, "", check.end);
-				}
-				comp._is_undo = false;
-			}
-
 			if (pThis._composer.isComposing()) {
 				pThis._composer.setStatus(nexacro._CompositionState.COMPOSING, pos.end);
 			}
@@ -5267,6 +5123,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				if (!pThis.on_sys_keyinput_before_process.call(pThis, evt)) {
 					return;
 				}
+
 				return pThis.on_sys_keyinput_process.call(pThis, evt);
 			}
 		};
@@ -5280,15 +5137,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			var input_handle = (evt.target || evt.srcElement);
 			var pThis = input_handle._linked_element;
 			var comp = pThis.parent_elem.linkedcontrol;
-			var _win = comp._getRootWindow();
-
-			if (_win && _win._keydown_element && _win._keydown_element != pThis && comp._processing_autoskip) {
-				var old_value = pThis.value;
-				var sel_range = (pThis._last_selection_range) ? pThis._last_selection_range : [0, 0];
-				pThis._updateInputValue(old_value, false, sel_range[0], sel_range[1]);
-				comp._processing_autoskip = false;
-				return false;
-			}
 
 			var composing_status = pThis._composer.status;
 			var beginOffset, endOffset;
@@ -5598,7 +5446,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					pThis.__prevent_sys_lbuttonup = false;
 				}
 
-				if (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge" || (nexacro._Browser == "Gecko" && nexacro._BrowserVersion >= 85)) {
+				if (nexacro._BrowserType == "Edge") {
 					if (!pThis._is_sys_focused && pThis.autoselect) {
 						evt.preventDefault();
 					}
@@ -5682,11 +5530,9 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			return;
 		}
 
-		if ((nexacro._Browser == "IE" && nexacro._BrowserVersion == 8) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
-			if (pThis._force_focus) {
-				pThis._force_focus = false;
-				return;
-			}
+		if ((nexacro._Browser == "IE" && nexacro._BrowserVersion == 8 || nexacro._BrowserType == "Edge") && pThis._force_focus) {
+			pThis._force_focus = false;
+			return;
 		}
 
 		var _parent = pThis.parent;
@@ -5700,7 +5546,12 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				var _win = comp._getWindow();
 				if (_win && _win._is_active_window) {
 					var cur_focus_paths = _win.getCurrentFocusPaths();
-					var focuspath_index = cur_focus_paths ? nexacro._indexOf(cur_focus_paths, comp._getRootComponent(comp)) : -1;
+					var focuspath_index = -1;
+
+					var rootComp = comp._getRootComponent(comp);
+					if (cur_focus_paths) {
+						focuspath_index = nexacro._indexOf(cur_focus_paths, rootComp);
+					}
 
 					if (focuspath_index == -1) {
 						var old_focused_comp = cur_focus_paths ? cur_focus_paths[cur_focus_paths.length - 1] : null;
@@ -5709,7 +5560,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 								pThis._skip_sys_keyinput = true;
 							}
 
-							if (nexacro._Browser == "Chrome" || nexacro._Browser == "Opera" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit") || nexacro._OS == "iOS") {
+							if (nexacro._Browser == "Chrome" || nexacro._Browser == "Opera" || nexacro._OS == "iOS") {
 								pThis.setElementValue(comp.value, pThis._is_invalid_value);
 							}
 							old_focused_comp._apply_setfocus();
@@ -5719,7 +5570,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				}
 			}
 		}
-
 		pThis._is_sys_focused = true;
 
 		var _doc = pThis._getRootWindowHandle();
@@ -5732,7 +5582,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				nexacro.__setDOMNode_Select(_doc, input_handle);
 			}
 		}
-		else if (pThis._last_selection_range) {
+		else if (pThis._last_selection_range && !(nexacro._enableaccessibility && nexacro._accessibilitytype == 5)) {
 			var sel = pThis._last_selection_range;
 			nexacro.__setDOMNode_SetSelect(_doc, input_handle, sel[0], sel[1]);
 		}
@@ -5796,10 +5646,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			nexacro._adjustBodyScrollPos(cur_doc);
 		}
 
-		if ((nexacro._Browser == "IE" && nexacro._BrowserVersion == 8) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
-			if (pThis._force_focus) {
-				input_handle.focus();
-			}
+		if ((nexacro._Browser == "IE" && nexacro._BrowserVersion == 8 || nexacro._BrowserType == "Edge") && pThis._force_focus) {
+			input_handle.focus();
 		}
 
 		return true;
@@ -5936,7 +5784,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 						pThis.setInputStatusPseudoClass("AUTOFILL", 0);
 
-						if (pThis.value == null && pThis.displaynulltext != "" && !pThis._is_focused) {
+						if (pThis.value == null && pThis.displaynulltext != "") {
 							nexacro.__changeInputDOMNodeType(input_handle, "text");
 						}
 						break;
@@ -6022,7 +5870,13 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 	_pTextAreaElement.usemultiline = true;
 	_pTextAreaElement._use_html_maxlength = false;
 
-	if ((nexacro._Browser == "IE" && nexacro._BrowserVersion == 11) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge") || nexacro._BrowserType == "WebKit" || nexacro._BrowserType == "Opera") {
+	if (nexacro._BrowserType == "Edge") {
+		_pTextAreaElement._BROWSER_SCROLLBAR_SIZE = 0;
+	}
+	else if (nexacro._Browser == "IE" && nexacro._BrowserVersion == 11) {
+		_pTextAreaElement._BROWSER_SCROLLBAR_SIZE = 0;
+	}
+	else if (nexacro._BrowserType == "WebKit" || nexacro._BrowserType == "Opera") {
 		_pTextAreaElement._BROWSER_SCROLLBAR_SIZE = 0;
 	}
 	else if (nexacro._Browser == "Gecko" || (nexacro._Browser == "IE" && nexacro._BrowserVersion < 9)) {
@@ -6030,6 +5884,13 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 	}
 	else {
 		_pTextAreaElement._BROWSER_SCROLLBAR_SIZE = undefined;
+	}
+
+	if (nexacro._Browser == "IE" && nexacro._BrowserVersion <= 10) {
+		_pTextAreaElement._use_proto = false;
+	}
+	else {
+		_pTextAreaElement._use_proto = true;
 	}
 
 	_pTextAreaElement._createElementHandle = function (owner_elem, _doc) {
@@ -6091,14 +5952,10 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		}
 
 		if (nexacro._enableaccessibility) {
-			var label_handle = nexacro.__createLabelElementHandle(_doc, this.name, this.value);
-			if (label_handle) {
-				nexacro.__appendDOMNode(owner_elem.dest_handle, label_handle);
-			}
 			nexacro.__setDOMAccessibility_LabelBy(handle, this.parent_elem.name);
 
 			if (nexacro._accessibilitytype == 4 || nexacro._accessibilitytype == 5) {
-				nexacro.__setDOMAccessibility_Role(handle, this.parent_elem.accessibilityrole);
+				nexacro.__setDOMAccessibility_Role(handle, this.parent_elem.name);
 			}
 		}
 
@@ -6153,8 +6010,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				attr_str += nexacro.__getHTMLAttr_MaxLength(this.maxlength);
 			}
 
-			var str = nexacro.__getDOMAccessibilityStr_Labelfor(this.name, this.value);
-			str += "<textarea id='" + this.name + "' class='" + this._getElementNexaClassName("nexatextarea") + "' ";
+			var str = "<textarea id='" + this.name + "' class='" + this._getElementNexaClassName("nexatextarea") + "' ";
 			str += (handle_style) ? (" style='" + handle_style + "'") : "";
 			str += attr_str ? (" " + attr_str) + ">" : ">";
 			if (this.value) {
@@ -6287,9 +6143,16 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					}
 				}
 
-				if (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge") {
+				if (nexacro._BrowserType == "Edge") {
 					if (self_flag !== true || trigger_type != "lbuttondown") {
 						nexacro.__setInputDOMNodeFocus(input_handle);
+
+						if (!this.autoselect && trigger_type != undefined && trigger_type != "lbutton") {
+							_doc = this._getRootWindowHandle();
+							if (_doc) {
+								nexacro.__setDOMNode_SetSelect(_doc, input_handle, 0, 0);
+							}
+						}
 					}
 				}
 				else if (nexacro._Browser == "IE" && nexacro._BrowserVersion == 8) {
@@ -6310,6 +6173,15 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					}
 				}
 				else {
+					if (nexacro._Browser == "Chrome" || nexacro._Browser == "Gecko") {
+						if (self_flag !== true || trigger_type == undefined) {
+							_doc = this._getRootWindowHandle();
+							if (_doc) {
+								nexacro.__setDOMNode_SetSelect(_doc, input_handle, 0, 0);
+							}
+						}
+					}
+
 					if (!(nexacro._OS == "iOS" && this.inputtype == "date")) {
 						nexacro.__setInputDOMNodeFocus(input_handle, trigger_type);
 					}
@@ -6684,14 +6556,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		var ret = this._BROWSER_SCROLLBAR_SIZE;
 		if (nexacro._Browser == "Gecko") {
 			var ratio = window.devicePixelRatio;
-			if (ratio) {
-				if (ratio < 1) {
-					ret = ret / ratio;
-				}
-				else {
-					ret = ret *  ratio;
-				}
-			}
+			ret = ret / (ratio ? ratio : 1);
 		}
 
 		return ret;
@@ -6775,7 +6640,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					}
 
 					if (bScroll) {
-						comp._scrollTo(hscroll_pos, vscroll_pos, true, true, undefined, evtid);
+						comp._scrollTo(hscroll_pos, vscroll_pos, true, false, undefined, evtid);
 					}
 				}
 			}
@@ -6844,16 +6709,23 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 		var _locale = pThis._imelocale.getLocale();
 		if (_locale && nexacro._cache_inputelement_set[_locale] && nexacro._cache_textareaelement_set[_locale]) {
-			for (i = 0, len = nexacro._inputelement_user_override_func.length; i < len; i++) {
-				pThis[nexacro._inputelement_user_override_func[i]] = nexacro.InputElement.prototype[nexacro._inputelement_user_override_func[i]];
+			if (this._use_proto) {
+				for (i = 0, len = nexacro._inputelement_user_override_func.length; i < len; i++) {
+					pThis.__proto__[nexacro._inputelement_user_override_func[i]] = nexacro.InputElement.prototype[nexacro._inputelement_user_override_func[i]];
+				}
 
-				if (nexacro.TextAreaElement.prototype[nexacro._inputelement_user_override_func[i]]) {
-					pThis[nexacro._inputelement_user_override_func[i]] = nexacro.TextAreaElement.prototype[nexacro._inputelement_user_override_func[i]];
+				for (var prop in nexacro._cache_inputelement_set[_locale]) {
+					pThis.__proto__[prop] = nexacro._cache_inputelement_set[_locale][prop];
 				}
 			}
+			else {
+				for (i = 0, len = nexacro._inputelement_user_override_func.length; i < len; i++) {
+					pThis[nexacro._inputelement_user_override_func[i]] = nexacro.InputElement.prototype[nexacro._inputelement_user_override_func[i]];
+				}
 
-			for (var prop in nexacro._cache_inputelement_set[_locale]) {
-				pThis[prop] = nexacro._cache_inputelement_set[_locale][prop];
+				for (var prop in nexacro._cache_inputelement_set[_locale]) {
+					pThis[prop] = nexacro._cache_inputelement_set[_locale][prop];
+				}
 			}
 
 			for (var prop in nexacro._cache_textareaelement_set[_locale]) {
@@ -6869,15 +6741,23 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 		}
 		else if (_locale && nexacro._cache_inputelement_set[_locale]) {
-			for (i = 0, len = nexacro._inputelement_user_override_func.length; i < len; i++) {
-				pThis[nexacro._inputelement_user_override_func[i]] = nexacro.InputElement.prototype[nexacro._inputelement_user_override_func[i]];
-				if (nexacro.TextAreaElement.prototype[nexacro._inputelement_user_override_func[i]]) {
-					pThis[nexacro._inputelement_user_override_func[i]] = nexacro.TextAreaElement.prototype[nexacro._inputelement_user_override_func[i]];
+			if (this._use_proto) {
+				for (i = 0, len = nexacro._inputelement_user_override_func.length; i < len; i++) {
+					pThis.__proto__[nexacro._inputelement_user_override_func[i]] = nexacro.InputElement.prototype[nexacro._inputelement_user_override_func[i]];
+				}
+
+				for (var prop in nexacro._cache_inputelement_set[_locale]) {
+					pThis.__proto__[prop] = nexacro._cache_inputelement_set[_locale][prop];
 				}
 			}
+			else {
+				for (i = 0, len = nexacro._inputelement_user_override_func.length; i < len; i++) {
+					pThis[nexacro._inputelement_user_override_func[i]] = nexacro.InputElement.prototype[nexacro._inputelement_user_override_func[i]];
+				}
 
-			for (var prop in nexacro._cache_inputelement_set[_locale]) {
-				pThis[prop] = nexacro._cache_inputelement_set[_locale][prop];
+				for (var prop in nexacro._cache_inputelement_set[_locale]) {
+					pThis[prop] = nexacro._cache_inputelement_set[_locale][prop];
+				}
 			}
 
 			for (i = 0, len = nexacro._inputelement_user_override_func.length; i < len; i++) {
@@ -6888,11 +6768,13 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 		}
 		else if (_locale && nexacro._cache_textareaelement_set[_locale]) {
-			for (i = 0, len = nexacro._inputelement_user_override_func.length; i < len; i++) {
-				pThis[nexacro._inputelement_user_override_func[i]] = nexacro.InputElement.prototype[nexacro._inputelement_user_override_func[i]];
-				if (nexacro.TextAreaElement.prototype[nexacro._inputelement_user_override_func[i]]) {
-					pThis[nexacro._inputelement_user_override_func[i]] = nexacro.TextAreaElement.prototype[nexacro._inputelement_user_override_func[i]];
+			if (this._use_proto) {
+				for (i = 0, len = nexacro._inputelement_user_override_func.length; i < len; i++) {
+					pThis.__proto__[nexacro._inputelement_user_override_func[i]] = nexacro.InputElement.prototype[nexacro._inputelement_user_override_func[i]];
 				}
+			}
+			else {
+				pThis[nexacro._inputelement_user_override_func[i]] = nexacro.InputElement.prototype[nexacro._inputelement_user_override_func[i]];
 			}
 
 			for (var prop in nexacro._cache_textareaelement_set[_locale]) {
@@ -6907,10 +6789,14 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 		}
 		else {
-			for (i = 0, len = nexacro._inputelement_user_override_func.length; i < len; i++) {
-				pThis[nexacro._inputelement_user_override_func[i]] = nexacro.InputElement.prototype[nexacro._inputelement_user_override_func[i]];
-				if (nexacro.TextAreaElement.prototype[nexacro._inputelement_user_override_func[i]]) {
-					pThis[nexacro._inputelement_user_override_func[i]] = nexacro.TextAreaElement.prototype[nexacro._inputelement_user_override_func[i]];
+			if (this._use_proto) {
+				for (i = 0, len = nexacro._inputelement_user_override_func.length; i < len; i++) {
+					pThis.__proto__[nexacro._inputelement_user_override_func[i]] = nexacro.InputElement.prototype[nexacro._inputelement_user_override_func[i]];
+				}
+			}
+			else {
+				for (i = 0, len = nexacro._inputelement_user_override_func.length; i < len; i++) {
+					pThis[nexacro._inputelement_user_override_func[i]] = nexacro.InputElement.prototype[nexacro._inputelement_user_override_func[i]];
 				}
 			}
 
@@ -7135,7 +7021,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 		}
 		catch (e) {
-			nexacro._settracemsg(e);
 		}
 	};
 
@@ -7224,8 +7109,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 	_pControlElement._on_attachHandle = nexacro._emptyFn;
 	_pControlElement.attachHandle = function (win) {
-		if (this.name) {
-			var handle = this.handle || win._doc.getElementById(this.name);
+		if (this.name && !this.handle) {
+			var handle = win._doc.getElementById(this.name);
 			if (handle) {
 				handle._linked_element = this;
 
@@ -7393,26 +7278,10 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 		};
 
-		_pControlElement._getComputedStyleBackgroundColor = function (noflush, bExport) {
+		_pControlElement._getComputedStyleBackgroundColor = function (noflush) {
 			var handle = this.handle;
 			if (handle) {
 				var style = window.getComputedStyle(handle, null);
-				if (bExport) {
-					var ret = style.getPropertyValue("background");
-					if (nexacro._Browser == "IE") {
-						if (!ret) {
-							ret = style.getPropertyValue("background-image");
-							if (ret && ret.indexOf("linear-gradient") >= 0) {
-								return ret;
-							}
-						}
-					}
-					else {
-						if (ret && ret.indexOf("linear-gradient") >= 0) {
-							return ret;
-						}
-					}
-				}
 				return style.getPropertyValue("background-color");
 			}
 		};
@@ -7884,20 +7753,16 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			this.borderRightNone = borderright;
 			this.borderBottomNone = borderbottom;
 
-			this._refreshBorderNone();
-		}
-	};
+			if (this.handle) {
+				nexacro.__setDOMStyle_BorderNone(this.handle.style, borderleft, bordertop, borderright, borderbottom, this.border, this.rtl);
+			}
 
-	_pControlElement._refreshBorderNone = function () {
-		if (this.handle) {
-			nexacro.__setDOMStyle_BorderNone(this.handle.style, this.borderLeftNone, this.borderTopNone, this.borderRightNone, this.borderBottomNone, this.border, this.rtl);
-		}
+			if (this._updateInnerSize()) {
+				this._updateClientRect();
 
-		if (this._updateInnerSize()) {
-			this._updateClientRect();
-
-			if (this._edge_elem) {
-				this._edge_elem.setElementSize(this.inner_width, this.inner_height);
+				if (this._edge_elem) {
+					this._edge_elem.setElementSize(this.inner_width, this.inner_height);
+				}
 			}
 		}
 	};
@@ -8492,14 +8357,10 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				this._step_containers = [];
 				for (var i = 0; i < step_count; i++) {
 					var step_client = new nexacro._ContainerElement(this._client_elem, this._use_translate_scroll);
-					step_client.setElementPosition(i *  this.client_width, 0);
+					step_client.setElementPosition(i * this.client_width, 0);
 					step_client.setElementSize(this.client_width, this.container_maxheight);
 					step_client.create(win);
 					this._step_containers.push(step_client);
-				}
-
-				if (this._client_elem._scroll_left != this._client_elem.handle.scrollLeft) {
-					nexacro.__setDOMNode_HScrollPos(this._client_elem.handle, this._client_elem._scroll_left, this._isRtl());
 				}
 			}
 		}
@@ -8561,11 +8422,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 			this.scroll_left = 0;
 			this.scroll_top = 0;
-			if (this._client_elem) {
-				this._client_elem._setElementHScrollPos(0);
-				this._client_elem._setElementVScrollPos(0);
-			}
-
 			this.container_maxwidth = 0;
 			this.container_maxheight = 0;
 
@@ -8580,7 +8436,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 			this._scrollview_width_top = 0;
 			this._step_count = 0;
-			this._pre_step_count = 0;
 			this._step_index = -1;
 
 			if (control._use_translate_scroll_force) {
@@ -8612,13 +8467,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			this._on_change_clientSize = this._on_change_clientSizeExpand;
 		}
 
-		this._not_use_scrollLeft = control._not_use_scrollLeft;
-		this._not_use_scrollTop = control._not_use_scrollTop;
-
 		var client_elemt = this._client_elem;
 		if (client_elemt) {
-			client_elemt._not_use_scrollLeft = this._not_use_scrollLeft;
-			client_elemt._not_use_scrollTop = this._not_use_scrollTop;
 			client_elemt._use_translate_scroll = this._use_translate_scroll;
 			client_elemt._use_container_move = this._use_container_move;
 			client_elemt._use_native_scroll = this._use_native_scroll;
@@ -8638,7 +8488,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				this._step_containers = null;
 			}
 
-			this._pre_step_count = this._step_count;
 			this._step_count = count;
 
 			this._updateClientRect();
@@ -8647,7 +8496,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 				for (i = 0; i < count; i++) {
 					step_client = new nexacro._ContainerElement(this._client_elem, this._use_translate_scroll);
-					step_client.setElementPosition(i *  this.client_width, 0);
+					step_client.setElementPosition(i * this.client_width, 0);
 					step_client.setElementSize(this.client_width, this.client_height);
 					step_client.create();
 					this._step_containers.push(step_client);
@@ -8722,7 +8571,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		if (this._scrolltype != scrolltype) {
 			this._scrolltype = scrolltype;
 			var container = this._client_elem;
-			if (container && this._scrolltype != "none") {
+			if (container) {
 				container._setElementScrolltype(this._getElementScrollType(scrolltype));
 			}
 			ret = true;
@@ -8832,7 +8681,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			if (this._step_count > 0) {
 				this.getContainerElement(this._step_index)._setElementVScrollPos(vpos);
 			}
-			else if (this._use_container_move) {
+			if (this._use_container_move) {
 				this._client_elem._setElementVScrollPos(vpos);
 			}
 			if (this.linkedcontrol) {
@@ -8864,8 +8713,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				if (step_count > 0 && step_containers) {
 					for (i = 0; i < step_count; i++) {
 						step_client_elem = step_containers[i];
-						step_client_elem.setElementPosition(zclient_width *  i, 0);
-						if (i == step_index && this._use_translate_scroll) {
+						step_client_elem.setElementPosition(zclient_width * i, 0);
+						if (i == step_index) {
 							step_client_elem.setElementSize(zclient_width, this.container_maxheight);
 						}
 					}
@@ -8884,11 +8733,11 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			if (step_count > 0 && step_containers) {
 				for (i = 0; i < step_count; i++) {
 					step_client_elem = step_containers[i];
-					step_client_elem.setElementPosition(zclient_width *  i, 0);
+					step_client_elem.setElementPosition(zclient_width * i, 0);
 				}
 
 				step_index = this._step_index;
-				var step_scroll_left = zclient_width *  step_index;
+				var step_scroll_left = zclient_width * step_index;
 				if (this.scroll_left != step_scroll_left) {
 					this.scroll_left = step_scroll_left;
 					this._client_elem._setElementHScrollPos(step_scroll_left);
@@ -8941,24 +8790,13 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				client_elem.setElementSize(width, height);
 
 				if (step_count > 0 && step_containers) {
-					if (this._use_translate_scroll) {
-						step_client_elem = step_containers[this._step_index];
+					for (i = 0; i < step_count; i++) {
+						step_client_elem = step_containers[i];
 						if (step_client_elem) {
+							step_client_elem.setElementSize(zclient_width, max_height);
 							dest_handle = step_client_elem.dest_handle;
 							if (dest_handle) {
 								nexacro.__setDOMStyle_Size(dest_handle.style, width, max_height);
-							}
-						}
-					}
-					else if (this._use_container_move) {
-						for (i = 0; i < step_count; i++) {
-							step_client_elem = step_containers[i];
-							if (step_client_elem) {
-								step_client_elem.setElementSize(zclient_width, height);
-								dest_handle = step_client_elem.dest_handle;
-								if (dest_handle) {
-									nexacro.__setDOMStyle_Size(dest_handle.style, width, height);
-								}
 							}
 						}
 					}
@@ -9054,12 +8892,9 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		var scroll_top = this.scroll_top;
 
 		var step_count = this._step_count;
-		var pre_step_count = this._pre_step_count;
-		var is_change_step_cnt = false;
-		is_change_step_cnt = step_count != pre_step_count;
 		var step_containers = this._step_containers;
-		if ((step_count > 0 && step_containers) || is_change_step_cnt) {
-			container_maxwidth = step_count *  zclient_width;
+		if (step_count > 0 && step_containers) {
+			container_maxwidth = step_count * zclient_width;
 		}
 
 		var reset_vlimit = false;
@@ -9073,7 +8908,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		var vscrollbartype = this._vscrollbartype;
 		var scrolltype = this._scrolltype;
 
-		if ((step_count > 0 && step_containers) || is_change_step_cnt) {
+		if (step_count > 0 && step_containers) {
 			hscrollbartype = "none";
 		}
 
@@ -9126,8 +8961,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 		}
 
-		if ((step_count > 0 && step_containers) || is_change_step_cnt) {
-			container_maxwidth = step_count *  zclient_width;
+		if (step_count > 0 && step_containers) {
+			container_maxwidth = step_count * zclient_width;
 
 			if (container_maxwidth > zclient_width) {
 				hscroll_limit = container_maxwidth - zclient_width;
@@ -9609,7 +9444,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		if (this.handle) {
 			this._max_child_zindex++;
 
-			var new_zindex = (this._max_child_zindex *  10);
+			var new_zindex = (this._max_child_zindex * 10);
 
 			elem.setElementZIndex(new_zindex);
 			if (elem._border_elems) {
@@ -9910,12 +9745,10 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 			this._refreshControl(handle, handle.style, _doc);
 			this._createBackgroundElement(_doc, handle, win.clientWidth, win.clientHeight);
-			if (nexacro._isDesktop()) {
-				if (nexacro._Browser == "Chrome" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) {
-					var _window = this._getWindow();
-					if (_window) {
-						this.setElementZoom(_window._wheelZoom);
-					}
+			if (nexacro._isDesktop() && nexacro._Browser == "Chrome") {
+				var _window = this._getWindow();
+				if (_window) {
+					this.setElementZoom(_window._wheelZoom);
 				}
 			}
 			if (nexacro._enableaccessibility && nexacro._accessibilitytype == 5) {
@@ -9949,7 +9782,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 		}
 		catch (e) {
-			return;
 		}
 	};
 
@@ -10113,14 +9945,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				target.scrollLeft = 0;
 				target.scrollTop = 0;
 			}
-			else if (elem._not_use_scrollLeft || elem._not_use_scrollTop) {
-				if (elem._not_use_scrollLeft) {
-					target.scrollLeft = 0;
-				}
-				if (elem._not_use_scrollTop) {
-					target.scrollTop = 0;
-				}
-			}
 			else {
 				if ((elem._scroll_top != target.scrollTop || elem._scroll_left != target.scrollLeft) && elem._use_onscroll_inner != true) {
 					evt._node_activate_scroll = true;
@@ -10139,7 +9963,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		};
 	};
 
-	if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+	if (nexacro._Browser == "IE") {
 		__pContainerElement._callback_func_onscroll = function (evt) {
 			if ((!evt || evt.type != "scroll") && window.event) {
 				evt = window.event;
@@ -10247,17 +10071,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 			nexacro.__setDOMStyle_ScrollLimitY(handle.style, this._scroll_type & 0x01);
 
-			if (owner_elem.dest_handle.hasChildNodes()) {
-				if (owner_elem.dest_handle.firstChild.className == "nexaedge") {
-					nexacro.__insertDOMNode(owner_elem.dest_handle, handle, owner_elem.dest_handle.childNodes[0].nextSibling);
-				}
-				else {
-					nexacro.__insertDOMNode(owner_elem.dest_handle, handle, owner_elem.dest_handle.childNodes[0]);
-				}
-			}
-			else {
-				nexacro.__appendDOMNode(owner_elem.dest_handle, handle);
-			}
+			nexacro.__appendDOMNode(owner_elem.dest_handle, handle);
 
 			this._syshandler_onscroll_forward = _bind_container_scroll_handler(this);
 			nexacro._observeSysEvent(handle, "scroll", "onscroll", this._syshandler_onscroll_forward);
@@ -10266,7 +10080,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 	__pContainerElement.createCommandStart = function () {
 		var owner_elem = this.parent_elem;
-		if (owner_elem) {
+		if (owner_elem && !this.handle) {
 			this.owner_elem = owner_elem;
 			this.name = owner_elem.name + ":container" + this.type;
 			var str = "<div";
@@ -10303,8 +10117,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 	};
 
 	__pContainerElement.attachHandle = function (win) {
-		if (this.name) {
-			var handle = this.handle || win._doc.getElementById(this.name);
+		if (this.name && !this.handle) {
+			var handle = win._doc.getElementById(this.name);
 			if (handle) {
 				this.handle = handle;
 				if (this._use_translate_scroll || this._use_onscroll_inner) {
@@ -10334,11 +10148,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		}
 	};
 
-	__pContainerElement._syshandler_inner_onscroll_forward = function (evt) {
-		evt.target.scrollTop = 0;
-		evt.target.scrollLeft = 0;
-	};
-
 	__pContainerElement.createInnerContainer = function (_doc) {
 		var handle = this.handle;
 		var dest_handle;
@@ -10362,8 +10171,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					var bRtl = this._isRtl();
 					nexacro.__setDOMStyle_Translate(dest_handle.style, -this._scroll_left, -this._scroll_top, bRtl);
 				}
-
-				nexacro._observeSysEvent(dest_handle, "scroll", "onscroll", this._syshandler_inner_onscroll_forward);
 			}
 			else {
 				if (this._use_onscroll_inner) {
@@ -10626,10 +10433,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			nexacro._stopSysObserving(handle, "scroll", "onscroll", this._syshandler_onscroll_forward);
 		}
 
-		if (this.dest_handle) {
-			nexacro._stopSysObserving(this.dest_handle, "scroll", "onscroll", this._syshandler_inner_onscroll_forward);
-		}
-
 		this._destroyElementHandle();
 
 		this.owner_elem = null;
@@ -10638,7 +10441,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		this.parent_elem = null;
 	};
 
-	if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+	if (nexacro._Browser == "IE") {
 		if (nexacro._BrowserVersion <= 8) {
 			__pContainerElement._syshandler_onscroll_forward = function (evt) {
 				if ((!evt || evt.type != "scroll") && window.event) {
@@ -10996,7 +10799,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 
 			if (len < 0) {
-				for (i = len *  -1; i > 0; i--) {
+				for (i = len * -1; i > 0; i--) {
 					this.removeInnerContainer();
 				}
 			}
@@ -11231,6 +11034,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 		}
 
+
 		if (owner_elem && !this.handle) {
 			var handle = this._createObjectElementHandle(_doc, this.left, this.top, this.width, this.height, this._params);
 			nexacro.__setDOMNode_Selectable(handle, false);
@@ -11251,7 +11055,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		}
 	};
 
-	if (nexacro._Browser == "IE") {
+	if (nexacro._Browser == "IE" && nexacro._BrowserType != "Edge") {
 		_pPluginElement.createCommand = function () {
 			var owner_elem = this.parent_elem.getContainerElement(this.position_step);
 			if (owner_elem && !this._created) {
@@ -11260,7 +11064,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				var height = this.height;
 				this.owner_elem = owner_elem;
 				this.name = owner_elem.name + ":" + this._type_name;
-				this._object_id = this.name;
 				var str = "";
 
 				if (this.lpkpath) {
@@ -11300,7 +11103,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				if (data) {
 					str += 'data="' + data + '" ';
 				}
-
 				str += (handle_style) ? (" style='" + handle_style + "'>") : ">";
 				var params = this._params;
 				var param_cnt = (params ? params.length : 0);
@@ -11337,7 +11139,92 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 			return "";
 		};
+	}
+	else {
+		_pPluginElement.createCommand = function () {
+			var owner_elem = this.parent_elem.getContainerElement(this.position_step);
+			if (owner_elem && !this._created) {
+				this.owner_elem = owner_elem;
+				this.name = owner_elem.name + ":" + this._type_name;
+				var handle_style = this._getCommonStyleStr();
+				var str = "<object id = '" + this.name + "'";
+				str += this.codebase ? "codebase = '" + this.codebase + "'" : "";
+				str += this.code ? "code = '" + this.code + "'" : "";
+				str += this.archive ? "archive = '" + this.archive + "'" : "";
+				str += this.mimetype ? "mimetype = '" + this.mimetype + "'" : "";
+				str += this.movie ? "data = '" + this.movie + "'" : "";
+				str += (handle_style) ? (" style='" + handle_style + "'/>") : "/>";
+				var params = this._params;
+				var param_cnt = (params ? params.length : 0);
 
+				for (var i = 0; i < param_cnt; i++) {
+					str += "<param name ='" + params.get_id(i) + "' value ='" + params.get_item(i) + "'/>";
+				}
+				if (this.pluginsrc || this.pluginpage) {
+					str += "<embed ";
+					str += this.pluginsrc ? "src = '" + this.pluginsrc + "'" : "";
+					str += this.pluginpage ? "pluginpage = '" + this.pluginpage + "'" : "";
+					str += this.plugintype ? "type = '" + this.plugintype + "'" : "";
+					for (i = 0; i < param_cnt; i++) {
+						str += " " + params.get_id(i) + " = '" + params.get_item(i) + "' ";
+					}
+					str += "/></embed>";
+				}
+				str += "</object>";
+				return str;
+			}
+			return "";
+		};
+	}
+	_pPluginElement.attachHandle = function (win) {
+		var handle = this.handle = win._doc.getElementById(this.name);
+		if (handle) {
+			this._object_node = handle;
+			var embed_node = null;
+			var nodes = handle.getElementsByTagName("embed");
+			if (nodes && nodes.length > 0) {
+				embed_node = nodes[0];
+			}
+			this._embed_node = embed_node;
+		}
+	};
+
+	_pPluginElement.destroy = function () {
+		var handle = this.handle;
+		if (handle) {
+			handle._linked_element = null;
+
+			var _owner_handle = null;
+			if (this.owner_elem && this.owner_elem.dest_handle) {
+				_owner_handle = this.owner_elem.dest_handle;
+			}
+
+			if (!this.owner_elem || _owner_handle) {
+				nexacro.__removeDOMNode(_owner_handle, handle);
+			}
+
+			this.owner_elem = null;
+			this.handle = this.dest_handle = null;
+			this._object_node = null;
+			this._embed_node = null;
+		}
+		this.parent = null;
+		this.parent_elem = null;
+
+		var params = this._params;
+		if (params) {
+			params.destroy();
+			this._params = null;
+		}
+
+		var events = this._events;
+		if (events) {
+			events.destroy();
+			this._events = null;
+		}
+	};
+
+	if (nexacro._Browser == "IE" && nexacro._BrowserType != "Edge") {
 		_pPluginElement._createObjectElementHandle = function (_doc, left, top, width, height, params) {
 			var handle = _doc.createElement("div");
 
@@ -11450,241 +11337,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 			return handle;
 		};
-
-		_pPluginElement.setElementClassId = function (classid) {
-			if (classid) {
-				if (classid.charAt(0) == '{') {
-					var clsid = classid.replace(/\{|\}/g, "");
-					classid = "clsid:" + clsid;
-				}
-			}
-
-			if (this.classid != classid) {
-				this.classid = classid;
-
-				var object_node = this._object_node;
-				if (object_node) {
-					nexacro.__setHTMLAttr_Proeprty(object_node, 'classid', classid);
-				}
-			}
-		};
-
-		_pPluginElement.addEventHandler = function (name, callback) {
-			if (this.handle && this._object_node && this._object_id && callback) {
-				var _doc = this._getRootWindowHandle();
-				var script_node = _doc.createElement("script");
-				nexacro.__setHTMLAttr_Proeprty(script_node, 'for', this._object_id);
-
-				var paramsFromToStringRegex = /\(.*?\)/;
-				var params = callback.toString().match(paramsFromToStringRegex)[0];
-				var len = params.length;
-				params = params.substring(1, len - 1);
-				params = params.split(",");
-				len = params.length;
-
-				if (len > 0) {
-					params.shift();
-					params = "(" + params + ")";
-				}
-
-				var eventValue = name + params;
-				var callfunc = "";
-				var pluginobj = "";
-				var frmidx, frmlen;
-				nexacro.__setHTMLAttr_Proeprty(script_node, 'event', eventValue);
-				nexacro.__setHTMLAttr_Proeprty(script_node, 'language', 'javascript');
-
-				var parentFrame, parentFrame2;
-				parentFrame = this.component ? this.component.parent : null;
-				if (parentFrame) {
-					callfunc = "." + this.component.id + '["' + name + '"]; \n';
-					pluginobj = "." + this.component.id + "; \n";
-
-					len = params.length;
-					params = params.substring(1, len - 1);
-					len = params.length;
-
-					if (len == 0) {
-						params = "( obj )";
-					}
-					else {
-						params = params.split(",");
-						params.unshift("obj");
-						params = "( " + params + ")";
-					}
-
-					callfunc += 'if (eventFn) eventFn._firePluginEvent' + params + ';';
-					do {
-						if (parentFrame instanceof nexacro.MainFrame) {
-							callfunc = 'var eventFn = nexacro.getApplication().mainframe' + callfunc;
-							pluginobj = 'var obj = nexacro.getApplication().mainframe' + pluginobj;
-							break;
-						}
-						if (parentFrame instanceof nexacro.ChildFrame) {
-							parentFrame2 = parentFrame.parent;
-							if (parentFrame2) {
-								if (parentFrame2 instanceof nexacro.FrameSet || 
-									parentFrame2 instanceof nexacro.VFrameSet || 
-									parentFrame2 instanceof nexacro.HFrameSet || 
-									parentFrame2 instanceof nexacro.ChildFrame) {
-									if (parentFrame2._frames && parentFrame2._frames.length) {
-										frmlen = parentFrame2._frames.length;
-										for (frmidx = 0; frmidx < frmlen; frmidx++) {
-											if (parentFrame2._frames[frmidx] == parentFrame) {
-												callfunc = '._frames[' + frmidx + ']' + callfunc;
-												pluginobj = '._frames[' + frmidx + ']' + pluginobj;
-												break;
-											}
-										}
-									}
-								}
-								else if (parentFrame2 instanceof nexacro.MainFrame) {
-									callfunc = '.frame' + callfunc;
-									pluginobj = '.frame' + pluginobj;
-								}
-								else if (parentFrame2 instanceof nexacro.Form) {
-									callfunc = '.' + parentFrame.id + callfunc;
-									pluginobj = '.' + parentFrame.id + pluginobj;
-								}
-							}
-						}
-						else if (parentFrame instanceof nexacro.FrameSet || 
-							parentFrame instanceof nexacro.VFrameSet || 
-							parentFrame instanceof nexacro.HFrameSet) {
-							parentFrame2 = parentFrame.parent;
-							if (parentFrame2) {
-								if (parentFrame2._frames && parentFrame2._frames.length) {
-									frmlen = parentFrame2._frames.length;
-									for (frmidx = 0; frmidx < frmlen; frmidx++) {
-										if (parentFrame2._frames[frmidx] == parentFrame) {
-											callfunc = '._frames[' + frmidx + ']' + callfunc;
-											pluginobj = '._frames[' + frmidx + ']' + pluginobj;
-											break;
-										}
-									}
-								}
-							}
-						}
-						else if (parentFrame instanceof nexacro.Div) {
-							callfunc = '.' + parentFrame.id + callfunc;
-							pluginobj = '.' + parentFrame.id + pluginobj;
-						}
-						else if (parentFrame instanceof nexacro.Form) {
-							callfunc = '.form' + callfunc;
-							pluginobj = '.form' + pluginobj;
-						}
-						parentFrame = parentFrame.parent;
-					} while (parentFrame);
-				}
-				callfunc = pluginobj + callfunc;
-				nexacro.__setDOMNode_Text(script_node, callfunc);
-
-				var owner_elem = this.parent_elem.getContainerElement(this.position_step);
-				nexacro.__appendDOMNode(owner_elem.dest_handle, script_node);
-				return true;
-			}
-			else {
-				this._events.add_item(name, callback);
-			}
-			return false;
-		};
-
-		_pPluginElement.removeEventHandler = function (name, callback) {
-			if (this.handle) {
-				var paramsFromToStringRegex = /\(.*?\)/;
-				var params = callback.toString().match(paramsFromToStringRegex)[0];
-				var eventValue = name + params;
-
-				var i;
-				var owner_elem = this.parent_elem.getContainerElement(this.position_step);
-				var _scripts = owner_elem.dest_handle.getElementsByTagName("script");
-				var length = _scripts.length;
-				for (i = 0; i < length; i++) {
-					var script = _scripts[i];
-					if (script) {
-						var eventAttribute = nexacro.__getHTMLAttr_Proeprty(script, 'event');
-						if (eventAttribute === eventValue) {
-							var parentNode = script.parentNode;
-							nexacro.__unlinkDOMNode(parentNode, script);
-							break;
-						}
-					}
-				}
-			}
-		};
-
-		_pPluginElement.setElementMovie = function (movie) {
-			this.setElementParam("movie", movie);
-		};
-
-		_pPluginElement.setElementPluginPage = function (pluginpage) {
-			if (this.pluginpage != pluginpage) {
-				this.pluginpage = pluginpage;
-
-				var object_node = this._object_node;
-				if (object_node) {
-					var embed_node = this._embed_node;
-					if (embed_node == null) {
-						var _doc = this._getRootWindowHandle();
-						this._embed_node = embed_node = _doc.createElement("embed");
-						nexacro.__appendDOMNode(object_node, embed_node);
-					}
-					nexacro.__setHTMLAttr_Proeprty(embed_node, 'pluginspage', pluginpage);
-				}
-			}
-		};
-
-		_pPluginElement._play = function (movie) {
-			var obj_node = this._object_node;
-			if (obj_node) {
-				obj_node.Play();
-			}
-		};
-
-		_pPluginElement._stopPlay = function (movie) {
-			var obj_node = this._object_node;
-			if (obj_node) {
-				obj_node.StopPlay();
-			}
-		};
 	}
 	else {
-		_pPluginElement.createCommand = function () {
-			var owner_elem = this.parent_elem.getContainerElement(this.position_step);
-			if (owner_elem && !this._created) {
-				this.owner_elem = owner_elem;
-				this.name = owner_elem.name + ":" + this._type_name;
-				this._object_id = this.name;
-				var handle_style = this._getCommonStyleStr();
-				var str = "<object id = '" + this.name + "'";
-				str += this.codebase ? "codebase = '" + this.codebase + "'" : "";
-				str += this.code ? "code = '" + this.code + "'" : "";
-				str += this.archive ? "archive = '" + this.archive + "'" : "";
-				str += this.mimetype ? "mimetype = '" + this.mimetype + "'" : "";
-				str += this.movie ? "data = '" + this.movie + "'" : "";
-				str += (handle_style) ? (" style='" + handle_style + "'/>") : "/>";
-				var params = this._params;
-				var param_cnt = (params ? params.length : 0);
-
-				for (var i = 0; i < param_cnt; i++) {
-					str += "<param name ='" + params.get_id(i) + "' value ='" + params.get_item(i) + "'/>";
-				}
-				if (this.pluginsrc || this.pluginpage) {
-					str += "<embed ";
-					str += this.pluginsrc ? "src = '" + this.pluginsrc + "'" : "";
-					str += this.pluginpage ? "pluginpage = '" + this.pluginpage + "'" : "";
-					str += this.plugintype ? "type = '" + this.plugintype + "'" : "";
-					for (i = 0; i < param_cnt; i++) {
-						str += " " + params.get_id(i) + " = '" + params.get_item(i) + "' ";
-					}
-					str += "/></embed>";
-				}
-				str += "</object>";
-				return str;
-			}
-			return "";
-		};
-
 		_pPluginElement._createObjectElementHandle = function (_doc, left, top, width, height, params) {
 			var handle = _doc.createElement("object");
 
@@ -11714,7 +11368,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				nexacro.__setHTMLAttr_Proeprty(handle, 'archive', archive);
 			}
 
-			if (nexacro._Browser == "Chrome" || nexacro._Browser == "Edge") {
+			if (nexacro._Browser == "Chrome" || nexacro._BrowserType == "Edge") {
 				var mimetype = this.mimetype;
 				if (mimetype) {
 					nexacro.__setHTMLAttr_Proeprty(handle, 'mimetype', mimetype);
@@ -11759,231 +11413,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			this._object_node = handle;
 			return handle;
 		};
-
-		_pPluginElement.setElementClassId = nexacro._emptyFn;
-
-		_pPluginElement.addEventHandler = function (name, callback) {
-			if (this.handle && this._object_node) {
-				var object_node = this._object_node;
-				nexacro.__setHTMLAttr_Proeprty(object_node, name, name);
-
-				var doc = this._getRootWindowHandle();
-				var script_node = doc.createElement("script");
-
-				var paramsFromToStringRegex = /\(.*?\)/;
-				var params = callback.toString().match(paramsFromToStringRegex)[0];
-				var eventValue = name + params;
-
-				nexacro.__setHTMLAttr_Proeprty(script_node, 'event', eventValue);
-
-				var parentFrame, parentFrame2;
-				var callfunc = "";
-				var frmidx, frmlen;
-				parentFrame = this.component ? this.component.parent : null;
-				if (parentFrame) {
-					callfunc = "." + this.component.id + '["' + name + '"]; \n';
-					callfunc += '\tif (eventFn) eventFn._firePluginEvent' + params + ';' + "\n};";
-					do {
-						if (parentFrame instanceof nexacro.MainFrame) {
-							callfunc = '\tvar eventFn = nexacro.getApplication().mainframe' + callfunc;
-							break;
-						}
-						if (parentFrame instanceof nexacro.ChildFrame) {
-							parentFrame2 = parentFrame.parent;
-							if (parentFrame2) {
-								if (parentFrame2 instanceof nexacro.FrameSet || 
-									parentFrame2 instanceof nexacro.VFrameSet || 
-									parentFrame2 instanceof nexacro.HFrameSet || 
-									parentFrame2 instanceof nexacro.ChildFrame) {
-									if (parentFrame2._frames && parentFrame2._frames.length) {
-										frmlen = parentFrame2._frames.length;
-										for (frmidx = 0; frmidx < frmlen; frmidx++) {
-											if (parentFrame2._frames[frmidx] == parentFrame) {
-												callfunc = '._frames[' + frmidx + ']' + callfunc;
-												break;
-											}
-										}
-									}
-								}
-								else if (parentFrame2 instanceof nexacro.MainFrame) {
-									callfunc = '.frame' + callfunc;
-								}
-								else if (parentFrame2 instanceof nexacro.Form) {
-									callfunc = '.' + parentFrame.id + callfunc;
-								}
-							}
-						}
-						else if (parentFrame instanceof nexacro.FrameSet || 
-							parentFrame instanceof nexacro.VFrameSet || 
-							parentFrame instanceof nexacro.HFrameSet) {
-							parentFrame2 = parentFrame.parent;
-							if (parentFrame2) {
-								if (parentFrame2._frames && parentFrame2._frames.length) {
-									frmlen = parentFrame2._frames.length;
-									for (frmidx = 0; frmidx < frmlen; frmidx++) {
-										if (parentFrame2._frames[frmidx] == parentFrame) {
-											callfunc = '._frames[' + frmidx + ']' + callfunc;
-											break;
-										}
-									}
-								}
-							}
-						}
-						else if (parentFrame instanceof nexacro.Div) {
-							callfunc = '.' + parentFrame.id + callfunc;
-						}
-						else if (parentFrame instanceof nexacro.Form) {
-							callfunc = '.form' + callfunc;
-						}
-						parentFrame = parentFrame.parent;
-					} while (parentFrame);
-				}
-				if (callfunc) {
-					callfunc = 'function ' + eventValue + '\n{\n' + callfunc;
-				}
-
-				script_node.text = callfunc;
-				this.handle.appendChild(script_node);
-				return true;
-			}
-			else {
-				this._events.add_item(name, callback);
-			}
-			return false;
-		};
-
-		_pPluginElement.removeEventHandler = function (name, callback) {
-			if (this.handle && this._object_node) {
-				var object_node = this._object_node;
-				nexacro.__removeHTMLAttr_Proeprty(object_node, name);
-				object_node.removeAttribute(name);
-
-				var paramsFromToStringRegex = /\(.*?\)/;
-				var params = callback.toString().match(paramsFromToStringRegex)[0];
-				var eventValue = name + params;
-
-				var i;
-				var scripts = this.handle.getElementsByTagName("script");
-				var length = scripts.length;
-				for (i = 0; i < length; i++) {
-					var script = scripts[i];
-					if (script) {
-						var eventAttribute = nexacro.__getHTMLAttr_Proeprty(script, 'event');
-						if (eventAttribute === eventValue) {
-							var parentNode = script.parentNode;
-							nexacro.__unlinkDOMNode(parentNode, script);
-							break;
-						}
-					}
-				}
-			}
-		};
-
-		if (nexacro._Browser == "Chrome" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) {
-			_pPluginElement.setElementMovie = function (movie) {
-				if (this.movie) {
-					nexacro.__removeDOMNode(this.owner_elem.handle, this._object_node);
-					var handle = this._createObjectElementHandle(document, this.left, this.top, this.width, this.height, this._params);
-					nexacro.__appendDOMNode(this.owner_elem.dest_handle, handle);
-				}
-				this.movie = movie;
-				var obj_node = this._object_node;
-				if (obj_node) {
-					nexacro.__setHTMLAttr_Proeprty(obj_node, "data", movie);
-				}
-			};
-		}
-		else if (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge") {
-			_pPluginElement.setElementMovie = function (movie) {
-				this.movie = movie;
-				var obj_node = this._object_node;
-				if (obj_node) {
-					nexacro.__removeDOMNode(this.owner_elem.handle, obj_node);
-					var handle = this._createObjectElementHandle(document, this.left, this.top, this.width, this.height, this._params);
-					nexacro.__appendDOMNode(this.owner_elem.handle, handle);
-				}
-			};
-		}
-		else {
-			_pPluginElement.setElementMovie = function (movie) {
-				this.movie = movie;
-				var obj_node = this._object_node;
-				if (obj_node) {
-					nexacro.__setHTMLAttr_Proeprty(obj_node, "data", movie);
-				}
-			};
-		}
-
-		_pPluginElement.setElementPluginPage = nexacro._emptyFn;
-
-		_pPluginElement._play = function () {
-			var obj_node = this._object_node;
-			if (obj_node) {
-				obj_node.Play();
-			}
-		};
-
-		_pPluginElement._stopPlay = function () {
-			var obj_node = this._object_node;
-			if (obj_node) {
-				obj_node.StopPlay();
-			}
-		};
 	}
-
-	_pPluginElement.attachHandle = function (win) {
-		var handle = this.handle = win._doc.getElementById(this.name);
-		if (handle) {
-			this._object_node = handle;
-			var embed_node = null;
-			var nodes = handle.getElementsByTagName("embed");
-			if (nodes && nodes.length > 0) {
-				embed_node = nodes[0];
-			}
-			this._embed_node = embed_node;
-
-			var events = this._events;
-			var event_cnt = events.length;
-			for (var i = 0; i < event_cnt; i++) {
-				this.addEventHandler(events.get_id(i), events.get_item(i), null);
-			}
-		}
-	};
-
-	_pPluginElement.destroy = function () {
-		var handle = this.handle;
-		if (handle) {
-			handle._linked_element = null;
-
-			var _owner_handle = null;
-			if (this.owner_elem && this.owner_elem.dest_handle) {
-				_owner_handle = this.owner_elem.dest_handle;
-			}
-
-			if (!this.owner_elem || _owner_handle) {
-				nexacro.__removeDOMNode(_owner_handle, handle);
-			}
-
-			this.owner_elem = null;
-			this.handle = this.dest_handle = null;
-			this._object_node = null;
-			this._embed_node = null;
-		}
-		this.parent = null;
-		this.parent_elem = null;
-
-		var params = this._params;
-		if (params) {
-			params.destroy();
-			this._params = null;
-		}
-
-		var events = this._events;
-		if (events) {
-			events.destroy();
-			this._events = null;
-		}
-	};
 
 	_pPluginElement._setObjectDOMParam = function (_doc, target_handle, name, value) {
 		var param_node = _doc.createElement("param");
@@ -12051,6 +11481,29 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 		}
 	};
+
+	if (nexacro._Browser == "IE" && nexacro._BrowserType != "Edge") {
+		_pPluginElement.setElementClassId = function (classid) {
+			if (classid) {
+				if (classid.charAt(0) == '{') {
+					var clsid = classid.replace(/\{|\}/g, "");
+					classid = "clsid:" + clsid;
+				}
+			}
+
+			if (this.classid != classid) {
+				this.classid = classid;
+
+				var object_node = this._object_node;
+				if (object_node) {
+					nexacro.__setHTMLAttr_Proeprty(object_node, 'classid', classid);
+				}
+			}
+		};
+	}
+	else {
+		_pPluginElement.setElementClassId = nexacro._emptyFn;
+	}
 
 	_pPluginElement.setElementCodebase = function (codebase) {
 		if (this.codebase != codebase) {
@@ -12177,53 +11630,30 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		}
 
 		if (this.handle && this._object_node) {
-			var obj_idx = 0;
-			var obj_arr = [];
-			var target = this._embed_node ? this._embed_node : this._object_node;
 			var fn_name = Array.prototype.shift.call(arguments);
-			var script_str = "var ret = this." + fn_name + "(";
+			var str;
 
-			for (var i = 0; i < arguments.length; i++) {
-				if (arguments[i] === undefined) {
-					script_str = "var arg" + i + " = undefined" + ";\n" + script_str;
-				}
-				else if (arguments[i] === null) {
-					script_str = "var arg" + i + " = null" + ";\n" + script_str;
-				}
-				else if (arguments[i] === "") {
-					script_str = "var arg" + i + " = \"\"" + ";\n" + script_str;
-				}
-				else {
-					if (typeof arguments[i] == "string") {
-						var replace_str = arguments[i].replace(/"/g, "\\\"").replace(/\n/g, "\\n");
-						script_str = "var arg" + i + " = \"" + replace_str + "\";\n" + script_str;
-					}
-					else if (typeof arguments[i] == "object") {
-						script_str = "var arg" + i + " = arguments[" + obj_idx + "];\n" + script_str;
-						obj_arr.push(arguments[i]);
-						obj_idx++;
-					}
-					else {
-						script_str = "var arg" + i + " = " + arguments[i] + ";\n" + script_str;
-					}
-				}
+			if (this._embed_node) {
+				str = 'this._embed_node.' + fn_name;
+			}
+			else if (this._object_node) {
+				str = 'this._object_node.' + fn_name;
+			}
+			else {
+				str = this._object_id + '.' + fn_name;
+			}
 
-				if (i < arguments.length - 1) {
-					script_str += "arg" + i + ", ";
-				}
-				else {
-					script_str += "arg" + i;
+			str += '(';
+			var len = arguments.length;
+			if (len > 0) {
+				str += 'arguments[0]';
+				for (var i = 1; i < len; i++) {
+					str += ', arguments[' + i + ']';
 				}
 			}
-			script_str += ");\n";
-			script_str += "return ret;";
+			str += ');';
 
-			var callScript = function () {
-				var fn = new Function(arguments[0]);
-				return fn.apply(this, obj_arr);
-			};
-
-			return callScript.call(target, script_str);
+			return eval(str);
 		}
 	};
 
@@ -12235,6 +11665,324 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			return obj;
 		}
 	};
+
+
+	if (nexacro._Browser == "IE" && nexacro._BrowserType != "Edge") {
+		_pPluginElement.addEventHandler = function (name, callback) {
+			if (this.handle && this._object_node && this._object_id) {
+				var _doc = this._getRootWindowHandle();
+				var script_node = _doc.createElement("script");
+				nexacro.__setHTMLAttr_Proeprty(script_node, 'for', this._object_id);
+
+				var paramsFromToStringRegex = /\(.*?\)/;
+				var params = callback.toString().match(paramsFromToStringRegex)[0];
+				var eventValue = name + params;
+				var callfunc = "";
+				var frmidx, frmlen;
+				nexacro.__setHTMLAttr_Proeprty(script_node, 'event', eventValue);
+				nexacro.__setHTMLAttr_Proeprty(script_node, 'language', 'javascript');
+
+				var parentFrame, parentFrame2;
+				parentFrame = this.component ? this.component.parent : null;
+				if (parentFrame) {
+					callfunc = "." + this.component.id + '["' + name + '"]; \n';
+					callfunc += 'if (eventFn) eventFn._firePluginEvent' + params + ';';
+					do {
+						if (parentFrame instanceof nexacro.MainFrame) {
+							callfunc = 'var eventFn = nexacro.getApplication().mainframe' + callfunc;
+							break;
+						}
+						if (parentFrame instanceof nexacro.ChildFrame) {
+							parentFrame2 = parentFrame.parent;
+							if (parentFrame2) {
+								if (parentFrame2 instanceof nexacro.FrameSet || 
+									parentFrame2 instanceof nexacro.VFrameSet || 
+									parentFrame2 instanceof nexacro.HFrameSet || 
+									parentFrame2 instanceof nexacro.ChildFrame) {
+									if (parentFrame2._frames && parentFrame2._frames.length) {
+										frmlen = parentFrame2._frames.length;
+										for (frmidx = 0; frmidx < frmlen; frmidx++) {
+											if (parentFrame2._frames[frmidx] == parentFrame) {
+												callfunc = '._frames[' + frmidx + ']' + callfunc;
+												break;
+											}
+										}
+									}
+								}
+								else if (parentFrame2 instanceof nexacro.MainFrame) {
+									callfunc = '.frame' + callfunc;
+								}
+								else if (parentFrame2 instanceof nexacro.Form) {
+									callfunc = '.' + parentFrame.id + callfunc;
+								}
+							}
+						}
+						else if (parentFrame instanceof nexacro.FrameSet || 
+							parentFrame instanceof nexacro.VFrameSet || 
+							parentFrame instanceof nexacro.HFrameSet) {
+							parentFrame2 = parentFrame.parent;
+							if (parentFrame2) {
+								if (parentFrame2._frames && parentFrame2._frames.length) {
+									frmlen = parentFrame2._frames.length;
+									for (frmidx = 0; frmidx < frmlen; frmidx++) {
+										if (parentFrame2._frames[frmidx] == parentFrame) {
+											callfunc = '._frames[' + frmidx + ']' + callfunc;
+											break;
+										}
+									}
+								}
+							}
+						}
+						else if (parentFrame instanceof nexacro.Div) {
+							callfunc = '.' + parentFrame.id + callfunc;
+						}
+						else if (parentFrame instanceof nexacro.Form) {
+							callfunc = '.form' + callfunc;
+						}
+						parentFrame = parentFrame.parent;
+					} while (parentFrame);
+				}
+				nexacro.__setDOMNode_Text(script_node, callfunc);
+
+				var owner_elem = this.parent_elem.getContainerElement(this.position_step);
+				nexacro.__appendDOMNode(owner_elem.dest_handle, script_node);
+				return true;
+			}
+			else {
+				this._events.add_item(name, callback);
+			}
+			return false;
+		};
+
+		_pPluginElement.removeEventHandler = function (name, callback) {
+			if (this.handle) {
+				var paramsFromToStringRegex = /\(.*?\)/;
+				var params = callback.toString().match(paramsFromToStringRegex)[0];
+				var eventValue = name + params;
+
+				var i;
+				var owner_elem = this.parent_elem.getContainerElement(this.position_step);
+				var _scripts = owner_elem.dest_handle.getElementsByTagName("script");
+				var length = _scripts.length;
+				for (i = 0; i < length; i++) {
+					var script = _scripts[i];
+					if (script) {
+						var eventAttribute = nexacro.__getHTMLAttr_Proeprty(script, 'event');
+						if (eventAttribute === eventValue) {
+							var parentNode = script.parentNode;
+							nexacro.__unlinkDOMNode(parentNode, script);
+							break;
+						}
+					}
+				}
+			}
+		};
+
+		_pPluginElement.setElementMovie = function (movie) {
+			this.setElementParam("movie", movie);
+		};
+
+		_pPluginElement.setElementPluginPage = function (pluginpage) {
+			if (this.pluginpage != pluginpage) {
+				this.pluginpage = pluginpage;
+
+				var object_node = this._object_node;
+				if (object_node) {
+					var embed_node = this._embed_node;
+					if (embed_node == null) {
+						var _doc = this._getRootWindowHandle();
+						this._embed_node = embed_node = _doc.createElement("embed");
+						nexacro.__appendDOMNode(object_node, embed_node);
+					}
+					nexacro.__setHTMLAttr_Proeprty(embed_node, 'pluginspage', pluginpage);
+				}
+			}
+		};
+
+		_pPluginElement._play = function (movie) {
+			var obj_node = this._object_node;
+			if (obj_node) {
+				obj_node.Play();
+			}
+		};
+
+		_pPluginElement._stopPlay = function (movie) {
+			var obj_node = this._object_node;
+			if (obj_node) {
+				obj_node.StopPlay();
+			}
+		};
+	}
+	else {
+		_pPluginElement.addEventHandler = function (name, callback) {
+			if (this.handle && this._object_node) {
+				var object_node = this._object_node;
+				nexacro.__setHTMLAttr_Proeprty(object_node, name, name);
+
+				var doc = this._getRootWindowHandle();
+				var script_node = doc.createElement("script");
+
+				var paramsFromToStringRegex = /\(.*?\)/;
+				var params = callback.toString().match(paramsFromToStringRegex)[0];
+				var eventValue = name + params;
+
+				nexacro.__setHTMLAttr_Proeprty(script_node, 'event', eventValue);
+
+				var parentFrame, parentFrame2;
+				var callfunc = "";
+				var frmidx, frmlen;
+				parentFrame = this.component ? this.component.parent : null;
+				if (parentFrame) {
+					callfunc = "." + this.component.id + '["' + name + '"]; \n';
+					callfunc += '\tif (eventFn) eventFn._firePluginEvent' + params + ';' + "\n};";
+					do {
+						if (parentFrame instanceof nexacro.MainFrame) {
+							callfunc = '\tvar eventFn = nexacro.getApplication().mainframe' + callfunc;
+							break;
+						}
+						if (parentFrame instanceof nexacro.ChildFrame) {
+							parentFrame2 = parentFrame.parent;
+							if (parentFrame2) {
+								if (parentFrame2 instanceof nexacro.FrameSet || 
+									parentFrame2 instanceof nexacro.VFrameSet || 
+									parentFrame2 instanceof nexacro.HFrameSet || 
+									parentFrame2 instanceof nexacro.ChildFrame) {
+									if (parentFrame2._frames && parentFrame2._frames.length) {
+										frmlen = parentFrame2._frames.length;
+										for (frmidx = 0; frmidx < frmlen; frmidx++) {
+											if (parentFrame2._frames[frmidx] == parentFrame) {
+												callfunc = '._frames[' + frmidx + ']' + callfunc;
+												break;
+											}
+										}
+									}
+								}
+								else if (parentFrame2 instanceof nexacro.MainFrame) {
+									callfunc = '.frame' + callfunc;
+								}
+								else if (parentFrame2 instanceof nexacro.Form) {
+									callfunc = '.' + parentFrame.id + callfunc;
+								}
+							}
+						}
+						else if (parentFrame instanceof nexacro.FrameSet || 
+							parentFrame instanceof nexacro.VFrameSet || 
+							parentFrame instanceof nexacro.HFrameSet) {
+							parentFrame2 = parentFrame.parent;
+							if (parentFrame2) {
+								if (parentFrame2._frames && parentFrame2._frames.length) {
+									frmlen = parentFrame2._frames.length;
+									for (frmidx = 0; frmidx < frmlen; frmidx++) {
+										if (parentFrame2._frames[frmidx] == parentFrame) {
+											callfunc = '._frames[' + frmidx + ']' + callfunc;
+											break;
+										}
+									}
+								}
+							}
+						}
+						else if (parentFrame instanceof nexacro.Div) {
+							callfunc = '.' + parentFrame.id + callfunc;
+						}
+						else if (parentFrame instanceof nexacro.Form) {
+							callfunc = '.form' + callfunc;
+						}
+						parentFrame = parentFrame.parent;
+					} while (parentFrame);
+				}
+				if (callfunc) {
+					callfunc = 'function ' + eventValue + '\n{\n' + callfunc;
+				}
+
+				script_node.text = callfunc;
+				this.handle.appendChild(script_node);
+				return true;
+			}
+			else {
+				this._events.add_item(name, callback);
+			}
+			return false;
+		};
+
+		_pPluginElement.removeEventHandler = function (name, callback) {
+			if (this.handle && this._object_node) {
+				var object_node = this._object_node;
+				nexacro.__removeHTMLAttr_Proeprty(object_node, name);
+				object_node.removeAttribute(name);
+
+				var paramsFromToStringRegex = /\(.*?\)/;
+				var params = callback.toString().match(paramsFromToStringRegex)[0];
+				var eventValue = name + params;
+
+				var i;
+				var scripts = this.handle.getElementsByTagName("script");
+				var length = scripts.length;
+				for (i = 0; i < length; i++) {
+					var script = scripts[i];
+					if (script) {
+						var eventAttribute = nexacro.__getHTMLAttr_Proeprty(script, 'event');
+						if (eventAttribute === eventValue) {
+							var parentNode = script.parentNode;
+							nexacro.__unlinkDOMNode(parentNode, script);
+							break;
+						}
+					}
+				}
+			}
+		};
+
+		if (nexacro._Browser == "Chrome") {
+			_pPluginElement.setElementMovie = function (movie) {
+				if (this.movie) {
+					nexacro.__removeDOMNode(this.owner_elem.handle, this._object_node);
+					var handle = this._createObjectElementHandle(document, this.left, this.top, this.width, this.height, this._params);
+					nexacro.__appendDOMNode(this.owner_elem.dest_handle, handle);
+				}
+				this.movie = movie;
+				var obj_node = this._object_node;
+				if (obj_node) {
+					nexacro.__setHTMLAttr_Proeprty(obj_node, "data", movie);
+				}
+			};
+		}
+		else if (nexacro._BrowserType == "Edge") {
+			_pPluginElement.setElementMovie = function (movie) {
+				this.movie = movie;
+				var obj_node = this._object_node;
+				if (obj_node) {
+					nexacro.__removeDOMNode(this.owner_elem.handle, obj_node);
+					var handle = this._createObjectElementHandle(document, this.left, this.top, this.width, this.height, this._params);
+					nexacro.__appendDOMNode(this.owner_elem.handle, handle);
+				}
+			};
+		}
+		else {
+			_pPluginElement.setElementMovie = function (movie) {
+				this.movie = movie;
+				var obj_node = this._object_node;
+				if (obj_node) {
+					nexacro.__setHTMLAttr_Proeprty(obj_node, "data", movie);
+				}
+			};
+		}
+
+		_pPluginElement.setElementPluginPage = nexacro._emptyFn;
+
+		_pPluginElement._play = function () {
+			var obj_node = this._object_node;
+			if (obj_node) {
+				obj_node.Play();
+			}
+		};
+
+		_pPluginElement._stopPlay = function () {
+			var obj_node = this._object_node;
+			if (obj_node) {
+				obj_node.StopPlay();
+			}
+		};
+	}
+
 
 	_pPluginElement.getProperty = _pPluginElement.getElementParam;
 	_pPluginElement.setProperty = _pPluginElement.setElementParam;
@@ -12251,8 +11999,9 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 	_pPluginElement.updateWindow = nexacro._emptyFn;
 	_pPluginElement.setElementAdjustAlpha = nexacro._emptyFn;
 	_pPluginElement.setElementUsePersistData = nexacro._emptyFn;
-	_pPluginElement.getElementUsePersistData = nexacro._emptyFn;
 	_pPluginElement.setElementClassId64 = nexacro._emptyFn;
+
+
 
 	nexacro.PluginObject = function () {
 	};
@@ -12269,18 +12018,15 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		if (handle !== undefined) {
 			if (name) {
 				var property = handle[name];
-				if (property === null || (typeof property !== "undefined" && typeof property != "object" && typeof property != "function")) {
-					return property;
-				}
-				else {
-					if (property !== undefined) {
-						var pobject = new nexacro.PluginObject();
-						pobject.handle = property;
-						pobject._window = this._window;
-						return pobject;
+				if (property !== undefined) {
+					if (property === null || (typeof property != "object" && typeof property != "function")) {
+						return property;
 					}
+					var pobject = new nexacro.PluginObject();
+					pobject.handle = property;
+					pobject._window = this._window;
+					return pobject;
 				}
-
 				var param = this.handle.getElementsByTagName("param");
 				for (var i in param) {
 					if (param[i].name == name) {
@@ -12334,52 +12080,21 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		}
 
 		if (this.handle || this.handle !== undefined) {
-			var obj_idx = 0;
-			var obj_arr = [];
 			var fn_name = Array.prototype.shift.call(arguments);
-			var script_str = "var ret = this." + fn_name + "(";
+			var str = 'this.handle.' + fn_name;
 
-			for (var i = 0; i < arguments.length; i++) {
-				if (arguments[i] === undefined) {
-					script_str = "var arg" + i + " = undefined" + ";\n" + script_str;
-				}
-				else if (arguments[i] === null) {
-					script_str = "var arg" + i + " = null" + ";\n" + script_str;
-				}
-				else if (arguments[i] === "") {
-					script_str = "var arg" + i + " = \"\"" + ";\n" + script_str;
-				}
-				else {
-					if (typeof arguments[i] == "string") {
-						var replace_str = arguments[i].replace(/"/g, "\\\"").replace(/\n/g, "\\n");
-						script_str = "var arg" + i + " = \"" + replace_str + "\";\n" + script_str;
-					}
-					else if (typeof arguments[i] == "object") {
-						script_str = "var arg" + i + " = arguments[" + obj_idx + "];\n" + script_str;
-						obj_arr.push(arguments[i]);
-						obj_idx++;
-					}
-					else {
-						script_str = "var arg" + i + " = " + arguments[i] + ";\n" + script_str;
-					}
-				}
-
-				if (i < arguments.length - 1) {
-					script_str += "arg" + i + ", ";
-				}
-				else {
-					script_str += "arg" + i;
+			str += '(';
+			var len = arguments.length;
+			if (len > 0) {
+				str += 'arguments[0]';
+				for (var i = 1; i < len; i++) {
+					str += ', arguments[' + i + ']';
 				}
 			}
-			script_str += ");\n";
-			script_str += "return ret;";
+			str += ');';
 
-			var callScript = function () {
-				var fn = new Function(arguments[0]);
-				return fn.apply(this, obj_arr);
-			};
+			var value = eval(str);
 
-			var value = callScript.call(this.handle, script_str);
 			if (value != null && typeof (value) == "object") {
 				var pobject = new nexacro.PluginObject();
 				pobject.handle = value;
@@ -12420,7 +12135,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 	var _iframe_eventhandler_onmousemove = function (evt) {
 		var target;
-		if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+		if (nexacro._Browser == "IE") {
 			target = evt.srcElement;
 		}
 		else {
@@ -12438,12 +12153,11 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					var wb = _doc._nexacro_iframe_contaniner._linked_element.linkedcontrol;
 					var pos = wb._getWindowPosition();
 
-					win._on_sys_mousemove(elem, "lbutton", evt.altKey, evt.ctrlKey, evt.shiftKey, evt.clientX + pos.x, evt.clientY + pos.y, evt.screenX, evt.screenY, evt.offsetX, evt.offsetY, evt.metaKey);
+					win._on_sys_mousemove(elem, "lbutton", evt.altKey, evt.ctrlKey, evt.shiftKey, evt.clientX + pos.x, evt.clientY + pos.y, evt.screenX, evt.screenY, evt.offsetX, evt.offsetY);
 				}
 			}
 		}
 		catch (e) {
-			return;
 		}
 	};
 
@@ -12473,7 +12187,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 		}
 
-		if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+		if (nexacro._Browser == "IE") {
 			target = evt.srcElement;
 		}
 		else {
@@ -12628,7 +12342,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 	var _iframe_eventhandler_ontouchstart = function (evt) {
 		var target;
 		var scroll_target;
-		if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+		if (nexacro._Browser == "IE") {
 			target = evt.srcElement;
 		}
 		else {
@@ -12698,7 +12412,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 	var _iframe_eventhandler_ontouchend = function (evt) {
 		var target;
-		if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+		if (nexacro._Browser == "IE") {
 			target = evt.srcElement;
 		}
 		else {
@@ -12716,7 +12430,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 	var _iframe_eventhandler_onmousewheel = function (evt) {
 		var target;
-		if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+		if (nexacro._Browser == "IE") {
 			target = evt.srcElement;
 		}
 		else {
@@ -12728,7 +12442,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			var _body = _doc.body;
 			var ct = _doc._nexacro_iframe_contaniner;
 			var scroll_target;
-
 			if (nexacro._OS == "iOS") {
 				scroll_target = _doc._nexacro_iframe;
 			}
@@ -12740,7 +12453,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			var clientHeight = 0;
 			var scrollHeight = scroll_target.scrollHeight || _doc.documentElement.scrollHeight;
 			var scrollTop = scroll_target.scrollTop || _doc.documentElement.scrollTop;
-			var delta_y = nexacro.__getWheelDeltaY(evt);
 
 			if (nexacro._OS == "iOS") {
 				clientHeight = parseInt(scroll_target.style.height);
@@ -12754,14 +12466,14 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				}
 			}
 
-			if ((scrollTop == 0 && delta_y > 0) || (scrollHeight - clientHeight <= scrollTop && delta_y < 0)) {
+			if (scrollTop == 0 || (scrollHeight - clientHeight) <= scrollTop) {
 				nexacro._syshandler_onmousewheel(window.nexacro_HTMLSysEvent, ct, evt);
 			}
 		}
 	};
 
 	var _iframe_eventhandler_onload;
-	if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+	if (nexacro._Browser == "IE") {
 		_iframe_eventhandler_onload = function (evt) {
 			if (window.event) {
 				evt = window.event;
@@ -12782,10 +12494,11 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					nexacro._observeSysEvent(_doc, "MSPointerUp", "ontouchend", _iframe_eventhandler_ontouchend);
 				}
 
-				nexacro._observeSysEvent(_doc.body, "mousewheel", "onmousewheel", _iframe_eventhandler_onmousewheel);
+				nexacro._observeSysEvent(_doc, "mousewheel", "onmousewheel", _iframe_eventhandler_onmousewheel);
 				nexacro._observeSysEvent(_doc, "mousemove", "onmousemove", _iframe_eventhandler_onmousemove);
 			}
-
+			catch (e) {
+			}
 			finally {
 				var elem = node._linked_element;
 				if (elem) {
@@ -12817,7 +12530,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				nexacro._observeSysEvent(_doc, "DOMMouseScroll", "onmousewheel", _iframe_eventhandler_onmousewheel);
 				nexacro._observeSysEvent(_doc, "mousemove", "onmousemove", _iframe_eventhandler_onmousemove);
 			}
-
+			catch (e) {
+			}
 			finally {
 				var elem = node._linked_element;
 				if (elem) {
@@ -12873,7 +12587,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				this._createInternalNextAccessibilityElementHandle(win, _doc, owner_elem, handle);
 			}
 
-			if (((nexacro._Browser == "IE" && nexacro._BrowserVersion >= 9) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) || (nexacro._isTouchInteraction && nexacro._SupportTouch)) {
+			if ((nexacro._Browser == "IE" && nexacro._BrowserVersion >= 9) || (nexacro._isTouchInteraction && nexacro._SupportTouch)) {
 				nexacro._observeSysEvent(handle, "focusin", "onfocusin", this._iframe_onfocusin_forward);
 				nexacro._observeSysEvent(handle, "focusout", "onfocusout", this._iframe_onfocusout_forward);
 			}
@@ -12904,7 +12618,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		message_elem.create(win);
 		var message_elem_handle = message_elem.handle;
 		if (message_elem_handle) {
-			if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+			if (nexacro._Browser == "IE") {
 				nexacro.__setDOMAccessibility_StatHidden(message_elem_handle, false);
 			}
 
@@ -12924,7 +12638,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		message_elem.create(win);
 		var message_elem_handle = message_elem.handle;
 		if (message_elem_handle) {
-			if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+			if (nexacro._Browser == "IE") {
 				nexacro.__setDOMAccessibility_StatHidden(message_elem_handle, false);
 			}
 
@@ -13242,14 +12956,13 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		}
 	};
 
-	if (nexacro._Browser == "Gecko" || ((nexacro._Browser == "IE" && nexacro._BrowserVersion > 10) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge"))) {
+	if (nexacro._Browser == "Gecko" || (nexacro._Browser == "IE" && nexacro._BrowserVersion > 10)) {
 		__pWebBrowserPluginElement._setGo = function () {
 			if (this.handle && this.handle.contentWindow) {
 				try {
 					this.handle.contentWindow.location.reload(true);
 				}
 				catch (e) {
-					return;
 				}
 			}
 		};
@@ -13261,7 +12974,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					this.handle.contentWindow.history.go(0);
 				}
 				catch (e) {
-					return;
 				}
 			}
 		};
@@ -13273,7 +12985,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				this.handle.contentWindow.history.back();
 			}
 			catch (e) {
-				return;
 			}
 		}
 	};
@@ -13284,7 +12995,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				this.handle.contentWindow.history.forward();
 			}
 			catch (e) {
-				return;
 			}
 		}
 	};
@@ -13307,7 +13017,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		return this._window[fn_name].apply(this._window, arguments);
 	};
 
-	if (((nexacro._Browser == "IE" && nexacro._BrowserVersion >= 9) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) || (nexacro._isTouchInteraction && nexacro._SupportTouch)) {
+	if ((nexacro._Browser == "IE" && nexacro._BrowserVersion >= 9) || (nexacro._isTouchInteraction && nexacro._SupportTouch)) {
 		__pWebBrowserPluginElement._iframe_onfocusout_forward = function (evt) {
 			var win = this._linked_element.parent_elem.linkedcontrol._getWindow();
 			win._is_iframe_focus = false;
@@ -13319,7 +13029,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		};
 	}
 
-	if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+	if (nexacro._Browser == "IE") {
 		__pWebBrowserPluginElement._iframe_onfocus_forward = function (evt) {
 			if (window.event) {
 				evt = window.event;
@@ -13352,7 +13062,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					this.handle.contentDocument.body.focus();
 				}
 				catch (e) {
-					return;
 				}
 			}
 		}
@@ -13365,7 +13074,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					this.handle.contentDocument.body.focus();
 				}
 				catch (e) {
-					return;
 				}
 			}
 		}
@@ -13384,691 +13092,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 	__pWebBrowserPluginElement.getProperty = __pWebBrowserPluginElement.getElementParam;
 	__pWebBrowserPluginElement.setProperty = __pWebBrowserPluginElement.setElementParam;
-
-	nexacro._WebViewPluginElement = function (parent_elem) {
-		this.parent = parent_elem;
-		this.parent_elem = parent_elem;
-		this.parent_elem.windowed = true;
-
-		this._params = new nexacro.Collection();
-		this._events = new nexacro.Collection();
-	};
-
-	var __pWebViewPluginElement = nexacro._createPrototype(nexacro.PluginElement, nexacro._WebViewPluginElement);
-	nexacro._WebViewPluginElement.prototype = __pWebViewPluginElement;
-
-	__pWebViewPluginElement._type_name = "WebViewPluginElement";
-	__pWebViewPluginElement.initEvent = nexacro._emptyFn;
-
-	__pWebViewPluginElement._object_node = null;
-	__pWebViewPluginElement._embed_node = null;
-	__pWebViewPluginElement._params = null;
-	__pWebViewPluginElement._events = null;
-	__pWebViewPluginElement._window = null;
-	__pWebViewPluginElement._document = null;
-	__pWebViewPluginElement._block_node = null;
-	__pWebViewPluginElement._prev_outfocus_message_elem = null;
-	__pWebViewPluginElement._next_outfocus_message_elem = null;
-
-	__pWebViewPluginElement.create = function (win) {
-		var owner_elem = this.parent_elem.getContainerElement(this.position_step);
-		if (owner_elem && owner_elem.handle && !this.handle) {
-			this.owner_elem = owner_elem;
-			var _doc = owner_elem._getRootWindowHandle();
-			var handle = this._createInternalFrameElementHandle(_doc, this.left, this.top, this.width, this.height, this._params);
-			handle._contaniner = owner_elem;
-
-			if (nexacro._enableaccessibility) {
-				nexacro.__setDOMAccessibility_ActiveDescendant(handle, this.parent_elem.linkedcontrol._unique_id);
-			}
-
-			nexacro.__setDOMNode_Selectable(handle, true);
-
-			if (nexacro._OS == "iOS") {
-				nexacro.__setMobileIframeDOMNodeStyleScroll(owner_elem.dest_handle.style);
-			}
-
-			if (nexacro._OS == "Android" && (nexacro._Browser == "Safari" || nexacro._Browser == "MobileSafari") && this.visible) {
-				this._need_hide = true;
-			}
-
-			var handle_style = handle.style;
-			if (!this.visible || this._need_hide) {
-				nexacro.__setDOMStyle_Visible(handle_style, false);
-			}
-
-			if (this.font) {
-				nexacro.__setDOMStyle_Font(handle_style, this.font);
-			}
-			if (this.color) {
-				nexacro.__setDOMStyle_Color(handle_style, this.color);
-			}
-
-			if (nexacro._enableaccessibility) {
-				this._createInternalPrevAccessibilityElementHandle(win, _doc, owner_elem, handle);
-			}
-
-			this.handle = this.dest_handle = handle;
-			nexacro.__appendDOMNode(owner_elem.dest_handle, handle);
-			nexacro._observeSysEvent(handle, "load", "onload", _iframe_eventhandler_onload);
-			if (nexacro._enableaccessibility) {
-				this._createInternalNextAccessibilityElementHandle(win, _doc, owner_elem, handle);
-			}
-
-			if (((nexacro._Browser == "IE" && nexacro._BrowserVersion >= 9) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) || (nexacro._isTouchInteraction && nexacro._SupportTouch)) {
-				nexacro._observeSysEvent(handle, "focusin", "onfocusin", this._iframe_onfocusin_forward);
-				nexacro._observeSysEvent(handle, "focusout", "onfocusout", this._iframe_onfocusout_forward);
-			}
-		}
-	};
-	__pWebViewPluginElement.createCommand = function () {
-		return "";
-	};
-	__pWebViewPluginElement.attachHandle = function (win) {
-		return;
-	};
-	__pWebViewPluginElement._createInternalPrevAccessibilityElementHandle = function (win, _doc, owner_elem, handle) {
-		var _focus_input = _doc.createElement("div");
-		var f_input_style = _focus_input.style;
-		nexacro.__setDOMNode_TabIndex(_focus_input, 0);
-
-		f_input_style.opacity = 0;
-		_focus_input.parent_elem = this.parent;
-		nexacro.__appendDOMNode(owner_elem.dest_handle, _focus_input);
-		nexacro._observeSysEvent(_focus_input, "focus", "onfocus", this._go_prev_focus);
-
-		var message_elem = this._prev_outfocus_message_elem = new nexacro.TextBoxElement(owner_elem);
-		message_elem.text = " ";
-		if (nexacro._Browser == "MobileSafari" || nexacro._OS == "Android") {
-			message_elem.setElementVisible(false);
-		}
-		message_elem.create(win);
-		var message_elem_handle = message_elem.handle;
-		if (message_elem_handle) {
-			if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
-				nexacro.__setDOMAccessibility_StatHidden(message_elem_handle, false);
-			}
-
-			nexacro.__setDOMNode_TabIndex(message_elem_handle, 0);
-			message_elem_handle.style.opacity = 0;
-			nexacro._observeSysEvent(message_elem_handle, "focus", "onfocus", this._iframe_onfocus_forward);
-		}
-	};
-	__pWebViewPluginElement._createInternalNextAccessibilityElementHandle = function (win, _doc, owner_elem, handle) {
-		var message_elem = this._next_outfocus_message_elem = new nexacro.TextBoxElement(owner_elem);
-		message_elem.text = " ";
-		if (nexacro._Browser == "MobileSafari" || nexacro._OS == "Android") {
-			message_elem.setElementVisible(false);
-		}
-
-		message_elem.create(win);
-		var message_elem_handle = message_elem.handle;
-		if (message_elem_handle) {
-			if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
-				nexacro.__setDOMAccessibility_StatHidden(message_elem_handle, false);
-			}
-
-			nexacro.__setDOMNode_TabIndex(message_elem_handle, 0);
-			message_elem_handle.style.opacity = 0;
-			nexacro._observeSysEvent(message_elem_handle, "focus", "onfocus", this._iframe_onfocus_forward);
-		}
-
-		var _focus_input = _doc.createElement("div");
-		var f_input_style = _focus_input.style;
-		nexacro.__setDOMNode_TabIndex(_focus_input, 0);
-
-
-		f_input_style.opacity = 0;
-		_focus_input.parent_elem = this.parent;
-		nexacro.__appendDOMNode(owner_elem.dest_handle, _focus_input);
-		nexacro._observeSysEvent(_focus_input, "focus", "onfocus", this._go_next_focus);
-	};
-	__pWebViewPluginElement._go_prev_focus = function (evt) {
-		var node = evt.target ? evt.target : evt.srcElement;
-		var form = node.parent_elem.linkedcontrol._getForm();
-
-		var newfocus_comp = form._searchPrevTabFocus(form._last_focused);
-
-		if (newfocus_comp && newfocus_comp[0]) {
-			if (newfocus_comp[0] instanceof nexacro.Form && newfocus_comp[0]._last_focused) {
-				var win = form._getWindow();
-				win._removeFromCurrentFocusPath(newfocus_comp[0]._last_focused);
-			}
-
-			newfocus_comp[0]._setFocus(true, 1, true);
-		}
-	};
-
-	__pWebViewPluginElement._go_next_focus = function (evt) {
-		var node = evt.target ? evt.target : evt.srcElement;
-		var form = node.parent_elem.linkedcontrol._getForm();
-
-		var newfocus_comp = form._searchNextTabFocus(form._last_focused);
-
-		if (newfocus_comp && newfocus_comp[0]) {
-			if (newfocus_comp[0] instanceof nexacro.Form && newfocus_comp[0]._last_focused) {
-				var win = form._getWindow();
-				win._removeFromCurrentFocusPath(newfocus_comp[0]._last_focused);
-			}
-
-			newfocus_comp[0]._setFocus(true, 0, true);
-		}
-	};
-
-	__pWebViewPluginElement._on_frame_load = function (_win) {
-		var comp;
-		var docurl = "";
-		try {
-			comp = this.parent_elem.linkedcontrol;
-			if (_win) {
-				if (this._need_hide) {
-					nexacro.__setDOMStyle_Visible(this.handle.style, true);
-					this._need_hide = false;
-				}
-
-				this._window = _win;
-				this._document = _win.document;
-				if (_win.nexacro == undefined) {
-					_win.nexacro = 
-						{
-						firetargetfunc : undefined, 
-						target : undefined, 
-						fireUserNotify : function (userdata) {
-							var msg = {
-								message : 'fireUserNotify', 
-								target : this.target, 
-								data : userdata
-							};
-							this.firetargetfunc(msg);
-						}
-					};
-					_win.nexacro.firetargetfunc = comp.fireUserNotify;
-					_win.nexacro.target = comp;
-				}
-				if (_win.NEXACROWEBBROWSER == undefined) {
-					_win.NEXACROWEBBROWSER = comp;
-				}
-			}
-
-			if (this._document) {
-				var doc = this._document;
-				var script_ = doc.createElement('script');
-				script_.id = "_safeStringify";
-				script_.crossorigin = 'anonymous';
-				script_.async = "async";
-				script_.text = "var _safeStringify = function (obj, indent)" + 
-					"{ if (indent === void 0) { indent = 2; } var cache = [];" + 
-					"if(obj === null || obj ==='' || obj === undefined) return undefined;" + 
-					"var retVal = JSON.stringify(obj, function (key, value)" + 
-					"{ if(typeof value === 'object' && (value == document || value == window)) return value.toString();" + 
-					"return typeof value === 'object' && value !== null ? cache.indexOf(value) !== -1 ? undefined : cache.push(value) && value : value;" + 
-					"}, indent); cache = null; return retVal;" + 
-					"}; ";
-				doc.body.appendChild(script_);
-				docurl = this._document.location.href;
-			}
-		}
-		catch (e) {
-			this._window = null;
-			this._document = null;
-		}
-
-		_win = comp._getWindow();
-		var cur_focus_paths = _win.getCurrentFocusPaths();
-		var pThis = comp;
-
-		while (pThis && pThis._is_nc_control) {
-			pThis = pThis.parent;
-		}
-
-		if (!pThis) {
-			return;
-		}
-
-		var focuspath_index = -1;
-		if (cur_focus_paths) {
-			focuspath_index = nexacro._indexOf(cur_focus_paths, pThis);
-		}
-		var len = cur_focus_paths.length;
-
-		if (focuspath_index < 0) {
-			var focus_comp = cur_focus_paths[len - 1];
-			focus_comp._apply_setfocus();
-			var input_elem = focus_comp._input_element;
-			if (input_elem) {
-				input_elem._is_sys_focused = false;
-				input_elem.setElementFocus();
-			}
-		}
-		comp.on_load_handler(docurl);
-	};
-
-	__pWebViewPluginElement.destroy = function () {
-		if (this._prev_outfocus_message_elem) {
-			nexacro._stopSysObserving(this._prev_outfocus_message_elem.handle, "focus", "onfocus", this._iframe_onfocus_forward);
-			this._prev_outfocus_message_elem.destroy();
-			this._prev_outfocus_message_elem = null;
-		}
-
-		if (this._next_outfocus_message_elem) {
-			this._next_outfocus_message_elem.destroy();
-			this._next_outfocus_message_elem = null;
-		}
-
-		var handle = this.handle;
-		if (handle) {
-			nexacro._stopSysObserving(handle, "load", "onload", _iframe_eventhandler_onload);
-			handle._linked_element = null;
-
-			var _owner_handle = null;
-			if (this.owner_elem && this.owner_elem.dest_handle) {
-				_owner_handle = this.owner_elem.dest_handle;
-			}
-
-			if (!this.owner_elem || _owner_handle) {
-				nexacro.__removeDOMNode(_owner_handle, handle);
-			}
-
-			var overlay_elem = this._overlay_elem;
-			if (overlay_elem) {
-				overlay_elem.destroy();
-			}
-
-			this._overlay_elem = null;
-			this._document = null;
-			this.owner_elem = null;
-			this.handle = this.dest_handle = null;
-		}
-		this.parent = null;
-		this.parent_elem = null;
-
-		var params = this._params;
-		if (params) {
-			params.destroy();
-			this._params = null;
-		}
-
-		var events = this._events;
-		if (events) {
-			events.destroy();
-			this.events = null;
-		}
-	};
-
-	__pWebViewPluginElement._createInternalFrameElementHandle = function (_doc, left, top, width, height, params) {
-		var handle = _doc.createElement("iframe");
-
-		handle._linked_element = this;
-		handle.frameBorder = 0;
-
-		this._object_id = this.parent_elem.handle.id + '_' + this.component._type_name;
-		if (this._object_id) {
-			nexacro.__setHTMLAttr_Proeprty(handle, 'id', this._object_id);
-		}
-
-		var handle_style = handle.style;
-		handle_style.position = "absolute";
-
-		nexacro.__setDOMNode_ToolTip(handle, this.parent_elem.tooltiptext ? this.parent_elem.tooltiptext : (this.parent_elem.accessibilitylabel ? this.parent_elem.accessibilitylabel : this.parent_elem.linkedcontrol.id));
-
-		nexacro.__setDOMStyle_Pos(handle_style, left, top);
-		nexacro.__setDOMStyle_Size(handle_style, width, height);
-
-		var param_cnt = (params ? params.length : 0);
-		for (var i = 0; i < param_cnt; i++) {
-			this._setInternalFrameDOMParam(_doc, handle, params.get_id(i), params.get_item(i));
-		}
-
-		return handle;
-	};
-
-	__pWebViewPluginElement._setInternalFrameDOMParam = function (_doc, target_handle, name, value) {
-		nexacro.__setHTMLAttr_Proeprty(target_handle, name, value);
-	};
-
-	__pWebViewPluginElement.setElementFocus = nexacro._emptyFn;
-
-	__pWebViewPluginElement._setElementFocus = function (selffocus) {
-		var handle = this.handle;
-		if (handle) {
-			nexacro.__setDOMNode_Focus(handle, true);
-			nexacro.__setLastFocusedElement(this);
-			if (nexacro._enableaccessibility) {
-				var next_outfocus_message_elem = this._next_outfocus_message_elem;
-				if (next_outfocus_message_elem) {
-					next_outfocus_message_elem._killfocus_flag = false;
-				}
-
-				var prev_outfocus_message_elem = this._prev_outfocus_message_elem;
-				if (prev_outfocus_message_elem) {
-					prev_outfocus_message_elem._killfocus_flag = false;
-				}
-			}
-		}
-	};
-
-	__pWebViewPluginElement.setElementCodebase = function (codebaseurl) {
-		if (this.codebase != codebaseurl) {
-			this.codebase = codebaseurl;
-			var handle = this.handle;
-			if (handle) {
-				nexacro.__setHTMLAttr_Proeprty(handle, 'codebase', codebaseurl);
-			}
-		}
-	};
-
-	__pWebViewPluginElement.getElementParam = function (name) {
-		var handle = this.handle;
-		if (handle) {
-			var _doc = this._document;
-			if (!_doc) {
-				_doc = this._document = handle.contentDocument || handle.contentWindow.document;
-			}
-			var value = null;
-			var pobject;
-			if (name) {
-				if (name === "document") {
-					pobject = new nexacro.PluginObject();
-					pobject.handle = _doc;
-					return pobject;
-				}
-				else if (name == "window") {
-					var _win = this._window;
-					if (!_win) {
-						_win = this._window = handle.contentWindow;
-					}
-					pobject = new nexacro.PluginObject();
-					pobject.handle = _win;
-					return pobject;
-				}
-				value = handle[name];
-				if (value != null && typeof (value) == "object") {
-					pobject = new nexacro.PluginObject();
-					pobject.handle = value;
-					return pobject;
-				}
-				return value;
-			}
-		}
-		else {
-			var params = this._params;
-			return params.get_item(name);
-		}
-	};
-
-	__pWebViewPluginElement.setElementParam = function (name, value) {
-		if (this.handle) {
-			var _doc = this._getRootWindowHandle();
-			this._setInternalFrameDOMParam(_doc, this.handle, name, value);
-		}
-		else {
-			var params = this._params;
-			params.add_item(name, value);
-		}
-	};
-
-	__pWebViewPluginElement.setElementEnable = function (value) {
-		if (this.enable != value) {
-			this.enable = value;
-			var handle = this.handle;
-			if (handle) {
-				var overlay_elem = this._overlay_elem;
-				if (value) {
-					if (overlay_elem) {
-						overlay_elem.setElementVisible(false);
-					}
-				}
-				else {
-					if (!overlay_elem) {
-						var control_element = this.parent;
-						var linkedcontrol = control_element.linkedcontrol;
-						var win = linkedcontrol._getWindow();
-						if (!win) {
-							win = nexacro._getMainWindowHandle() ? nexacro._getMainWindowHandle()._linked_window : null;
-						}
-						overlay_elem = this._overlay_elem = new nexacro._OverlayElement(control_element);
-
-						overlay_elem.setLinkedControl(linkedcontrol);
-
-						overlay_elem.create(win);
-					}
-					overlay_elem.setElementVisible(true);
-				}
-			}
-		}
-	};
-
-	__pWebViewPluginElement._getDoc = function () {
-		return this._document;
-	};
-
-
-	__pWebViewPluginElement._setUrl = function (url, useurlhistory) {
-		if (this.handle) {
-			if (useurlhistory) {
-				this.setElementParam("src", url);
-			}
-			else {
-				this._replaceURL(url);
-			}
-		}
-	};
-	__pWebViewPluginElement._setInstallUrl = nexacro._emptyFn;
-	if (nexacro._Browser == "Gecko" || ((nexacro._Browser == "IE" && nexacro._BrowserVersion > 10) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge"))) {
-		__pWebViewPluginElement._setGo = function () {
-			if (this.handle && this.handle.contentWindow) {
-				try {
-					this.handle.contentWindow.location.reload(true);
-				}
-				catch (e) {
-					return;
-				}
-			}
-		};
-	}
-	else {
-		__pWebViewPluginElement._setGo = function () {
-			if (this.handle && this.handle.contentWindow) {
-				try {
-					this.handle.contentWindow.history.go(0);
-				}
-				catch (e) {
-					return;
-				}
-			}
-		};
-	}
-
-	__pWebViewPluginElement._setBack = function () {
-		if (this.handle && this.handle.contentWindow) {
-			try {
-				this.handle.contentWindow.history.back();
-			}
-			catch (e) {
-				return;
-			}
-		}
-	};
-
-	__pWebViewPluginElement._setForward = function () {
-		if (this.handle && this.handle.contentWindow) {
-			try {
-				this.handle.contentWindow.history.forward();
-			}
-			catch (e) {
-				return;
-			}
-		}
-	};
-
-	__pWebViewPluginElement._replaceURL = function (v) {
-		var iframe_window = this.handle.contentWindow;
-		if (iframe_window) {
-			iframe_window.location.replace(v);
-		}
-	};
-
-
-	__pWebViewPluginElement.injectScript = function () {
-		if (arguments.length < 1) {
-			return undefined;
-		}
-		if (!this._window) {
-			return undefined;
-		}
-		var script = arguments[0];
-
-
-		if (script != null && typeof script == 'string') {
-			script = script.replace(/\'/gi, "\\'");
-			script = script.replace(/\r\n/gi, "\\n");
-			script = script.replace(/\n/gi, "\\n");
-			script = script.replace(/\r/gi, "\\n");
-			var make = "this._safeStringify.call(this,this.eval(\'" + script + "\'))";
-
-			var callScript = function () {
-				return Function("return " + arguments[0]).call(this);
-			};
-			var ret = callScript.call(this._window, make);
-
-			if (ret === null || ret === undefined || ret === "") {
-				return undefined;
-			}
-			else {
-				ret = ret.toString();
-				if (ret.charAt(0) == "\"") {
-					ret = ret.substr(1, ret.length - 1);
-					ret = ret.substr(0, ret.length - 1);
-				}
-			}
-			return ret;
-		}
-
-		return undefined;
-	};
-	__pWebViewPluginElement.injectScriptAsync = function () {
-		if (arguments.length < 1) {
-			return undefined;
-		}
-		if (!this._window) {
-			return undefined;
-		}
-		var script = arguments[0];
-		var callback = arguments[1];
-		var scope = arguments[2];
-
-		if (script != null && typeof script == 'string') {
-			script = script.replace(/\'/gi, "\\'");
-			script = script.replace(/\r\n/gi, "\\r\\n");
-			script = script.replace(/\n/gi, "\\n");
-			script = script.replace(/\r/gi, "\\r");
-			var make = "this._safeStringify.call(this,this.eval(\'" + script + "\'))";
-
-			var callScript = function () {
-				return Function("return " + arguments[0]).call(this);
-			};
-			var ret = callScript.call(this._window, make);
-
-			if (ret === null || ret === undefined || ret === "") {
-				ret = undefined;
-			}
-			else {
-				ret = ret.toString();
-				if (ret.charAt(0) == "\"") {
-					ret = ret.substr(1, ret.length - 1);
-					ret = ret.substr(0, ret.length - 1);
-				}
-			}
-			if (callback != null && typeof callback == "function") {
-				if (scope && scope._is_alive) {
-					return callback.call(scope, ret);
-				}
-				else {
-					return callback.call(null, ret);
-				}
-			}
-		}
-
-
-		return undefined;
-	};
-
-
-
-	if (((nexacro._Browser == "IE" && nexacro._BrowserVersion >= 9) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) || (nexacro._isTouchInteraction && nexacro._SupportTouch)) {
-		__pWebViewPluginElement._iframe_onfocusout_forward = function (evt) {
-			var win = this._linked_element.parent_elem.linkedcontrol._getWindow();
-			win._is_iframe_focus = false;
-		};
-
-		__pWebViewPluginElement._iframe_onfocusin_forward = function (evt) {
-			var win = this._linked_element.parent_elem.linkedcontrol._getWindow();
-			win._is_iframe_focus = true;
-		};
-	}
-
-	if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
-		__pWebViewPluginElement._iframe_onfocus_forward = function (evt) {
-			if (window.event) {
-				evt = window.event;
-			}
-			if (nexacro._com_waiting) {
-				if (evt.preventDefault) {
-					evt.preventDefault();
-				}
-			}
-			this._linked_element._killfocus_flag = true;
-		};
-	}
-	else {
-		__pWebViewPluginElement._iframe_onfocus_forward = function (evt) {
-			if (nexacro._com_waiting) {
-				nexacro._stopSysEvent(evt);
-			}
-			this._linked_element._killfocus_flag = true;
-		};
-	}
-
-	__pWebViewPluginElement._setElementInternalFocus = function (keycode) {
-		var E = nexacro.Event;
-		if (keycode == E.KEY_UP) {
-			if (this._prev_outfocus_message_elem._killfocus_flag == true) {
-				this._prev_outfocus_message_elem._killfocus_flag = false;
-			}
-			else {
-				try {
-					this.handle.contentDocument.body.focus();
-				}
-				catch (e) {
-					return;
-				}
-			}
-		}
-		else if (keycode == E.KEY_DOWN) {
-			if (this._next_outfocus_message_elem._killfocus_flag == true) {
-				this._next_outfocus_message_elem._killfocus_flag = false;
-			}
-			else {
-				try {
-					this.handle.contentDocument.body.focus();
-				}
-				catch (e) {
-					return;
-				}
-			}
-		}
-	};
-
-	__pWebViewPluginElement._setElementLeaveMessage = function (message) {
-		var prev_outfocus_elem = this._prev_outfocus_message_elem;
-		if (prev_outfocus_elem) {
-			prev_outfocus_elem.setElementText(message);
-		}
-		var next_outfocus_elem = this._next_outfocus_message_elem;
-		if (next_outfocus_elem) {
-			next_outfocus_elem.setElementText(message);
-		}
-	};
 
 
 	nexacro._VideoPlayerPluginElement = function (parent_elem) {
@@ -14269,13 +13292,13 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		__pVideoPlayerPluginElement._video_eventhandler_timeupdate = function (evt) {
 			var node = evt.target;
 			var comp = node._linked_element.parent_elem.linkedcontrol;
-			comp && comp._on_currenttimechanged(node.currentTime *  1000);
+			comp && comp._on_currenttimechanged(node.currentTime * 1000);
 		};
 
 		__pVideoPlayerPluginElement._video_eventhandler_volumechange = function (evt) {
 			var node = evt.target;
 			var comp = node._linked_element.parent_elem.linkedcontrol;
-			comp && comp._on_volumechangechanged(parseInt(node.volume *  100), node.muted);
+			comp && comp._on_volumechangechanged(parseInt(node.volume * 100), node.muted);
 		};
 
 		__pVideoPlayerPluginElement._video_eventhandler_error = function (evt) {
@@ -14306,7 +13329,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			var node = evt.target;
 			var comp = node._linked_element.parent_elem.linkedcontrol;
 			comp.size = node.videoWidth + " " + node.videoHeight;
-			comp.duration = node.duration *  1000;
+			comp.duration = node.duration * 1000;
 			comp._on_statuschanged("buffer");
 		};
 
@@ -14475,11 +13498,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			if (this.loop != null) {
 				str += "loop = '" + this.loop + "' ";
 			}
-
-			if (nexacro._OS == "iOS") {
-				str += "playsinline = '" + true + "' ";
-			}
-
 			var handle_style = this._getCommonStyleStr();
 			if (handle_style) {
 				str += "style = '" + handle_style + "' ";
@@ -14997,17 +14015,17 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		}
 	};
 
-	_pCanvasElement.toDataURL = function (imgType, ImgOption) {
+	_pCanvasElement.toDataURL = function () {
 		var handle = this.handle;
 		try {
 			if (handle) {
-				return nexacro.__toDataURLCanvas(handle, imgType, ImgOption);
+				return nexacro.__toDataURLCanvas(handle);
 			}
 		}
 		catch (e) {
 			try {
 				if (handle) {
-					return nexacro.__toDataURLCanvas(handle, imgType, ImgOption);
+					return nexacro.__toDataURLCanvas(handle);
 				}
 			}
 			catch (e) {
@@ -15176,16 +14194,16 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				return;
 			}
 
-			var angle_rad = angle_deg *  Math.PI / 180;
+			var angle_rad = angle_deg * Math.PI / 180;
 			this.handle._draw_ctx.rotate(angle_rad);
 		};
 
 		_pCanvasElement.circle = function (x, y, r) {
-			this.arc(x, y, r, 0, 2 *  Math.PI, true);
+			this.arc(x, y, r, 0, 2 * Math.PI, true);
 		};
 
 		_pCanvasElement.drawStrokeCircle = function (x, y, r) {
-			this.arc(x, y, r, 0, 2 *  Math.PI, true);
+			this.arc(x, y, r, 0, 2 * Math.PI, true);
 			this.drawStroke();
 		};
 
@@ -15197,7 +14215,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 		_pCanvasElement.drawStrokeInsetCircle = function (x, y, r) {
 			var gap = this.lineOffset;
-			this.arc(x, y, r - gap, 0, 2 *  Math.PI, true);
+			this.arc(x, y, r - gap, 0, 2 * Math.PI, true);
 			this.drawStroke();
 		};
 
@@ -15218,7 +14236,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		};
 
 		_pCanvasElement.drawFillCircle = function (x, y, r) {
-			this.arc(x, y, r, 0, 2 *  Math.PI, true);
+			this.arc(x, y, r, 0, 2 * Math.PI, true);
 			this.fill();
 			this.beginPath();
 		};
@@ -15374,16 +14392,16 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			var scale = this.handle._scale;
 			var _half_scale = this.handle._half_scale;
 			return {
-				x : Math.round(scale *  (x *  m[0][0] + y *  m[1][0] + m[2][0]) - _half_scale), 
-				y : Math.round(scale *  (x *  m[0][1] + y *  m[1][1] + m[2][1]) - _half_scale)
+				x : Math.round(scale * (x * m[0][0] + y * m[1][0] + m[2][0]) - _half_scale), 
+				y : Math.round(scale * (x * m[0][1] + y * m[1][1] + m[2][1]) - _half_scale)
 			};
 		};
 
 		_pCanvasElement._getCoordPos = function (x, y) {
 			var m = this.handle._matrix;
 			return {
-				x : (x *  m[0][0] + y *  m[1][0] + m[2][0]), 
-				y : (x *  m[0][1] + y *  m[1][1] + m[2][1])
+				x : (x * m[0][0] + y * m[1][0] + m[2][0]), 
+				y : (x * m[0][1] + y * m[1][1] + m[2][1])
 			};
 		};
 
@@ -15427,7 +14445,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			if (handle) {
 				var scale = handle._scale;
 				var hscale = handle._half_scale;
-				var _r = r *  scale;
+				var _r = r * scale;
 				var xStart = x + _r - hscale;
 				var yStart = y - hscale;
 
@@ -15526,14 +14544,14 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			if (handle && handle._path_str) {
 				var vml_str = "";
 				vml_str += "<v:shape filled='f' stroked='t' style='position:absolute;width:10px;height:10px;' ";
-				vml_str += "coordorigin='0 0' coordsize='" + handle._scale *  10 + ' ' + handle._scale *  10 + "' ";
+				vml_str += "coordorigin='0 0' coordsize='" + handle._scale * 10 + ' ' + handle._scale * 10 + "' ";
 				vml_str += "color='" + handle._stroke_color + "' ";
 				vml_str += "strokecolor='" + handle._stroke_color + "' ";
 				if (handle._stroke_alpha != 1) {
 					vml_str += "opacity='" + handle._stroke_alpha + "' ";
 				}
 
-				var lineWidth = elem.lineWidth *  handle._line_scale;
+				var lineWidth = elem.lineWidth * handle._line_scale;
 				vml_str += "joinstyle='" + elem.lineJoin + "' endcap='" + elem._getLineCapStr() + "' strokeweight='" + lineWidth + "px' ";
 				vml_str += "path='" + handle._path_str + "' />";
 
@@ -15833,7 +14851,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		var client_top = 0;
 		var client_width = this.inner_width;
 		var client_height = this.inner_height;
-		var step_containers = this._step_containers;
 
 		if (this._apply_client_padding) {
 			var padding = this.padding ? this.padding : this._padding_info;
@@ -15871,11 +14888,9 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		var scroll_top = this.scroll_top;
 
 		var step_count = this._step_count;
-		var pre_step_count = this._pre_step_count;
-		var is_change_step_cnt = false;
-		is_change_step_cnt = step_count != pre_step_count;
-		if ((step_count > 0 && step_containers) || is_change_step_cnt) {
-			container_maxwidth = step_count *  zclient_width_body;
+		var step_containers = this._step_containers;
+		if (step_count > 0 && step_containers) {
+			container_maxwidth = step_count * zclient_width_body;
 		}
 
 
@@ -15886,7 +14901,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		var hscrollbartype = this._hscrollbartype;
 		var vscrollbartype = this._vscrollbartype;
 
-		if ((step_count > 0 && step_containers) || is_change_step_cnt) {
+		if (step_count > 0 && step_containers) {
 			hscrollbartype = "none";
 		}
 
@@ -15905,10 +14920,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				zclient_height = client_height / zoomfactor;
 				zclient_height_body -= this._hscroll_size / zoomfactor;
 			}
-		}
-
-		if (zclient_height_body < 0) {
-			zclient_height_body = 0;
 		}
 
 		if (zclient_height_body >= 0 && container_maxheight > zclient_height_body) {
@@ -15941,8 +14952,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			}
 		}
 
-		if ((step_count > 0 && step_containers) || is_change_step_cnt) {
-			container_maxwidth = step_count *  zclient_width_body;
+		if (step_count > 0 && step_containers) {
+			container_maxwidth = step_count * zclient_width_body;
 
 			if (zclient_width_body >= 0 && container_maxwidth > zclient_width_body) {
 				hscroll_limit = container_maxwidth - zclient_width_body;
@@ -16414,8 +15425,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 
 	nexacro._GridBandContainerElement = function (parent_elem, use_translate_scroll, type) {
-		use_translate_scroll = use_translate_scroll && this._use_inner_move;
-
 		nexacro._ContainerElement.call(this, parent_elem, use_translate_scroll, type, true);
 		this._scroll_max_arr = [];
 		this._ext_inners = [];
@@ -16428,7 +15437,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 	nexacro._GridBandContainerElement.prototype = __pGridBandContainerElement;
 	__pGridBandContainerElement._type_name = "GridBandContainerElement";
-	__pGridBandContainerElement._use_inner_move = (nexacro._Browser == "Safari" || nexacro._Browser == "MobileSafari");
 
 	__pGridBandContainerElement._adjustPos = function () {
 		this.setElementPosition(this.left, this.top);
@@ -16622,8 +15630,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 		return null;
 	};
-
-	if (__pGridBandContainerElement._use_inner_move) {
+	if (nexacro._use_translate_scroll) {
 		__pGridBandContainerElement.create = function (win) {
 			var owner_elem = this.owner_elem = this.parent_elem;
 
@@ -16758,8 +15765,9 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 
 			if (nexacro._Browser == "IE" && nexacro._OS == "Windows" && nexacro._OSVersion <= 10) {
 				this.handle.style.transform = "translate3d(0px, 0px, 0)";
+				nexacro.__appendDOMNode(this.handle, tempdiv);
 			}
-			nexacro.__appendDOMNode(this.handle, tempdiv);
+
 			this._setScrollHeight(owner_elem.container_maxheight);
 
 			nexacro._stopSysObserving(this.handle, "scroll", "onscroll", this._syshandler_onscroll_forward);
@@ -16813,7 +15821,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			this._ext_inners = null;
 		};
 
-		if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+		if (nexacro._Browser == "IE") {
 			if (nexacro._BrowserVersion <= 8) {
 				__pGridBandContainerElement._syshandler_onscroll_forward = function (evt) {
 					if ((!evt || evt.type != "scroll") && window.event) {
@@ -17124,11 +16132,10 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 		this.parent = parent_elem;
 		this.parent_elem = parent_elem;
 
-		var use_inner_move = (nexacro._Browser == "Safari" || nexacro._Browser == "MobileSafari");
+		this._client_left_element = null;
 
-		this._client_body_element = new nexacro._ContainerElement(this, use_inner_move, "body");
-
-		if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+		if (nexacro._Browser == "IE") {
+			this._client_body_element = new nexacro._ContainerElement(this, false, "body");
 			this._client_body_element._callback_func_onscroll = function (evt) {
 				if (evt._node_activate_scroll) {
 					var target = evt.srcElement || evt.target;
@@ -17142,6 +16149,9 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 					this.parent.linkedcontrol._callback_func_onscroll(this._scroll_left, this._scroll_top);
 				}
 			};
+		}
+		else {
+			this._client_body_element = new nexacro._ContainerElement(this, true, "body");
 		}
 
 		this._client_right_element = null;
@@ -17311,8 +16321,8 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 	};
 
 	_pGridRowControlElement.attachHandle = function (win) {
-		if (this.name) {
-			var handle = this.handle || win._doc.getElementById(this.name);
+		if (this.name && !this.handle) {
+			var handle = win._doc.getElementById(this.name);
 			if (handle) {
 				handle._linked_element = this;
 
@@ -17337,39 +16347,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 				}
 			}
 			this.owner_elem = (this._is_nc_element) ? this.parent_elem : this.parent_elem.getContainerElement(this.linkedcontrol._fixed);
-		}
-	};
-
-	_pGridRowControlElement.setInnerHTML = function (str) {
-		if (this.dest_handle) {
-			if (this._client_left_element) {
-				var tempdiv = this._client_left_element._tempdiv;
-				if (tempdiv) {
-					var handle = this._client_left_element.handle;
-					nexacro.__removeDOMNode(handle, tempdiv);
-					this._client_left_element._tempdiv = null;
-				}
-			}
-
-			if (this._client_right_element) {
-				var tempdiv = this._client_right_element._tempdiv;
-				if (tempdiv) {
-					var handle = this._client_right_element.handle;
-					nexacro.__removeDOMNode(handle, tempdiv);
-					this._client_right_element._tempdiv = null;
-				}
-			}
-
-			if (this._client_body_element) {
-				var tempdiv = this._client_body_element._tempdiv;
-				if (tempdiv) {
-					var handle = this._client_body_element.handle;
-					nexacro.__removeDOMNode(handle, tempdiv);
-					this._client_body_element._tempdiv = null;
-				}
-			}
-
-			this.dest_handle.innerHTML = str;
 		}
 	};
 
@@ -17453,7 +16430,7 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			this._client_right_element.setElementSize(rightwidth - addgap, this.client_height);
 		}
 
-		this._body_width = this.client_width - leftwidth - rightwidth + (addgap *  2);
+		this._body_width = this.client_width - leftwidth - rightwidth + (addgap * 2);
 		this._client_body_element.setElementPosition(leftwidth - addgap, this.client_top);
 		this._client_body_element.setElementSize(this._body_width, this.height);
 	};
@@ -17518,23 +16495,6 @@ if (nexacro._Browser != "Runtime" && !nexacro.Element) {
 			handle.style.clip = "rect(0px, " + (this.width) + "px, " + (this.height) + "px, 0px)";
 		}
 	};
-
-
-	nexacro.CellControlElement = function (parent_elem, left_gap) {
-		nexacro.ControlElement.call(this, parent_elem);
-	};
-
-	var _pCellControlElement = nexacro._createPrototype(nexacro.ControlElement, nexacro.CellControlElement);
-
-	nexacro.CellControlElement.prototype = _pCellControlElement;
-
-	_pCellControlElement._type_name = "CellControlElement";
-
-	_pCellControlElement.setInnerHTML = function (str) {
-		if (this.handle) {
-			this.handle.innerHTML = str;
-		}
-	};
 }
 
 
@@ -17563,5 +16523,4 @@ if (_process) {
 	delete _pGridBandControlElement;
 	delete __pGridBandContainerElement;
 	delete _pGridRowControlElement;
-	delete _pCellControlElement;
 }

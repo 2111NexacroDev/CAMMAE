@@ -37,7 +37,10 @@ if (!nexacro.FileDownTransfer) {
 	delete _pFileDownTransferErrorEventInfo;
 
 	nexacro.FileDownTransfer = function (id, parent) {
-		nexacro._EventSinkObject.call(this, id, parent);
+		this.id = this.name = id;
+		if (parent) {
+			this.parent = parent;
+		}
 
 		this.postdatalist = new nexacro.Collection();
 	};
@@ -55,6 +58,8 @@ if (!nexacro.FileDownTransfer) {
 		"onsuccess" : 1, 
 		"onerror" : 1
 	};
+
+	_pFileDownTransfer.on_created = nexacro._emptyFn;
 
 	_pFileDownTransfer.destroy = function () {
 		this.postdatalist = null;

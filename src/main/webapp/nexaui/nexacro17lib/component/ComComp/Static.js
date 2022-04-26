@@ -207,13 +207,7 @@ if (!nexacro._IconText) {
 				total_h += padding.top + padding.bottom;
 			}
 
-			var text;
-			if (this._displaytext && this._displaytext !== "") {
-				text = this._displaytext;
-			}
-			else {
-				text = this.text;
-			}
+			var text = this.text;
 			if (text) {
 				var font = this._getCurrentStyleInheritValue("font");
 				var wordspace = this._getCurrentStyleInheritValue("wordSpacing");
@@ -692,6 +686,9 @@ if (!nexacro.Static) {
 	_pStatic._event_list = 
 		{
 		"onclick" : 1, 
+		"onflingstart" : 1, 
+		"onfling" : 1, 
+		"onflingend" : 1, 
 		"onlbuttondown" : 1, 
 		"onlbuttonup" : 1, 
 		"onlongpress" : 1, 
@@ -745,8 +742,6 @@ if (!nexacro.Static) {
 				else {
 					cellElem.setElementText(this._displaytext);
 				}
-
-				cellElem.setElementPointerEvents();
 			}
 		}
 	};
@@ -869,13 +864,7 @@ if (!nexacro.Static) {
 				total_h += padding.top + padding.bottom;
 			}
 
-			var text;
-			if (this._displaytext && this._displaytext !== "") {
-				text = this._displaytext;
-			}
-			else {
-				text = this.text;
-			}
+			var text = this.text;
 			if (text) {
 				var font = this._getCurrentStyleInheritValue("font");
 				var wordspace = this._getCurrentStyleInheritValue("wordSpacing");
@@ -934,8 +923,6 @@ if (!nexacro.Static) {
 			else {
 				cellElem.setElementText(text);
 			}
-
-			cellElem.setElementPointerEvents();
 		}
 
 		if (nexacro._enableaccessibility) {

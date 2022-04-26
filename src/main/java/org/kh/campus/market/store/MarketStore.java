@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 import org.kh.campus.market.domain.Market;
+import org.kh.campus.market.domain.MarketReply;
 import org.kh.campus.market.domain.PageInfo;
 import org.kh.campus.market.domain.Search;
 
@@ -32,6 +33,16 @@ public interface MarketStore {
 	
 	//페이징
 	int selectListCount(SqlSession sqlSession);
+
+
+	//댓글
+	List<MarketReply> selectAllReply(int marketNo, SqlSession sqlSession);
+
+	int insertReply(MarketReply marketReply, SqlSession sqlSession);
+
+	int updateReply(MarketReply marketReply, SqlSession sqlSession);
+
+	int deleteReply(MarketReply marketReply, SqlSession sqlSession);
 
 
 
