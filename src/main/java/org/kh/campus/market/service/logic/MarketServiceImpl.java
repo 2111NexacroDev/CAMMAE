@@ -5,10 +5,12 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 import org.kh.campus.market.domain.Market;
+import org.kh.campus.market.domain.MarketReply;
 import org.kh.campus.market.domain.PageInfo;
 import org.kh.campus.market.domain.Search;
 import org.kh.campus.market.service.MarketService;
 import org.kh.campus.market.store.MarketStore;
+import org.kh.campus.question.domain.QuestionReply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +71,36 @@ public class MarketServiceImpl implements MarketService {
 		int totalCount = mStore.selectListCount(sqlSession);
 		return totalCount;
 	}
+
+	
+	
+	
+	//댓글
+	
+		@Override
+		public List<MarketReply> printAllMarketReply(int marketNo) {
+			List<MarketReply> mReplyList = mStore.selectAllReply(marketNo, sqlSession);
+			return mReplyList;
+		}
+
+		@Override
+		public int registerReply(MarketReply marketReply) {
+			int result = mStore.insertReply(marketReply, sqlSession);
+			return result;
+		}
+
+		@Override
+		public int modifyMarketReply(MarketReply marketReply) {
+			int result = mStore.updateReply(marketReply, sqlSession);
+			return result;
+		}
+		
+		@Override
+		public int removeMarketReply(MarketReply marketReply) {
+			int result = mStore.deleteReply(marketReply, sqlSession);
+			return result;
+		}
+
 
 
 
