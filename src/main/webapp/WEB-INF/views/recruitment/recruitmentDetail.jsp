@@ -6,51 +6,111 @@
 <head>
 <meta charset="UTF-8">
 <title>채용공고 상세 조회</title>
+<style>
+        #modal.modal-overlay {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(1.5px);
+            -webkit-backdrop-filter: blur(1.5px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+/*         modal창 (파란색 배경) */
+        #modal .modal-window {
+            background: rgba( 69, 139, 197, 0.70 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 13.5px );
+            -webkit-backdrop-filter: blur( 13.5px );
+            border-radius: 10px;
+            border: 1px solid rgba( 255, 255, 255, 0.18 );
+            width: 400px;
+            height: 400px;
+            position: relative;
+            top: 50px;
+            padding: 10px;
+        }
+        #modal .title {
+            padding-left: 10px;
+            display: inline;
+            text-shadow: 1px 1px 2px gray;
+            color: white;
+            
+        }
+        #modal .title h2 {
+            display: inline;
+        }
+        #modal .close-area {
+            display: inline;
+            float: right;
+            padding-right: 10px;
+            cursor: pointer;
+            text-shadow: 1px 1px 2px gray;
+            color: white;
+        }
+        
+        #modal .content {
+            margin-top: 20px;
+            padding: 0px 10px;
+            text-shadow: 1px 1px 2px gray;
+            color: white;
+            text-align: center;
+        }
+        
+        #modal #reportContents {
+           width: 350px;
+            height: 200px;
+        }
+</style>
+
 <script>
 	window.onload = function(){
-		const modal = document.getElementById("modal")
-		function modalOn(){
-			$("#fileName").val("");
-		}
-		function isModalOn(){
-			return modal.style.display === "flex"
-		}
-		function modalOff(){
-			modal.style.display = "none"
-		}
-		const closeBtn = modal.querySelector(".close-area")
-		closeBtn.addEventListener("click", e => {
-			
-		})
-		modal.addEventListener("click", e => {
-			const evTarget = e.target
-			if(evTarget.classList.contains("modal-overlay")){
-				modalOff()
-			}
-		})
-		window.addEventListener("Keyup", e => {
-			if(isModalOn() && e.key === "Escape"){
-				modalOff()
-			}
-		})
-		var btnModal = document.querySelectorAll(".btn-modal");
-		
-		var completion = document.querySelector("#completion");
-		completion.addEventListener("click", function(){
-			if($("#fileName").val() != ""){
-				var recruitmentNo = $("#recruitmentNo").val();
-				var fileName = $("#fileName").val();
-				$.ajax({
-					url  : "",
-					type : "post",
-					data : {"recruitmentNo" : recruitmentNo, "fileName" : fileName},
-					success : function() {data},
-					error   : function() {}
-				});
-				modalOff();
-			}
-		})
-		
+	   const modal = document.getElementById("modal")
+	   function modalOn() {
+	       modal.style.display = "flex"
+	   }
+	   function isModalOn() {
+	       return modal.style.display === "flex"
+	   }
+	   function modalOff() {
+	       modal.style.display = "none"
+	   }
+	   
+	   const closeBtn = modal.querySelector(".close-area")
+	   closeBtn.addEventListener("click", e => {
+	       modalOff()
+	   })
+	   modal.addEventListener("click", e => {
+	       const evTarget = e.target
+	       if(evTarget.classList.contains("modal-overlay")) {
+	           modalOff()
+	       }
+	   })
+	   window.addEventListener("keyup", e => {
+	       if(isModalOn() && e.key === "Escape") {
+	           modalOff()
+	       }
+	   })
+	   // 모달 온, 이력서 지원하기 뛰우기
+	   var btnModal = document.querySelectorAll(".btn-modal");
+	        btnModal[0].addEventListener("click", function(event){
+	           modalOn();
+	        });
+	    
+	    // 모달에서 완료 버튼 클릭시
+	       var findPwd = document.querySelector("#completion");
+	       findPwd.addEventListener("click", function() {
+	    	   modalOff();
+	       });
+	    
 	}
 </script>
 </head>
@@ -117,23 +177,23 @@
 					<button onclick="location.href='/recruitment/list.kh'">목록</button>
 					<a href="${rModify }">수정하기</a>
 					<a href="${rDelete }">삭제하기</a>
-					<a href="#">지원하기</a>
+					<button class="btn-modal">지원하기</button>
 				</td>
 			</tr>
-			<form enctype="multipart/form-data">
-					<div id="modal" class="modal-overlay">
+				
+		</table>
+		<form action="/support/register.kh" method="post" enctype="multipart/form-data">
+			<div id="modal" class="modal-overlay">
 				        <div class="modal-window">
 				            <div class="close-area">X</div>
 				                <div class="content">
 				                    <p>이력서 지원</p>
-				                    <input type="file" size="50" name="uploadFile"><br>
-				                    <input type="file" size="50" name="uploadFile">
-				                    <button id="completion">완료</button>
+				                    <input  type="file" size="50" name="uploadFile"><br>
+				                    <input  type="file" size="50" name="uploadFile1"><br>
+				                    <button type="submit" id="completion">완료</button>
 				                </div>
 				        </div>
 		    		</div>
-		    </form>		
-		</table>
-	
+		</form>
 </body>
 </html>
