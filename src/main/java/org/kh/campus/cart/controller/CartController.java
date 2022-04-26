@@ -45,7 +45,7 @@ public class CartController {
 		int result = cService.registerCart(lectureNo);
 		try {
 			if (result > 0) {
-				mv.setViewName("cart/preCartListView");
+				mv.setViewName("cart/preCartListView.kh");
 			} else {
 				System.out.println("실패했습니다.");
 			}

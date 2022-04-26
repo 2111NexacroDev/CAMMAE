@@ -11,9 +11,10 @@
 <body>
 	<h1>예비수강신청 내역</h1>
 	<table>
-		<form action="/cart/cartPick.kh" method="get">
+		
 		<tr>
 			<th>찜하기</th>
+			<th>담은순서</th>
 			<th>과목코드</th>
 			<th>단과대학</th>
 			<th>개설학과</th>
@@ -33,6 +34,7 @@
 					<a href="${lPick }">찜하기</a>
 				
 				</td>
+				<td></td>
 				<td>${lList.lectureNo }</td>
 				<td>${lList.universityCollege }</td>
 				<td>${lList.lectureDepartment }</td>

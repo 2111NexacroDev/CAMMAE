@@ -24,8 +24,14 @@
 		<result property="cartYear" column="CART_YEAR" />
 		<result property="cartTerm" column="CART_TERM" />
 	</resultMap>
+	
+<!--  	<resultMap type="Total" id="totalResultMap">
+		<collection property="Lecture" resultMap="lectureResultMap"/>
+		<collection property="Cart" resultMap="cartResultMap"/>
+	</resultMap>  --> 
+	
 	<select id="selectAllCart" resultMap="lectureResultMap">
-	SELECT * FROM LECTURE_TBL  
+		SELECT * FROM LECTURE_TBL  
 	</select>
 	
 	<insert id="insertCart" parameterType="Lecture" >
@@ -36,7 +42,8 @@
 		, '1학기')	
 	</insert>
 
-	<select id="selectMyCart">
-	SELECT LECTURE_NO FROM LECTURE_TBL, CART_TBL WHERE CART_NO 
+	<select id="selectMyCart" resultMap="totalResultMap">
+	<!-- SELECT LECTURE_NO FROM LECTURE_TBL FULL OUTER JOIN CART_TBL WHERE CART_NO -->
+	SELECT * FROM CART_TBL LEFT OUTER JOIN LECTURE_TBL ON LECTURE_TBL.LECTURE_NO = CART_TBL.LECTURE_NO 
 	</select>
  </mapper>

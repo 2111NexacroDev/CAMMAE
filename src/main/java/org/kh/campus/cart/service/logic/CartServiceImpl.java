@@ -40,7 +40,7 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public List<Cart> printMyCart() {
 		List<Cart> cList = cStore.selectMyCart(sqlSession);
-		return null;
+		return cList;
 	}
 
 
