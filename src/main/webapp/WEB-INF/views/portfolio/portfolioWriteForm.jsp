@@ -16,8 +16,8 @@
  학번 <input type="text" name="port_student_no"><br>
  학과명 <input type="text" name="port_college"><br>
  전화번호 <input type="text" name="port_student_number"><br>
- 자격증 첨부 <input type="file" name="uploadFile" value="첨부파일"><br>
-수상이력 첨부 <input type="file" name="uploadFile1" value="첨부파일"><br>
+ 자격증 첨부 <input type="file" name="uploadFile" value="첨부파일" multiple="multiple"><br>
+수상이력 첨부 <input type="file" name="uploadFile1" value="첨부파일" multiple="multiple"><br>
  내용 <textarea name="port_content"></textarea>
  <input type="submit" value="등록">
 </form>
