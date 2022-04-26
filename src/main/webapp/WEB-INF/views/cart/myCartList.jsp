@@ -11,6 +11,7 @@
 <body>
 	<h1>예비수강신청 내역</h1>
 	<table>
+		<form action="/cart/cartPick.kh" method="get">
 		<tr>
 			<th>찜하기</th>
 			<th>과목코드</th>
@@ -48,8 +49,8 @@
 			</tr>
 
 		</c:forEach>
+		</form>
 	</table>
 
-	</table>
 </body>
 </html>

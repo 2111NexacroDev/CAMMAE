@@ -17,6 +17,13 @@
 		<result property="lectureTime" column="LECTURE_TIME" />
 	</resultMap>
 	
+	<resultMap type="Cart" id="cartResultMap">
+		<id property="cartNo" column="CART_NO"/>
+		<result property="lectureNo" column="LECTURE_NO" />
+		<result property="studentNo" column="STUDENT_NO" />
+		<result property="cartYear" column="CART_YEAR" />
+		<result property="cartTerm" column="CART_TERM" />
+	</resultMap>
 	<select id="selectAllCart" resultMap="lectureResultMap">
 	SELECT * FROM LECTURE_TBL  
 	</select>
@@ -29,4 +36,7 @@
 		, '1학기')	
 	</insert>
 
+	<select id="selectMyCart">
+	SELECT LECTURE_NO FROM LECTURE_TBL, CART_TBL WHERE CART_NO 
+	</select>
  </mapper>

@@ -14,5 +14,7 @@ public interface CartStore {
 
 	int deleteCart(SqlSession sqlSession, int lectureNo);
 
+	List<Cart> selectMyCart(SqlSession sqlSession);
+
 
 }

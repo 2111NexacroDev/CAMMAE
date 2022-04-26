@@ -8,10 +8,11 @@ import org.kh.campus.lecture.domain.Lecture;
 public interface CartService {
 
 	public List<Lecture>printAllCart();  
-
+	
+	public List<Cart>printMyCart();
+	
 	public int registerCart(int lectureNo);
 	
 	public int removeCart(int lectureNo);
-
 
 }
