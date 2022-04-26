@@ -36,10 +36,16 @@ public class ScholarshipController {
 		return result;
 	}
 
-	/* @RequestMapping(value = "", method = RequestMethod.GET) */
+	@RequestMapping(value = "/scholarship/scholarResult.kh", method = RequestMethod.GET)
 	public NexacroResult printScholarResult() {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
+		NexacroResult result = new NexacroResult();
 		List<Scholarship> sList = sService.printScholarResult();
-		return null;
+		result.addDataSet("out_scholarshipResult", sList);
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
+		return result;
 	}
 
 	@RequestMapping(value = "/scholarship/scholarInfo.kh", method = RequestMethod.GET)
@@ -71,6 +77,7 @@ public class ScholarshipController {
 		String scholarship_name = student.getStudentName();
 		String scholarship_phonenumber = student.getStudentPhonenumber();
 		String scholarship_college = student.getUniversityCollege();
+		int scholarship_student_no = student.getStudentNo();
 		Scholarship scholarship = new Scholarship(
 				scholarship_inno
 				,scholarship_avg_grade
@@ -80,7 +87,8 @@ public class ScholarshipController {
 				, scholarship_amount
 				, scholarship_name
 				, scholarship_phonenumber
-				, scholarship_college);
+				, scholarship_college
+				, scholarship_student_no);
 		aResult = sService.registerScholar(scholarship);
 		return result;
 
