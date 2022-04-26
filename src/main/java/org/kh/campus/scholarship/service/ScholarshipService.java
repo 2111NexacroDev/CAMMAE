@@ -8,8 +8,8 @@ public interface ScholarshipService {
 	
 	public List<Scholarship>printAllScholar(); 
 	public int insertScholar(Scholarship scholarship); 
-	public List<Scholarship> printScholarResult(); 
-	public int registerScholar(Scholarship scholarship);  
+	public List<Scholarship> printScholarResult(int studentNo); 
+	public int registerScholar(Scholarship scholarship); 
 
 
 	

@@ -2,6 +2,8 @@ package org.kh.campus.scholarship.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.kh.campus.scholarship.domain.Scholarship;
 import org.kh.campus.scholarship.service.ScholarshipService;
 import org.kh.campus.student.domain.Student;
@@ -37,11 +39,13 @@ public class ScholarshipController {
 	}
 
 	@RequestMapping(value = "/scholarship/scholarResult.kh", method = RequestMethod.GET)
-	public NexacroResult printScholarResult() {
+	public NexacroResult printScholarResult(
+			HttpSession session) {
+		int studentNo= Integer.parseInt(session.getAttribute("id").toString());
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
-		List<Scholarship> sList = sService.printScholarResult();
+		List<Scholarship> sList = sService.printScholarResult(studentNo);
 		result.addDataSet("out_scholarshipResult", sList);
 		result.addVariable("ErrorCode", nErrorCode);
 		result.addVariable("ErrorMsg", strErrorMsg);
@@ -62,12 +66,12 @@ public class ScholarshipController {
 
 	@RequestMapping(value = "/scholarship/register.kh", method = RequestMethod.POST)
 	public NexacroResult registerScholar(
-			@ParamDataSet(name = "in_admin_scholar") DataSet inAdminScholar) throws Exception {
+			@ParamDataSet(name = "in_admin_scholar") DataSet inAdminScholar, HttpSession session) throws Exception {
 		int nErrorCode = 0;
 		String strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		int aResult = 0;
-		Student student = stdService.printStudent(0);
+		Student student = stdService.printStudent(Integer.parseInt(session.getAttribute("id").toString()));
 		int scholarship_inno = 0;
 		int scholarship_avg_grade = student.getStudentGrade() ;
 		String scholarship_year = dsGet(inAdminScholar, 0, "scholarship_year");

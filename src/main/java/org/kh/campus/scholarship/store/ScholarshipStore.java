@@ -9,7 +9,7 @@ public interface ScholarshipStore {
 
 	List<Scholarship> selectAllScholar(SqlSession sqlSession);
 	int insertScholar(SqlSession sqlSession, Scholarship scholarship);
-	List<Scholarship> selectResult(SqlSession sqlSession);
+	List<Scholarship> selectResult(SqlSession sqlSession, int studentNo);
 	int registerScholar(SqlSession sqlSession, Scholarship scholarship);
 	
 }
