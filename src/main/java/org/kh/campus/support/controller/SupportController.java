@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +26,26 @@ public class SupportController {
 	@Autowired
 	private SupportService sService;
 	
+	//지원현황 목록 조회
+	@RequestMapping(value="/support/list.kh", method=RequestMethod.GET)
+	public ModelAndView supportListView(ModelAndView mv) {
+		try {
+			List<Support> sList = sService.printAllSupport();
+			if(!sList.isEmpty()) {
+				mv.addObject("sList",sList);
+				mv.setViewName("support/supportList");
+			}else {
+				mv.addObject("msg","지원현황 조회 실패");
+				mv.setViewName("common/errorPage");
+			}
+		}catch(Exception e) {
+			mv.addObject("msg", e.toString());
+			mv.setViewName("common/errorPage");
+		}
+		return mv;
+	}
+	
+	//이력서 등록
 	@RequestMapping(value="/support/register.kh", method=RequestMethod.POST)
 	public ModelAndView supportRegisterView(ModelAndView mv
 			, @ModelAttribute Support support
@@ -53,7 +74,7 @@ public class SupportController {
 			}
 			int result = sService.insertSuport(support);
 			if(result > 0) {
-				mv.setViewName("redicrt:/support/listView.kh");
+				mv.setViewName("redicrt:/support/list.kh");
 			}else {
 				mv.addObject("msg","이력서 등록 실패");
 				mv.setViewName("common/errorPage");

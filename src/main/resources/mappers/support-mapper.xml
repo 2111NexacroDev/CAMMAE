@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="SupportMapper">
 	<resultMap type="Support" id="supportResultMap">
-		<id property="supporNo" column="SUPPORT_NO"/>
+		<id property="supportNo" column="SUPPORT_NO"/>
 		<result property="recruitmentNo" column="RECRUITMENT_NO"/>
 		<result property="recruitmentTitle" column="RECRUITMENT_TITLE"/>
 		<result property="studentNo" column="STUDENT_NO"/>
@@ -16,6 +16,10 @@
 		<result property="supPortFileRename" column="SUP_PORT_FILE_RENAME"/>
 		<result property="supPortFilePath" column="SUP_PORT_FILE_PATH"/>
 	</resultMap>
+	
+	<select id="selectAllSupport" resultMap="supportResultMap">
+		SELECT * FROM SUPPORT_TBL ORDER BY SUPPORT_NO ASC
+	</select>
 	
 	<insert id="insertSupport" parameterType="Support">
 		INSERT INTO SUPPORT_TBL VALUES(SEQ_SUPPORT_NO.NEXTVAL
