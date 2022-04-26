@@ -49,32 +49,29 @@ public class SupportController {
 	@RequestMapping(value="/support/register.kh", method=RequestMethod.POST)
 	public ModelAndView supportRegisterView(ModelAndView mv
 			, @ModelAttribute Support support
-			, @RequestParam(value="upladFile", required=false)MultipartFile uploadFile
+			, @RequestParam(value="uploadFile", required=false)MultipartFile uploadFile
 			, @RequestParam(value="uploadFile1", required=false)MultipartFile uploadFile1
+			, @RequestParam(value="recruitmentNo")int recruitmentNo
 			, HttpServletRequest request) throws UnsupportedEncodingException {
 		try {
-			if(uploadFile != null && !uploadFile.getOriginalFilename().equals("")) {
-				HashMap<String, String> fileMap = saveFile(uploadFile, request);
+			if(uploadFile != null && !uploadFile.getOriginalFilename().equals("") || uploadFile1 != null && !uploadFile1.getOriginalFilename().equals("")) {
+				HashMap<String, String> fileMap = saveFile(uploadFile, request, uploadFile1);
 				String filePath = fileMap.get("filePath");
 				String fileRename = fileMap.get("fileName");
+				String filePath1= fileMap.get("filePath1");
+				String fileRename1 = fileMap.get("fileName1");
 				if(filePath != null && !filePath.equals("")) {
 					support.setSupFileName(uploadFile.getOriginalFilename());
 					support.setSupFileRename(fileRename);
 					support.setSupFilePath(filePath);
-				}
-			} else if(uploadFile1 != null && !uploadFile1.getOriginalFilename().equals("")) {
-				HashMap<String, String> fileMap = saveFile(uploadFile1,request);
-				String filePath = fileMap.get("filePath");
-				String fileRename = fileMap.get("fileName");
-				if(filePath != null && !filePath.equals("")) {
 					support.setSupPortFileName(uploadFile1.getOriginalFilename());
-					support.setSupPortFileRename(fileRename);
-					support.setSupPortFilePath(filePath);
+					support.setSupPortFileRename(fileRename1);
+					support.setSupPortFilePath(filePath1);
 				}
 			}
 			int result = sService.insertSuport(support);
 			if(result > 0) {
-				mv.setViewName("redicrt:/support/list.kh");
+				mv.setViewName("redirect:/recruitment/detail.kh?recruitmentNo=" + recruitmentNo);
 			}else {
 				mv.addObject("msg","이력서 등록 실패");
 				mv.setViewName("common/errorPage");
@@ -86,29 +83,41 @@ public class SupportController {
 		return mv;
 	}
 	
-	// 파일 경로
-		public HashMap<String, String> saveFile(MultipartFile file, HttpServletRequest request) {
-			String filePath = "";
-			HashMap<String, String> fileMap = new HashMap<String, String>();
-			String root = request.getSession().getServletContext().getRealPath("resources");
-			String savePath = root + "\\nuploadFiles";
-			File folder = new File(savePath);
-			if (!folder.exists())
-				folder.mkdir();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-			String originalFileName = file.getOriginalFilename();
-			String extesionName = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-			String renameFileName = sdf.format(new Date(System.currentTimeMillis())) + "." + extesionName;
-			filePath = folder + "\\" + renameFileName;
-			fileMap.put("filePath", filePath);
-			fileMap.put("fileName", renameFileName);
-			try {
-				file.transferTo(new File(filePath));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return fileMap;
-		}
+	 // 파일 경로
+	   public HashMap<String, String> saveFile(MultipartFile file, HttpServletRequest request, MultipartFile uploadFile) {
+	      String filePath = "";
+	      String filePath1 = "";
+	      HashMap<String, String> fileMap = new HashMap<String, String>();
+	      String root = request.getSession().getServletContext().getRealPath("resources");
+	      String savePath = root + "\\supportUploadFiles";
+	      
+	      File folder = new File(savePath);
+	      if (!folder.exists())
+	         folder.mkdir();
+	      
+	      SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+	      SimpleDateFormat sd = new SimpleDateFormat("yyyyMMdd");
+	      String originalFileName = file.getOriginalFilename();
+	      String originalFileName1 = uploadFile.getOriginalFilename();
+	      String extesionName = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+	      String extesionName1 = originalFileName1.substring(originalFileName1.lastIndexOf(".") + 1);
+	      String renameFileName = sdf.format(new Date(System.currentTimeMillis())) + "." + extesionName;
+	      String renameFileName1 = sd.format(new Date(System.currentTimeMillis())) + "." + extesionName1;
+	      filePath = folder + "\\" + renameFileName;
+	      filePath1 = folder + "\\" + renameFileName1;
+	      fileMap.put("filePath", filePath);
+	      fileMap.put("fileName", renameFileName);
+	      fileMap.put("filePath1", filePath1);
+	      fileMap.put("fileName1", renameFileName1);
+	      try {
+	         file.transferTo(new File(filePath));
+	         uploadFile.transferTo(new File(filePath1));
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      return fileMap;
+	   }
+	
 	
 	
 	

@@ -9,17 +9,17 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class SupportSotreLogic implements SupportStore{
+	
+	@Override
+	public List<Support> selectAllSupport(SqlSession sqlSession) {
+		List<Support> sList = sqlSession.selectList("SupportMapper.selectAllSupport");
+		return sList;
+	}
 
 	@Override
 	public int insertSupport(SqlSession sqlSession, Support support) {
 		int result = sqlSession.insert("SupportMapper.insertSupport", support);
 		return result;
-	}
-
-	@Override
-	public List<Support> selectAllSupport(SqlSession sqlSession) {
-		List<Support> sList = sqlSession.selectList("SupportMapper.selectAllSupport");
-		return sList;
 	}
 
 }

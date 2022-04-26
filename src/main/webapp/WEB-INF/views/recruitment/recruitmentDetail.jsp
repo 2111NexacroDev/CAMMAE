@@ -190,6 +190,8 @@
 				                    <p>이력서 지원</p>
 				                    이력서<input  type="file" multiple="multiple" size="50" name="uploadFile"><br>
 				                    포트폴리오<input  type="file" multiple="multiple" size="50" name="uploadFile1"><br>
+				                    <input type="hidden" value="${recruitment.recruitmentNo }" name="recruitmentNo">
+				                    <input type="hidden" value="${recruitment.recruitmentTitle }" name="recruitmentTitle">
 				                    <button type="submit" id="completion">완료</button>
 				                </div>
 				        </div>
