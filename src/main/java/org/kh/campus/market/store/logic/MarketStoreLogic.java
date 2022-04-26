@@ -6,9 +6,11 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 import org.kh.campus.market.domain.Market;
+import org.kh.campus.market.domain.MarketReply;
 import org.kh.campus.market.domain.PageInfo;
 import org.kh.campus.market.domain.Search;
 import org.kh.campus.market.store.MarketStore;
+import org.kh.campus.question.domain.QuestionReply;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -69,6 +71,33 @@ public class MarketStoreLogic implements MarketStore {
 		return totalCount;
 	}
 
+
+	
+	//댓글
+
+		@Override
+		public List<MarketReply> selectAllReply(int marketNo, SqlSession sqlSession) {
+			List<MarketReply> mReplyList = sqlSession.selectList("MarketMapper.selectAllReply", marketNo);
+			return mReplyList;
+		}
+		
+		@Override
+		public int insertReply(MarketReply marketReply, SqlSession sqlSession) {
+			int result = sqlSession.insert("MarketMapper.insertReply", marketReply);
+			return result;
+		}
+
+		@Override
+		public int updateReply(MarketReply marketReply, SqlSession sqlSession) {
+			int result = sqlSession.update("MarketMapper.updateReply", marketReply);
+			return result;
+		}
+
+		@Override
+		public int deleteReply(MarketReply marketReply, SqlSession sqlSession) {
+			int result = sqlSession.delete("MarketMapper.deleteReply", marketReply);
+			return result;
+		}
 
 
 
