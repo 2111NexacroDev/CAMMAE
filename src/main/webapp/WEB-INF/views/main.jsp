@@ -88,8 +88,8 @@
             </div>
 
             <div id="submenu6">
-                <div id="submenu6_1"><a href="#" style="color:white">지원현황</a></div>
-                <div id="submenu6_2"><a href="#"><span class="material-icons" style="font-size:50px; color: rgba(255, 255, 255, 0.5);">list_alt</span></a></div> 
+                <div id="submenu6_1"><a href="/support/list.kh" style="color:white">지원현황</a></div>
+                <div id="submenu6_2"><a href="/support/list.kh"><span class="material-icons" style="font-size:50px; color: rgba(255, 255, 255, 0.5);">list_alt</span></a></div> 
             </div>
 
             <div id="submenu7">

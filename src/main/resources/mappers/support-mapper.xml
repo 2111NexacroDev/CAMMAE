@@ -26,7 +26,7 @@
 		, #{recruitmentNo} 
 		,#{recruitmentTitle} 
 		,#{studentNo} 
-		,#{supportDate} 
+		,DEFAULT 
 		,#{supFileName} 
 		,#{supFileRename} 
 		,#{supFilePath} 
