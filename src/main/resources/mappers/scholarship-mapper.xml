@@ -12,14 +12,20 @@
   	<result property="scholarship_amount" column="SCHOLARSHIP_AMOUNT"/>
   	<result property="scholarship_name" column="SCHOLARSHIP_NAME"/>
   	<result property="scholarship_phonenumber" column="SCHOLARSHIP_PHONENUMBER"/>
-  	<result property="scholarship_college" column="SCHOLARSHIP_COLLEGE"/>		
+  	<result property="scholarship_college" column="SCHOLARSHIP_COLLEGE"/>
+  	<result property="scholarship_student_no" column="SCHOLARSHIP_STU_NO"/>		
   
   	</resultMap>
   	<insert id="registerScholar" parameterType="Scholarship">
-  	 INSERT INTO SCHOLARSHIP_TBL VALUES(SEQ_SCHOLARSHIP_NO.NEXTVAL, #{scholarship_avg_grade},  #{scholarship_year},  #{scholarship_term},  DEFAULT,  #{scholarship_amount},  #{scholarship_name}, #{scholarship_phonenumber}, #{scholarship_college})
+  	 INSERT INTO SCHOLARSHIP_TBL VALUES(SEQ_SCHOLARSHIP_NO.NEXTVAL, #{scholarship_avg_grade},  #{scholarship_year},  #{scholarship_term},  DEFAULT,  #{scholarship_amount},  #{scholarship_name}, #{scholarship_phonenumber}, #{scholarship_college}, #{scholarship_student_no})
   	</insert>
   	<select id="selectAllScholar" resultMap="scholarshipResultMap">
   	 SELECT * FROM SCHOLARSHIP_TBL
+  	</select>
+  	
+  	<select id="selectResult" resultMap="scholarshipResultMap">
+  	SELECT SCHOLARSHIP_NAME, SCHOLARSHIP_STU_NO, SCHOLARSHIP_COLLEGE, SCHOLARSHIP_PHONENUMBER, SCHOLARSHIP_YEAR , SCHOLARSHIP_TEAM, SCHOLARSHIP_STATUS 
+  	FROM SCHOLARSHIP_TBL WHERE SCHOLARSHIP_NAME = #{scholarship_name}
   	</select>
   	
   	</mapper>
