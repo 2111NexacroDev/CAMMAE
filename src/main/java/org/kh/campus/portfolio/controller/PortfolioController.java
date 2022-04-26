@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,25 +58,21 @@ public class PortfolioController {
 			@RequestParam(value = "uploadFile1", required = false) MultipartFile uploadFile1,
 			HttpServletRequest request) throws UnsupportedEncodingException {
 		try {
-			if (uploadFile != null && !uploadFile.getOriginalFilename().equals("")) {
-				HashMap<String, String> fileMap = saveFile(uploadFile, request);
+			if (uploadFile != null && !uploadFile.getOriginalFilename().equals("") || uploadFile1 != null && !uploadFile1.getOriginalFilename().equals("")) {
+				HashMap<String, String> fileMap = saveFile(uploadFile, request , uploadFile1);
 				String filePath = fileMap.get("filePath");
 				String fileRename = fileMap.get("fileName");
+				String filePath1 = fileMap.get("filePath1");
+				String fileRename1 = fileMap.get("fileName1");
 				if (filePath != null && !filePath.equals("")) {
 					portfolio.setPort_license(uploadFile.getOriginalFilename());
 					portfolio.setPort_licenseRename(fileRename);
 					portfolio.setPort_licenseFilePath(filePath);
+					portfolio.setPort_award_history(uploadFile1.getOriginalFilename());
+					portfolio.setPort_award_historyRename(fileRename1);
+					portfolio.setPort_awardFilePath(filePath1);
 				}
 
-			} else if (uploadFile1 != null && !uploadFile1.getOriginalFilename().equals("")) {
-				HashMap<String, String> fileMap = saveFile(uploadFile1, request);
-				String filePath = fileMap.get("filePath");
-				String fileRename = fileMap.get("fileName");
-				if (filePath != null && !filePath.equals("")) {
-					portfolio.setPort_award_history(uploadFile1.getOriginalFilename());
-					portfolio.setPort_award_historyRename(fileRename);
-					portfolio.setPort_awardFilePath(filePath);
-				}
 			}
 
 			int result = pService.insertPort(portfolio);
@@ -94,23 +91,34 @@ public class PortfolioController {
 	}
 
 	// 파일 경로
-	public HashMap<String, String> saveFile(MultipartFile file, HttpServletRequest request) {
+	public HashMap<String, String> saveFile(MultipartFile file, HttpServletRequest request, MultipartFile uploadFile) {
 		String filePath = "";
+		String filePath1 = "";
 		HashMap<String, String> fileMap = new HashMap<String, String>();
 		String root = request.getSession().getServletContext().getRealPath("resources");
-		String savePath = root + "\\nuploadFiles";
+		String savePath = root + "\\puploadFiles";
+		
 		File folder = new File(savePath);
 		if (!folder.exists())
 			folder.mkdir();
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHH");
 		String originalFileName = file.getOriginalFilename();
+		String originalFileName1 = uploadFile.getOriginalFilename();
 		String extesionName = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+		String extesionName1 = originalFileName1.substring(originalFileName1.lastIndexOf(".") + 1);
 		String renameFileName = sdf.format(new Date(System.currentTimeMillis())) + "." + extesionName;
+		String renameFileName1 = sd.format(new Date(System.currentTimeMillis())) + "." + extesionName1;
 		filePath = folder + "\\" + renameFileName;
+		filePath1 = folder + "\\" + renameFileName1;
 		fileMap.put("filePath", filePath);
 		fileMap.put("fileName", renameFileName);
+		fileMap.put("filePath1", filePath1);
+		fileMap.put("fileName1", renameFileName1);
 		try {
 			file.transferTo(new File(filePath));
+			uploadFile.transferTo(new File(filePath1));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
