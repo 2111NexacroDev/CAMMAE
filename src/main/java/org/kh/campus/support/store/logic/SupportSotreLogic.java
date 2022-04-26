@@ -1,5 +1,7 @@
 package org.kh.campus.support.store.logic;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.support.domain.Support;
 import org.kh.campus.support.store.SupportStore;
@@ -12,6 +14,12 @@ public class SupportSotreLogic implements SupportStore{
 	public int insertSupport(SqlSession sqlSession, Support support) {
 		int result = sqlSession.insert("SupportMapper.insertSupport", support);
 		return result;
+	}
+
+	@Override
+	public List<Support> selectAllSupport(SqlSession sqlSession) {
+		List<Support> sList = sqlSession.selectList("SupportMapper.selectAllSupport");
+		return sList;
 	}
 
 }

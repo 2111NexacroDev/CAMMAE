@@ -1,5 +1,7 @@
 package org.kh.campus.support.service.logic;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.support.domain.Support;
 import org.kh.campus.support.service.SupportService;
@@ -19,5 +21,11 @@ public class SupportServiceImpl implements SupportService{
 	public int insertSuport(Support support) {
 		int result = sStore.insertSupport(sqlSession, support);
 		return result;
+	}
+
+	@Override
+	public List<Support> printAllSupport() {
+		List<Support> sList = sStore.selectAllSupport(sqlSession);
+		return sList;
 	}
 }

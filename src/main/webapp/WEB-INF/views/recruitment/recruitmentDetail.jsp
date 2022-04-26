@@ -188,8 +188,8 @@
 				            <div class="close-area">X</div>
 				                <div class="content">
 				                    <p>이력서 지원</p>
-				                    <input  type="file" size="50" name="uploadFile"><br>
-				                    <input  type="file" size="50" name="uploadFile1"><br>
+				                    이력서<input  type="file" multiple="multiple" size="50" name="uploadFile"><br>
+				                    포트폴리오<input  type="file" multiple="multiple" size="50" name="uploadFile1"><br>
 				                    <button type="submit" id="completion">완료</button>
 				                </div>
 				        </div>
