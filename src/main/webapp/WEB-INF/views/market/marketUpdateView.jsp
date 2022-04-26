@@ -100,7 +100,21 @@ h3 {
 
 
 	<script>
-		CKEDITOR.replace('marketContent');
+	CKEDITOR.replace('marketContent',
+			{filebrowserUploadUrl:'/market/imageUpload.kh'
+			});
+			
+			CKEDITOR.on('dialogDefinition', function (ev) {
+	            var dialogName = ev.data.name;
+	            var dialog = ev.data.definition.dialog;
+	            var dialogDefinition = ev.data.definition;
+	            if (dialogName == 'image') {
+	                dialog.on('show', function (obj) {
+	                    this.selectPage('Upload'); //업로드텝으로 시작
+	                });
+	                dialogDefinition.removeContents('Link'); // 링크탭 제거
+	            }
+	        });
 	</script>
 </body>
 </html>
