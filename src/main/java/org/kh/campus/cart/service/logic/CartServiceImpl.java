@@ -37,6 +37,12 @@ public class CartServiceImpl implements CartService {
 		return result;
 	}
 
+	@Override
+	public List<Cart> printMyCart() {
+		List<Cart> cList = cStore.selectMyCart(sqlSession);
+		return cList;
+	}
+
 
 
 

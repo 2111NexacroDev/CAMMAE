@@ -29,6 +29,12 @@ public class CartStoreLogic implements CartStore {
 		return result;
 	}
 
+	@Override
+	public List<Cart> selectMyCart(SqlSession sqlSession) {
+		List<Cart> cList = sqlSession.selectList("CartMapper.selectMyCart");
+		return cList;
+	}
+
 
 
 
