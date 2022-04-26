@@ -198,13 +198,6 @@ public class MarketController {
 		public void ckSubmit(@RequestParam(value = "uid") String uid, @RequestParam(value = "fileName") String fileName,
 				HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-			// 서버에 저장된 이미지 경로
-			/*
-			 * String path = "C:\\Users\\wowo1\\Pictures\\Saved Pictures" + "ckImage/"; //
-			 * 저장된 이미지 경로 System.out.println("path:" + path); String sDirPath = path + uid +
-			 * "_" + fileName;
-			 */
-
 			// 파일 경로 설정
 			String root = request.getSession().getServletContext().getRealPath("resources");
 			// 저장 폴더 선택
