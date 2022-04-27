@@ -198,7 +198,7 @@ public class BoardController {
 			}
 		int result = service.modifyBoard(board);
 		if(result > 0) {
-			mv.setViewName("board/boardDetail");
+			mv.setViewName("redirect:/board/detail.kh?boardNo="+board.getBoardNo());
 		}else {
 			mv.addObject("msg", "공지사항 수정실패");
 			mv.setViewName("common/errorPage");
@@ -223,7 +223,7 @@ public class BoardController {
 		try {
 			int result = service.removeBoard(boardNo);
 			if(result > 0) {
-				return "redirect:/board/lisg.kh";
+				return "redirect:/board/list.kh";
 			}else {
 				model.addAttribute("msg", "게시판 삭제 실패");
 				return "common/errorPage";

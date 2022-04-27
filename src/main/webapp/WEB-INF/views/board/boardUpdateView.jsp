@@ -48,12 +48,12 @@ h3 {
 <body>
 	
 	<div class="center">
-		<form action="/board/update" method="POST"
+		<form action="/board/update.kh" method="POST"
 			enctype="multipart/form-data">
 			<input type="hidden" name="boardNo" value="${board.boardNo }">
-			<input type="hidden" name="boardFileName" value="${board.boardFileName }"> 
-			<input type="hidden" name="boardFileReName" value="${board.boardFileReNeme }">
-			<input type="hidden" name="boardFilePath" value="${board.boardFilePath }"> 
+			<input type="hidden" name="boardFilename" value="${board.boardFilename }"> 
+			<input type="hidden" name="boardFilerename" value="${board.boardFilerename }">
+			<input type="hidden" name="boardFilepath" value="${board.boardFilepath }"> 
 			<input type="hidden" name="boardDate" value="${board.boardDate }">
 
 
@@ -75,7 +75,7 @@ h3 {
 
 				<div style="padding: 10px;">
 					<input type="file" id="fileArea" name="reloadFile">
-					${board.boardFileName}
+					${board.boardFilename}
 				</div>
 
 				<hr style="width: 585px; text-align: center;">

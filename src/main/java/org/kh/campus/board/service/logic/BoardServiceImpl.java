@@ -55,7 +55,7 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int removeBoard(int boardNo) {
 		int result = bStore.deleteBoard(boardNo, sqlSession);
-		return 0;
+		return result;
 	}
 	//댓글 목록 보여주기
 	@Override
