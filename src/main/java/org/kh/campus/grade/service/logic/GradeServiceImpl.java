@@ -17,8 +17,8 @@ public class GradeServiceImpl implements GradeService {
 	private SqlSession sqlSession;
 	
 	@Override
-	public List<Grade> printGradeStudent(Grade grade) {
-		List<Grade> gList = gStore.selectGradeStudent(grade, sqlSession);
+	public List<Grade> printGradeStudent(int studentNo) {
+		List<Grade> gList = gStore.selectGradeStudent(studentNo, sqlSession);
 		return gList;
 	}
 	@Override
@@ -32,8 +32,8 @@ public class GradeServiceImpl implements GradeService {
 		return result;
 	}
 	@Override
-	public List<Grade> printGradeProfessor(Grade grade) {
-		List<Grade> gList = gStore.selectGradeProfessor(grade, sqlSession);
+	public List<Grade> printGradeProfessor(int prfNo) {
+		List<Grade> gList = gStore.selectGradeProfessor(prfNo, sqlSession);
 		return gList;
 	}
 	

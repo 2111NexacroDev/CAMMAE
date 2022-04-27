@@ -14,4 +14,11 @@
 	<select id="managerLogin" resultType="_int">
 		SELECT MANAGER_NO FROM MANAGER_TBL WHERE MANAGER_NO = #{managerNo} AND MANAGER_PASSWORD = #{managerPassword}
 	</select>
+	
+	<select id="selectPwdStd" resultType="string">
+		SELECT STUDENT_EMAIL FROM STUDENT_TBL
+		WHERE STUDENT_NO = #{studentNo}
+		AND STUDENT_NAME = #{studentName}
+		AND STUDENT_PHONENUMBER = #{studentPhonenumber}
+	</select>
 </mapper>
