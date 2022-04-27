@@ -16,6 +16,8 @@
 			alias="Professor" />
 		<typeAlias type="org.kh.campus.manager.domain.Manager"
 			alias="Manager" />
+		<typeAlias type="org.kh.campus.grade.domain.Grade"
+			alias="Grade" />
 		<typeAlias type="org.kh.campus.question.domain.Question"
 			alias="Question" />
 		<typeAlias type="org.kh.campus.market.domain.Market"
@@ -54,6 +56,7 @@
 		<mapper resource="mappers/professor-mapper.xml" />
 		<mapper resource="mappers/manager-mapper.xml" />
 		<mapper resource="mappers/login-mapper.xml" />
+		<mapper resource="mappers/grade-mapper.xml" />
 		<mapper resource="mappers/question-mapper.xml" />
 		<mapper resource="mappers/market-mapper.xml" />
 		<mapper resource="mappers/board-mapper.xml" />

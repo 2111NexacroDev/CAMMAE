@@ -46,7 +46,6 @@ public class LoginController {
 				int stdNo = 0;
 				stdNo = lService.loginStudent(student);
 				
-				
 				session.setAttribute("login", "std");
 				session.setAttribute("id", stdNo);
 				// 교수

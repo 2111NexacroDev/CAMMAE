@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GradeMapper">
+	<resultMap type="Grade" id="gradeResultMap">
+		<id property="lectureNo" column="LECTURE_NO"/>
+		<result property="studentNo" column="STUDENT_NO"/>
+		<result property="gradeYear" column="GRADE_YEAR"/>
+		<result property="gradeSession" column="GRADE_SESSION"/>
+		<result property="gradeSubject" column="GRADE_SUBJECT"/>
+		<result property="gradeComplete" column="LECTURE_DIVISION"/>
+		<result property="lectureGrade" column="LECTURE_GRADE"/>
+		<result property="gradeScore" column="GRADE_SCORE"/>
+		<result property="gradeAvg" column="GRADE_AVG"/>
+		<result property="gradeFeedback" column="GRADE_FEEDBACK"/>
+		<result property="gradeObjection" column="GRADE_OBJECTION"/>
+		<result property="gradeChange" column="GRADE_CHANGE"/>
+	</resultMap>
+	
+	<select id="selectGradeStudent" resultMap="gradeResultMap">
+		SELECT * FROM GRADE_TBL WHERE STUDENT_NO = #{studentNo}
+	</select>
+	
+	<select id="selectGradeProfessor" resultMap="gradeResultMap">
+		SELECT * FROM GRADE_TBL WHERE PROFESSOR_NO = #{professorNo}
+	</select>
+</mapper>

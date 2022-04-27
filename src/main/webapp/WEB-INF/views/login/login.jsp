@@ -100,11 +100,9 @@ window.onload = function(){
 	})
     // 모달 온, 비밀번호 찾기 창 뛰우기
 	var btnModal = document.querySelectorAll(".btn-modal");
-    for (var i=0; i<btnModal.length; i++) {
-        btnModal[i].addEventListener("click", function(event){
+        btnModal[0].addEventListener("click", function(event){
         	modalOn();
         });
-    }
     
     // 모달에서 찾기 버튼 클릭시
 	    var findPwd = document.querySelector("#findPwd");

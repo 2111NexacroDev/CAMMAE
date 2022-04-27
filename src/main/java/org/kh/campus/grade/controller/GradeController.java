@@ -1,21 +1,37 @@
 package org.kh.campus.grade.controller;
 
 
+import java.util.List;
+
+import org.kh.campus.grade.domain.Grade;
 import org.kh.campus.grade.service.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.nexacro.uiadapter17.spring.core.data.NexacroResult;
+import com.nexacro17.xapi.data.DataSet;
 
 @Controller
 public class GradeController {
 	
 	@Autowired
-	private static GradeService gService;
+	private GradeService gService;
 	
 	// 학생 성적 조회
+	@RequestMapping(value="/grade/stdGrade.kh", method=RequestMethod.GET)
 	public NexacroResult printGradeStudent() {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
+		int studentNo = 0;
+		
+		List<Grade> gList = gService.printGradeStudent(studentNo);
+		
+		result.addDataSet("out_stdGrade", gList);
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
 		
 		return result;
 	}
@@ -35,8 +51,18 @@ public class GradeController {
 	}
 	
 	// 교수 성적 조회
+	@RequestMapping(value="/grade/prfGrade.kh", method=RequestMethod.GET)
 	public NexacroResult printGradeProfessor() {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
+		int prfNo = 1;
+		
+		List<Grade> gList = gService.printGradeProfessor(prfNo);
+		
+		result.addDataSet("out_stdGrade", gList);
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
 		
 		return result;
 	}
@@ -61,4 +87,15 @@ public class GradeController {
 		
 		return result;
 	}
+	
+	// Dataset value
+	public String dsGet(DataSet ds, int rowno, String colid) throws Exception
+	{
+	    String value;
+	    value = ds.getString(rowno, colid);
+	    if( value == null )
+	        return "";
+	    else
+	        return value;
+	} 
 }
