@@ -12,6 +12,8 @@ public interface SupportService {
 	public List<Support> printSearchSupport(SupportSearch supportSearch);//지원현황 검색
 	public int insertSuport(Support support);//이력서 등록
 	public int getListCount();
+	public int checkDelete(int supportNo);
+
 
 
 }

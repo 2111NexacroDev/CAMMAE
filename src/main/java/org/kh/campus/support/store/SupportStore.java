@@ -13,6 +13,8 @@ public interface SupportStore {
 	public List<Support> selectSearchSupport(SupportSearch supportSearch, SqlSession sqlSession);
 	public int insertSupport(SqlSession sqlSession, Support support);
 	public int selectListCount(SqlSession sqlSession);
+	public int deletCheck(int supportNo, SqlSession sqlSession);
+	
 
 
 }

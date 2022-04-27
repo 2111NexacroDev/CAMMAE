@@ -41,6 +41,14 @@ public class SupportSotreLogic implements SupportStore{
 		return totalCount;
 	}
 
+	@Override
+	public int deletCheck(int supportNo, SqlSession sqlSession) {
+		int result = sqlSession.delete("SupportMapper.deleteSupport", supportNo);
+		return result;
+	}
+
+	
+
 
 
 }

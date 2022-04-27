@@ -22,7 +22,7 @@
 	</select>
 	
 	<select id="selectAllSupport" resultMap="supportResultMap">
-		SELECT * FROM SUPPORT_TBL ORDER BY SUPPORT_NO ASC
+		SELECT * FROM SUPPORT_TBL ORDER BY SUPPORT_NO DESC
 	</select>
 	
 	<select id="selectSearchSupport" resultMap="supportResultMap">
@@ -48,4 +48,7 @@
 		,#{supPortFileRename} 
 		,#{supPortFilePath})
 	</insert>
+	<delete id="deleteSupport">
+		DELETE FROM SUPPORT_TBL WHERE SUPPORT_NO = #{supportNo}
+	</delete>
 </mapper>
