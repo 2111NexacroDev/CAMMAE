@@ -36,7 +36,7 @@
 	<select id="selectSearchRecruitment" resultMap="recruitmentResultMap">
 		SELECT * FROM RECRUITMENT_TBL
 		<if test="searchCondition.toString() == 'title'">
-			WHERE RECRUITMENT_WRITER LIKE '%' || #{searchValue} || '%'
+			WHERE RECRUITMENT_TITLE LIKE '%' || #{searchValue} || '%'
 		</if>
 	</select>
 	

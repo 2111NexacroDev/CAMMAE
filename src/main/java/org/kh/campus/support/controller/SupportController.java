@@ -9,7 +9,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.kh.campus.support.domain.PageInfo;
+import org.kh.campus.support.domain.Pagination;
 import org.kh.campus.support.domain.Support;
+import org.kh.campus.support.domain.SupportSearch;
 import org.kh.campus.support.service.SupportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,11 +31,15 @@ public class SupportController {
 	
 	//지원현황 목록 조회
 	@RequestMapping(value="/support/list.kh", method=RequestMethod.GET)
-	public ModelAndView supportListView(ModelAndView mv) {
+	public ModelAndView supportListView(ModelAndView mv, @RequestParam(value="page", required=false)Integer page) {
 		try {
-			List<Support> sList = sService.printAllSupport();
+			int currentPage = (page != null) ? page : 1;
+			int totalCount = sService.getListCount();
+			PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
+			List<Support> sList = sService.printAllSupport(pi);
 			if(!sList.isEmpty()) {
 				mv.addObject("sList",sList);
+				mv.addObject("pi",pi);
 				mv.setViewName("support/supportList");
 			}else {
 				mv.addObject("msg","지원현황 조회 실패");
@@ -41,6 +48,21 @@ public class SupportController {
 		}catch(Exception e) {
 			mv.addObject("msg", e.toString());
 			mv.setViewName("common/errorPage");
+		}
+		return mv;
+	}
+	
+	//지원현황 검색
+	@RequestMapping(value="/support/search", method=RequestMethod.GET)
+	public ModelAndView supportSearchList(ModelAndView mv, @ModelAttribute SupportSearch supportSearch) {
+		try {
+			List<Support> searchList = sService.printSearchSupport(supportSearch);
+			if(!searchList.isEmpty()) {
+				mv.addObject("sList", searchList);
+				mv.setViewName("support/supportList");
+			}
+		}catch(Exception e) {
+			System.out.println(e.toString());
 		}
 		return mv;
 	}
