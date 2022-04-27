@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -140,7 +141,20 @@ public class SupportController {
 	      return fileMap;
 	   }
 	
-	
+	//선택삭제
+	   @ResponseBody
+	   @RequestMapping(value="/deleteSupport", method=RequestMethod.POST)
+	   public String ajaxDelete(HttpServletRequest request) {
+		   
+		   String[] ajaxMsg = request.getParameterValues("valueArr");
+		   int size = ajaxMsg.length;
+		   for(int i=0; i<size; i++) {
+			   sService.checkDelete (Integer.parseInt(ajaxMsg[i]));
+			   System.out.println(ajaxMsg[i]);
+		   }
+		   
+		   return "redirect:support/list.kh";
+	   }
 	
 	
 	

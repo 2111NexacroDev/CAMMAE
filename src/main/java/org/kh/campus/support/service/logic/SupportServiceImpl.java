@@ -43,5 +43,10 @@ public class SupportServiceImpl implements SupportService{
 		return totalCount;
 	}
 
+	@Override
+	public int checkDelete(int supportNo) {
+		int result = sStore.deletCheck(supportNo, sqlSession);
+		return result;
+	}
 	
 }
