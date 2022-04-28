@@ -42,8 +42,8 @@ public class CartController {
 	// 예비수강신청 등록
 	@RequestMapping(value = "/cart/cartPick.kh", method = RequestMethod.GET)
 	public ModelAndView cartRegister(ModelAndView mv, @RequestParam("lectureNo") int lectureNo) {
-		int result = cService.registerCart(lectureNo);
 		try {
+			int result = cService.registerCart(lectureNo);
 			if (result > 0) {
 				mv.setViewName("redirect:/cart/preCartListView.kh");
 			} else {
@@ -52,10 +52,9 @@ public class CartController {
 				System.out.println("실패했습니다.");
 			}
 		} catch (Exception e) {
-			mv.setViewName("common/errorPage");
-			mv.addObject("msg", e.toString());
+			mv.setViewName("redirect:/cart/preCartListView.kh");
+		
 		}
-		System.out.println(result);
 		return mv;
 	}
 
