@@ -41,7 +41,7 @@ h3 {
 }
 
 /* 게시물 이미지 크기*/
- .content img{
+    .content img{
 		max-width: 100%;
 		max-height: 200px; 
 	}
