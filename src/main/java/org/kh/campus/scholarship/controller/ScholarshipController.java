@@ -64,6 +64,7 @@ public class ScholarshipController {
 		result.addVariable("ErrorMsg", strErrorMsg);
 		return result;
 	}
+
 	
 	@RequestMapping(value = "/scholarship/scholarDenine.kh", method = RequestMethod.POST)
 	public NexacroResult updateScholarDenine(
@@ -108,7 +109,6 @@ public class ScholarshipController {
 	
 	
 	
-	
 	@RequestMapping(value = "/scholarship/scholarResult.kh", method = RequestMethod.GET)
 	public NexacroResult printScholarResult(
 			HttpSession session) {
@@ -143,6 +143,7 @@ public class ScholarshipController {
 	@RequestMapping(value = "/scholarship/register.kh", method = RequestMethod.POST)
 	public NexacroResult registerScholar(
 			@ParamDataSet(name = "in_admin_scholar", required = false) DataSet inAdminScholar, HttpSession session) throws Exception {
+
 		int nErrorCode = 0;
 		String strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
