@@ -36,6 +36,8 @@
 			alias="Consultant" />
 		<typeAlias type="org.kh.campus.board.domain.BoardReply"
 			alias="BoardReply" />
+		<typeAlias type="org.kh.campus.board.domain.University"
+			alias="University" />
 		<typeAlias
 			type="org.kh.campus.consultant.domain.ConsultantReply"
 			alias="ConsultantReply" />
@@ -76,5 +78,6 @@
 		<mapper resource="mappers/cart-mapper.xml" />
 		<mapper resource="mappers/scholarship-mapper.xml" />
 		<mapper resource="mappers/support-mapper.xml" />
+		
 	</mappers>
 </configuration>

@@ -6,6 +6,7 @@ import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
 import org.kh.campus.board.domain.PageInfo;
 import org.kh.campus.board.domain.Search;
+import org.kh.campus.board.domain.University;
 
 public interface BoardService {
 	//메소드명은 기능에 맞게
@@ -21,6 +22,7 @@ public interface BoardService {
 	public int modifyBoardReply(BoardReply boardReply);//댓글 수정
 	public int removeBoardReply(BoardReply boardReply);//댓글 삭제
 	public int getListCount();
+	public List<University> printAllUniversity();
 	
 
 	

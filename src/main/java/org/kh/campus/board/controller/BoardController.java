@@ -8,12 +8,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
 import org.kh.campus.board.domain.PageInfo;
 import org.kh.campus.board.domain.Pagination;
 import org.kh.campus.board.domain.Search;
+import org.kh.campus.board.domain.University;
 import org.kh.campus.board.service.BoardService;
 import org.kh.campus.consultant.domain.ConsultantReply;
 import org.kh.campus.question.domain.QuestionReply;
@@ -41,9 +43,12 @@ public class BoardController {
 	@RequestMapping(value = "/board/list.kh", method = RequestMethod.GET)
 	public ModelAndView boardListView(ModelAndView mv, @RequestParam(value = "page", required = false) Integer page) {
 
+		int universityCode = 0001;
+		
 		int currentPage = (page != null) ? page : 1;
 		int totalCount = service.getListCount();
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
+		pi.setUniversityCode(universityCode);
 		try {
 			List<Board> bList = service.printAllBoard(pi);
 			if (!bList.isEmpty()) {
@@ -60,7 +65,26 @@ public class BoardController {
 		}
 		return mv;
 	}
-
+	
+	@RequestMapping(value = "/board/unlist.kh", method = RequestMethod.GET)
+	public ModelAndView boarUnList(ModelAndView mv) {
+		
+		try {
+			List<University> uList = service.printAllUniversity();
+			if (!uList.isEmpty()) {
+				mv.addObject("uList", uList);
+				mv.setViewName("board/boardUnList2");
+			} else {
+				mv.addObject("msg", "학과게시판 조회 실패");
+				mv.setViewName("common/errorPage");
+			}
+		} catch (Exception e) {
+			mv.addObject("msg", e.toString());
+			mv.setViewName("commmon/errorPage");
+		}
+		return mv;
+	
+	}
 	// 게시판 상세 조회
 	@RequestMapping(value = "/board/detail.kh", method = RequestMethod.GET)
 	public ModelAndView boardOneView(ModelAndView mv, @RequestParam("boardNo") int boardNo) {
@@ -120,6 +144,8 @@ public class BoardController {
 				}
 
 			}
+			int universityCode = 0001;
+			board.setUniversityCode(universityCode);
 			int result = service.registerBoard(board);
 			if (result > 0) {
 				mv.setViewName("redirect:/board/list.kh");
