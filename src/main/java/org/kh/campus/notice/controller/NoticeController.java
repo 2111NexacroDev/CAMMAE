@@ -42,8 +42,10 @@ public class NoticeController {
 				mv.addObject("pi", pi);
 				mv.setViewName("notice/noticeList");
 			}else {
-				mv.addObject("msg","공지사항 조회 실패");
-				mv.setViewName("common/errorPage");
+				mv.setViewName("notice/noticeList");
+				/*
+				 * mv.addObject("msg","공지사항 조회 실패"); mv.setViewName("common/errorPage");
+				 */
 			}
 		}catch(Exception e){
 			mv.addObject("msg", e.toString());

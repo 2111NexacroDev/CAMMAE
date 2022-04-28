@@ -32,8 +32,8 @@ public class CartServiceImpl implements CartService {
 	
 
 	@Override
-	public int removeCart(int lectureNo) {
-		int result = cStore.deleteCart(sqlSession, lectureNo);
+	public int removeCart(int cartNo) {
+		int result = cStore.deleteCart(sqlSession, cartNo);
 		return result;
 	}
 
