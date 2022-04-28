@@ -4,17 +4,20 @@ import java.sql.Date;
 
 public class Cart {
 	private int cartNo;
-	private int lectureNo;
 	private int studentNo;
-	private Date cartYear;
+	private String lectureNo;
+	private String cartYear;
 	private String cartTerm;
 	
 	public Cart() {}
 
-	@Override
-	public String toString() {
-		return "Cart [cartNo=" + cartNo + ", lectureNo=" + lectureNo + ", studentNo=" + studentNo + ", cartYear="
-				+ cartYear + ", cartTerm=" + cartTerm + "]";
+	public Cart(int cartNo, int studentNo, String lectureNo, String cartYear, String cartTerm) {
+		super();
+		this.cartNo = cartNo;
+		this.studentNo = studentNo;
+		this.lectureNo = lectureNo;
+		this.cartYear = cartYear;
+		this.cartTerm = cartTerm;
 	}
 
 	public int getCartNo() {
@@ -25,14 +28,6 @@ public class Cart {
 		this.cartNo = cartNo;
 	}
 
-	public int getLectureNo() {
-		return lectureNo;
-	}
-
-	public void setLectureNo(int lectureNo) {
-		this.lectureNo = lectureNo;
-	}
-
 	public int getStudentNo() {
 		return studentNo;
 	}
@@ -41,11 +36,19 @@ public class Cart {
 		this.studentNo = studentNo;
 	}
 
-	public Date getCartYear() {
+	public String getLectureNo() {
+		return lectureNo;
+	}
+
+	public void setLectureNo(String lectureNo) {
+		this.lectureNo = lectureNo;
+	}
+
+	public String getCartYear() {
 		return cartYear;
 	}
 
-	public void setCartYear(Date cartYear) {
+	public void setCartYear(String cartYear) {
 		this.cartYear = cartYear;
 	}
 
@@ -57,13 +60,15 @@ public class Cart {
 		this.cartTerm = cartTerm;
 	}
 
-	public Cart(int cartNo, int lectureNo, int studentNo, Date cartYear, String cartTerm) {
-		super();
-		this.cartNo = cartNo;
-		this.lectureNo = lectureNo;
-		this.studentNo = studentNo;
-		this.cartYear = cartYear;
-		this.cartTerm = cartTerm;
+	@Override
+	public String toString() {
+		return "Cart [cartNo=" + cartNo + ", studentNo=" + studentNo + ", lectureNo=" + lectureNo + ", cartYear="
+				+ cartYear + ", cartTerm=" + cartTerm + "]";
 	}
 
+	
+
+	
+
+	
 }

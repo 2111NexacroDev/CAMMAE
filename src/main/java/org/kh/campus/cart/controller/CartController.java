@@ -42,20 +42,23 @@ public class CartController {
 	// 예비수강신청 등록
 	@RequestMapping(value = "/cart/cartPick.kh", method = RequestMethod.GET)
 	public ModelAndView cartRegister(ModelAndView mv, @RequestParam("lectureNo") int lectureNo) {
-		int result = cService.registerCart(lectureNo);
 		try {
+			int result = cService.registerCart(lectureNo);
 			if (result > 0) {
-				mv.setViewName("cart/preCartListView.kh");
+				mv.setViewName("redirect:/cart/preCartListView.kh");
 			} else {
+				mv.setViewName("common/errorPage");
+				mv.addObject("msg", "실패했습니다");
 				System.out.println("실패했습니다.");
 			}
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			mv.setViewName("redirect:/cart/preCartListView.kh");
+		
 		}
 		return mv;
 	}
 
-	// 예비수강신청 내역 리스트
+//	 예비수강신청 내역 목록
 	@RequestMapping(value = "/cart/myCartList.kh", method = RequestMethod.GET)
 	public ModelAndView myCartList(ModelAndView mv) {
 		List<Cart> cList = cService.printMyCart();
@@ -64,7 +67,7 @@ public class CartController {
 				mv.addObject("cList", cList);
 				mv.setViewName("cart/myCartList");
 			} else {
-				System.out.println("찌마기 실패.");
+				System.out.println("찜하기 실패.");
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
@@ -72,10 +75,20 @@ public class CartController {
 		return mv;
 	}
 
-//	@RequestMapping(value = "", method = RequestMethod.GET)
-//	public String cartRemove(Model model, @RequestParam("lectureNo") int lectureNo) {
-//		int result = cService.removeCart(lectureNo);
-//		
-//		return "";
-//	}
+	@RequestMapping(value = "/cart/remove.kh", method = RequestMethod.GET)
+	public String cartRemove(Model model, @RequestParam("cartNo") int cartNo) {
+		int result = cService.removeCart(cartNo);
+		if(result > 0) {
+			return "redirect:/cart/myCartList.kh";
+		}else {
+			model.addAttribute("msg", "찜 삭제 실패");
+			return "common/errorPage";
+		}
+	}
+	
+
+	
+	
+	
+	
 }

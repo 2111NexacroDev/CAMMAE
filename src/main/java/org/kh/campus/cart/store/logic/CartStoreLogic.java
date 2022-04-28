@@ -24,8 +24,8 @@ public class CartStoreLogic implements CartStore {
 	}
 
 	@Override
-	public int deleteCart(SqlSession sqlSession, int lectureNo) {
-		int result = sqlSession.delete("",lectureNo);
+	public int deleteCart(SqlSession sqlSession, int cartNo) {
+		int result = sqlSession.delete("CartMapper.deleteCart",cartNo);
 		return result;
 	}
 
