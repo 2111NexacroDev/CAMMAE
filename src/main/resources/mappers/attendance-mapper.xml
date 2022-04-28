@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   <mapper namespace="AttendanceMapper">
+  	<resultMap type="Attendance" id="AttendanceResultMap">
+  	<id property="studentNo" column="STUDENT_NO"></id>
+  	<result property="lectureNo" column="LECTURE_NO"/>
+  	<result property="attDate" column="ATT_DATE"/>
+  	<result property="attStatus" column="ATT_STATUS"/>
+  	<result property="attObjection" column="ATT_OBJECTION"/>
+  	</resultMap>
+  	 
+    </mapper>

@@ -11,7 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
 
 @Controller
 public class LoginController {
@@ -42,7 +45,6 @@ public class LoginController {
 				student.setStudentPassword(pw);
 				int stdNo = 0;
 				stdNo = lService.loginStudent(student);
-				
 				
 				session.setAttribute("login", "std");
 				session.setAttribute("id", stdNo);
@@ -87,5 +89,31 @@ public class LoginController {
 		}
 		
 		return mv;
+	}
+	
+	// 비밀번호 찾기
+	@ResponseBody
+	@RequestMapping(value="/login/findPwd.kh", method=RequestMethod.POST)
+	public String findPwd(@RequestParam("type") String type
+			, @RequestParam("userNo") String userNo
+			, @RequestParam("userName") String userName
+			, @RequestParam("userPhone") String userPhone) {
+		String email = "";
+		if(type.contentEquals("student")) {
+			Student std = new Student();
+			std.setStudentNo(Integer.parseInt(userNo));
+			std.setStudentName(userName);
+			std.setStudentPhonenumber(userPhone);
+			
+			email = lService.findPwdStd(std);
+			
+			
+		} else if(type.contentEquals("professor")) {
+			System.out.println("교수 입니다.");
+		} else {
+			System.out.println("관리자 입니다.");
+		}
+		
+		return email;
 	}
 }

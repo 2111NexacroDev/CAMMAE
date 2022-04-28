@@ -7,6 +7,7 @@ import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
 import org.kh.campus.board.domain.PageInfo;
 import org.kh.campus.board.domain.Search;
+import org.kh.campus.board.domain.University;
 
 public interface BoardStore {
 
@@ -31,5 +32,7 @@ public interface BoardStore {
 	public int deleteBoardReply(BoardReply boardReply, SqlSession sqlSession);
 
 	public int selectListCount(SqlSession sqlSession);
+
+	public List<University> selectAllUniversity(SqlSession sqlSession);
 
 }

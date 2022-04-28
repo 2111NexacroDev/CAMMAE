@@ -12,12 +12,13 @@ public class Board {
 	private String boardFilename;
 	private String boardFilerename;
 	private String boardFilepath;
+	private int universityCode;
 	
 	public Board() {}
 
 	public Board(int boardNo, String boardTitle, String boardContent, String boardWriter, String boardDate,
-			String boardUpdatedate, int boardCount, String boardFilename, String boardFilerename,
-			String boardFilepath) {
+			String boardUpdatedate, int boardCount, String boardFilename, String boardFilerename, String boardFilepath,
+			int universityCode) {
 		super();
 		this.boardNo = boardNo;
 		this.boardTitle = boardTitle;
@@ -29,6 +30,7 @@ public class Board {
 		this.boardFilename = boardFilename;
 		this.boardFilerename = boardFilerename;
 		this.boardFilepath = boardFilepath;
+		this.universityCode = universityCode;
 	}
 
 	public int getBoardNo() {
@@ -111,15 +113,23 @@ public class Board {
 		this.boardFilepath = boardFilepath;
 	}
 
+	public int getUniversityCode() {
+		return universityCode;
+	}
+
+	public void setUniversityCode(int universityCode) {
+		this.universityCode = universityCode;
+	}
+
 	@Override
 	public String toString() {
 		return "Board [boardNo=" + boardNo + ", boardTitle=" + boardTitle + ", boardContent=" + boardContent
 				+ ", boardWriter=" + boardWriter + ", boardDate=" + boardDate + ", boardUpdatedate=" + boardUpdatedate
 				+ ", boardCount=" + boardCount + ", boardFilename=" + boardFilename + ", boardFilerename="
-				+ boardFilerename + ", boardFilepath=" + boardFilepath + "]";
+				+ boardFilerename + ", boardFilepath=" + boardFilepath + ", universityCode=" + universityCode + "]";
 	}
-	
 
+	
 	
 
 }

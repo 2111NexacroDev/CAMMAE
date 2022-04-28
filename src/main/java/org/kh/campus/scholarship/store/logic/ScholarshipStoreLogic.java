@@ -23,8 +23,14 @@ public class ScholarshipStoreLogic implements ScholarshipStore {
 	}
 
 	@Override
+
 	public List<Scholarship> selectScholarIns(SqlSession sqlSession, String inVar1) {
 		List<Scholarship>sList= sqlSession.selectList("ScholarshipMapper.selectScholarIns", inVar1);
+    retrun sList; 
+  }
+
+	public List<Scholarship> selectResult(SqlSession sqlSession, int studentNo) {
+		List<Scholarship>sList = sqlSession.selectList("ScholarshipMapper.selectResult", studentNo);
 		return sList;
 	}
 

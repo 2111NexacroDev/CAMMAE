@@ -13,4 +13,6 @@ public interface LoginStore {
 
 	public int selectManager(SqlSession sqlSession, Manager manager);
 
+	public String selectPwdStd(SqlSession sqlSession, Student std);
+
 }

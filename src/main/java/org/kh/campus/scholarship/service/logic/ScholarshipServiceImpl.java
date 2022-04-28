@@ -38,6 +38,10 @@ public class ScholarshipServiceImpl implements ScholarshipService {
 	@Override
 	public List<Scholarship> printAllScholar(Scholarship scholarship) {
 		List<Scholarship> sList = sStore.selectAllScholar(sqlSession, scholarship);
+    
+    
+	public List<Scholarship> printScholarResult(int studentNo) {
+		List<Scholarship>sList = sStore.selectResult(sqlSession, studentNo);
 		return sList;
 	}
 

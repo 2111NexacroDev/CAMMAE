@@ -26,8 +26,15 @@
 		</repository>
 	</repositories>
 	
-	
 	<dependencies>
+	
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-email -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-email</artifactId>
+		    <version>1.5</version>
+		</dependency>
+	
 		<!-- Nexacro lib -->
 		<dependency>
 			<groupId>com.nexacro.uiadapter17.spring</groupId>
