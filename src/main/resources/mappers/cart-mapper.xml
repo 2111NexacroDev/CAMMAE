@@ -43,7 +43,7 @@
 	</insert>
 	
 	<select id="selectMyCart" resultMap="cartResultMap">
-	SELECT * FROM CART_TBL
+	SELECT * FROM CART_TBL 
 	</select>
  
  	<delete id="deleteCart">
