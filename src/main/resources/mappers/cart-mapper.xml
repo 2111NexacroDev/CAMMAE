@@ -19,20 +19,35 @@
 	
 	<resultMap type="Cart" id="cartResultMap">
 		<id property="cartNo" column="CART_NO"/>
-		<result property="lectureNo" column="LECTURE_NO" />
 		<result property="studentNo" column="STUDENT_NO" />
+		<result property="lectureNo" column="LECTURE_NO" />
 		<result property="cartYear" column="CART_YEAR" />
 		<result property="cartTerm" column="CART_TERM" />
 	</resultMap>
 	
-<!--  	<resultMap type="Total" id="totalResultMap">
+<!--  	<resultMap type="org.kh.campus.cart.domain.Total" id="totalResultMap">
 		<collection property="Lecture" resultMap="lectureResultMap"/>
 		<collection property="Cart" resultMap="cartResultMap"/>
-	</resultMap>  --> 
+	</resultMap>   -->
 	
 	<select id="selectAllCart" resultMap="lectureResultMap">
 		SELECT * FROM LECTURE_TBL  
 	</select>
 	
+	<insert id="insertCart" parameterType="Lecture" >
+		INSERT INTO CART_TBL VALUES(SEQ_CART_NO.NEXTVAL
+		, '0'
+		, #{lectureNo}
+		, DEFAULT
+		, '1학기')	
+	</insert>
+	
+	<select id="selectMyCart" resultMap="cartResultMap">
+	SELECT * FROM CART_TBL
+	</select>
+ 
+ 	<delete id="deleteCart">
+ 		DELETE FROM CART_TBL WHERE CART_NO=#{cartNo}
+ 	</delete>
 
  </mapper>

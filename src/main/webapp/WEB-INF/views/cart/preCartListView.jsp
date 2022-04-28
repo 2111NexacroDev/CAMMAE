@@ -29,8 +29,7 @@
 				<td>
 				<c:url var="lPick" value="/cart/cartPick.kh">
 				<c:param name="lectureNo" value="${lList.lectureNo }"></c:param></c:url>
-					<a href="${lPick }">찜하기</a>
-				
+					<a href="${lPick }"  >찜하기</a><!-- <button type="submit">찜하기</button> -->
 				</td>				
 				<td>${lList.lectureNo }</td>
 				<td>${lList.universityCollege }</td>

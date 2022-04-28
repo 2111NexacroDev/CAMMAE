@@ -13,6 +13,6 @@ public interface CartService {
 	
 	public int registerCart(int lectureNo);
 	
-	public int removeCart(int lectureNo);
+	public int removeCart(int cartNo);
 
 }
