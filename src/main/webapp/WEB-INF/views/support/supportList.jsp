@@ -38,6 +38,7 @@
 			}
 			else{
 				var chk = confirm("정말 삭제하시겠습니까?");
+				if(chk) {
 				$.ajax({
 					url : "/deleteSupport",
 					type : 'POST',
@@ -47,7 +48,6 @@
 					},
 					success : function(jdata){
 						if(jdata = 1){
-							alert("삭제 성공");
 							location.replace("/support/list.kh")
 						}
 						else{
@@ -55,6 +55,7 @@
 						}
 					}
 				});
+				}
 			}
 		}
 	</script>		
