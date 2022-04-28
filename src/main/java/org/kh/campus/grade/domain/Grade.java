@@ -13,12 +13,24 @@ public class Grade {
 	private String gradeFeedback;
 	private String gradeObjection;
 	private String gradeChange;
+	private String objectionContent;
+	private String feedbackContent;
 	
 	public Grade() {}
 
+	@Override
+	public String toString() {
+		return "Grade [lectureNo=" + lectureNo + ", studentNo=" + studentNo + ", gradeYear=" + gradeYear
+				+ ", gradeSession=" + gradeSession + ", gradeSubject=" + gradeSubject + ", gradeComplete="
+				+ gradeComplete + ", lectureGrade=" + lectureGrade + ", gradeScore=" + gradeScore + ", gradeAvg="
+				+ gradeAvg + ", gradeFeedback=" + gradeFeedback + ", gradeObjection=" + gradeObjection
+				+ ", gradeChange=" + gradeChange + ", objectionContent=" + objectionContent + ", feedbackContent="
+				+ feedbackContent + "]";
+	}
+
 	public Grade(int lectureNo, int studentNo, String gradeYear, String gradeSession, String gradeSubject,
 			String gradeComplete, int lectureGrade, int gradeScore, int gradeAvg, String gradeFeedback,
-			String gradeObjection, String gradeChange) {
+			String gradeObjection, String gradeChange, String objectionContent, String feedbackContent) {
 		super();
 		this.lectureNo = lectureNo;
 		this.studentNo = studentNo;
@@ -32,15 +44,8 @@ public class Grade {
 		this.gradeFeedback = gradeFeedback;
 		this.gradeObjection = gradeObjection;
 		this.gradeChange = gradeChange;
-	}
-
-	@Override
-	public String toString() {
-		return "Grade [lectureNo=" + lectureNo + ", studentNo=" + studentNo + ", gradeYear=" + gradeYear
-				+ ", gradeSession=" + gradeSession + ", gradeSubject=" + gradeSubject + ", gradeComplete="
-				+ gradeComplete + ", lectureGrade=" + lectureGrade + ", gradeScore=" + gradeScore + ", gradeAvg="
-				+ gradeAvg + ", gradeFeedback=" + gradeFeedback + ", gradeObjection=" + gradeObjection
-				+ ", gradeChange=" + gradeChange + "]";
+		this.objectionContent = objectionContent;
+		this.feedbackContent = feedbackContent;
 	}
 
 	public int getLectureNo() {
@@ -138,6 +143,24 @@ public class Grade {
 	public void setGradeChange(String gradeChange) {
 		this.gradeChange = gradeChange;
 	}
+
+	public String getObjectionContent() {
+		return objectionContent;
+	}
+
+	public void setObjectionContent(String objectionContent) {
+		this.objectionContent = objectionContent;
+	}
+
+	public String getFeedbackContent() {
+		return feedbackContent;
+	}
+
+	public void setFeedbackContent(String feedbackContent) {
+		this.feedbackContent = feedbackContent;
+	}
+	
+	
 	
 	
 }

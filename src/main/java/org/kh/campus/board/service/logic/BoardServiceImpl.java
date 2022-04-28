@@ -7,6 +7,7 @@ import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
 import org.kh.campus.board.domain.PageInfo;
 import org.kh.campus.board.domain.Search;
+import org.kh.campus.board.domain.University;
 import org.kh.campus.board.service.BoardService;
 import org.kh.campus.board.store.BoardStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int removeBoard(int boardNo) {
 		int result = bStore.deleteBoard(boardNo, sqlSession);
-		return 0;
+		return result;
 	}
 	//댓글 목록 보여주기
 	@Override
@@ -85,6 +86,11 @@ public class BoardServiceImpl implements BoardService{
 	public int getListCount() {
 		int totalCount = bStore.selectListCount(sqlSession);
 		return totalCount;
+	}
+	@Override
+	public List<University> printAllUniversity() {
+		List<University> uList = bStore.selectAllUniversity(sqlSession);
+		return uList;
 	}
 	
 

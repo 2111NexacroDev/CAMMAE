@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 <meta charset="UTF-8">
 <title>채용공고 상세 조회</title>
 <style>
@@ -101,8 +102,20 @@
 	   })
 	   // 모달 온, 이력서 지원하기 뛰우기
 	   var btnModal = document.querySelectorAll(".btn-modal");
+	   let today = new Date();
+	   let year = today.getFullYear(); // 년도
+	   let month = today.getMonth() + 1;  // 월
+	   let date = today.getDate();  // 날짜
+	   let day = today.getDay();  // 요일
+	   var endDate = $("#endDate").html();
+	   let endDate2 =  new Date(endDate);
 	        btnModal[0].addEventListener("click", function(event){
-	           modalOn();
+	           if(endDate2 > today){
+				   modalOn();
+			   }else{
+				   alert("마감되었습니다.");
+			   }
+			  
 	        });
 	    
 	    // 모달에서 완료 버튼 클릭시
@@ -164,7 +177,7 @@
 			</tr>
 			<tr>
 				<td>마감일</td>
-				<td>${recruitment.recruitmentEndDate }</td>		
+				<td id="endDate">${recruitment.recruitmentEndDate }</td>		
 			</tr>
 			<tr>
 				<td colspan="2" align="center">
@@ -190,6 +203,8 @@
 				                    <p>이력서 지원</p>
 				                    이력서<input  type="file" multiple="multiple" size="50" name="uploadFile"><br>
 				                    포트폴리오<input  type="file" multiple="multiple" size="50" name="uploadFile1"><br>
+				                    <input type="hidden" value="${recruitment.recruitmentNo }" name="recruitmentNo">
+				                    <input type="hidden" value="${recruitment.recruitmentTitle }" name="recruitmentTitle">
 				                    <button type="submit" id="completion">완료</button>
 				                </div>
 				        </div>

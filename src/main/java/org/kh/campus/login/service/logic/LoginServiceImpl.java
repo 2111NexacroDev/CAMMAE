@@ -32,4 +32,9 @@ public class LoginServiceImpl implements LoginService {
 		int result = lStore.selectManager(sqlSession, manager);
 		return result;
 	}
+	@Override
+	public String findPwdStd(Student std) {
+		String result = lStore.selectPwdStd(sqlSession, std);
+		return result;
+	}
 }

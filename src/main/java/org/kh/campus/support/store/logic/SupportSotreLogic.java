@@ -2,13 +2,32 @@ package org.kh.campus.support.store.logic;
 
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
+import org.kh.campus.support.domain.PageInfo;
 import org.kh.campus.support.domain.Support;
+import org.kh.campus.support.domain.SupportSearch;
 import org.kh.campus.support.store.SupportStore;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class SupportSotreLogic implements SupportStore{
+	
+	@Override
+	public List<Support> selectAllSupport(SqlSession sqlSession, PageInfo pi) {
+		int limit = pi.getSupportLimit();
+		int currentPage = pi.getCurrentPage();
+		int offset = (currentPage -1) * limit;
+		RowBounds rowBounds = new RowBounds(offset,limit);
+		List<Support> sList = sqlSession.selectList("SupportMapper.selectAllSupport",pi, rowBounds);
+		return sList;
+	}
+	
+	@Override
+	public List<Support> selectSearchSupport(SupportSearch supportSearch, SqlSession sqlSession) {
+		List<Support> sList = sqlSession.selectList("SupportMapper.selectSearchSupport", supportSearch);
+		return sList;
+	}
 
 	@Override
 	public int insertSupport(SqlSession sqlSession, Support support) {
@@ -17,9 +36,19 @@ public class SupportSotreLogic implements SupportStore{
 	}
 
 	@Override
-	public List<Support> selectAllSupport(SqlSession sqlSession) {
-		List<Support> sList = sqlSession.selectList("SupportMapper.selectAllSupport");
-		return sList;
+	public int selectListCount(SqlSession sqlSession) {
+		int totalCount = sqlSession.selectOne("SupportMapper.selectListCount");
+		return totalCount;
 	}
+
+	@Override
+	public int deletCheck(int supportNo, SqlSession sqlSession) {
+		int result = sqlSession.delete("SupportMapper.deleteSupport", supportNo);
+		return result;
+	}
+
+	
+
+
 
 }

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 public class GradeStoreLogic implements GradeStore {
 
 	@Override
-	public List<Grade> selectGradeStudent(Grade grade, SqlSession sqlSession) {
-		List<Grade> gList = sqlSession.selectList("");
+	public List<Grade> selectGradeStudent(int studentNo, SqlSession sqlSession) {
+		List<Grade> gList = sqlSession.selectList("GradeMapper.selectGradeStudent", studentNo);
 		return gList;
 	}
 
@@ -29,8 +29,8 @@ public class GradeStoreLogic implements GradeStore {
 	}
 
 	@Override
-	public List<Grade> selectGradeProfessor(Grade grade, SqlSession sqlSession) {
-		List<Grade> gList = sqlSession.selectList("");
+	public List<Grade> selectGradeProfessor(int prfNo, SqlSession sqlSession) {
+		List<Grade> gList = sqlSession.selectList("GradeMapper.selectGradeProfessor", prfNo);
 		return gList;
 	}
 	

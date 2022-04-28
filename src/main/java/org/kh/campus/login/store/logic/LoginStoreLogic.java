@@ -27,5 +27,11 @@ public class LoginStoreLogic implements LoginStore {
 		int result = sqlSession.selectOne("LoginMapper.managerLogin", manager);
 		return result;
 	}
+
+	@Override
+	public String selectPwdStd(SqlSession sqlSession, Student std) {
+		String result = sqlSession.selectOne("LoginMapper.selectPwdStd", std);
+		return result;
+	}
 	
 }
