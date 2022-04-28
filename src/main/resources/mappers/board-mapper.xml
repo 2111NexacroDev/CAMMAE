@@ -18,10 +18,10 @@
 
   	</resultMap>
   	<select id="selectListCount" resultType="_int">
-  		SELECT COUNT(*) FROM BOARD_TBL
+  		SELECT COUNT(*) FROM BOARD_TBL WHERE UNIVERSITY_CODE=#{universityCode}
   	</select>
   	<select id="selectAllBoard" resultMap="boardResultMap">
-  		SELECT*FROM BOARD_TBL ORDER BY BOARD_NO ASC
+  		SELECT*FROM BOARD_TBL WHERE UNIVERSITY_CODE=#{universityCode}
   	</select>
   	<select id="selectOneBoard" resultMap="boardResultMap">
   		SELECT*FROM BOARD_TBL WHERE BOARD_NO = #{boardNo}
@@ -37,7 +37,7 @@
   
   	<insert id="insertBoard" parameterType="Board">
   	 	INSERT INTO BOARD_TBL VALUES(SEQ_BOARD_NO.NEXTVAL, #{boardTitle}, #{boardContent}, #{boardWriter}, 
-  	 	#{boardDate}, #{boardUpdatedate}, #{boardCount}, #{boardFilename}, #{boardFilerename}, #{boardFilepath}) 
+  	 	default, default, default, #{boardFilename}, #{boardFilerename}, #{boardFilepath}) 
   	</insert>
   	<update id="updateBoard">
   		UPDATE BOARD_TBL
@@ -74,5 +74,15 @@
   	<delete id="deleteReply">
 		DELETE FROM BOARDREPLY_TBL WHERE BOARDREPLY_NO=#{boardreplyNo} AND BOARD_NO=#{boardNo}
 	</delete>
+	
+	<select id="selectUnivesityList" resultMap="universityResultMap">
+		SELECT*FROM UNIVERSITY_TBL ORDER BY UNIVERSITY_COLLEGE
+	</select>
+	
+	<resultMap type="university" id="universityResultMap">
+		<id property="universityCode" column="UNIVERSITY_CODE"/>
+		<result property="universityName" column="UNIVERSITY_NAME"/>
+		<result property="universityCollege" column="UNIVERSITY_COLLEGE"/>
+	</resultMap>
   	
   </mapper>

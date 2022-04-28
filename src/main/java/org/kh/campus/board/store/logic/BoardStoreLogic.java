@@ -8,6 +8,7 @@ import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
 import org.kh.campus.board.domain.PageInfo;
 import org.kh.campus.board.domain.Search;
+import org.kh.campus.board.domain.University;
 import org.kh.campus.board.store.BoardStore;
 import org.springframework.stereotype.Repository;
 
@@ -84,6 +85,12 @@ public class BoardStoreLogic implements BoardStore {
 	public int selectListCount(SqlSession sqlSession) {
 		int totalCount = sqlSession.selectOne("BoardMapper.selectListCount");
 		return totalCount;
+	}
+
+	@Override
+	public List<University> selectAllUniversity(SqlSession sqlSession) {
+		List<University> uList = sqlSession.selectList("BoardMapper.selectUnivesityList");
+		return uList;
 	}
 
 }

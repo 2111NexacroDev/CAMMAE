@@ -10,12 +10,14 @@ public class PageInfo {
 	private int maxPage;  // �������� ������ ��ȣ
 	private boolean prev;  //����
 	private boolean next; //����
+	private int universityCode;
 	
 	public PageInfo() {}
-
 	
+	
+
 	public PageInfo(int currentPage, int boardLimit, int naviLimit, int startNavi, int endNavi, int totalCount,
-			int maxPage, boolean prev, boolean next) {
+			int maxPage, boolean prev, boolean next, int universityCode) {
 		super();
 		this.currentPage = currentPage;
 		this.boardLimit = boardLimit;
@@ -26,7 +28,9 @@ public class PageInfo {
 		this.maxPage = maxPage;
 		this.prev = prev;
 		this.next = next;
+		this.universityCode = universityCode;
 	}
+
 
 
 	public int getCurrentPage() {
@@ -101,17 +105,37 @@ public class PageInfo {
 		this.next = next;
 	}
 
+	public int getUniversityCode() {
+		return universityCode;
+	}
+
+	public void setUniversityCode(int universityCode) {
+		this.universityCode = universityCode;
+	}
+
 	@Override
 	public String toString() {
 		return "PageInfo [currentPage=" + currentPage + ", boardLimit=" + boardLimit + ", naviLimit=" + naviLimit
 				+ ", startNavi=" + startNavi + ", endNavi=" + endNavi + ", totalCount=" + totalCount + ", maxPage="
-				+ maxPage + ", prev=" + prev + ", next=" + next + "]";
+				+ maxPage + ", prev=" + prev + ", next=" + next + ", universityCode=" + universityCode + "]";
+	}
+
+
+
+	public PageInfo(int currentPage, int boardLimit, int naviLimit, int startNavi, int endNavi, int totalCount,
+			int maxPage, boolean prev, boolean next) {
+		super();
+		this.currentPage = currentPage;
+		this.boardLimit = boardLimit;
+		this.naviLimit = naviLimit;
+		this.startNavi = startNavi;
+		this.endNavi = endNavi;
+		this.totalCount = totalCount;
+		this.maxPage = maxPage;
+		this.prev = prev;
+		this.next = next;
 	}
 
 	
-
-
 	
-
-
 }
