@@ -11,12 +11,24 @@ public class Scholarship {
 	private String scholarship_phonenumber;
 	private String scholarship_college;
 	private int scholarship_student_no;
+	private String chk;
 	
 	public Scholarship() {}
 
+	
+	
+	public Scholarship(String scholarship_year, String scholarship_term, String scholarship_college) {
+		super();
+		this.scholarship_year = scholarship_year;
+		this.scholarship_term = scholarship_term;
+		this.scholarship_college = scholarship_college;
+	}
+
+
+
 	public Scholarship(int scholarship_inno, int scholarship_avg_grade, String scholarship_year,
 			String scholarship_term, String scholarship_status, int scholarship_amount, String scholarship_name,
-			String scholarship_phonenumber, String scholarship_college, int scholarship_student_no) {
+			String scholarship_phonenumber, String scholarship_college, int scholarship_student_no, String chk) {
 		super();
 		this.scholarship_inno = scholarship_inno;
 		this.scholarship_avg_grade = scholarship_avg_grade;
@@ -28,7 +40,10 @@ public class Scholarship {
 		this.scholarship_phonenumber = scholarship_phonenumber;
 		this.scholarship_college = scholarship_college;
 		this.scholarship_student_no = scholarship_student_no;
+		this.chk = chk;
 	}
+
+
 
 	public int getScholarship_inno() {
 		return scholarship_inno;
@@ -110,6 +125,16 @@ public class Scholarship {
 		this.scholarship_student_no = scholarship_student_no;
 	}
 
+	public String getChk() {
+		return chk;
+	}
+
+	public void setChk(String chk) {
+		this.chk = chk;
+	}
+
+
+
 	@Override
 	public String toString() {
 		return "Scholarship [scholarship_inno=" + scholarship_inno + ", scholarship_avg_grade=" + scholarship_avg_grade
@@ -117,9 +142,10 @@ public class Scholarship {
 				+ ", scholarship_status=" + scholarship_status + ", scholarship_amount=" + scholarship_amount
 				+ ", scholarship_name=" + scholarship_name + ", scholarship_phonenumber=" + scholarship_phonenumber
 				+ ", scholarship_college=" + scholarship_college + ", scholarship_student_no=" + scholarship_student_no
-				+ "]";
+				+ ", chk=" + chk + "]";
 	}
-
 	
+	
+
 
 }

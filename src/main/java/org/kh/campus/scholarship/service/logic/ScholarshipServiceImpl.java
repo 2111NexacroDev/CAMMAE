@@ -16,18 +16,7 @@ public class ScholarshipServiceImpl implements ScholarshipService {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	@Override
-	public List<Scholarship> printAllScholar() {
-		List<Scholarship> sList = sStore.selectAllScholar(sqlSession);
-		return sList;
-	}
-
-	@Override
-	public int insertScholar(Scholarship scholarship) {
-		int result = sStore.insertScholar(sqlSession, scholarship);
-		return result;
-	}
-
+	
 	@Override
 	public List<Scholarship> printScholarResult(int studentNo) {
 		List<Scholarship>sList = sStore.selectResult(sqlSession, studentNo);
@@ -39,5 +28,26 @@ public class ScholarshipServiceImpl implements ScholarshipService {
 		int result = sStore.registerScholar(sqlSession, scholarship);
 		return result;
 	}
+
+	@Override
+	public int modifyScholarAccept(Scholarship scholarship) {
+		int result = sStore.updateScholarAccept(sqlSession, scholarship);
+		return result;
+	}
+
+	@Override
+	public List<Scholarship> printAllScholar(Scholarship scholarship) {
+		List<Scholarship> sList = sStore.selectAllScholar(sqlSession, scholarship);
+		return sList;
+	}
+
+	@Override
+	public int modifyScholarDenine(Scholarship scholarship) {
+		int result = sStore.updateScholarDenine(sqlSession, scholarship);
+		return result;
+		
+	}
+
+	
 
 }

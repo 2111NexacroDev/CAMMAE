@@ -24,20 +24,89 @@ public class ScholarshipController {
 	private ScholarshipService sService;
 	@Autowired
 	private StudentService stdService;
-
-//	@RequestMapping(value = "", method = RequestMethod.GET)
-	NexacroResult insertScholarshipInfo(
-			@ParamDataSet(name = "in_admin_scholar") DataSet inAdminScholar)
-			throws Exception {
-		int nErrorCode = 0;
-		String strErrorMsg = "START";
+	
+	@RequestMapping(value = "/scholarship/scholarAccept.kh", method = RequestMethod.POST)
+	public NexacroResult updateScholarAccept(
+			@ParamDataSet(name = "ins_scholarship", required=false)DataSet scholarshipAccept) throws Exception{
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
-		int iResult = 0;
-		Scholarship scholarship = new Scholarship();
-		iResult += sService.insertScholar(scholarship);
+		int scholarship_student_no = Integer.parseInt(dsGet(scholarshipAccept, 0, "scholarship_student_no"));
+		String scholarship_status = dsGet(scholarshipAccept, 0, "scholarship_status");
+		int scholarship_inno = 0;
+		int scholarship_avg_grade = 0;
+		String scholarship_year = "";
+		String scholarship_term = "";
+		int scholarship_amount = 0;
+		String scholarship_name = "";
+		String scholarship_phonenumber = "";
+		String scholarship_college = "";
+		String chk= "";
+		Scholarship scholarship = new Scholarship(
+				scholarship_inno,
+				scholarship_avg_grade,
+				scholarship_year,
+				scholarship_term,
+				scholarship_status,
+				scholarship_amount,
+				scholarship_name,
+				scholarship_phonenumber,
+				scholarship_college,
+				scholarship_student_no,
+				chk
+				);
+		
+		System.out.println(scholarship_student_no);
+		scholarship.setScholarship_student_no(scholarship_student_no);
+		sService.modifyScholarAccept(scholarship);
+		
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
 		return result;
 	}
-
+	
+	@RequestMapping(value = "/scholarship/scholarDenine.kh", method = RequestMethod.POST)
+	public NexacroResult updateScholarDenine(
+			@ParamDataSet(name = "ins_scholarship", required=false)DataSet scholarshipAccept) throws Exception{
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
+		NexacroResult result = new NexacroResult();
+		int scholarship_student_no = Integer.parseInt(dsGet(scholarshipAccept, 0, "scholarship_student_no"));
+		String scholarship_status = dsGet(scholarshipAccept, 0, "scholarship_status");
+		int scholarship_inno = 0;
+		int scholarship_avg_grade = 0;
+		String scholarship_year = "";
+		String scholarship_term = "";
+		int scholarship_amount = 0;
+		String scholarship_name = "";
+		String scholarship_phonenumber = "";
+		String scholarship_college = "";
+		String chk= "";
+		Scholarship scholarship = new Scholarship(
+				scholarship_inno,
+				scholarship_avg_grade,
+				scholarship_year,
+				scholarship_term,
+				scholarship_status,
+				scholarship_amount,
+				scholarship_name,
+				scholarship_phonenumber,
+				scholarship_college,
+				scholarship_student_no,
+				chk
+				);
+		
+		System.out.println(scholarship_student_no);
+		scholarship.setScholarship_student_no(scholarship_student_no);
+		sService.modifyScholarDenine(scholarship);
+		
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
+		return result;
+	}
+	
+	
+	
 	
 	
 	@RequestMapping(value = "/scholarship/scholarResult.kh", method = RequestMethod.GET)
@@ -54,12 +123,17 @@ public class ScholarshipController {
 		return result;
 	}
 
-	@RequestMapping(value = "/scholarship/scholarInfo.kh", method = RequestMethod.GET)
-	public NexacroResult printAllScholar() {
+	@RequestMapping(value = "/scholarship/scholarInfo.kh", method = RequestMethod.POST)
+	public NexacroResult printAllScholar(@ParamDataSet(name= "in_scholar", required = false)DataSet dsScholar,
+			@ParamDataSet(name="in_scholar1", required=false)DataSet dsScholar1, @ParamDataSet(name="in_scholar2", required=false)DataSet dsScholar2) throws Exception{
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
-		List<Scholarship> sList = sService.printAllScholar();
+		String scholarship_year = dsGet(dsScholar, 0, "scholarship_year");
+		String scholarship_term = dsGet(dsScholar1, 0, "scholarship_term");
+		String scholarship_college= dsGet(dsScholar2, 0, "scholarship_college");
+		Scholarship scholarship = new Scholarship(scholarship_year, scholarship_term, scholarship_college);
+		List<Scholarship> sList = sService.printAllScholar(scholarship);
 		result.addDataSet("out_scholarship", sList);
 		result.addVariable("ErrorCode", nErrorCode);
 		result.addVariable("ErrorMsg", strErrorMsg);
@@ -68,7 +142,7 @@ public class ScholarshipController {
 
 	@RequestMapping(value = "/scholarship/register.kh", method = RequestMethod.POST)
 	public NexacroResult registerScholar(
-			@ParamDataSet(name = "in_admin_scholar") DataSet inAdminScholar, HttpSession session) throws Exception {
+			@ParamDataSet(name = "in_admin_scholar", required = false) DataSet inAdminScholar, HttpSession session) throws Exception {
 		int nErrorCode = 0;
 		String strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
@@ -84,6 +158,7 @@ public class ScholarshipController {
 		String scholarship_phonenumber = student.getStudentPhonenumber();
 		String scholarship_college = student.getUniversityCollege();
 		int scholarship_student_no = student.getStudentNo();
+		String chk= "";
 		Scholarship scholarship = new Scholarship(
 				scholarship_inno
 				,scholarship_avg_grade
@@ -94,7 +169,8 @@ public class ScholarshipController {
 				, scholarship_name
 				, scholarship_phonenumber
 				, scholarship_college
-				, scholarship_student_no);
+				, scholarship_student_no
+				, chk);
 		aResult = sService.registerScholar(scholarship);
 		return result;
 
