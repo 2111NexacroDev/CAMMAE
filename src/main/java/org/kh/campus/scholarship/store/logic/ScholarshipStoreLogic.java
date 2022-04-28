@@ -26,13 +26,9 @@ public class ScholarshipStoreLogic implements ScholarshipStore {
 
 	public List<Scholarship> selectScholarIns(SqlSession sqlSession, String inVar1) {
 		List<Scholarship>sList= sqlSession.selectList("ScholarshipMapper.selectScholarIns", inVar1);
-    retrun sList; 
+		return sList; 
   }
 
-	public List<Scholarship> selectResult(SqlSession sqlSession, int studentNo) {
-		List<Scholarship>sList = sqlSession.selectList("ScholarshipMapper.selectResult", studentNo);
-		return sList;
-	}
 
 	@Override
 	public int updateScholarAccept(SqlSession sqlSession, Scholarship scholarship) {
