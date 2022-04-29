@@ -12,7 +12,7 @@ public interface CartStore {
 
 	int insertCart(SqlSession sqlSession, int lectureNo);
 
-	int deleteCart(SqlSession sqlSession, int lectureNo);
+	int deleteCart(SqlSession sqlSession, int cartNo);
 
 	List<Cart> selectMyCart(SqlSession sqlSession);
 
