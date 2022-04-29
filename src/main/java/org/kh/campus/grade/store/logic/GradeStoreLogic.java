@@ -17,8 +17,8 @@ public class GradeStoreLogic implements GradeStore {
 	}
 
 	@Override
-	public List<Grade> selectFeedbackStudent(Grade grade, SqlSession sqlSession) {
-		List<Grade> gList = sqlSession.selectList("");
+	public List<Grade> selectFeedbackStudent(int studentNo, SqlSession sqlSession) {
+		List<Grade> gList = sqlSession.selectList("GradeMapper.selectFeedbackStudent", studentNo);
 		return gList;
 	}
 
@@ -48,8 +48,8 @@ public class GradeStoreLogic implements GradeStore {
 
 
 	@Override
-	public List<Grade> selectFeedbackProfessor(Grade grade, SqlSession sqlSession) {
-		List<Grade> gList = sqlSession.selectList("");
+	public List<Grade> selectFeedbackProfessor(int prfNo, SqlSession sqlSession) {
+		List<Grade> gList = sqlSession.selectList("GradeMapper.selectFeedbackProfessor", prfNo);
 		return gList;
 	}
 
