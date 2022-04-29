@@ -9,7 +9,7 @@ public interface GradeStore {
 
 	public List<Grade> selectGradeStudent(int studentNo, SqlSession sqlSession);
 
-	public List<Grade> selectFeedbackStudent(Grade grade, SqlSession sqlSession);
+	public List<Grade> selectFeedbackStudent(int studentNo, SqlSession sqlSession);
 
 	public int insertObjection(Grade grade, SqlSession sqlSession);
 
@@ -19,7 +19,7 @@ public interface GradeStore {
 
 	public int updateGrade(Grade grade, SqlSession sqlSession);
 	
-	public List<Grade> selectFeedbackProfessor(Grade grade, SqlSession sqlSession);
+	public List<Grade> selectFeedbackProfessor(int prfNo, SqlSession sqlSession);
 
 	public int insertFeedBack(Grade grade, SqlSession sqlSession);
 

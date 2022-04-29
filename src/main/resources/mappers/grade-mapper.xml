@@ -16,6 +16,7 @@
 		<result property="gradeFeedback" column="GRADE_FEEDBACK"/>
 		<result property="gradeObjection" column="GRADE_OBJECTION"/>
 		<result property="gradeChange" column="GRADE_CHANGE"/>
+		<result property="objectionContent" column="OBJECTION_CONTENT"/>
 	</resultMap>
 	
 	<select id="selectGradeStudent" resultMap="gradeResultMap">
@@ -24,5 +25,19 @@
 	
 	<select id="selectGradeProfessor" resultMap="gradeResultMap">
 		SELECT * FROM GRADE_TBL WHERE PROFESSOR_NO = #{professorNo}
+	</select>
+	
+	<select id="selectFeedbackStudent" resultMap="gradeResultMap">
+		SELECT * FROM GRADE_OBJECTION O
+		LEFT JOIN GRADE_TBL G ON
+		(G.STUDENT_NO = O.STUDENT_NO AND G.LECTURE_NO = O.LECTURE_NO AND O.STUDENT_NO = #{studentNo})
+		LEFT JOIN FEEDBACK_TBL F ON (F.STUDENT_NO = O.STUDENT_NO AND F.LECTURE_NO = O.LECTURE_NO)
+	</select>
+	
+	<select id="selectFeedbackProfessor" resultMap="gradeResultMap">
+		SELECT * FROM GRADE_OBJECTION O
+		LEFT JOIN GRADE_TBL G ON
+		(G.STUDENT_NO = O.STUDENT_NO AND G.LECTURE_NO = O.LECTURE_NO AND G.PROFESSOR_NO = #{professorNo})
+		LEFT JOIN FEEDBACK_TBL F ON (F.STUDENT_NO = O.STUDENT_NO AND F.LECTURE_NO = O.LECTURE_NO)
 	</select>
 </mapper>
