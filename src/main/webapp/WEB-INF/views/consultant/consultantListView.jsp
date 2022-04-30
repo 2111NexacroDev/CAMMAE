@@ -5,12 +5,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>학생 상담신청 전체조회 페이지</title
->
-
-
+<title>학생 상담신청 전체조회 페이지</title>
 </head>
 <body>
+
 <div class="section">
 						<div class="bbs">
 							<table>
@@ -34,7 +32,7 @@
 										<tr class="space">
 											<td class="ta" id="no">${consultant.cons_no}</td>
 											<c:url var="cDetail" value="/consultant/Detail.kh">
-												<c:param name="consultant_no" value="${consultant.cons_no}"></c:param>
+												<c:param name="cons_student_no" value="${loginUser.studentNo}"></c:param>
 											</c:url>
 											
 											<td class="ta" id="detail" style="text-align:left"><a href="${cDetail}">${consultant.cons_title }</a></td>
@@ -45,51 +43,13 @@
 											<td class="ta" id="time">${consultant.cons_time}</td>
 											<td class="ta" id="counselor">${consultant.cons_counselor}</td>
 											<td class="ta" id="counselor">${consultant.cons_content}</td>
-											<td class="ta" id="status">${consultant.cons_status}</td>		
+											<td class="ta" id="status">${consultant.cons_status == 'Y' ? "상담완료": "상담대기"}</td>		
 										</tr>
 									</c:forEach>
 								</tbody>
 							</table>
 				
-							<div class="paging">
-
-								<c:if test="${pi.startNavi ==1 }">
-
-									<a href="/consultat/list.kh?page=1"></a>
-
-								</c:if>
-
-
-								<c:if test="${pi.prev}">
-
-									<a href="/consultat/list.kh?page=${pi.startNavi-1}">
-									</a>
-
-								</c:if>
-
-
-
-
-
-								<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
-									<c:url var="pagination" value="/consultat/list.kh">
-										<c:param name="page" value="${p }"></c:param>
-									</c:url>
-
-									<a href="${pagination }"><button class="on1">${p }</button></a>&nbsp;
-																		
-									</c:forEach>
-
-
-								<c:if test="${pi.next && pi.endNavi > 0}">
-
-									<a href="/consultat/list.kh?page=${pi.endNavi+1}"> 
-									</a>
-
-								</c:if>
-
-							</div>
 						</div>
-					</div>
+					</div>						
 </body>
 </html>

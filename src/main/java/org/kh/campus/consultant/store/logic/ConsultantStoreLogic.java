@@ -8,18 +8,15 @@ import org.kh.campus.consultant.domain.Consultant;
 import org.kh.campus.consultant.domain.ConsultantReply;
 import org.kh.campus.consultant.domain.PageInfo;
 import org.kh.campus.consultant.store.ConsultantStore;
+import org.kh.campus.manager.domain.Manager;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class ConsultantStoreLogic implements ConsultantStore {
 
 	@Override
-	public List<Consultant> selectAllCons(SqlSession sqlSession, PageInfo pi) {
-		int limit = pi.getConsultantLimit();
-		int currentPage = pi.getCurrentPage();
-		int offset = (currentPage -1) * limit ;
-		RowBounds rowBounds = new RowBounds(offset, limit);
-		List<Consultant> cList=  sqlSession.selectList("ConsultantMapper.selectAllCons",pi, rowBounds);
+	public List<Consultant> selectAllCons(SqlSession sqlSession,  int cons_student_no) {
+		List<Consultant> cList = sqlSession.selectList("ConsultantMapper.selectAllCons", cons_student_no);
 		return cList;
 	}
 
@@ -30,8 +27,8 @@ public class ConsultantStoreLogic implements ConsultantStore {
 	}
 
 	@Override
-	public Consultant selectDetailCons(SqlSession sqlSession, String consultant_title) {
-		Consultant consultant = sqlSession.selectOne("ConsultantMapper.selectDetailCons", consultant_title);
+	public Consultant selectDetailCons(SqlSession sqlSession, int cons_no) {
+		Consultant consultant = sqlSession.selectOne("ConsultantMapper.selectDetailCons", cons_no);
 		return consultant;
 	}
 
@@ -69,4 +66,17 @@ public class ConsultantStoreLogic implements ConsultantStore {
 		return crList;
 	}
 
+	@Override
+	public int updateStatus(SqlSession sqlSession, int cons_no) {
+		int result = sqlSession.update("ConsultantMapper.updateStatus", cons_no);
+		return result;
+	}
+
+	@Override
+	public Consultant printByStNo(SqlSession sqlSession, int cons_student_no) {
+		Consultant consultant = sqlSession.selectOne("ConsultantMapper.printByStNo", cons_student_no);
+		return consultant;
+	}
+
+	
 }

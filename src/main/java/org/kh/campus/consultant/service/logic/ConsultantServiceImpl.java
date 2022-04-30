@@ -8,6 +8,7 @@ import org.kh.campus.consultant.domain.ConsultantReply;
 import org.kh.campus.consultant.domain.PageInfo;
 import org.kh.campus.consultant.service.ConsultantService;
 import org.kh.campus.consultant.store.ConsultantStore;
+import org.kh.campus.manager.domain.Manager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,8 @@ public class ConsultantServiceImpl implements ConsultantService {
 	private SqlSession sqlSession;
 		
 	@Override
-	public List<Consultant> printAllCons(PageInfo pi) {
-		List<Consultant>cList = cStore.selectAllCons(sqlSession, pi);
+	public List<Consultant> printAllCons(int cons_student_no) {
+		List<Consultant> cList= cStore.selectAllCons(sqlSession, cons_student_no);
 		return cList;
 	}
 
@@ -31,8 +32,8 @@ public class ConsultantServiceImpl implements ConsultantService {
 	}
 
 	@Override
-	public Consultant printDetailCons(String consultant_title) {
-		Consultant consultant = cStore.selectDetailCons(sqlSession, consultant_title);
+	public Consultant printDetailCons(int cons_no) {
+		Consultant consultant = cStore.selectDetailCons(sqlSession, cons_no);
 		return consultant;
 	}
 
@@ -66,6 +67,18 @@ public class ConsultantServiceImpl implements ConsultantService {
 	public List<ConsultantReply> printAllAdminReply(int cons_no) {
 		List<ConsultantReply>crList = cStore.selectAllAdminReply(sqlSession,cons_no);
 		return crList;
+	}
+
+	@Override
+	public int modifyStatus(int cons_no) {
+		int result = cStore.updateStatus(sqlSession, cons_no);
+		return result;
+	}
+
+	@Override
+	public Consultant printOneByStNo(int cons_student_no) {
+		Consultant consultant = cStore.printByStNo(sqlSession, cons_student_no);
+		return consultant;
 	}
 
 

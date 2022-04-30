@@ -19,6 +19,7 @@ public interface PortfolioStore {
 	public Portfolio selectprintOneByNo(SqlSession sqlSession, Integer port_no);
 	public int updatePortfolio(SqlSession sqlSession);
 	public int deletePortfolio(SqlSession sqlSession, int port_no);
+	public Portfolio selectBySt(SqlSession sqlSession, int studentNo);
 	
 
 }

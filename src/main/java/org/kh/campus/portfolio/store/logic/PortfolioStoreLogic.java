@@ -82,6 +82,12 @@ public class PortfolioStoreLogic implements PortfolioStore {
 		return result;
 	}
 
+	@Override
+	public Portfolio selectBySt(SqlSession sqlSession, int studentNo) {
+		Portfolio port = sqlSession.selectOne("PortfolioMapper.selectBySt", studentNo);
+		return port;
+	}
+
 
 	
 
