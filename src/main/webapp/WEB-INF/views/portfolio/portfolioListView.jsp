@@ -27,7 +27,7 @@
 									<c:forEach items="${pList}" var="portfolio">
 										<tr class="space">
 											<td class="ta" id="no">${portfolio.port_no}</td>
-											<c:url var="pDetail" value="/portfolio/adminDetail.kh">
+											<c:url var="pDetail" value="/portfolio/Detail.kh">
 												<c:param name="port_no" value="${portfolio.port_no}"></c:param>
 											</c:url>
 											<td class="ta" id="detail" style="text-align:left"><a href="${pDetail}">${portfolio.port_title }</a></td>
@@ -40,41 +40,7 @@
 									</c:forEach>
 								</tbody>
 							</table>
-				
-							<div class="paging">
-
-								<c:if test="${pi.startNavi ==1 }">
-									<a href="/portfolio/listView.kh?page=1"></a>
-								</c:if>
-								<c:if test="${pi.prev}">
-
-									<a href="/portfolio/listView.kh?page=${pi.startNavi-1}">
-									</a>
-
-								</c:if>
-
-
-
-
-
-								<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
-									<c:url var="pagination" value="/portfolio/listView.kh">
-										<c:param name="page" value="${p }"></c:param>
-									</c:url>
-
-									<a href="${pagination }"><button class="on1">${p }</button></a>&nbsp;
-																		
-									</c:forEach>
-
-
-								<c:if test="${pi.next && pi.endNavi > 0}">
-
-									<a href="/portfolio/listView.kh?page=${pi.endNavi+1}"> 
-									</a>
-
-								</c:if>
-
-							</div>
+			
 						</div>
 					</div>
 
