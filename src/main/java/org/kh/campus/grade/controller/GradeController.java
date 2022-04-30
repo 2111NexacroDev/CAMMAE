@@ -37,8 +37,18 @@ public class GradeController {
 	}
 	
 	// 학생 이의신청 조회
+	@RequestMapping(value="/grade/stdObjection.kh", method=RequestMethod.GET)
 	public NexacroResult printFeedbackStudent() {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
+		int studentNo = 0;
+		
+		List<Grade> gList = gService.printFeedbackStudent(studentNo);
+		
+		result.addDataSet("out_stdGrade", gList);
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
 		
 		return result;
 	}
@@ -75,8 +85,18 @@ public class GradeController {
 	}
 	
 	// 교수 이의신청 조회
+	@RequestMapping(value="/grade/prfObjection.kh", method=RequestMethod.GET)
 	public NexacroResult printFeedbackProfessor() {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
+		int prfNo = 1;
+		
+		List<Grade> gList = gService.printFeedbackProfessor(prfNo);
+		
+		result.addDataSet("out_stdGrade", gList);
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
 		
 		return result;
 	}

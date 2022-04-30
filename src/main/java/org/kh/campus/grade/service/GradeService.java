@@ -10,7 +10,7 @@ public interface GradeService {
 	public List<Grade> printGradeStudent(int studentNo);
 
 	// 이의신청 조회
-	public List<Grade> printFeedbackStudent(Grade grade);
+	public List<Grade> printFeedbackStudent(int studentNo);
 	// 이의신청 등록
 	public int registerObjection(Grade grade);
 	
@@ -22,7 +22,7 @@ public interface GradeService {
 	// 교수 성적 수정
 	public int modifyGrade(Grade grade);
 	// 이의신청 조회
-	public List<Grade> printFeedbackProfessor(Grade grade);
+	public List<Grade> printFeedbackProfessor(int prfNo);
 	// 피드백 등록
 	public int registerFeedBack(Grade grade);
 	// 피드백 수정
