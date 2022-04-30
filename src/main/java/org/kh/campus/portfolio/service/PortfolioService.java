@@ -19,6 +19,7 @@ public interface PortfolioService {
 	public Portfolio printOneByNo(Integer port_no);
 	public int modifyPortfolio(Portfolio portfolio);
 	public int deletePortfolio(int port_no);
+	public Portfolio printOneByStNo(int studentNo);
 	
 
 }

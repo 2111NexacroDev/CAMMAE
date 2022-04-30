@@ -10,11 +10,14 @@ import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.kh.campus.consultant.domain.Consultant;
 import org.kh.campus.portfolio.domain.PageInfo;
 import org.kh.campus.portfolio.domain.Pagination;
 import org.kh.campus.portfolio.domain.Portfolio;
 import org.kh.campus.portfolio.service.PortfolioService;
+import org.kh.campus.student.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -77,7 +80,13 @@ public class PortfolioController {
 
 			int result = pService.insertPort(portfolio);
 			if (result > 0) {
-				mv.setViewName("redirect:/portfolio/listView.kh");
+				HttpSession session = request.getSession();
+				int studentNo = ((Student)(session.getAttribute("loginUser"))).getStudentNo();
+				Portfolio portOne = pService.printOneByStNo(studentNo);
+				if(portOne != null) {
+					mv.addObject("portfolio", portOne);
+					mv.setViewName("redirect:/portfolio/listView.kh");
+				}	
 			} else {
 				mv.addObject("msg", "포트폴리오 등록실패");
 				mv.setViewName("common/errorPage");

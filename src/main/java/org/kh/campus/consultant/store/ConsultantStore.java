@@ -6,17 +6,20 @@ import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.consultant.domain.Consultant;
 import org.kh.campus.consultant.domain.ConsultantReply;
 import org.kh.campus.consultant.domain.PageInfo;
+import org.kh.campus.manager.domain.Manager;
 
 public interface ConsultantStore {
 
-	public List<Consultant> selectAllCons(SqlSession sqlSession, PageInfo pi);
+	public List<Consultant> selectAllCons(SqlSession sqlSession, int cons_student_no);
 	public int insertCons(SqlSession sqlSession, Consultant consultant);
-	public Consultant selectDetailCons(SqlSession sqlSession, String consultant_title);
+	public Consultant selectDetailCons(SqlSession sqlSession, int cons_no);
 	public List<Consultant> selectAdminAllCons(SqlSession sqlSession, PageInfo pi);
 	public int insertAdminConsReply(SqlSession sqlSession, ConsultantReply consultantReply);
 	public Consultant selectAdminDetailCons(SqlSession sqlSession, Integer consultant_no);
 	public int selectListCount(SqlSession sqlSession);
 	public List<ConsultantReply> selectAllAdminReply(SqlSession sqlSession, int cons_no);
+	public int updateStatus(SqlSession sqlSession, int cons_no);
+	public Consultant printByStNo(SqlSession sqlSession, int cons_student_no);
 	
 	
 

@@ -90,6 +90,12 @@ public class PortfolioServiceImpl implements PortfolioService {
 		return result;
 	}
 
+	@Override
+	public Portfolio printOneByStNo(int studentNo) {
+		Portfolio port = pStore.selectBySt(sqlSession, studentNo);
+		return port;
+	}
+
 
 
 }

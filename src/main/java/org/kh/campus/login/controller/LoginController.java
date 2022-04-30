@@ -4,8 +4,10 @@ import javax.servlet.http.HttpSession;
 
 import org.kh.campus.login.service.LoginService;
 import org.kh.campus.manager.domain.Manager;
+import org.kh.campus.manager.service.ManagerService;
 import org.kh.campus.professor.domain.Professor;
 import org.kh.campus.student.domain.Student;
+import org.kh.campus.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,10 @@ public class LoginController {
 
 	@Autowired
 	private LoginService lService;
+	@Autowired
+	private StudentService sService;
+	@Autowired
+	private ManagerService mService;
 	
 	// 로그인 페이지
 	@RequestMapping(value="/login/loginPage.kh", method=RequestMethod.GET)
@@ -37,14 +43,23 @@ public class LoginController {
 			, @RequestParam("user-id") int id
 			, @RequestParam("user-pwd") String pw
 			, @RequestParam(value = "login_type", required = false) String type) {
-		try {
-			// 학생
+	
+		
+		try {	// 학생
 			if(type.equals("student")) {
 				Student student = new Student();
 				student.setStudentNo(id);
 				student.setStudentPassword(pw);
+				Student loginUser = sService.loginStudent(student);
+				if(loginUser != null) {
+					session.setAttribute("loginUser", loginUser);
+				}
+				
+				
+				lService.loginStudent(student);
+				
 				int stdNo = 0;
-				stdNo = lService.loginStudent(student);
+			
 				
 				session.setAttribute("login", "std");
 				session.setAttribute("id", stdNo);
@@ -63,6 +78,11 @@ public class LoginController {
 				Manager manager = new Manager();
 				manager.setManagerNo(id);
 				manager.setManagerPassword(pw);
+				
+				Manager loginManager = mService.loginManager(manager);
+				if(loginManager != null) {
+					session.setAttribute("loginManager", loginManager);
+				}
 				int magNo = 0;
 				magNo = lService.loginManager(manager);
 				

@@ -74,6 +74,7 @@
 					alert("ajax 실패!");
 				}
 			});
+			updateStatus();
 		});
 		function getReplyList() {
 			var cons_no = "${consultant.cons_no }";
@@ -107,8 +108,27 @@
 					alert("ajax 통신 실패! 관리자에게 문의하세요.");
 				}
 			});
+			
+			
+			
 		}
-		
+		function updateStatus(){
+				var cons_no = "${consultant.cons_no}";
+				$.ajax({
+					url : "/consultant/statusChange.kh",
+					type : "post",
+					data : { "cons_no" : cons_no},
+					success : function(data) {
+						if(data == "success") {
+							alert("업데이트 성공");
+						
+						}else{
+							alert("업데이트 실패");
+						}
+					},
+					
+				});
+			}
 	</script>
 </body>
 </html>

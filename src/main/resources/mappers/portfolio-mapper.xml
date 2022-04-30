@@ -52,4 +52,8 @@
 	<select id="selectAllPort" resultMap="portfolioResultMap">
 		SELECT PORT_NO, PORT_TITLE, PORT_NAME, PORT_LICENSE, PORT_AWARD_HISTORY, PORT_WRITEDATE, PORT_CONTENT FROM PORTFOLIO_TBL
 	</select>
+	
+	<select id="selectBySt" resultMap = "portfolioResultMap">
+		SELECT * FROM PORTFOLIO_TBL PORT_STUDENT_NO = #{studentNo}
+	</select>
 </mapper>

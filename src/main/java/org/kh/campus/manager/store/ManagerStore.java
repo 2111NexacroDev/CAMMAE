@@ -33,5 +33,8 @@ public interface ManagerStore {
 
 	public int deleteManager(SqlSession sqlSession, int managerNo);
 
+	public Manager selectAllManagerInfo(Manager manager, SqlSession sqlSession);
+
+
 
 }
