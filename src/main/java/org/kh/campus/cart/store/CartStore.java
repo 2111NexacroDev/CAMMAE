@@ -16,5 +16,9 @@ public interface CartStore {
 
 	List<Cart> selectMyCart(SqlSession sqlSession);
 
+	List<Lecture> selectAllEnroll(SqlSession sqlSession);
+
+	int insertEnroll(SqlSession sqlSession, Lecture lecture);
+
 
 }
