@@ -48,6 +48,8 @@ h3 {
 </head>
 
 <body>
+<jsp:include page="../common/menuBar.jsp"></jsp:include>
+ <div id="content">
 	<div class="left">1</div>
 	<div class="center">
 		<form action="/question/register" method="POST"
@@ -94,7 +96,7 @@ h3 {
 
 	</div>
 	<!-- 	<div class="right">3</div> -->
-				
+ </div>
 				
 				
 
