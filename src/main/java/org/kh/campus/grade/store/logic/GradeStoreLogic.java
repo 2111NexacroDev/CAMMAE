@@ -24,7 +24,7 @@ public class GradeStoreLogic implements GradeStore {
 
 	@Override
 	public int insertObjection(Grade grade, SqlSession sqlSession) {
-		int result = sqlSession.insert("");
+		int result = sqlSession.insert("GradeMapper.insertObjection", grade);
 		return result;
 	}
 
@@ -42,7 +42,7 @@ public class GradeStoreLogic implements GradeStore {
 
 	@Override
 	public int updateGrade(Grade grade, SqlSession sqlSession) {
-		int result = sqlSession.update("");
+		int result = sqlSession.update("GradeMapper.updateGrade", grade);
 		return result;
 	}
 
