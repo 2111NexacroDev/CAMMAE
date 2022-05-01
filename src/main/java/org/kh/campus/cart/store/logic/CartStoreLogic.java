@@ -35,6 +35,18 @@ public class CartStoreLogic implements CartStore {
 		return cList;
 	}
 
+	@Override
+	public List<Lecture> selectAllEnroll(SqlSession sqlSession) {
+		List<Lecture> lList = sqlSession.selectList("CartMapper.selectAllEnroll");
+		return lList;
+	}
+
+	@Override
+	public int insertEnroll(SqlSession sqlSession, Lecture lecture) {
+		int result = sqlSession.insert("CartMapper.insertEnroll", lecture);
+		return result;
+	}
+
 
 
 

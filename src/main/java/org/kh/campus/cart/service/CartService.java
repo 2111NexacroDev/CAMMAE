@@ -15,4 +15,8 @@ public interface CartService {
 	
 	public int removeCart(int cartNo);
 
+	public List<Lecture> printAllenroll();
+	
+	public int registerEnroll(Lecture lecture);
+
 }
