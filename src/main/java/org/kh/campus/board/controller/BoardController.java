@@ -19,6 +19,7 @@ import org.kh.campus.board.domain.University;
 import org.kh.campus.board.service.BoardService;
 import org.kh.campus.consultant.domain.ConsultantReply;
 import org.kh.campus.question.domain.QuestionReply;
+import org.kh.campus.student.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,9 +45,12 @@ public class BoardController {
 	public ModelAndView boardListView(ModelAndView mv, @RequestParam(value = "page", required = false) Integer page
 			,HttpSession session, @RequestParam(value = "universityCode", required = false) Integer universityCode) {
 
-		session.getAttribute("");
-		universityCode = (universityCode != null) ? universityCode : 1;
+		int universityCodeStd = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
+		System.out.println(universityCodeStd +"test11");
+		System.out.println(universityCodeStd +"test11");
+		System.out.println(universityCodeStd +"test11");
 		
+		universityCode = (universityCode != null) ? universityCode : universityCodeStd;
 		int currentPage = (page != null) ? page : 1;
 		int totalCount = service.getListCount();
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
