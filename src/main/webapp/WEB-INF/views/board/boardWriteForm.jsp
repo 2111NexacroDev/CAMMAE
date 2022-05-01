@@ -60,6 +60,12 @@ h3{
 					<input type="text" size="50" name="boardTitle"
 						placeholder="제목을 입력하세요" style="border: none; padding: 10px;">
 				</div>
+				
+				<div class="title">
+					<input type="text" size="50" name="universityCode"
+						placeholder="학과를 선택하세요" style="border: none; padding: 10px;">
+				</div>
+				
 
 				<hr style="width: 585px; text-align: center;">
 				<div class="content" style="padding: 10px;">

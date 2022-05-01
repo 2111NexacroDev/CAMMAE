@@ -41,9 +41,11 @@ public class BoardController {
 
 	// 게시판 목록 조회
 	@RequestMapping(value = "/board/list.kh", method = RequestMethod.GET)
-	public ModelAndView boardListView(ModelAndView mv, @RequestParam(value = "page", required = false) Integer page) {
+	public ModelAndView boardListView(ModelAndView mv, @RequestParam(value = "page", required = false) Integer page
+			,HttpSession session, @RequestParam(value = "universityCode", required = false) Integer universityCode) {
 
-		int universityCode = 0001;
+		session.getAttribute("");
+		universityCode = (universityCode != null) ? universityCode : 1;
 		
 		int currentPage = (page != null) ? page : 1;
 		int totalCount = service.getListCount();
@@ -67,9 +69,17 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/board/unlist.kh", method = RequestMethod.GET)
-	public ModelAndView boarUnList(ModelAndView mv) {
+	public ModelAndView boarUnList(ModelAndView mv,
+			HttpSession session ) {
 		
 		try {
+			String login = session.getAttribute("login").toString();
+			System.out.println(login);
+			System.out.println(login);
+			System.out.println(login);
+			if (login.contentEquals("std") || login.contentEquals("prf")) {
+				mv.setViewName("redirect:/board/list.kh");
+			} else {
 			List<University> uList = service.printAllUniversity();
 			if (!uList.isEmpty()) {
 				mv.addObject("uList", uList);
@@ -77,6 +87,7 @@ public class BoardController {
 			} else {
 				mv.addObject("msg", "학과게시판 조회 실패");
 				mv.setViewName("common/errorPage");
+			}
 			}
 		} catch (Exception e) {
 			mv.addObject("msg", e.toString());

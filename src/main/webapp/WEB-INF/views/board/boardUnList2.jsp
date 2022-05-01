@@ -62,7 +62,7 @@ h3{
 				<c:forEach items="${uList }" var="university">
 				<tr>
 				
-				<c:url var="uDetail" value="/board/unlist.kh">
+				<c:url var="uDetail" value="/board/list.kh">
 					<c:param name="universityCode" value="${university.universityCode}"></c:param>
 				</c:url>
 
