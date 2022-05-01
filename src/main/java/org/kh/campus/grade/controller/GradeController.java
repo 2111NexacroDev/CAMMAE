@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.kh.campus.grade.domain.Grade;
 import org.kh.campus.grade.service.GradeService;
+import org.kh.campus.student.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.nexacro.uiadapter17.spring.core.annotation.ParamDataSet;
 import com.nexacro.uiadapter17.spring.core.data.NexacroResult;
 import com.nexacro17.xapi.data.DataSet;
 
@@ -54,9 +56,28 @@ public class GradeController {
 	}
 	
 	// 학생 이의 신청 등록
-	public NexacroResult registerObjection() {
+	@RequestMapping(value="/grade/std_objection.kh", method=RequestMethod.POST)
+	public NexacroResult registerObjection(
+			@ParamDataSet(name="in_obj") DataSet stdObj
+			) throws Exception {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
+		System.out.println(dsGet(stdObj, 0, "lectureNo"));
+		System.out.println(dsGet(stdObj, 0, "lectureNo").toString());
+		System.out.println(Integer.parseInt(dsGet(stdObj, 0, "lectureNo")));
+		
+		int lectureNo = Integer.parseInt(dsGet(stdObj, 0, "lectureNo"));
+		String objectionContent = dsGet(stdObj, 0, "objectionContent");
+		int studentNo = 0;
+		Grade grade = new Grade(lectureNo, studentNo, objectionContent);
+		
+		gService.registerObjection(grade);
+
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
+	
 		return result;
 	}
 	
@@ -77,10 +98,29 @@ public class GradeController {
 		return result;
 	}
 	
-	// 교수 성적 등록, 수정
-	public NexacroResult changeGradeProfessor() {
+	// 교수 성적 입력(수정)
+	@RequestMapping(value="/grade/gradeUpdate.kh", method=RequestMethod.POST)
+	public NexacroResult changeGradeProfessor(
+			@ParamDataSet(name="In_grade") DataSet inGrd
+			) throws Exception {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
+		for(int i = 0; i < inGrd.getRowCount(); i++) {
+			int lectureNo = Integer.parseInt(dsGet(inGrd, i, "lectureNo"));
+			int studentNo = Integer.parseInt(dsGet(inGrd, i, "studentNo"));
+			String gradeScore = dsGet(inGrd, i, "gradeScore");
+			int gradeAvg = Integer.parseInt(dsGet(inGrd, i, "gradeAvg"));
+			Grade grade = new Grade(lectureNo,
+					studentNo, gradeScore, gradeAvg);
+				
+			gService.modifyGrade(grade);
+		}
+
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
+	
 		return result;
 	}
 	

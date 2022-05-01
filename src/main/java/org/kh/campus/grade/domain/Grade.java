@@ -8,7 +8,7 @@ public class Grade {
 	private String gradeSubject;
 	private String gradeComplete;
 	private int lectureGrade;
-	private int gradeScore;
+	private String gradeScore;
 	private int gradeAvg;
 	private String gradeFeedback;
 	private String gradeObjection;
@@ -27,9 +27,26 @@ public class Grade {
 				+ ", gradeChange=" + gradeChange + ", objectionContent=" + objectionContent + ", feedbackContent="
 				+ feedbackContent + "]";
 	}
+	
+	
+
+	public Grade(int lectureNo, int studentNo, String objectionContent) {
+		super();
+		this.lectureNo = lectureNo;
+		this.studentNo = studentNo;
+		this.objectionContent = objectionContent;
+	}
+
+	public Grade(int lectureNo, int studentNo, String gradeScore, int gradeAvg) {
+		super();
+		this.lectureNo = lectureNo;
+		this.studentNo = studentNo;
+		this.gradeScore = gradeScore;
+		this.gradeAvg = gradeAvg;
+	}
 
 	public Grade(int lectureNo, int studentNo, String gradeYear, String gradeSession, String gradeSubject,
-			String gradeComplete, int lectureGrade, int gradeScore, int gradeAvg, String gradeFeedback,
+			String gradeComplete, int lectureGrade, String gradeScore, int gradeAvg, String gradeFeedback,
 			String gradeObjection, String gradeChange, String objectionContent, String feedbackContent) {
 		super();
 		this.lectureNo = lectureNo;
@@ -104,11 +121,11 @@ public class Grade {
 		this.lectureGrade = lectureGrade;
 	}
 
-	public int getGradeScore() {
+	public String getGradeScore() {
 		return gradeScore;
 	}
 
-	public void setGradeScore(int gradeScore) {
+	public void setGradeScore(String gradeScore) {
 		this.gradeScore = gradeScore;
 	}
 
