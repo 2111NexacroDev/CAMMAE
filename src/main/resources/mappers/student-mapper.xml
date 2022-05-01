@@ -17,6 +17,7 @@
 		<result property="professorNo" column="PROFESSOR_NO"/>
 		<result property="studentState" column="STUDENT_STATE"/>
 		<result property="professorName" column="PROFESSOR_NAME"/>
+		<result property="universityCode" column="UNIVERSITY_CODE"/>
 	</resultMap>
 	
 	<select id="selectStudentInfoOne" resultMap="studentResultMap">
