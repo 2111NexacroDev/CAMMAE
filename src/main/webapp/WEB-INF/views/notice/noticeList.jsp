@@ -4,122 +4,30 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="/resources/menuBar.css">
 <style>
-html, body, span, li, a, div, ul {
-	margin: 0;
-	padding: 0;
+#contents {
+	height: 783px;
+	width: 100%
 }
 
-body {
-	width: 100%;
-	height: 100%;
-}
+ #line {
+	height: 150px;
+} 
 
-a {
-	text-decoration: none;
-}
-
-#header {
-	position: relative;
-	height: 60px;
-	border-bottom: 1px solid rgb(16, 65, 44);
-	background: rgb(16, 65, 44);
-}
-
-.inner {
-	/* margin: 0 auto; */
-	width: 1200px;
-	height: 60px;
-}
-
-.btn_gnb_home {
-	float: right;
-	margin-top: 20px;
-	margin-right: -30px;
-	/* margin-left: 1050px; */
-	text-decoration: none;
-	color: white;
-}
-
-.btn_gnb_login {
-	float: right;
-	margin-top: 20px;
-	margin-right: -130px;
-	text-decoration: none;
-	color: white;
-}
-
-h1 {
-	margin-top: 30px;
-	margin-left: 180px;
-	width: 320px;
-}
-
-.lnb_nav_dep1 li {
+.left {
+	height: inherit;
+	width: 15%;
 	float: left;
-	margin-top: -10px
+	width: 15%;
 }
 
-#lnb_title {
-	margin-left: 20px;
-}
-
-#lnb_subtitle {
-	display: flex;
-	font-size: 14px;
-	margin-left: 115px;
-	margin-top: -40px;
-	color: rgb(0, 74, 38);
-}
-
-h1 a {
-	text-align: left;
-	/* display: block; */
-	/* margin-top: 20px; */
-	width: 220px;
-	text-decoration: none;
-	position: absolute;
-	color: rgb(0, 74, 38);
-}
-
-.lnb_nav_dep1 {
-	display: flex;
-	margin-top: -60px;
-	margin-left: 490px;
-	width: 1200px;
-}
-
-dl, ul, ol, menu, li {
-	list-style: none;
-}
-
-.lnb_nav_dep1 li {
-	float: left;
-}
-
-.lnb_nav_dep1 li a:hover {
-	color: rgb(0, 74, 38);
-}
-
-.btn_lnb_dep1 {
-	display: inline-block;
-	margin: 0 70px;
-	font-size: 20px;
-	font-weight: 600;
-	text-decoration: none;
-	color: #1d1d1d;
-}
-
-#contents{
-	height : 783px;
-	width : 100%
-}
-	.contents_1{
+/* 	.contents_1{
 		height: inherit;
 		width : 15%;
 		float : left;
-	}
-		.contents_1bar{
+	} */
+/* 		.contents_1bar{
 			height: 400px;
 			width : 100%;
 			margin-top : 150px;
@@ -180,30 +88,18 @@ dl, ul, ol, menu, li {
 				border-bottom: solid 1px gray;
 				font-size : 20px;
 				line-height: 60px;
-			}
-	.contents_2{
+			} */
+/* 	.contents_2{
 		height: inherit;
 		width : 85%;
 		float : left;
-	}
-	
-footer {
-	width: 100%;
-	background: rgb(87, 87, 87);
-	height: 80px;
-}
-
-footer .footer_tit {
-	padding: 20px 0 0 0;
-	font-size: 15px;
-	color: rgb(255, 255, 255);
-	text-align: center;
-}
-
-footer #footer_bottom {
-	text-align: center;
-	font-size: 13px;
-	color: rgb(255, 255, 255);
+		margin-top : 100px;
+	} */
+.contents_2 {
+	height: inherit;
+	width: 50%;
+	float: left;
+	margin-left: 200px;
 }
 </style>
 <meta charset="UTF-8">
@@ -243,11 +139,15 @@ footer #footer_bottom {
 			</div>
 		</div>
 	</div>
+	<div id="line"></div>
 
 	<!-- contents영역 -->
 
 	<div id="contents">
-		<div class="contents_1">
+		<div class="left">
+			<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
+		</div>
+		<!-- 		<div class="contents_1">
 			<div class="contents_1bar">
 				<div class="contents_1bar_1">
 					<div class="contents_1bar_1_1"><a href="#" style="color:white">&nbsp;&nbsp;취업지원센터</a></div>
@@ -259,9 +159,9 @@ footer #footer_bottom {
 				<div class="contents_1bar_5"><a href="#" style="color:black">&nbsp;&nbsp;&nbsp;상담관리</a></div>
 				<div class="contents_1bar_6"><a href="#" style="color:black">&nbsp;&nbsp;&nbsp;포트폴리오 관리</a></div>
 			</div>
-		</div>
+		</div> -->
 		<div class="contents_2">
-			<h2 align="center" style="color:rgb(0, 74, 38)">공지사항</h2>
+			<h2 align="center" style="color: rgb(0, 74, 38)">공지사항</h2>
 			<br> <br>
 			<div>
 				<button onclick="location.href='/notice/writeView.kh'">글쓰기</button>
@@ -328,7 +228,7 @@ footer #footer_bottom {
 				</c:if>
 			</div>
 		</div>
-		
+
 	</div>
 
 
