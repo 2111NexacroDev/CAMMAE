@@ -11,7 +11,7 @@ import org.kh.campus.recruitment.service.RecruitmentService;
 import org.kh.campus.recruitment.store.RecruitmentStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+//채용공고
 @Service
 public class RecruitmentServiceImpl implements RecruitmentService{
 
