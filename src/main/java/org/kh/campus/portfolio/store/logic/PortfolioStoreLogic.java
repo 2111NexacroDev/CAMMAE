@@ -2,7 +2,9 @@ package org.kh.campus.portfolio.store.logic;
 
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
+import org.kh.campus.portfolio.domain.PageInfo;
 import org.kh.campus.portfolio.domain.Portfolio;
 import org.kh.campus.portfolio.store.PortfolioStore;
 import org.springframework.stereotype.Repository;
@@ -11,8 +13,8 @@ import org.springframework.stereotype.Repository;
 public class PortfolioStoreLogic implements PortfolioStore {
 
 	@Override
-	public List<Portfolio> selectAllPort(SqlSession sqlSession) {
-	 List<Portfolio> pList = sqlSession.selectList("PortfolioMapper.selectAllPort");
+	public List<Portfolio> selectAllPort(SqlSession sqlSession, int studentNo) {
+		List<Portfolio> pList = sqlSession.selectList("PortfolioMapper.selectAllPort", studentNo);
 		return pList;
 	}
 
@@ -29,20 +31,18 @@ public class PortfolioStoreLogic implements PortfolioStore {
 	}
 
 	@Override
-	public int updatePort(SqlSession sqlSession, String port_title) {
-		int result = sqlSession.update("PortfolioMapper.updatePort", port_title);
-		return result;
-	}
-
-	@Override
 	public int deletePort(SqlSession sqlSession, String port_title) {
 		int result = sqlSession.delete("PortfolioMapper.deletePort", port_title);
 		return result;
 	}
 
 	@Override
-	public List<Portfolio> selectAdminAllPort(SqlSession sqlSession) {
-		List<Portfolio>pList = sqlSession.selectList("PortfolioMapper.selectAdminAllPort");
+	public List<Portfolio> selectAdminAllPort(SqlSession sqlSession, PageInfo pi) {
+		int limit = pi.getPortfolioLimit();
+		int currentPage = pi.getCurrentPage();
+		int offset = (currentPage -1) * limit ;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		List<Portfolio>pList = sqlSession.selectList("PortfolioMapper.selectAdminAllPort", pi, rowBounds);
 		return pList;
 	}
 
@@ -71,8 +71,8 @@ public class PortfolioStoreLogic implements PortfolioStore {
 	}
 
 	@Override
-	public int updatePortfolio(SqlSession sqlSession) {
-		int result = sqlSession.update("PortfolioMapper.updatePortfolio");
+	public int updatePortfolio(SqlSession sqlSession, Portfolio portfolio) {
+		int result = sqlSession.update("PortfolioMapper.updatePortfolio", portfolio);
 		return result;
 	}
 
@@ -80,6 +80,12 @@ public class PortfolioStoreLogic implements PortfolioStore {
 	public int deletePortfolio(SqlSession sqlSession, int port_no) {
 		int result = sqlSession.delete("PortfolioMapper.deletePortfolio", port_no);
 		return result;
+	}
+
+	@Override
+	public List<Portfolio> selectBySt(SqlSession sqlSession, int port_student_no) {
+		List<Portfolio> pList = sqlSession.selectList("PortfolioMapper.selectBySt", port_student_no);
+		return pList;
 	}
 
 

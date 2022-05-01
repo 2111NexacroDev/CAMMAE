@@ -17,14 +17,14 @@ public class GradeStoreLogic implements GradeStore {
 	}
 
 	@Override
-	public List<Grade> selectFeedbackStudent(Grade grade, SqlSession sqlSession) {
-		List<Grade> gList = sqlSession.selectList("");
+	public List<Grade> selectFeedbackStudent(int studentNo, SqlSession sqlSession) {
+		List<Grade> gList = sqlSession.selectList("GradeMapper.selectFeedbackStudent", studentNo);
 		return gList;
 	}
 
 	@Override
 	public int insertObjection(Grade grade, SqlSession sqlSession) {
-		int result = sqlSession.insert("");
+		int result = sqlSession.insert("GradeMapper.insertObjection", grade);
 		return result;
 	}
 
@@ -42,14 +42,14 @@ public class GradeStoreLogic implements GradeStore {
 
 	@Override
 	public int updateGrade(Grade grade, SqlSession sqlSession) {
-		int result = sqlSession.update("");
+		int result = sqlSession.update("GradeMapper.updateGrade", grade);
 		return result;
 	}
 
 
 	@Override
-	public List<Grade> selectFeedbackProfessor(Grade grade, SqlSession sqlSession) {
-		List<Grade> gList = sqlSession.selectList("");
+	public List<Grade> selectFeedbackProfessor(int prfNo, SqlSession sqlSession) {
+		List<Grade> gList = sqlSession.selectList("GradeMapper.selectFeedbackProfessor", prfNo);
 		return gList;
 	}
 

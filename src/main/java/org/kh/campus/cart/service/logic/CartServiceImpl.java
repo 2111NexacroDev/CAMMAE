@@ -43,6 +43,18 @@ public class CartServiceImpl implements CartService {
 		return cList;
 	}
 
+	@Override
+	public List<Lecture> printAllenroll() {
+		List<Lecture> lList = cStore.selectAllEnroll(sqlSession);
+		return lList;
+	}
+
+	@Override
+	public int registerEnroll(Lecture lecture) {
+		int result = cStore.insertEnroll(sqlSession, lecture);
+		return result;
+	}
+
 
 
 

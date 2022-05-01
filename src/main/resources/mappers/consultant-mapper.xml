@@ -17,7 +17,7 @@
 		<result property="cons_counselor" column="CONS_COUNSELOR" />
 	</resultMap>
 	<select id="selectListCount" resultType="_int">
-		SELECT COUNT(*) FROM CONSULTANT_TBL WHERE CONS_STATUS = 'N'
+		SELECT COUNT(*) FROM CONSULTANT_TBL 
 	</select>
 	
 	<insert id="insertCons" parameterType="Consultant">
@@ -25,16 +25,30 @@
 	</insert>
 	
 	<select id="selectAdminAllCons" resultMap="consultantResultMap">
-	 SELECT * FROM CONSULTANT_TBL
+	 SELECT * FROM CONSULTANT_TBL ORDER BY CONS_NO ASC
 	</select>
 	
 	<select id="selectAdminDetailCons" resultMap="consultantResultMap">
-	 SELECT * FROM CONSULTANT_TBL WHERE CONS_NO = #{cons_no}
+	 SELECT * FROM CONSULTANT_TBL WHERE CONS_NO = #{cons_student_no}
 	</select>
 	
 	<select id="selectAllCons" resultMap="consultantResultMap">
-	 SELECT * FROM CONSULTANT_TBL
+	 SELECT * FROM CONSULTANT_TBL WHERE CONS_STUDENT_NO = #{cons_student_no}
 	</select>
+	
+	<select id="printByStNo"  resultMap="consultantResultMap">
+	 SELECT * FROM CONSULTANT_TBL WHERE	CONS_STUDENT_NO=  #{studentNo}
+	</select>
+	
+	<select id="selectDetailCons" resultMap="consultantResultMap">
+	 SELECT * FROM CONSULTANT_TBL WHERE CONS_NO = #{cons_student_no}
+	</select>
+	
+	
+	<update id="updateStatus">
+	 UPDATE CONSULTANT_TBL SET CONS_STATUS = 'Y' 
+	 WHERE CONS_NO = #{cons_no}
+	</update>
 	
 	<resultMap type="ConsultantReply" id="ConsultantReplyResultMap">
 		<id property="cons_reply_no" column="CONS_REPLY_NO"></id>

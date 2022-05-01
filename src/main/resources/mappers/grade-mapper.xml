@@ -16,13 +16,45 @@
 		<result property="gradeFeedback" column="GRADE_FEEDBACK"/>
 		<result property="gradeObjection" column="GRADE_OBJECTION"/>
 		<result property="gradeChange" column="GRADE_CHANGE"/>
+		<result property="objectionContent" column="OBJECTION_CONTENT"/>
 	</resultMap>
 	
+	<!-- 학생 -->
 	<select id="selectGradeStudent" resultMap="gradeResultMap">
 		SELECT * FROM GRADE_TBL WHERE STUDENT_NO = #{studentNo}
 	</select>
 	
+	<select id="selectFeedbackStudent" resultMap="gradeResultMap">
+		SELECT * FROM GRADE_OBJECTION O
+		LEFT JOIN GRADE_TBL G ON
+		(G.STUDENT_NO = O.STUDENT_NO AND G.LECTURE_NO = O.LECTURE_NO AND O.STUDENT_NO = #{studentNo})
+		LEFT JOIN FEEDBACK_TBL F ON (F.STUDENT_NO = O.STUDENT_NO AND F.LECTURE_NO = O.LECTURE_NO)
+	</select>
+	
+	<insert id="insertObjection">
+			BEGIN
+			INSERT INTO GRADE_OBJECTION VALUES(#{lectureNo}, #{studentNo}, #{objectionContent});
+			
+			UPDATE GRADE_TBL SET GRADE_OBJECTION = 'Y'
+			WHERE STUDENT_NO = #{studentNo} AND LECTURE_NO = #{lectureNo};
+		END;
+	</insert>
+	
+	<!-- 교수 -->
 	<select id="selectGradeProfessor" resultMap="gradeResultMap">
 		SELECT * FROM GRADE_TBL WHERE PROFESSOR_NO = #{professorNo}
 	</select>
+	
+	<select id="selectFeedbackProfessor" resultMap="gradeResultMap">
+		SELECT * FROM GRADE_OBJECTION O
+		LEFT JOIN GRADE_TBL G ON
+		(G.STUDENT_NO = O.STUDENT_NO AND G.LECTURE_NO = O.LECTURE_NO AND G.PROFESSOR_NO = #{professorNo})
+		LEFT JOIN FEEDBACK_TBL F ON (F.STUDENT_NO = O.STUDENT_NO AND F.LECTURE_NO = O.LECTURE_NO)
+	</select>
+	
+	<update id="updateGrade">
+		UPDATE GRADE_TBL
+		SET GRADE_SCORE = #{gradeScore}, GRADE_AVG = #{gradeAvg}
+		WHERE STUDENT_NO = #{studentNo} AND LECTURE_NO = #{lectureNo}
+	</update>
 </mapper>

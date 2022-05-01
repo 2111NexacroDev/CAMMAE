@@ -34,9 +34,9 @@
 	</select>
 	
 	<update id="updatePortfolio" parameterType="Portfolio">
-		UPDATE PORTFOLIO_TBL SET PORT_TITLE = #{port_title}, PORT_NAME = #{port_name}, PORT_STUDENT_NO = #{port_student_no}, PORT_COLLEGE = #{port_college}, PORT_STUDENT_NUMBER = #{port_student_number}, 
-		PORT_LICENSE = #{port_license}, PORT_AWARD_HISTORY = #{port_award_history}, PORT_WRITEDATE = #{port_writerDate}, PORT_CONTENT = #{port_content}
-		WHERE PORT_NO = #{port_no}
+		UPDATE PORTFOLIO_TBL SET PORT_TITLE = #{port_title}, PORT_LICENSE = #{port_license}, PORT_LICENSERENAME= #{port_licenseRename}, PORT_LICENSE_FILEPATH = #{port_licenseFilePath}, 
+		PORT_AWARD_HISTORY = #{port_award_history}, PORT_AWARD_HISTORY_RENAME = #{port_award_historyRename}, PORT_AWARD_HISTORY_FILEPATH = #{port_awardFilePath},
+		PORT_CONTENT = #{port_content} WHERE PORT_NO = #{port_no}
 	</update>
 	
 	
@@ -45,11 +45,19 @@
 	</select>
 	
 	<select id="selectprintAdminDetailPort" resultMap="portfolioResultMap">
-		SELECT PORT_NO, PORT_TITLE, PORT_STUDENT_NO,  PORT_NAME, PORT_COLLEGE, PORT_STUDENT_NUMBER, PORT_LICENSE, PORT_AWARD_HISTORY, PORT_WRITEDATE, PORT_CONTENT
+		SELECT PORT_NO, PORT_TITLE, PORT_STUDENT_NO,  PORT_NAME, PORT_COLLEGE, PORT_STUDENT_NUMBER, PORT_LICENSE, PORT_LICENSERENAME , PORT_AWARD_HISTORY, PORT_AWARD_HISTORY_RENAME, PORT_WRITEDATE, PORT_CONTENT
 		FROM PORTFOLIO_TBL WHERE PORT_NO = #{port_no}
 	</select>
 	
 	<select id="selectAllPort" resultMap="portfolioResultMap">
-		SELECT PORT_NO, PORT_TITLE, PORT_NAME, PORT_LICENSE, PORT_AWARD_HISTORY, PORT_WRITEDATE, PORT_CONTENT FROM PORTFOLIO_TBL
+		SELECT PORT_NO, PORT_TITLE, PORT_NAME, PORT_LICENSE, PORT_AWARD_HISTORY, PORT_WRITEDATE, PORT_CONTENT FROM PORTFOLIO_TBL WHERE PORT_STUDENT_NO = #{studentNo}
 	</select>
+	
+	<select id="selectBySt" resultMap = "portfolioResultMap">
+		SELECT * FROM PORTFOLIO_TBL WHERE PORT_STUDENT_NO = #{port_student_no}
+	</select>
+	
+	<delete id="deletePortfolio">
+		DELETE FROM PORTFOLIO_TBL WHERE PORT_NO = #{port_no}
+	</delete>
 </mapper>

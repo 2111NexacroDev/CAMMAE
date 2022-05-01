@@ -9,6 +9,12 @@
 </head>
 <body>
 <h1>포트폴리오 관리</h1>
+
+<c:if test="${empty sessionScope}">
+	<jsp:forward page="/login/loginPage.kh" />
+</c:if>
+	
+<c:if test="${not empty sessionScope}">
 <div class="section">
 						<div class="bbs">
 							<table>
@@ -89,6 +95,6 @@
 						</div>
 					</div>
 
-
+</c:if>
 </body>
 </html>
