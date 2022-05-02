@@ -133,7 +133,7 @@ h3 {
 			</table>
 			<br>
 			<div>
-				<form action="/question/search.kh" method="get">
+				<form action="/question/list.kh" method="get">
 					<select name="searchCondition">
 						<option value="all">전체</option>
 						<option value="professor">담당교수</option>
@@ -147,27 +147,25 @@ h3 {
 			</div>
 			<!-- 페이지 -->
 			<div>
-				<c:if test="${pi.startNavi ==1 }">
-
-					<a href="/question/list?page=1">
-						<button>이전</button>
-					</a>
-
-				</c:if>
-
-
-				<c:if test="${pi.prev}">
+				<c:if test="${pi.startNavi !=1 }">
 
 					<a href="/question/list?page=${pi.startNavi-1}">
 						<button>이전</button>
 					</a>
+
 				</c:if>
 
-
 				<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
-					<c:url var="pagination" value="/question/list">
-						<c:param name="page" value="${p }"></c:param>
-					</c:url>
+					<c:if test="${empty questionSearch.searchValue }">
+						<c:url var="pagination" value="/question/list">
+							<c:param name="page" value="${p }"></c:param>
+						</c:url>
+					</c:if>
+					<c:if test="${not empty questionSearch.searchValue }">
+						<c:url var="pagination" value="/question/list?searchCondition=${questionSearch.searchCondition}&searchValue=${questionSearch.searchValue}">
+							<c:param name="page" value="${p }"></c:param>
+						</c:url>
+					</c:if>
 					<a href="${pagination }">${p }</a>&nbsp;
 			</c:forEach>
 				<c:if test="${pi.next && pi.endNavi > 0}">
