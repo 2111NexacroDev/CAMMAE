@@ -13,23 +13,42 @@
 	<table border="3">
 		
 		<tr>
-			<th>장바구니번호</th>
-			<th>과목코드</th>
+			<th>강의번호</th>
 			<th>학번</th>
 			<th>년도</th>
 			<th>학기</th>
+			<th>교과목명</th>
+			<th>이수구분</th>
+			<th>학점</th>
+			<th>변경여부</th>
+			<th>평점</th>
+			<th>학년</th>
+			<th>이의신청여부</th>
+			<th>학기</th>
+			<th>신청날짜</th>
 			<th>삭제</th>
+			
 		</tr>
-		<c:forEach items="${cList }" var="cart">
+		<c:forEach items="${lList }" var="grade">
 			<tr>
-				<td>${cart.cartNo }</td>
-				<td>${cart.lectureNo }</td>
-				<td>${cart.studentNo }</td>
-				<td>${cart.cartYear }</td>
-				<td>${cart.cartTerm }</td>
-				<td><c:url var="cRemove" value="/cart/remove.kh">
-						<c:param name="cartNo" value="${cart.cartNo }"></c:param>
-					</c:url> <a href="${cRemove }">삭제</a></td>
+				<td>${grade.lectureNo }</td>
+				<td>${grade.studentNo }</td>
+				<td>${grade.gradeYear }</td>
+				<td>${grade.gradeSession }</td>
+				<td>${grade.gradeSubject }</td>
+				<td>${grade.gradeComplete }</td>
+				<td>${grade.lectureGrade }</td>
+				<td>${grade.gradeScore }</td>
+				<td>${grade.gradeAvg }</td>
+				<td>${grade.gradeFeedback }</td>
+				<td>${grade.gradeObjection }</td>
+				<td>${grade.gradeChange }</td>
+				
+			<%-- 	<td>${grade.professorName }</td>
+				<td>${grade.lectureName }</td> --%>
+				<td><c:url var="gRemove" value="/cart/enrollRemove.kh">
+						<c:param name="lectureNo" value="${grade.lectureNo }"></c:param>
+					</c:url> <a href="${gRemove }">삭제</a></td>
 			</tr>
 
 		</c:forEach>

@@ -40,6 +40,7 @@ public class NoticeController {
 			if(!nList.isEmpty()) {
 				mv.addObject("nList", nList);
 				mv.addObject("pi", pi);
+				mv.addObject("menu", "notice");
 				mv.setViewName("notice/noticeList");
 			}else {
 				mv.setViewName("notice/noticeList");

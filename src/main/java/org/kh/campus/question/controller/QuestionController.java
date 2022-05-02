@@ -38,23 +38,29 @@ public class QuestionController {
 	// 게시글 리스트조회
 	@RequestMapping(value = "/question/list", method = RequestMethod.GET)
 	public ModelAndView questionListView(ModelAndView mv,
-			@RequestParam(value = "page", required = false) Integer page) {
+			@RequestParam(value = "page", required = false) Integer page
+			, @ModelAttribute QuestionSearch questionSearch
+			) {
 
 		int currentPage = (page != null) ? page : 1;
 
-		int totalCount = qService.getListCount();
+		int totalCount = qService.getListCount(questionSearch);
 
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
 
 		mv.addObject("pi", pi);
+		pi.setSearchCondition(questionSearch.getSearchCondition());
+		pi.setSearchValue(questionSearch.getSearchValue());
 
 		List<Question> qList = qService.printAllQuestion(pi);
 		try {
 			if (!qList.isEmpty()) {
 				mv.addObject("qList", qList);
+				mv.addObject("questionSearch", questionSearch);
 				mv.setViewName("question/questionList");
 			} else {
 				System.out.println("조회 실패");
+				mv.setViewName("question/questionList");
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());

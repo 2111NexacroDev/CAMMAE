@@ -23,8 +23,10 @@ public class Pagination {
 			endNavi = maxPage;
 			
 		}
+		String searchKey = "";
+		String searchValue = "";
 		pi = new PageInfo(currentPage, questionLimit, 
-				naviLimit, startNavi, endNavi, totalCount, maxPage, prev, next);
+				naviLimit, startNavi, endNavi, totalCount, maxPage, prev, next, searchKey, searchValue);
 		return pi;
 	}
 

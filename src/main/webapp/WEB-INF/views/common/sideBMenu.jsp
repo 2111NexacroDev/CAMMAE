@@ -66,14 +66,13 @@
 <div class="contents_1">
 			<div class="contents_1bar">
 				<div class="contents_1bar_1">
-					<div class="contents_1bar_1_1"><a href="#" style="color:white">&nbsp;&nbsp;취업지원센터</a></div>
+					<div class="contents_1bar_1_1"><a href="#" style="color:white">&nbsp;&nbsp;게시판</a></div>
 					<div class="contents_1bar_1_2"><img src="../../../resources/img/logo2.png" style="width:120px; height:110px;  opacity: 0.4; filter: alpha(opacity=40);"></div>
 				</div>
-				<div class="contents_1bar_2 ${menu eq 'notice' ? 'active' : '' }"> <a href="/notice/list.kh">&nbsp;&nbsp;&nbsp;공지사항</a></div>
-				<div class="contents_1bar_2 ${menu eq 'recruitment' ? 'active' : '' }"><a href="/recruitment/list.kh">&nbsp;&nbsp;&nbsp;채용공고</a></div>
-				<div class="contents_1bar_2"><a href="#">&nbsp;&nbsp;&nbsp;지원현황</a></div>
-				<div class="contents_1bar_2"><a href="#">&nbsp;&nbsp;&nbsp;상담관리</a></div>
-				<div class="contents_1bar_2"><a href="#">&nbsp;&nbsp;&nbsp;포트폴리오 관리</a></div>
+				<div class="contents_1bar_2 ${menu eq 'board' ? 'active' : '' }"> <a href="/notice/list.kh">&nbsp;&nbsp;&nbsp;학과게시판</a></div>
+				<div class="contents_1bar_2 ${menu eq 'recruitment' ? 'active' : '' }"><a href="/recruitment/list.kh">&nbsp;&nbsp;&nbsp;질의응답게시판</a></div>
+				<div class="contents_1bar_2"><a href="#">&nbsp;&nbsp;&nbsp;중고거래게시판</a></div>
+			
 			</div>
 		</div>
 </body>
