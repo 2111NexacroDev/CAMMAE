@@ -61,6 +61,8 @@ public class BoardController {
 				mv.addObject("bList", bList);
 				mv.addObject("pi", pi);
 				mv.setViewName("board/boardList");
+				mv.addObject("menu", "board");
+
 			} else {
 				mv.addObject("msg", "학과게시판 조회 실패");
 				mv.setViewName("common/errorPage");
