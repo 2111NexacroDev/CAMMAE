@@ -99,7 +99,7 @@ h3 {
 
 	<div id="content">
 		<div class="left">
-			<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
+			<jsp:include page="../common/sideBMenu.jsp"></jsp:include>
 		</div>
 		<div class="center">
 			<h3 id="b-title">질의응답 게시판</h3>
