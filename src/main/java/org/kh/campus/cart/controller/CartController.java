@@ -94,9 +94,8 @@ public class CartController {
 	// 수강신청 신청목록 페이지 보여주는곳
 	@RequestMapping(value = "/cart/enrollRegister.kh", method = RequestMethod.GET)
 	public ModelAndView enrollListView(ModelAndView mv) {
-		List<Lecture> lList = cService.printAllenroll();
-		
 		try {
+			List<Lecture> lList = cService.printAllenroll();
 			if (!lList.isEmpty()) {
 				mv.addObject("lList", lList);
 				mv.setViewName("cart/enrollRegister");
@@ -110,14 +109,30 @@ public class CartController {
 		return mv;
 	}
 	
-	// 수강신청 등록 기능
-	@RequestMapping(value = "/cart/lectureEnroll.kh", method = RequestMethod.GET)
-	public ModelAndView enrollListInsert(ModelAndView mv, @RequestParam("lectureNo") int lectureNo) {
-		
+	@RequestMapping(value = "/cart/cartEnroll.kh", method = RequestMethod.GET)
+	public ModelAndView cartListInsert(ModelAndView mv, @RequestParam("lectureNo") int lectureNo) {
 		try {
 			Lecture lecture = lService.printOneLecture(lectureNo);
 			int result = cService.registerEnroll(lecture);
-			
+			if (result > 0) {
+				mv.setViewName("redirect:/cart/myCartList.kh");
+			} else {
+				mv.addObject("msg", "실패했습니다");
+				mv.setViewName("common/errorPage");
+			}
+		} catch (Exception e) {
+			mv.setViewName("redirect:/cart/myCartList.kh");
+		}
+		return mv;
+	}
+	
+	
+	// 수강신청 등록 기능
+	@RequestMapping(value = "/cart/lectureEnroll.kh", method = RequestMethod.GET)
+	public ModelAndView enrollListInsert(ModelAndView mv, @RequestParam("lectureNo") int lectureNo) {
+		try {
+			Lecture lecture = lService.printOneLecture(lectureNo);
+			int result = cService.registerEnroll(lecture);
 			if (result > 0) {
 				mv.setViewName("redirect:/cart/enrollRegister.kh");
 			} else {
@@ -130,6 +145,39 @@ public class CartController {
 		return mv;
 	}
 	
+	
+	@RequestMapping(value = "/cart/enrollList.kh", method = RequestMethod.GET)
+	public ModelAndView enrollMyListView(ModelAndView mv) {
+		List<Lecture> lList = cService.printMyEnroll();
+		try {
+			if (!lList.isEmpty()) {
+				mv.addObject("lList", lList);
+				mv.setViewName("cart/enrollList");
+			} else {
+				System.out.println("실패했습니다.");
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return mv;
+	}
+	
+	@RequestMapping(value = "/cart/enrollRemove.kh", method = RequestMethod.GET)
+	public String lectureRemove(Model model, @RequestParam("lectureNo") int lectureNo) {
+	try {
+		int result = cService.removeEnroll(lectureNo);
+		if(result > 0 ) {
+			return "redirect:/cart/enrollList.kh";
+		} else {
+			model.addAttribute("msg", "수강신청 취소 실패");
+			return "common/errorPage";
+		}
+		
+	} catch (Exception e) {
+		model.addAttribute("msg",e.toString());
+		return "common/errorPage";
+	}
+	}
 	
 	
 	

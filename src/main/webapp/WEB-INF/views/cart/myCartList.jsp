@@ -13,6 +13,7 @@
 	<table border="3">
 		
 		<tr>
+			<th>신청</th>
 			<th>장바구니번호</th>
 			<th>과목코드</th>
 			<th>학번</th>
@@ -22,6 +23,11 @@
 		</tr>
 		<c:forEach items="${cList }" var="cart">
 			<tr>
+				<td>
+				<c:url var="lPick" value="/cart/cartEnroll.kh">
+				<c:param name="lectureNo" value="${cart.lectureNo }"></c:param></c:url>
+					<a href="${lPick }"  >신청하기</a>
+				</td>
 				<td>${cart.cartNo }</td>
 				<td>${cart.lectureNo }</td>
 				<td>${cart.studentNo }</td>
