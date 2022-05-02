@@ -50,6 +50,12 @@ public class ScholarshipServiceImpl implements ScholarshipService {
 		
 	}
 
+	@Override
+	public List<Scholarship> printStuInfo(Scholarship scholarship) {
+		List<Scholarship>sList = sStore.selectStuInfo(sqlSession, scholarship);
+		return sList;
+	}
+
 	
 
 }

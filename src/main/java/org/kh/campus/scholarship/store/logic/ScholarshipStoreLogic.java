@@ -48,4 +48,10 @@ public class ScholarshipStoreLogic implements ScholarshipStore {
 		return result;
 	}
 
+	@Override
+	public List<Scholarship> selectStuInfo(SqlSession sqlSession, Scholarship scholarship) {
+		List<Scholarship>sList = sqlSession.selectList("ScholarshipMapper.selectStuInfo", scholarship);
+		return sList;
+	}
+
 }

@@ -164,7 +164,7 @@ public class PortfolioController {
 
 	@RequestMapping(value = "/portfolio/Detail.kh", method = RequestMethod.GET)
 	public String portDetailView(Model model, @RequestParam("port_no") Integer port_no) {
-		Portfolio portfolio = pService.printOneByNo(port_no);
+		Portfolio portfolio = pService.printDetailPort(port_no);
 		if (portfolio != null) {
 			model.addAttribute("portfolio", portfolio);
 			return "portfolio/portfolioDetailView";

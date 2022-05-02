@@ -31,6 +31,7 @@
 										<th>수상이력첨부</th>
 										<th>작성날짜</th>
 										<th>내용</th>
+										<th>단과대학</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -44,12 +45,13 @@
 											<td class="ta" id="detail" style="text-align:left"><a href="${pDetail}">${portfolio.port_title }</a></td>
 											<td class="ta" id="writer">${portfolio.port_name}</td>
 											<td class="ta" id="stu_number">${portfolio.port_student_no}</td>
-											<td class="ta" id="college">${portfolio.port_college}</td>
+											<td class="ta" id="college">${portfolio.port_college == '1' ? '컴퓨터공학과' : '2' ? '전자전기공학과' : '3' ? '산업디자인학과' : '4' ? '중국어학과' : '5' ? '유비쿼터스학과' : '국어국문학과'}</td>
 											<td class="ta" id="stu_phonenumber">${portfolio.port_student_number}</td>
 											<td class="ta" id="license">${portfolio.port_license}</td>
 											<td class="ta" id="award_history">${portfolio.port_award_history}</td>
 											<td class="ta" id="writeDate">${portfolio.port_writerDate}</td>
-											<td class="ta" id="content">${portfolio.port_content}</td>		
+											<td class="ta" id="content">${portfolio.port_content}</td>	
+											<td class="ta" id="univ_code">${portfolio.port_university_code }</td>	
 										</tr>
 									</c:forEach>
 								</tbody>

@@ -21,6 +21,7 @@
 										<th>수상이력첨부</th>
 										<th>작성날짜</th>
 										
+										
 									</tr>
 								</thead>
 								<tbody>

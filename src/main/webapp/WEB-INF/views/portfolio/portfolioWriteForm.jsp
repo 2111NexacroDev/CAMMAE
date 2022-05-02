@@ -24,6 +24,7 @@
  전화번호 <input type="text" name="port_student_number" value="${loginUser.studentPhonenumber}"><br>
  자격증 첨부 <input type="file" name="uploadFile" value="첨부파일" multiple="multiple"><br>
 수상이력 첨부 <input type="file" name="uploadFile1" value="첨부파일" multiple="multiple"><br>
+단과대학 <input type="text" name="port_university_code" value="${loginUser.departmentName}" /><br>
  내용 <textarea name="port_content"></textarea><br>
  <input type="submit" value="등록">
 </form>

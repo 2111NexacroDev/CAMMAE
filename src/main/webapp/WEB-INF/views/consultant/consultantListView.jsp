@@ -25,6 +25,7 @@
 										<th>상담사</th>
 										<th>상담내용</th>
 										<th>상담현황</th>
+										<th>단과대학</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -38,12 +39,13 @@
 											<td class="ta" id="detail" style="text-align:left"><a href="${cDetail}">${consultant.cons_title }</a></td>
 											<td class="ta" id="writer">${consultant.cons_student_name}</td>
 											<td class="ta" id="stu_number">${consultant.cons_student_number}</td>
-											<td class="ta" id="college">${consultant.cons_college}</td>
+											<td class="ta" id="college">${consultant.cons_college == '1' ? '컴퓨터공학과' : '2' ? '전자전기공학과' : '3' ? '산업디자인학과' : '4' ? '중국어학과' : '5' ? '유비쿼터스학과' : '국어국문학과'}</td>
 											<td class="ta" id="date">${consultant.cons_date}</td>
 											<td class="ta" id="time">${consultant.cons_time}</td>
 											<td class="ta" id="counselor">${consultant.cons_counselor}</td>
 											<td class="ta" id="counselor">${consultant.cons_content}</td>
-											<td class="ta" id="status">${consultant.cons_status == 'Y' ? "상담완료": "상담대기"}</td>		
+											<td class="ta" id="status">${consultant.cons_status == 'Y' ? "상담완료": "상담대기"}</td>	
+											<td class="ta" id="univ_code">${consultant.cons_university_code}</td>	
 										</tr>
 									</c:forEach>
 								</tbody>

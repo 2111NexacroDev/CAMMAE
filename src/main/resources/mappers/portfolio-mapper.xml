@@ -18,18 +18,23 @@
 		<result property="port_content" column="PORT_CONTENT" />
 		<result property="port_licenseFilePath" column = "PORT_LICENSE_FILEPATH" />
 		<result property="port_awardFilePath" column = "PORT_AWARD_HISTORY_FILEPATH" />
+		<result property="port_university_code" column="PORT_UNIVERSITY_CODE" />
 		
 	</resultMap>
 	<insert id="insertPort" parameterType="Portfolio">
-		INSERT INTO PORTFOLIO_TBL VALUES(SEQ_PORT_NO.NEXTVAL,#{port_title}, #{port_name}, #{port_student_no}, #{port_college}, #{port_student_number}, #{port_license},#{port_licenseRename}, #{port_award_history}, #{port_award_historyRename}, DEFAULT, #{port_content}, #{port_licenseFilePath}, #{port_awardFilePath})
+		INSERT INTO PORTFOLIO_TBL VALUES(SEQ_PORT_NO.NEXTVAL,#{port_title}, #{port_name}, #{port_student_no}, #{port_college}, #{port_student_number}, #{port_license},#{port_licenseRename}, #{port_award_history}, #{port_award_historyRename}, DEFAULT, #{port_content}, #{port_licenseFilePath}, #{port_awardFilePath}, #{port_university_code})
 	</insert>
 	
 	<select id="selectAdminAllPort" resultMap="portfolioResultMap">
-		SELECT PORT_NO, PORT_TITLE, PORT_STUDENT_NO,  PORT_NAME, PORT_COLLEGE, PORT_STUDENT_NUMBER, PORT_LICENSE, PORT_AWARD_HISTORY, PORT_WRITEDATE, PORT_CONTENT
+		SELECT PORT_NO, PORT_TITLE, PORT_STUDENT_NO,  PORT_NAME, PORT_COLLEGE, PORT_STUDENT_NUMBER, PORT_LICENSE, PORT_AWARD_HISTORY, PORT_WRITEDATE, PORT_CONTENT, PORT_UNIVERSITY_CODE
 		FROM PORTFOLIO_TBL
 	</select>
 	
 	<select id="selectprintOneByNo" resultMap="portfolioResultMap">
+		SELECT * FROM PORTFOLIO_TBL WHERE PORT_NO = #{port_no}
+	</select>
+	
+	<select id="selectprintDetailPort" resultMap="portfolioResultMap">
 		SELECT * FROM PORTFOLIO_TBL WHERE PORT_NO = #{port_no}
 	</select>
 	
@@ -45,12 +50,12 @@
 	</select>
 	
 	<select id="selectprintAdminDetailPort" resultMap="portfolioResultMap">
-		SELECT PORT_NO, PORT_TITLE, PORT_STUDENT_NO,  PORT_NAME, PORT_COLLEGE, PORT_STUDENT_NUMBER, PORT_LICENSE, PORT_LICENSERENAME , PORT_AWARD_HISTORY, PORT_AWARD_HISTORY_RENAME, PORT_WRITEDATE, PORT_CONTENT
+		SELECT PORT_NO, PORT_TITLE, PORT_STUDENT_NO,  PORT_NAME, PORT_COLLEGE, PORT_STUDENT_NUMBER, PORT_LICENSE, PORT_LICENSERENAME , PORT_AWARD_HISTORY, PORT_AWARD_HISTORY_RENAME, PORT_WRITEDATE, PORT_CONTENT, PORT_UNIVERSITY_CODE
 		FROM PORTFOLIO_TBL WHERE PORT_NO = #{port_no}
 	</select>
 	
 	<select id="selectAllPort" resultMap="portfolioResultMap">
-		SELECT PORT_NO, PORT_TITLE, PORT_NAME, PORT_LICENSE, PORT_AWARD_HISTORY, PORT_WRITEDATE, PORT_CONTENT FROM PORTFOLIO_TBL WHERE PORT_STUDENT_NO = #{studentNo}
+		SELECT PORT_NO, PORT_TITLE, PORT_NAME, PORT_LICENSE, PORT_AWARD_HISTORY, PORT_WRITEDATE, PORT_CONTENT, PORT_UNIVERSITY_CODE FROM PORTFOLIO_TBL WHERE PORT_STUDENT_NO = #{studentNo}
 	</select>
 	
 	<select id="selectBySt" resultMap = "portfolioResultMap">

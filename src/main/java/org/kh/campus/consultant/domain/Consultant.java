@@ -12,6 +12,7 @@ public class Consultant {
 	private String cons_time;
 	private String cons_status;
 	private String cons_counselor;
+	private String cons_university_code;
 	
 	public Consultant() {}
 
@@ -102,6 +103,16 @@ public class Consultant {
 	public void setCons_counselor(String cons_counselor) {
 		this.cons_counselor = cons_counselor;
 	}
+	
+	
+
+	public String getCons_university_code() {
+		return cons_university_code;
+	}
+
+	public void setCons_university_code(String cons_university_code) {
+		this.cons_university_code = cons_university_code;
+	}
 
 	@Override
 	public String toString() {
@@ -109,11 +120,10 @@ public class Consultant {
 				+ cons_student_name + ", cons_student_number=" + cons_student_number + ", cons_title=" + cons_title
 				+ ", cons_college=" + cons_college + ", cons_content=" + cons_content + ", cons_date=" + cons_date
 				+ ", cons_time=" + cons_time + ", cons_status=" + cons_status + ", cons_counselor=" + cons_counselor
-				+ "]";
+				+ ", cons_university_code=" + cons_university_code + "]";
 	}
 
 
-	
 	
 
 }
