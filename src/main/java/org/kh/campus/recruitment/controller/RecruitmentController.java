@@ -27,12 +27,20 @@ public class RecruitmentController {
 	
 	//채용공고 목록 조회
 	@RequestMapping(value="/recruitment/list.kh", method=RequestMethod.GET)
-	public ModelAndView recruitmentListView(ModelAndView mv, @RequestParam(value = "page", required = false)Integer page) {
+	public ModelAndView recruitmentListView(ModelAndView mv
+			, @RequestParam(value = "page", required = false)Integer page
+			, @ModelAttribute RecruitmentSearch recruitmentSearch) {
+		int currentPage = (page != null) ? page : 1;
+		
+		int totalCount = rService.getListCount(recruitmentSearch);
+
+		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
+		
+		mv.addObject("pi",pi);
+		pi.setSearchCondition(recruitmentSearch.getSearchCondition());
+		pi.setSearchValue(recruitmentSearch.getSearchValue());
+		List<Recruitment> rList = rService.printAllRecruitment(pi);
 		try {
-			int currentPage = (page != null) ? page : 1;
-			int totalCount = rService.getListCount();
-			PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
-			List<Recruitment> rList = rService.printAllRecruitment(pi);
 			if(!rList.isEmpty()) {
 				mv.addObject("rList", rList);
 				mv.addObject("pi", pi);

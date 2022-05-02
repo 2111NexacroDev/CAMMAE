@@ -15,7 +15,7 @@ public interface RecruitmentService {
 	public int modifyRecruitment(Recruitment recruitment);//채용공고 수정
 	public int recruitmentCountUpdate(int recruitmentNo);//채용공고 조회수
 	public int removeRecruitment(int recruitmentNo);//채용공고 삭제
-	public int getListCount();
+	public int getListCount(RecruitmentSearch recruitmentSearch);
 
 
 }

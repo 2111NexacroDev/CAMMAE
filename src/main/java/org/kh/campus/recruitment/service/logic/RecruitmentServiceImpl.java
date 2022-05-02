@@ -59,8 +59,8 @@ public class RecruitmentServiceImpl implements RecruitmentService{
 	}
 
 	@Override
-	public int getListCount() {
-		int totalCount = rStore.selectListCount(sqlSession);
+	public int getListCount(RecruitmentSearch recruitmentSearch) {
+		int totalCount = rStore.selectListCount(sqlSession, recruitmentSearch);
 		return totalCount;
 	}
 

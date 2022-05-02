@@ -17,7 +17,7 @@ public interface RecruitmentStore {
 	public int updateRecruitment(Recruitment recruitment, SqlSession sqlSession);
 	public int updateCountRecruitment(int recruitmentNo, SqlSession sqlSession);
 	public int deleteRecruitment(int recruitmentNo, SqlSession sqlSession);
-	public int selectListCount(SqlSession sqlSession);
+	public int selectListCount(SqlSession sqlSession, RecruitmentSearch recruitmentSearch);
 
 
 }

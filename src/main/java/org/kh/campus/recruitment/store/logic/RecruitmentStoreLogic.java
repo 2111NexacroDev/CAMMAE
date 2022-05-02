@@ -55,8 +55,8 @@ public class RecruitmentStoreLogic implements RecruitmentStore{
 	}
 
 	@Override
-	public int selectListCount(SqlSession sqlSession) {
-		int totalCount = sqlSession.selectOne("RecruitmentMapper.selectListCount");
+	public int selectListCount(SqlSession sqlSession, RecruitmentSearch recruitmentSearch) {
+		int totalCount = sqlSession.selectOne("RecruitmentMapper.selectListCount", recruitmentSearch);
 		return totalCount;
 	}
 
