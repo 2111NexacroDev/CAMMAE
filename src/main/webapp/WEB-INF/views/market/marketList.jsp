@@ -150,12 +150,7 @@ h3 {
 		</div>
 	</div>
 		<!-- footer -->
-	<footer>
-		<div class="footer_tit">서울특별시 중구 남대문로 120 대일빌딩 2F, 3F (T:
-			1544-9970) / F: 02-722-0858)</div>
-		<div id="footer_bottom">Copyright © 1998-2022 DI University All
-			Right Reserved</div>
-	</footer>
+<jsp:include page="../common/footer.jsp"></jsp:include>
 
 </body>
 </html>

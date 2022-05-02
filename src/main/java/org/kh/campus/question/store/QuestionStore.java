@@ -25,7 +25,7 @@ public interface QuestionStore {
 	public int updateCount(int questionNo, SqlSession sqlSession);
 	public int deleteQuestion(int questionNo, SqlSession sqlSession);
 	//페이징
-	public int selectListCount(SqlSession sqlSession, QuestionSearch questionSearch);
+	public int selectListCount(SqlSession sqlSession, PageInfo pagiInfo);
 	//댓글
 	public List<QuestionReply> selectAllReply(int questionNo, SqlSession sqlSession);
 	public int insertReply(QuestionReply questionReply, SqlSession sqlSession);

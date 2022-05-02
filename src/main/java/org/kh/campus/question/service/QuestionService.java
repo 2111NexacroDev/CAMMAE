@@ -29,7 +29,7 @@ public interface QuestionService {
 	//게시글 삭제
 	public int removeQuestion(int questionNo);
 	//페이징
-	public int getListCount(QuestionSearch questionSearch);
+	public int getListCount(PageInfo pagiInfo);
 	
 	//댓글
 	

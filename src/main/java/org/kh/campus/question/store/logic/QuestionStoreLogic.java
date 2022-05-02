@@ -79,8 +79,8 @@ public class QuestionStoreLogic implements QuestionStore {
 	}
 	//페이징
 	@Override
-	public int selectListCount(SqlSession sqlSession, QuestionSearch questionSearch) {
-		int totalCount = sqlSession.selectOne("QuestionMapper.selectListCount", questionSearch);
+	public int selectListCount(SqlSession sqlSession, PageInfo pagiInfo) {
+		int totalCount = sqlSession.selectOne("QuestionMapper.selectListCount", pagiInfo);
 		return totalCount;
 	}
 	

@@ -156,13 +156,13 @@ h3 {
 				</c:if>
 
 				<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
-					<c:if test="${empty questionSearch.searchValue }">
+					<c:if test="${empty pagiInfo.searchValue }">
 						<c:url var="pagination" value="/question/list">
 							<c:param name="page" value="${p }"></c:param>
 						</c:url>
 					</c:if>
-					<c:if test="${not empty questionSearch.searchValue }">
-						<c:url var="pagination" value="/question/list?searchCondition=${questionSearch.searchCondition}&searchValue=${questionSearch.searchValue}">
+					<c:if test="${not empty pagiInfo.searchValue }">
+						<c:url var="pagination" value="/question/list?searchCondition=${pagiInfo.searchCondition}&searchValue=${pagiInfo.searchValue}">
 							<c:param name="page" value="${p }"></c:param>
 						</c:url>
 					</c:if>
