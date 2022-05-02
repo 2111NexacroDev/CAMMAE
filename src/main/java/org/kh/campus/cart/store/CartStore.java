@@ -10,15 +10,19 @@ public interface CartStore {
 
 	List<Lecture> selectAllCart(SqlSession sqlSession);
 
+	List<Cart> selectMyCart(SqlSession sqlSession);
+
 	int insertCart(SqlSession sqlSession, int lectureNo);
 
 	int deleteCart(SqlSession sqlSession, int cartNo);
 
-	List<Cart> selectMyCart(SqlSession sqlSession);
-
 	List<Lecture> selectAllEnroll(SqlSession sqlSession);
 
+	List<Lecture> selectMyEnroll(SqlSession sqlSession);
+
 	int insertEnroll(SqlSession sqlSession, Lecture lecture);
+
+	int deleteEnroll(SqlSession sqlSession, int lectureNo);
 
 
 }

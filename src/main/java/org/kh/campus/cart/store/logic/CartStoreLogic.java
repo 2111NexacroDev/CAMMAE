@@ -47,6 +47,18 @@ public class CartStoreLogic implements CartStore {
 		return result;
 	}
 
+	@Override
+	public int deleteEnroll(SqlSession sqlSession, int lectureNo) {
+		int result =  sqlSession.delete("CartMapper.deleteEnroll",lectureNo);
+		return result;
+	}
+
+	@Override
+	public List<Lecture> selectMyEnroll(SqlSession sqlSession) {
+		List<Lecture> lList = sqlSession.selectList("CartMapper.selectMyEnroll");
+		return lList;
+	}
+
 
 
 

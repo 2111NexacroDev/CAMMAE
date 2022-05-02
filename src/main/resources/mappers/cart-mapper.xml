@@ -25,6 +25,20 @@
 		<result property="cartTerm" column="CART_TERM" />
 	</resultMap>
 	
+	<resultMap type="Grade" id="gradeResultMap">
+		<id property="lectureNo" column="LECTURE_NO"/>
+		<result property="studentNo" column="STUDENT_NO"/>
+		<result property="gradeYear" column="GRADE_YEAR"/>
+		<result property="gradeSession" column="GRADE_SESSION"/>
+		<result property="gradeSubject" column="GRADE_SUBJECT"/>
+		<result property="gradeComplete" column="LECTURE_DIVISION"/>
+		<result property="lectureGrade" column="LECTURE_GRADE"/>
+		<result property="gradeAvg" column="GRADE_AVG"/>
+		<result property="gradeFeedback" column="GRADE_FEEDBACK"/>
+		<result property="gradeObjection" column="GRADE_OBJECTION"/>
+		<result property="gradeChange" column="GRADE_CHANGE"/>
+	</resultMap>
+	
 <!--  	<resultMap type="org.kh.campus.cart.domain.Total" id="totalResultMap">
 		<collection property="Lecture" resultMap="lectureResultMap"/>
 		<collection property="Cart" resultMap="cartResultMap"/>
@@ -44,6 +58,9 @@
 	
 	<select id="selectMyCart" resultMap="cartResultMap">
 	SELECT * FROM CART_TBL 
+	<!-- SELECT *
+FROM CART_TBL  JOIN  LECTURE_TBL
+     ON CART_TBL.LECTURE_NO = LECTURE_TBL.LECTURE_NO; -->
 	</select>
  
  	<delete id="deleteCart">
@@ -62,7 +79,38 @@
  	 , 0, 0, 0
  	 , #{lectureDivision}
  	 , #{lectureGrade}
- 	 ,0,0,0,0,0,0,0) 
+ 	 ,0,0,0
+ 	 ,default
+ 	 ,0,0,0) 
  	</insert>
+ 	
+ 	<select id="selectMyEnroll" resultMap="gradeResultMap">
+ 	 <!-- SELECT LECTURE_NO, STUDENT_NO, GRADE_YEAR, GRADE_SESSION, GRADE_SUBJECT
+ 	 , LECTURE_DIVISION, LECTURE_GRADE, GRADE_AVG, GRADE_FEEDBACK
+ 	 , GRADE_OBJECTION, GRADE_CHANGE FROM GRADE_TBL -->
+<!--  	SELECT * FROM LECTURE_TBL L 
+	RIGHT JOIN GRADE_TBL G ON 
+	G.LECTURE_NO = L.LECTURE_NO -->
+	SELECT GRADE_TBL.LECTURE_NO
+	, GRADE_TBL.STUDENT_NO
+	, GRADE_TBL.GRADE_YEAR
+	, GRADE_TBL.GRADE_SESSION
+	, GRADE_TBL.GRADE_SUBJECT
+ 	 , GRADE_TBL.LECTURE_DIVISION
+ 	 , GRADE_TBL.LECTURE_GRADE
+ 	 , GRADE_TBL.GRADE_AVG
+ 	 , GRADE_TBL.GRADE_FEEDBACK
+ 	 , GRADE_TBL.GRADE_OBJECTION
+ 	 , GRADE_TBL.GRADE_CHANGE 
+ 	 , LECTURE_TBL.PROFESSOR_NAME
+ 	 , LECTURE_TBL.LECTURE_NAME
+     FROM GRADE_TBL INNER JOIN LECTURE_TBL
+     ON GRADE_TBL.LECTURE_NO = LECTURE_TBL.LECTURE_NO
+ 	</select>
+ 	
+ 	<delete id="deleteEnroll"> 
+ 	 DELETE FROM GRADE_TBL WHERE LECTURE_NO=#{lectureNo}
+ 	</delete>
+ 	
 
  </mapper>
