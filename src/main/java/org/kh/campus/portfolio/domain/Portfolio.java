@@ -16,7 +16,7 @@ public class Portfolio {
 	private String port_award_historyRename;
 	private String port_award_history;
 	private String port_awardFilePath;
-	
+	private String port_university_code;
 	
 	public Portfolio() {}
 
@@ -161,6 +161,17 @@ public class Portfolio {
 	}
 
 
+	
+	public String getPort_university_code() {
+		return port_university_code;
+	}
+
+
+	public void setPort_university_code(String port_university_code) {
+		this.port_university_code = port_university_code;
+	}
+
+
 	@Override
 	public String toString() {
 		return "Portfolio [port_no=" + port_no + ", port_student_no=" + port_student_no + ", port_title=" + port_title
@@ -168,9 +179,12 @@ public class Portfolio {
 				+ ", port_college=" + port_college + ", port_student_number=" + port_student_number + ", port_license="
 				+ port_license + ", port_licenseRename=" + port_licenseRename + ", port_licenseFilePath="
 				+ port_licenseFilePath + ", port_award_historyRename=" + port_award_historyRename
-				+ ", port_award_history=" + port_award_history + ", port_awardFilePath=" + port_awardFilePath + "]";
+				+ ", port_award_history=" + port_award_history + ", port_awardFilePath=" + port_awardFilePath
+				+ ", port_university_code=" + port_university_code + "]";
 	}
 
+
+	
 	
 	
 	

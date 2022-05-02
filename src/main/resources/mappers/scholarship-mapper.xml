@@ -38,4 +38,9 @@
   	UPDATE SCHOLARSHIP_TBL SET SCHOLARSHIP_STATUS = 'N' 
   	WHERE SCHOLARSHIP_STU_NO = #{scholarship_student_no}
   	</update>
+  	
+  	<select id="selectStuInfo" resultMap="scholarshipResultMap">
+  	SELECT SCHOLARSHIP_NAME, SCHOLARSHIP_STU_NO, SCHOLARSHIP_PHONENUMBER FROM SCHOLARSHIP_TBL 
+  	WHERE SCHOLARSHIP_STU_NO = #{scholarship_student_no}
+  	</select>
   	</mapper>
