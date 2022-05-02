@@ -48,17 +48,7 @@
 	<select id="selectOneRecruitment" resultMap="recruitmentResultMap">
 		SELECT * FROM RECRUITMENT_TBL WHERE RECRUITMENT_NO = #{recruitmentNo}
 	</select>
-	
-	
-	<!-- 검색 -->
-	<select id="selectSearchRecruitment" resultMap="recruitmentResultMap">
-		SELECT * FROM RECRUITMENT_TBL
-		<if test="searchCondition.toString() == 'title'">
-			WHERE RECRUITMENT_TITLE LIKE '%' || #{searchValue} || '%'
-		</if>
-		ORDER BY RECRUITMENT_NO DESC
-	</select>
-	
+		
 	<insert id="insertRecruitment" parameterType="Recruitment">
 		INSERT INTO RECRUITMENT_TBL VALUES(SEQ_RECRUITMENT_NO.NEXTVAL
 		, #{recruitmentTitle}

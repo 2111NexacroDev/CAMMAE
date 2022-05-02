@@ -29,26 +29,25 @@ public class RecruitmentController {
 	@RequestMapping(value="/recruitment/list.kh", method=RequestMethod.GET)
 	public ModelAndView recruitmentListView(ModelAndView mv
 			, @RequestParam(value = "page", required = false)Integer page
-			, @ModelAttribute RecruitmentSearch recruitmentSearch) {
+			, @ModelAttribute PageInfo pageInfo) {
 		int currentPage = (page != null) ? page : 1;
 		
-		int totalCount = rService.getListCount(recruitmentSearch);
+		int totalCount = rService.getListCount(pageInfo);
 
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
 		
 		mv.addObject("pi",pi);
-		pi.setSearchCondition(recruitmentSearch.getSearchCondition());
-		pi.setSearchValue(recruitmentSearch.getSearchValue());
+		pi.setSearchCondition(pageInfo.getSearchCondition());
+		pi.setSearchValue(pageInfo.getSearchValue());
 		List<Recruitment> rList = rService.printAllRecruitment(pi);
 		try {
 			if(!rList.isEmpty()) {
 				mv.addObject("rList", rList);
-				mv.addObject("pi", pi);
+				mv.addObject("pageInfo", pageInfo);
 				mv.addObject("menu", "recruitment");
 				mv.setViewName("recruitment/recruitmentList");
 			}else {
-				mv.addObject("msg","공지사항 조회 실패");
-				mv.setViewName("common/errorPage");
+				mv.setViewName("recruitment/recruitmentList");
 			}
 		}catch(Exception e) {
 			mv.addObject("msg",e.toString());
@@ -76,20 +75,6 @@ public class RecruitmentController {
 		return mv;
 	}
 	
-	//채용공고 검색
-	@RequestMapping(value="/recruitment/search", method=RequestMethod.GET)
-	public ModelAndView RecruitmentSearchList(ModelAndView mv, @ModelAttribute RecruitmentSearch recruitmentSearch) {
-		try {
-			List<Recruitment> searchList = rService.printSearchRecruitment(recruitmentSearch);
-			if(!searchList.isEmpty()) {
-				mv.addObject("rList", searchList);
-				mv.setViewName("recruitment/recruitmentList");
-			}
-		}catch(Exception e) {
-			System.out.println(e.toString());
-		}
-		return mv;
-	}
 	 
 	//채용공고 등록 화면
 	@RequestMapping(value="/recruitment/writeView.kh")

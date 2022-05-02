@@ -116,13 +116,13 @@
 			</c:if>
 			
 			<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
-				<c:if test="${empty recruitmentSearch.searchValue }">
+				<c:if test="${empty pageInfo.searchValue }">
 					<c:url var="pagination" value="/recruitment/list.kh">
 						<c:param name="page" value="${p }"></c:param>
 					</c:url>
 				</c:if>
-				<c:if test="${not empty recruitmentSearch.seqrchValue }">
-					<c:url var="pagination" value="/recruitment/list.kh?searchCondition=${recruitmentSearch.searchCondition }&searchValue=${recruitmentSearch.searchValue }">
+				<c:if test="${not empty pageInfo.searchValue }">
+					<c:url var="pagination" value="/recruitment/list.kh?searchCondition=${pageInfo.searchCondition }&searchValue=${pageInfo.searchValue }">
 						<c:param name="page" value="${p }"></c:param>
 					</c:url>
 				</c:if>
