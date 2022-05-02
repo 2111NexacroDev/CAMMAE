@@ -67,8 +67,8 @@ public class MarketServiceImpl implements MarketService {
 	
 	//페이징
 	@Override
-	public int getListCount() {
-		int totalCount = mStore.selectListCount(sqlSession);
+	public int getListCount(PageInfo pageInfo) {
+		int totalCount = mStore.selectListCount(sqlSession, pageInfo);
 		return totalCount;
 	}
 

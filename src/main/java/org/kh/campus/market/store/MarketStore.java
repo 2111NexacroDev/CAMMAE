@@ -32,7 +32,7 @@ public interface MarketStore {
 	int deleteMarket(int marketNo, SqlSession sqlSession);
 	
 	//페이징
-	int selectListCount(SqlSession sqlSession);
+	int selectListCount(SqlSession sqlSession, PageInfo pageInfo);
 
 
 	//댓글

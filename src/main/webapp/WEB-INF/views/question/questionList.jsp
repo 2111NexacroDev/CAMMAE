@@ -183,7 +183,7 @@ h3 {
 			</div>
 		</div>
 	</div>
-	<br>
+
 	<!-- footer -->
 	<footer>
 		<div class="footer_tit">서울특별시 중구 남대문로 120 대일빌딩 2F, 3F (T:

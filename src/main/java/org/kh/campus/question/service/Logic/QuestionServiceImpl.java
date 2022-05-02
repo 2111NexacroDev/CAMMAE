@@ -29,11 +29,11 @@ public class QuestionServiceImpl implements QuestionService {
 	}
 	
 
-	@Override
-	public List<Question> printSearchQuestion(QuestionSearch questionSearch) {
-		List<Question> searchList = qStore.selectSearchQuestion(questionSearch, sqlSession); 
-		return searchList;
-	}
+	/*
+	 * @Override public List<Question> printSearchQuestion(QuestionSearch
+	 * questionSearch) { List<Question> searchList =
+	 * qStore.selectSearchQuestion(questionSearch, sqlSession); return searchList; }
+	 */
 	
 	@Override
 	public Question printOneQuestion(int questionNo) {
