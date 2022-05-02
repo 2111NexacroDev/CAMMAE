@@ -55,7 +55,7 @@ public class GradeStoreLogic implements GradeStore {
 
 	@Override
 	public int insertFeedBack(Grade grade, SqlSession sqlSession) {
-		int result = sqlSession.insert("");
+		int result = sqlSession.insert("GradeMapper.insertFeedBack", grade);
 		return result;
 	}
 
