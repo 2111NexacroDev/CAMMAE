@@ -69,9 +69,9 @@
 					<div class="contents_1bar_1_1"><a href="#" style="color:white">&nbsp;&nbsp;게시판</a></div>
 					<div class="contents_1bar_1_2"><img src="../../../resources/img/logo2.png" style="width:120px; height:110px;  opacity: 0.4; filter: alpha(opacity=40);"></div>
 				</div>
-				<div class="contents_1bar_2 ${menu eq 'board' ? 'active' : '' }"> <a href="/notice/list.kh">&nbsp;&nbsp;&nbsp;학과게시판</a></div>
-				<div class="contents_1bar_2 ${menu eq 'recruitment' ? 'active' : '' }"><a href="/recruitment/list.kh">&nbsp;&nbsp;&nbsp;질의응답게시판</a></div>
-				<div class="contents_1bar_2"><a href="#">&nbsp;&nbsp;&nbsp;중고거래게시판</a></div>
+				<div class="contents_1bar_2 ${menu eq 'board' ? 'active' : '' }"> <a href="/board/list.kh">&nbsp;&nbsp;&nbsp;학과게시판</a></div>
+				<div class="contents_1bar_2 ${menu eq 'question' ? 'active' : '' }"><a href="/question/list">&nbsp;&nbsp;&nbsp;질의응답게시판</a></div>
+				<div class="contents_1bar_2 ${menu eq 'market' ? 'active' : '' }"><a href="/market/list">&nbsp;&nbsp;&nbsp;중고거래게시판</a></div>
 			
 			</div>
 		</div>

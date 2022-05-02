@@ -99,7 +99,7 @@ h3 {
 
 	<div id="content">
 		<div class="left">
-			<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
+			<jsp:include page="../common/sideBMenu.jsp"></jsp:include>
 		</div>
 		<div class="center">
 			<h3 id="b-title">질의응답 게시판</h3>
@@ -183,7 +183,7 @@ h3 {
 			</div>
 		</div>
 	</div>
-	<br>
+
 	<!-- footer -->
 	<footer>
 		<div class="footer_tit">서울특별시 중구 남대문로 120 대일빌딩 2F, 3F (T:
