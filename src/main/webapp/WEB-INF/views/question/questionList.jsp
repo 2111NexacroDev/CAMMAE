@@ -14,7 +14,7 @@
 }
 
 #line {
-	height: 150px;
+	height: 50px;
 }
 
 .left {
@@ -76,7 +76,8 @@ h3 {
 				</c:if>
 			</div>
 		</div>
-		<!-- local navigation bar -->
+	</div>
+	<!-- local navigation bar -->
 		<div id="lnb">
 			<div class="inner lnb_nav">
 				<h1>
@@ -93,7 +94,6 @@ h3 {
 				</ul>
 			</div>
 		</div>
-	</div>
 
 	<div id="line"></div>
 

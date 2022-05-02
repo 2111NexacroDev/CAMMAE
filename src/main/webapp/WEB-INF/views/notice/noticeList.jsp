@@ -12,7 +12,7 @@
 }
 
  #line {
-	height: 150px;
+	height: 50px;
 } 
 
 .left {
@@ -121,6 +121,7 @@
 				</c:if>
 			</div>
 		</div>
+	</div>
 		<!-- local navigation bar -->
 		<div id="lnb">
 			<div class="inner lnb_nav">
@@ -138,7 +139,6 @@
 				</ul>
 			</div>
 		</div>
-	</div>
 	<div id="line"></div>
 
 	<!-- contents영역 -->
