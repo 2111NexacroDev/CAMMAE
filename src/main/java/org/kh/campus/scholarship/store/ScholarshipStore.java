@@ -14,5 +14,6 @@ public interface ScholarshipStore {
 	List<Scholarship> selectScholarIns(SqlSession sqlSession, String inVar1);
 	int updateScholarAccept(SqlSession sqlSession, Scholarship scholarship);
 	int updateScholarDenine(SqlSession sqlSession, Scholarship scholarship);
+	List<Scholarship> selectStuInfo(SqlSession sqlSession, Scholarship scholarship);
 	
 }

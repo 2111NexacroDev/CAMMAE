@@ -45,6 +45,14 @@ public class Scholarship {
 
 
 
+	public Scholarship(String scholarship_name, int scholarship_student_no, String scholarship_phonenumber) {
+		this.scholarship_name = scholarship_name;
+		this.scholarship_student_no = scholarship_student_no;
+		this.scholarship_phonenumber = scholarship_phonenumber;
+	}
+
+
+
 	public int getScholarship_inno() {
 		return scholarship_inno;
 	}

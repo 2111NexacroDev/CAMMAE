@@ -15,13 +15,14 @@
 		<result property="cons_time" column="CONS_TIME" />
 		<result property="cons_status" column="CONS_STATUS" />
 		<result property="cons_counselor" column="CONS_COUNSELOR" />
+		<result property="cons_university_code" column="CONS_UNIVERSITY_CODE" />
 	</resultMap>
 	<select id="selectListCount" resultType="_int">
 		SELECT COUNT(*) FROM CONSULTANT_TBL 
 	</select>
 	
 	<insert id="insertCons" parameterType="Consultant">
-	 INSERT INTO CONSULTANT_TBL VALUES(SEQ_CONS_NO.NEXTVAL, #{cons_student_no}, #{cons_student_name}, #{cons_student_number},#{cons_title}, #{cons_college},#{cons_content}, #{cons_date}, #{cons_time}, default, #{cons_counselor}  )
+	 INSERT INTO CONSULTANT_TBL VALUES(SEQ_CONS_NO.NEXTVAL, #{cons_student_no}, #{cons_student_name}, #{cons_student_number},#{cons_title}, #{cons_college},#{cons_content}, #{cons_date}, #{cons_time}, default, #{cons_counselor}, #{cons_university_code})
 	</insert>
 	
 	<select id="selectAdminAllCons" resultMap="consultantResultMap">
@@ -41,7 +42,7 @@
 	</select>
 	
 	<select id="selectDetailCons" resultMap="consultantResultMap">
-	 SELECT * FROM CONSULTANT_TBL WHERE CONS_NO = #{cons_student_no}
+	 SELECT * FROM CONSULTANT_TBL WHERE CONS_STUDENT_NO = #{cons_student_no}
 	</select>
 	
 	

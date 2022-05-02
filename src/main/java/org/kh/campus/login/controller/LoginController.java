@@ -44,7 +44,6 @@ public class LoginController {
 			, @RequestParam("user-pwd") String pw
 			, @RequestParam(value = "login_type", required = false) String type) {
 	
-		
 		try {	// 학생
 			if(type.equals("student")) {
 				Student student = new Student();

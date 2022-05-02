@@ -71,6 +71,9 @@ public class ConsultantController {
 		if(result >0) {
 			HttpSession session = request.getSession();
 			int studentNo = ((Student)(session.getAttribute("loginUser"))).getStudentNo();
+			
+		
+	
 			Consultant studentOne = cService.printOneByStNo(studentNo);
 			if(studentOne != null) {
 			model.addAttribute("consultant", studentOne);
