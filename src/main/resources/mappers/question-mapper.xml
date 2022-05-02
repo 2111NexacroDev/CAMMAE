@@ -65,10 +65,8 @@
 			<if test="searchCondition.toString() == 'all'">
 				WHERE QUESTION_CONTENT LIKE '%' || #{searchValue} || '%'
 				OR QUESTION_TITLE LIKE '%' || #{searchValue} || '%'
-				OR
-				QUESTION_WRITER LIKE '%' || #{searchValue} || '%'
-				OR PROFESSOR_NAME
-				LIKE '%' || #{searchValue} || '%'
+				OR QUESTION_WRITER LIKE '%' || #{searchValue} || '%'
+				OR PROFESSOR_NAME LIKE '%' || #{searchValue} || '%'
 				OR LECTURE_NAME LIKE '%' || #{searchValue} || '%'
 			</if>
 			<if test="searchCondition.toString() == 'professor'">
