@@ -27,11 +27,12 @@ public class QuestionStoreLogic implements QuestionStore {
 		return qList;
 	}
 	
-	@Override
-	public List<Question> selectSearchQuestion(QuestionSearch questionSearch, SqlSession sqlSession) {
-		List<Question> qList = sqlSession.selectList("QuestionMapper.selectSearchQuestion", questionSearch);
-		return qList;
-	}
+	/*
+	 * @Override public List<Question> selectSearchQuestion(QuestionSearch
+	 * questionSearch, SqlSession sqlSession) { List<Question> qList =
+	 * sqlSession.selectList("QuestionMapper.selectSearchQuestion", questionSearch);
+	 * return qList; }
+	 */
 	
 	@Override
 	public Question selectOneQuestion(SqlSession sqlSession, int questionNo) {

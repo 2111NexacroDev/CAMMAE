@@ -57,6 +57,7 @@ public class QuestionController {
 			if (!qList.isEmpty()) {
 				mv.addObject("qList", qList);
 				mv.addObject("questionSearch", questionSearch);
+				mv.addObject("menu", "question");
 				mv.setViewName("question/questionList");
 			} else {
 				System.out.println("조회 실패");
@@ -69,20 +70,16 @@ public class QuestionController {
 	}
 
 	// 게시글 검색
-	@RequestMapping(value = "/question/search", method = RequestMethod.GET)
-	public ModelAndView questionSearchList(ModelAndView mv, @ModelAttribute QuestionSearch questionSearch) {
-
-		try {
-			List<Question> searchList = qService.printSearchQuestion(questionSearch);
-			if (!searchList.isEmpty()) {
-				mv.addObject("qList", searchList);
-				mv.setViewName("question/questionList");
-			}
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
-		return mv;
-	}
+	/*
+	 * @RequestMapping(value = "/question/search", method = RequestMethod.GET)
+	 * public ModelAndView questionSearchList(ModelAndView mv, @ModelAttribute
+	 * QuestionSearch questionSearch) {
+	 * 
+	 * try { List<Question> searchList =
+	 * qService.printSearchQuestion(questionSearch); if (!searchList.isEmpty()) {
+	 * mv.addObject("qList", searchList); mv.setViewName("question/questionList"); }
+	 * } catch (Exception e) { System.out.println(e.toString()); } return mv; }
+	 */
 
 	// 게시판 상세페이지 조회
 	@RequestMapping(value = "/question/detail", method = RequestMethod.GET)

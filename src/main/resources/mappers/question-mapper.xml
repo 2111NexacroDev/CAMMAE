@@ -77,7 +77,7 @@
 			ORDER BY QUESTION_NO DESC
 	</select>
 	
-	<select id="selectSearchQuestion" resultMap="questionResultMap">
+<!-- 	<select id="selectSearchQuestion" resultMap="questionResultMap">
 		SELECT * FROM QUESTION_TBL
 		<if test="searchCondition.toString() == 'writer'">
 			WHERE QUESTION_WRITER LIKE '%' || #{searchValue} || '%'
@@ -102,7 +102,7 @@
 			WHERE LECTURE_NAME LIKE '%' || #{searchValue} || '%'		
 		</if>
 		ORDER BY QUESTION_NO DESC
-	</select>
+	</select> -->
 	
 	<select id="selectOneQuestion" resultMap="questionResultMap">
 		SELECT * FROM QUESTION_TBL WHERE QUESTION_NO = #{questionNo}
