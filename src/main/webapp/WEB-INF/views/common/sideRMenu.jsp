@@ -18,7 +18,7 @@
 			.contents_1bar_1{
 				height: 100px;
 				width : 100%;
-				background-color : rgb(30, 57, 50);
+				background-color : rgb(30, 57, 50); 
 			}
 				.contents_1bar_1_1{
 					height: 100px;
@@ -35,7 +35,8 @@
 			.contents_1bar_2{
 				height: 60px;
 				width: 100%;
-				background-color : rgb(231, 232, 226);
+				/* background-color : rgb(231, 232, 226); */ 
+				background-color : rgb(241, 241, 241);
 				border-bottom: solid 1px gray;
 				font-size : 20px;
 				line-height: 60px;
@@ -75,6 +76,12 @@
 </style>
 <title>Insert title here</title>
 </head>
+<script src="//code.jquery.com/jquery-latest.min.js"></script>
+<script>
+	function change_color(){
+		$("#menu").css("background-color", "rgb(231, 232, 226)").css("color","rgb(30, 57, 50)");		
+	}
+</script>
 <body>
 <div class="contents_1">
 			<div class="contents_1bar">
@@ -82,8 +89,8 @@
 					<div class="contents_1bar_1_1"><a href="#" style="color:white">&nbsp;&nbsp;취업지원센터</a></div>
 					<div class="contents_1bar_1_2"><img src="../../../resources/img/logo2.png" style="width:120px; height:110px;  opacity: 0.4; filter: alpha(opacity=40);"></div>
 				</div>
-				<div class="contents_1bar_2"><a href="#" style="color:rgb(0, 74, 38)">&nbsp;&nbsp;&nbsp;공지사항</a></div>
-				<div class="contents_1bar_3"><a href="#" style="color:black">&nbsp;&nbsp;&nbsp;채용공고</a></div>
+				<div class="contents_1bar_2"> <a href="/notice/list.kh">&nbsp;&nbsp;&nbsp;공지사항</a></div>
+				<div class="contents_1bar_3" id="menu" onclick="change_color()"><a href="/recruitment/list.kh" style="color:black">&nbsp;&nbsp;&nbsp;채용공고</a></div>
 				<div class="contents_1bar_4"><a href="#" style="color:black">&nbsp;&nbsp;&nbsp;지원현황</a></div>
 				<div class="contents_1bar_5"><a href="#" style="color:black">&nbsp;&nbsp;&nbsp;상담관리</a></div>
 				<div class="contents_1bar_6"><a href="#" style="color:black">&nbsp;&nbsp;&nbsp;포트폴리오 관리</a></div>
