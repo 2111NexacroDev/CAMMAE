@@ -36,6 +36,7 @@ public class RecruitmentController {
 			if(!rList.isEmpty()) {
 				mv.addObject("rList", rList);
 				mv.addObject("pi", pi);
+				mv.addObject("menu", "recruitment");
 				mv.setViewName("recruitment/recruitmentList");
 			}else {
 				mv.addObject("msg","공지사항 조회 실패");
