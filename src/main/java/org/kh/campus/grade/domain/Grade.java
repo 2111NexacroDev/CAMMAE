@@ -30,6 +30,13 @@ public class Grade {
 	
 	
 
+	public Grade(String feedbackContent, int lectureNo, int studentNo) {
+		super();
+		this.lectureNo = lectureNo;
+		this.studentNo = studentNo;
+		this.feedbackContent = feedbackContent;
+	}
+
 	public Grade(int lectureNo, int studentNo, String objectionContent) {
 		super();
 		this.lectureNo = lectureNo;
