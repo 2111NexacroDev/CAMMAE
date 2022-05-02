@@ -19,6 +19,7 @@ import org.kh.campus.board.domain.University;
 import org.kh.campus.board.service.BoardService;
 import org.kh.campus.consultant.domain.ConsultantReply;
 import org.kh.campus.question.domain.QuestionReply;
+import org.kh.campus.student.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,10 +42,15 @@ public class BoardController {
 
 	// 게시판 목록 조회
 	@RequestMapping(value = "/board/list.kh", method = RequestMethod.GET)
-	public ModelAndView boardListView(ModelAndView mv, @RequestParam(value = "page", required = false) Integer page) {
+	public ModelAndView boardListView(ModelAndView mv, @RequestParam(value = "page", required = false) Integer page
+			,HttpSession session, @RequestParam(value = "universityCode", required = false) Integer universityCode) {
 
-		int universityCode = 0001;
+		int universityCodeStd = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
+		System.out.println(universityCodeStd +"test11");
+		System.out.println(universityCodeStd +"test11");
+		System.out.println(universityCodeStd +"test11");
 		
+		universityCode = (universityCode != null) ? universityCode : universityCodeStd;
 		int currentPage = (page != null) ? page : 1;
 		int totalCount = service.getListCount();
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
@@ -67,9 +73,17 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/board/unlist.kh", method = RequestMethod.GET)
-	public ModelAndView boarUnList(ModelAndView mv) {
+	public ModelAndView boarUnList(ModelAndView mv,
+			HttpSession session ) {
 		
 		try {
+			String login = session.getAttribute("login").toString();
+			System.out.println(login);
+			System.out.println(login);
+			System.out.println(login);
+			if (login.contentEquals("std") || login.contentEquals("prf")) {
+				mv.setViewName("redirect:/board/list.kh");
+			} else {
 			List<University> uList = service.printAllUniversity();
 			if (!uList.isEmpty()) {
 				mv.addObject("uList", uList);
@@ -77,6 +91,7 @@ public class BoardController {
 			} else {
 				mv.addObject("msg", "학과게시판 조회 실패");
 				mv.setViewName("common/errorPage");
+			}
 			}
 		} catch (Exception e) {
 			mv.addObject("msg", e.toString());

@@ -68,8 +68,8 @@
                 </div>
                 
                 <div id="submenu2">
-                    <div id="submenu2_1"><a href="/board/list.kh" style="color:white">학과게시판</a></div>
-                    <div id="submenu2_2"><a href="/board/list.kh"><span class="material-icons" style="font-size:50px; color: rgba(255, 255, 255, 0.5);">school</span></a></div>
+                    <div id="submenu2_1"><a href="/board/unlist.kh" style="color:white">학과게시판</a></div>
+                    <div id="submenu2_2"><a href="/board/unlist.kh"><span class="material-icons" style="font-size:50px; color: rgba(255, 255, 255, 0.5);">school</span></a></div>
                 </div>
 
                 <div id="submenu3">

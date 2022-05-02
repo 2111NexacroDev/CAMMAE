@@ -17,6 +17,7 @@
 		<result property="gradeObjection" column="GRADE_OBJECTION"/>
 		<result property="gradeChange" column="GRADE_CHANGE"/>
 		<result property="objectionContent" column="OBJECTION_CONTENT"/>
+		<result property="feedbackContent" column="FEEDBACK_CONTENT"/>
 	</resultMap>
 	
 	<!-- 학생 -->
@@ -57,4 +58,16 @@
 		SET GRADE_SCORE = #{gradeScore}, GRADE_AVG = #{gradeAvg}
 		WHERE STUDENT_NO = #{studentNo} AND LECTURE_NO = #{lectureNo}
 	</update>
+
+	<insert id="insertFeedBack">
+		MERGE INTO FEEDBACK_TBL
+		USING DUAL ON
+		(STUDENT_NO = #{studentNo} AND LECTURE_NO = #{lectureNo})
+		WHEN MATCHED THEN
+		UPDATE SET
+		FEEDBACK_CONTENT = #{feedbackContent}
+		WHEN NOT MATCHED THEN
+		INSERT VALUES
+		( #{lectureNo} , #{studentNo} , #{feedbackContent} , DEFAULT)
+	</insert>
 </mapper>

@@ -64,10 +64,6 @@ public class GradeController {
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
-		System.out.println(dsGet(stdObj, 0, "lectureNo"));
-		System.out.println(dsGet(stdObj, 0, "lectureNo").toString());
-		System.out.println(Integer.parseInt(dsGet(stdObj, 0, "lectureNo")));
-		
 		int lectureNo = Integer.parseInt(dsGet(stdObj, 0, "lectureNo"));
 		String objectionContent = dsGet(stdObj, 0, "objectionContent");
 		int studentNo = 0;
@@ -142,8 +138,23 @@ public class GradeController {
 	}
 	
 	// 교수 피드백 등록 수정 삭제
-	public NexacroResult changeFeedbackProfessor() {
+	@RequestMapping(value="/grade/fdupdate.kh", method=RequestMethod.POST)
+	public NexacroResult changeFeedbackProfessor(
+			@ParamDataSet(name="in_fdG") DataSet inFb) throws Exception {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
+
+		for(int i = 0; i < inFb.getRowCount(); i++) {
+			String feedbackContent = dsGet(inFb, i, "feedbackContent");
+			int studentNo 	 = Integer.parseInt(dsGet(inFb, i, "studentNo"));
+			int lectureNo = Integer.parseInt(dsGet(inFb, i, "lectureNo"));
+			Grade grade = new Grade(feedbackContent, lectureNo, studentNo);
+			gService.registerFeedBack(grade);
+		}
+		
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
 		
 		return result;
 	}

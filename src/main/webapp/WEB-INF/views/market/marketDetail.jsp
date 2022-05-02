@@ -41,7 +41,7 @@ h3 {
 }
 
 /* 게시물 이미지 크기*/
- .content img{
+    .content img{
 		max-width: 100%;
 		max-height: 200px; 
 	}
@@ -106,7 +106,7 @@ h3 {
 				판매가격  ${market.marketPrice } 원
 			</div>
 			<div>
-				<button class="btn">판매자와 채팅하기</button>
+				<button class="btn" onclick="chatOpen();">판매자와 채팅하기</button>
 			</div>
 
 			<div class="content" style="padding: 10px;">
@@ -132,7 +132,12 @@ h3 {
 			</div>
 		</div>
 	</div>
-	
+	<script>
+	function chatOpen(){
+		 window.open("#", "marketChat", "width=400, height=600, left=100, top=50"); 
+		
+	}
+	</script>
 	
 	<!-- 댓글동작  -->
 	<script>

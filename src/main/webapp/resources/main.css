@@ -20,7 +20,8 @@ a{
 position: relative;
     height: 60px;
     border-bottom: 1px solid rgb(16, 65, 44);
-    background: rgb(16, 65, 44);
+    background-color : rgb(30, 57, 50);
+
     
 }
 .inner {

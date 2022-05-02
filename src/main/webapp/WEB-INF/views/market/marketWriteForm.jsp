@@ -69,12 +69,15 @@ h3 {
 						placeholder="제목을 입력하세요" style="border: none; padding: 10px;">
 				</div>
 				<hr style="width: 585px; text-align: center;">
-				
+
 				<div>
-					상품명 &emsp;<input type="text" size="35" name="marketGoods" placeholder="상품명을 입력해주세요" style="border: none; padding: 10px;">
+					상품명 &emsp;<input type="text" size="35" name="marketGoods"
+						placeholder="상품명을 입력해주세요" style="border: none; padding: 10px;">
 				</div>
 				<div>
-					판매가격  <input type="text" size="35" name="marketPrice" placeholder="가격을 입력해주세요" style="border: none; padding: 10px;"> 원
+					판매가격 <input type="text" size="35" name="marketPrice"
+						placeholder="가격을 입력해주세요" style="border: none; padding: 10px;">
+					원
 				</div>
 
 				<div>
@@ -95,22 +98,23 @@ h3 {
 	<!-- 	<div class="right">3</div> -->
 
 	<script>
-	CKEDITOR.replace('marketContent',
-			{filebrowserUploadUrl:'/market/imageUpload.kh'
-			});
-			
-			CKEDITOR.on('dialogDefinition', function (ev) {
-	            var dialogName = ev.data.name;
-	            var dialog = ev.data.definition.dialog;
-	            var dialogDefinition = ev.data.definition;
-	            if (dialogName == 'image') {
-	                dialog.on('show', function (obj) {
-	                    this.selectPage('Upload'); //업로드텝으로 시작
-	                });
-	                dialogDefinition.removeContents('Link'); // 링크탭 제거
-	            }
-	        });
-			
+		CKEDITOR.replace('marketContent', {
+			filebrowserUploadUrl : '/market/imageUpload.kh'
+		});
+
+		CKEDITOR.on('dialogDefinition', function(ev) {
+			var dialogName = ev.data.name;
+			var dialog = ev.data.definition.dialog;
+			var dialogDefinition = ev.data.definition;
+			if (dialogName == 'image') {
+				dialog.on('show', function(obj) {
+					this.selectPage('Upload'); //업로드텝으로 시작
+				});
+				dialogDefinition.removeContents('Link'); // 링크탭 제거
+			}
+		});
+
+
 	</script>
 
 
