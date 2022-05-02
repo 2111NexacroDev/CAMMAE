@@ -70,7 +70,7 @@
 			<th><input id="allCheck" type="checkbox" name="allCheck"></th>
 			<th>번호</th>
 			<th>제목</th>
-			<th>작성자</th>
+			<th>지원자</th>
 			<th>지원일</th>
 			<th>파일이름</th>
 		</tr>
