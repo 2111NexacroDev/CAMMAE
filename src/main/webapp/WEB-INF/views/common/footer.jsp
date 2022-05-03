@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
- <link rel="stylesheet" href="/resources/menuBar.css">
+ <link rel="stylesheet" href="/resources/footer.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <title>Insert title here</title>
 </head>

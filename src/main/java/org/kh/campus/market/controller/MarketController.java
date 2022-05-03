@@ -54,11 +54,13 @@ public class MarketController {
 
 		int totalCount = mService.getListCount(pageInfo);
 
-		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
+		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount, pageInfo.getSearchCondition(), pageInfo.getSearchValue());
 
 		mv.addObject("pi", pi);
-		pi.setSearchCondition(pageInfo.getSearchCondition());
-		pi.setSearchValue(pageInfo.getSearchValue());
+		/*
+		 * pi.setSearchCondition(pageInfo.getSearchCondition());
+		 * pi.setSearchValue(pageInfo.getSearchValue());
+		 */
 
 		
 		List<Market> mList = mService.printAllMarket(pi);

@@ -1,7 +1,7 @@
 package org.kh.campus.market.domain;
 
 public class Pagination {
-	public static PageInfo getPageInfo(int currentPage, int totalCount) {
+	public static PageInfo getPageInfo(int currentPage, int totalCount ,String searchCondition, String searchValue) {
 		PageInfo pi = null;
 		
 		int marketLimit = 5;
@@ -23,8 +23,6 @@ public class Pagination {
 			endNavi = maxPage;
 			
 		}
-		String searchCondition = "";
-		String searchValue = "";
 		pi = new PageInfo(currentPage, marketLimit, 
 				naviLimit, startNavi, endNavi, totalCount, maxPage, prev, next, searchCondition, searchValue);
 		return pi;

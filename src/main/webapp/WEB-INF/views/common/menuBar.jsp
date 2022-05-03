@@ -33,7 +33,7 @@
             <div class="inner lnb_nav">
                 <h1>
                     <img src="/resources/img/logo.png" style="width:80px; height:80px; " >
-                    <a href="main.kh">  
+                    <a href="/main.kh">  
                     <span id="lnb_title"> 대일대학교</span></a>
                     <span id="lnb_subtitle">DAILE UNIVERSITY</span>
                 </h1>
