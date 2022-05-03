@@ -6,178 +6,79 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-</head>
+<link rel="stylesheet" href="/resources/menuBar.css">
 <style>
-html, body, span, li, a, div, ul {
-    margin: 0;
-    padding: 0;
+#contents {
+	height: 783px;
+	width: 100%
 }
 
-body{
-    width: 100%;
-    height: 100%;
-}
-a{
-    text-decoration: none;
-}
-
-#header{
-position: relative;
-    height: 60px;
-    border-bottom: 1px solid rgb(16, 65, 44);
-    background: rgb(16, 65, 44);
-
-}
-.inner {
-    /* margin: 0 auto; */
-    width: 1200px;
-    height: 60px;
-    
-  
-}
-
-.btn_gnb_home{
-    float: right;
-    margin-top: 20px;
-    margin-right: -30px;
-    /* margin-left: 1050px; */
-    text-decoration: none;
-    color: white;
-}
-
-.btn_gnb_login{
-    float:right;
-    margin-top: 20px;
-    margin-right: -130px;
-    text-decoration: none;
-    color: white;
-}
-
-h1 {
-    margin-top: 30px;
-    margin-left: 180px;
-    width: 320px; 
- }   
-
-.lnb_nav_dep1 li{
-    float: left;
-    margin-top: -10px
-}
-
-
-#lnb_title{
-    margin-left: 20px;
-}
-
-#lnb_subtitle{
-    display: flex;
-    font-size: 14px;
-    margin-left: 115px;
-    margin-top: -40px;
-    color: rgb(0, 74, 38);
-   
-   
-}
-
-h1 a {
-    text-align: left;
-    /* display: block; */
-    /* margin-top: 20px; */
-    width: 220px;
-   
-    text-decoration: none;
-    position: absolute;
-    color: rgb(0, 74, 38);
-   
-}
-
-.lnb_nav_dep1 {
-    display: flex;
-    margin-top: -60px;
-    margin-left: 490px;
-    width: 1200px;
-}
-
-dl, ul, ol, menu, li {
-    list-style: none;
-}
-
- .lnb_nav_dep1 li {
-    float: left;
+ #line {
+	height: 50px;
 } 
-.lnb_nav_dep1 li a:hover{
-    color: rgb(0, 74, 38);
-}
-.btn_lnb_dep1 {
-    display: inline-block;
-    margin: 0 70px;
-    font-size: 20px;
-    font-weight: 600;
-    text-decoration: none;
-    color: #1d1d1d;
-    
+
+.left {
+	height: inherit;
+	width: 15%;
+	float: left;
+	width: 15%;
 }
 
-#content_box{
-    margin-top: 130px;
-    width: 100%;
-    height: 380px;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+
+.bbs {
+	height: inherit;
+	width: 50%;
+	float: left;
+	margin-left: 200px;
 }
 </style>
+
+</head>
+
+
 <body>
 	   
-	 <div id="header">
-        <!-- 로그인, 회원가입 부분 -->
-        <!-- gnb = global navigation bar  -->
-        <div id="gnb">   
-            <div class="inner">
-            
-                <a href="/main.kh" class="btn_gnb_home">
-                 
-                    HOME
-                </a>
-                <c:if test="${empty sessionScope}">
-	                <a href="/login/loginPage.kh" class="btn_gnb_login">
-	                 
-	                    LOGIN
-	                </a>
-              	</c:if>
-              	<c:if test="${not empty sessionScope}">
-              		<a href="/login/logout.kh" class="btn_gnb_login">
+	<div id="header">
+			<!-- 로그인, 회원가입 부분 -->
+			<!-- gnb = global navigation bar  -->
+			<div id="gnb">
+				<div class="inner">
 
-	                    LOGOUT
-	                </a>
-	           </c:if>
-            </div>
-        </div>  
-        <!-- local navigation bar -->
-        <div id="lnb">
-            <div class="inner lnb_nav">
-                <h1>
-                    <img src="/resources/img/logo.png" style="width:80px; height:80px; " >
-                    <a href="main.kh">  
-                    <span id="lnb_title"> 대일대학교</span></a>
-                    <span id="lnb_subtitle">DAILE UNIVERSITY</span>
-                </h1>
-                <ul class="lnb_nav_dep1">
-                    <li><a href="/board/list.kh" class="btn_lnb_dep1">게시판</a></li>
-                    <li><a href="#" class="btn_lnb_dep1">수강신청</a></li>
-                    <li><a href="#" class="btn_lnb_dep1">캠퍼스매니저</a></li>
-                    <li><a href="/notice/list.kh" class="btn_lnb_dep1">취업지원센터</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-	<div id="content_box">
-		<div class="notice_page_title">
-			<h2 class="tit_page">공지사항 관리</h2>
+					<a href="/main.kh" class="btn_gnb_home"> HOME </a>
+					<c:if test="${empty sessionScope}">
+						<a href="/login/loginPage.kh" class="btn_gnb_login"> LOGIN </a>
+					</c:if>
+					<c:if test="${not empty sessionScope}">
+						<a href="/login/logout.kh" class="btn_gnb_login"> LOGOUT </a>
+					</c:if>
+				</div>
+			</div>
+		</div>
+		<!-- local navigation bar -->
+		<div id="lnb">
+			<div class="inner lnb_nav">
+				<h1>
+					<img src="../../../resources/img/logo.png"
+						style="width: 80px; height: 80px;"> <a href="/main.kh">
+						<span id="lnb_title"> 대일대학교</span>
+					</a> <span id="lnb_subtitle">DAILE UNIVERSITY</span>
+				</h1>
+				<ul class="lnb_nav_dep1">
+					<li><a href="/board/list.kh" class="btn_lnb_dep1">게시판</a></li>
+					<li><a href="#" class="btn_lnb_dep1">수강신청</a></li>
+					<li><a href="#" class="btn_lnb_dep1">캠퍼스매니저</a></li>
+					<li><a href="/notice/list.kh" class="btn_lnb_dep1">취업지원센터</a></li>
+				</ul>
+			</div>
+		</div>
+	<div id="line"></div>
+	<div id="contents">
+		<div class="left">
+			<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
 
 		</div>
-		<div class="section">
 			<div class="bbs">
+				<h2 align="left" style="color: rgb(0, 74, 38)">포트폴리오</h2>
 				<form action="/portfolio/modify.kh" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="port_no" value="${portfolio.port_no}" />
 					<input type="hidden" name="port_licenseRename" value="${portfolio.port_licenseRename}">
@@ -210,7 +111,6 @@ dl, ul, ol, menu, li {
 					</div>
 				</form>
 			</div>
-		</div>
 	</div>
 
 </body>

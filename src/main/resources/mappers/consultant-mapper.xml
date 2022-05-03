@@ -37,20 +37,41 @@
 	 SELECT * FROM CONSULTANT_TBL WHERE CONS_STUDENT_NO = #{cons_student_no}
 	</select>
 	
-	<select id="printByStNo"  resultMap="consultantResultMap">
-	 SELECT * FROM CONSULTANT_TBL WHERE	CONS_STUDENT_NO=  #{studentNo}
+	<select id="printByStNo" parameterType="Consultant" resultMap="consultantResultMap">
+	 SELECT * FROM CONSULTANT_TBL WHERE	CONS_STUDENT_NO= #{studentNo} AND CONS_NO = (SELECT MAX(CONS_NO) FROM CONSULTANT_TBL WHERE cons_student_no = #{studentNo})
 	</select>
 	
-	<select id="selectDetailCons" resultMap="consultantResultMap">
-	 SELECT * FROM CONSULTANT_TBL WHERE CONS_STUDENT_NO = #{cons_student_no}
+	<select id="selectDetailCons"  parameterType="hashmap" resultMap="consultantResultMap">
+	 SELECT * FROM CONSULTANT_TBL WHERE CONS_STUDENT_NO = #{cons_student_no} AND CONS_NO=#{cons_no}
 	</select>
-	
 	
 	<update id="updateStatus">
 	 UPDATE CONSULTANT_TBL SET CONS_STATUS = 'Y' 
 	 WHERE CONS_NO = #{cons_no}
 	</update>
 	
+	<select id="deleteConsultant" resultMap="consultantResultMap">
+	 DELETE FROM CONSULTANT_TBL  WHERE CONS_NO = #{cons_no}
+	</select>
+	
+	<resultMap type="Manager" id="managerResultMap">
+		<id property="managerNo" column="MANAGER_NO"/>
+		<result property="managerName" column="MANAGER_NAME"/>
+		<result property="managerBirth" column="MANAGER_BIRTH"/>
+		<result property="managerAddress" column="MANAGER_ADDRESS"/>
+		<result property="managerPhonenumber" column="MANAGER_PHONENUMBER"/>
+		<result property="managerEmail" column="MANAGER_EMAIL"/>
+		<result property="managerPassword" column="MANAGER_PASSWORD"/>
+		<result property="managerTeam" column="MANAGER_TEAM"/>
+	</resultMap>
+	
+	
+	<select id="selectAllManager" resultMap="managerResultMap">
+	 SELECT * FROM MANAGER_TBL
+	</select>
+	
+
+
 	<resultMap type="ConsultantReply" id="ConsultantReplyResultMap">
 		<id property="cons_reply_no" column="CONS_REPLY_NO"></id>
 		<result property="cons_no" column="CONS_NO" />
@@ -64,6 +85,10 @@
 		
 		<select id="selectAllAdminReply" resultMap="ConsultantReplyResultMap">
 			SELECT * FROM CONSULTANT_REPLY_TBL WHERE CONS_NO = #{cons_no} ORDER BY CONS_REPLY_NO DESC 
+		</select>
+		
+		<select id="selectReplyCount" resultType="_int">
+			SELECT COUNT(*) FROM CONSULTANT_REPLY_TBL WHERE CONS_NO = #{cons_no}
 		</select>
 </mapper>
 

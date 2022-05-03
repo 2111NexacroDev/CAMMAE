@@ -1,5 +1,6 @@
 package org.kh.campus.consultant.store.logic;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -27,8 +28,8 @@ public class ConsultantStoreLogic implements ConsultantStore {
 	}
 
 	@Override
-	public Consultant selectDetailCons(SqlSession sqlSession, int cons_no) {
-		Consultant consultant = sqlSession.selectOne("ConsultantMapper.selectDetailCons", cons_no);
+	public Consultant selectDetailCons(SqlSession sqlSession, HashMap<String, Integer>map) {
+		Consultant consultant = sqlSession.selectOne("ConsultantMapper.selectDetailCons", map);
 		return consultant;
 	}
 
@@ -73,9 +74,27 @@ public class ConsultantStoreLogic implements ConsultantStore {
 	}
 
 	@Override
-	public Consultant printByStNo(SqlSession sqlSession, int cons_student_no) {
-		Consultant consultant = sqlSession.selectOne("ConsultantMapper.printByStNo", cons_student_no);
+	public Consultant printByStNo(SqlSession sqlSession, int studentNo) {
+		Consultant consultant = sqlSession.selectOne("ConsultantMapper.printByStNo", studentNo);
 		return consultant;
+	}
+
+	@Override
+	public List<Manager> selectAllManager(SqlSession sqlSession) {
+		List<Manager>mList = sqlSession.selectList("ConsultantMapper.selectAllManager");
+		return mList;
+	}
+
+	@Override
+	public int selectReplyCount(SqlSession sqlSession, int cons_no) {
+		int result = sqlSession.selectOne("ConsultantMapper.selectReplyCount", cons_no);
+		return result;
+	}
+
+	@Override
+	public int deleteConsultant(SqlSession sqlSession, int cons_no) {
+		int result = sqlSession.delete("ConsultantMapper.deleteConsultant", cons_no);
+		return result;
 	}
 
 	

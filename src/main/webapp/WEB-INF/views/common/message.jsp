@@ -5,12 +5,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>에러페이지</title>
-<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+<title>Insert title here</title>
 </head>
 <body>
-	<h1>${msg }</h1>
-	
-	
+
+
+	<script>
+		var message = "<c:out value='${message}'/>";
+		var url = "<c:out value='${url}'/>";
+		alert(message);
+		location.href = url; 
+	</script>
 </body>
 </html>
