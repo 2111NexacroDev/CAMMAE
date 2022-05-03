@@ -1,5 +1,6 @@
 package org.kh.campus.consultant.service.logic;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -32,8 +33,8 @@ public class ConsultantServiceImpl implements ConsultantService {
 	}
 
 	@Override
-	public Consultant printDetailCons(int cons_no) {
-		Consultant consultant = cStore.selectDetailCons(sqlSession, cons_no);
+	public Consultant printDetailCons(HashMap<String, Integer> map) {
+		Consultant consultant = cStore.selectDetailCons(sqlSession, map);
 		return consultant;
 	}
 
@@ -75,10 +76,29 @@ public class ConsultantServiceImpl implements ConsultantService {
 		return result;
 	}
 
+	
+	  @Override public Consultant printOneByStNo(int studentNo) { 
+		  Consultant consultant = cStore.printByStNo(sqlSession, studentNo); 
+		  return consultant; 
+	  }
+	 
+
 	@Override
-	public Consultant printOneByStNo(int cons_student_no) {
-		Consultant consultant = cStore.printByStNo(sqlSession, cons_student_no);
-		return consultant;
+	public List<Manager> printAllManager() {
+		List<Manager>mList = cStore.selectAllManager(sqlSession);
+		return mList;
+	}
+
+	@Override
+	public int countReply(int cons_no) {
+		int result = cStore.selectReplyCount(sqlSession, cons_no);
+		return result;
+	}
+
+	@Override
+	public int printByNo(int cons_no) {
+		int result = cStore.deleteConsultant(sqlSession, cons_no);
+		return result;
 	}
 
 

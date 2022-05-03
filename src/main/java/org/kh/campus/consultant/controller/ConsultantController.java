@@ -1,6 +1,7 @@
 package org.kh.campus.consultant.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -71,10 +72,8 @@ public class ConsultantController {
 		if(result >0) {
 			HttpSession session = request.getSession();
 			int studentNo = ((Student)(session.getAttribute("loginUser"))).getStudentNo();
-			
 		
-	
-			Consultant studentOne = cService.printOneByStNo(studentNo);
+		Consultant studentOne = cService.printOneByStNo(studentNo);
 			if(studentOne != null) {
 			model.addAttribute("consultant", studentOne);
 			return "redirect:/consultant/list.kh";	
@@ -91,8 +90,11 @@ public class ConsultantController {
 	}
 	
 	@RequestMapping(value="/consultant/Detail.kh", method=RequestMethod.GET)
-	public String consultantDetailView(Model model, @RequestParam("cons_student_no")int cons_no) {
-		Consultant consultant = cService.printDetailCons(cons_no);
+	public String consultantDetailView(Model model, @RequestParam("cons_student_no")int cons_student_no, @RequestParam("cons_no") int cons_no) {
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("cons_student_no", cons_student_no);
+		map.put("cons_no", cons_no);
+		Consultant consultant = cService.printDetailCons(map);
 		if(consultant != null) {
 			model.addAttribute("consultant", consultant);
 			return "consultant/consultantDetailView";		
@@ -171,8 +173,7 @@ public class ConsultantController {
 		@ResponseBody
 		@RequestMapping(value = "/consultant/JoinViewCounselor.kh", method=RequestMethod.GET, produces="application/json;charset=utf-8")
 		public String consJoinViewCounselor(Model model) throws UnsupportedEncodingException {
-		
-			List<Manager> mList = mService.printAllManager();
+			List<Manager> mList = cService.printAllManager();
 			if(!mList.isEmpty()) {
 				
 				
@@ -181,4 +182,32 @@ public class ConsultantController {
 			
 			return null;
 		}
+		
+		@RequestMapping(value="/consultant/cancel.kh", method=RequestMethod.GET)
+		public String consultantCancel(Model model, @RequestParam("cons_no") int cons_no,
+				HttpServletRequest request) {
+			
+			int consultantReply = cService.countReply(cons_no);
+			
+			System.out.println(consultantReply +"test");
+			
+			
+			
+			if(consultantReply < 1) {
+				int result = cService.printByNo(cons_no);
+			 if(result >0) {
+				 
+				 return "redirect:/consultant/list.kh";
+			 }else {
+				 model.addAttribute("msg", "상담취소 실패");
+					return "common/errorPage";
+			 }
+			 
+			}else {
+				request.setAttribute("message", "상담취소를 할 수 없습니다."); 
+				request.setAttribute("url", "/consultant/list.kh");
+				return "common/message";
+			}
+		}
+		
 }
