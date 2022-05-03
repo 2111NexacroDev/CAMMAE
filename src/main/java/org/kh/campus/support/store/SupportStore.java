@@ -10,9 +10,8 @@ import org.kh.campus.support.domain.SupportSearch;
 public interface SupportStore {
 
 	public List<Support> selectAllSupport(SqlSession sqlSession, PageInfo pi);
-	public List<Support> selectSearchSupport(SupportSearch supportSearch, SqlSession sqlSession);
 	public int insertSupport(SqlSession sqlSession, Support support);
-	public int selectListCount(SqlSession sqlSession);
+	public int selectListCount(SqlSession sqlSession, PageInfo pageInfo);
 	public int deletCheck(int supportNo, SqlSession sqlSession);
 	
 

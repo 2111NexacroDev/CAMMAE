@@ -24,12 +24,6 @@ public class SupportServiceImpl implements SupportService{
 		List<Support> sList = sStore.selectAllSupport(sqlSession, pi);
 		return sList;
 	}
-
-	@Override
-	public List<Support> printSearchSupport(SupportSearch supportSearch) {
-		List<Support> searchList = sStore.selectSearchSupport(supportSearch,sqlSession);
-		return searchList;
-	}
 	
 	@Override
 	public int insertSuport(Support support) {
@@ -38,8 +32,8 @@ public class SupportServiceImpl implements SupportService{
 	}
 
 	@Override
-	public int getListCount() {
-		int totalCount = sStore.selectListCount(sqlSession);
+	public int getListCount(PageInfo pageInfo) {
+		int totalCount = sStore.selectListCount(sqlSession, pageInfo);
 		return totalCount;
 	}
 

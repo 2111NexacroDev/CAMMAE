@@ -19,13 +19,35 @@
 	
 	<select id="selectListCount" resultType="_int">
 		SELECT COUNT(*) FROM SUPPORT_TBL
+		<if test="searchValue!=null">
+			<if test="searchCondition.toString() == 'title'">
+				WHERE RECRUITMENT_TITLE LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'writer'">
+				WHERE STUDENT_NO LIKE '%' || #{searchValue} || '%'
+			</if>
+		</if>
+		ORDER BY SUPPORT_NO DESC
 	</select>
+	
+	
 	
 	<select id="selectAllSupport" resultMap="supportResultMap">
-		SELECT * FROM SUPPORT_TBL ORDER BY SUPPORT_NO DESC
+		SELECT * FROM SUPPORT_TBL
+		<if test="searchValue!=null">
+			<if test="searchCondition.toString() == 'title'">
+				WHERE RECRUITMENT_TITLE LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'writer'">
+				WHERE STUDENT_NO LIKE '%' || #{searchValue} || '%'
+			</if>
+		</if> 
+		ORDER BY SUPPORT_NO DESC
 	</select>
 	
-	<select id="selectSearchSupport" resultMap="supportResultMap">
+	
+	
+	<!-- <select id="selectSearchSupport" resultMap="supportResultMap">
 		SELECT * FROM SUPPORT_TBL
 		<if test="searchCondition.toString() == 'title'">
 			WHERE RECRUITMENT_TITLE LIKE '%' || #{searchValue} || '%'
@@ -33,7 +55,7 @@
 		<if test="searchCondition.toString() == 'writer'">
 			WHERE STUDENT_NO LIKE '%' || #{searchValue} || '%'
 		</if>
-	</select>
+	</select> -->
 	
 	<insert id="insertSupport" parameterType="Support">
 		INSERT INTO SUPPORT_TBL VALUES(SEQ_SUPPORT_NO.NEXTVAL

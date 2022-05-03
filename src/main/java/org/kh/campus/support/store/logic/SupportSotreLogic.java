@@ -24,20 +24,14 @@ public class SupportSotreLogic implements SupportStore{
 	}
 	
 	@Override
-	public List<Support> selectSearchSupport(SupportSearch supportSearch, SqlSession sqlSession) {
-		List<Support> sList = sqlSession.selectList("SupportMapper.selectSearchSupport", supportSearch);
-		return sList;
-	}
-
-	@Override
 	public int insertSupport(SqlSession sqlSession, Support support) {
 		int result = sqlSession.insert("SupportMapper.insertSupport", support);
 		return result;
 	}
 
 	@Override
-	public int selectListCount(SqlSession sqlSession) {
-		int totalCount = sqlSession.selectOne("SupportMapper.selectListCount");
+	public int selectListCount(SqlSession sqlSession, PageInfo pageInfo) {
+		int totalCount = sqlSession.selectOne("SupportMapper.selectListCount", pageInfo);
 		return totalCount;
 	}
 
