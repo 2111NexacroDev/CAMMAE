@@ -19,8 +19,10 @@ public class Pagination {
 		if(maxPage < endNavi) {
 			endNavi = maxPage;
 		}
+		String searchCondition = "";
+		String searchValue = "";
 		pi = new PageInfo(currentPage, supportLimit,
-				naviLimit, startNavi, endNavi, totalCount, maxPage, prev, next);
+				naviLimit, startNavi, endNavi, totalCount, maxPage, prev, next, searchCondition, searchValue);
 		return pi;
 	}
 	
