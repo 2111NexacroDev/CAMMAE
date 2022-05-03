@@ -5,47 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+ <link rel="stylesheet" href="/resources/contents.css">
 <title>중고거래 게시판</title>
-<style>
-#content {
-	width: 100%;
-	height: 783px;
-}
-
-.left {
-	height: inherit;
-	width: 15%;
-	float: left;
-	width: 15%;
-}
-
-.center {
-	height: inherit;
-	width: 50%;
-	float: left;
-	margin-left: 200px;
-}
-
-h3 {
-	color: #10412C;
-}
-
-.btn {
-	border: 1px solid #10412C;
-	background-color: #10412C;
-	color: white;
-	border-radius: 5px;
-	padding: 5px 10px;
-	font-size: 13px;
-	font-weight: bold;
-	margin-right: 5px;
-}
-
-/* .right {
-	width: 20%;
-	float: left;
-} */
-</style>
 </head>
 
 <body>
@@ -54,10 +15,11 @@ h3 {
 	<!-- contents -->
 	<div id="content">
 		<!-- sidemenu -->
-		<div class="left">
+		<div id="left">
 			<jsp:include page="../common/sideBMenu.jsp"></jsp:include>
 		</div>
-		<div class="center">
+		<!-- contents-main -->
+		<div id="center">
 			<h3 id="b-title">중고거래 게시판</h3>
 			<br>
 			<div>
@@ -97,8 +59,8 @@ h3 {
 						<option value="title">제목</option>
 						<option value="contents">내용</option>
 						<option value="writer">작성자</option>
-					</select> <input type="text" name="searchValue"> <input class="btn"
-						type="submit" value="검색">
+					</select> <input type="text" name="searchValue"> 
+					<input class="btn" type="submit" value="검색">
 				</form>
 			</div>
 			<br>
