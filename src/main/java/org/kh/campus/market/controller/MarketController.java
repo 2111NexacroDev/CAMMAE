@@ -47,24 +47,31 @@ public class MarketController {
 	// 게시글 리스트
 	@RequestMapping(value = "/market/list", method = RequestMethod.GET)
 	public ModelAndView marketListView(ModelAndView mv,
-			@RequestParam(value = "page", required = false) Integer page) {
+			@RequestParam(value = "page", required = false) Integer page
+			, @ModelAttribute PageInfo pageInfo ) {
 
 		int currentPage = (page != null) ? page : 1;
 
-		int totalCount = mService.getListCount();
+		int totalCount = mService.getListCount(pageInfo);
 
-		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
+		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount, pageInfo.getSearchCondition(), pageInfo.getSearchValue());
 
 		mv.addObject("pi", pi);
+		/*
+		 * pi.setSearchCondition(pageInfo.getSearchCondition());
+		 * pi.setSearchValue(pageInfo.getSearchValue());
+		 */
 
 		
 		List<Market> mList = mService.printAllMarket(pi);
 		try {
 			if (!mList.isEmpty()) {
 				mv.addObject("mList", mList);
+				mv.addObject("pageInfo", pageInfo);
+				mv.addObject("menu", "market");
 				mv.setViewName("market/marketList");
 			} else {
-				System.out.println("조회 실패");
+				mv.setViewName("market/marketList");
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
@@ -95,21 +102,16 @@ public class MarketController {
 	}
 	
 	// 게시글 검색
-	@RequestMapping(value = "/market/search", method = RequestMethod.GET)
-	public ModelAndView questionSearchList(ModelAndView mv, @ModelAttribute Search search) {
-
-		try {
-			List<Market> searchList = mService.printSearchMarket(search);
-			if (!searchList.isEmpty()) {
-				mv.addObject("mList", searchList);
-				mv.setViewName("market/marketList");
-			}
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
-		return mv;
-	}
-
+	/*
+	 * @RequestMapping(value = "/market/search", method = RequestMethod.GET) public
+	 * ModelAndView questionSearchList(ModelAndView mv, @ModelAttribute Search
+	 * search) {
+	 * 
+	 * try { List<Market> searchList = mService.printSearchMarket(search); if
+	 * (!searchList.isEmpty()) { mv.addObject("mList", searchList);
+	 * mv.setViewName("market/marketList"); } } catch (Exception e) {
+	 * System.out.println(e.toString()); } return mv; }
+	 */
 	
 
 	// 게시글 등록 페이지

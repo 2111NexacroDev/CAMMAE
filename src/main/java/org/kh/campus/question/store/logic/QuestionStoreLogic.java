@@ -27,11 +27,12 @@ public class QuestionStoreLogic implements QuestionStore {
 		return qList;
 	}
 	
-	@Override
-	public List<Question> selectSearchQuestion(QuestionSearch questionSearch, SqlSession sqlSession) {
-		List<Question> qList = sqlSession.selectList("QuestionMapper.selectSearchQuestion", questionSearch);
-		return qList;
-	}
+	/*
+	 * @Override public List<Question> selectSearchQuestion(QuestionSearch
+	 * questionSearch, SqlSession sqlSession) { List<Question> qList =
+	 * sqlSession.selectList("QuestionMapper.selectSearchQuestion", questionSearch);
+	 * return qList; }
+	 */
 	
 	@Override
 	public Question selectOneQuestion(SqlSession sqlSession, int questionNo) {
@@ -78,8 +79,8 @@ public class QuestionStoreLogic implements QuestionStore {
 	}
 	//페이징
 	@Override
-	public int selectListCount(SqlSession sqlSession, QuestionSearch questionSearch) {
-		int totalCount = sqlSession.selectOne("QuestionMapper.selectListCount", questionSearch);
+	public int selectListCount(SqlSession sqlSession, PageInfo pagiInfo) {
+		int totalCount = sqlSession.selectOne("QuestionMapper.selectListCount", pagiInfo);
 		return totalCount;
 	}
 	

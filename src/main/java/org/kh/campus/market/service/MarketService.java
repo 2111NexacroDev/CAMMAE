@@ -27,7 +27,7 @@ public interface MarketService {
 	public int removeMarket(int marketNo);
 	
 	//페이징
-	public int getListCount();
+	public int getListCount(PageInfo pageInfo);
 	
 	//댓글
 	public int registerReply(MarketReply marketReply);

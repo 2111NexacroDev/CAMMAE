@@ -13,7 +13,7 @@ public interface QuestionService {
 	//게시글 조회
 	public List<Question> printAllQuestion(PageInfo pi);
 	//게시글 검색 조회
-	public List<Question> printSearchQuestion(QuestionSearch questionSearch);
+	/* public List<Question> printSearchQuestion(QuestionSearch questionSearch); */
 	//게시글 상세 조회
 	public Question printOneQuestion(int questionNo);
 	//게시글 등록
@@ -29,7 +29,7 @@ public interface QuestionService {
 	//게시글 삭제
 	public int removeQuestion(int questionNo);
 	//페이징
-	public int getListCount(QuestionSearch questionSearch);
+	public int getListCount(PageInfo pagiInfo);
 	
 	//댓글
 	

@@ -66,8 +66,8 @@ public class MarketStoreLogic implements MarketStore {
 	}
 	//페이징
 	@Override
-	public int selectListCount(SqlSession sqlSession) {
-		int totalCount = sqlSession.selectOne("MarketMapper.selectListCount");
+	public int selectListCount(SqlSession sqlSession, PageInfo pageInfo) {
+		int totalCount = sqlSession.selectOne("MarketMapper.selectListCount",pageInfo);
 		return totalCount;
 	}
 

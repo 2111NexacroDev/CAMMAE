@@ -1,5 +1,6 @@
 package org.kh.campus.cart.store;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -22,7 +23,7 @@ public interface CartStore {
 
 	int insertEnroll(SqlSession sqlSession, Lecture lecture);
 
-	int deleteEnroll(SqlSession sqlSession, int lectureNo);
+	int deleteEnroll(SqlSession sqlSession, HashMap<String, Integer> map);
 
 
 }

@@ -1,0 +1,22 @@
+@charset "UTF-8";
+html, body, span, li, a, div, ul {
+    margin: 0;
+    padding: 0;
+}
+
+footer {
+    width: 100%;
+       background: rgb(87, 87, 87);
+       height: 80px;    
+   }
+       footer .footer_tit {
+           padding: 20px 0 0 0;
+           font-size: 15px;
+           color:rgb(255, 255, 255);
+           text-align: center;
+       }
+       footer #footer_bottom{
+           text-align: center;
+           font-size: 13px;
+           color:rgb(255, 255, 255);
+       }

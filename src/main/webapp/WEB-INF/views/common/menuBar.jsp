@@ -12,36 +12,28 @@
 <title>menuBar</title>
 </head>
 <body>
-    <div id="header">
-        <!-- 로그인, 회원가입 부분 -->
-        <!-- gnb = global navigation bar  -->
-        <div id="gnb">   
-            <div class="inner">
-            
-                <a href="/main.kh" class="btn_gnb_home">
-                 
-                    HOME
-                </a>
-                <c:if test="${empty sessionScope}">
-	                <a href="/login/loginPage.kh" class="btn_gnb_login">
-	                 
-	                    LOGIN
-	                </a>
-              	</c:if>
-              	<c:if test="${not empty sessionScope}">
-              		<a href="/login/logout.kh" class="btn_gnb_login">
+	<div id="header">
+		<!-- 로그인, 회원가입 부분 -->
+		<!-- gnb = global navigation bar  -->
+		<div id="gnb">
+			<div class="inner">
 
-	                    LOGOUT
-	                </a>
-	           </c:if>
-            </div>
-        </div>  
-        <!-- local navigation bar -->
+				<a href="/main.kh" class="btn_gnb_home"> HOME </a>
+				<c:if test="${empty sessionScope}">
+					<a href="/login/loginPage.kh" class="btn_gnb_login"> LOGIN </a>
+				</c:if>
+				<c:if test="${not empty sessionScope}">
+					<a href="/login/logout.kh" class="btn_gnb_login"> LOGOUT </a>
+				</c:if>
+			</div>
+		</div>
+	</div>
+	<!-- local navigation bar -->
         <div id="lnb">
             <div class="inner lnb_nav">
                 <h1>
-                    <img src="resources/img/logo.png" style="width:80px; height:80px; " >
-                    <a href="main.kh">  
+                    <img src="/resources/img/logo.png" style="width:80px; height:80px; " >
+                    <a href="/main.kh">  
                     <span id="lnb_title"> 대일대학교</span></a>
                     <span id="lnb_subtitle">DAILE UNIVERSITY</span>
                 </h1>
@@ -53,7 +45,8 @@
                 </ul>
             </div>
         </div>
-    </div>
+        <div id="line">
+        </div>
 
 </body>
 </html>
