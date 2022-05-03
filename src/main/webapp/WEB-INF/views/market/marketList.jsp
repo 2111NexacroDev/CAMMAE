@@ -26,13 +26,6 @@
 	margin-left: 200px;
 }
 
-.c-main {
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	width: 600px;
-	padding: 30px 30px 30px 30px;
-}
-
 h3 {
 	color: #10412C;
 }
@@ -56,9 +49,11 @@ h3 {
 </head>
 
 <body>
+	<!-- header  -->
 	<jsp:include page="../common/menuBar.jsp"></jsp:include>
-
+	<!-- contents -->
 	<div id="content">
+		<!-- sidemenu -->
 		<div class="left">
 			<jsp:include page="../common/sideBMenu.jsp"></jsp:include>
 		</div>
@@ -149,8 +144,8 @@ h3 {
 			</div>
 		</div>
 	</div>
-		<!-- footer -->
-<jsp:include page="../common/footer.jsp"></jsp:include>
+	<!-- footer -->
+	<jsp:include page="../common/footer.jsp"></jsp:include>
 
 </body>
 </html>
