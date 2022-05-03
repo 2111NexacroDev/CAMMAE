@@ -5,8 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
- <link rel="stylesheet" href="/resources/contents.css">
 <title>중고거래 게시판</title>
+<link rel="stylesheet" href="/resources/contents.css">
 </head>
 
 <body>

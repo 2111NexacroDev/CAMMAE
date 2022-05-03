@@ -90,6 +90,7 @@ public class MarketController {
 
 				mv.addObject("market", market);
 				mv.setViewName("/market/marketDetail");
+				mv.addObject("menu", "market");
 
 			} else {
 				System.out.println("상세조회실패");
@@ -117,7 +118,7 @@ public class MarketController {
 	// 게시글 등록 페이지
 	@RequestMapping(value = "/market/registerView")
 	public String marketWirteView(Model model) {
-
+		model.addAttribute("menu", "market");
 		return "market/marketWriteForm";
 	}
 
@@ -253,6 +254,7 @@ public class MarketController {
 			Market market = mService.printOneMarket(marketNo);
 			if (market != null) {
 				mv.addObject("market", market);
+				mv.addObject("menu", "market");
 				mv.setViewName("market/marketUpdateView");
 			} else {
 				System.out.println("데이터 없음");
