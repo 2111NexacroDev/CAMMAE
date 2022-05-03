@@ -1,5 +1,6 @@
 package org.kh.campus.cart.service.logic;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -45,6 +46,10 @@ public class CartServiceImpl implements CartService {
 		return cList;
 	}
 
+	
+	// 수강신청 파트
+	
+	
 	@Override
 	public List<Lecture> printAllenroll() {
 		List<Lecture> lList = cStore.selectAllEnroll(sqlSession);
@@ -64,8 +69,8 @@ public class CartServiceImpl implements CartService {
 	}
 		
 	@Override
-	public int removeEnroll(int lectureNo) {
-		int result = cStore.deleteEnroll(sqlSession, lectureNo);
+	public int removeEnroll(HashMap<String, Integer> map) {
+		int result = cStore.deleteEnroll(sqlSession, map);
 		return result;
 	}
 

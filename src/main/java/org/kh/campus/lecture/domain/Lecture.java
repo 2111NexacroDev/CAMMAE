@@ -12,8 +12,31 @@ public class Lecture {
 	private String lectureRoom;
 	private int lecturePeople;
 	private String lectureTime;
+	private int studentNo;
+	private String gradeYear;
+	private String gradeSession; 
 	
 	public Lecture() {}
+
+	public Lecture(int lectureNo, int professorNo, String universityCollege, String lectureDepartment,
+			String lectureName, String professorName, String lectureDivision, int lectureGrade, String lectureRoom,
+			int lecturePeople, String lectureTime, int studentNo, String gradeYear, String gradeSession) {
+		super();
+		this.lectureNo = lectureNo;
+		this.professorNo = professorNo;
+		this.universityCollege = universityCollege;
+		this.lectureDepartment = lectureDepartment;
+		this.lectureName = lectureName;
+		this.professorName = professorName;
+		this.lectureDivision = lectureDivision;
+		this.lectureGrade = lectureGrade;
+		this.lectureRoom = lectureRoom;
+		this.lecturePeople = lecturePeople;
+		this.lectureTime = lectureTime;
+		this.studentNo = studentNo;
+		this.gradeYear = gradeYear;
+		this.gradeSession = gradeSession;
+	}
 
 	public int getLectureNo() {
 		return lectureNo;
@@ -21,6 +44,14 @@ public class Lecture {
 
 	public void setLectureNo(int lectureNo) {
 		this.lectureNo = lectureNo;
+	}
+
+	public int getProfessorNo() {
+		return professorNo;
+	}
+
+	public void setProfessorNo(int professorNo) {
+		this.professorNo = professorNo;
 	}
 
 	public String getUniversityCollege() {
@@ -95,23 +126,39 @@ public class Lecture {
 		this.lectureTime = lectureTime;
 	}
 
-	public int getProfessorNo() {
-		return professorNo;
+	public int getStudentNo() {
+		return studentNo;
 	}
 
-	public void setProfessorNo(int professorNo) {
-		this.professorNo = professorNo;
+	public void setStudentNo(int studentNo) {
+		this.studentNo = studentNo;
+	}
+
+	public String getGradeYear() {
+		return gradeYear;
+	}
+
+	public void setGradeYear(String gradeYear) {
+		this.gradeYear = gradeYear;
+	}
+
+	public String getGradeSession() {
+		return gradeSession;
+	}
+
+	public void setGradeSession(String gradeSession) {
+		this.gradeSession = gradeSession;
 	}
 
 	@Override
 	public String toString() {
-		return "Lecture [lectureNo=" + lectureNo + ", universityCollege=" + universityCollege + ", lectureDepartment="
-				+ lectureDepartment + ", lectureName=" + lectureName + ", professorName=" + professorName
-				+ ", lectureDivision=" + lectureDivision + ", lectureGrade=" + lectureGrade + ", lectureRoom="
-				+ lectureRoom + ", lecturePeople=" + lecturePeople + ", lectureTime=" + lectureTime + ", professorNo="
-				+ professorNo + "]";
+		return "Lecture [lectureNo=" + lectureNo + ", professorNo=" + professorNo + ", universityCollege="
+				+ universityCollege + ", lectureDepartment=" + lectureDepartment + ", lectureName=" + lectureName
+				+ ", professorName=" + professorName + ", lectureDivision=" + lectureDivision + ", lectureGrade="
+				+ lectureGrade + ", lectureRoom=" + lectureRoom + ", lecturePeople=" + lecturePeople + ", lectureTime="
+				+ lectureTime + ", studentNo=" + studentNo + ", gradeYear=" + gradeYear + ", gradeSession="
+				+ gradeSession + "]";
 	}
 
 	
-
-}
+}	
