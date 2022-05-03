@@ -1,5 +1,6 @@
 package org.kh.campus.cart.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.kh.campus.cart.domain.Cart;
@@ -153,6 +154,7 @@ public class CartController {
 			if (!lList.isEmpty()) {
 				mv.addObject("lList", lList);
 				mv.setViewName("cart/enrollList");
+				System.out.println(lList.toString());
 			} else {
 				System.out.println("실패했습니다.");
 			}
@@ -165,7 +167,11 @@ public class CartController {
 	@RequestMapping(value = "/cart/enrollRemove.kh", method = RequestMethod.GET)
 	public String lectureRemove(Model model, @RequestParam("lectureNo") int lectureNo) {
 	try {
-		int result = cService.removeEnroll(lectureNo);
+		int studentNo = 0;
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("lectureNo", lectureNo);
+		map.put("studentNo", studentNo);
+		int result = cService.removeEnroll(map);
 		if(result > 0 ) {
 			return "redirect:/cart/enrollList.kh";
 		} else {

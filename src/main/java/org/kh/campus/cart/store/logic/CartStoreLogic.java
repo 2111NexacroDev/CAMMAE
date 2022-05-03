@@ -1,5 +1,6 @@
 package org.kh.campus.cart.store.logic;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -48,8 +49,8 @@ public class CartStoreLogic implements CartStore {
 	}
 
 	@Override
-	public int deleteEnroll(SqlSession sqlSession, int lectureNo) {
-		int result =  sqlSession.delete("CartMapper.deleteEnroll",lectureNo);
+	public int deleteEnroll(SqlSession sqlSession, HashMap<String, Integer> map) {
+		int result =  sqlSession.delete("CartMapper.deleteEnroll",map);
 		return result;
 	}
 

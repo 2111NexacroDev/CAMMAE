@@ -1,5 +1,6 @@
 package org.kh.campus.cart.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.kh.campus.cart.domain.Cart;
@@ -33,5 +34,5 @@ public interface CartService {
 	public List<Lecture> printMyEnroll();
 
 	// 수강신청 신청 취소(신청취소)
-	public int removeEnroll(int lectureNo);
+	public int removeEnroll(HashMap<String, Integer> map);
 }

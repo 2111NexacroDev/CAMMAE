@@ -15,6 +15,9 @@
 		<result property="lectureRoom" column="LECTURE_ROOM" />
 		<result property="lecturePeople" column="LECTURE_PEOPLE" />
 		<result property="lectureTime" column="LECTURE_TIME" />
+		<result property="studentNo" column="STUDENT_NO"/>
+		<result property="gradeYear" column="GRADE_YEAR"/>
+		<result property="gradeSession" column="GRADE_SESSION"/>
 	</resultMap>
 	
 	<resultMap type="Cart" id="cartResultMap">
@@ -37,6 +40,7 @@
 		<result property="gradeFeedback" column="GRADE_FEEDBACK"/>
 		<result property="gradeObjection" column="GRADE_OBJECTION"/>
 		<result property="gradeChange" column="GRADE_CHANGE"/>
+		
 	</resultMap>
 	
 <!--  	<resultMap type="org.kh.campus.cart.domain.Total" id="totalResultMap">
@@ -84,32 +88,33 @@ FROM CART_TBL  JOIN  LECTURE_TBL
  	 ,0,0,0) 
  	</insert>
  	
- 	<select id="selectMyEnroll" resultMap="gradeResultMap">
+ 	<select id="selectMyEnroll" resultMap="lectureResultMap">
  	 <!-- SELECT LECTURE_NO, STUDENT_NO, GRADE_YEAR, GRADE_SESSION, GRADE_SUBJECT
  	 , LECTURE_DIVISION, LECTURE_GRADE, GRADE_AVG, GRADE_FEEDBACK
  	 , GRADE_OBJECTION, GRADE_CHANGE FROM GRADE_TBL -->
 <!--  	SELECT * FROM LECTURE_TBL L 
 	RIGHT JOIN GRADE_TBL G ON 
 	G.LECTURE_NO = L.LECTURE_NO -->
-	SELECT GRADE_TBL.LECTURE_NO
-	, GRADE_TBL.STUDENT_NO
-	, GRADE_TBL.GRADE_YEAR
-	, GRADE_TBL.GRADE_SESSION
-	, GRADE_TBL.GRADE_SUBJECT
- 	 , GRADE_TBL.LECTURE_DIVISION
- 	 , GRADE_TBL.LECTURE_GRADE
- 	 , GRADE_TBL.GRADE_AVG
- 	 , GRADE_TBL.GRADE_FEEDBACK
- 	 , GRADE_TBL.GRADE_OBJECTION
- 	 , GRADE_TBL.GRADE_CHANGE 
- 	 , LECTURE_TBL.PROFESSOR_NAME
- 	 , LECTURE_TBL.LECTURE_NAME
-     FROM GRADE_TBL INNER JOIN LECTURE_TBL
-     ON GRADE_TBL.LECTURE_NO = LECTURE_TBL.LECTURE_NO
+SELECT G.LECTURE_NO
+	, G.STUDENT_NO
+	, G.GRADE_YEAR
+	, G.GRADE_SESSION
+	, G.GRADE_SUBJECT
+ 	 , G.LECTURE_DIVISION
+ 	 , G.LECTURE_GRADE 
+ 	 , L.PROFESSOR_NAME
+ 	 , L.LECTURE_NAME
+     , L.LECTURE_DEPARTMENT
+     , L.UNIVERSITY_COLLEGE
+     , L.LECTURE_ROOM
+     , L.LECTURE_PEOPLE
+     , L.LECTURE_TIME
+     FROM GRADE_TBL G INNER JOIN LECTURE_TBL L
+     ON G.LECTURE_NO = L.LECTURE_NO
  	</select>
  	
- 	<delete id="deleteEnroll"> 
- 	 DELETE FROM GRADE_TBL WHERE LECTURE_NO=#{lectureNo}
+ 	<delete id="deleteEnroll" parameterType="hashmap"> 
+ 	 DELETE FROM GRADE_TBL WHERE LECTURE_NO=#{lectureNo} AND STUDENT_NO=#{studentNo}
  	</delete>
  	
 

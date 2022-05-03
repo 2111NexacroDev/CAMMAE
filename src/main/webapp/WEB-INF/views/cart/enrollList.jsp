@@ -20,29 +20,22 @@
 			<th>교과목명</th>
 			<th>이수구분</th>
 			<th>학점</th>
-			<th>변경여부</th>
-			<th>평점</th>
 			<th>학년</th>
-			<th>이의신청여부</th>
 			<th>학기</th>
-			<th>신청날짜</th>
 			<th>삭제</th>
 			
 		</tr>
-		<c:forEach items="${lList }" var="grade">
+		<c:forEach items="${lList }" var="lecture">
 			<tr>
-				<td>${grade.lectureNo }</td>
-				<td>${grade.studentNo }</td>
-				<td>${grade.gradeYear }</td>
-				<td>${grade.gradeSession }</td>
-				<td>${grade.gradeSubject }</td>
-				<td>${grade.gradeComplete }</td>
-				<td>${grade.lectureGrade }</td>
-				<td>${grade.gradeScore }</td>
-				<td>${grade.gradeAvg }</td>
-				<td>${grade.gradeFeedback }</td>
-				<td>${grade.gradeObjection }</td>
-				<td>${grade.gradeChange }</td>
+				<td>${lecture.lectureNo }</td>
+				<td>${lecture.studentNo }</td>
+				<td>${lecture.gradeYear }</td>
+				<td>${lecture.gradeSession }</td>
+				<td>${lecture.lectureName }</td>
+				<td>${lecture.lectureDivision }</td>
+				<td>${lecture.lectureGrade }</td>
+				<td>${lecture.professorName }</td>
+	
 				
 			<%-- 	<td>${grade.professorName }</td>
 				<td>${grade.lectureName }</td> --%>
