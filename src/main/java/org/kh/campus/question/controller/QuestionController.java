@@ -92,6 +92,7 @@ public class QuestionController {
 
 				mv.addObject("question", question);
 				mv.setViewName("/question/questionDetail");
+				mv.addObject("menu", "question");
 
 			} else {
 				System.out.println("상세조회실패");
@@ -109,6 +110,7 @@ public class QuestionController {
 		List<Lecture> lList = qService.printAllPro();
 		if(!lList.isEmpty()) {
 			model.addAttribute("lList", lList);
+			model.addAttribute("menu", "question");
 		}
 		return "question/questionWriteForm";
 	}
@@ -202,7 +204,10 @@ public class QuestionController {
 		try {
 			Question question = qService.printOneQuestion(questionNo);
 			if (question != null) {
+				List<Lecture> lList = qService.printAllPro();
+				mv.addObject("lList", lList);
 				mv.addObject("question", question);
+				mv.addObject("menu", "question");
 				mv.setViewName("question/questionUpdateView");
 			} else {
 				System.out.println("데이터 없음");

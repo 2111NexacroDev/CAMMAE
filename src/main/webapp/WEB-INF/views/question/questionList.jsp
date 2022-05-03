@@ -4,11 +4,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="/resources/contents.css">
 <meta charset="UTF-8">
 <title>질의응답게시판</title>
-<style>
-</style>
+<link rel="stylesheet" href="/resources/contents.css">
 </head>
 
 <body>
