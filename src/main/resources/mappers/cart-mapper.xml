@@ -26,6 +26,12 @@
 		<result property="lectureNo" column="LECTURE_NO" />
 		<result property="cartYear" column="CART_YEAR" />
 		<result property="cartTerm" column="CART_TERM" />
+		<result property="lectureDivision" column="LECTURE_DIVISION" />
+		<result property="lectureGrade" column="LECTURE_GRADE"/>
+		<result property="professorName" column="PROFESSOR_NAME" />
+		<result property="lectureName" column="LECTURE_NAME" />
+		<result property="lectureDepartment" column="LECTURE_DEPARTMENT" />
+		<result property="lectureTime" column="LECTURE_TIME" />
 	</resultMap>
 	
 	<resultMap type="Grade" id="gradeResultMap">
@@ -57,11 +63,24 @@
 		, '0'
 		, #{lectureNo}
 		, DEFAULT
-		, '1학기')	
+		, '1학기'
+ )	
 	</insert>
 	
 	<select id="selectMyCart" resultMap="cartResultMap">
-	SELECT * FROM CART_TBL 
+	SELECT 
+    C.CART_NO
+    ,C.LECTURE_NO
+ 	 , L.LECTURE_DIVISION
+ 	 , G.LECTURE_GRADE 
+ 	 , L.PROFESSOR_NAME
+ 	 , L.LECTURE_NAME
+     , L.LECTURE_DEPARTMENT
+     , L.LECTURE_TIME
+     FROM CART_TBL C INNER JOIN LECTURE_TBL L
+     ON C.LECTURE_NO = L.LECTURE_NO
+     INNER JOIN GRADE_TBL G
+     ON G.LECTURE_NO = C.LECTURE_NO
 	<!-- SELECT *
 FROM CART_TBL  JOIN  LECTURE_TBL
      ON CART_TBL.LECTURE_NO = LECTURE_TBL.LECTURE_NO; -->
@@ -99,7 +118,6 @@ SELECT G.LECTURE_NO
 	, G.STUDENT_NO
 	, G.GRADE_YEAR
 	, G.GRADE_SESSION
-	, G.GRADE_SUBJECT
  	 , G.LECTURE_DIVISION
  	 , G.LECTURE_GRADE 
  	 , L.PROFESSOR_NAME

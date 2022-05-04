@@ -32,9 +32,9 @@
 						<option>패필</option>
 
 				</select><br>
-학점 <input type="text" name="lectureGrade"><br>
+학점 <input type="number" name="lectureGrade"><br>
 강의실 <input type="text" name="lectureRoom"><br>
-인원 <input type="text" name="lecturePeople"><br>
+인원 <input type="number" name="lecturePeople"><br>
 강의시간 <input type="time" name="lectureTime"><br>
 <input type="submit" value="등록하기">
 </form>
