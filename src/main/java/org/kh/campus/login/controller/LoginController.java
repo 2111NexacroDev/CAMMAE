@@ -8,6 +8,8 @@ import org.kh.campus.professor.domain.Professor;
 import org.kh.campus.student.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.nexacro.uiadapter17.spring.core.annotation.ParamVariable;
+import com.nexacro.uiadapter17.spring.core.data.NexacroResult;
 
 @Controller
 public class LoginController {
@@ -115,5 +119,42 @@ public class LoginController {
 		}
 		
 		return email;
+	}
+	
+	// 비밀번호 일치여부 확인
+	@PostMapping("/login/pwdSame.kh")
+	public NexacroResult pwdSame(
+			@ParamVariable(name="in_pwd") String pwd) {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
+		NexacroResult result = new NexacroResult();
+		
+		// 로그인 연동시 타입과 아이디 같이 넘겨주기
+		int id = 0;
+		String type = "std";
+		
+		int result1 = lService.pwdSame(type ,id, pwd);
+		
+		result.addVariable("ErrorCode", result1);
+		result.addVariable("ErrorMsg", strErrorMsg);
+		return result;
+	}
+	
+	@PostMapping("/login/pwdChange.kh")
+	public NexacroResult pwdChange(
+			@ParamVariable(name="in_pwd") String pwd) {
+		int 	nErrorCode = 0;
+		String  strErrorMsg = "START";
+		NexacroResult result = new NexacroResult();
+		
+		// 로그인 연동시 타입과 아이디 같이 넘겨주기
+		int id = 0;
+		String type = "std";
+		
+		int result1 = lService.pwdChange(type ,id, pwd);
+		
+		result.addVariable("ErrorCode", result1);
+		result.addVariable("ErrorMsg", strErrorMsg);
+		return result;
 	}
 }
