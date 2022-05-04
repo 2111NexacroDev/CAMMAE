@@ -29,17 +29,6 @@ public class PortfolioServiceImpl implements PortfolioService {
 		return result;
 	}
 
-	@Override
-	public Portfolio printDetailPort(String port_title) {
-		Portfolio portfolio = pStore.selectDetailPort(sqlSession, port_title);
-		return portfolio;
-	}
-
-	@Override
-	public int deletePort(String port_title) {
-		int result = pStore.deletePort(sqlSession, port_title);
-		return result;
-	}
 
 	@Override
 	public List<Portfolio> printAdminAllPort(PageInfo pi) {
