@@ -11,13 +11,13 @@ public class PageInfo {
 	private boolean prev;  //����
 	private boolean next; //����
 	private int universityCode;
+	private String searchCondition;
+	private String searchValue;
 	
 	public PageInfo() {}
-	
-	
 
 	public PageInfo(int currentPage, int boardLimit, int naviLimit, int startNavi, int endNavi, int totalCount,
-			int maxPage, boolean prev, boolean next, int universityCode) {
+			int maxPage, boolean prev, boolean next, int universityCode, String searchCondition, String searchValue) {
 		super();
 		this.currentPage = currentPage;
 		this.boardLimit = boardLimit;
@@ -29,9 +29,9 @@ public class PageInfo {
 		this.prev = prev;
 		this.next = next;
 		this.universityCode = universityCode;
+		this.searchCondition = searchCondition;
+		this.searchValue = searchValue;
 	}
-
-
 
 	public int getCurrentPage() {
 		return currentPage;
@@ -113,29 +113,30 @@ public class PageInfo {
 		this.universityCode = universityCode;
 	}
 
+	public String getSearchCondition() {
+		return searchCondition;
+	}
+
+	public void setSearchCondition(String searchCondition) {
+		this.searchCondition = searchCondition;
+	}
+
+	public String getSearchValue() {
+		return searchValue;
+	}
+
+	public void setSearchValue(String searchValue) {
+		this.searchValue = searchValue;
+	}
+
 	@Override
 	public String toString() {
 		return "PageInfo [currentPage=" + currentPage + ", boardLimit=" + boardLimit + ", naviLimit=" + naviLimit
 				+ ", startNavi=" + startNavi + ", endNavi=" + endNavi + ", totalCount=" + totalCount + ", maxPage="
-				+ maxPage + ", prev=" + prev + ", next=" + next + ", universityCode=" + universityCode + "]";
+				+ maxPage + ", prev=" + prev + ", next=" + next + ", universityCode=" + universityCode
+				+ ", searchCondition=" + searchCondition + ", searchValue=" + searchValue + "]";
 	}
-
-
-
-	public PageInfo(int currentPage, int boardLimit, int naviLimit, int startNavi, int endNavi, int totalCount,
-			int maxPage, boolean prev, boolean next) {
-		super();
-		this.currentPage = currentPage;
-		this.boardLimit = boardLimit;
-		this.naviLimit = naviLimit;
-		this.startNavi = startNavi;
-		this.endNavi = endNavi;
-		this.totalCount = totalCount;
-		this.maxPage = maxPage;
-		this.prev = prev;
-		this.next = next;
-	}
-
+	
 	
 	
 }

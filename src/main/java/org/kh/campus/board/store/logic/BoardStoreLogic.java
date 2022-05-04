@@ -31,12 +31,12 @@ public class BoardStoreLogic implements BoardStore {
 		return board;
 	}
 
-	@Override
-	public List<Board> selectSearchBoard(SqlSession sqlSession, Search search) {
-		List<Board> searchList
-			= sqlSession.selectList("BoardMapper.selectSearchBoder", search);
-		return searchList;
-	}
+	
+	  @Override public List<Board> selectSearchBoard(SqlSession sqlSession, Search
+	  search) { List<Board> searchList =
+	  sqlSession.selectList("BoardMapper.selectSearchBoder", search); 
+	  return searchList; }
+	 
 
 	@Override
 	public int insertBoard(Board board, SqlSession sqlSession) {
@@ -82,8 +82,8 @@ public class BoardStoreLogic implements BoardStore {
 	}
 
 	@Override
-	public int selectListCount(SqlSession sqlSession) {
-		int totalCount = sqlSession.selectOne("BoardMapper.selectListCount");
+	public int selectListCount(SqlSession sqlSession, PageInfo pageInfo) {
+		int totalCount = sqlSession.selectOne("BoardMapper.selectListCount" , pageInfo);
 		return totalCount;
 	}
 
