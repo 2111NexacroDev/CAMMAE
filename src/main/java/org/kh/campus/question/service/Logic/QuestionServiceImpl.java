@@ -80,8 +80,8 @@ public class QuestionServiceImpl implements QuestionService {
 	
 	//페이징
 	@Override
-	public int getListCount(PageInfo pagiInfo) {
-		int totalCount = qStore.selectListCount(sqlSession, pagiInfo);
+	public int getListCount(PageInfo pageInfo) {
+		int totalCount = qStore.selectListCount(sqlSession, pageInfo);
 		return totalCount;
 	}
 

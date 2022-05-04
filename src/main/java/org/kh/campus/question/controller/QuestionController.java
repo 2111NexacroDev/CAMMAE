@@ -39,24 +39,24 @@ public class QuestionController {
 	@RequestMapping(value = "/question/list", method = RequestMethod.GET)
 	public ModelAndView questionListView(ModelAndView mv,
 			@RequestParam(value = "page", required = false) Integer page
-			, @ModelAttribute PageInfo pagiInfo
+			, @ModelAttribute PageInfo pageInfo
 			) {
 
 		int currentPage = (page != null) ? page : 1;
 
-		int totalCount = qService.getListCount(pagiInfo);
+		int totalCount = qService.getListCount(pageInfo);
 
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
 
 		mv.addObject("pi", pi);
-		pi.setSearchCondition(pagiInfo.getSearchCondition());
-		pi.setSearchValue(pagiInfo.getSearchValue());
+		pi.setSearchCondition(pageInfo.getSearchCondition());
+		pi.setSearchValue(pageInfo.getSearchValue());
 
 		List<Question> qList = qService.printAllQuestion(pi);
 		try {
 			if (!qList.isEmpty()) {
 				mv.addObject("qList", qList);
-				mv.addObject("questionSearch", pagiInfo);
+				mv.addObject("pageInfo", pageInfo);
 				mv.addObject("menu", "question");
 				mv.setViewName("question/questionList");
 			} else {
