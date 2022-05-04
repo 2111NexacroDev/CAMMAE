@@ -9,9 +9,9 @@ import org.kh.campus.manager.domain.Manager;
 
 public interface ConsultantService {
 	
-	public List<Consultant> printAllCons(int cons_student_no); //상담신청 목록 조회
+	public List<Consultant> printAllCons(int cons_student_no, PageInfo pi); //상담신청 목록 조회
 	public int insertCons(Consultant consultant); //상담신청 등록
-	public List<Consultant>printAdminAllCons(PageInfo pi);  //관리자 상담신청 목록조회
+	public List<Consultant>printAdminAllCons(PageInfo pi, int studentNo);  //관리자 상담신청 목록조회
 	public Consultant printAdminDetailCons(Integer consultant_no); //관리자 상담신청 상세조회
 	public int insertAdminConsReply(ConsultantReply consultantReply); //관리자 상담신청 댓글 등록
 	public int getListCount(); //페이징 처리를 위한 리스트 갯수 조회

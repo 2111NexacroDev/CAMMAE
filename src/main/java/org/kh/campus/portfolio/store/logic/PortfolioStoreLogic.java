@@ -30,7 +30,7 @@ public class PortfolioStoreLogic implements PortfolioStore {
 		int currentPage = pi.getCurrentPage();
 		int offset = (currentPage -1) * limit ;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		List<Portfolio>pList = sqlSession.selectList("PortfolioMapper.selectAdminAllPort", pi, rowBounds);
+		List<Portfolio>pList = sqlSession.selectList("PortfolioMapper.selectAdminAllPort", pi,rowBounds );
 		return pList;
 	}
 

@@ -30,7 +30,7 @@
 					자격증첨부 <span><a href="../../../resources/puploadFiles/${portfolio.port_licenseRename}" download>${portfolio.port_license}</a></span><br>
 					수상이력 첨부<span><a href="../../../resources/puploadFiles/${portfolio.port_award_historyRename}" download>${portfolio.port_award_history}</a></span><br>
 					작성날짜 <span>${portfolio.port_writerDate}</span><br>
-					상담내용 <span>${portfolio.port_content}</span>
+					상담내용 <span>${portfolio.port_content}</span><br>
 					단과대학 <span>${portfolio.port_university_code}</span>
 
 			</div>

@@ -64,7 +64,30 @@
 									</c:forEach>
 								</tbody>
 							</table>
-				
+							<div class="paging">
+
+					<c:if test="${pi.prev}">
+
+						<a href="/consultant/list.kh?page=${pi.startNavi-1}"> </a>
+
+					</c:if>
+
+					<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
+						<c:url var="pagination" value="/consultant/list.kh">
+							<c:param name="page" value="${p }"></c:param>
+						</c:url>
+
+						<a href="${pagination }"><button class="on1">${p }</button></a>&nbsp;
+																		
+									</c:forEach>
+
+
+					<c:if test="${pi.next && pi.endNavi > 0}">
+
+						<a href="/consultant/list.kh?page=${pi.endNavi+1}"> </a>
+					</c:if>
+
+				</div>
 						</div>
 					</div>
 				</div>

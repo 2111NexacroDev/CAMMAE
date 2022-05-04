@@ -33,14 +33,19 @@ public class ConsultantController {
 	
 	//학생 상담신청 목록 조회
 	@RequestMapping(value="/consultant/list.kh", method=RequestMethod.GET)
-	public String consultantListView(Model model, HttpServletRequest request) {
+	public String consultantListView(Model model, HttpServletRequest request, @RequestParam(value = "page", required = false) Integer page) {
 		try {
 		HttpSession session = request.getSession();
 		int cons_student_no = ((Student)(session.getAttribute("loginUser"))).getStudentNo();
-		List<Consultant> cList = cService.printAllCons(cons_student_no);
+		int currentPage = (page != null) ? page : 1;
+		int totalCount = cService.getListCount();
+		
+		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
+		List<Consultant> cList = cService.printAllCons(cons_student_no , pi);
 		
 		if(!cList.isEmpty()) {
 			model.addAttribute("cList", cList);
+			model.addAttribute("pi", pi);
 			return "consultant/consultantListView";
 		}else {
 			model.addAttribute("msg", "상담 전체 조회 실패");
@@ -133,11 +138,13 @@ public class ConsultantController {
 	
 	//관리자 상담신청 목록 조회
 	@RequestMapping(value="/consultant/adlist.kh", method=RequestMethod.GET)
-	public String consultantAdminListView(Model model, @RequestParam(value = "page", required = false) Integer page) {
+	public String consultantAdminListView(Model model, @RequestParam(value = "page", required = false) Integer page,  HttpServletRequest request) {
 		int currentPage = (page != null) ? page : 1;
 		int totalCount = cService.getListCount();
+		HttpSession session = request.getSession();
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
-		List<Consultant>cList = cService.printAdminAllCons(pi);
+		int studentNo = ((Manager)(session.getAttribute("loginManager"))).getManagerNo();
+		List<Consultant>cList = cService.printAdminAllCons(pi, studentNo);
 		if(!cList.isEmpty()) {
 			model.addAttribute("cList", cList);
 			model.addAttribute("pi", pi);

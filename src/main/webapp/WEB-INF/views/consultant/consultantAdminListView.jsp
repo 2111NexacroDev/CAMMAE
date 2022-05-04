@@ -44,6 +44,7 @@
 					</thead>
 					<tbody>
 						<c:forEach items="${cList}" var="consultant">
+							<c:if test="${consultant.cons_counselor == loginManager.managerName}">
 							<tr class="space">
 								<td class="ta" id="no">${consultant.cons_no}</td>
 								<c:url var="cDetail" value="/consultant/adDetail.kh">
@@ -62,6 +63,7 @@
 								<td class="ta" id="status">${consultant.cons_status == 'Y' ? "상담완료" : "상담대기"}</td>
 								<td class="ta" id="univ_code">${consultant.cons_university_code}</td>
 							</tr>
+							</c:if>
 						</c:forEach>
 					</tbody>
 				</table>
