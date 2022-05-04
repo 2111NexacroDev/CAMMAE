@@ -25,18 +25,6 @@ public class PortfolioStoreLogic implements PortfolioStore {
 	}
 
 	@Override
-	public Portfolio selectDetailPort(SqlSession sqlSession, String port_title) {
-		Portfolio portfolio = sqlSession.selectOne("PortfolioMapper.selectDetailPort", port_title);
-		return portfolio;
-	}
-
-	@Override
-	public int deletePort(SqlSession sqlSession, String port_title) {
-		int result = sqlSession.delete("PortfolioMapper.deletePort", port_title);
-		return result;
-	}
-
-	@Override
 	public List<Portfolio> selectAdminAllPort(SqlSession sqlSession, PageInfo pi) {
 		int limit = pi.getPortfolioLimit();
 		int currentPage = pi.getCurrentPage();

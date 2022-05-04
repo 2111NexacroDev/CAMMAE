@@ -28,6 +28,7 @@ public class PortfolioController {
 	@Autowired
 	private PortfolioService pService;
 
+	//학생 포트폴리오 조회
 	@RequestMapping(value = "/portfolio/listView.kh", method = RequestMethod.GET)
 	public String portListView(Model model, @RequestParam(value = "page", required = false) Integer page, HttpServletRequest request) {
 		try {
@@ -47,12 +48,13 @@ public class PortfolioController {
 		}
 
 	}
-
+	
+	//학생 포트폴리오 등록
 	@RequestMapping(value = "/portfolio/writeView.kh", method = RequestMethod.GET)
 	public String portWriteView() {
 		return "portfolio/portfolioWriteForm";
 	}
-
+	//학생 포트폴리오 등록 실행
 	@RequestMapping(value = "/portfolio/register.kh", method = RequestMethod.POST)
 	public ModelAndView portRegisterView(ModelAndView mv, @ModelAttribute Portfolio portfolio,
 			@RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile,
@@ -132,36 +134,7 @@ public class PortfolioController {
 		return fileMap;
 	}
 
-	@RequestMapping(value = "/portfolio/adminListView.kh", method = RequestMethod.GET)
-	public String portAdminListView(Model model, @RequestParam(value = "page", required = false) Integer page) {
-		int currentPage = (page != null) ? page : 1;
-		int totalCount = pService.getListCount();
-		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
-		List<Portfolio> pList = pService.printAdminAllPort(pi);
-		if (!pList.isEmpty()) {
-			model.addAttribute("pList", pList);
-			model.addAttribute("pi", pi);
-			return "portfolio/portfolioAdminListView";
-		} else {
-			model.addAttribute("msg", "포트폴리오 전체조회 실패");
-			return "common/errorPage";
-		}
-
-	}
-
-	@RequestMapping(value = "/portfolio/adminDetail.kh", method = RequestMethod.GET)
-	public String portAdminDetailView(Model model, @RequestParam("port_no") int port_no) {
-		Portfolio portfolio = pService.printAdminDetailPort(port_no);
-		if (portfolio != null) {
-			model.addAttribute("portfolio", portfolio);
-			return "portfolio/portfolioAdminDetailView";
-		} else {
-			model.addAttribute("msg", "관리자 포트폴리오 디테일 조회 실패");
-			return "common/errorPage";
-		}
-
-	}
-
+	//학생 포트폴리오 상세조회
 	@RequestMapping(value = "/portfolio/Detail.kh", method = RequestMethod.GET)
 	public String portDetailView(Model model, @RequestParam("port_no") Integer port_no) {
 		Portfolio portfolio = pService.printDetailPort(port_no);
@@ -175,6 +148,7 @@ public class PortfolioController {
 
 	}
 
+	//학생 포트폴리오 수정
 	@RequestMapping(value = "/portfolio/updateView.kh", method = RequestMethod.GET)
 	public String portfolioUpdateView(Model model, @RequestParam("port_no") Integer port_no){
 
@@ -188,7 +162,8 @@ public class PortfolioController {
 		}
 
 	}
-
+	
+	//학생 포트폴리오 수정 실행
 	@RequestMapping(value = "/portfolio/modify.kh", method = RequestMethod.POST)
 	public String portfolioModify(Model model,
 			@ModelAttribute Portfolio portfolio,
@@ -228,6 +203,7 @@ public class PortfolioController {
 
 	}
 	
+	//첨부파일 삭제
 	private void deleteFile(String FilePath, String FilePath1, HttpServletRequest request) {
 		File deleteFile = new File(FilePath);
 		File deleteFile1 = new File(FilePath1);
@@ -241,7 +217,7 @@ public class PortfolioController {
 		
 	}
 	
-	
+	//학생 포트폴리오 삭제
 	@RequestMapping(value="/portfolio/delete.kh")
 	 public String portfolioDelete(Model model, @RequestParam("port_no")int port_no) {
 		try {
@@ -258,6 +234,41 @@ public class PortfolioController {
 			return "common/errorPage";
 		}
 	}
+	
+	
+	//관리자 포트폴리오 목록 조회
+	@RequestMapping(value = "/portfolio/adminListView.kh", method = RequestMethod.GET)
+	public String portAdminListView(Model model, @RequestParam(value = "page", required = false) Integer page) {
+		int currentPage = (page != null) ? page : 1;
+		int totalCount = pService.getListCount();
+		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
+		List<Portfolio> pList = pService.printAdminAllPort(pi);
+		if (!pList.isEmpty()) {
+			model.addAttribute("pList", pList);
+			model.addAttribute("pi", pi);
+			return "portfolio/portfolioAdminListView";
+		} else {
+			model.addAttribute("msg", "포트폴리오 전체조회 실패");
+			return "common/errorPage";
+		}
+
+	}
+	
+	//관리자 포트폴리오 상세조회
+	@RequestMapping(value = "/portfolio/adminDetail.kh", method = RequestMethod.GET)
+	public String portAdminDetailView(Model model, @RequestParam("port_no") int port_no) {
+		Portfolio portfolio = pService.printAdminDetailPort(port_no);
+		if (portfolio != null) {
+			model.addAttribute("portfolio", portfolio);
+			return "portfolio/portfolioAdminDetailView";
+		} else {
+			model.addAttribute("msg", "관리자 포트폴리오 디테일 조회 실패");
+			return "common/errorPage";
+		}
+
+	}
+
+	
 }
 
 	

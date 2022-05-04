@@ -43,7 +43,7 @@
 					상담사 <select id="cons_counselor" class="select" name="cons_counselor" onclick="conChange()">
 						<option value="">선택</option>
 						<c:forEach items="${mList}" var="mList">
-							<option value="${mList.managerNo}">${mList.managerNo}</option>
+							<option value="${mList.managerName}">${mList.managerName}</option>
 						</c:forEach>
 					</select>
 					<br>
@@ -73,7 +73,7 @@
 					data: { "cons_counselor" : cons_counselor},
 					success : function(mList) {
 							for(var i= 0; i<mList.length; i++) {
-							$("#cons_counselor").append("<option value="+mList[i].managerNo+">"+mList[i].managerNo+"</option>");
+							$("#cons_counselor").append("<option value="+mList[i].managerName+">"+mList[i].managerName+"</option>");
 							}			
 			       		
 					},

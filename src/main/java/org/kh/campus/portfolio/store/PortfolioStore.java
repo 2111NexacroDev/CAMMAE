@@ -10,8 +10,6 @@ public interface PortfolioStore {
 
 	public List<Portfolio> selectAllPort(SqlSession sqlSession, int studentNo);
 	public int insertPort(SqlSession sqlSession, Portfolio portfolio);
-	public Portfolio selectDetailPort(SqlSession sqlSession, String port_title);
-	public int deletePort(SqlSession sqlSession, String port_title);
 	public List<Portfolio> selectAdminAllPort(SqlSession sqlSession, PageInfo pi);
 	public Portfolio selectprintAdminDetailPort(SqlSession sqlSession, int port_no);
 	public int selectListCount(SqlSession sqlSession);

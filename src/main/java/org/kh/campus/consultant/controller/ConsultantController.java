@@ -13,9 +13,7 @@ import org.kh.campus.consultant.domain.PageInfo;
 import org.kh.campus.consultant.domain.Pagination;
 import org.kh.campus.consultant.service.ConsultantService;
 import org.kh.campus.manager.domain.Manager;
-import org.kh.campus.manager.service.ManagerService;
 import org.kh.campus.student.domain.Student;
-import org.kh.campus.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,10 +30,8 @@ import com.google.gson.GsonBuilder;
 public class ConsultantController {
 	@Autowired
 	private ConsultantService cService;
-	@Autowired
-	private ManagerService mService;
-
 	
+	//학생 상담신청 목록 조회
 	@RequestMapping(value="/consultant/list.kh", method=RequestMethod.GET)
 	public String consultantListView(Model model, HttpServletRequest request) {
 		try {
@@ -57,12 +53,14 @@ public class ConsultantController {
 		
 	}
 	
+	//학생 상담신청 등록
 	@RequestMapping(value="/consultant/writeView.kh", method=RequestMethod.GET)
 	public String consultantWriteView() {
 		return "consultant/consultantWriteForm";
 		
 	}
 
+	//학생 상담신청 등록 실행
 	@RequestMapping(value="/consultant/register.kh", method=RequestMethod.POST)
 	public String consultantRegister(Model model, @ModelAttribute Consultant consultant,
 			HttpServletRequest request) {
@@ -89,6 +87,7 @@ public class ConsultantController {
 		
 	}
 	
+	//학생 상담신청 상세조회
 	@RequestMapping(value="/consultant/Detail.kh", method=RequestMethod.GET)
 	public String consultantDetailView(Model model, @RequestParam("cons_student_no")int cons_student_no, @RequestParam("cons_no") int cons_no) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
@@ -104,6 +103,35 @@ public class ConsultantController {
 		}
 	}
 	
+	//학생 상담신청 취소
+	@RequestMapping(value="/consultant/cancel.kh", method=RequestMethod.GET)
+	public String consultantCancel(Model model, @RequestParam("cons_no") int cons_no,
+			HttpServletRequest request) {
+		
+		int consultantReply = cService.countReply(cons_no);
+		
+		System.out.println(consultantReply +"test");
+		
+		
+		
+		if(consultantReply < 1) {
+			int result = cService.printByNo(cons_no);
+		 if(result >0) {
+			 
+			 return "redirect:/consultant/list.kh";
+		 }else {
+			 model.addAttribute("msg", "상담취소 실패");
+				return "common/errorPage";
+		 }
+		 
+		}else {
+			request.setAttribute("message", "상담취소를 할 수 없습니다."); 
+			request.setAttribute("url", "/consultant/list.kh");
+			return "common/message";
+		}
+	}
+	
+	//관리자 상담신청 목록 조회
 	@RequestMapping(value="/consultant/adlist.kh", method=RequestMethod.GET)
 	public String consultantAdminListView(Model model, @RequestParam(value = "page", required = false) Integer page) {
 		int currentPage = (page != null) ? page : 1;
@@ -120,6 +148,7 @@ public class ConsultantController {
 		}
 	}
 	
+	//관리자 상담신청 상세조회
 	@RequestMapping(value="/consultant/adDetail.kh", method=RequestMethod.GET)
 	public String consultantAdminDetailView(Model model,  @RequestParam("consultant_no")Integer consultant_no) {	
 		Consultant consultant = cService.printAdminDetailCons(consultant_no);
@@ -134,6 +163,7 @@ public class ConsultantController {
 		
 	}
 	
+	//관리자 상담신청 댓글 등록
 	@ResponseBody
 	@RequestMapping(value="/consultant/replyAdd.kh", method=RequestMethod.POST) 
 	public String consultantAdminWriteReply(Model model, @ModelAttribute ConsultantReply consultantreply) {
@@ -145,6 +175,7 @@ public class ConsultantController {
 		}
 	}
 	
+	//관리자 및 학생 상담신청 댓글 조회
 	@ResponseBody
 	@RequestMapping(value="/consultant/replyList.kh", method=RequestMethod.GET,
 		produces="application/json;charset=utf-8")
@@ -157,6 +188,7 @@ public class ConsultantController {
 		return null;
 	}
 	
+	//관리자 상담현황 수정
 	@ResponseBody
 	@RequestMapping(value="/consultant/statusChange.kh" , method=RequestMethod.POST)
 	 	public String consultantStatusUpdate(@RequestParam("cons_no") int cons_no, Model model) {
@@ -169,7 +201,7 @@ public class ConsultantController {
 		}
 	}
 	
-	// 관리자  정보 가져오기
+	//상담사  정보 가져오기
 		@ResponseBody
 		@RequestMapping(value = "/consultant/JoinViewCounselor.kh", method=RequestMethod.GET, produces="application/json;charset=utf-8")
 		public String consJoinViewCounselor(Model model) throws UnsupportedEncodingException {
@@ -183,31 +215,6 @@ public class ConsultantController {
 			return null;
 		}
 		
-		@RequestMapping(value="/consultant/cancel.kh", method=RequestMethod.GET)
-		public String consultantCancel(Model model, @RequestParam("cons_no") int cons_no,
-				HttpServletRequest request) {
-			
-			int consultantReply = cService.countReply(cons_no);
-			
-			System.out.println(consultantReply +"test");
-			
-			
-			
-			if(consultantReply < 1) {
-				int result = cService.printByNo(cons_no);
-			 if(result >0) {
-				 
-				 return "redirect:/consultant/list.kh";
-			 }else {
-				 model.addAttribute("msg", "상담취소 실패");
-					return "common/errorPage";
-			 }
-			 
-			}else {
-				request.setAttribute("message", "상담취소를 할 수 없습니다."); 
-				request.setAttribute("url", "/consultant/list.kh");
-				return "common/message";
-			}
-		}
+		
 		
 }
