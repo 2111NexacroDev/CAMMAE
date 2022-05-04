@@ -1,5 +1,4 @@
 
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -9,32 +8,8 @@
 <meta charset="UTF-8">
 <title>상담신청 페이지</title>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
-<link rel="stylesheet" href="/resources/menuBar.css">
-<style>
-#contents {
-	height: 783px;
-	width: 100%
-}
+<link rel="stylesheet" href="/resources/contents.css">
 
- #line {
-	height: 50px;
-} 
-
-.left {
-	height: inherit;
-	width: 15%;
-	float: left;
-	width: 15%;
-}
-
-
-.bbs {
-	height: inherit;
-	width: 50%;
-	float: left;
-	margin-left: 200px;
-}
-</style>
 </head>
 <body>
 
@@ -44,48 +19,19 @@
 	</c:if>
 
 	<c:if test="${not empty sessionScope}">
-		<div id="header">
-			<!-- 로그인, 회원가입 부분 -->
-			<!-- gnb = global navigation bar  -->
-			<div id="gnb">
-				<div class="inner">
-
-					<a href="/main.kh" class="btn_gnb_home"> HOME </a>
-					<c:if test="${empty sessionScope}">
-						<a href="/login/loginPage.kh" class="btn_gnb_login"> LOGIN </a>
-					</c:if>
-					<c:if test="${not empty sessionScope}">
-						<a href="/login/logout.kh" class="btn_gnb_login"> LOGOUT </a>
-					</c:if>
-				</div>
-			</div>
+		<!-- header  -->
+	<jsp:include page="../common/menuBar.jsp"></jsp:include>
+	<!-- contents -->
+	<div id="content">
+		<div id="left">
+			<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
 		</div>
-		<!-- local navigation bar -->
-		<div id="lnb">
-			<div class="inner lnb_nav">
-				<h1>
-					<img src="../../../resources/img/logo.png"
-						style="width: 80px; height: 80px;"> <a href="/main.kh">
-						<span id="lnb_title"> 대일대학교</span>
-					</a> <span id="lnb_subtitle">DAILE UNIVERSITY</span>
-				</h1>
-				<ul class="lnb_nav_dep1">
-					<li><a href="/board/list.kh" class="btn_lnb_dep1">게시판</a></li>
-					<li><a href="#" class="btn_lnb_dep1">수강신청</a></li>
-					<li><a href="#" class="btn_lnb_dep1">캠퍼스매니저</a></li>
-					<li><a href="/notice/list.kh" class="btn_lnb_dep1">취업지원센터</a></li>
-				</ul>
-			</div>
-		</div>
-		<div id="line"></div>
-
-		<div class="contents">
-			<div class="left">
-				<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
-			</div>
-			<div class="bbs">
-				<h2 align="left" style="color: rgb(0, 74, 38)">상담관리</h2>
-				<form action="/consultant/register.kh" method="post">
+		<!-- contents-main -->
+		<div id="center">
+			<form action="/consultant/register.kh" method="post">
+				<h3 id="b-title">상담관리</h3>
+				<br>
+				<div id="c-main" style="width: 800px; height: 800px;">
 					상담제목 <input type="text" name="cons_title"><br> 
 					이름 <input type="text" name="cons_student_name" value="${loginUser.studentName}"><br>
 					학번 <input type="text" name="cons_student_no" value="${loginUser.studentNo }"><br>
@@ -101,15 +47,20 @@
 						</c:forEach>
 					</select>
 					<br>
+					
 					상담내용<textarea name="cons_content"></textarea><br> 
-					
-					
 					<input type="submit" value="상담신청">
-				</form>
+					
+				</div>
+				</form>	
 			</div>
+			
 		</div>
-
+		<!-- footer -->
+		
+		<jsp:include page="../common/footer.jsp"></jsp:include>
 	</c:if>
+	
 	<script type="text/javascript">
 		var mIndex = 0;
 		function conChange(){
