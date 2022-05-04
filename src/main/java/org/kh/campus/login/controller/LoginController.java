@@ -125,7 +125,6 @@ public class LoginController {
 	@PostMapping("/login/pwdSame.kh")
 	public NexacroResult pwdSame(
 			@ParamVariable(name="in_pwd") String pwd) {
-		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
@@ -143,7 +142,6 @@ public class LoginController {
 	@PostMapping("/login/pwdChange.kh")
 	public NexacroResult pwdChange(
 			@ParamVariable(name="in_pwd") String pwd) {
-		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
