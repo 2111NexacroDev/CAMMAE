@@ -19,6 +19,12 @@
 			<th>학번</th>
 			<th>년도</th>
 			<th>학기</th>
+			<th>이수구분</th>
+			<th>학점</th>
+			<th>교수명</th>
+			<th>교과목명</th>
+			<th>개설학과</th>
+			<th>강의시간</th>
 			<th>삭제</th>
 		</tr>
 		<c:forEach items="${cList }" var="cart">
@@ -33,6 +39,13 @@
 				<td>${cart.studentNo }</td>
 				<td>${cart.cartYear }</td>
 				<td>${cart.cartTerm }</td>
+				<td>${cart.lectureDivision }</td>
+				<td>${cart.lectureGrade }</td>
+				<td>${cart.professorName }</td>
+				<td>${cart.lectureName }</td>
+				<td>${cart.lectureDepartment }</td>
+				<td>${cart.lectureTime }</td>
+				
 				<td><c:url var="cRemove" value="/cart/remove.kh">
 						<c:param name="cartNo" value="${cart.cartNo }"></c:param>
 					</c:url> <a href="${cRemove }">삭제</a></td>
