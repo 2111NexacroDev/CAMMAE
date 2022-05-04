@@ -31,7 +31,7 @@ public interface BoardStore {
 
 	public int deleteBoardReply(BoardReply boardReply, SqlSession sqlSession);
 
-	public int selectListCount(SqlSession sqlSession);
+	public int selectListCount(SqlSession sqlSession, PageInfo pageInfo);
 
 	public List<University> selectAllUniversity(SqlSession sqlSession);
 

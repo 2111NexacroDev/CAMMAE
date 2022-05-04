@@ -83,9 +83,10 @@ public class BoardServiceImpl implements BoardService{
 		return result;
 	}
 	@Override
-	public int getListCount() {
-		int totalCount = bStore.selectListCount(sqlSession);
+	public int getListCount(PageInfo pageInfo) {
+		int totalCount = bStore.selectListCount(sqlSession, pageInfo);
 		return totalCount;
+		
 	}
 	@Override
 	public List<University> printAllUniversity() {

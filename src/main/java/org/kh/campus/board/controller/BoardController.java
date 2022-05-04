@@ -7,18 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
 import org.kh.campus.board.domain.PageInfo;
 import org.kh.campus.board.domain.Pagination;
-import org.kh.campus.board.domain.Search;
 import org.kh.campus.board.domain.University;
 import org.kh.campus.board.service.BoardService;
-import org.kh.campus.consultant.domain.ConsultantReply;
-import org.kh.campus.question.domain.QuestionReply;
 import org.kh.campus.student.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,29 +39,33 @@ public class BoardController {
 	// 게시판 목록 조회
 	@RequestMapping(value = "/board/list.kh", method = RequestMethod.GET)
 	public ModelAndView boardListView(ModelAndView mv, @RequestParam(value = "page", required = false) Integer page
-			,HttpSession session, @RequestParam(value = "universityCode", required = false) Integer universityCode) {
+			,HttpSession session
+			, @RequestParam(value = "universityCode", required = false) Integer universityCode
+			, @ModelAttribute PageInfo pageInfo) {
 
 		int universityCodeStd = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
-		System.out.println(universityCodeStd +"test11");
-		System.out.println(universityCodeStd +"test11");
-		System.out.println(universityCodeStd +"test11");
+		
 		
 		universityCode = (universityCode != null) ? universityCode : universityCodeStd;
 		int currentPage = (page != null) ? page : 1;
-		int totalCount = service.getListCount();
+		System.out.println(universityCode+"test");
+		int totalCount = service.getListCount(pageInfo);
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
+		
 		pi.setUniversityCode(universityCode);
+		pi.setSearchCondition(pageInfo.getSearchCondition());
+		pi.setSearchValue(pageInfo.getSearchValue());
 		try {
 			List<Board> bList = service.printAllBoard(pi);
 			if (!bList.isEmpty()) {
 				mv.addObject("bList", bList);
-				mv.addObject("pi", pi);
 				mv.setViewName("board/boardList");
 				mv.addObject("menu", "board");
+				mv.addObject("pi", pi);
+				System.out.println(pi.toString()+"test");
 
 			} else {
-				mv.addObject("msg", "학과게시판 조회 실패");
-				mv.setViewName("common/errorPage");
+				mv.setViewName("board/boardList");
 			}
 		} catch (Exception e) {
 			mv.addObject("msg", e.toString());
@@ -77,14 +77,12 @@ public class BoardController {
 	@RequestMapping(value = "/board/unlist.kh", method = RequestMethod.GET)
 	public ModelAndView boarUnList(ModelAndView mv,
 			HttpSession session ) {
-		
+			
 		try {
 			String login = session.getAttribute("login").toString();
-			System.out.println(login);
-			System.out.println(login);
-			System.out.println(login);
 			if (login.contentEquals("std") || login.contentEquals("prf")) {
-				mv.setViewName("redirect:/board/list.kh");
+				int universityCodeStd = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
+				mv.setViewName("redirect:/board/list.kh?universityCode="+universityCodeStd);
 			} else {
 			List<University> uList = service.printAllUniversity();
 			if (!uList.isEmpty()) {
@@ -123,21 +121,15 @@ public class BoardController {
 
 	// 학과게시판 검색기능
 
-	@RequestMapping(value = "/board/search.kh", method = RequestMethod.GET)
-	public ModelAndView boardSearchList(ModelAndView mv, @ModelAttribute Search search) {
-		try {
-			List<Board> searchList = service.printSearchBoard(search);
-			if (!searchList.isEmpty()) {
-				mv.addObject("bList", searchList);
-				mv.setViewName("board/boardList");
-			}
-		} catch (Exception e) {
-			mv.addObject("msg", e.toString());
-			mv.setViewName("common/errorPage");
-		}
-		return mv;
-	}
-
+	/*
+	 * @RequestMapping(value = "/board/search.kh", method = RequestMethod.GET)
+	 * public ModelAndView boardSearchList(ModelAndView mv, @ModelAttribute Search
+	 * search) { try { List<Board> searchList = service.printSearchBoard(search); if
+	 * (!searchList.isEmpty()) { mv.addObject("bList", searchList);
+	 * mv.setViewName("board/boardList"); } } catch (Exception e) {
+	 * mv.addObject("msg", e.toString()); mv.setViewName("common/errorPage"); }
+	 * return mv; }
+	 */
 	// 학과게시판 등록화면
 	@RequestMapping(value = "/board/writeView.kh")
 	public String boardWriteView() {
@@ -148,7 +140,7 @@ public class BoardController {
 	@RequestMapping(value = "/board/register.kh", method = RequestMethod.POST)
 	public ModelAndView boardRegister(ModelAndView mv, @ModelAttribute Board board,
 			@RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile,
-			HttpServletRequest request) {
+			HttpServletRequest request, HttpSession session) {
 		try {
 			if (uploadFile != null && !uploadFile.getOriginalFilename().equals("")) {
 				HashMap<String, String> fileMap = saveFile(uploadFile, request);
@@ -161,11 +153,12 @@ public class BoardController {
 				}
 
 			}
-			int universityCode = 0001;
+			int universityCode = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
 			board.setUniversityCode(universityCode);
+			System.out.println(universityCode);
 			int result = service.registerBoard(board);
 			if (result > 0) {
-				mv.setViewName("redirect:/board/list.kh");
+				mv.setViewName("redirect:/board/list.kh?universityCode="+universityCode);
 			} else {
 				mv.addObject("msg", "게시글 등록 실패");
 				mv.setViewName("common.errorPage");

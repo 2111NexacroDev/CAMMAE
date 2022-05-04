@@ -117,12 +117,13 @@ h3 {
 
 
 					<c:forEach items="${bList }" var="board">
+						<input type="hidden" name="universityCode" value="${loginUser.universityCode }" />
 						<tr>
 							<td class="ta" id="no">${board.boardNo}</td>
 							<c:url var="bDetail" value="/board/detail.kh">
 								<c:param name="boardNo" value="${board.boardNo}"></c:param>
+			
 							</c:url>
-
 							<td><a href="${bDetail}">${board.boardTitle }</a></td>
 							<td>${board.boardWriter }</td>
 							<td>${board.boardDate }</td>
@@ -132,40 +133,53 @@ h3 {
 					</c:forEach>
 				</tbody>
 			</table>
-			<div class="paging">
+			<div>
+				<form action="/board/list.kh" method="get">
+					<input type="hidden" name="universityCode" value="${loginUser.universityCode }" />
+					<select name="searchCondition">
+						<option value="all">전체</option>
+						<option value="title">제목</option>
+						<option value="contents">내용</option>
+						<option value="writer">작성자</option>
+					</select> <input type="text" name="searchValue"> <input class="btn"
+						type="submit" value="검색">
+				</form>
+			</div>
+			<!-- 페이징-->			
+			<div>
+				<c:if test="${pi.startNavi !=1 }">
 
-				<c:if test="${pi.startNavi ==1 }">
-
-					<a href="/board/list.kh?page=1"></a>
+					<a href="/board/list.kh?universityCode=${pi.universityCode}&page=${pi.startNavi-1}">
+						<button>이전</button>
+					</a>
 
 				</c:if>
-
-
-				<c:if test="${pi.prev}">
-
-					<a href="/board/list.kh?page=${pi.startNavi-1}"> </a>
-
-				</c:if>
-
-
-
-
 
 				<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
-					<c:url var="pagination" value="/board/list.kh">
-						<c:param name="page" value="${p }"></c:param>
-					</c:url>
-
-					<a href="${pagination }"><button class="on1">${p }</button></a>&nbsp;
-																		
-									</c:forEach>
-
-
+					<c:if test="${empty pageInfo.searchValue }">
+						<c:url var="pagination" value="/board/list.kh?universityCode=${pi.universityCode}">
+							<c:param name="page" value="${p }"></c:param>
+						</c:url>
+					</c:if>
+					<c:if test="${not empty pageInfo.searchValue }">
+						<c:url var="pagination" value="/board/list.kh?universityCode=${pi.universityCode}&searchCondition=${pageInfo.searchCondition}&searchValue=${pageInfo.searchValue}">
+							
+							<c:param name="page" value="${p }"></c:param>
+						</c:url>
+					</c:if>
+					<a href="${pagination }">${p }</a>&nbsp;
+			</c:forEach>
 				<c:if test="${pi.next && pi.endNavi > 0}">
 
-					<a href="/board/list.kh?page=${pi.endNavi+1}"> </a>
+					<a href="/board/list.kh?universityCode=${pi.universityCode}&page=${pi.endNavi+1}">
+						<button>다음</button>
+					</a>
 
 				</c:if>
+
+				<%-- <c:if test="${pi.endNavi && pi.endNavi >0}">
+		<a href="/board/list?page=${pi.endNavi+1 }"><button style="height:25px; width:55px">다음</button></a>
+	</c:if> --%>
 
 			</div>
 		</div>

@@ -21,7 +21,7 @@ public interface BoardService {
 	public int registerBoardReply(BoardReply boardReply);//댓글 등록
 	public int modifyBoardReply(BoardReply boardReply);//댓글 수정
 	public int removeBoardReply(BoardReply boardReply);//댓글 삭제
-	public int getListCount();
+	public int getListCount(PageInfo pageInfo);
 	public List<University> printAllUniversity();
 	
 
