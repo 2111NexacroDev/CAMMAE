@@ -11,10 +11,10 @@ import org.kh.campus.manager.domain.Manager;
 
 public interface ConsultantStore {
 
-	public List<Consultant> selectAllCons(SqlSession sqlSession, int cons_student_no);
+	public List<Consultant> selectAllCons(SqlSession sqlSession, int cons_student_no ,PageInfo pi);
 	public int insertCons(SqlSession sqlSession, Consultant consultant);
 	public Consultant selectDetailCons(SqlSession sqlSession, HashMap<String, Integer>map);
-	public List<Consultant> selectAdminAllCons(SqlSession sqlSession, PageInfo pi);
+	public List<Consultant> selectAdminAllCons(SqlSession sqlSession, PageInfo pi, int studentNo);
 	public int insertAdminConsReply(SqlSession sqlSession, ConsultantReply consultantReply);
 	public Consultant selectAdminDetailCons(SqlSession sqlSession, Integer consultant_no);
 	public int selectListCount(SqlSession sqlSession);

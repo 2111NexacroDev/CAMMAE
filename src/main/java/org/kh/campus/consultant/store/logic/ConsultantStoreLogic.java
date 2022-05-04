@@ -16,8 +16,12 @@ import org.springframework.stereotype.Repository;
 public class ConsultantStoreLogic implements ConsultantStore {
 
 	@Override
-	public List<Consultant> selectAllCons(SqlSession sqlSession,  int cons_student_no) {
-		List<Consultant> cList = sqlSession.selectList("ConsultantMapper.selectAllCons", cons_student_no);
+	public List<Consultant> selectAllCons(SqlSession sqlSession,  int cons_student_no, PageInfo pi) {
+		int limit = pi.getConsultantLimit();
+		int currentPage = pi.getCurrentPage();
+		int offset = (currentPage -1) * limit ;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		List<Consultant> cList = sqlSession.selectList("ConsultantMapper.selectAllCons", cons_student_no, rowBounds);
 		return cList;
 	}
 
@@ -34,12 +38,12 @@ public class ConsultantStoreLogic implements ConsultantStore {
 	}
 
 	@Override
-	public List<Consultant> selectAdminAllCons(SqlSession sqlSession, PageInfo pi) {
+	public List<Consultant> selectAdminAllCons(SqlSession sqlSession, PageInfo pi, int studentNo) {
 		int limit = pi.getConsultantLimit();
 		int currentPage = pi.getCurrentPage();
 		int offset = (currentPage -1) * limit ;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		List<Consultant> cList = sqlSession.selectList("ConsultantMapper.selectAdminAllCons" ,pi, rowBounds);
+		List<Consultant> cList = sqlSession.selectList("ConsultantMapper.selectAdminAllCons" ,studentNo, rowBounds);
 		return cList;
 	}
 

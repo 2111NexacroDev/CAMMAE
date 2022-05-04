@@ -21,8 +21,8 @@ public class ConsultantServiceImpl implements ConsultantService {
 	private SqlSession sqlSession;
 		
 	@Override
-	public List<Consultant> printAllCons(int cons_student_no) {
-		List<Consultant> cList= cStore.selectAllCons(sqlSession, cons_student_no);
+	public List<Consultant> printAllCons(int cons_student_no, PageInfo pi) {
+		List<Consultant> cList= cStore.selectAllCons(sqlSession, cons_student_no, pi);
 		return cList;
 	}
 
@@ -39,8 +39,8 @@ public class ConsultantServiceImpl implements ConsultantService {
 	}
 
 	@Override
-	public List<Consultant> printAdminAllCons(PageInfo pi) {
-		List<Consultant> cList = cStore.selectAdminAllCons(sqlSession, pi);
+	public List<Consultant> printAdminAllCons(PageInfo pi, int studentNo) {
+		List<Consultant> cList = cStore.selectAdminAllCons(sqlSession, pi, studentNo);
 		return cList;
 	}
 
