@@ -6,7 +6,7 @@
 <head>
 <link rel="stylesheet" href="/resources/menuBar.css">
 <style>
-
+	
 </style>
 <meta charset="UTF-8">
 <title>공지사항</title>

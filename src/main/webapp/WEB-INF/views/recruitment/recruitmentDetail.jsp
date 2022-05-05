@@ -28,6 +28,7 @@
 	-webkit-backdrop-filter: blur(1.5px);
 	border-radius: 10px;
 	border: 1px solid rgba(255, 255, 255, 0.18);
+	z-index: 1000;
 }
 /*         modal창 (파란색 배경) */
 #modal .modal-window {
@@ -178,10 +179,19 @@
 			<td>지역</td>
 			<td id="addr1">${recruitment.recruitmentRegion }</td>
 		</tr>
-		<tr>
+		<!-- <tr>
 			<td><button id="mapView" onclick="mapView();">지도</button></td>
-			<td>
-			<div id="map" style="width: 500px; height: 300px; margin-top: 10px; display: none;"></div></td>
+			<td><div id="map"
+					style="width: 500px; height: 500px; margin-top: 10px; display: none;"></div></td>
+		</tr> -->
+		<tr>		
+	
+            <td colspan="2">
+            <Button onclick="mapView()" >지도</Button>   
+            <div id="map" style="width:100%; height: 350px;"></div>
+         <!--    <div id="clickLatlng"></div> -->
+            </td>
+		
 		</tr>
 		<tr>
 			<td>시작일</td>
@@ -202,7 +212,6 @@
 				href="${rModify }">수정하기</a> <a href="${rDelete }">삭제하기</a>
 				<button class="btn-modal">지원하기</button></td>
 		</tr>
-
 	</table>
 	<form action="/support/register.kh" method="post"
 		enctype="multipart/form-data">
@@ -222,30 +231,76 @@
 			</div>
 		</div>
 	</form>
+
+
+
+
+
+
+
+
+
 	<script>
 	
-	var resultY = "";
-	var resultX = "";
+	    function mapView() {
+	           var mapContainer = document.getElementById('map'),
+	           mapOption = {
+	              center: new kakao.maps.LatLng(33.450701, 126.570608),
+	              level: 3
+	           };
+	       
+	          var map = new daum.maps.Map(mapContainer, mapOption);
+	             var geocoder = new daum.maps.services.Geocoder();
+	            
+	               geocoder.addressSearch('${recruitment.recruitmentRegion}', function(results, status) {
+	               var coords=new kakao.maps.LatLng(results[0].y, results[0].x);
+	                 /*   var message = 'lating: new kakao.maps.LatLng('+results[0].y+','; message
+	                   += results[0].x + ')';
+	                    var resultDiv = document.getElementById('clickLatlng');
+	                   resultDiv.innerHTML = message;  */
+	                   
+	                   var marker = new kakao.maps.Marker({
+	                      map:map,
+	                      position: coords
+	                   });
+	                   var infowindow = new kakao.maps.InfoWindow({
+	                      content :'<div style="width: 300px; text-align:center;padding: 6px 0;">${recruitment.recruitmentCompanyName }</div>'
+	                   });
+	                   infowindow.open(map, marker);
+	                   map.setCenter(coords);
+	                   
+	               });
+	       };        
+	               
+	               
+/* var map2;
+		
+ 	var resultY = "";
+	var resultX = "";  
 			function mapView() {
 				var map = document.getElementById('map')
 			
 				map.style.display = "block";
-				 mapOption = {
+				
+				window.setTimeout(function(){
+					map2.relayout();},0);
+				
+ 			 	 mapOption = {
 				            center: new daum.maps.LatLng(resultY, resultX), // 지도의 중심좌표 
-				            level: 10// 지도의 확대 레벨
-				        };
+				            level: 5// 지도의 확대 레벨
+				        };  
 
 			};
 		
-			var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-		    mapOption = {
+	 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	 	    mapOption = {
 		        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-		        level: 5 // 지도의 확대 레벨
-		    };  
-		
+		        level:6 // 지도의 확대 레벨
+		    }; 
+		 
 			// 지도를 생성합니다    
 			var map = new kakao.maps.Map(mapContainer, mapOption); 
-			
+			map2 = map;
 			// 주소-좌표 변환 객체를 생성합니다
 			var geocoder = new kakao.maps.services.Geocoder();
 			var addr1 = document.getElementById('addr1').innerHTML;
@@ -256,9 +311,9 @@
 		     if (status === kakao.maps.services.Status.OK) {
 		
 		        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-				
-		        resultY = result[0].y;
-		        resultX = result[0].x;
+				 
+	        resultY = result[0].y;
+		        resultX = result[0].x;  
 		        
 		        // 결과값으로 받은 위치를 마커로 표시합니다
 		        var marker = new kakao.maps.Marker({
@@ -273,9 +328,13 @@
 		        infowindow.open(map, marker);
 		
 		        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-		        map.setCenter(coords);
+		        map2.setCenter(coords);
+               
+		        
+		      
 		    } 
 		});    
+ */
 </script>
 </body>
 </html>
