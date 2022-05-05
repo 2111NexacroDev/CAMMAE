@@ -48,10 +48,13 @@
 				<td>급여</td>
 				<td><input type="text" name="recruitmentSalary"></td>
 			</tr>
-			<!-- <tr>
-				<td>지역</td>
-				<td><input type="text" name="recruitmentRegion"></td>
-			</tr> -->
+			<tr>
+				<td>
+					<input type="text" id="sample5_address" placeholder="주소" name="recruitmentRegion">
+					<input type="button" onclick="sample5_execDaumPostcode()" value="주소 검색"><br>
+					<div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
+				</td>
+			</tr>
 			
 			<tr>
 				<td>시작일</td>
@@ -68,9 +71,7 @@
 				</td>
 			</tr>
 		</table>
-			<input type="text" id="sample5_address" placeholder="주소">
-			<input type="button" onclick="sample5_execDaumPostcode()" value="주소 검색"><br>
-			<div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
+			
 	</form>
 	<!-- c27b638af6c98ea42aa55b7709a8c29c -->
 	
