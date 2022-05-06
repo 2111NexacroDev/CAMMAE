@@ -67,8 +67,24 @@ h2{
 	margin-right: 5px;
 }
 
-.pbtn{
-	color : #10412C;
-	font-size:20px;
+.page-btn, .pbtn { /* 페이지, 이전/다음 버튼 */
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
 }
 
+.pbtn{ /* 이전/다음 버튼 */
+	color : #10412C;
+	font-size:15px;
+	font-weight: bold;
+}
+
+.page-btn { /* 페이지 버튼 */
+	font-size:12px;
+}
+
+.page-btn.active { /* 선택된 페이지 버튼 */
+	color : #10412C;
+	font-weight: bold;
+	font-size: 15px;
+}
