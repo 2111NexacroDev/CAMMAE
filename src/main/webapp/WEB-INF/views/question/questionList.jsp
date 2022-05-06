@@ -8,6 +8,26 @@
 <title>질의응답게시판</title>
 <link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
+<style>
+#q1{
+	width:10%;
+}
+#q2{
+	width:33%;
+}
+#q3{
+	width:22%;
+}
+#q4{
+	width:10%;
+}
+#q5{
+	width:15%;
+}
+#q6{
+	width:10%;
+}
+</style>
 </head>
 
 <body>
@@ -32,12 +52,12 @@
 			<table class="type01">
 				<thead>
 					<tr>
-						<th scope="cols">번호</th>
-						<th scope="cols">담당교수 및 강의명</th>
-						<th scope="cols">제목</th>
-						<th scope="cols">작성자</th>
-						<th scope="cols">작성일</th>
-						<th scope="cols">조회수</th>
+						<th id="q1">번호</th>
+						<th id="q2">담당교수 및 강의명</th>
+						<th id="q3">제목</th>
+						<th id="q4">작성자</th>
+						<th id="q5">작성일</th>
+						<th id="q6">조회수</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -48,10 +68,10 @@
 							<c:url var="qDetail" value="/question/detail">
 								<c:param name="questionNo" value="${question.questionNo}"></c:param>
 							</c:url>
-							<td scope="row"><a href="${qDetail}">${question.questionTitle }</a></td>
-							<td scope="row">${question.questionWriter }</td>
-							<td scope="row">${question.questionDate }</td>
-							<td scope="row">${question.questionCount }</td>
+							<td><a href="${qDetail}">${question.questionTitle }</a></td>
+							<td>${question.questionWriter }</td>
+							<td>${question.questionDate }</td>
+							<td>${question.questionCount }</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -75,7 +95,7 @@
 			<div class="paging" align="center">
 				<c:if test="${pi.startNavi !=1 }">
 					<a class="pbtn" href="/question/list?page=${pi.startNavi-1}">
-						◀
+						<button class="pbtn">＜</button>
 					</a>
 				</c:if>
 
@@ -91,11 +111,12 @@
 							<c:param name="page" value="${p }"></c:param>
 						</c:url>
 					</c:if>
-					<a href="${pagination }">${p }</a>&nbsp;
+					 <a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
+
 			</c:forEach>
 				<c:if test="${pi.next && pi.endNavi > 0}">
 					<a class="pbtn" href="/question/list?page=${pi.endNavi+1}">
-						▶
+						<button class="pbtn">＞</button>
 					</a>
 				</c:if>
 

@@ -43,7 +43,8 @@
 				width: 220px;
 				background-color : rgb(231, 232, 226);
 				border-bottom: solid 1px gray;
-				font-size : 15px;
+				font-size : 16px;
+				font-weight:bold;
 				line-height: 40px;
 			}
 			.contents_1bar_2.active a {
