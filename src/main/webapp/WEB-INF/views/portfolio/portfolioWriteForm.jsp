@@ -7,6 +7,30 @@
 <meta charset="UTF-8">
 <title>학생 포트폴리오 등록 페이지</title>
 <link rel="stylesheet" href="/resources/contents.css">
+<style>
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table td* {
+	vertical-align: middle;
+}
+
+table td {
+	padding: 15px 5px;
+	border-bottom: 1px solid #c2c2c2;
+	font-size: 16px;
+}
+.td-left {
+	width: 100px;
+}
+
+.td_sub{
+	border: none;
+}
+
+</style>
 </head>
 <body>
 	<c:if test="${empty sessionScope}">
@@ -27,16 +51,65 @@
 			<br>
 			<div>
 				<form action="/portfolio/register.kh" method="post" enctype="multipart/form-data">
-					제목 <input type="text" name="port_title"><br> 
-					이름 <input type="text" name="port_name" value="${loginUser.studentName}"><br>
-					학번 <input type="text" name="port_student_no" value="${loginUser.studentNo}"><br> 
-					학과명 <input type="text" name="port_college" value="${loginUser.universityCollege}"><br>
-					전화번호 <input type="text" name="port_student_number" value="${loginUser.studentPhonenumber}"><br>
-					자격증 첨부 <input type="file" name="uploadFile" value="첨부파일" multiple="multiple"><br>
-					수상이력 첨부 <input type="file" name="uploadFile1" value="첨부파일" multiple="multiple"><br> 
-					단과대학 <input type="text" name="port_university_code" value="${loginUser.departmentName}" /><br>
-					내용 <textarea name="port_content"></textarea><br>
-					<input type="submit" value="등록">
+					
+					<table>
+						<tr>
+							
+							<td class="td_left">제목</td>
+							<td class="td_right"><input type="text" name="port_title"> </td>
+						</tr>
+						
+						<tr>
+							<td class="td_left">이름</td>
+							<td class="td_right"> <input type="text" name="port_name" value="${loginUser.studentName}"> </td>
+						</tr>
+						
+						<tr>
+							<td class="td_left">학번</td>
+							<td class="td_right"><input type="text" name="port_student_no" value="${loginUser.studentNo}"></td>
+						</tr>
+						
+						<tr>
+							<td class="td_left">학과명</td>
+							<td class="td_right"><input type="text" name="port_college" value="${loginUser.universityCollege}"></td>
+						</tr>
+						
+						<tr>
+							<td class="td_left">전화번호</td>
+							<td class="td_right"><input type="text" name="port_student_number" value="${loginUser.studentPhonenumber}"></td>
+						</tr>
+						
+						<tr>
+							<td class="td_left">자격증 첨부</td>
+							<td class="td_right"><input type="file" name="uploadFile" value="첨부파일" multiple="multiple"></td>
+						</tr>
+						
+						
+						<tr>
+							<td class="td_left">수상이력 첨부</td>
+							<td class="td_right"><input type="file" name="uploadFile1" value="첨부파일" multiple="multiple"></td>
+						</tr>
+						
+						
+						<tr>
+							<td class="td_left">단과대학</td>
+							<td class="td_right"><input type="text" name="port_university_code" value="${loginUser.departmentName}" /></td>
+						</tr>
+						
+						<tr>
+							<td class="td_left">내용</td>
+							<td class="td_right"><textarea name="port_content"></textarea></td>
+						</tr>
+						
+						<tr >
+							<td colspan="2" align="center" class="td_sub">
+								<input type="submit" value="등록" class="submit">
+							</td>
+						</tr>
+						
+					</table>
+		
+					
 				</form>
 			</div>
 		</div>

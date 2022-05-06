@@ -7,6 +7,8 @@
 <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 <meta charset="UTF-8">
 <title>채용공고 상세 조회</title>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=59e01a6bc5da7b5c92daf4b7f323ce10&libraries=services"></script>
 <style>
         #modal.modal-overlay {
             width: 100%;
@@ -169,7 +171,12 @@
 			</tr>
 			<tr>
 				<td>지역</td>
-				<td>${recruitment.recruitmentRegion }</td>		
+				<td>
+				<Button onclick="sample5_execDaumPostcode()" >지도</Button>	
+				<div id="map" style="width:100%; height: 350px;"></div>
+				<div id="clickLatlng"></div>
+				</td>
+					
 			</tr>
 			<tr>
 				<td>시작일</td>
@@ -210,5 +217,45 @@
 				        </div>
 		    		</div>
 		</form>
+		
+		<script>
+    function sample5_execDaumPostcode() {
+        	var mapContainer = document.getElementById('map'),
+        	mapOption = {
+        		center: new kakao.maps.LatLng(33.450701, 126.570608),
+        		level: 3
+        	};
+    	
+    		var map = new daum.maps.Map(mapContainer, mapOption);
+             var geocoder = new daum.maps.services.Geocoder();
+            
+               geocoder.addressSearch('${recruitment.recruitmentRegion}', function(results, status) {
+				   var coords=new kakao.maps.LatLng(results[0].y, results[0].x);
+                   var message = 'lating: new kakao.maps.LatLng('+results[0].y+','; message
+                   += results[0].x + ')';
+                   var resultDiv = document.getElementById('clickLatlng');
+                   resultDiv.innerHTML = message;
+                   
+                   var marker = new kakao.maps.Marker({
+                   	map:map,
+                   	position: coords
+                   });
+                   var infowindow = new kakao.maps.InfoWindow({
+                   	content :'<div style="width: 120px; text-align:center;padding: 6px 0;">${recruitment.recruitmentCompanyName }</div>'
+                   });
+                   infowindow.open(map, marker);
+                   map.setCenter(coords);
+                   
+               });
+       };        
+            	
+            	
+            	
+            	
+            	
+            	
+            	
+      
+</script>
 </body>
 </html>
