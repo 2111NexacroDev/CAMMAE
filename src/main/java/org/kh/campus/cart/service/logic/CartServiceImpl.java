@@ -51,8 +51,8 @@ public class CartServiceImpl implements CartService {
 	
 	
 	@Override
-	public List<Lecture> printAllenroll() {
-		List<Lecture> lList = cStore.selectAllEnroll(sqlSession);
+	public List<Lecture> printAllenroll(String lectureDepartment) {
+		List<Lecture> lList = cStore.selectAllEnroll(sqlSession, lectureDepartment);
 		return lList;
 	}
 

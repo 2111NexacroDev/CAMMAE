@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -93,10 +94,13 @@ public class CartController {
 	}
 	
 	// 수강신청 신청목록 페이지 보여주는곳
-	@RequestMapping(value = "/cart/enrollRegister.kh", method = RequestMethod.GET)
-	public ModelAndView enrollListView(ModelAndView mv) {
+	@ResponseBody
+	@RequestMapping(value = "/cart/enrollRegister.kh", method = RequestMethod.GET, produces="application/json;charset=utf-8")
+	public ModelAndView enrollListView(ModelAndView mv,
+			@RequestParam(value = "lecturedep", required = false) String lectureDepartment) {
 		try {
-			List<Lecture> lList = cService.printAllenroll();
+			List<Lecture> lList = cService.printAllenroll(lectureDepartment);
+			System.out.println(lList.toString() +"test11");
 			if (!lList.isEmpty()) {
 				mv.addObject("lList", lList);
 				mv.setViewName("cart/enrollRegister");

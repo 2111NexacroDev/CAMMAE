@@ -17,7 +17,7 @@ public interface CartStore {
 
 	int deleteCart(SqlSession sqlSession, int cartNo);
 
-	List<Lecture> selectAllEnroll(SqlSession sqlSession);
+	List<Lecture> selectAllEnroll(SqlSession sqlSession, String lectureDepartment);
 
 	List<Lecture> selectMyEnroll(SqlSession sqlSession);
 

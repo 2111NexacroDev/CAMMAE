@@ -92,6 +92,9 @@ FROM CART_TBL  JOIN  LECTURE_TBL
  	
  	<select id="selectAllEnroll" resultMap="lectureResultMap"> 
  		SELECT * FROM LECTURE_TBL
+ 		<if test="lectureDepartment!=null">
+ 			WHERE LECTURE_DEPARTMENT = #{lectureDepartment}
+ 		</if>
  	</select> 
  	
  	<insert id="insertEnroll" parameterType="Lecture">

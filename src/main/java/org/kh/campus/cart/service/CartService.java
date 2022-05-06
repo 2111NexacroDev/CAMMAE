@@ -25,7 +25,7 @@ public interface CartService {
 	//수강신청 부분
 	
 	// 수강신청 목록 출력
-	public List<Lecture> printAllenroll();
+	public List<Lecture> printAllenroll(String lectureDepartment);
 	
 	// 수강신청 등록(신청)
 	public int registerEnroll(Lecture lecture);
