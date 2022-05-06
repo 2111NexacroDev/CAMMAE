@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>질의응답게시판</title>
+<link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
 </head>
 
@@ -19,37 +20,44 @@
 		</div>
 		<!-- contents-main -->
 		<div id="center">
-			<h3 id="b-title">질의응답 게시판</h3>
-			<br>
-			<div>
-				<button class="btn" onclick="location.href='/question/registerView'">글쓰기</button>
+			<div class="c-title">
+				<div class="b-title">
+					<h2>질의응답게시판</h2>
+				</div>
+				<div class="btn_1">
+					<button class="btn" style="width: 80px"
+						onclick="location.href='/question/registerView'">글쓰기</button>
+				</div>
 			</div>
-			<br>
-			<table width="800px" border="2">
-				<tr>
-					<th height="40px">번호</th>
-					<th>담당교수 및 강의명</th>
-					<th>제목</th>
-					<th>작성자</th>
-					<th>작성일</th>
-					<th>조회수</th>
-				</tr>
-				<c:forEach items="${qList }" var="question">
+			<table class="type01">
+				<thead>
 					<tr>
-						<td height="40px">${question.questionNo }</td>
-						<td align="center">${question.professorName }_${question.lectureName }</td>
-						<c:url var="qDetail" value="/question/detail">
-							<c:param name="questionNo" value="${question.questionNo}"></c:param>
-						</c:url>
-						<td><a href="${qDetail}">${question.questionTitle }</a></td>
-						<td>${question.questionWriter }</td>
-						<td>${question.questionDate }</td>
-						<td>${question.questionCount }</td>
+						<th scope="cols">번호</th>
+						<th scope="cols">담당교수 및 강의명</th>
+						<th scope="cols">제목</th>
+						<th scope="cols">작성자</th>
+						<th scope="cols">작성일</th>
+						<th scope="cols">조회수</th>
 					</tr>
-				</c:forEach>
+				</thead>
+				<tbody>
+					<c:forEach items="${qList }" var="question">
+						<tr>
+							<td>${question.questionNo }</td>
+							<td >${question.professorName }_${question.lectureName }</td>
+							<c:url var="qDetail" value="/question/detail">
+								<c:param name="questionNo" value="${question.questionNo}"></c:param>
+							</c:url>
+							<td scope="row"><a href="${qDetail}">${question.questionTitle }</a></td>
+							<td scope="row">${question.questionWriter }</td>
+							<td scope="row">${question.questionDate }</td>
+							<td scope="row">${question.questionCount }</td>
+						</tr>
+					</c:forEach>
+				</tbody>
 			</table>
 			<br>
-			<div>
+			<div align="center">
 				<form action="/question/list.kh" method="get">
 					<select name="searchCondition">
 						<option value="all">전체</option>
@@ -64,10 +72,10 @@
 			</div>
 			<br>
 			<!-- 페이지 -->
-			<div>
+			<div class="paging" align="center">
 				<c:if test="${pi.startNavi !=1 }">
-					<a href="/question/list?page=${pi.startNavi-1}">
-						<button>이전</button>
+					<a class="pbtn" href="/question/list?page=${pi.startNavi-1}">
+						◀
 					</a>
 				</c:if>
 
@@ -86,8 +94,8 @@
 					<a href="${pagination }">${p }</a>&nbsp;
 			</c:forEach>
 				<c:if test="${pi.next && pi.endNavi > 0}">
-					<a href="/question/list?page=${pi.endNavi+1}">
-						<button>다음</button>
+					<a class="pbtn" href="/question/list?page=${pi.endNavi+1}">
+						▶
 					</a>
 				</c:if>
 
@@ -97,6 +105,6 @@
 
 	<!-- footer -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>
-	
+
 </body>
 </html>
