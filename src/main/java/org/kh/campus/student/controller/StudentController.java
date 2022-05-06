@@ -43,6 +43,7 @@ public class StudentController {
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		int studentNo = 0;
+		String strSucc = "";
 		
 		String studentPhonenumber = dsGet(inStd, 0, "studentPhonenumber");
 		String studentAddress = dsGet(inStd, 0, "studentAddress");
@@ -54,10 +55,15 @@ public class StudentController {
 				);
 		student.setStudentNo(studentNo);
 			
-		sService.modifyStudent(student);
+		int result1 = sService.modifyStudent(student);
+		
+		if(result1>0) {
+			strSucc = "성공";
+		}
 
 		result.addVariable("ErrorCode", nErrorCode);
 		result.addVariable("ErrorMsg", strErrorMsg);
+		result.addVariable("strSucc", strSucc);
 	
 		return result;
 	}

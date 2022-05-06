@@ -18,6 +18,7 @@
 		<result property="professorNo" column="PROFESSOR_NO"/>
 		<result property="studentState" column="STUDENT_STATE"/>
 		<result property="professorName" column="PROFESSOR_NAME"/>
+		<result property="chk" column="CHK"/>
 	</resultMap>
 	
 	<select id="selectStudentList" resultMap="studentResultMap">
@@ -26,8 +27,8 @@
 	
 	<insert id="insertStudent">
 		INSERT INTO STUDENT_TBL VALUES(#{studentNo}, #{universityCollege}, #{departmentName}, #{studentName}
-		, #{studentGrade}, #{studentBirth}, #{studentAddress}, #{studentEmail}, #{studentPassword}, #{professorNo}
-		, #{studentState}, #{studentState}, #{professorName})
+		, #{studentGrade}, #{studentBirth}, #{studentAddress}, #{studentPhonenumber}, #{studentEmail}, #{studentPassword}, #{professorNo}
+		, #{studentState}, #{studentState}, #{professorName}, DEFAULT)
 	</insert>
 	
 	<update id="updateStudent">
