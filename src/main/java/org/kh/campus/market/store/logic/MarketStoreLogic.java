@@ -8,7 +8,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.market.domain.Market;
 import org.kh.campus.market.domain.MarketReply;
 import org.kh.campus.market.domain.PageInfo;
-import org.kh.campus.market.domain.Search;
 import org.kh.campus.market.store.MarketStore;
 import org.kh.campus.question.domain.QuestionReply;
 import org.springframework.stereotype.Repository;
@@ -34,12 +33,12 @@ public class MarketStoreLogic implements MarketStore {
 		return market;
 	}
 	
-	@Override
-	public List<Market> selectSearchMarket(Search search, SqlSession sqlSession) {
-		List<Market> mList = sqlSession.selectList("MarketMapper.selectSearchMarket", search);
-		return mList;
-	}
-
+	/*
+	 * @Override public List<Market> selectSearchMarket(Search search, SqlSession
+	 * sqlSession) { List<Market> mList =
+	 * sqlSession.selectList("MarketMapper.selectSearchMarket", search); return
+	 * mList; }
+	 */
 	@Override
 	public int insertMarket(Market market, SqlSession sqlSession) {
 		int result = sqlSession.insert("MarketMapper.insertMarket", market);

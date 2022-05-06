@@ -7,7 +7,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.market.domain.Market;
 import org.kh.campus.market.domain.MarketReply;
 import org.kh.campus.market.domain.PageInfo;
-import org.kh.campus.market.domain.Search;
 
 public interface MarketStore {
 	//게시글 전체 리스트 조회
@@ -16,8 +15,10 @@ public interface MarketStore {
 	//게시글 상세 조회
 	Market selectOneMarket(SqlSession sqlSession, int marketNo);
 
-	//게시글 검색
-	List<Market> selectSearchMarket(Search search, SqlSession sqlSession);
+	/*
+	 * //게시글 검색 List<Market> selectSearchMarket(Search search, SqlSession
+	 * sqlSession);
+	 */
 	
 	//게시글 등록
 	int insertMarket(Market market, SqlSession sqlSession);
