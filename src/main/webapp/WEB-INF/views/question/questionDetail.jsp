@@ -12,8 +12,12 @@
 .c-main {
 	border: 1px solid #ccc;
 	border-radius: 5px;
-	width: 600px;
+	width: 740px;
 	padding: 30px 30px 30px 30px;
+	margin-top: 45px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    margin-left: 0px;
 }
 
 /* 댓글 */
@@ -44,27 +48,30 @@
 		</div>
 		<!-- contents-main -->
 		<div id="center">
-			<h3 id="b-title">질의응답 게시판</h3>
-			<br>
-			<div>
-				<c:url var="qModify" value="/question/modifyView">
-					<c:param name="questionNo" value="${question.questionNo }"></c:param>
-				</c:url>
-				<button class="btn" onclick="location.href='${qModify }'">수정</button>
-				<c:url var="qDelete" value="/question/delete">
-					<c:param name="questionNo" value="${question.questionNo }"></c:param>
-				</c:url>
-				<button class="btn" onclick="location.href='${qDelete }'">삭제</button>
-				<button class="btn" onclick="location.href='/question/list'">목록</button>
+			<div class="c-title">
+				<div class="b-title">
+					<h2>질의응답게시판</h2>
+				</div>
+				<div class="btn_1">
+					<c:url var="qModify" value="/question/modifyView">
+						<c:param name="questionNo" value="${question.questionNo }"></c:param>
+					</c:url>
+					<button class="btn" onclick="location.href='${qModify }'">수정</button>
+					<c:url var="qDelete" value="/question/delete">
+						<c:param name="questionNo" value="${question.questionNo }"></c:param>
+					</c:url>
+					<button class="btn" onclick="location.href='${qDelete }'">삭제</button>
+					<button class="btn" onclick="location.href='/question/list'">목록</button>
+				</div>
 			</div>
-			<br>
+			
 			<div class="c-main">
 				<div class="title">[${question.professorName }교수 _
 					${question.lectureName }] ${question.questionTitle }</div>
 				<br>
 				<div>${question.questionWriter }${question.questionDate }</div>
 
-				<hr style="width: 585px; text-align: center;">
+				<hr style="width: 740px; text-align: center;">
 				<div class="content" style="padding: 10px;">
 					${question.questionContent }
 					<c:if test="${not empty question.questionFileReNeme }">
@@ -76,18 +83,18 @@
 					</c:if>
 				</div>
 				<br> 댓글
-				<hr style="width: 585px; text-align: center;">
+				<hr style="width: 740px; text-align: center;">
 				<!-- 댓글 입력 -->
 				<div>
 					<input type="hidden" id="questionNo"
 						value="${question.questionNo }">
-					<textarea rows="3" cols="70" id="rContents"></textarea>
+					<textarea rows="3" cols="91" id="rContents"></textarea>
 					<button class="btn" id="rbtn">등록</button>
 				</div>
-				<hr style="width: 585px; text-align: center;">
+				<hr style="width: 740px; text-align: center;">
 				<!-- 댓글 조회 -->
 				<div id="replyArea">
-					<table align="center" width="600px" id="rtb">
+					<table align="center" width="700px" id="rtb">
 						<thead>
 						</thead>
 						<tbody>
