@@ -12,8 +12,12 @@
 .c-main {
 	border: 1px solid #ccc;
 	border-radius: 5px;
-	width: 600px;
+	width: 740px;
 	padding: 30px 30px 30px 30px;
+	margin-top: 45px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    margin-left: 0px;
 }
 </style>
 </head>
@@ -30,18 +34,21 @@
 		<div id="center">
 			<form action="/question/register" method="POST"
 				enctype="multipart/form-data">
-				<h3 id="b-title">질의응답 게시판</h3>
-				<br>
+				<div class="c-title">
+				<div class="b-title">
+					<h2>질의응답게시판</h2>
+				</div>
+				</div>
 				<div class="c-main">
-					<div class="selectBox" style="padding: 10px;">
+					<div class="selectBox" style="padding:10px;">
 						<select id="professorName" name="professorName"
-							onchange="getProName()" style="border: none; width: 250px;">
+							onchange="getProName()" style="border: none; width: 330px;">
 							<option value="" selected disabled >담당교수를 선택하세요</option>
 							<c:forEach var="lList" items="${lList}">
 								<option value="${lList.professorName }">${lList.professorName }</option>
 							</c:forEach>
 						</select> &emsp;&emsp; <select id="lectureName" name="lectureName"
-							style="border: none; width: 250px;">
+							style="border: none; width: 330px;">
 							<option value="">강의명을 선택하세요</option>
 						</select>
 
@@ -51,9 +58,9 @@
 							placeholder="제목을 입력하세요" style="border: none; padding: 10px;">
 					</div>
 
-					<hr style="width: 585px; text-align: center;">
+					<hr style="width: 740px; text-align: center;">
 					<div class="content" style="padding: 10px;">
-						<textarea rows="20" cols="75" id="questionContent"
+						<textarea rows="20" cols="98" id="questionContent"
 							name="questionContent" placeholder="내용을 입력하세요"></textarea>
 					</div>
 
@@ -61,7 +68,7 @@
 						<input type="file" id="fileArea" name="uploadFile">
 					</div>
 
-					<hr style="width: 585px; text-align: center;">
+					<hr style="width: 740px; text-align: center;">
 					<div align="center" style="padding: 15px;">
 						<button class="btn" type="submit">등록</button>
 						<button class="btn" type="reset">취소</button>
