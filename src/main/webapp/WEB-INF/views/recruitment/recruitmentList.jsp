@@ -4,8 +4,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+	.btn_1{
+		margin-left: 900px;
+	}
+</style>
 <link rel="stylesheet" href="/resources/menuBar.css">
-
 <meta charset="UTF-8">
 <title>채용공고</title>
 <link rel="stylesheet" href="/resources/common.css">
@@ -24,10 +28,9 @@
 		<div id="center">
 	
 
-		<h3>채용공고</h3>
-		<br>
-		<div>
-			<button class="btn" onclick="location.href='/recruitment/writeView.kh'">글쓰기</button>
+		<h2>채용공고</h2>
+		<div class="btn_1">
+			<button style=" width:80px " class="btn" onclick="location.href='/recruitment/writeView.kh'">글쓰기</button>
 		</div>
 		<table class="type01">
 		<thead>

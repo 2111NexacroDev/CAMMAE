@@ -4,6 +4,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="/resources/menuBar.css">
+<link rel="stylesheet" href="/resources/common.css">
+<link rel="stylesheet" href="/resources/contents.css">
 <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 	<script>
 		$(function(){
@@ -63,9 +66,21 @@
 <title>지원현황</title>
 </head>
 <body>
-	<h1 align="center">지원현황</h1>
+
+	<!-- header  -->
+	<jsp:include page="../common/menuBar.jsp"></jsp:include>
+
+	<!-- contents영역 -->
+	<div id="content">
+		<div id="left">
+			<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
+		</div>
+		
+		<div id="center">
+	<h3>지원현황</h3>
 	<br><br>
-	<table align="center" width="600" border="1">
+	<table class="type01">
+	<thead>
 		<tr>
 			<th><input id="allCheck" type="checkbox" name="allCheck"></th>
 			<th>번호</th>
@@ -74,6 +89,8 @@
 			<th>지원일</th>
 			<th>파일이름</th>
 		</tr>
+	</thead>
+	<tbody>
 		<c:forEach items="${sList }" var="support">
 			<tr>
 				<td><input type="checkbox" name="RowCheck" value="${support.supportNo}"></td>
@@ -87,6 +104,7 @@
 				</td>
 			</tr>
 		</c:forEach>
+	</tbody>
 	</table>
 	<br>
 	<div align="center"><input type="button" value="삭제" class="btn-delete" onclick="deleteValue();"></div>
@@ -130,6 +148,9 @@
 			</a>
 		</c:if>						
 	</div>
-						
+	</div>
+	</div>
+	<!-- footer -->
+	<jsp:include page="../common/footer.jsp"></jsp:include>					
 </body>
 </html>

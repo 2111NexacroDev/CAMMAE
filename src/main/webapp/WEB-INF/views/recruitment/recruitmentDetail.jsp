@@ -184,14 +184,13 @@
 			<td><div id="map"
 					style="width: 500px; height: 500px; margin-top: 10px; display: none;"></div></td>
 		</tr> -->
-		<tr>		
-	
-            <td colspan="2">
-            <Button onclick="mapView()" >지도</Button>   
-            <div id="map" style="width:100%; height: 350px;"></div>
-         <!--    <div id="clickLatlng"></div> -->
-            </td>
-		
+		<tr>
+
+			<td colspan="2">
+				<Button onclick="mapView()">지도</Button>
+				<div id="map" style="width: 100%; height: 350px;"></div> <!--    <div id="clickLatlng"></div> -->
+			</td>
+
 		</tr>
 		<tr>
 			<td>시작일</td>
@@ -249,27 +248,39 @@
 	              level: 3
 	           };
 	       
-	          var map = new daum.maps.Map(mapContainer, mapOption);
-	             var geocoder = new daum.maps.services.Geocoder();
-	            
-	               geocoder.addressSearch('${recruitment.recruitmentRegion}', function(results, status) {
-	               var coords=new kakao.maps.LatLng(results[0].y, results[0].x);
-	                 /*   var message = 'lating: new kakao.maps.LatLng('+results[0].y+','; message
-	                   += results[0].x + ')';
-	                    var resultDiv = document.getElementById('clickLatlng');
-	                   resultDiv.innerHTML = message;  */
-	                   
-	                   var marker = new kakao.maps.Marker({
-	                      map:map,
-	                      position: coords
-	                   });
-	                   var infowindow = new kakao.maps.InfoWindow({
-	                      content :'<div style="width: 300px; text-align:center;padding: 6px 0;">${recruitment.recruitmentCompanyName }</div>'
-	                   });
-	                   infowindow.open(map, marker);
-	                   map.setCenter(coords);
-	                   
-	               });
+	         	 
+	               /* if ( $('#map').css('display') === 'none' )
+	               { $('#map').show(); 
+	               }else { $('#map').hide(); }
+ */
+ 				if($("#map").html()== ""){
+ 					var map = new daum.maps.Map(mapContainer, mapOption);
+ 		             var geocoder = new daum.maps.services.Geocoder();
+ 		            
+ 		               geocoder.addressSearch('${recruitment.recruitmentRegion}', function(results, status) {
+ 		               var coords=new kakao.maps.LatLng(results[0].y, results[0].x);
+ 		                 /*   var message = 'lating: new kakao.maps.LatLng('+results[0].y+','; message
+ 		                   += results[0].x + ')';
+ 		                    var resultDiv = document.getElementById('clickLatlng');
+ 		                   resultDiv.innerHTML = message;  */
+ 		                   
+ 		                   var marker = new kakao.maps.Marker({
+ 		                      map:map,
+ 		                      position: coords
+ 		                   });
+ 		                   var infowindow = new kakao.maps.InfoWindow({
+ 		                      content :'<div style="width: 300px; text-align:center;padding: 6px 0;">${recruitment.recruitmentCompanyName }</div>'
+ 		                   });
+ 		                   infowindow.open(map, marker);
+ 		                   map.setCenter(coords);
+ 		                   
+ 		               });
+ 					
+ 				}else{
+ 					$("#map").html("");
+ 					$('#map').css('background-image', 'url("")');
+
+ 				}
 	       };        
 	               
 	               

@@ -71,7 +71,7 @@
 				</div>
 				<div class="contents_1bar_2 ${menu eq 'notice' ? 'active' : '' }"> <a href="/notice/list.kh">&nbsp;&nbsp;&nbsp;공지사항</a></div>
 				<div class="contents_1bar_2 ${menu eq 'recruitment' ? 'active' : '' }"><a href="/recruitment/list.kh">&nbsp;&nbsp;&nbsp;채용공고</a></div>
-				<div class="contents_1bar_2"><a href="#">&nbsp;&nbsp;&nbsp;지원현황</a></div>
+				<div class="contents_1bar_2 ${menu eq 'support' ? 'active' : '' }"><a href="/support/list.kh">&nbsp;&nbsp;&nbsp;지원현황</a></div>
 				<div class="contents_1bar_2"><a href="#">&nbsp;&nbsp;&nbsp;상담관리</a></div>
 				<div class="contents_1bar_2"><a href="#">&nbsp;&nbsp;&nbsp;포트폴리오 관리</a></div>
 			</div>
