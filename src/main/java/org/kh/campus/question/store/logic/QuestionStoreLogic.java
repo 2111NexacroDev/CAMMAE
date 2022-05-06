@@ -8,7 +8,6 @@ import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.question.domain.PageInfo;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.domain.QuestionReply;
-import org.kh.campus.question.domain.QuestionSearch;
 import org.kh.campus.question.store.QuestionStore;
 import org.springframework.stereotype.Repository;
 
