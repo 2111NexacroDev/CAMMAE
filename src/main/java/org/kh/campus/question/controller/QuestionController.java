@@ -58,10 +58,11 @@ public class QuestionController {
 				mv.addObject("pageInfo", pageInfo);
 				mv.addObject("menu", "question");
 				mv.setViewName("question/questionList");
-			} else {
-				System.out.println("조회 실패");
-				mv.setViewName("question/questionList");
-			}
+			} /*
+				 * else { System.out.println("조회 실패"); }
+				 */
+			mv.setViewName("question/questionList");
+			
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}

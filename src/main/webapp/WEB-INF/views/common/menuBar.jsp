@@ -46,6 +46,7 @@
             </div>
         </div>
         <div id="line">
+        <img src="/resources/img/menubar3.jpg" style="width:100%; height:100%;">
         </div>
 
 </body>

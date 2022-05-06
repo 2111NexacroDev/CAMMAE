@@ -23,7 +23,7 @@
 			</tr>
 			<tr>
 				<td>내용</td>
-				<td><textarea cols="50" name="noticeContent" value="${notice.noticeContent }"></textarea></td>
+				<td><textarea cols="50" name="noticeContent">${notice.noticeContent }</textarea></td>
 			</tr>
 			<tr>
 				<td>첨부파일</td>
