@@ -45,6 +45,7 @@ public class RecruitmentController {
 				mv.addObject("rList", rList);
 				mv.addObject("pageInfo", pageInfo);
 				mv.addObject("menu", "recruitment");
+				mv.addObject("currentPage", currentPage);
 				mv.setViewName("recruitment/recruitmentList");
 			}else {
 				mv.setViewName("recruitment/recruitmentList");
