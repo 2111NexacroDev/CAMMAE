@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.kh.campus.market.domain.Market;
 import org.kh.campus.market.domain.MarketReply;
-import org.kh.campus.market.domain.Search;
 import org.kh.campus.market.domain.PageInfo;
 
 public interface MarketService {
@@ -12,8 +11,9 @@ public interface MarketService {
 	public List<Market> printAllMarket(PageInfo pi);
 	//게시글 상세 조회
 	public Market printOneMarket(int marketNo);
-	//게시글 검색
-	public List<Market> printSearchMarket(Search search);
+	/*
+	 * //게시글 검색 public List<Market> printSearchMarket(Search search);
+	 */
 	
 	//게시글 등록
 	public int registerMarket(Market market);
