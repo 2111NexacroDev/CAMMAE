@@ -155,9 +155,11 @@ public class QuestionController {
 				mv.setViewName("redirect:/question/list");
 			} else {
 				System.out.println("등록 실패");
+				
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
+			
 
 		}
 		return mv;

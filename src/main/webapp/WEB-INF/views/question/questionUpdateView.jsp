@@ -11,8 +11,12 @@
 .c-main {
 	border: 1px solid #ccc;
 	border-radius: 5px;
-	width: 600px;
+	width: 740px;
 	padding: 30px 30px 30px 30px;
+	margin-top: 45px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+	margin-left: 0px;
 }
 </style>
 </head>
@@ -39,20 +43,22 @@
 					value="${question.questionFilePath }"> <input type="hidden"
 					name="questionDate" value="${question.questionDate }">
 
-
-				<h3 id="b-title">질의응답 게시판</h3>
-				<br>
+				<div class="c-title">
+					<div class="b-title">
+						<h2>질의응답게시판</h2>
+					</div>
+				</div>
 				<div class="c-main">
 					<div class="selectBox" style="padding: 10px;">
 						<select id="professorName" name="professorName"
-							onchange="getProName()" style="border: none; width: 250px;">
-							<option value="">담당교수를 선택하세요</option>
+							onchange="getProName()" style="border: none; width: 330px;">
+							<option value="교수를 선택하세요">${question.professorName}</option>
 							<c:forEach var="lList" items="${lList}">
 								<option value="${lList.professorName }">${lList.professorName }</option>
 							</c:forEach>
 						</select> &emsp;&emsp; <select id="lectureName" name="lectureName"
-							style="border: none; width: 250px;">
-							<option value="">강의명을 선택하세요</option>
+							style="border: none; width: 330px;">
+							<option value="강의를 선택하세요">${question.lectureName}</option>
 						</select>
 					</div>
 					<div class="title">
@@ -61,9 +67,9 @@
 							value="${question.questionTitle }">
 
 					</div>
-					<hr style="width: 585px; text-align: center;">
+					<hr style="width: 740px; text-align: center;">
 					<div class="content" style="padding: 10px;">
-						<textarea rows="20" cols="75" id="questionContent"
+						<textarea rows="20" cols="98" id="questionContent"
 							name="questionContent">	${question.questionContent }</textarea>
 					</div>
 
@@ -72,10 +78,10 @@
 						${question.questionFileName}
 					</div>
 
-					<hr style="width: 585px; text-align: center;">
+					<hr style="width: 740px; text-align: center;">
 					<div align="center" style="padding: 15px;">
 						<button class="btn" type="submit">수정</button>
-						<button class="btn" type="reset">취소</button>
+						<button type="reset" class="btn" onclick="location.href='/question/list'">취소</button>
 					</div>
 				</div>
 			</form>
@@ -98,6 +104,7 @@
 					"professorName" : professorName
 				},
 				success : function(data) {
+					$("#lectureName option").remove();
 					for (var i = 0; i < data.length; i++) {
 						$("#lectureName").append(
 								"<option value="+data[i].lectureName+">"

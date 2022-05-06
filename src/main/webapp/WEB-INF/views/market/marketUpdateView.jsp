@@ -72,7 +72,7 @@
 					<hr style="width: 585px; text-align: center;">
 					<div align="center" style="padding: 15px;">
 						<button class="btn" type="submit">수정</button>
-						<button class="btn" type="reset">취소</button>
+						<button type="reset" class="btn" onclick="location.href='/market/list'">취소</button>
 					</div>
 				</div>
 			</form>
