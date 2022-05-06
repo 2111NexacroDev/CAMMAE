@@ -36,7 +36,7 @@
 					<div class="selectBox" style="padding: 10px;">
 						<select id="professorName" name="professorName"
 							onchange="getProName()" style="border: none; width: 250px;">
-							<option value="">담당교수를 선택하세요</option>
+							<option value="" selected disabled >담당교수를 선택하세요</option>
 							<c:forEach var="lList" items="${lList}">
 								<option value="${lList.professorName }">${lList.professorName }</option>
 							</c:forEach>
@@ -87,6 +87,7 @@
 					"professorName" : professorName
 				},
 				success : function(data) {
+					$("#lectureName option").remove();
 					for (var i = 0; i < data.length; i++) {
 						$("#lectureName").append(
 								"<option value="+data[i].lectureName+">"
