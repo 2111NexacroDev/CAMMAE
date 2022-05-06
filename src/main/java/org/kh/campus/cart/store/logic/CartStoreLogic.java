@@ -60,6 +60,12 @@ public class CartStoreLogic implements CartStore {
 		return lList;
 	}
 
+	@Override
+	public List<Lecture> selectAllEnroll2(SqlSession sqlSession, String lectureDepartment) {
+		List<Lecture> lList = sqlSession.selectList("CartMapper.selectAllEnroll2", lectureDepartment);
+		return lList;
+	}
+
 
 
 

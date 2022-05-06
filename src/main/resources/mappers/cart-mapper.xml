@@ -90,11 +90,16 @@ FROM CART_TBL  JOIN  LECTURE_TBL
  		DELETE FROM CART_TBL WHERE CART_NO=#{cartNo}
  	</delete>
  	
- 	<select id="selectAllEnroll" resultMap="lectureResultMap"> 
+ 	<select id="selectAllEnroll" resultMap="lectureResultMap" parameterType="String"> 
  		SELECT * FROM LECTURE_TBL
  		<if test="lectureDepartment!=null">
  			WHERE LECTURE_DEPARTMENT = #{lectureDepartment}
  		</if>
+ 	</select> 
+ 	
+ 	<select id="selectAllEnroll2" resultMap="lectureResultMap" parameterType="String"> 
+ 		SELECT * FROM LECTURE_TBL
+ 			WHERE LECTURE_DEPARTMENT = #{lectureDepartment}
  	</select> 
  	
  	<insert id="insertEnroll" parameterType="Lecture">

@@ -35,4 +35,6 @@ public interface CartService {
 
 	// 수강신청 신청 취소(신청취소)
 	public int removeEnroll(HashMap<String, Integer> map);
+
+	public List<Lecture> printAllenroll2(String lectureDepartment);
 }

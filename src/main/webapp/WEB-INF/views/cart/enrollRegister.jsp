@@ -14,12 +14,12 @@
 	<label for="lectureSelect">학과</label>
 	<select id="lecList"> 
 		<option value="전체" >전체</option> 
-		<option value="컴퓨터공학과">컴퓨터공학과</option> 
-		<option value="전자전기공학과">전자전기공학과</option>
-		<option value="산업디자인학과">산업디자인학과</option>
-		<option value="중국어학과">중국어학과</option>
-		<option value="유비쿼터스학과">유비쿼터스학과</option>
-		<option value="국어국문학과">국어국문학과</option>
+		<option value="1">컴퓨터공학과</option> 
+		<option value="2">전자전기공학과</option>
+		<option value="3">산업디자인학과</option>
+		<option value="4">중국어학과</option>
+		<option value="5">유비쿼터스학과</option>
+		<option value="6">국어국문학과</option>
 	</select>
 	<input type="button" value="검색"  onclick="getList();">
 	<table align="center" width="1200" border="1" id="lectureTable">
@@ -62,17 +62,23 @@
 		function getList() {
 			var lectureDepartment = $('#lecList').val();
 			$.ajax({
-				url : "/cart/enrollRegister.kh",
+				url : "/cart/enrollRegister2.kh",
 				type : "get",
 				data : { "lecturedep" : lectureDepartment },
 				success : function(data) {
 					$(".lecTr").remove();
-					var $tableBody = $("#rtb tbody");
-					$tableBody.html("");
-					var $lLectureNo;
-					var $rContent;
-					var $rCreateDate;
-					
+					var $tableBody = $("#lectureTable");
+					var $tr;
+					var $lecNo;
+					var $lecDep
+					var $lecUniCol;
+					var $lecName;
+					var $lecProName;
+					var $lecDivision;
+					var $lecGrade;
+					var $lecRoom;
+					var $lecPeople;
+					var $lecTime;
 					var $btnArea;
 					
 					
@@ -83,17 +89,29 @@
 						for(var i in data) {
 							$tr = $("<tr>");
 							
-							$rWriter = $("<td width='100'>").text(data[i].replyWriter);
-							$rContent = $("<td>").text(data[i].replyContents);
-							$rCreateDate = $("<td width='100'>").text(data[i].rCreateDate);
-							
+							$lecNo = $("<td width='100'>").text(data[i].lectureNo);
+							$lecDep = $("<td width='100'>").text(data[i].lectureDepartment);
+							$lecUniCol = $("<td width='100'>").text(data[i].universityCollege);
+							$lecName = $("<td width='100'>").text(data[i].lectureName);
+							$lecProName = $("<td width='100'>").text(data[i].professorName);
+							$lecDivision = $("<td width='100'>").text(data[i].lectureDivision);
+							$lecGrade = $("<td width='100'>").text(data[i].lectureGrade);
+							$lecRoom = $("<td width='100'>").text(data[i].lectureRoom);
+							$lecPeople = $("<td width='100'>").text(data[i].lecturePeople);
+							$lecTime = $("<td width='100'>").text(data[i].lectureTime);
 							$btnArea = $("<td width='80'>")
-											.append("<a href='javascript:void(0);' onclick='modifyViewReply(this,\""+data[i].replyContents+"\", "+data[i].replyNo+");'>수정 </a>")
-											.append("<a href='javascript:void(0);' onclick='removeReply("+data[i].replyNo+");'>삭제</a>");
-							$tr.append($rWriter);
-							$tr.append($rContent);
-							$tr.append($rCreateDate);
+							.append("<a href='javascript:void(0);' onclick='/cart/lectureEnroll.kh?lectureNo="+data[i].lectureNo+"'>신청</a>");
 							$tr.append($btnArea);
+							$tr.append($lecNo);
+							$tr.append($lecDep);
+							$tr.append($lecUniCol);
+							$tr.append($lecName);
+							$tr.append($lecProName);
+							$tr.append($lecDivision);
+							$tr.append($lecGrade);
+							$tr.append($lecRoom);
+							$tr.append($lecPeople);
+							$tr.append($lecTime);
 							$tableBody.append($tr);
 						}
 					}

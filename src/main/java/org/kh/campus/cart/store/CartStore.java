@@ -25,5 +25,7 @@ public interface CartStore {
 
 	int deleteEnroll(SqlSession sqlSession, HashMap<String, Integer> map);
 
+	List<Lecture> selectAllEnroll2(SqlSession sqlSession, String lectureDepartment);
+
 
 }
