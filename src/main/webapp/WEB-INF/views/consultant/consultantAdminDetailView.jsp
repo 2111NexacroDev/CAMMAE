@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/resources/contents.css">
 </head>
 <body>
-		<!-- header  -->
+	<!-- header  -->
 	<jsp:include page="../common/menuBar.jsp"></jsp:include>
 	<!-- contents -->
 	<div id="content">
@@ -22,45 +22,41 @@
 			<h3 id="b-title">상담관리</h3>
 			<br>
 			<div>
-			<input type="hidden" name="consultant_no" value="${consultant.cons_no}"> 
-				
-			상담제목 <span>${consultant.cons_title}</span><br>
-			이름 <span>${consultant.cons_student_name}</span><br> 
-			학번 <span>${consultant.cons_student_no }</span><br>
-			학과명 <span>${consultant.cons_college == '1' ? '컴퓨터공학과' : '2' ? '전자전기공학과' : '3' ? '산업디자인학과' : '4' ? '중국어학과' : '5' ? '유비쿼터스학과' : '국어국문학과'}</span><br>
-			전화번호 <span>${consultant.cons_student_number }</span><br> 
-			상담희망날짜<span>${consultant.cons_date}</span><br> 
-			상담사 <span>${consultant.cons_counselor }</span><br>
-			단과대학 <span>${consultant.cons_university_code}</span><br>
-			상담내용 <span>${consultant.cons_content}</span> 
-			
-			<!-- 댓글 등록 -->
-			<table align="center" width="500" border="1">
-				<tr>
-					<td><textarea rows="3" cols="55" id="cons_reply_content"></textarea>
+				<input type="hidden" name="consultant_no"
+					value="${consultant.cons_no}"> 상담제목 <span>${consultant.cons_title}</span><br>
+				이름 <span>${consultant.cons_student_name}</span><br> 학번 <span>${consultant.cons_student_no }</span><br>
+				학과명 <span>${consultant.cons_college == '1' ? '컴퓨터공학과' : '2' ? '전자전기공학과' : '3' ? '산업디자인학과' : '4' ? '중국어학과' : '5' ? '유비쿼터스학과' : '국어국문학과'}</span><br>
+				전화번호 <span>${consultant.cons_student_number }</span><br> 상담희망날짜<span>${consultant.cons_date}</span><br>
+				상담사 <span>${consultant.cons_counselor }</span><br> 단과대학 <span>${consultant.cons_university_code}</span><br>
+				상담내용 <span>${consultant.cons_content}</span>
 
-					</td>
-					<td><input type="hidden" name="" value="" id=""></td>
-
-					<td>
-						<button id="rSubmit">등록하기</button>
-					</td>
-				</tr>
-			</table>
-			<!-- 댓글 목록 -->
-			<table align="center" width="500" border="1" id="rtb">
-				<thead>
+				<!-- 댓글 등록 -->
+				<table align="center" width="500" border="1">
 					<tr>
-						<!-- 댓글 갯수 -->
-						<td colspan="4"><b id="rCount"></b></td>
+						<td><textarea rows="3" cols="55" id="cons_reply_content"></textarea>
+
+						</td>
+						<td><input type="hidden" name="" value="" id=""></td>
+
+						<td>
+							<button id="rSubmit">등록하기</button>
+						</td>
 					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
+				</table>
+				<!-- 댓글 목록 -->
+				<table align="center" width="500" border="1" id="rtb">
+					<thead>
+						<tr>
+							<!-- 댓글 갯수 -->
+							<td colspan="4"><b id="rCount"></b></td>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
-</div>
 	<!-- footer -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>
 	<script>

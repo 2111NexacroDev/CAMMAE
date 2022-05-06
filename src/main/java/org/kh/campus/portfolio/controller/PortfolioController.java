@@ -28,41 +28,44 @@ public class PortfolioController {
 	@Autowired
 	private PortfolioService pService;
 
-	//학생 포트폴리오 조회
+	// 학생 포트폴리오 조회
 	@RequestMapping(value = "/portfolio/listView.kh", method = RequestMethod.GET)
-	public String portListView(Model model, @RequestParam(value = "page", required = false) Integer page, HttpServletRequest request) {
+	public String portListView(Model model, @RequestParam(value = "page", required = false) Integer page,
+			HttpServletRequest request) {
 		try {
-		HttpSession session = request.getSession();
-		int studentNo = ((Student)(session.getAttribute("loginUser"))).getStudentNo();
-		List<Portfolio> pList = pService.printAllPort(studentNo);
-		if (!pList.isEmpty()) {
-			model.addAttribute("pList", pList);
-			return "portfolio/portfolioListView";
-		} else {
-			model.addAttribute("msg", "포트폴리오 전체조회 실패");
-			return "common/errorPage";
-		}
-		
-		}catch(Exception e) {
+			HttpSession session = request.getSession();
+			int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
+			List<Portfolio> pList = pService.printAllPort(studentNo);
+			if (!pList.isEmpty()) {
+				model.addAttribute("pList", pList);
+				return "portfolio/portfolioListView";
+			} else {
+				model.addAttribute("msg", "포트폴리오 전체조회 실패");
+				return "common/errorPage";
+			}
+
+		} catch (Exception e) {
 			return "login/login";
 		}
 
 	}
-	
-	//학생 포트폴리오 등록
+
+	// 학생 포트폴리오 등록
 	@RequestMapping(value = "/portfolio/writeView.kh", method = RequestMethod.GET)
 	public String portWriteView() {
 		return "portfolio/portfolioWriteForm";
 	}
-	//학생 포트폴리오 등록 실행
+
+	// 학생 포트폴리오 등록 실행
 	@RequestMapping(value = "/portfolio/register.kh", method = RequestMethod.POST)
 	public ModelAndView portRegisterView(ModelAndView mv, @ModelAttribute Portfolio portfolio,
 			@RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile,
 			@RequestParam(value = "uploadFile1", required = false) MultipartFile uploadFile1,
 			HttpServletRequest request) throws UnsupportedEncodingException {
 		try {
-			if (uploadFile != null && !uploadFile.getOriginalFilename().equals("") || uploadFile1 != null && !uploadFile1.getOriginalFilename().equals("")) {
-				HashMap<String, String> fileMap = saveFile(uploadFile, request , uploadFile1);
+			if (uploadFile != null && !uploadFile.getOriginalFilename().equals("")
+					|| uploadFile1 != null && !uploadFile1.getOriginalFilename().equals("")) {
+				HashMap<String, String> fileMap = saveFile(uploadFile, request, uploadFile1);
 				String filePath = fileMap.get("filePath");
 				String fileRename = fileMap.get("fileName");
 				String filePath1 = fileMap.get("filePath1");
@@ -81,12 +84,13 @@ public class PortfolioController {
 			int result = pService.insertPort(portfolio);
 			if (result > 0) {
 				HttpSession session = request.getSession();
-				int port_student_no = ((Student)(session.getAttribute("loginUser"))).getStudentNo();
-				List<Portfolio> pList= pService.printOneByStNo(port_student_no);
-				if(pList != null) {
+				int port_student_no = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
+				List<Portfolio> pList = pService.printOneByStNo(port_student_no);
+				if (pList != null) {
 					mv.addObject("pList", pList);
-					mv.setViewName("redirect:/portfolio/listView.kh");
-				}	
+					mv.setViewName("portfolio/portfolioListView");
+
+				}
 			} else {
 				mv.addObject("msg", "포트폴리오 등록실패");
 				mv.setViewName("common/errorPage");
@@ -106,11 +110,11 @@ public class PortfolioController {
 		HashMap<String, String> fileMap = new HashMap<String, String>();
 		String root = request.getSession().getServletContext().getRealPath("resources");
 		String savePath = root + "\\puploadFiles";
-		
+
 		File folder = new File(savePath);
 		if (!folder.exists())
 			folder.mkdir();
-		
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHH");
 		String originalFileName = file.getOriginalFilename();
@@ -134,7 +138,7 @@ public class PortfolioController {
 		return fileMap;
 	}
 
-	//학생 포트폴리오 상세조회
+	// 학생 포트폴리오 상세조회
 	@RequestMapping(value = "/portfolio/Detail.kh", method = RequestMethod.GET)
 	public String portDetailView(Model model, @RequestParam("port_no") Integer port_no) {
 		Portfolio portfolio = pService.printDetailPort(port_no);
@@ -148,9 +152,9 @@ public class PortfolioController {
 
 	}
 
-	//학생 포트폴리오 수정
+	// 학생 포트폴리오 수정
 	@RequestMapping(value = "/portfolio/updateView.kh", method = RequestMethod.GET)
-	public String portfolioUpdateView(Model model, @RequestParam("port_no") Integer port_no){
+	public String portfolioUpdateView(Model model, @RequestParam("port_no") Integer port_no) {
 
 		Portfolio portfolio = pService.printOneByNo(port_no);
 		if (portfolio != null) {
@@ -162,19 +166,18 @@ public class PortfolioController {
 		}
 
 	}
-	
-	//학생 포트폴리오 수정 실행
+
+	// 학생 포트폴리오 수정 실행
 	@RequestMapping(value = "/portfolio/modify.kh", method = RequestMethod.POST)
-	public String portfolioModify(Model model,
-			@ModelAttribute Portfolio portfolio,
-			@RequestParam(value="reloadFile" ,required = false)  MultipartFile reloadFile,
-			@RequestParam(value="reloadFile1",required = false) MultipartFile reloadFile1,
-			HttpServletRequest request) {
+	public String portfolioModify(Model model, @ModelAttribute Portfolio portfolio,
+			@RequestParam(value = "reloadFile", required = false) MultipartFile reloadFile,
+			@RequestParam(value = "reloadFile1", required = false) MultipartFile reloadFile1,
+			HttpServletRequest request, @RequestParam("port_no") Integer port_no) {
 
 		try {
 			if (reloadFile != null && !reloadFile.isEmpty() || reloadFile1 != null && !reloadFile1.isEmpty()) {
 				deleteFile(portfolio.getPort_licenseFilePath(), portfolio.getPort_awardFilePath(), request);
-				HashMap<String, String> fileMap = saveFile(reloadFile, request , reloadFile1);
+				HashMap<String, String> fileMap = saveFile(reloadFile, request, reloadFile1);
 				String savePath = fileMap.get("filePath");
 				String fileRename = fileMap.get("fileName");
 				String savePath1 = fileMap.get("filePath1");
@@ -188,10 +191,11 @@ public class PortfolioController {
 					portfolio.setPort_awardFilePath(savePath1);
 				}
 			}
-			
+
 			int result = pService.modifyPortfolio(portfolio);
 			if (result > 0) {
-				return "portfolio/portfolioDetailView";
+				model.addAttribute("port_no", port_no);
+				return "redirect:/portfolio/Detail.kh";
 			} else {
 				model.addAttribute("msg", "포트폴리오 수정 실패!");
 				return "common/errorPage";
@@ -202,28 +206,27 @@ public class PortfolioController {
 		}
 
 	}
-	
-	//첨부파일 삭제
+
+	// 첨부파일 삭제
 	private void deleteFile(String FilePath, String FilePath1, HttpServletRequest request) {
 		File deleteFile = new File(FilePath);
 		File deleteFile1 = new File(FilePath1);
-		if(deleteFile.exists()) {
+		if (deleteFile.exists()) {
 			deleteFile.delete();
-		}else if(deleteFile.exists()) {
+		} else if (deleteFile.exists()) {
 			deleteFile1.delete();
-		}else {
+		} else {
 			System.out.println("삭제 실패");
 		}
-		
+
 	}
-	
-	//학생 포트폴리오 삭제
-	@RequestMapping(value="/portfolio/delete.kh")
-	 public String portfolioDelete(Model model, @RequestParam("port_no")int port_no) {
+
+	// 학생 포트폴리오 삭제
+	@RequestMapping(value = "/portfolio/delete.kh")
+	public String portfolioDelete(Model model, @RequestParam("port_no") int port_no) {
 		try {
 			int result = pService.deletePortfolio(port_no);
 			if (result > 0) {
-				model.addAttribute("portfolio", port_no);
 				return "redirect:/portfolio/listView.kh";
 			} else {
 				model.addAttribute("msg", "공지사항 수정 실패!");
@@ -234,9 +237,8 @@ public class PortfolioController {
 			return "common/errorPage";
 		}
 	}
-	
-	
-	//관리자 포트폴리오 목록 조회
+
+	// 관리자 포트폴리오 목록 조회
 	@RequestMapping(value = "/portfolio/adminListView.kh", method = RequestMethod.GET)
 	public String portAdminListView(Model model, @RequestParam(value = "page", required = false) Integer page) {
 		int currentPage = (page != null) ? page : 1;
@@ -253,8 +255,8 @@ public class PortfolioController {
 		}
 
 	}
-	
-	//관리자 포트폴리오 상세조회
+
+	// 관리자 포트폴리오 상세조회
 	@RequestMapping(value = "/portfolio/adminDetail.kh", method = RequestMethod.GET)
 	public String portAdminDetailView(Model model, @RequestParam("port_no") int port_no) {
 		Portfolio portfolio = pService.printAdminDetailPort(port_no);
@@ -268,8 +270,4 @@ public class PortfolioController {
 
 	}
 
-	
 }
-
-	
-

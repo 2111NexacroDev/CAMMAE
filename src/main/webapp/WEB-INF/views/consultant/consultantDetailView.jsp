@@ -12,44 +12,48 @@
 <body>
 	<jsp:include page="../common/menuBar.jsp"></jsp:include>
 	<div class="contents">
-	<div id="content">
-		<div id="left">
-			<jsp:include page="../common/sideBMenu.jsp"></jsp:include>
-		</div>
-		<!-- contents-main -->
-		<div id="center">
-			<h3 id="b-title">상담관리</h3>
-			<br>
-			<input type="hidden" name="cons_no" value="${consultant.cons_no}" />
-			<input type="hidden" name="cons_student_no" value="${consultant.cons_student_no}" />
-				 상담제목 <span>${consultant.cons_title}</span><br>
-			이름 <span>${consultant.cons_student_name}</span><br> 학번 <span>${consultant.cons_student_no }</span><br>
-			학과명 <span>${consultant.cons_college == '1' ? '컴퓨터공학과' : '2' ? '전자전기공학과' : '3' ? '산업디자인학과' : '4' ? '중국어학과' : '5' ? '유비쿼터스학과' : '국어국문학과'}</span><br>
-			전화번호 <span>${consultant.cons_student_number }</span><br> 상담희망날짜
-			<span>${consultant.cons_date}</span><br> 상담사 <span>${consultant.cons_counselor }</span><br>
-			상담내용 <span>${consultant.cons_content}</span><br> 
-			단과대학 <span>${consultant.cons_university_code }</span><br>
-			
-			
-			
-			 <button  class="submit" type="button" onclick="location.href='/consultant/cancel.kh?cons_no=${consultant.cons_no}'">상담 취소</button><br>
-			<!-- 댓글 목록 -->
-			<table align="center" width="500" border="1" id="rtb">
-				<thead>
-					<tr>
-						<!-- 댓글 갯수 -->
-						<td colspan="4"><b id="rCount"></b></td>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
+		<div id="content">
+			<div id="left">
+				<jsp:include page="../common/sideBMenu.jsp"></jsp:include>
+			</div>
+			<!-- contents-main -->
+			<div id="center">
+				<h3 id="b-title">상담관리</h3><br>
+				<input type="hidden" name="cons_no" value="${consultant.cons_no}" />
+				<input type="hidden" name="cons_student_no" value="${consultant.cons_student_no}" />
+				상담제목 <span>${consultant.cons_title}</span><br> 
+				이름 <span>${consultant.cons_student_name}</span><br>
+				학번 <span>${consultant.cons_student_no }</span><br> 
+				학과명 <span>${consultant.cons_college == '1' ? '컴퓨터공학과' : '2' ? '전자전기공학과' : '3' ? '산업디자인학과' : '4' ? '중국어학과' : '5' ? '유비쿼터스학과' : '국어국문학과'}</span><br>
+				전화번호 <span>${consultant.cons_student_number }</span><br> 
+				상담희망날짜 <span>${consultant.cons_date}</span><br> 
+				상담사 <span>${consultant.cons_counselor }</span><br>
+				상담내용 <span>${consultant.cons_content}</span><br> 
+				단과대학 <span>${consultant.cons_university_code }</span><br>
+
+
+
+				<button class="submit" type="button"
+					onclick="location.href='/consultant/cancel.kh?cons_no=${consultant.cons_no}'">상담
+					취소</button>
+				<br>
+				<!-- 댓글 목록 -->
+				<table align="center" width="500" border="1" id="rtb">
+					<thead>
+						<tr>
+							<!-- 댓글 갯수 -->
+							<td colspan="4"><b id="rCount"></b></td>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
-</div>
-<!-- footer -->
+	<!-- footer -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>
-	
+
 
 	<script>
 		getReplyList();

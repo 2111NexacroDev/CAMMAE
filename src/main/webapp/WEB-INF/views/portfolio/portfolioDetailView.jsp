@@ -39,6 +39,7 @@
 					href="/portfolio/updateView.kh?port_no=${portfolio.port_no}"><button>수정</button></a>
 				<a id="list_l"
 					href="/portfolio/delete.kh?port_no=${portfolio.port_no}"><button>삭제</button></a>
+				<a href="/portfolio/listView.kh" id="list_l">목록</a>	
 			</div>
 		</div>
 	</div>

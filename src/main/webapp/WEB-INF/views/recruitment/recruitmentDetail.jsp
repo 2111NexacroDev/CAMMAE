@@ -44,18 +44,15 @@
 	top: 50px;
 	padding: 10px;
 }
-
 #modal .title {
 	padding-left: 10px;
 	display: inline;
 	text-shadow: 1px 1px 2px gray;
 	color: white;
 }
-
 #modal .title h2 {
 	display: inline;
 }
-
 #modal .close-area {
 	display: inline;
 	float: right;
@@ -64,7 +61,6 @@
 	text-shadow: 1px 1px 2px gray;
 	color: white;
 }
-
 #modal .content {
 	margin-top: 20px;
 	padding: 0px 10px;
@@ -72,7 +68,6 @@
 	color: white;
 	text-align: center;
 }
-
 #modal #reportContents {
 	width: 350px;
 	height: 200px;
@@ -279,7 +274,6 @@
  				}else{
  					$("#map").html("");
  					$('#map').css('background-image', 'url("")');
-
  				}
 	       };        
 	               
@@ -300,7 +294,6 @@
 				            center: new daum.maps.LatLng(resultY, resultX), // 지도의 중심좌표 
 				            level: 5// 지도의 확대 레벨
 				        };  
-
 			};
 		
 	 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
