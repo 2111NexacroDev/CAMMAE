@@ -13,7 +13,6 @@ import org.kh.campus.question.domain.PageInfo;
 import org.kh.campus.question.domain.Pagination;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.domain.QuestionReply;
-import org.kh.campus.question.domain.QuestionSearch;
 import org.kh.campus.question.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
