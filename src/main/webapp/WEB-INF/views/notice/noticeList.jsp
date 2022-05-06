@@ -5,6 +5,7 @@
 <html>
 <head>
 <link rel="stylesheet" href="/resources/menuBar.css">
+
 <style>
 	
 </style>
@@ -40,6 +41,12 @@
 					</tr>
 				</thead>
 				<tbody>
+				<c:if test="${nList eq null}">
+					<tr>
+						<td colspan="5"></td>
+					</tr>
+				
+				</c:if>
 					<c:forEach items="${nList }" var="notice">
 						<tr>
 							<td scope="row">${notice.noticeNo }</td>
@@ -54,7 +61,7 @@
 					</c:forEach>
 				</tbody>
 			</table>
-			<div class="paging">
+			<div class="paging" >
 
 				<c:if test="${pi.startNavi !=1 }">
 

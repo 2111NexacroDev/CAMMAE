@@ -9,16 +9,16 @@ table.type01 {
   line-height: 1.5;
   /* border-left: 1px solid #ccc; */
   margin: 20px 10px;
-  width: 1000px;
+  width: 800px;
 }
 
 table.type01 thead th {
-  padding: 10px;
+/*   padding: 10px; */
   font-weight: bold;
   border-top: 1px solid #ccc;
-  height: 30px;
+  height: 35px;
   /* border-right: 1px solid #ccc; */
-  border-bottom: 2px solid #ccc;
+  border-bottom: 1px solid #ccc;
   background: rgb(231, 232, 226);
 }
 
@@ -26,8 +26,8 @@ table.type01 td {
   width: 350px;
   padding: 10px;
   vertical-align: top;
-  height: 50px;
-  line-height: 50px;
+  height: 10px;
+  line-height: 10px;
  /*  border-right: 1px solid #ccc; */
   border-bottom: 1px solid #ccc;
 }
