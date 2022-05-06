@@ -14,9 +14,12 @@ public class Student {
 	private String professorNo;
 	private String studentState;
 	private String professorName;
+	private String chk;
 	
 	public Student() {}
 
+	
+	
 	public Student(int studentNo, String universityCollege, String departmentName, String studentName, int studentGrade,
 			String studentBirth, String studentAddress, String studentPhonenumber, String studentEmail,
 			String studentPassword, String professorNo, String studentState, String professorName) {
@@ -35,8 +38,8 @@ public class Student {
 		this.studentState = studentState;
 		this.professorName = professorName;
 	}
-	
-	
+
+
 
 	public Student(int studentNo, String universityCollege, String departmentName, String studentName, int studentGrade,
 			String studentBirth, String studentAddress, String studentPhonenumber, String studentEmail,
@@ -126,6 +129,14 @@ public class Student {
 
 	public void setStudentAddress(String studentAddress) {
 		this.studentAddress = studentAddress;
+	}
+
+	public String getChk() {
+		return chk;
+	}
+
+	public void setChk(String chk) {
+		this.chk = chk;
 	}
 
 	public String getStudentPhonenumber() {
