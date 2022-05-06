@@ -57,6 +57,7 @@ public class QuestionController {
 				mv.addObject("qList", qList);
 				mv.addObject("pageInfo", pageInfo);
 				mv.addObject("menu", "question");
+				mv.addObject("currentPage", currentPage);
 				mv.setViewName("question/questionList");
 			} /*
 				 * else { System.out.println("조회 실패"); }
