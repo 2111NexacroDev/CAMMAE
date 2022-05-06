@@ -8,7 +8,6 @@ import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.question.domain.PageInfo;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.domain.QuestionReply;
-import org.kh.campus.question.domain.QuestionSearch;
 import org.kh.campus.question.store.QuestionStore;
 import org.springframework.stereotype.Repository;
 
@@ -79,8 +78,8 @@ public class QuestionStoreLogic implements QuestionStore {
 	}
 	//페이징
 	@Override
-	public int selectListCount(SqlSession sqlSession, PageInfo pagiInfo) {
-		int totalCount = sqlSession.selectOne("QuestionMapper.selectListCount", pagiInfo);
+	public int selectListCount(SqlSession sqlSession, PageInfo pageInfo) {
+		int totalCount = sqlSession.selectOne("QuestionMapper.selectListCount", pageInfo);
 		return totalCount;
 	}
 	

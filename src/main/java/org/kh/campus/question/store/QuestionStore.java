@@ -7,7 +7,6 @@ import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.question.domain.PageInfo;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.domain.QuestionReply;
-import org.kh.campus.question.domain.QuestionSearch;
 
 public interface QuestionStore {
 
@@ -25,7 +24,7 @@ public interface QuestionStore {
 	public int updateCount(int questionNo, SqlSession sqlSession);
 	public int deleteQuestion(int questionNo, SqlSession sqlSession);
 	//페이징
-	public int selectListCount(SqlSession sqlSession, PageInfo pagiInfo);
+	public int selectListCount(SqlSession sqlSession, PageInfo pageInfo);
 	//댓글
 	public List<QuestionReply> selectAllReply(int questionNo, SqlSession sqlSession);
 	public int insertReply(QuestionReply questionReply, SqlSession sqlSession);

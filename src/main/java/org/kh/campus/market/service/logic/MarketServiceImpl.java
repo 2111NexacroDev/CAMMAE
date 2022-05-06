@@ -7,7 +7,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.market.domain.Market;
 import org.kh.campus.market.domain.MarketReply;
 import org.kh.campus.market.domain.PageInfo;
-import org.kh.campus.market.domain.Search;
 import org.kh.campus.market.service.MarketService;
 import org.kh.campus.market.store.MarketStore;
 import org.kh.campus.question.domain.QuestionReply;
@@ -35,11 +34,10 @@ public class MarketServiceImpl implements MarketService {
 		return market;
 	}
 	
-	@Override
-	public List<Market> printSearchMarket(Search search) {
-		List<Market> mList = mStore.selectSearchMarket(search, sqlSession);
-		return mList;
-	}
+	/*
+	 * @Override public List<Market> printSearchMarket(Search search) { List<Market>
+	 * mList = mStore.selectSearchMarket(search, sqlSession); return mList; }
+	 */
 	
 	@Override
 	public int registerMarket(Market market) {

@@ -21,4 +21,34 @@
 		AND STUDENT_NAME = #{studentName}
 		AND STUDENT_PHONENUMBER = #{studentPhonenumber}
 	</select>
+	
+	<select id="stdPwdSame" resultType="_int">
+		SELECT COUNT(*) FROM STUDENT_TBL
+		WHERE STUDENT_NO = #{id} AND STUDENT_PASSWORD = #{pwd}
+	</select>
+	
+	<select id="prfPwdSame" resultType="_int">
+		SELECT COUNT(*) FROM PROFESSOR_TBL
+		WHERE PROFESSOR_NO = #{id} AND PROFESSOR_PASSWORD = #{pwd}
+	</select>
+	
+	<select id="magPwdSame" resultType="_int">
+		SELECT COUNT(*) FROM MANAGER_TBL
+		WHERE MANAGER_NO = #{id} AND MANAGER_PASSWORD = #{pwd}
+	</select>
+	
+	<update id="stdPwdChange">
+		UPDATE STUDENT_TBL SET STUDENT_PASSWORD =#{pwd}
+		WHERE STUDENT_NO = #{id}
+	</update>
+	
+	<update id="prfPwdChange">
+		UPDATE PROFESSOR_TBL SET PROFESSOR_PASSWORD =#{pwd}
+		WHERE PROFESSOR_NO = #{id}
+	</update>
+	
+	<update id="magPwdChange">
+		UPDATE MANAGER_TBL SET MANAGER_PASSWORD =#{pwd}
+		WHERE MANAGER_NO = #{id}
+	</update>
 </mapper>

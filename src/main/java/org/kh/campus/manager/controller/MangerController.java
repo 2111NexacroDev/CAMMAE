@@ -83,6 +83,7 @@ public class MangerController {
 							,	studentState
 							,	professorName);
 					if( rowType == DataSet.ROW_TYPE_INSERTED) {
+						student.setStudentPassword(Integer.toString(studentNo));
 						iResult += mService.registerStudent(student);
 					}else if( rowType == DataSet.ROW_TYPE_UPDATED) {
 						String sStdNo = inStd.getSavedData(i, "studentNo").toString();

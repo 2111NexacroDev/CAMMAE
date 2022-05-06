@@ -20,8 +20,12 @@
 			<th>교과목명</th>
 			<th>이수구분</th>
 			<th>학점</th>
-			<th>학년</th>
-			<th>학기</th>
+			<th>교수명</th>
+			<th>개설학과</th>
+			<th>단과대학</th>
+			<th>강의실</th>
+			<th>강의인원</th>
+			<th>강의시간</th>
 			<th>삭제</th>
 			
 		</tr>
@@ -35,12 +39,13 @@
 				<td>${lecture.lectureDivision }</td>
 				<td>${lecture.lectureGrade }</td>
 				<td>${lecture.professorName }</td>
-	
-				
-			<%-- 	<td>${grade.professorName }</td>
-				<td>${grade.lectureName }</td> --%>
+				<td>${lecture.lectureDepartment }</td>
+				<td>${lecture.universityCollege }</td>
+				<td>${lecture.lectureRoom }</td>
+				<td>${lecture.lecturePeople }</td>
+				<td>${lecture.lectureTime }</td>
 				<td><c:url var="gRemove" value="/cart/enrollRemove.kh">
-						<c:param name="lectureNo" value="${grade.lectureNo }"></c:param>
+						<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
 					</c:url> <a href="${gRemove }">삭제</a></td>
 			</tr>
 

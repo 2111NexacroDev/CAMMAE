@@ -7,7 +7,6 @@ import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.question.domain.PageInfo;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.domain.QuestionReply;
-import org.kh.campus.question.domain.QuestionSearch;
 import org.kh.campus.question.service.QuestionService;
 import org.kh.campus.question.store.QuestionStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,8 +79,8 @@ public class QuestionServiceImpl implements QuestionService {
 	
 	//페이징
 	@Override
-	public int getListCount(PageInfo pagiInfo) {
-		int totalCount = qStore.selectListCount(sqlSession, pagiInfo);
+	public int getListCount(PageInfo pageInfo) {
+		int totalCount = qStore.selectListCount(sqlSession, pageInfo);
 		return totalCount;
 	}
 

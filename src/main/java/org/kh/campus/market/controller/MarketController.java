@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.kh.campus.market.domain.Market;
 import org.kh.campus.market.domain.MarketReply;
-import org.kh.campus.market.domain.Search;
 import org.kh.campus.market.service.MarketService;
 import org.kh.campus.question.domain.QuestionReply;
 import org.kh.campus.market.domain.PageInfo;

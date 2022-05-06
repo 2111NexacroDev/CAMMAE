@@ -6,7 +6,6 @@ import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.question.domain.PageInfo;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.domain.QuestionReply;
-import org.kh.campus.question.domain.QuestionSearch;
 
 public interface QuestionService {
 	
@@ -29,7 +28,7 @@ public interface QuestionService {
 	//게시글 삭제
 	public int removeQuestion(int questionNo);
 	//페이징
-	public int getListCount(PageInfo pagiInfo);
+	public int getListCount(PageInfo pageInfo);
 	
 	//댓글
 	

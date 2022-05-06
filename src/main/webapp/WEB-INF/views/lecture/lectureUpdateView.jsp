@@ -26,6 +26,7 @@
 						<option>전자공학과</option>
 						<option>소프트웨어기술학과</option>
 						<option>술먹고 피방가는 학과</option>
+						<option>과학학과</option>
 
 				</select></td>
 			</tr>
@@ -43,6 +44,7 @@
 						<option>교수3</option>
 						<option>교수4</option>
 						<option>아이고</option>
+						<option>야스오</option>
 				</select></td>
 			</tr>
 			<tr>
