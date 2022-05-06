@@ -17,6 +17,7 @@
 		<result property="professorNo" column="PROFESSOR_NO"/>
 		<result property="studentState" column="STUDENT_STATE"/>
 		<result property="professorName" column="PROFESSOR_NAME"/>
+		<result property="universityCode" column="UNIVERSITY_CODE"/>
 	</resultMap>
 	
 	<select id="selectStudentInfoOne" resultMap="studentResultMap">
@@ -30,4 +31,8 @@
 		STUDENT_EMAIL = #{studentEmail}
 		WHERE STUDENT_NO = #{studentNo}
 	</update>
+	
+	<select id="selectLoginStudent" resultMap="studentResultMap">
+		SELECT * FROM STUDENT_TBL WHERE STUDENT_NO = #{studentNo} AND STUDENT_PASSWORD = #{studentPassword}
+	</select>
 </mapper>

@@ -10,11 +10,13 @@ public class PageInfo {
 	private int maxPage; 
 	private boolean prev;  
 	private boolean next; 
+	private String searchCondition;
+	private String searchValue;
 	
 	public PageInfo() {}
 
 	public PageInfo(int currentPage, int recruitmentLimit, int naviLimit, int startNavi, int endNavi, int totalCount,
-			int maxPage, boolean prev, boolean next) {
+			int maxPage, boolean prev, boolean next, String searchCondition, String searchValue) {
 		super();
 		this.currentPage = currentPage;
 		this.recruitmentLimit = recruitmentLimit;
@@ -25,6 +27,8 @@ public class PageInfo {
 		this.maxPage = maxPage;
 		this.prev = prev;
 		this.next = next;
+		this.searchCondition = searchCondition;
+		this.searchValue = searchValue;
 	}
 
 	public int getCurrentPage() {
@@ -99,13 +103,31 @@ public class PageInfo {
 		this.next = next;
 	}
 
+	public String getSearchCondition() {
+		return searchCondition;
+	}
+
+	public void setSearchCondition(String searchCondition) {
+		this.searchCondition = searchCondition;
+	}
+
+	public String getSearchValue() {
+		return searchValue;
+	}
+
+	public void setSearchValue(String searchValue) {
+		this.searchValue = searchValue;
+	}
+
 	@Override
 	public String toString() {
 		return "PageInfo [currentPage=" + currentPage + ", recruitmentLimit=" + recruitmentLimit + ", naviLimit="
 				+ naviLimit + ", startNavi=" + startNavi + ", endNavi=" + endNavi + ", totalCount=" + totalCount
-				+ ", maxPage=" + maxPage + ", prev=" + prev + ", next=" + next + "]";
+				+ ", maxPage=" + maxPage + ", prev=" + prev + ", next=" + next + ", searchCondition=" + searchCondition
+				+ ", searchValue=" + searchValue + "]";
 	}
 
+	
 	
 
 	

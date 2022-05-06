@@ -24,6 +24,8 @@ public interface ManagerService {
 	public int registerManager(Manager manager);
 	public int modifyrManager(Manager manager);
 	public int deleteManager(int managerNo);
+	public Manager loginManager(Manager manager);
+	
 	
 	
 }

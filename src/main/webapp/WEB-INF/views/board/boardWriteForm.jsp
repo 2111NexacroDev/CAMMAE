@@ -60,11 +60,22 @@ h3{
 					<input type="text" size="50" name="boardTitle"
 						placeholder="제목을 입력하세요" style="border: none; padding: 10px;">
 				</div>
+				
+				<div class="title">
+					<input type="text" size="50" name="universityCode" value="${loginUser.universityCode}"
+						placeholder="학과를 선택하세요" style="border: none; padding: 10px;">
+				</div>
+				
 
 				<hr style="width: 585px; text-align: center;">
 				<div class="content" style="padding: 10px;">
 					<textarea rows="20" cols="75" id="boardContent"
-						name="questionContent" placeholder="내용을 입력하세요"></textarea>
+						name="boardContent" placeholder="내용을 입력하세요"></textarea>
+				</div>
+				
+				<div>
+					<input type="text" size="50" name="boardWriter" value="${loginUser.studentName}"
+						placeholder="이름을 입력해주세요" style="border: none; padding: 10px;">
 				</div>
 
 				<div style="padding: 10px;">

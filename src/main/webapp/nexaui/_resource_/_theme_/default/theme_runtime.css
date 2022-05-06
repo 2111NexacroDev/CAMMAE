@@ -57,12 +57,6 @@
 {
   cursor:default;
 }
-
-.Sketch .nexacontentsbox
-{
-   text-align:center;
-}
-
 .nexainput
 {
   cursor:inherit;
@@ -483,14 +477,6 @@
 {
 	border : 1px solid #d5d5d5;
 }
-.WebView
-{
-	border : 1px solid #d5d5d5;
-}
-.WebViewControl
-{
-	border : 1px solid #d5d5d5;
-}
 .Tab .tabpageTab
 {
 	border : 1px solid #cfcfcf, 0px none, 0px none, 0px none;
@@ -626,7 +612,7 @@
 	background : #f9f9f9;
 	font : 12px "Gulim";
 }
-.ListViewDetailBandControl.popupListViewdetail
+.ListViewBandControl.popupListViewdetail
 {
 	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
 	background : #f9f9f9;
@@ -640,7 +626,7 @@
 {
 	border : 1px solid #dbdee2;
 }
-.ListViewDetailBandControl.popupListViewdetail .cell
+.ListViewBandControl.popupListViewdetail .cell
 {
 	border : 1px solid #dbdee2;
 }
@@ -1024,7 +1010,7 @@
 	background : #ffffff;
 	font : 12px "Gulim";
 }
-.ListViewDetailBandControl.popupListViewdetail[status=readonly]
+.ListViewBandControl.popupListViewdetail[status=readonly]
 {
 	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
 	background : #ffffff;
@@ -1042,7 +1028,7 @@
 	background : #ffffff;
 	font : 12px "Gulim";
 }
-.ListViewDetailBandControl.popupListViewdetail[status=focused]
+.ListViewBandControl.popupListViewdetail[status=focused]
 {
 	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
 	background : #ffffff;
@@ -1060,7 +1046,7 @@
 	background : #ffffff;
 	font : 12px "Gulim";
 }
-.ListViewDetailBandControl.popupListViewdetail[status=mouseover]
+.ListViewBandControl.popupListViewdetail[status=mouseover]
 {
 	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
 	background : #ffffff;
@@ -1074,7 +1060,7 @@
 {
 	border : 1px solid #dbdee2;
 }
-.ListViewDetailBandControl.popupListViewdetail .cell[status=readonly]
+.ListViewBandControl.popupListViewdetail .cell[status=readonly]
 {
 	border : 1px solid #dbdee2;
 }
@@ -1086,7 +1072,7 @@
 {
 	border : 1px solid #dbdee2;
 }
-.ListViewDetailBandControl.popupListViewdetail .cell[status=focused]
+.ListViewBandControl.popupListViewdetail .cell[status=focused]
 {
 	border : 1px solid #dbdee2;
 }
@@ -1098,7 +1084,7 @@
 {
 	border : 1px solid #c4c9cf;
 }
-.ListViewDetailBandControl.popupListViewdetail .cell[status=mouseover]
+.ListViewBandControl.popupListViewdetail .cell[status=mouseover]
 {
 	border : 1px solid #c4c9cf;
 }
@@ -1341,7 +1327,7 @@
 {
 	background : #ebf3f9;
 }
-.ListViewDetailBandControl.popupListViewdetail[userstatus=selected]
+.ListViewBandControl.popupListViewdetail[userstatus=selected]
 {
 	background : #ebf3f9;
 }
@@ -1635,7 +1621,7 @@
 {
 	color : #999999;
 }
-.ListViewDetailBandControl.popupListViewdetail[status=disabled]
+.ListViewBandControl.popupListViewdetail[status=disabled]
 {
 	color : #999999;
 }
@@ -1647,7 +1633,7 @@
 {
 	border : 1px solid #dbdee2;
 }
-.ListViewDetailBandControl.popupListViewdetail .cell[status=disabled]
+.ListViewBandControl.popupListViewdetail .cell[status=disabled]
 {
 	border : 1px solid #dbdee2;
 }

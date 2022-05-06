@@ -13,7 +13,6 @@ import org.kh.campus.question.domain.PageInfo;
 import org.kh.campus.question.domain.Pagination;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.domain.QuestionReply;
-import org.kh.campus.question.domain.QuestionSearch;
 import org.kh.campus.question.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,23 +37,30 @@ public class QuestionController {
 	// 게시글 리스트조회
 	@RequestMapping(value = "/question/list", method = RequestMethod.GET)
 	public ModelAndView questionListView(ModelAndView mv,
-			@RequestParam(value = "page", required = false) Integer page) {
+			@RequestParam(value = "page", required = false) Integer page
+			, @ModelAttribute PageInfo pageInfo
+			) {
 
 		int currentPage = (page != null) ? page : 1;
 
-		int totalCount = qService.getListCount();
+		int totalCount = qService.getListCount(pageInfo);
 
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
 
 		mv.addObject("pi", pi);
+		pi.setSearchCondition(pageInfo.getSearchCondition());
+		pi.setSearchValue(pageInfo.getSearchValue());
 
 		List<Question> qList = qService.printAllQuestion(pi);
 		try {
 			if (!qList.isEmpty()) {
 				mv.addObject("qList", qList);
+				mv.addObject("pageInfo", pageInfo);
+				mv.addObject("menu", "question");
 				mv.setViewName("question/questionList");
 			} else {
 				System.out.println("조회 실패");
+				mv.setViewName("question/questionList");
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
@@ -63,20 +69,16 @@ public class QuestionController {
 	}
 
 	// 게시글 검색
-	@RequestMapping(value = "/question/search", method = RequestMethod.GET)
-	public ModelAndView questionSearchList(ModelAndView mv, @ModelAttribute QuestionSearch questionSearch) {
-
-		try {
-			List<Question> searchList = qService.printSearchQuestion(questionSearch);
-			if (!searchList.isEmpty()) {
-				mv.addObject("qList", searchList);
-				mv.setViewName("question/questionList");
-			}
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
-		return mv;
-	}
+	/*
+	 * @RequestMapping(value = "/question/search", method = RequestMethod.GET)
+	 * public ModelAndView questionSearchList(ModelAndView mv, @ModelAttribute
+	 * QuestionSearch questionSearch) {
+	 * 
+	 * try { List<Question> searchList =
+	 * qService.printSearchQuestion(questionSearch); if (!searchList.isEmpty()) {
+	 * mv.addObject("qList", searchList); mv.setViewName("question/questionList"); }
+	 * } catch (Exception e) { System.out.println(e.toString()); } return mv; }
+	 */
 
 	// 게시판 상세페이지 조회
 	@RequestMapping(value = "/question/detail", method = RequestMethod.GET)
@@ -89,6 +91,7 @@ public class QuestionController {
 
 				mv.addObject("question", question);
 				mv.setViewName("/question/questionDetail");
+				mv.addObject("menu", "question");
 
 			} else {
 				System.out.println("상세조회실패");
@@ -106,6 +109,7 @@ public class QuestionController {
 		List<Lecture> lList = qService.printAllPro();
 		if(!lList.isEmpty()) {
 			model.addAttribute("lList", lList);
+			model.addAttribute("menu", "question");
 		}
 		return "question/questionWriteForm";
 	}
@@ -114,7 +118,7 @@ public class QuestionController {
 	@ResponseBody
 	@RequestMapping(value = "/question/selectLeture", method =RequestMethod.GET, produces = "application/json;charset=utf-8") 
 	public String questionProList(@RequestParam("professorName") String professorName) {
-	  List<Lecture> lList = qService.printAllLec(professorName);
+		List<Lecture> lList = qService.printAllLec(professorName);
 	  
 	  if (!lList.isEmpty()) { 
 		 Gson gson = new Gson();
@@ -199,7 +203,10 @@ public class QuestionController {
 		try {
 			Question question = qService.printOneQuestion(questionNo);
 			if (question != null) {
+				List<Lecture> lList = qService.printAllPro();
+				mv.addObject("lList", lList);
 				mv.addObject("question", question);
+				mv.addObject("menu", "question");
 				mv.setViewName("question/questionUpdateView");
 			} else {
 				System.out.println("데이터 없음");

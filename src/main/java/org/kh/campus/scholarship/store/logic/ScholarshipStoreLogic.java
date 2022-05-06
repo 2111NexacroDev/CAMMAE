@@ -11,27 +11,47 @@ import org.springframework.stereotype.Repository;
 public class ScholarshipStoreLogic implements ScholarshipStore {
 
 	@Override
-	public List<Scholarship> selectAllScholar(SqlSession sqlSession) {
-		List<Scholarship> sList = sqlSession.selectList("ScholarMapper.selectAllScholar");
-		return sList;
-	}
-
-	@Override
-	public int insertScholar(SqlSession sqlSession, Scholarship scholarship) {
-		int result = sqlSession.insert("ScholarMapper.insertScholar", scholarship);
-		return result;
-	}
-
-	@Override
-	public List<Scholarship> selectResult(SqlSession sqlSession) {
-		List<Scholarship>sList = sqlSession.selectList("ScholarMapper.selectResult");
+	public List<Scholarship> selectResult(SqlSession sqlSession, int studentNo) {
+		List<Scholarship>sList = sqlSession.selectList("ScholarshipMapper.selectResult", studentNo);
 		return sList;
 	}
 
 	@Override
 	public int registerScholar(SqlSession sqlSession, Scholarship scholarship) {
-		int result = sqlSession.insert("ScholarMapper.registerScholar", scholarship);
+		int result = sqlSession.insert("ScholarshipMapper.registerScholar", scholarship);
 		return result;
+	}
+
+	@Override
+
+	public List<Scholarship> selectScholarIns(SqlSession sqlSession, String inVar1) {
+		List<Scholarship>sList= sqlSession.selectList("ScholarshipMapper.selectScholarIns", inVar1);
+		return sList; 
+  }
+
+
+	@Override
+	public int updateScholarAccept(SqlSession sqlSession, Scholarship scholarship) {
+		int result = sqlSession.update("ScholarshipMapper.updateScholarAccept", scholarship);
+		return result;
+	}
+
+	@Override
+	public List<Scholarship> selectAllScholar(SqlSession sqlSession, Scholarship scholarship) {
+		List<Scholarship> sList = sqlSession.selectList("ScholarshipMapper.selectAllScholar", scholarship);
+		return sList;
+	}
+
+	@Override
+	public int updateScholarDenine(SqlSession sqlSession, Scholarship scholarship) {
+		int result = sqlSession.update("ScholarshipMapper.updateScholarDenine", scholarship);
+		return result;
+	}
+
+	@Override
+	public List<Scholarship> selectStuInfo(SqlSession sqlSession, Scholarship scholarship) {
+		List<Scholarship>sList = sqlSession.selectList("ScholarshipMapper.selectStuInfo", scholarship);
+		return sList;
 	}
 
 }

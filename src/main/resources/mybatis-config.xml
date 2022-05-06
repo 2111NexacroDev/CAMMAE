@@ -25,6 +25,8 @@
 		<typeAlias
 			type="org.kh.campus.question.domain.QuestionReply"
 			alias="QuestionReply" />
+		<typeAlias type="org.kh.campus.market.domain.MarketReply"
+			alias="MarketReply" />
 		<typeAlias type="org.kh.campus.board.domain.Board"
 			alias="Board" />
 		<typeAlias type="org.kh.campus.lecture.domain.Lecture"
@@ -34,6 +36,8 @@
 			alias="Consultant" />
 		<typeAlias type="org.kh.campus.board.domain.BoardReply"
 			alias="BoardReply" />
+		<typeAlias type="org.kh.campus.board.domain.University"
+			alias="University" />
 		<typeAlias
 			type="org.kh.campus.consultant.domain.ConsultantReply"
 			alias="ConsultantReply" />
@@ -43,10 +47,17 @@
 		<typeAlias
 			type="org.kh.campus.recruitment.domain.Recruitment"
 			alias="Recruitment" />
-		
-		<typeAlias
-			type="org.kh.campus.cart.domain.Cart"
+
+		<typeAlias type="org.kh.campus.cart.domain.Cart"
 			alias="Cart" />
+
+		<typeAlias
+			type="org.kh.campus.scholarship.domain.Scholarship"
+			alias="Scholarship" />
+			
+		<typeAlias
+			type="org.kh.campus.support.domain.Support"
+			alias="Support" />
 
 	</typeAliases>
 	<mappers>
@@ -64,6 +75,9 @@
 		<mapper resource="mappers/consultant-mapper.xml" />
 		<mapper resource="mappers/portfolio-mapper.xml" />
 		<mapper resource="mappers/recruitment-mapper.xml" />
-		<mapper resource="mappers/cart-mapper.xml"/>
+		<mapper resource="mappers/cart-mapper.xml" />
+		<mapper resource="mappers/scholarship-mapper.xml" />
+		<mapper resource="mappers/support-mapper.xml" />
+		
 	</mappers>
 </configuration>

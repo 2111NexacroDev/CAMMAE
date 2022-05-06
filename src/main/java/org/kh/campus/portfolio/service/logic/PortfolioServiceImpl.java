@@ -18,8 +18,8 @@ public class PortfolioServiceImpl implements PortfolioService {
 	@Autowired
 	private SqlSession sqlSession;
 	@Override
-	public List<Portfolio> printAllPort(PageInfo pi) {
-		List<Portfolio>pList = pStore.selectAllPort(sqlSession);
+	public List<Portfolio> printAllPort(int studentNo) {
+		List<Portfolio>pList = pStore.selectAllPort(sqlSession, studentNo);
 		return pList;
 	}
 
@@ -29,27 +29,10 @@ public class PortfolioServiceImpl implements PortfolioService {
 		return result;
 	}
 
-	@Override
-	public Portfolio printDetailPort(String port_title) {
-		Portfolio portfolio = pStore.selectDetailPort(sqlSession, port_title);
-		return portfolio;
-	}
-
-	@Override
-	public int updatePort(String port_title) {
-		int result = pStore.updatePort(sqlSession, port_title);
-		return result;
-	}
-
-	@Override
-	public int deletePort(String port_title) {
-		int result = pStore.deletePort(sqlSession, port_title);
-		return result;
-	}
 
 	@Override
 	public List<Portfolio> printAdminAllPort(PageInfo pi) {
-		List<Portfolio> pList = pStore.selectAdminAllPort(sqlSession);
+		List<Portfolio> pList = pStore.selectAdminAllPort(sqlSession, pi);
 		return pList;
 	}
 
@@ -80,7 +63,7 @@ public class PortfolioServiceImpl implements PortfolioService {
 
 	@Override
 	public int modifyPortfolio(Portfolio portfolio) {
-		int result = pStore.updatePortfolio(sqlSession);
+		int result = pStore.updatePortfolio(sqlSession,portfolio);
 		return result;
 	}
 
@@ -88,6 +71,12 @@ public class PortfolioServiceImpl implements PortfolioService {
 	public int deletePortfolio(int port_no) {
 		int result = pStore.deletePortfolio(sqlSession, port_no);
 		return result;
+	}
+
+	@Override
+	public List<Portfolio> printOneByStNo(int port_student_no) {
+		List<Portfolio> pList = pStore.selectBySt(sqlSession, port_student_no);
+		return pList;
 	}
 
 

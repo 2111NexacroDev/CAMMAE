@@ -21,7 +21,7 @@ if (!nexacro.GridFormat) {
 		this._imgHeightTemp = {
 		};
 		this._suppress_infos = [];
-		this._virtualmerge_infos = [];
+		this._virtualmerge_infos = null;
 
 		this._cur1font_size = null;
 		this._cur1selectfont_size = null;
@@ -55,6 +55,14 @@ if (!nexacro.GridFormat) {
 		this._curborder = null;
 		this._curpadding = null;
 		this._stylecache = null;
+
+		var vinfos = this._virtualmerge_infos;
+		if (vinfos) {
+			for (var i = 0, n = vinfos.length; i < n; i++) {
+				vinfos[i] = null;
+			}
+			this._virtualmerge_infos = null;
+		}
 	};
 
 	_pGridCellInfo._setStyleCache = function (prop, datarow, selected, val) {
@@ -114,181 +122,16 @@ if (!nexacro.GridFormat) {
 		this._suppress_infos = [];
 	};
 
-	_pGridCellInfo._initVirtualMergeInfo = function () {
-		this._virtualmerge_infos = [];
-	};
-
-	_pGridCellInfo._setVirtualMergeInfo = function (idx, info) {
-		this._virtualmerge_infos[idx] = info;
-	};
-
-	_pGridCellInfo._getVirtualMergeInfo = function (idx) {
-		if (!this._hasVirtualMergeInfo()) {
-			return null;
-		}
-
-		return this._virtualmerge_infos[idx];
-	};
-
-	_pGridCellInfo._hasVirtualMergeInfo = function () {
-		if (this._virtualmerge_infos && this._virtualmerge_infos.length > 0) {
-			return true;
-		}
-
-		return false;
-	};
-
 	_pGridCellInfo._query_status_align = function (rowidx, displayType, userstatus) {
 		return this._grid._getCellStyleInfo(this._cellidx, "align", rowidx, userstatus == "selected");
 	};
 
-	_pGridCellInfo._query_status_background = function (rowidx, userstatus, bExport) {
-		return this._grid._getCellStyleInfo(this._cellidx, "background", rowidx, userstatus == "selected", null, null, bExport);
-	};
-
-
-	_pGridCellInfo._getExportCurrentStyleBorder = function (cell) {
-		var control_elem = cell._control_element;
-		if (control_elem) {
-			var border = control_elem.border ? control_elem.border : control_elem._border_info;
-			if (control_elem.borderLeftNone || control_elem.borderRightNone || control_elem.borderTopNone || control_elem.borderBottomNone) {
-				if (border) {
-					var values = [border.top.value, border.right.value, border.bottom.value, border.left.value];
-
-					if (cell._refinfo._col > 0) {
-						if (control_elem.borderLeftNone) {
-							values[3] = "0px solid transparent";
-						}
-					}
-
-					if ((cell._rowidx == -1 && cell._refinfo._row == 0) == false) {
-						if (control_elem.borderTopNone) {
-							values[0] = "0px solid transparent";
-						}
-					}
-
-					if (control_elem.borderRightNone) {
-						values[1] = "0px solid transparent";
-					}
-					if (control_elem.borderBottomNone) {
-						values[2] = "0px solid transparent";
-					}
-
-					values = values.join(",");
-					return nexacro.BorderObject(values);
-				}
-			}
-			return border;
-		}
-		return undefined;
+	_pGridCellInfo._query_status_background = function (rowidx, userstatus) {
+		return this._grid._getCellStyleInfo(this._cellidx, "background", rowidx, userstatus == "selected");
 	};
 
 	_pGridCellInfo._query_status_border = function (rowidx, userstatus) {
-		var cellinfos = this._grid._getCellinfos(rowidx);
-		if (!cellinfos) {
-			return;
-		}
-
-		var cellidx = this._cellidx;
-		var cellinfo = cellinfos[cellidx];
-		var grididx = this._grid._getGridRow(rowidx);
-
-		var is_change = false;
-		var is_cached = true;
-		var is_selected = userstatus == "selected";
-		var checklist = ["top", "right", "bottom", "left"];
-
-		this._grid._createTempCell(this._cellidx, rowidx, null);
-
-		var cells = this._grid._getTempCell(cellidx, rowidx, null);
-		var cell = cells.cell;
-
-		var cell_style = this._getExportCurrentStyleBorder(cell);
-
-		if (this._grid && this._grid._checkVirtualMerge(cellinfo, rowidx) && cell._control_element) {
-			var vminfo = this._grid._checkVirtualMerge(cellinfo, rowidx);
-			var remove = vminfo.remove;
-			var remove_r, remove_l, remove_b, remove_t;
-
-			if (remove.indexOf("right") >= 0) {
-				remove_r = cell._control_element.borderRightNone;
-				cell._control_element.borderRightNone = false;
-			}
-			else if (remove.indexOf("left") >= 0) {
-				remove_l = cell._control_element.borderLeftNone;
-				cell._control_element.borderLeftNone = false;
-			}
-
-			if (remove.indexOf("bottom") >= 0) {
-				remove_b = cell._control_element.borderBottomNone;
-				cell._control_element.borderBottomNone = false;
-			}
-			else if (remove.indexOf("top") >= 0) {
-				remove_t = cell._control_element.borderTopNone;
-				cell._control_element.borderTopNone = false;
-			}
-
-			cell_style = cell._getCurrentStyleBorder();
-
-			if (remove_r) {
-				cell._control_element.borderRightNone = remove_r;
-			}
-			else if (remove_l) {
-				cell._control_element.borderLeftNone = remove_l;
-			}
-
-			if (remove_b) {
-				cell._control_element.borderBottomNone = remove_b;
-			}
-			else if (remove_t) {
-				cell._control_element.borderTopNone = remove_t;
-			}
-		}
-		cell._changeUserStatus("selected", !!is_selected);
-
-		var color = cell._getCurrentStyleInheritValue("color", "enabled");
-
-		var cached_style = cellinfo._getStyleCache("border", grididx, is_selected);
-		if (!cached_style) {
-			var cell_substyle;
-			var cell_substyle_val;
-			var change_val = [];
-			while (checklist.length) {
-				var prop = checklist[0];
-				if (prop) {
-					cell_substyle = cell_style[prop];
-					cell_substyle_val = cell_substyle.value;
-					if (cell_substyle.style == "none") {
-						cell_substyle_val = "0px solid transparent";
-					}
-					else {
-						if (cell_substyle.color == "") {
-							is_change = true;
-							cell_substyle_val += " " + color;
-						}
-					}
-				}
-				change_val.push(cell_substyle_val);
-				checklist.shift();
-			}
-
-			if (is_change) {
-				cell_style = nexacro.BorderObject(change_val.join(","));
-			}
-
-			if (cellinfo._getSuppress(rowidx) > 0) {
-				is_cached = false;
-			}
-
-			if (is_cached) {
-				cellinfo._setStyleCache("border", rowidx, is_selected, cell_style.value);
-			}
-		}
-		else {
-			cell_style = nexacro.BorderObject(cached_style);
-		}
-
-		return cell_style;
+		return this._grid._getCellStyleInfo(this._cellidx, "border", rowidx, userstatus == "selected");
 	};
 
 	_pGridCellInfo._query_status_color = function (rowidx, userstatus) {
@@ -632,9 +475,18 @@ if (!nexacro.GridFormat) {
 				}
 			}
 			else if (v.substring(0, 5).toLowerCase() != "theme") {
-				var format = nexacro._transImageBase64StringFormat(v);
-				if (format) {
-					v = format.alldata;
+				var isBase64 = nexacro._checkBase64String(v);
+				if (isBase64) {
+					if (v.substring(0, 10).toLowerCase() != "data:image") {
+						v = "data:image;base64," + v;
+					}
+					else if (v.substring(0, 17).toLowerCase() != "data:image;base64") {
+						var comma_idx = v.indexOf(",");
+						if (comma_idx > -1) {
+							var tmp = v.slice(comma_idx + 1, v.legnth);
+							v = "data:image;base64," + tmp;
+						}
+					}
 				}
 			}
 		}
@@ -794,20 +646,7 @@ if (!nexacro.GridFormat) {
 
 	_pGridFormat._findDataset = function (id) {
 		if (this._innerdatasets[id]) {
-			if (this._innerdatasets[id].parent != null) {
-				return this._innerdatasets[id];
-			}
-			else {
-				this._innerdatasets[id] = null;
-
-				for (var i = 0; i < this._innerdatasets_name.length; i++) {
-					var name = this._innerdatasets_name[i];
-					if (name == id) {
-						this._innerdatasets_name.splice(i, 1);
-						i--;
-					}
-				}
-			}
+			return this._innerdatasets[id];
 		}
 
 		var ds = this._grid._findDataset(id);
@@ -940,7 +779,7 @@ if (!nexacro.GridFormat) {
 						continue;
 					}
 
-					_cols[i].size = Math.round(autofitcol_rate[i] *  client_width);
+					_cols[i].size = Math.round(autofitcol_rate[i] * client_width);
 					_cols[i].left = left;
 					_cols[i].right = left + _cols[i].size;
 					left = _cols[i].right;
@@ -1169,19 +1008,19 @@ if (!nexacro.GridFormat) {
 
 		if (fromcol > tocol) {
 			for (i = tocol; i < fromcol; i++) {
-				this._cols[i].left = this._cols[i].orgleft = this._cols[i + 1].left;
-				this._cols[i].right = this._cols[i].orgright = this._cols[i + 1].right;
+				this._cols[i].left = this._cols[i + 1].left;
+				this._cols[i].right = this._cols[i + 1].right;
 			}
 		}
 		else {
 			for (i = tocol; i > fromcol; i--) {
-				this._cols[i].left = this._cols[i].orgleft = this._cols[i - 1].left;
-				this._cols[i].right = this._cols[i].orgright = this._cols[i - 1].right;
+				this._cols[i].left = this._cols[i - 1].left;
+				this._cols[i].right = this._cols[i - 1].right;
 			}
 		}
 
-		this._cols[fromcol].left = this._cols[fromcol].orgleft = from_left;
-		this._cols[fromcol].right = this._cols[fromcol].orgright = from_right;
+		this._cols[fromcol].left = from_left;
+		this._cols[fromcol].right = from_right;
 
 		this._adjustFormatColSize();
 
@@ -1901,7 +1740,7 @@ if (!nexacro.GridFormat) {
 				}
 
 				col.left = pos;
-				col.size = bodywidth *  autofitcol_rate[i];
+				col.size = bodywidth * autofitcol_rate[i];
 
 				if (col.size >= 0.5) {
 					col.size = Math.round(col.size);
@@ -1953,7 +1792,7 @@ if (!nexacro.GridFormat) {
 				}
 
 				row.top = pos;
-				row.size = (row.size *  factor);
+				row.size = (row.size * factor);
 
 				pos = pos + row.size;
 				row.bottom = pos;
@@ -2797,13 +2636,11 @@ if (!nexacro.GridFormat) {
 
 		if (mergecells.length > 0) {
 			var mergecell, subcells;
-			var skip_cells = [];
 
 			for (i = 0; i < mergecells.length; i++) {
 				mergecell = mergecells[i];
 				subcells = mergecell._subcells;
 				mergecell._rowspan++;
-				skip_cells.push(mergecell._col);
 
 				if (subcells.length) {
 					for (j = 0; j < subcells.length; j++) {
@@ -2815,7 +2652,7 @@ if (!nexacro.GridFormat) {
 					for (j = mergecell._col; j < mergecell._col + mergecell._colspan; j++) {
 						cellobj = new nexacro.GridCellInfo(bandtype + mergecell._cellidx + "_sub" + subcells.length, bandobj, this.parent, bandtype, subcells.length);
 						cellobj.celltype = bandtype;
-						cellobj._col = j - mergecell._col;
+						cellobj._col = j;
 						cellobj._colspan = 1;
 						cellobj._row = insertidx - mergecell._row;
 						cellobj._rowspan = 1;
@@ -2827,11 +2664,7 @@ if (!nexacro.GridFormat) {
 			}
 
 			if (mergecell) {
-				for (i = 0; i < colsize; i++) {
-					if (skip_cells[0] == i) {
-						skip_cells.splice(0, 1);
-						continue;
-					}
+				for (i = (mergecell._col + mergecell._colspan); i < colsize; i++) {
 					cellobj = new nexacro.GridCellInfo(bandtype + cellsize, bandobj, this.parent, bandtype, cellsize);
 					cellobj.celltype = bandtype;
 					cellobj._col = i;
@@ -3400,7 +3233,7 @@ if (!nexacro.GridFormat) {
 					var col = band_cells[i]._col;
 					var area = band_cells[i]._area;
 
-					band_cells[i]._cellidx = col + (col_count *  row);
+					band_cells[i]._cellidx = col + (col_count * row);
 
 					subcells = band_cells[i]._subcells;
 					current_merge_col = (band_cells[i]._colspan + band_cells[i]._col) - 1;
@@ -3418,10 +3251,10 @@ if (!nexacro.GridFormat) {
 								subcells[j]._isSubCell = false;
 
 								if (band_cells[i + 1] && band_cells[i]._col < subcells[j]._col && subcells[j]._col < band_cells[i + 1]._col) {
-									subcells[j]._cellidx = col + 1 + (col_count *  row);
+									subcells[j]._cellidx = col + 1 + (col_count * row);
 								}
 								else {
-									subcells[j]._cellidx = col + (col_count *  row);
+									subcells[j]._cellidx = col + (col_count * row);
 								}
 
 								var rowspan = subcells[j]._rowspan;
@@ -3437,17 +3270,17 @@ if (!nexacro.GridFormat) {
 							band_cells[i].destroy();
 						}
 						else {
-							band_cells[i]._cellidx = band_cells[i]._col + (band_cells[i]._row *  col_count);
+							band_cells[i]._cellidx = band_cells[i]._col + (band_cells[i]._row * col_count);
 							matrix.push(band_cells[i]);
 						}
 					}
 					else {
 						if (bMakeSubCell) {
 							if ((current_merge_col >= nStartCol && current_merge_col <= nEndCol) && (current_merge_row >= nStartRow && current_merge_row <= nEndRow)) {
-								if ((band_cells[i]._rowspan *  band_cells[i]._colspan) > 1) {
+								if ((band_cells[i]._rowspan * band_cells[i]._colspan) > 1) {
 									var make_cell = null;
 									matrix.push(band_cells[i]);
-									for (j = 0; j < (band_cells[i]._rowspan *  band_cells[i]._colspan) - 1; j++) {
+									for (j = 0; j < (band_cells[i]._rowspan * band_cells[i]._colspan) - 1; j++) {
 										split_cell++;
 										make_cell = new nexacro.GridCellInfo(band_type + cell_idx, band_cells[i].parent, band_cells[i]._grid, band_cells[i].celltype, cell_idx++);
 
@@ -3465,7 +3298,7 @@ if (!nexacro.GridFormat) {
 											row++;
 											col = band_cells[i]._col;
 										}
-										make_cell._cellidx = col + (col_count *  row);
+										make_cell._cellidx = col + (col_count * row);
 										make_cell._row = row;
 										make_cell._col = col;
 										matrix.push(make_cell);

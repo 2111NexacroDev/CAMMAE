@@ -15,6 +15,7 @@ public class Student {
 	private String studentState;
 	private String professorName;
 	private String chk;
+	private int universityCode;
 	
 	public Student() {}
 
@@ -65,14 +66,27 @@ public class Student {
 		this.studentPhonenumber = studentPhonenumber;
 		this.studentEmail = studentEmail;
 	}
+	
+	
 
-	@Override
-	public String toString() {
-		return "Student [studentNo=" + studentNo + ", universityCollege=" + universityCollege + ", departmentName="
-				+ departmentName + ", studentName=" + studentName + ", studentGrade=" + studentGrade + ", studentBirth="
-				+ studentBirth + ", studentAddress=" + studentAddress + ", studentPhonenumber=" + studentPhonenumber
-				+ ", studentEmail=" + studentEmail + ", studentPassword=" + studentPassword + ", professorNo="
-				+ professorNo + ", studentState=" + studentState + ", professorName=" + professorName + "]";
+	public Student(int studentNo, String universityCollege, String departmentName, String studentName, int studentGrade,
+			String studentBirth, String studentAddress, String studentPhonenumber, String studentEmail,
+			String studentPassword, String professorNo, String studentState, String professorName, int universityCode) {
+		super();
+		this.studentNo = studentNo;
+		this.universityCollege = universityCollege;
+		this.departmentName = departmentName;
+		this.studentName = studentName;
+		this.studentGrade = studentGrade;
+		this.studentBirth = studentBirth;
+		this.studentAddress = studentAddress;
+		this.studentPhonenumber = studentPhonenumber;
+		this.studentEmail = studentEmail;
+		this.studentPassword = studentPassword;
+		this.professorNo = professorNo;
+		this.studentState = studentState;
+		this.professorName = professorName;
+		this.universityCode = universityCode;
 	}
 
 	public int getStudentNo() {
@@ -186,6 +200,25 @@ public class Student {
 	public void setProfessorName(String professorName) {
 		this.professorName = professorName;
 	}
+
+	public int getUniversityCode() {
+		return universityCode;
+	}
+
+	public void setUniversityCode(int universityCode) {
+		this.universityCode = universityCode;
+	}
+
+	@Override
+	public String toString() {
+		return "Student [studentNo=" + studentNo + ", universityCollege=" + universityCollege + ", departmentName="
+				+ departmentName + ", studentName=" + studentName + ", studentGrade=" + studentGrade + ", studentBirth="
+				+ studentBirth + ", studentAddress=" + studentAddress + ", studentPhonenumber=" + studentPhonenumber
+				+ ", studentEmail=" + studentEmail + ", studentPassword=" + studentPassword + ", professorNo="
+				+ professorNo + ", studentState=" + studentState + ", professorName=" + professorName
+				+ ", universityCode=" + universityCode + "]";
+	}
+	
 	
 	
 }

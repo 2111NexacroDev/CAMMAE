@@ -23,8 +23,11 @@ public class Pagination {
 			endNavi = maxPage;
 			
 		}
+		String searchCondition = "";
+		String searchValue = "";
+		int universityCode = 0;
 		pi = new PageInfo(currentPage, boardLimit, 
-				naviLimit, startNavi, endNavi, totalCount, maxPage, prev, next);
+				naviLimit, startNavi, endNavi, totalCount, maxPage, prev, next, universityCode, searchCondition, searchValue);
 		return pi;
 	}
 

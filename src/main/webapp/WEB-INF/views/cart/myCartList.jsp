@@ -10,46 +10,49 @@
 </head>
 <body>
 	<h1>예비수강신청 내역</h1>
-	<table>
+	<table border="3">
+		
 		<tr>
-			<th>찜하기</th>
+			<th>신청</th>
+			<th>장바구니번호</th>
 			<th>과목코드</th>
-			<th>단과대학</th>
-			<th>개설학과</th>
-			<th>강의명</th>
-			<th>교수명</th>
+			<th>학번</th>
+			<th>년도</th>
+			<th>학기</th>
 			<th>이수구분</th>
 			<th>학점</th>
-			<th>강의실</th>
-			<th>강의인원</th>
+			<th>교수명</th>
+			<th>교과목명</th>
+			<th>개설학과</th>
 			<th>강의시간</th>
+			<th>삭제</th>
 		</tr>
-		<c:forEach items="${lList }" var="lList">
+		<c:forEach items="${cList }" var="cart">
 			<tr>
 				<td>
-				<c:url var="lPick" value="/cart/cartPick.kh">
-				<c:param name="lectureNo" value="${lList.lectureNo }"></c:param></c:url>
-					<a href="${lPick }">찜하기</a>
-				
+				<c:url var="lPick" value="/cart/cartEnroll.kh">
+				<c:param name="lectureNo" value="${cart.lectureNo }"></c:param></c:url>
+					<a href="${lPick }"  >신청하기</a>
 				</td>
-				<td>${lList.lectureNo }</td>
-				<td>${lList.universityCollege }</td>
-				<td>${lList.lectureDepartment }</td>
-				<td>${lList.lectureName }</td>
-				<td>${lList.professorName }</td>
-				<td>${lList.lectureDivision }</td>
-				<td>${lList.lectureGrade }</td>
-				<td>${lList.lectureRoom }</td>
-				<td>${lList.lecturePeople }</td>
-				<td>${lList.lectureTime }</td>
-				<td><c:url var="lRemove" value="/lecture/remove.kh">
-						<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
-					</c:url> <a href="${lRemove }">삭제</a></td>
+				<td>${cart.cartNo }</td>
+				<td>${cart.lectureNo }</td>
+				<td>${cart.studentNo }</td>
+				<td>${cart.cartYear }</td>
+				<td>${cart.cartTerm }</td>
+				<td>${cart.lectureDivision }</td>
+				<td>${cart.lectureGrade }</td>
+				<td>${cart.professorName }</td>
+				<td>${cart.lectureName }</td>
+				<td>${cart.lectureDepartment }</td>
+				<td>${cart.lectureTime }</td>
+				
+				<td><c:url var="cRemove" value="/cart/remove.kh">
+						<c:param name="cartNo" value="${cart.cartNo }"></c:param>
+					</c:url> <a href="${cRemove }">삭제</a></td>
 			</tr>
 
 		</c:forEach>
 	</table>
 
-	</table>
 </body>
 </html>

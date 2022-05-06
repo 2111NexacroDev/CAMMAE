@@ -12,8 +12,8 @@
 //==============================================================================
 
 if (!nexacro.Radio) {
-	nexacro.RadioClickEventInfo = function (obj, id, index, itemText, itemValue, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key) {
-		nexacro.ClickEventInfo.call(this, obj, id || "onradioclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
+	nexacro.RadioClickEventInfo = function (obj, id, index, itemText, itemValue, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY) {
+		nexacro.ClickEventInfo.call(this, obj, id || "onradioclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
 
 		this.index = index;
 		this.itemtext = itemText;
@@ -51,7 +51,6 @@ if (!nexacro.Radio) {
 	_pRadio.readonly = false;
 	_pRadio.rowcount = 0;
 	_pRadio.value = undefined;
-	_pRadio.text = "";
 	_pRadio.acceptvaluetype = "allowinvalid";
 
 
@@ -142,6 +141,7 @@ if (!nexacro.Radio) {
 			items[i].on_created(win);
 		}
 
+		this._setEventHandler("onkeydown", this._on_radio_onkeydown, this);
 
 		if (nexacro._enableaccessibility) {
 			this.on_apply_prop_accessibilitylabel();
@@ -199,6 +199,7 @@ if (!nexacro.Radio) {
 			this._update_position();
 		}
 
+		this._setEventHandler("onkeydown", this._on_radio_onkeydown, this);
 
 		if (nexacro._enableaccessibility) {
 			this.on_apply_prop_accessibilitylabel();
@@ -245,7 +246,7 @@ if (!nexacro.Radio) {
 		}
 	};
 
-	_pRadio.on_init_bindSource = function (columnid, propid, ds) {
+	_pRadio.on_init_bindSource = function (columnid, propid) {
 		if (propid == "value") {
 			this.value = undefined;
 			this.text = "";
@@ -493,7 +494,7 @@ if (!nexacro.Radio) {
 						}
 						else if (radio_rowcount > 0) {
 							apply_colcnt = Math.ceil(ds_rowcount / radio_rowcount);
-							if ((apply_colcnt *  radio_rowcount) < ds_rowcount) {
+							if ((apply_colcnt * radio_rowcount) < ds_rowcount) {
 								apply_colcnt++;
 							}
 						}
@@ -517,7 +518,7 @@ if (!nexacro.Radio) {
 						}
 						else if (radio_columncount > 0) {
 							apply_rowcnt = parseInt(ds_rowcount / radio_columncount);
-							if ((radio_columncount *  apply_rowcnt) < ds_rowcount) {
+							if ((radio_columncount * apply_rowcnt) < ds_rowcount) {
 								apply_rowcnt++;
 							}
 						}
@@ -584,7 +585,7 @@ if (!nexacro.Radio) {
 						total_w += maxsize_col[i];
 					}
 					if (item_size) {
-						total_h += item_size[1] *  apply_rowcnt;
+						total_h += item_size[1] * apply_rowcnt;
 					}
 				}
 			}
@@ -707,9 +708,7 @@ if (!nexacro.Radio) {
 			this.on_apply_value(v);
 		}
 	};
-	_pRadio.updateToDataset = function () {
-		return this.applyto_bindSource("value", this.value);
-	};
+
 	_pRadio.on_apply_value = function (value) {
 		var ds = this._innerdataset;
 		var code = this.codecolumn;
@@ -722,10 +721,7 @@ if (!nexacro.Radio) {
 			this._doSelect(index);
 			this._block_read_aria_stat = false;
 
-			if (index >= 0) {
-				this._default_value = value;
-			}
-
+			this._default_value = value;
 			this._default_index = this.index;
 		}
 	};
@@ -876,9 +872,6 @@ if (!nexacro.Radio) {
 
 			if (ds) {
 				this._redrawRadioItem();
-				if (this.index < 0) {
-					this._default_value = this.value = undefined;
-				}
 			}
 			else {
 				this._createRadioTextElement();
@@ -1069,8 +1062,65 @@ if (!nexacro.Radio) {
 		}
 	};
 
+	_pRadio._on_radio_onkeydown = function (obj, e) {
+		var E = nexacro.Event;
+		var keycode = e.keycode;
 
-	_pRadio.on_fire_user_onkeydown = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key) {
+		if (nexacro._enableaccessibility) {
+			if (keycode == E.KEY_UP || keycode == E.KEY_DOWN) {
+				return false;
+			}
+		}
+
+		if (keycode == nexacro.Event.KEY_TAB) {
+			this._want_tab = false;
+			this._is_first_focus = false;
+		}
+		else if (keycode == E.KEY_LEFT || keycode == E.KEY_RIGHT || keycode == E.KEY_UP || keycode == E.KEY_DOWN) {
+			var ds = this._innerdataset;
+			if (!ds || this.readonly) {
+				return false;
+			}
+
+			var row_cnt = ds.getRowCount();
+			if (row_cnt < 1) {
+				return false;
+			}
+
+			var pre_index = this._default_index;
+			var pre_value = this._default_value;
+			var pre_text = this._default_text;
+
+			var op = (keycode == E.KEY_LEFT || keycode == E.KEY_UP) ? -1 : (keycode == E.KEY_RIGHT || keycode == E.KEY_DOWN) ? 1 : 0;
+
+			var idx = this.index + op;
+			if (idx >= row_cnt) {
+				idx = 0;
+			}
+			else if (idx < 0) {
+				idx = row_cnt - 1;
+			}
+			var radioitem = this._getItem(idx);
+			var ret = this.on_fire_canitemchange(obj, pre_index, pre_text, pre_value, idx, radioitem.text, radioitem._value);
+			if (ret) {
+				this._accessibility_index = idx;
+				if (row_cnt != idx && row_cnt >= idx && 0 <= idx) {
+					this.set_index(idx);
+					if (idx != pre_index) {
+						this.on_fire_onitemchanged(obj, pre_index, pre_text, pre_value, idx, radioitem.text, radioitem._value);
+					}
+				}
+
+				if (nexacro._enableaccessibility) {
+					radioitem._on_focus(true, op == -1 ? "keyleft" : (op == 1 ? "keyright" : undefined));
+					radioitem._changeUserStatus("selected", true);
+				}
+			}
+		}
+		return false;
+	};
+
+	_pRadio.on_fire_user_onkeydown = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp) {
 		var items = this._items;
 
 		if (keycode == nexacro.Event.KEY_SPACE) {
@@ -1129,7 +1179,7 @@ if (!nexacro.Radio) {
 			}
 		}
 
-		return nexacro.Component.prototype.on_fire_user_onkeydown.call(this, keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
+		return nexacro.Component.prototype.on_fire_user_onkeydown.call(this, keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
 	};
 
 	_pRadio._on_radioitem_onclick = function (obj) {
@@ -1213,66 +1263,6 @@ if (!nexacro.Radio) {
 		}
 
 		return true;
-	};
-
-	_pRadio.on_keydown_basic_action = function () {
-	};
-
-	_pRadio.on_keydown_default_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
-		var E = nexacro.Event;
-		var obj = this;
-		if (nexacro._enableaccessibility) {
-			if (keycode == E.KEY_UP || keycode == E.KEY_DOWN) {
-				return false;
-			}
-		}
-
-		if (keycode == nexacro.Event.KEY_TAB) {
-			this._want_tab = false;
-			this._is_first_focus = false;
-		}
-		else if (keycode == E.KEY_LEFT || keycode == E.KEY_RIGHT || keycode == E.KEY_UP || keycode == E.KEY_DOWN) {
-			var ds = this._innerdataset;
-			if (!ds || this.readonly) {
-				return false;
-			}
-
-			var row_cnt = ds.getRowCount();
-			if (row_cnt < 1) {
-				return false;
-			}
-
-			var pre_index = this._default_index;
-			var pre_value = this._default_value;
-			var pre_text = this._default_text;
-
-			var op = (keycode == E.KEY_LEFT || keycode == E.KEY_UP) ? -1 : (keycode == E.KEY_RIGHT || keycode == E.KEY_DOWN) ? 1 : 0;
-
-			var idx = this.index + op;
-			if (idx >= row_cnt) {
-				idx = 0;
-			}
-			else if (idx < 0) {
-				idx = row_cnt - 1;
-			}
-			var radioitem = this._getItem(idx);
-			var ret = this.on_fire_canitemchange(obj, pre_index, pre_text, pre_value, idx, radioitem.text, radioitem._value);
-			if (ret) {
-				this._accessibility_index = idx;
-				if (row_cnt != idx && row_cnt >= idx && 0 <= idx) {
-					this.set_index(idx);
-					if (idx != pre_index) {
-						this.on_fire_onitemchanged(obj, pre_index, pre_text, pre_value, idx, radioitem.text, radioitem._value);
-					}
-				}
-
-				if (nexacro._enableaccessibility) {
-					radioitem._on_focus(true, op == -1 ? "keyleft" : (op == 1 ? "keyright" : undefined));
-					radioitem._changeUserStatus("selected", true);
-				}
-			}
-		}
-		return false;
 	};
 
 	_pRadio._createRadioItemControl = function () {
@@ -1463,9 +1453,9 @@ if (!nexacro.Radio) {
 						}
 						else if (radio_rowcount > 0) {
 							apply_colcnt = Math.ceil(apply_rowcnt / radio_rowcount);
-							if ((apply_colcnt *  radio_rowcount) < apply_rowcnt) {
+							if ((apply_colcnt * radio_rowcount) < apply_rowcnt) {
 								apply_colcnt++;
-								apply_rowcnt = (((apply_colcnt *  radio_rowcount) - apply_rowcnt) >= apply_colcnt) ? radio_rowcount - 1 : radio_rowcount;
+								apply_rowcnt = (((apply_colcnt * radio_rowcount) - apply_rowcnt) >= apply_colcnt) ? radio_rowcount - 1 : radio_rowcount;
 							}
 						}
 						else {
@@ -1489,7 +1479,7 @@ if (!nexacro.Radio) {
 						}
 						else if (radio_columncount > 0) {
 							apply_rowcnt = parseInt(ds_rowcount / radio_columncount);
-							if ((radio_columncount *  apply_rowcnt) < ds_rowcount) {
+							if ((radio_columncount * apply_rowcnt) < ds_rowcount) {
 								apply_rowcnt++;
 							}
 						}
@@ -1526,7 +1516,7 @@ if (!nexacro.Radio) {
 									}
 
 									item = items[item_index];
-									item.move((item_width *  j), (item_height *  i), item_width, item_height);
+									item.move((item_width * j), (item_height * i), item_width, item_height);
 									item_index++;
 								}
 								item_top += item_height;
@@ -1564,11 +1554,11 @@ if (!nexacro.Radio) {
 										item_left += max_columnsize[j];
 									}
 									else if (fittocontents == "width") {
-										item.move(item_left, (item_height *  i), max_columnsize[j], item_height);
+										item.move(item_left, (item_height * i), max_columnsize[j], item_height);
 										item_left += max_columnsize[j];
 									}
 									else if (fittocontents == "height") {
-										item.move((item_width *  j), item_top, item_width, max_rowsize[i]);
+										item.move((item_width * j), item_top, item_width, max_rowsize[i]);
 									}
 
 									item_index++;
@@ -1593,7 +1583,7 @@ if (!nexacro.Radio) {
 									}
 
 									item = items[item_index];
-									item.move((item_width *  i), (item_height *  j), item_width, item_height);
+									item.move((item_width * i), (item_height * j), item_width, item_height);
 									item_index++;
 								}
 								item_top += item_height;
@@ -1631,11 +1621,11 @@ if (!nexacro.Radio) {
 										item_top += max_rowsize[i];
 									}
 									else if (fittocontents == "width") {
-										item.move(item_left, (item_height *  j), max_columnsize[i], item_height);
+										item.move(item_left, (item_height * j), max_columnsize[i], item_height);
 										item_top += max_rowsize[i];
 									}
 									else if (fittocontents == "height") {
-										item.move((item_width *  i), item_top, item_width, max_rowsize[j]);
+										item.move((item_width * i), item_top, item_width, max_rowsize[j]);
 									}
 
 									item_index++;

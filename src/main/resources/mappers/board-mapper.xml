@@ -14,30 +14,74 @@
   	<result property="boardFilename" column="BOARD_FILENAME"/>
   	<result property="boardFilerename" column="BOARD_FILERENAME"/>
 	<result property="boardFilepath" column="BOARD_FILEPATH"/>
+	<result property="universityCode" column="UNIVERSITY_CODE"/>
 	
-
   	</resultMap>
+  	
+  	
   	<select id="selectListCount" resultType="_int">
-  		SELECT COUNT(*) FROM BOARD_TBL
+  		SELECT COUNT(*) FROM BOARD_TBL WHERE UNIVERSITY_CODE = #{universityCode} 
+  		<if test="searchValue!=null">
+			<if test="searchCondition.toString() == 'writer'">
+				AND BOARD_WRITER LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'title'">
+				AND BOARD_TITLE LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'contents'">
+				AND BOARD_CONTENT LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'all'">
+				AND BOARD_CONTENT LIKE '%' || #{searchValue} || '%'
+				OR BOARD_TITLE LIKE '%' || #{searchValue} || '%'
+				OR BOARD_WRITER LIKE '%' || #{searchValue} || '%'
+			</if>
+		</if>
+  	  ORDER BY BOARD_NO DESC
   	</select>
+  	
+  	
   	<select id="selectAllBoard" resultMap="boardResultMap">
-  		SELECT*FROM BOARD_TBL ORDER BY BOARD_NO ASC
+  		SELECT*FROM BOARD_TBL WHERE UNIVERSITY_CODE = #{universityCode} 
+  		<if test="searchValue!=null">
+			<if test="searchCondition.toString() == 'writer'">
+				AND BOARD_WRITER LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'title'">
+				AND BOARD_TITLE LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'contents'">
+				AND BOARD_CONTENT LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'all'">
+				AND BOARD_CONTENT LIKE '%' || #{searchValue} || '%'
+				OR BOARD_TITLE LIKE '%' || #{searchValue} || '%'
+				OR BOARD_WRITER LIKE '%' || #{searchValue} || '%'
+			</if>
+		</if>
+  		 ORDER BY BOARD_NO DESC
   	</select>
+  	
+  	
   	<select id="selectOneBoard" resultMap="boardResultMap">
   		SELECT*FROM BOARD_TBL WHERE BOARD_NO = #{boardNo}
   	</select>
-  	<select id="selectSearchBoard" resultMap="boardResultMap">
-  		SELECT*FROM BOARD_TBL
-  		<if test="searchCondition.toString() == 'contents'">
-  			WHERE BOARD_CONTENTS LIKE '%'|| #{searchValue} || '%'
-  		</if>
-  		ORDER BY BOARD_DATE DESC
-  	</select>
-  
-  
+  	
+  	
+  	
+  	
   	<insert id="insertBoard" parameterType="Board">
-  	 	INSERT INTO BOARD_TBL VALUES(SEQ_BOARD_NO.NEXTVAL, #{boardTitle}, #{boardContent}, #{boardWriter}, 
-  	 	#{boardDate}, #{boardUpdatedate}, #{boardCount}, #{boardFilename}, #{boardFilerename}, #{boardFilepath}) 
+  	 	INSERT INTO BOARD_TBL VALUES(SEQ_BOARD_NO.NEXTVAL
+  	 	, #{boardTitle}
+  	 	, #{boardContent}
+  	 	, #{boardWriter}
+  	 	, default
+  	 	, default
+  	 	, default
+  	 	, #{boardFilename}
+  	 	, #{boardFilerename}
+  	 	, #{boardFilepath}
+  	 	, #{universityCode})  
   	</insert>
   	<update id="updateBoard">
   		UPDATE BOARD_TBL
@@ -74,5 +118,15 @@
   	<delete id="deleteReply">
 		DELETE FROM BOARDREPLY_TBL WHERE BOARDREPLY_NO=#{boardreplyNo} AND BOARD_NO=#{boardNo}
 	</delete>
+	
+	<select id="selectUnivesityList" resultMap="universityResultMap">
+		SELECT*FROM UNIVERSITY_TBL ORDER BY UNIVERSITY_COLLEGE
+	</select>
+	
+	<resultMap type="university" id="universityResultMap">
+		<id property="universityCode" column="UNIVERSITY_CODE"/>
+		<result property="universityName" column="UNIVERSITY_NAME"/>
+		<result property="universityCollege" column="UNIVERSITY_COLLEGE"/>
+	</resultMap>
   	
   </mapper>

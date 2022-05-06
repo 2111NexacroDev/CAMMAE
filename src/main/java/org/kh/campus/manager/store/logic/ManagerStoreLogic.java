@@ -87,4 +87,11 @@ public class ManagerStoreLogic implements ManagerStore {
 		return result;
 	}
 
+	@Override
+	public Manager selectAllManagerInfo(Manager manager, SqlSession sqlSession) {
+		Manager ma = sqlSession.selectOne("ManagerMapper.selectAllManagerInfo", manager);
+		return ma;
+	}
+
+
 }

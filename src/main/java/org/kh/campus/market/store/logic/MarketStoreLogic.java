@@ -6,9 +6,10 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 import org.kh.campus.market.domain.Market;
+import org.kh.campus.market.domain.MarketReply;
 import org.kh.campus.market.domain.PageInfo;
-import org.kh.campus.market.domain.Search;
 import org.kh.campus.market.store.MarketStore;
+import org.kh.campus.question.domain.QuestionReply;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -32,12 +33,12 @@ public class MarketStoreLogic implements MarketStore {
 		return market;
 	}
 	
-	@Override
-	public List<Market> selectSearchMarket(Search search, SqlSession sqlSession) {
-		List<Market> mList = sqlSession.selectList("MarketMapper.selectSearchMarket", search);
-		return mList;
-	}
-
+	/*
+	 * @Override public List<Market> selectSearchMarket(Search search, SqlSession
+	 * sqlSession) { List<Market> mList =
+	 * sqlSession.selectList("MarketMapper.selectSearchMarket", search); return
+	 * mList; }
+	 */
 	@Override
 	public int insertMarket(Market market, SqlSession sqlSession) {
 		int result = sqlSession.insert("MarketMapper.insertMarket", market);
@@ -64,11 +65,38 @@ public class MarketStoreLogic implements MarketStore {
 	}
 	//페이징
 	@Override
-	public int selectListCount(SqlSession sqlSession) {
-		int totalCount = sqlSession.selectOne("MarketMapper.selectListCount");
+	public int selectListCount(SqlSession sqlSession, PageInfo pageInfo) {
+		int totalCount = sqlSession.selectOne("MarketMapper.selectListCount",pageInfo);
 		return totalCount;
 	}
 
+
+	
+	//댓글
+
+		@Override
+		public List<MarketReply> selectAllReply(int marketNo, SqlSession sqlSession) {
+			List<MarketReply> mReplyList = sqlSession.selectList("MarketMapper.selectAllReply", marketNo);
+			return mReplyList;
+		}
+		
+		@Override
+		public int insertReply(MarketReply marketReply, SqlSession sqlSession) {
+			int result = sqlSession.insert("MarketMapper.insertReply", marketReply);
+			return result;
+		}
+
+		@Override
+		public int updateReply(MarketReply marketReply, SqlSession sqlSession) {
+			int result = sqlSession.update("MarketMapper.updateReply", marketReply);
+			return result;
+		}
+
+		@Override
+		public int deleteReply(MarketReply marketReply, SqlSession sqlSession) {
+			int result = sqlSession.delete("MarketMapper.deleteReply", marketReply);
+			return result;
+		}
 
 
 

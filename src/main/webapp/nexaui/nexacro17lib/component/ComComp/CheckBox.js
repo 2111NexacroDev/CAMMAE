@@ -105,7 +105,7 @@ if (!nexacro.CheckBox) {
 		}
 	};
 
-	_pCheckBox.on_change_bindSource = function (propid, ds, row, col) {
+	_pCheckBox.on_change_bindSource = function (propid, ds, row, col, index) {
 		if (propid == "value") {
 			this._setValue(this._changeValue(ds.getColumn(row, col)));
 			this.on_apply_value();
@@ -121,7 +121,7 @@ if (!nexacro.CheckBox) {
 	};
 
 	_pCheckBox._on_hotkey = function (key_code, alt_key, ctrl_key, shift_key) {
-		this.on_fire_onclick("", alt_key, ctrl_key, shift_key, -1, -1, -1, -1, -1, -1, this, this, false);
+		this.on_fire_onclick("", alt_key, ctrl_key, shift_key, -1, -1, -1, -1, -1, -1, this, this);
 	};
 
 	_pCheckBox._isFocusAcceptable = function () {
@@ -193,13 +193,13 @@ if (!nexacro.CheckBox) {
 		return this._isChecked(this.value);
 	};
 
-	_pCheckBox.on_keyup_basic_action = function (key_code, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pCheckBox.on_keyup_basic_action = function (key_code, alt_key, ctrl_key, shift_key, refer_comp) {
 		if (key_code == nexacro.Event.KEY_SPACE) {
-			this.on_fire_onclick("", alt_key, ctrl_key, shift_key, -1, -1, -1, -1, -1, -1, refer_comp, refer_comp, meta_key);
+			this.on_fire_onclick("", alt_key, ctrl_key, shift_key, -1, -1, -1, -1, -1, -1, refer_comp, refer_comp);
 		}
 	};
 
-	_pCheckBox.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pCheckBox.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (!this.enable || this.readonly) {
 			return false;
 		}
@@ -232,14 +232,11 @@ if (!nexacro.CheckBox) {
 			if (pre_val !== post_val) {
 				this.on_fire_onchanged(this, pre_val, post_val);
 			}
-			if (this._is_alive) {
-				this.on_apply_value();
-			}
+
+			this.on_apply_value();
 		}
 
-		if (this._is_alive) {
-			return nexacro.Component.prototype.on_fire_onclick.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
-		}
+		return nexacro.Component.prototype.on_fire_onclick.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
 	};
 
 	_pCheckBox.on_fire_canchange = function (obj, prevalue, postvalue) {
@@ -255,18 +252,6 @@ if (!nexacro.CheckBox) {
 		if (this.onchanged && this.onchanged._has_handlers) {
 			var evt = new nexacro.CheckBoxChangedEventInfo(this, "onchanged", prevalue, postvalue);
 			return this.onchanged._fireEvent(this, evt);
-		}
-	};
-
-	_pCheckBox._on_click = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
-		if (!this._is_alive) {
-			return;
-		}
-
-		if (this.visible && this._isEnable()) {
-			var clientXY = this._getClientXY(canvasX, canvasY);
-			this.on_fire_onclick(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, this, meta_key);
-			this.on_click_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key);
 		}
 	};
 
@@ -382,39 +367,5 @@ if (!nexacro.CheckBox) {
 		}
 	};
 
-	_pCheckBox._applyStatus = function () {
-		var pre_val = this.value;
-		var post_val;
-		if (this._isChecked(pre_val)) {
-			if (nexacro._isNull(this.falsevalue)) {
-				post_val = false;
-			}
-			else {
-				post_val = this.falsevalue;
-			}
-		}
-		else {
-			if (nexacro._isNull(this.truevalue)) {
-				post_val = true;
-			}
-			else {
-				post_val = this.truevalue;
-			}
-		}
-
-		var ret = this.on_fire_canchange(this, pre_val, post_val);
-		if (ret) {
-			if (this.applyto_bindSource("value", post_val)) {
-				this._setValue(post_val);
-			}
-
-			if (pre_val !== post_val) {
-				this.on_fire_onchanged(this, pre_val, post_val);
-			}
-			if (this._is_alive) {
-				this.on_apply_value();
-			}
-		}
-	};
 	delete _pCheckBox;
 }

@@ -45,7 +45,6 @@ if (!nexacro.TextArea) {
 	_pTextArea.useime = "global";
 	_pTextArea.text = "";
 	_pTextArea.value = undefined;
-	_pTextArea._not_use_scrollTop = true;
 
 
 	_pTextArea._input_element = null;
@@ -65,16 +64,11 @@ if (!nexacro.TextArea) {
 	_pTextArea._update_scroll_lock = false;
 	_pTextArea._processing_updateToDataset = false;
 	_pTextArea._result_updateToDataset = true;
-	_pTextArea._processing_canchange = false;
 	_pTextArea._apply_filter = true;
 
 	_pTextArea._onlydisplay = false;
 	_pTextArea._apply_client_padding = false;
 	_pTextArea._has_inputElement = true;
-	_pTextArea._change_value = false;
-	_pTextArea._processing_autoskip = false;
-
-	_pTextArea._is_undo = false;
 
 
 	_pTextArea._is_scrollable = true;
@@ -83,7 +77,7 @@ if (!nexacro.TextArea) {
 	_pTextArea._use_container_move = false;
 	_pTextArea._use_readonly_status = true;
 
-	if ((nexacro._Browser == "IE" && nexacro._BrowserVersion < 10) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+	if ((nexacro._Browser == "IE" && nexacro._BrowserVersion < 10) || nexacro._BrowserType == "Edge") {
 		_pTextArea._use_focus_caret = true;
 		_pTextArea._caret_pos = -1;
 	}
@@ -124,8 +118,7 @@ if (!nexacro.TextArea) {
 		"onhscroll" : 1, 
 		"ontouchstart" : 1, 
 		"ontouchmove" : 1, 
-		"ontouchend" : 1, 
-		"ondevicebuttonup" : 1
+		"ontouchend" : 1
 	};
 
 
@@ -163,6 +156,7 @@ if (!nexacro.TextArea) {
 			input_elem.setElementTextAlign(this.textAlign);
 			input_elem.setElementPadding(this.padding);
 
+
 			var wordwrap_info = this._getCSSStyleValue("wordWrap");
 			if (wordwrap_info) {
 				input_elem.setElementCSSMapInfo(wordwrap_info);
@@ -195,13 +189,13 @@ if (!nexacro.TextArea) {
 				this._changeUserStatus("nulltext", true);
 			}
 
+
 			if (nexacro._enableaccessibility) {
 				if (this.readonly) {
 					this._setAccessibilityFlagReadOnly(this.readonly);
 				}
 				this._setAccessibilityFlagMultiLine(true);
 			}
-
 			this.on_apply_scrollbartype();
 			this._onResetScrollBar();
 			this._onRecalcScrollSize();
@@ -268,14 +262,12 @@ if (!nexacro.TextArea) {
 				this._changeUserStatus("nulltext", true);
 			}
 		}
-
 		if (nexacro._enableaccessibility) {
 			if (this.readonly) {
 				this._setAccessibilityFlagReadOnly(this.readonly);
 			}
 			this._setAccessibilityFlagMultiLine(true);
 		}
-
 		this.on_apply_scrollbartype();
 		this._onRecalcScrollSize();
 		this._onResetScrollBar();
@@ -299,71 +291,73 @@ if (!nexacro.TextArea) {
 		}
 	};
 
+	_pTextArea.on_change_containerPos = function (left, top) {
+		if (this.onlydisplay) {
+			var input_elem = this._input_element;
+			if (input_elem) {
+				input_elem.setElementPosition(left, top);
+			}
+		}
+	};
+
+
+	_pTextArea.on_notify_vscroll_onscroll = function (obj, e) {
+		this._scrollTo(this._hscroll_pos, e.pos, false, false, e.type, e._evtkind);
+		var control_elem = this._control_element;
+		if (control_elem) {
+			this._input_element.setElementVScrollPos(e.pos);
+		}
+	};
+
 	_pTextArea._apply_setfocus = function (evt_name, self_flag) {
 		this._processing_updateToDataset = false;
 
 		var input_elem = this._input_element;
 		if (input_elem) {
-			if (!this._onlydisplay) {
-				input_elem.on_apply_imeSet();
-				input_elem.on_apply_force_imeSet();
+			input_elem.on_apply_imeSet();
+			input_elem.on_apply_force_imeSet();
 
-				this._want_tab = true;
-				if (evt_name) {
-					this._default_value = this.value;
-					this._default_text = this.text;
-				}
 
-				var win = this._getWindow();
-				if (win) {
-					var ldown_comp = win._cur_ldown_elem ? win._cur_ldown_elem.linkedcontrol : null;
-					if (!(ldown_comp && ldown_comp instanceof nexacro.ScrollBarControl)) {
+			this._want_tab = true;
+			if (evt_name) {
+				this._default_value = this.value;
+				this._default_text = this.text;
+			}
+
+			var win = this._getWindow();
+			if (win) {
+				var ldown_comp = win._cur_ldown_elem ? win._cur_ldown_elem.linkedcontrol : null;
+				if (!(ldown_comp && ldown_comp instanceof nexacro.ScrollBarControl)) {
+					if (!this._onlydisplay) {
 						input_elem.setElementFocus(evt_name, self_flag);
 					}
 				}
+			}
 
+			if (!this._onlydisplay) {
 				this._changeUserStatus("nulltext", false);
 
 				var text = input_elem.getElementText();
 				if (text != this.text) {
 					this._default_text = this.text = text;
 				}
+			}
 
-				if (nexacro._needAdjustScrollPosition(this._is_set_value)) {
-					this._adjust_scrollPosition(input_elem, evt_name);
-				}
+			if (nexacro._needAdjustScrollPosition(this._is_set_value)) {
+				this._adjust_scrollPosition(input_elem, evt_name);
+			}
 
-				if (!this.autoselect) {
-					if (this._use_focus_caret) {
-						if (this._caret_pos == -1) {
-							input_elem.setElementSetSelect(0, 0);
-						}
-						else {
-							input_elem.setElementSetSelect(this._caret_pos.begin, this._caret_pos.end);
-						}
+			if (!this._onlydisplay && !this.autoselect) {
+				if (this._use_focus_caret) {
+					if (this._caret_pos == -1) {
+						input_elem.setElementSetSelect(this.value ? this.value.length : 0);
 					}
 					else {
-						if (this._caret_pos == -1) {
-							if (this._change_value) {
-								input_elem.setElementSetSelect(this.value ? this.value.length : 0);
-							}
-							else {
-								input_elem.setElementSetSelect(0, 0);
-							}
-						}
+						input_elem.setElementSetSelect(this._caret_pos.begin, this._caret_pos.end);
 					}
 				}
-			}
-			else {
-				this._want_tab = true;
-
-				if (evt_name) {
-					this._default_value = this.value;
-					this._default_text = this.text;
-				}
-
-				if (nexacro._needAdjustScrollPosition(this._is_set_value)) {
-					this._adjust_scrollPosition(input_elem, evt_name);
+				else if (this._caret_pos == -1) {
+					input_elem.setElementSetSelect(this.value ? this.value.length : 0);
 				}
 			}
 		}
@@ -388,15 +382,10 @@ if (!nexacro.TextArea) {
 	_pTextArea.on_apply_prop_enable = function (v) {
 		var input_elem = this._input_element;
 		if (input_elem) {
+			var color = this._getCSSStyleValue("color");
+
 			if (!this._onlydisplay) {
-				input_elem.setElementEnable(v, this._getCSSStyleValue("color"));
-
-				this._update_scroll_lock = true;
-
-				this._onRecalcScrollSize();
-				this._onResetScrollBar();
-
-				this._update_scroll_lock = false;
+				input_elem.setElementEnable(v, color);
 			}
 		}
 	};
@@ -411,9 +400,14 @@ if (!nexacro.TextArea) {
 		}
 	};
 
-	_pTextArea.on_change_bindSource = function (propid, ds, row, col) {
+	_pTextArea.on_change_bindSource = function (propid, ds, row, col, index) {
 		if (propid == "value") {
 			var input_elem = this._input_element;
+			if (input_elem) {
+				if (!this._onlydisplay) {
+					input_elem.setCompositionComplete();
+				}
+			}
 
 			var v = ds.getColumn(row, col);
 			v = this._convertValueType(v, true);
@@ -499,7 +493,7 @@ if (!nexacro.TextArea) {
 					var viewcount = clientheight / textsize[1];
 
 					if (viewstart + viewcount < caretline) {
-						vscrollbar.set_pos(textsize[1] *  caretline - nodeheight);
+						vscrollbar.set_pos(textsize[1] * caretline - nodeheight);
 					}
 				}
 				else {
@@ -653,11 +647,6 @@ if (!nexacro.TextArea) {
 			if (pos && pos != -1) {
 				this._caret_pos = pos;
 			}
-			else {
-				this._change_value = this._is_created ? true : false;
-			}
-
-			this._is_set_value = true;
 		}
 	};
 
@@ -671,11 +660,11 @@ if (!nexacro.TextArea) {
 	_pTextArea.on_apply_displaynulltext = function (displaynulltext) {
 		var input_elem = this._input_element;
 		if (input_elem) {
-			if (!this._onlydisplay) {
-				input_elem.setElementDisplayNullText(displaynulltext);
+			if (this._onlydisplay) {
+				this.on_apply_value(this.value);
 			}
 			else {
-				this.on_apply_value(this.value);
+				input_elem.setElementDisplayNullText(displaynulltext);
 			}
 		}
 	};
@@ -690,10 +679,8 @@ if (!nexacro.TextArea) {
 
 	_pTextArea.on_apply_usesoftkeyboard = function (bforce) {
 		var input_elem = this._input_element;
-		if (input_elem) {
-			if (!this._onlydisplay) {
-				input_elem.setElementUseSoftKeyboard(this.usesoftkeyboard, bforce);
-			}
+		if (input_elem && !this._onlydisplay) {
+			input_elem.setElementUseSoftKeyboard(this.usesoftkeyboard, bforce);
 		}
 	};
 
@@ -713,10 +700,8 @@ if (!nexacro.TextArea) {
 		this._changeStatus("readonly", readonly);
 
 		var input_elem = this._input_element;
-		if (input_elem) {
-			if (!this._onlydisplay) {
-				input_elem.setElementReadonly(readonly);
-			}
+		if (input_elem && !this._onlydisplay) {
+			input_elem.setElementReadonly(readonly);
 		}
 	};
 
@@ -730,10 +715,8 @@ if (!nexacro.TextArea) {
 
 	_pTextArea.on_apply_autoselect = function (autoselect) {
 		var input_elem = this._input_element;
-		if (input_elem) {
-			if (!this._onlydisplay) {
-				input_elem.setElementAutoSelect(autoselect);
-			}
+		if (input_elem && !this._onlydisplay) {
+			input_elem.setElementAutoSelect(autoselect);
 		}
 	};
 
@@ -747,10 +730,8 @@ if (!nexacro.TextArea) {
 
 	_pTextArea.on_apply_autoskip = function (autoskip) {
 		var input_elem = this._input_element;
-		if (input_elem) {
-			if (!this._onlydisplay) {
-				input_elem.setElementAutoSkip(autoskip);
-			}
+		if (input_elem && !this._onlydisplay) {
+			input_elem.setElementAutoSkip(autoskip);
 		}
 	};
 
@@ -826,16 +807,14 @@ if (!nexacro.TextArea) {
 		this._keypad_type = this._inputtype_obj.keypadtype;
 
 		var input_elem = this._input_element;
-		if (input_elem) {
-			if (!this._onlydisplay) {
-				if ((this.inputtype.indexOf("normal") >= 0) || (this.inputtype.indexOf("full") >= 0)) {
-					input_elem._inputtype = "text";
-				}
-				else {
-					input_elem._inputtype = "";
-				}
-				input_elem.setElementInputType(this.password ? "password" : this._keypad_type, this._imedisable);
+		if (input_elem && !this._onlydisplay) {
+			if ((this.inputtype.indexOf("normal") >= 0) || (this.inputtype.indexOf("full") >= 0)) {
+				input_elem._inputtype = "text";
 			}
+			else {
+				input_elem._inputtype = "";
+			}
+			input_elem.setElementInputType(this.password ? "password" : this._keypad_type, this._imedisable);
 		}
 	};
 
@@ -852,10 +831,8 @@ if (!nexacro.TextArea) {
 
 	_pTextArea.on_apply_maxlength = function (maxlength) {
 		var input_elem = this._input_element;
-		if (input_elem) {
-			if (!this._onlydisplay) {
-				input_elem.setElementMaxLength(maxlength);
-			}
+		if (input_elem && !this._onlydisplay) {
+			input_elem.setElementMaxLength(maxlength);
 		}
 	};
 
@@ -869,10 +846,8 @@ if (!nexacro.TextArea) {
 
 	_pTextArea.on_apply_useime = function (useime) {
 		var input_elem = this._input_element;
-		if (input_elem) {
-			if (!this._onlydisplay) {
-				input_elem.setElementUseIme(useime);
-			}
+		if (input_elem && !this._onlydisplay) {
+			input_elem.setElementUseIme(useime);
 		}
 	};
 
@@ -890,10 +865,8 @@ if (!nexacro.TextArea) {
 
 	_pTextArea.on_apply_imemode = function (imemode) {
 		var input_elem = this._input_element;
-		if (input_elem) {
-			if (!this._onlydisplay) {
-				input_elem.setElementImeMode(imemode);
-			}
+		if (input_elem && !this._onlydisplay) {
+			input_elem.setElementImeMode(imemode);
 		}
 	};
 
@@ -1178,19 +1151,6 @@ if (!nexacro.TextArea) {
 					return "";
 				}
 
-				var new_v = "";
-				if (this._inputtype_obj) {
-					var v_len = v.length;
-					for (var i = 0; i < v_len; i++) {
-						var ch = v[i];
-						if (this._inputtype_obj.test(ch)) {
-							new_v += ch;
-						}
-					}
-
-					v = new_v;
-				}
-
 				var insertlen = v.length;
 				var src = this.text.substring(start, end);
 				var newtext = this.text;
@@ -1201,7 +1161,7 @@ if (!nexacro.TextArea) {
 				newtext = newtext.substring(0, start) + v + newtext.substring(end);
 
 				if (this.text != newtext) {
-					this.set_value(newtext);
+					this._setValue(newtext);
 					input_elem.setElementSetSelect(start, start + insertlen);
 				}
 
@@ -1245,7 +1205,7 @@ if (!nexacro.TextArea) {
 			text = text.substring(0, position) + insert_text + text.substring(position);
 
 			if (!this._onlydisplay) {
-				this.set_value(text);
+				this._setValue(text);
 			}
 			else {
 			}
@@ -1282,7 +1242,7 @@ if (!nexacro.TextArea) {
 			if (!this._onlydisplay) {
 				var text = input_value.substring(0, start) + input_value.substring(start + count);
 
-				this.set_value(text);
+				this._setValue(text);
 			}
 			else {
 			}
@@ -1341,7 +1301,7 @@ if (!nexacro.TextArea) {
 					}
 
 
-					this.set_value(cur_text || "");
+					this._setValue(cur_text || "");
 					if (input_elem._is_focused) {
 						this.setCaretPos(newpos);
 					}
@@ -1367,12 +1327,7 @@ if (!nexacro.TextArea) {
 	_pTextArea.on_deactivate_process = function () {
 		var input_elem = this._input_element;
 		if (input_elem) {
-			if (!this._onlydisplay) {
-				input_elem.setCompositionComplete();
-
-				var pos = input_elem.getElementCaretPos();
-				input_elem.setElementSetSelect(pos.begin, pos.end);
-			}
+			input_elem.setCompositionComplete();
 		}
 	};
 
@@ -1415,6 +1370,7 @@ if (!nexacro.TextArea) {
 		return true;
 	};
 
+
 	_pTextArea._on_input_undo = function (item) {
 		if (this.readonly || !this._isEnable()) {
 			return;
@@ -1423,7 +1379,6 @@ if (!nexacro.TextArea) {
 		var input_elem = this._input_element;
 		if (input_elem) {
 			if (item) {
-				this._is_undo = true;
 				var caret = item.end;
 				if (item.value && item.value.length > caret) {
 					caret = item.value.length;
@@ -1450,24 +1405,12 @@ if (!nexacro.TextArea) {
 		}
 	};
 
-	_pTextArea.on_notify_vscroll_onscroll = function (obj, e) {
-		this._scrollTo(this._hscroll_pos, e.pos, false, false, e.type, e._evtkind);
-
-		if (this._input_element) {
-			this._input_element.setElementVScrollPos(e.pos);
-		}
-	};
-
-	_pTextArea.on_keydown_basic_before_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pTextArea.on_keydown_basic_before_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
 		return true;
 	};
 
-	_pTextArea.on_keydown_basic_specialkey_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pTextArea.on_keydown_basic_specialkey_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
 		var input_elem = this._input_element;
-
-		if (nexacro._OS == "Mac OS" || nexacro._OS == "OSX" || nexacro._OS == "iOS") {
-			ctrl_key = meta_key;
-		}
 
 		if (keycode == nexacro.KeyCode_ImeInput && this._imedisable) {
 			input_elem.stopSysEvent();
@@ -1512,7 +1455,7 @@ if (!nexacro.TextArea) {
 		return true;
 	};
 
-	_pTextArea.on_keydown_basic_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pTextArea.on_keydown_basic_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
 		var input_elem = this._input_element;
 		if (this._undostack && !input_elem.isComposing()) {
 			var pos = input_elem.getElementCaretPos();
@@ -1524,29 +1467,29 @@ if (!nexacro.TextArea) {
 		return true;
 	};
 
-	_pTextArea.on_keydown_basic_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pTextArea.on_keydown_basic_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
 		if (this.readonly || !this._isEnable()) {
 			return;
 		}
 
 		var input_elem = this._input_element;
 		if (input_elem) {
-			if (!this.on_keydown_basic_before_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key)) {
+			if (!this.on_keydown_basic_before_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp)) {
 				return;
 			}
-			if (!this.on_keydown_basic_specialkey_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key)) {
+			if (!this.on_keydown_basic_specialkey_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp)) {
 				return;
 			}
 
-			this.on_keydown_basic_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key);
+			this.on_keydown_basic_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp);
 		}
 	};
 
-	_pTextArea.on_keydown_default_before_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pTextArea.on_keydown_default_before_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
 		return true;
 	};
 
-	_pTextArea.on_keydown_default_specialkey_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pTextArea.on_keydown_default_specialkey_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
 		if (keycode >= nexacro.Event.KEY_LEFT && keycode <= nexacro.Event.KEY_DOWN) {
 			this._onRecalcScrollSize();
 		}
@@ -1554,21 +1497,21 @@ if (!nexacro.TextArea) {
 		return true;
 	};
 
-	_pTextArea.on_keydown_default_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pTextArea.on_keydown_default_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
 		return true;
 	};
 
-	_pTextArea.on_keydown_default_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pTextArea.on_keydown_default_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
 		if (this.readonly || !this._isEnable()) {
 			return;
 		}
 
 		var input_elem = this._input_element;
 		if (input_elem) {
-			if (!this.on_keydown_default_before_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key)) {
+			if (!this.on_keydown_default_before_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp)) {
 				return;
 			}
-			if (!this.on_keydown_default_specialkey_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key)) {
+			if (!this.on_keydown_default_specialkey_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp)) {
 				return;
 			}
 
@@ -1596,7 +1539,7 @@ if (!nexacro.TextArea) {
 		var input_elem = this._input_element;
 		charcode = charcode || keycode;
 
-		if (!ctrl_key && !alt_key && charcode) {
+		if (!ctrl_key && !alt_key && charcode && !input_elem.isComposing()) {
 			var inputChar = String.fromCharCode(charcode);
 			if (inputChar.length > 0 && this._isFilterChar(inputChar)) {
 				input_elem.stopSysEvent();
@@ -1607,21 +1550,21 @@ if (!nexacro.TextArea) {
 		return true;
 	};
 
-	_pTextArea.on_keypress_basic_action = function (keycode, charcode, alt_key, ctrl_key, shift_key, meta_key) {
+	_pTextArea.on_keypress_basic_action = function (keycode, charcode, alt_key, ctrl_key, shift_key) {
 		var input_elem = this._input_element;
 		if (input_elem) {
 			if (keycode !== 0 && charcode === 0) {
 				return true;
 			}
 			else {
-				if (!this.on_keypress_basic_before_process.call(this, keycode, charcode, alt_key, ctrl_key, shift_key, meta_key)) {
+				if (!this.on_keypress_basic_before_process.call(this, keycode, charcode, alt_key, ctrl_key, shift_key)) {
 					return;
 				}
-				if (!this.on_keypress_basic_specialkey_process.call(this, keycode, charcode, alt_key, ctrl_key, shift_key, meta_key)) {
+				if (!this.on_keypress_basic_specialkey_process.call(this, keycode, charcode, alt_key, ctrl_key, shift_key)) {
 					return;
 				}
 
-				if (!this.on_keypress_basic_process.call(this, keycode, charcode, alt_key, ctrl_key, shift_key, meta_key)) {
+				if (!this.on_keypress_basic_process.call(this, keycode, charcode, alt_key, ctrl_key, shift_key)) {
 					return false;
 				}
 			}
@@ -1630,28 +1573,27 @@ if (!nexacro.TextArea) {
 		}
 	};
 
-	_pTextArea.on_keyup_basic_before_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pTextArea.on_keyup_basic_before_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
 		return true;
 	};
 
-	_pTextArea.on_keyup_basic_specialkey_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pTextArea.on_keyup_basic_specialkey_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
 		return true;
 	};
-
-	_pTextArea.on_keyup_default_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+	_pTextArea.on_keyup_default_process = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
 		this._onRecalcScrollSize();
 		return true;
 	};
 
-	_pTextArea.on_keyup_default_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
-		if (!this.on_keyup_basic_before_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key)) {
+	_pTextArea.on_keyup_default_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
+		if (!this.on_keyup_basic_before_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp)) {
 			return;
 		}
-		if (!this.on_keyup_basic_specialkey_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key)) {
+		if (!this.on_keyup_basic_specialkey_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp)) {
 			return;
 		}
 
-		if (!this.on_keyup_default_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key)) {
+		if (!this.on_keyup_default_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp)) {
 			return false;
 		}
 	};
@@ -1752,36 +1694,34 @@ if (!nexacro.TextArea) {
 		cur_text = cur_value ? cur_value : "";
 
 		if (pre_value != cur_value) {
-			if (!this._processing_canchange) {
-				var pos = input_elem.getElementCaretPos();
-				if (!this._on_value_change(pre_text, pre_value, cur_text, cur_value)) {
-					var cur_text_len = cur_text ? cur_text.length : 0;
-					var pre_text_len = pre_text ? pre_text.length : 0;
-					if (pos != -1) {
-						if (cur_text_len - pre_text_len >= 0) {
-							pos.begin = pos.end = pos.begin - (cur_text_len - pre_text_len);
-						}
-						if (pos.begin < 0) {
-							pos.begin = pos.end = 0;
-						}
-
-						this._caret_pos = pos;
+			var pos = input_elem.getElementCaretPos();
+			if (!this._on_value_change(pre_text, pre_value, cur_text, cur_value)) {
+				var cur_text_len = cur_text ? cur_text.length : 0;
+				var pre_text_len = pre_text ? pre_text.length : 0;
+				if (pos != -1) {
+					if (cur_text_len - pre_text_len >= 0) {
+						pos.begin = pos.end = pos.begin - (cur_text_len - pre_text_len);
 					}
-					else {
-						this._caret_pos.begin = this._caret_pos.end = pre_value ? pre_value.length : 0;
-					}
-					this.value = pre_value;
-					this.text = pre_text;
-
-					if (!this._onlydisplay) {
-						input_elem.setElementValue(pre_value);
-					}
-					else {
-						input_elem.setElementText(pre_value);
+					if (pos.begin < 0) {
+						pos.begin = pos.end = 0;
 					}
 
-					input_elem.setElementSetSelect(this._caret_pos.begin, this._caret_pos.end);
+					this._caret_pos = pos;
 				}
+				else {
+					this._caret_pos.begin = this._caret_pos.end = pre_value ? pre_value.length : 0;
+				}
+				this.value = pre_value;
+				this.text = pre_text;
+
+				if (!this._onlydisplay) {
+					input_elem.setElementValue(pre_value);
+				}
+				else {
+					input_elem.setElementText(pre_value);
+				}
+
+				input_elem.setElementSetSelect(this._caret_pos.begin, this._caret_pos.end);
 			}
 		}
 		else {
@@ -1803,8 +1743,6 @@ if (!nexacro.TextArea) {
 	};
 
 	_pTextArea.on_killfocus_basic_action = function (new_focus, new_refer_focus) {
-		nexacro.Component.prototype.on_killfocus_basic_action.call(this);
-
 		var input_elem = this._input_element;
 		if (input_elem) {
 			if (!this._onlydisplay) {
@@ -1820,41 +1758,33 @@ if (!nexacro.TextArea) {
 		}
 	};
 
-	_pTextArea.on_click_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
+	_pTextArea.on_click_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY) {
 		var input_elem = this._input_element;
 		if (input_elem) {
-			if (!this._onlydisplay) {
-				var _window = this._getWindow();
-				if (_window && this._track_capture) {
-					var capture_comp = _window._getCaptureComp(true, false, this);
-					if (!capture_comp || capture_comp == this) {
-						input_elem.setElementFocus(button, true);
-					}
+			var _window = this._getWindow();
+			if (_window && this._track_capture) {
+				var capture_comp = _window._getCaptureComp(true, false, this);
+				if (!this._onlydisplay && (!capture_comp || capture_comp == this)) {
+					input_elem.setElementFocus(button, true);
 				}
 			}
 		}
 	};
 
-	_pTextArea.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pTextArea.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this.oneditclick && this.oneditclick._has_handlers) {
 			var caretpos = this.getCaretPos();
 
-			var evt = new nexacro.EditClickEventInfo(this, "oneditclick", caretpos, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, this, this, meta_key);
+			var evt = new nexacro.EditClickEventInfo(this, "oneditclick", caretpos, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, this, this);
 			return this.oneditclick._fireEvent(this, evt);
 		}
-
 		return true;
 	};
 
 	_pTextArea.on_fire_canchange = function (obj, bText, bValue, aText, aValue) {
 		if (this.canchange && this.canchange._has_handlers) {
 			var evt = new nexacro.ChangeEventInfo(obj, "canchange", bText, bValue, aText, aValue);
-
-			this._processing_canchange = true;
-			var ret = this.canchange._fireCheckEvent(this, evt);
-			this._processing_canchange = false;
-
-			return ret;
+			return this.canchange._fireCheckEvent(this, evt);
 		}
 
 		return true;
@@ -1895,7 +1825,9 @@ if (!nexacro.TextArea) {
 		this.on_apply_value(this.value);
 	};
 
-	_pTextArea._setDefaultCaret = nexacro._emptyFn;
+	_pTextArea._setDefaultCaret = function () {
+		this.setCaretPos(0);
+	};
 
 	_pTextArea._setFocusToNextComponent = function () {
 		var root_comp = this._getRootComponent(this);
@@ -1939,7 +1871,7 @@ if (!nexacro.TextArea) {
 				wheelline = 3;
 			}
 
-			wheelDelta = lineheight *  wheelline;
+			wheelDelta = lineheight * wheelline;
 
 			var old_value = this._vscroll_pos;
 			var value = old_value - wheelDelta;
@@ -2184,21 +2116,15 @@ if (!nexacro.TextArea) {
 		var h_pos = this.hscrollbar ? this.hscrollbar.pos : 0;
 		var v_pos = this.vscrollbar ? this.vscrollbar.pos : 0;
 		if (this._is_set_value && (evt_name == "tabkey" || evt_name == "shifttabkey" || (this.taborder == 0 && !this._is_subcontrol && evt_name != "lbuttondown" && evt_name != "lbutton"))) {
-			if (!this._change_value && this._caret_pos == -1) {
-				if (this.vscrollbar) {
-					v_pos = 0;
-				}
-				if (this.hscrollbar) {
-					h_pos = 0;
-				}
+			if (!this.autoselect) {
+				this.setCaretPos(this.value ? this.value.length : 0);
+				input_elem._setElementLastSelectionRange();
 			}
-			else {
-				if (this.vscrollbar) {
-					v_pos = nexacro._getTextAreaElementVscrollPos(input_elem);
-				}
-				if (this.hscrollbar) {
-					h_pos = nexacro._getTextAreaElementHscrollPos(input_elem);
-				}
+			if (this.vscrollbar) {
+				v_pos = nexacro._getTextAreaElementVscrollPos(input_elem);
+			}
+			if (this.hscrollbar) {
+				h_pos = nexacro._getTextAreaElementHscrollPos(input_elem);
 			}
 		}
 		var pThis = this;
@@ -2215,11 +2141,11 @@ if (!nexacro.TextArea) {
 
 
 
-	_pTextArea._on_input_compositionend = function (value, _pos) {
+	_pTextArea._on_input_compositionend = function (value) {
 		var input_elem = this._input_element;
 		if (input_elem) {
 			if (this._undostack) {
-				var pos = _pos ? _pos : input_elem.getElementCaretPos();
+				var pos = input_elem.getElementCaretPos();
 				if (pos && pos != -1) {
 					this._undostack.push(value, pos.begin, pos.end);
 				}

@@ -78,4 +78,10 @@ public class ManagerServiceImpl implements ManagerService {
 		int result = mStore.deleteManager(sqlSession, managerNo);
 		return result;
 	}
+	@Override
+	public Manager loginManager(Manager manager) {
+	   Manager ma = mStore.selectAllManagerInfo(manager, sqlSession);
+	   return ma;
+	}
+	
 }

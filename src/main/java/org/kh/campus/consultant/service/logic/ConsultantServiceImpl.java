@@ -1,5 +1,6 @@
 package org.kh.campus.consultant.service.logic;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -8,6 +9,7 @@ import org.kh.campus.consultant.domain.ConsultantReply;
 import org.kh.campus.consultant.domain.PageInfo;
 import org.kh.campus.consultant.service.ConsultantService;
 import org.kh.campus.consultant.store.ConsultantStore;
+import org.kh.campus.manager.domain.Manager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +21,8 @@ public class ConsultantServiceImpl implements ConsultantService {
 	private SqlSession sqlSession;
 		
 	@Override
-	public List<Consultant> printAllCons(PageInfo pi) {
-		List<Consultant>cList = cStore.selectAllCons(sqlSession, pi);
+	public List<Consultant> printAllCons(int cons_student_no, PageInfo pi) {
+		List<Consultant> cList= cStore.selectAllCons(sqlSession, cons_student_no, pi);
 		return cList;
 	}
 
@@ -31,14 +33,14 @@ public class ConsultantServiceImpl implements ConsultantService {
 	}
 
 	@Override
-	public Consultant printDetailCons(String consultant_title) {
-		Consultant consultant = cStore.selectDetailCons(sqlSession, consultant_title);
+	public Consultant printDetailCons(HashMap<String, Integer> map) {
+		Consultant consultant = cStore.selectDetailCons(sqlSession, map);
 		return consultant;
 	}
 
 	@Override
-	public List<Consultant> printAdminAllCons(PageInfo pi) {
-		List<Consultant> cList = cStore.selectAdminAllCons(sqlSession, pi);
+	public List<Consultant> printAdminAllCons(PageInfo pi, int studentNo) {
+		List<Consultant> cList = cStore.selectAdminAllCons(sqlSession, pi, studentNo);
 		return cList;
 	}
 
@@ -66,6 +68,37 @@ public class ConsultantServiceImpl implements ConsultantService {
 	public List<ConsultantReply> printAllAdminReply(int cons_no) {
 		List<ConsultantReply>crList = cStore.selectAllAdminReply(sqlSession,cons_no);
 		return crList;
+	}
+
+	@Override
+	public int modifyStatus(int cons_no) {
+		int result = cStore.updateStatus(sqlSession, cons_no);
+		return result;
+	}
+
+	
+	  @Override public Consultant printOneByStNo(int studentNo) { 
+		  Consultant consultant = cStore.printByStNo(sqlSession, studentNo); 
+		  return consultant; 
+	  }
+	 
+
+	@Override
+	public List<Manager> printAllManager() {
+		List<Manager>mList = cStore.selectAllManager(sqlSession);
+		return mList;
+	}
+
+	@Override
+	public int countReply(int cons_no) {
+		int result = cStore.selectReplyCount(sqlSession, cons_no);
+		return result;
+	}
+
+	@Override
+	public int printByNo(int cons_no) {
+		int result = cStore.deleteConsultant(sqlSession, cons_no);
+		return result;
 	}
 
 

@@ -24,13 +24,6 @@ public class RecruitmentStoreLogic implements RecruitmentStore{
 	}
 	
 	@Override
-	public List<Recruitment> selectSearchRecruitment(RecruitmentSearch recruitmentSearch, SqlSession sqlSession) {
-		List<Recruitment> rList = sqlSession.selectList("RecruitmentMapper.selectSearchRecruitment", recruitmentSearch);
-		return rList;
-	}
-
-
-	@Override
 	public int insertRecruitment(Recruitment recruitment, SqlSession sqlSession) {
 		int result = sqlSession.insert("RecruitmentMapper.insertRecruitment", recruitment);
 		return result;
@@ -55,8 +48,8 @@ public class RecruitmentStoreLogic implements RecruitmentStore{
 	}
 
 	@Override
-	public int selectListCount(SqlSession sqlSession) {
-		int totalCount = sqlSession.selectOne("RecruitmentMapper.selectListCount");
+	public int selectListCount(SqlSession sqlSession, PageInfo pageInfo) {
+		int totalCount = sqlSession.selectOne("RecruitmentMapper.selectListCount", pageInfo);
 		return totalCount;
 	}
 

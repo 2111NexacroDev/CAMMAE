@@ -18,6 +18,25 @@
 
 	<select id="selectAllMarket" resultMap="marketResultMap">
 		SELECT * FROM MARKET_TBL
+		<if test="searchValue!=null">
+			<if test="searchCondition.toString() == 'writer'">
+				WHERE MARKET_WRITER LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'title'">
+				WHERE MARKET_TITLE LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'contents'">
+				WHERE MARKET_CONTENT LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'all'">
+				WHERE MARKET_CONTENT LIKE '%' || #{searchValue} || '%'
+				OR
+				MARKET_TITLE LIKE '%' || #{searchValue} || '%'
+				OR MARKET_WRITER
+				LIKE
+				'%' || #{searchValue} || '%'
+			</if>
+		</if>
 		ORDER BY MARKET_NO DESC
 	</select>
 
@@ -26,7 +45,7 @@
 		WHERE MARKET_NO = #{marketNo}
 	</select>
 
-	<select id="selectSearchMarket" resultMap="marketResultMap">
+	<!-- <select id="selectSearchMarket" resultMap="marketResultMap">
 		SELECT * FROM MARKET_TBL
 		<if test="searchCondition.toString() == 'writer'">
 			WHERE MARKET_WRITER LIKE '%' || #{searchValue} || '%'
@@ -46,12 +65,31 @@
 			'%' || #{searchValue} || '%'
 		</if>
 		ORDER BY MARKET_NO DESC
-	</select>
+	</select> -->
 
 	<!-- 페이지 -->
 	<select id="selectListCount" resultType="_int">
-		SELECT COUNT(*) FROM
-		MARKET_TBL
+		SELECT COUNT(*) FROM MARKET_TBL
+		<if test="searchValue!=null">
+			<if test="searchCondition.toString() == 'writer'">
+				WHERE MARKET_WRITER LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'title'">
+				WHERE MARKET_TITLE LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'contents'">
+				WHERE MARKET_CONTENT LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'all'">
+				WHERE MARKET_CONTENT LIKE '%' || #{searchValue} || '%'
+				OR
+				MARKET_TITLE LIKE '%' || #{searchValue} || '%'
+				OR MARKET_WRITER
+				LIKE
+				'%' || #{searchValue} || '%'
+			</if>
+		</if>
+		ORDER BY MARKET_NO DESC
 	</select>
 
 	<insert id="insertMarket">
@@ -78,5 +116,54 @@
 	<delete id="deleteMarket">
 		DELETE FROM MARKET_TBL WHERE MARKET_NO = #{marketNo}
 	</delete>
+
+
+	<!-- 댓글 -->
+	<resultMap type="MarketReply" id="mReplyResult">
+		<id property="marketReplyNo" column="MARKETREPLY_NO"></id>
+		<result property="marketNo" column="MARKET_NO" />
+		<result property="mReplyWriter" column="M_REPLY_WRITER" />
+		<result property="mReplyContent" column="M_REPLY_CONTENT" />
+		<result property="mReplyDate" column="M_REPLY_DATE" />
+		<result property="mReplyUpdateDat" column="M_REPLY_UPDATEDATE" />
+	</resultMap>
+
+
+
+	<select id="selectAllReply" resultMap="mReplyResult">
+		SELECT * FROM
+		MARKETREPLY_TBL WHERE MARKET_NO = #{marketNo}
+	</select>
+
+	<insert id="insertReply">
+		INSERT INTO MARKETREPLY_TBL
+		VALUES(SEQ_MARKETREPLY_NO.NEXTVAL, #{marketNo}, #{mReplyWriter},
+		#{mReplyContent}, DEFAULT, DEFAULT)
+	</insert>
+
+	<update id="updateReply">
+		UPDATE MARKETREPLY_TBL SET M_REPLY_CONTENT =
+		#{mReplyContent} WHERE MARKET_NO = #{marketNo} AND MARKETREPLY_NO =
+		#{marketReplyNo}
+	</update>
+
+	<delete id="deleteReply">
+		DELETE FROM MARKETREPLY_TBL WHERE
+		MARKET_NO=#{marketNo} AND MARKETREPLY_NO=#{marketReplyNo}
+	</delete>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </mapper>

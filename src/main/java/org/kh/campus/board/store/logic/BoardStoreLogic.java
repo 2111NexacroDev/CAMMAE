@@ -8,6 +8,7 @@ import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
 import org.kh.campus.board.domain.PageInfo;
 import org.kh.campus.board.domain.Search;
+import org.kh.campus.board.domain.University;
 import org.kh.campus.board.store.BoardStore;
 import org.springframework.stereotype.Repository;
 
@@ -30,12 +31,12 @@ public class BoardStoreLogic implements BoardStore {
 		return board;
 	}
 
-	@Override
-	public List<Board> selectSearchBoard(SqlSession sqlSession, Search search) {
-		List<Board> searchList
-			= sqlSession.selectList("BoardMapper.selectSearchBoder", search);
-		return searchList;
-	}
+	
+	  @Override public List<Board> selectSearchBoard(SqlSession sqlSession, Search
+	  search) { List<Board> searchList =
+	  sqlSession.selectList("BoardMapper.selectSearchBoder", search); 
+	  return searchList; }
+	 
 
 	@Override
 	public int insertBoard(Board board, SqlSession sqlSession) {
@@ -81,9 +82,15 @@ public class BoardStoreLogic implements BoardStore {
 	}
 
 	@Override
-	public int selectListCount(SqlSession sqlSession) {
-		int totalCount = sqlSession.selectOne("BoardMapper.selectListCount");
+	public int selectListCount(SqlSession sqlSession, PageInfo pageInfo) {
+		int totalCount = sqlSession.selectOne("BoardMapper.selectListCount" , pageInfo);
 		return totalCount;
+	}
+
+	@Override
+	public List<University> selectAllUniversity(SqlSession sqlSession) {
+		List<University> uList = sqlSession.selectList("BoardMapper.selectUnivesityList");
+		return uList;
 	}
 
 }

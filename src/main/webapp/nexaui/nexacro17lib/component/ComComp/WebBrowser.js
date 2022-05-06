@@ -81,8 +81,7 @@ if (!nexacro.WebBrowser) {
 		"onrbuttonup" : 1, 
 		"oncontextmenu" : 1, 
 		"onloadcompleted" : 1, 
-		"onusernotify" : 1, 
-		"ondevicebuttonup" : 1
+		"onusernotify" : 1
 	};
 
 	_pWebBrowser.on_get_accessibility_label = function () {
@@ -173,11 +172,6 @@ if (!nexacro.WebBrowser) {
 		return true;
 	};
 
-	_pWebBrowser.on_ondevicebuttonup_default_action = function (button) {
-		if (button == 2) {
-			this.goback();
-		}
-	};
 	_pWebBrowser._getDlgCode = function (keycode) {
 		var _ifrm_elem = this._ifrm_elem;
 		if (_ifrm_elem) {
@@ -197,7 +191,7 @@ if (!nexacro.WebBrowser) {
 		};
 	};
 
-	_pWebBrowser.on_fire_user_onkeydown = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key) {
+	_pWebBrowser.on_fire_user_onkeydown = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp) {
 		var E = nexacro.Event;
 		if (keycode == E.KEY_TAB) {
 			this._getWindow()._keydown_element._event_stop = false;
@@ -208,7 +202,7 @@ if (!nexacro.WebBrowser) {
 				ifrm_elem._setElementInternalFocus(keycode);
 			}
 		}
-		return nexacro.Component.prototype.on_fire_user_onkeydown.call(this, keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
+		return nexacro.Component.prototype.on_fire_user_onkeydown.call(this, keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
 	};
 
 	_pWebBrowser._apply_setfocus = function (evt_name) {
@@ -247,8 +241,11 @@ if (!nexacro.WebBrowser) {
 				var enable_flag = (this.parent._real_enable && v);
 				if (this._real_enable != enable_flag) {
 					this._real_enable = enable_flag;
-					this._changeStatus("disabled", !enable_flag);
+					this._changeStatus("enabled", enable_flag ? true : false);
 					this.on_apply_prop_enable(this._real_enable);
+					if (this._ifrm_elem) {
+						this._ifrm_elem.setElementEnable(enable_flag);
+					}
 				}
 			}
 		}
@@ -314,14 +311,6 @@ if (!nexacro.WebBrowser) {
 	_pWebBrowser.on_apply_accessibility = function () {
 		nexacro.Component.prototype.on_apply_accessibility.call(this);
 		this._on_apply_accessibilityleavemessage();
-	};
-
-	_pWebBrowser.on_apply_prop_enable = function (v) {
-		nexacro.Component.prototype.on_apply_prop_enable.call(this, v);
-
-		if (this._ifrm_elem) {
-			this._ifrm_elem.setElementEnable(v);
-		}
 	};
 
 	_pWebBrowser.stoploading = function () {

@@ -11,7 +11,7 @@ import org.kh.campus.recruitment.service.RecruitmentService;
 import org.kh.campus.recruitment.store.RecruitmentStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+//채용공고
 @Service
 public class RecruitmentServiceImpl implements RecruitmentService{
 
@@ -27,11 +27,6 @@ public class RecruitmentServiceImpl implements RecruitmentService{
 		return rList;
 	}
 	
-	@Override
-	public List<Recruitment> printSearchRecruitment(RecruitmentSearch recruitmentSearch) {
-		List<Recruitment> searchList = rStore.selectSearchRecruitment(recruitmentSearch, sqlSession);
-		return searchList;
-	}
 	
 	@Override
 	public int registerRecruitment(Recruitment recruitment) {
@@ -59,8 +54,8 @@ public class RecruitmentServiceImpl implements RecruitmentService{
 	}
 
 	@Override
-	public int getListCount() {
-		int totalCount = rStore.selectListCount(sqlSession);
+	public int getListCount(PageInfo pageInfo) {
+		int totalCount = rStore.selectListCount(sqlSession, pageInfo);
 		return totalCount;
 	}
 

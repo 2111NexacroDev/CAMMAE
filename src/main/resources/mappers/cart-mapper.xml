@@ -15,18 +15,125 @@
 		<result property="lectureRoom" column="LECTURE_ROOM" />
 		<result property="lecturePeople" column="LECTURE_PEOPLE" />
 		<result property="lectureTime" column="LECTURE_TIME" />
+		<result property="studentNo" column="STUDENT_NO"/>
+		<result property="gradeYear" column="GRADE_YEAR"/>
+		<result property="gradeSession" column="GRADE_SESSION"/>
 	</resultMap>
 	
+	<resultMap type="Cart" id="cartResultMap">
+		<id property="cartNo" column="CART_NO"/>
+		<result property="studentNo" column="STUDENT_NO" />
+		<result property="lectureNo" column="LECTURE_NO" />
+		<result property="cartYear" column="CART_YEAR" />
+		<result property="cartTerm" column="CART_TERM" />
+		<result property="lectureDivision" column="LECTURE_DIVISION" />
+		<result property="lectureGrade" column="LECTURE_GRADE"/>
+		<result property="professorName" column="PROFESSOR_NAME" />
+		<result property="lectureName" column="LECTURE_NAME" />
+		<result property="lectureDepartment" column="LECTURE_DEPARTMENT" />
+		<result property="lectureTime" column="LECTURE_TIME" />
+	</resultMap>
+	
+	<resultMap type="Grade" id="gradeResultMap">
+		<id property="lectureNo" column="LECTURE_NO"/>
+		<result property="studentNo" column="STUDENT_NO"/>
+		<result property="gradeYear" column="GRADE_YEAR"/>
+		<result property="gradeSession" column="GRADE_SESSION"/>
+		<result property="gradeSubject" column="GRADE_SUBJECT"/>
+		<result property="gradeComplete" column="LECTURE_DIVISION"/>
+		<result property="lectureGrade" column="LECTURE_GRADE"/>
+		<result property="gradeAvg" column="GRADE_AVG"/>
+		<result property="gradeFeedback" column="GRADE_FEEDBACK"/>
+		<result property="gradeObjection" column="GRADE_OBJECTION"/>
+		<result property="gradeChange" column="GRADE_CHANGE"/>
+		
+	</resultMap>
+	
+<!--  	<resultMap type="org.kh.campus.cart.domain.Total" id="totalResultMap">
+		<collection property="Lecture" resultMap="lectureResultMap"/>
+		<collection property="Cart" resultMap="cartResultMap"/>
+	</resultMap>   -->
+	
 	<select id="selectAllCart" resultMap="lectureResultMap">
-	SELECT * FROM LECTURE_TBL  
+		SELECT * FROM LECTURE_TBL  
 	</select>
 	
 	<insert id="insertCart" parameterType="Lecture" >
 		INSERT INTO CART_TBL VALUES(SEQ_CART_NO.NEXTVAL
+		, '0'
 		, #{lectureNo}
-		, NULL
 		, DEFAULT
-		, '1학기')	
+		, '1학기'
+ )	
 	</insert>
+	
+	<select id="selectMyCart" resultMap="cartResultMap">
+	SELECT 
+    C.CART_NO
+    ,C.LECTURE_NO
+ 	 , L.LECTURE_DIVISION
+ 	 , G.LECTURE_GRADE 
+ 	 , L.PROFESSOR_NAME
+ 	 , L.LECTURE_NAME
+     , L.LECTURE_DEPARTMENT
+     , L.LECTURE_TIME
+     FROM CART_TBL C INNER JOIN LECTURE_TBL L
+     ON C.LECTURE_NO = L.LECTURE_NO
+     INNER JOIN GRADE_TBL G
+     ON G.LECTURE_NO = C.LECTURE_NO
+	<!-- SELECT *
+FROM CART_TBL  JOIN  LECTURE_TBL
+     ON CART_TBL.LECTURE_NO = LECTURE_TBL.LECTURE_NO; -->
+	</select>
+ 
+ 	<delete id="deleteCart">
+ 		DELETE FROM CART_TBL WHERE CART_NO=#{cartNo}
+ 	</delete>
+ 	
+ 	<select id="selectAllEnroll" resultMap="lectureResultMap"> 
+ 		SELECT * FROM LECTURE_TBL
+ 	</select> 
+ 	
+ 	<insert id="insertEnroll" parameterType="Lecture">
+ 	 INSERT INTO GRADE_TBL
+ 	 VALUES(#{lectureNo}
+ 	 , 0
+ 	 , 0
+ 	 , 0, 0, 0
+ 	 , #{lectureDivision}
+ 	 , #{lectureGrade}
+ 	 ,0,0,0
+ 	 ,default
+ 	 ,0,0,0) 
+ 	</insert>
+ 	
+ 	<select id="selectMyEnroll" resultMap="lectureResultMap">
+ 	 <!-- SELECT LECTURE_NO, STUDENT_NO, GRADE_YEAR, GRADE_SESSION, GRADE_SUBJECT
+ 	 , LECTURE_DIVISION, LECTURE_GRADE, GRADE_AVG, GRADE_FEEDBACK
+ 	 , GRADE_OBJECTION, GRADE_CHANGE FROM GRADE_TBL -->
+<!--  	SELECT * FROM LECTURE_TBL L 
+	RIGHT JOIN GRADE_TBL G ON 
+	G.LECTURE_NO = L.LECTURE_NO -->
+SELECT G.LECTURE_NO
+	, G.STUDENT_NO
+	, G.GRADE_YEAR
+	, G.GRADE_SESSION
+ 	 , G.LECTURE_DIVISION
+ 	 , G.LECTURE_GRADE 
+ 	 , L.PROFESSOR_NAME
+ 	 , L.LECTURE_NAME
+     , L.LECTURE_DEPARTMENT
+     , L.UNIVERSITY_COLLEGE
+     , L.LECTURE_ROOM
+     , L.LECTURE_PEOPLE
+     , L.LECTURE_TIME
+     FROM GRADE_TBL G INNER JOIN LECTURE_TBL L
+     ON G.LECTURE_NO = L.LECTURE_NO
+ 	</select>
+ 	
+ 	<delete id="deleteEnroll" parameterType="hashmap"> 
+ 	 DELETE FROM GRADE_TBL WHERE LECTURE_NO=#{lectureNo} AND STUDENT_NO=#{studentNo}
+ 	</delete>
+ 	
 
  </mapper>

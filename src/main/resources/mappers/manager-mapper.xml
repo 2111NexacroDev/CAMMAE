@@ -123,6 +123,13 @@
 	</delete>
 	
 	<select id="selectManagerList" resultMap="managerResultMap">
-		SELECT * FROM Manager_TBL
+		SELECT * FROM MANAGER_TBL
 	</select>
+	
+	<select id="selectAllManagerInfo" resultMap="managerResultMap">
+		SELECT * FROM MANAGER_TBL WHERE MANAGER_NO = #{managerNo} AND MANAGER_PASSWORD = #{managerPassword}
+	</select>
+	
+	
+	
 </mapper>

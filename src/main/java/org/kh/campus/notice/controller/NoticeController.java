@@ -40,10 +40,13 @@ public class NoticeController {
 			if(!nList.isEmpty()) {
 				mv.addObject("nList", nList);
 				mv.addObject("pi", pi);
+				mv.addObject("menu", "notice");
 				mv.setViewName("notice/noticeList");
 			}else {
-				mv.addObject("msg","공지사항 조회 실패");
-				mv.setViewName("common/errorPage");
+				mv.setViewName("notice/noticeList");
+				/*
+				 * mv.addObject("msg","공지사항 조회 실패"); mv.setViewName("common/errorPage");
+				 */
 			}
 		}catch(Exception e){
 			mv.addObject("msg", e.toString());
@@ -79,7 +82,7 @@ public class NoticeController {
 		return "notice/noticeWriteForm";
 	}
 	
-	//관리자 공지사항 등록
+	//관리자 공지사항 등록 실행
 	@RequestMapping(value="/notice/register.kh", method=RequestMethod.POST)
 	public ModelAndView noticeRegister(ModelAndView mv
 			,@ModelAttribute Notice notice

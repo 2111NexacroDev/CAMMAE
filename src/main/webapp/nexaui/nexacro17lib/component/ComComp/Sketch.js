@@ -55,8 +55,8 @@ if (!nexacro.Sketch) {
 
 		this._history = [];
 
-		this._image_format = ["bmp", "gif", "jpeg", "jpg", "png", "tif", "tiff", "icon"];
-
+		this._image_format = ["bmp", "bmp,mono", "gif", "jpeg", "jpg", "png", "tif", "tiff", "icon"];
+		this._save_image_formattype = ["BMP", "PNG", "JPG", "GIF", "TIF", "BMP,Mono"];
 
 		this._default_stroke_style = nexacro.ColorObject("black");
 		this._currentPath = [];
@@ -183,8 +183,7 @@ if (!nexacro.Sketch) {
 		"ondragenter" : 1, 
 		"ondragleave" : 1, 
 		"oncontextmenu" : 1, 
-		"ondragmove" : 1, 
-		"ondevicebuttonup" : 1
+		"ondragmove" : 1
 	};
 
 	_pSketch.on_create_contents = function () {
@@ -216,6 +215,9 @@ if (!nexacro.Sketch) {
 
 				text_elem.setElementSize(this._getClientWidth(), this._getClientHeight());
 
+				text_elem.setElementFont(this._font);
+				text_elem.setElementTextAlign("center");
+				text_elem.setElementVerticalAlign("middle");
 				text_elem.setElementText(this.text);
 				this._text_elem = text_elem;
 			}
@@ -512,12 +514,13 @@ if (!nexacro.Sketch) {
 				text_elem.setElementSize(this._getClientWidth(), this._getClientHeight());
 				text_elem.setElementTextAlign("center");
 				text_elem.setElementVerticalAlign("middle");
+				text_elem.setElementText(text);
+
 				if (this._is_created) {
 					text_elem.create(this._getRootWindow());
 					control_elem.sendToBackElement(text_elem);
 				}
 			}
-			text_elem.setElementText(text);
 		}
 	};
 
@@ -540,18 +543,10 @@ if (!nexacro.Sketch) {
 		return this._loadSketch(url);
 	};
 
-	_pSketch.saveSketch = function (format, option) {
+	_pSketch.saveSketch = function () {
 		var canvas_elem = this._canvas_elem;
 		if (canvas_elem) {
-			var args = nexacro._ImageType.getImageType("base64", format);
-
-
-			var opt;
-
-			opt = nexacro._ImageType.calcImageQuality(args.datatype, option);
-			var img;
-
-			img = canvas_elem.toDataURL(args.datatype, opt);
+			var img = canvas_elem.toDataURL();
 			if (img && img.src) {
 				img.setBase64String(img.src);
 				this._set_value(img);
@@ -600,34 +595,29 @@ if (!nexacro.Sketch) {
 			return false;
 		}
 
+		fileType = fileType ? fileType : this._save_image_formattype[0];
 
-		var args = nexacro._ImageType.getImageType("file", fileType);
-		fileType = args.type;
-		if (fileType == "JPG" && !option) {
+		if (fileType == this._save_image_formattype[2] && !option) {
 			option = 100;
 		}
 
 		if (fileName.lastIndexOf(".") < 0) {
-			var fileformattype = args.ext;
+			var fileformattype = this._saveImageFileFormatType(fileType);
 			fileName = fileName + this._const_dot + fileformattype;
 		}
 
-
-		var rtn = nexacro._saveToImageFile(this, fileName, fileType, option, false, true);
+		var rtn = system.saveToImageFile(this, fileName, fileType, option);
 		if (rtn !== undefined) {
 			if (rtn) {
-				if (typeof rtn != "string") {
-					errormsg = nexacro._GetSystemErrorMsg(this, this._const_code_savefile_msg);
-					this.on_fire_onerror(this, this._const_code_savefile, errormsg, this._const_errortype_obj, this._const_code_savefile, fileName, this._getRefFormBaseUrl());
-					return false;
-				}
-				else {
-					var imgObj = new nexacro.Image();
-					imgObj.set_src(rtn);
-					imgObj.setBase64String(imgObj.src);
-					this._set_value(imgObj);
-					this.on_fire_onsuccess(imgObj);
-					return true;
+				var canvas_elem = this._canvas_elem;
+				if (canvas_elem) {
+					var img = canvas_elem.toDataURL();
+					if (img && img.src) {
+						img.setBase64String(img.src);
+						this._set_value(img);
+						this.on_fire_onsuccess(img);
+						return true;
+					}
 				}
 			}
 			else {
@@ -638,6 +628,32 @@ if (!nexacro.Sketch) {
 		}
 		return false;
 	};
+
+	_pSketch._saveImageFileFormatType = function (fileType) {
+		var fileformattype;
+		switch (fileType) {
+			case "PNG":
+				fileformattype = "png";
+				break;
+			case "JPG":
+				fileformattype = "jpg";
+				break;
+			case "GIF":
+				fileformattype = "gif";
+				break;
+			case "TIF":
+				fileformattype = "tif";
+				break;
+			case "BMP,Mono":
+				fileformattype = "bmp";
+				break;
+			default:
+				fileformattype = "bmp";
+				break;
+		}
+		return fileformattype;
+	};
+
 	_pSketch.undo = function () {
 		if (this._checkEditmode() == false || this.readonly) {
 			return;
@@ -891,24 +907,6 @@ if (!nexacro.Sketch) {
 		this._resetTextEdit(status);
 	};
 
-	_pSketch._no_bubble_scroll = true;
-	_pSketch.on_fire_sys_onfling = function (elem, touch_manager, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, from_comp, from_refer_comp) {
-		var retn = nexacro.Component.prototype.on_fire_sys_onfling.call(this, elem, touch_manager, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, from_comp, from_refer_comp);
-		if (this._no_bubble_scroll) {
-			retn = true;
-		}
-
-		return retn;
-	};
-	_pSketch.on_fire_sys_onslide = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp, scroll_start) {
-		var retn = nexacro.Component.prototype.on_fire_sys_onslide.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp, scroll_start);
-		if (this._no_bubble_scroll) {
-			retn = true;
-		}
-
-		return retn;
-	};
-
 	_pSketch.on_fire_ontouchmove = function (touchinfos, changedtouchinfos, from_comp, from_refer_comp) {
 		if (touchinfos.length == 0) {
 			return;
@@ -920,14 +918,14 @@ if (!nexacro.Sketch) {
 
 	_pSketch.on_fire_sys_ontouchmove = _pSketch.on_fire_ontouchmove;
 
-	_pSketch.on_fire_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pSketch.on_fire_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		nexacro._getElementPositionInFrame(this.getElement(), true);
 		this._moveAction(button, clientX, clientY);
 		return false;
 	};
 
-	_pSketch.on_fire_sys_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
-		var retn = nexacro.Component.prototype.on_fire_sys_ondragmove.call(this, src_comp, src_refer_comp, dragdata, userdata, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
+	_pSketch.on_fire_sys_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+		var retn = nexacro.Component.prototype.on_fire_sys_ondragmove.call(this, src_comp, src_refer_comp, dragdata, userdata, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
 
 		this._moveAction(button, clientX, clientY);
 		return retn;
@@ -941,7 +939,10 @@ if (!nexacro.Sketch) {
 				return;
 			}
 
-
+			var _window = this._getWindow();
+			var wheelZoom = (_window && (_window._wheelZoom != undefined)) ? _window._wheelZoom / 100 : 1.0;
+			clientX = clientX / wheelZoom;
+			clientY = clientY / wheelZoom;
 			clientY -= nexacro._getCurrentBodyScrollTop();
 			if (button == "touch") {
 				if (this._touch_status == 3) {
@@ -989,18 +990,18 @@ if (!nexacro.Sketch) {
 		this.on_fire_onlbuttondown("lbutton", null, null, null, evt.screenx, evt.screeny, evt.canvasx, evt.canvasy, evt._canvasx, evt._canvasy, from_comp, from_refer_comp);
 	};
 
-	_pSketch._on_touch_lbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, meta_key) {
+	_pSketch._on_touch_lbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
 		nexacro._skipDragEventAfterMsgBox = false;
 		var ret;
 		var pThis = this._getFromComponent(this);
 		if (!pThis.onlbuttondown || (pThis.onlbuttondown && !pThis.onlbuttondown.defaultprevented)) {
-			this._on_onlbuttondown(button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, canvasX, canvasY, fire_comp, refer_comp, false, meta_key);
-			ret = this._on_bubble_touch_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false, meta_key);
+			this._on_onlbuttondown(button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, canvasX, canvasY, fire_comp, refer_comp, false);
+			ret = this._on_bubble_touch_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false);
 		}
 		return ret;
 	};
 
-	_pSketch._on_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pSketch._on_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this._checkEditmode() == false) {
 			return;
 		}
@@ -1018,19 +1019,20 @@ if (!nexacro.Sketch) {
 
 		clientY -= nexacro._getCurrentBodyScrollTop();
 		this.button = button;
-
-		this._initPath(this._path_style, this.editmode, (clientX - this._default_edit_gap), clientY);
-		this._drawPath(clientX, clientY);
+		var _window = this._getWindow();
+		var wheelZoom = (_window && (_window._wheelZoom != undefined)) ? _window._wheelZoom / 100 : 1.0;
+		this._initPath(this._path_style, this.editmode, (clientX - this._default_edit_gap) / wheelZoom, clientY / wheelZoom);
+		this._drawPath(clientX / wheelZoom, clientY / wheelZoom);
 	};
 
 	_pSketch.on_fire_sys_ontouchstart = _pSketch.on_fire_ontouchstart;
 
-	_pSketch.on_fire_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pSketch.on_fire_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (nexacro._isTouchInteraction && nexacro._SupportTouch && !nexacro._enabletouchevent) {
 			return;
 		}
 
-		return this._on_onlbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
+		return this._on_onlbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
 	};
 
 	_pSketch.on_fire_sys_onlbuttondown = _pSketch.on_fire_onlbuttondown;
@@ -1045,7 +1047,7 @@ if (!nexacro.Sketch) {
 
 	_pSketch.on_fire_sys_ontouchend = _pSketch.on_fire_ontouchend;
 
-	_pSketch.on_fire_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pSketch.on_fire_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (this._checkEditmode() == false || this.readonly) {
 			return;
 		}
@@ -1159,9 +1161,20 @@ if (!nexacro.Sketch) {
 			else {
 				v = v.toString();
 
-				var format = nexacro._transImageBase64StringFormat(v);
-				if (format) {
-					v = format.alldata;
+				var isBase64 = nexacro._checkBase64String(v);
+				if (isBase64) {
+					if (v.substring(0, 10).toLowerCase() == "data:image") {
+						if (v.substring(0, 17).toLowerCase() != "data:image;base64") {
+							var comma_idx = v.indexOf(",");
+							if (comma_idx > -1) {
+								var tmp = v.slice(comma_idx + 1, v.legnth);
+								v = "data:image;base64," + tmp;
+							}
+						}
+					}
+					else {
+						v = "data:image;base64," + v;
+					}
 					this._img_type = "base64";
 				}
 				else {
@@ -1452,10 +1465,6 @@ if (!nexacro.Sketch) {
 		}
 
 		for (var n = 0, length = path.length; n < length; n++) {
-			if (path[n][0].strokeStyle == undefined) {
-				path[n][0].strokeStyle = this._default_stroke_style;
-			}
-
 			this._regenStroke(path[n], this._canvas_elem);
 			this._regenStroke(path[n], this._canvas_elem_tmp);
 		}
@@ -1473,39 +1482,17 @@ if (!nexacro.Sketch) {
 		if (length < 1) {
 			return;
 		}
-
-		if (this.button == "touch" || this.button == "lbutton") {
-			for (var n = this._drawpathcount; n < length; n++) {
-				var p1 = path[n];
-				var p2 = path[n + 1];
-				if (n == 0) {
-					this._setupCanvasElem(canavs_elem, p1);
-				}
-				else {
-					canavs_elem.moveTo(p1.x, p1.y);
-				}
-				canavs_elem.lineTo(p2.x, p2.y);
+		for (var n = this._drawpathcount; n < length; n++) {
+			var p1 = path[n];
+			var p2 = path[n + 1];
+			if (n == 0) {
+				this._setupCanvasElem(canavs_elem, p1);
 			}
-		}
-		else {
-			for (var n = this._drawpathcount; n < length; n++) {
-				var p1 = path[n];
-				var p2 = path[n + 1];
-
-				if (n == this._drawpathcount) {
-					var _path = this._clone(path[0]);
-					_path.x = p1.x;
-					_path.y = p1.y;
-
-					this._setupCanvasElem(canavs_elem, _path);
-				}
-				else {
-					canavs_elem.moveTo(p1.x, p1.y);
-				}
-				canavs_elem.lineTo(p2.x, p2.y);
+			else {
+				canavs_elem.moveTo(p1.x, p1.y);
 			}
+			canavs_elem.lineTo(p2.x, p2.y);
 		}
-
 		canavs_elem.stroke();
 	};
 
@@ -1518,12 +1505,7 @@ if (!nexacro.Sketch) {
 			var p1 = path[n];
 			var p2 = path[n + 1];
 			if (n == 0) {
-				this._setupCanvasElem(canavs_elem, p1);
-				canavs_elem.lineTo(p2.x, p2.y);
-				canavs_elem.lineTo(p1.x, p1.y);
-			}
-			else {
-				canavs_elem.moveTo(p1.x, p1.y);
+				this._setupCanvasElem(canavs_elem, p1, p2);
 				canavs_elem.lineTo(p2.x, p2.y);
 				canavs_elem.lineTo(p1.x, p1.y);
 			}
@@ -1541,7 +1523,7 @@ if (!nexacro.Sketch) {
 			case this._const_erase:
 			case this._const_erase_user:
 				canavs_elem.setElementStrokeStyle(this._default_stroke_style);
-				canavs_elem.setElementLineWidth(p1.eraseWidth + 1.5);
+				canavs_elem.setElementLineWidth(p1.eraseWidth);
 				break;
 			case this._const_stroke:
 			case this._const_stroke_user:

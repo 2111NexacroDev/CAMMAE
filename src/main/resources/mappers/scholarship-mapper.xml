@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="ScholarshipMapper">
+  	<resultMap type="Scholarship" id="scholarshipResultMap">
+  	<id property="scholarship_inno" column="SCHOLARSHIP_INNO"></id>
+  	<result property="scholarship_avg_grade" column="SCHOLARSHIP_AVG_GRADE"/>
+  	<result property="scholarship_year" column="SCHOLARSHIP_YEAR"/>
+  	<result property="scholarship_term" column="SCHOLARSHIP_TEAM"/>
+  	<result property="scholarship_status" column="SCHOLARSHIP_STATUS"/>
+  	<result property="scholarship_amount" column="SCHOLARSHIP_AMOUNT"/>
+  	<result property="scholarship_name" column="SCHOLARSHIP_NAME"/>
+  	<result property="scholarship_phonenumber" column="SCHOLARSHIP_PHONENUMBER"/>
+  	<result property="scholarship_college" column="SCHOLARSHIP_COLLEGE"/>
+  	<result property="scholarship_student_no" column="SCHOLARSHIP_STU_NO"/>		
+  	<result property="chk" column="CHK"/>
+  	</resultMap>
+  	<insert id="registerScholar" parameterType="Scholarship">
+  	 INSERT INTO SCHOLARSHIP_TBL VALUES(SEQ_SCHOLARSHIP_NO.NEXTVAL, #{scholarship_avg_grade},  #{scholarship_year},  #{scholarship_term},  DEFAULT,  '2500000',  #{scholarship_name}, #{scholarship_phonenumber}, #{scholarship_college}, #{scholarship_student_no}, DEFAULT)
+  	</insert>
+  	<select id="selectAllScholar" resultMap="scholarshipResultMap">
+  	 SELECT * FROM SCHOLARSHIP_TBL 
+  	 WHERE SCHOLARSHIP_YEAR = #{scholarship_year} AND SCHOLARSHIP_TEAM= #{scholarship_term} AND SCHOLARSHIP_COLLEGE = #{scholarship_college}
+  	</select>
+  	
+  	<select id="selectResult" resultMap="scholarshipResultMap">
+  	SELECT SCHOLARSHIP_INNO, SCHOLARSHIP_NAME, SCHOLARSHIP_STU_NO, SCHOLARSHIP_COLLEGE, SCHOLARSHIP_PHONENUMBER, SCHOLARSHIP_YEAR , SCHOLARSHIP_TEAM, SCHOLARSHIP_STATUS 
+  	FROM SCHOLARSHIP_TBL WHERE SCHOLARSHIP_STU_NO = #{studentNo}
+  	</select>
+  	
+  	<update id="updateScholarAccept">
+  	UPDATE SCHOLARSHIP_TBL SET SCHOLARSHIP_STATUS = 'Y' 
+  	WHERE SCHOLARSHIP_STU_NO = #{scholarship_student_no}
+  	</update>
+  	
+  	<update id="updateScholarDenine">
+  	UPDATE SCHOLARSHIP_TBL SET SCHOLARSHIP_STATUS = 'N' 
+  	WHERE SCHOLARSHIP_STU_NO = #{scholarship_student_no}
+  	</update>
+  	
+  	<select id="selectStuInfo" resultMap="scholarshipResultMap">
+  	SELECT SCHOLARSHIP_NAME, SCHOLARSHIP_STU_NO, SCHOLARSHIP_PHONENUMBER FROM SCHOLARSHIP_TBL 
+  	WHERE SCHOLARSHIP_STU_NO = #{scholarship_student_no}
+  	</select>
+  	</mapper>

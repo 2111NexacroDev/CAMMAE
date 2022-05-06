@@ -101,7 +101,6 @@ if (!nexacro.ListBox) {
 	_pListBox.itemaccessibilitydescription = "";
 	_pListBox.itemaccessibilityaction = "";
 	_pListBox.itemaccessibilitydesclevel = "all";
-	_pListBox._selectscrollmode = (nexacro._isTouchInteraction) ? "scroll" : "select";
 
 	_pListBox._event_list = 
 		{
@@ -135,6 +134,12 @@ if (!nexacro.ListBox) {
 		"ontouchstart" : 1, 
 		"ontouchmove" : 1, 
 		"ontouchend" : 1, 
+		"onslidestart" : 1, 
+		"onslide" : 1, 
+		"onslideend" : 1, 
+		"onflingstart" : 1, 
+		"onfling" : 1, 
+		"onflingend" : 1, 
 		"oncontextmenu" : 1, 
 		"onitemmouseenter" : 1, 
 		"onvscroll" : 1, 
@@ -171,6 +176,7 @@ if (!nexacro.ListBox) {
 		this._selectinfo.text = this.text;
 		this._selectinfo.value = this.value;
 
+		this._setEventHandler("onkeydown", this._on_onkeydown, this);
 
 		if (nexacro._enableaccessibility) {
 			this._want_arrow = true;
@@ -192,6 +198,7 @@ if (!nexacro.ListBox) {
 		this._buffer_pages = null;
 
 		this._removeEventHandlerToInnerDataset();
+		this._removeEventHandler("onkeydown", this._on_onkeydown, this);
 
 		this._selectinfo = null;
 		this._select_multi = null;
@@ -242,6 +249,7 @@ if (!nexacro.ListBox) {
 		this._selectinfo.text = this.text;
 		this._selectinfo.value = this.value;
 
+		this._setEventHandler("onkeydown", this._on_onkeydown, this);
 
 		if (nexacro._enableaccessibility) {
 			this.on_apply_prop_accessibilitylabel();
@@ -282,8 +290,6 @@ if (!nexacro.ListBox) {
 	};
 
 	_pListBox.on_killfocus_basic_action = function () {
-		nexacro.Component.prototype.on_killfocus_basic_action.call(this);
-
 		if (nexacro._enableaccessibility) {
 			var accidx = this._accessibility_index;
 
@@ -309,6 +315,14 @@ if (!nexacro.ListBox) {
 		}
 	};
 
+	_pListBox.on_apply_custom_class = function () {
+		var items = this._getContentsItem();
+		var itemlen = items.length;
+		for (var i = 0; i < itemlen; i++) {
+			items[i].on_apply_prop_class();
+		}
+	};
+
 	_pListBox.on_apply_prop_cssclass = function () {
 		var items = this._getContentsItem();
 		var itemlen = items.length;
@@ -328,7 +342,7 @@ if (!nexacro.ListBox) {
 		}
 	};
 
-	_pListBox.on_change_bindSource = function (propid, ds, row, col) {
+	_pListBox.on_change_bindSource = function (propid, ds, row, col, index) {
 		if (propid == "value") {
 			var val = ds.getColumn(row, col);
 			val = this._convertValueType(val, true);
@@ -338,7 +352,7 @@ if (!nexacro.ListBox) {
 				var codecolumn = this.codecolumn;
 				var datacolumn = this.datacolumn == "" ? codecolumn : this.datacolumn;
 				if (ds && codecolumn) {
-					var index = ds.findRow(codecolumn, val);
+					index = ds.findRow(codecolumn, val);
 					var text = val;
 					if (index > -1) {
 						text = ds.getColumn(index, datacolumn);
@@ -346,6 +360,7 @@ if (!nexacro.ListBox) {
 					else {
 						this._do_not_change_value = true;
 					}
+
 
 					this._setValue(val);
 					this._setIndex(index);
@@ -571,7 +586,7 @@ if (!nexacro.ListBox) {
 			var data_maxheight = this._getInnerdatasetInfo("_max_height");
 
 			total_w += data_maxwidth;
-			total_h += data_maxheight *  rowcount;
+			total_h += data_maxheight * rowcount;
 
 			return [total_w, total_h];
 		}
@@ -752,6 +767,19 @@ if (!nexacro.ListBox) {
 		}
 	};
 
+	_pListBox.set_visible = function (v) {
+		var vscroll = this.vscrollbar;
+		var need_refreshDom = nexacro._Browser == "Chrome" && v && this.visible != v && vscroll;
+
+		nexacro.Component.prototype.set_visible.call(this, v);
+
+		if (need_refreshDom) {
+			var vscrollPos = vscroll.pos;
+			vscroll.set_pos(vscrollPos - 1);
+			vscroll.set_pos(vscrollPos);
+		}
+	};
+
 	_pListBox.set_multiselect = function (v) {
 		v = nexacro._toBoolean(v);
 		if (this.multiselect != v) {
@@ -822,15 +850,13 @@ if (!nexacro.ListBox) {
 	};
 
 	_pListBox.set_selectscrollmode = function (v) {
-		switch (v) {
-			case "select":
-			case "scroll":
-				this._selectscrollmode = this.selectscrollmode = v;
-				break;
-			case "default":
-				this.selectscrollmode = v;
-				this._selectscrollmode = (nexacro._isTouchInteraction) ? "scroll" : "select";
-				break;
+		var selectscrollmode_enum = ["default", "scroll", "select"];
+		if (selectscrollmode_enum.indexOf(v) == -1) {
+			return;
+		}
+
+		if (this.selectscrollmode != v) {
+			this.selectscrollmode = v;
 		}
 	};
 
@@ -998,14 +1024,12 @@ if (!nexacro.ListBox) {
 
 	_pListBox.clearSelect = function () {
 		if (this._select_multi && this._select_multi.length > 0) {
-			this._change_by_script = true;
 			this._selectinfo.index = -1;
 
 			if (this._changeIndex(-1)) {
 				this.on_apply_index(-1);
 			}
 			this._select_clear();
-			this._change_by_script = false;
 		}
 	};
 
@@ -1018,9 +1042,6 @@ if (!nexacro.ListBox) {
 		select = nexacro._toBoolean(select);
 		index = parseInt(index) | 0;
 		var item = this._getItem(index);
-
-		this._change_by_script = true;
-
 		if (index >= 0) {
 			if (select == true) {
 				if (!this.multiselect) {
@@ -1048,24 +1069,10 @@ if (!nexacro.ListBox) {
 				if (item) {
 					item.set_selected(false);
 				}
-				var changeidx = this.index;
-				var currentidx;
-				if (this._select_multi && this._select_multi.length > 0) {
-					if (this.index == index) {
-						var obj = this._select_multi.items;
 
-						currentidx = obj.indexOf(this.index);
-						if (currentidx > 0) {
-							changeidx = obj[currentidx - 1];
-						}
-					}
-				}
 				this._select_remove(index);
 				if (this._select_multi && this._select_multi.length == 0) {
 					this._changeIndex(-1);
-				}
-				else if (this._select_multi && this._select_multi.length > 0) {
-					this._changeIndex(changeidx);
 				}
 			}
 		}
@@ -1076,8 +1083,6 @@ if (!nexacro.ListBox) {
 
 			this._select_clear();
 		}
-
-		this._change_by_script = false;
 	};
 
 	_pListBox.updateToDataset = function () {
@@ -1102,6 +1107,146 @@ if (!nexacro.ListBox) {
 
 	_pListBox.getInnerDataset = function () {
 		return this._innerdataset;
+	};
+
+	_pListBox._on_onkeydown = function (obj, e) {
+		if (this.readonly) {
+			return;
+		}
+
+		var rowcount = this._getInnerdatasetInfo("_rowcount");
+		if (!rowcount) {
+			return;
+		}
+
+		this._shiftKey = e.shiftkey;
+		this._ctrlKey = e.ctrlkey;
+		this._altKey = e.altkey;
+
+		if (!this._shiftKey) {
+			this._shift_select_base_index = obj.index;
+		}
+
+		var nextidx;
+		var multi_info = this._select_multi;
+		var keycode = e.keycode;
+
+		this._last_keydown_keycode = keycode;
+
+		if (keycode == nexacro.Event.KEY_UP) {
+			if (e.ctrlkey) {
+				this._do_scroll("up");
+				return true;
+			}
+
+			if (!nexacro._enableaccessibility) {
+				if (this.multiselect) {
+					this._select_withkeyupevent(e);
+					nextidx = multi_info.items[multi_info.length - 1];
+
+					if (nextidx != null) {
+						if (nextidx > -1) {
+							if (this._last_focused) {
+								this._do_defocus(this._last_focused);
+							}
+							this._changeIndex(nextidx);
+						}
+					}
+				}
+				else {
+					nextidx = +this.index - 1;
+					if (nextidx < 0) {
+						nextidx = rowcount - 1;
+					}
+					else if (nextidx >= rowcount) {
+						nextidx = 0;
+					}
+
+					if (nextidx > -1) {
+						if (this._changeIndex(nextidx)) {
+							if (this._last_focused) {
+								this._do_defocus(this._last_focused);
+							}
+							this.on_apply_index(nextidx);
+						}
+					}
+				}
+			}
+		}
+		else if (keycode == nexacro.Event.KEY_DOWN) {
+			if (e.ctrlkey) {
+				this._do_scroll("down");
+				return true;
+			}
+			if (!nexacro._enableaccessibility) {
+				if (this.multiselect) {
+					this._select_withkeydownevent(e);
+					nextidx = multi_info.items[multi_info.length - 1];
+
+					if (nextidx != null) {
+						if (nextidx < rowcount) {
+							this._changeIndex(nextidx);
+						}
+					}
+				}
+				else {
+					nextidx = +this.index + 1;
+
+					if (nextidx < 0) {
+						nextidx = rowcount - 1;
+					}
+					else if (nextidx >= rowcount) {
+						nextidx = 0;
+					}
+
+					if (nextidx < rowcount) {
+						if (this._changeIndex(nextidx)) {
+							this.on_apply_index(nextidx);
+						}
+					}
+				}
+			}
+		}
+		else if (keycode === nexacro.Event.KEY_SPACE) {
+			if (this.multiselect) {
+				var cur_item = this._getItem(this._select_multi.lastselected);
+				var is_same = false;
+				this._sellist = this._select_multi.items;
+				var len = this._sellist.length;
+				var del_idx, iv;
+
+				for (var i = 0; i < len; i++) {
+					iv = this._sellist[i];
+
+					if (this._select_multi.lastselected == iv) {
+						is_same = true;
+						cur_item = this._getItem(iv);
+						del_idx = iv;
+					}
+				}
+
+				if (is_same !== true) {
+					if (cur_item) {
+						cur_item.set_selected(true);
+					}
+					this._select_add(this._select_multi.lastselected);
+				}
+				else {
+					this._do_deselect(del_idx, true);
+				}
+			}
+			else {
+				nextidx = this._accessibility_index;
+				if (nextidx > -1) {
+					if (this._changeIndex(nextidx)) {
+						if (this._last_focused) {
+							this._do_defocus(this._last_focused);
+						}
+						this.on_apply_index(nextidx);
+					}
+				}
+			}
+		}
 	};
 
 	_pListBox._on_dataset_onload = function (obj, e) {
@@ -1305,7 +1450,7 @@ if (!nexacro.ListBox) {
 		return false;
 	};
 
-	_pListBox.on_fire_user_onkeydown = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key) {
+	_pListBox.on_fire_user_onkeydown = function (keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp) {
 		if (keycode == nexacro.Event.KEY_UP || keycode == nexacro.Event.KEY_DOWN) {
 			if (nexacro._enableaccessibility) {
 				var item;
@@ -1361,18 +1506,94 @@ if (!nexacro.ListBox) {
 
 
 
-		return nexacro.Component.prototype.on_fire_user_onkeydown.call(this, keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
+		return nexacro.Component.prototype.on_fire_user_onkeydown.call(this, keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
 	};
 
-	_pListBox.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	_pListBox.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		if (!this._is_alive) {
 			return;
 		}
 
-		return nexacro.Component.prototype.on_fire_user_onlbuttonup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
+		return nexacro.Component.prototype.on_fire_user_onlbuttonup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
 	};
 
-	_pListBox.on_fire_sys_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
+	_pListBox.on_fire_sys_ontouchend = function (touchinfos, changedtouchinfos, from_comp, from_refer_comp) {
+		if (from_refer_comp && (from_refer_comp instanceof nexacro.ScrollBarControl || (from_refer_comp.parent && from_refer_comp.parent instanceof nexacro.ScrollBarControl))) {
+			return;
+		}
+
+		var up_obj = this._getWindow().findComponent(touchinfos[0].target);
+		var sel_info_list = this._selectinfo_list;
+
+		var ret = nexacro.Component.prototype.on_fire_sys_ontouchend.call(this, touchinfos, changedtouchinfos, from_comp, from_refer_comp);
+
+		while (sel_info_list.length) {
+			var down_item = sel_info_list[0].obj;
+			if (down_item) {
+				var change_item;
+				if (this._contains(up_obj)) {
+					var evt = touchinfos[0];
+
+					var canvasX = evt.canvasx;
+					var canvasY = evt.canvasy;
+
+					var elem = this.getElement();
+					if (elem) {
+						var border = this._getCurrentStyleBorder();
+						var c_l_border = border ? border._getBorderLeftWidth() : 0;
+						var c_t_border = border ? border._getBorderTopWidth() : 0;
+						canvasX = canvasX - ((elem.scroll_left ? elem.scroll_left : 0) - c_l_border);
+						canvasY = canvasY - ((elem.scroll_top ? elem.scroll_top : 0) - c_t_border);
+
+						if (canvasX < 0) {
+							canvasX = c_l_border;
+						}
+						if (canvasY < 0) {
+							canvasY = c_t_border;
+						}
+					}
+
+					var clientXY = this._getClientXY(canvasX, canvasY);
+
+					this.on_fire_onitemclick(this, up_obj.index, up_obj.text, up_obj.value, evt._current_state, this._altKey, this._ctrlKey, this._shiftKey, evt.screenx, evt.screeny, canvasX, canvasY, clientXY[0], clientXY[1]);
+
+					change_item = down_item;
+
+					var change_index = change_item.index;
+
+					if (this.multiselect) {
+						if (this._shiftKey === true || this._ctrlKey === true) {
+							this._select_withmouseevent(change_index);
+						}
+						else {
+							this._do_select(change_index, false);
+						}
+					}
+					else {
+						if (this._changeIndex(change_index)) {
+							this.on_apply_index(change_index);
+						}
+						else {
+							if (!down_item.selected) {
+								down_item._changeUserStatus("selected", false);
+							}
+						}
+					}
+				}
+				else {
+					if (!down_item.selected) {
+						down_item._changeUserStatus("selected", false);
+					}
+				}
+			}
+
+			sel_info_list.shift();
+		}
+
+		return ret;
+	};
+
+	_pListBox.on_fire_sys_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem) {
 		if (from_refer_comp && (from_refer_comp instanceof nexacro.ScrollBarControl || (from_refer_comp.parent && from_refer_comp.parent instanceof nexacro.ScrollBarControl))) {
 			return;
 		}
@@ -1380,14 +1601,14 @@ if (!nexacro.ListBox) {
 		var up_obj = this._getWindow().findComponent(from_elem);
 		var sel_info = this._selectinfo;
 
-		var ret = nexacro.Component.prototype.on_fire_sys_onlbuttonup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key);
+		var ret = nexacro.Component.prototype.on_fire_sys_onlbuttonup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem);
 
 		var down_item = sel_info.obj;
 		if (down_item) {
 			var change_item;
 
 			if (this._contains(from_elem)) {
-				this.on_fire_onitemclick(this, up_obj.index, up_obj.text, up_obj.value, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
+				this.on_fire_onitemclick(this, up_obj.index, up_obj.text, up_obj.value, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
 
 				if (nexacro._enableaccessibility) {
 					if (this._accessibility_index > -1) {
@@ -1421,9 +1642,7 @@ if (!nexacro.ListBox) {
 						this.on_apply_index(change_index);
 					}
 					else {
-						if (!down_item.selected) {
-							down_item._changeUserStatus("selected", false);
-						}
+						down_item._changeUserStatus("selected", false);
 					}
 
 					if (down_item != up_obj) {
@@ -1511,13 +1730,13 @@ if (!nexacro.ListBox) {
 		return nexacro.Component.prototype.on_fire_sys_onflingend.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp);
 	};
 
-	_pListBox.on_fire_onitemclick = function (obj, index, itemtext, itemvalue, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key) {
+	_pListBox.on_fire_onitemclick = function (obj, index, itemtext, itemvalue, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY) {
 		if (this.readonly) {
 			return false;
 		}
 
 		if (this.onitemclick && this.onitemclick._has_handlers) {
-			var evt = new nexacro.ItemClickEventInfo(obj, "onitemclick", index, itemtext, itemvalue, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
+			var evt = new nexacro.ItemClickEventInfo(obj, "onitemclick", index, itemtext, itemvalue, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
 			var ret = this.onitemclick._fireEvent(this, evt);
 			return nexacro._toBoolean(ret);
 		}
@@ -1559,13 +1778,13 @@ if (!nexacro.ListBox) {
 		return false;
 	};
 
-	_pListBox.on_fire_onitemdblclick = function (obj, index, itemtext, itemvalue, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key) {
+	_pListBox.on_fire_onitemdblclick = function (obj, index, itemtext, itemvalue, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY) {
 		if (this.readonly) {
 			return false;
 		}
 
 		if (this.onitemdblclick && this.onitemdblclick._has_handlers) {
-			var evt = new nexacro.ItemClickEventInfo(obj, "onitemdblclick", index, itemtext, itemvalue, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
+			var evt = new nexacro.ItemClickEventInfo(obj, "onitemdblclick", index, itemtext, itemvalue, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
 			var ret = this.onitemdblclick._fireEvent(this, evt);
 			return nexacro._toBoolean(ret);
 		}
@@ -1605,148 +1824,6 @@ if (!nexacro.ListBox) {
 		}
 
 		return ret;
-	};
-
-	_pListBox.on_keydown_basic_action = function () {
-	};
-
-	_pListBox.on_keydown_default_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
-		if (this.readonly) {
-			return;
-		}
-
-		var rowcount = this._getInnerdatasetInfo("_rowcount");
-		if (!rowcount) {
-			return;
-		}
-
-		this._shiftKey = shift_key;
-		this._ctrlKey = ctrl_key;
-		this._altKey = alt_key;
-
-		if (!this._shiftKey) {
-			this._shift_select_base_index = this.index;
-		}
-
-		var nextidx;
-		var multi_info = this._select_multi;
-
-		this._last_keydown_keycode = keycode;
-
-		if (keycode == nexacro.Event.KEY_UP) {
-			if (ctrl_key) {
-				this._do_scroll("up");
-				return true;
-			}
-
-			if (!nexacro._enableaccessibility) {
-				if (this.multiselect) {
-					this._select_withkeyupevent(shift_key);
-					nextidx = multi_info.items[multi_info.length - 1];
-
-					if (nextidx != null) {
-						if (nextidx > -1) {
-							if (this._last_focused) {
-								this._do_defocus(this._last_focused);
-							}
-							this._changeIndex(nextidx);
-						}
-					}
-				}
-				else {
-					nextidx = +this.index - 1;
-					if (nextidx < 0) {
-						nextidx = rowcount - 1;
-					}
-					else if (nextidx >= rowcount) {
-						nextidx = 0;
-					}
-
-					if (nextidx > -1) {
-						if (this._changeIndex(nextidx)) {
-							if (this._last_focused) {
-								this._do_defocus(this._last_focused);
-							}
-							this.on_apply_index(nextidx);
-						}
-					}
-				}
-			}
-		}
-		else if (keycode == nexacro.Event.KEY_DOWN) {
-			if (ctrl_key) {
-				this._do_scroll("down");
-				return true;
-			}
-			if (!nexacro._enableaccessibility) {
-				if (this.multiselect) {
-					this._select_withkeydownevent(shift_key);
-					nextidx = multi_info.items[multi_info.length - 1];
-
-					if (nextidx != null) {
-						if (nextidx < rowcount) {
-							this._changeIndex(nextidx);
-						}
-					}
-				}
-				else {
-					nextidx = +this.index + 1;
-
-					if (nextidx < 0) {
-						nextidx = rowcount - 1;
-					}
-					else if (nextidx >= rowcount) {
-						nextidx = 0;
-					}
-
-					if (nextidx < rowcount) {
-						if (this._changeIndex(nextidx)) {
-							this.on_apply_index(nextidx);
-						}
-					}
-				}
-			}
-		}
-		else if (keycode === nexacro.Event.KEY_SPACE) {
-			if (this.multiselect) {
-				var cur_item = this._getItem(this._select_multi.lastselected);
-				var is_same = false;
-				this._sellist = this._select_multi.items;
-				var len = this._sellist.length;
-				var del_idx, iv;
-
-				for (var i = 0; i < len; i++) {
-					iv = this._sellist[i];
-
-					if (this._select_multi.lastselected == iv) {
-						is_same = true;
-						cur_item = this._getItem(iv);
-						del_idx = iv;
-					}
-				}
-
-				if (is_same !== true) {
-					if (cur_item) {
-						cur_item.set_selected(true);
-					}
-					this._select_add(this._select_multi.lastselected);
-				}
-				else {
-					this._do_deselect(del_idx, true);
-				}
-			}
-			else {
-				nextidx = this._accessibility_index;
-				if (nextidx > -1) {
-					if (this._changeIndex(nextidx)) {
-						if (this._last_focused) {
-							this._do_defocus(this._last_focused);
-						}
-						this.on_apply_index(nextidx);
-					}
-				}
-			}
-		}
 	};
 
 	_pListBox._redrawListBoxContents = function (bScrollChange) {
@@ -1830,7 +1907,7 @@ if (!nexacro.ListBox) {
 					}
 
 					for (i = 0; i < len; i++) {
-						index = start + (i *  page_rowcount);
+						index = start + (i * page_rowcount);
 						if (index + page_rowcount > max_index) {
 							page_rowcount = max_index - index + 1;
 						}
@@ -1883,7 +1960,7 @@ if (!nexacro.ListBox) {
 					this._clearListBoxBufferPage();
 
 					for (i = 0; i < len; i++) {
-						index = start + (i *  page_rowcount);
+						index = start + (i * page_rowcount);
 						if (index + page_rowcount > max_index) {
 							page_rowcount = max_index - index + 1;
 						}
@@ -1945,7 +2022,7 @@ if (!nexacro.ListBox) {
 			var itemheight = this._getItemHeight();
 			var client_w = this._getClientWidth();
 
-			var item = this._createListItem("item_" + index, 0, index *  itemheight, Math.max(this._contents_maxwidth, client_w), itemheight, null, null, null, null, null, null, this);
+			var item = this._createListItem("item_" + index, 0, index * itemheight, Math.max(this._contents_maxwidth, client_w), itemheight, null, null, null, null, null, null, this);
 			item.set_value(data.value);
 			item.set_text(data.text);
 			item.set_index(index);
@@ -2124,7 +2201,7 @@ if (!nexacro.ListBox) {
 		for (var i = 0; i < item_len; i++) {
 			item = items[i];
 			if (item) {
-				item.move(0, item.index *  itemheight, Math.max(this._contents_maxwidth, client_w), itemheight);
+				item.move(0, item.index * itemheight, Math.max(this._contents_maxwidth, client_w), itemheight);
 			}
 		}
 	};
@@ -2146,9 +2223,9 @@ if (!nexacro.ListBox) {
 
 		this._scroll_default_value = data_maxheight;
 
-		if (this._contents_maxwidth != data_maxwidth || this._contents_maxheight != (itemheight *  rowcount)) {
+		if (this._contents_maxwidth != data_maxwidth || this._contents_maxheight != (itemheight * rowcount)) {
 			this._contents_maxwidth = data_maxwidth;
-			this._contents_maxheight = itemheight *  rowcount;
+			this._contents_maxheight = itemheight * rowcount;
 
 			if (this._is_created) {
 				this._onRecalcScrollSize();
@@ -2302,28 +2379,10 @@ if (!nexacro.ListBox) {
 					}
 
 					if (item.selected === false) {
-						var changeidx = this.index;
-						var currentidx;
-						if (this._select_multi && this._select_multi.length > 0) {
-							if (this.index == idx) {
-								var obj = this._select_multi.items;
-
-								currentidx = obj.indexOf(this.index);
-								if (currentidx > 0) {
-									changeidx = obj[currentidx - 1];
-								}
-							}
-						}
 						for (var i = 0; i < len; i++) {
 							if (idx === sel.items[i]) {
 								this._select_remove(idx);
 							}
-						}
-						if (this._select_multi && this._select_multi.length == 0) {
-							this._changeIndex(-1);
-						}
-						else if (this._select_multi && this._select_multi.length > 0) {
-							this._changeIndex(changeidx);
 						}
 					}
 					else {
@@ -2344,12 +2403,12 @@ if (!nexacro.ListBox) {
 		}
 	};
 
-	_pListBox._select_withkeyupevent = function (shiftkey) {
+	_pListBox._select_withkeyupevent = function (e) {
 		var lastidx = this._select_multi.lastselected == null ? nexacro._enableaccessibility ? this._accessibility_index : this._select_multi.lastselected : this._select_multi.lastselected;
 
 		if (lastidx > 0) {
 			var idx = lastidx - 1;
-			if (shiftkey && lastidx) {
+			if (e.shiftkey && lastidx) {
 				if (this._is_selected(lastidx) && this._is_selected(idx)) {
 					this._do_deselect(lastidx, true);
 					this._set_last_selectfocused(idx);
@@ -2377,13 +2436,13 @@ if (!nexacro.ListBox) {
 		}
 	};
 
-	_pListBox._select_withkeydownevent = function (shiftkey) {
+	_pListBox._select_withkeydownevent = function (e) {
 		var lastidx = this._select_multi.lastselected == null ? nexacro._enableaccessibility ? this._accessibility_index : this._select_multi.lastselected : this._select_multi.lastselected;
 		var rowcount = this._getInnerdatasetInfo("_rowcount");
 
 		if (lastidx + 1 < rowcount) {
-			var idx = lastidx === null ? 0 : lastidx + 1;
-			if (shiftkey && lastidx >= 0) {
+			var idx = lastidx + 1;
+			if (e.shiftkey && lastidx >= 0) {
 				if (this._shift_select_base_index == lastidx) {
 					this._deselect_all(true);
 					this._do_select(this._shift_select_base_index, true);
@@ -2421,18 +2480,18 @@ if (!nexacro.ListBox) {
 				idx += 1;
 			}
 			else {
-				if (vscroll_pos <= idx *  rowheight) {
+				if (vscroll_pos <= idx * rowheight) {
 					idx -= 1;
 				}
 			}
 
 			if (idx > -1) {
-				this._scrollTo(null, idx *  rowheight);
+				this._scrollTo(null, idx * rowheight);
 			}
 		}
 	};
 
-	_pListBox._select_add = function (selectIdx, isNotFireEvent) {
+	_pListBox._select_add = function (selectIdx) {
 		if (selectIdx < 0 || selectIdx > this._innerdataset.getRowCount() - 1) {
 			return;
 		}
@@ -2448,7 +2507,7 @@ if (!nexacro.ListBox) {
 		info.items.push(selectIdx);
 		info.keys.push(k);
 
-		this._changeIndex(selectIdx, undefined, isNotFireEvent);
+		this._changeIndex(selectIdx);
 	};
 
 	_pListBox._select_replace = function (k, selectIdx) {
@@ -2520,10 +2579,7 @@ if (!nexacro.ListBox) {
 			this._deselect_all(true);
 		}
 
-
-		var i;
-		var rows = [];
-		var FinalRow = endRow;
+		var selectedCount = 0, i, tmp, dontdeselect, rows = [], FinalRow = endRow;
 
 		if (!nexacro._isNumber(startRow)) {
 			startRow = 0;
@@ -2532,20 +2588,37 @@ if (!nexacro.ListBox) {
 			endRow = this._getInnerdatasetInfo("_rowcount");
 		}
 
-
-
 		if (startRow > endRow) {
-			for (i = startRow; endRow <= i; i--) {
-				rows.push(i);
+			tmp = endRow;
+			endRow = startRow;
+			startRow = tmp;
+			FinalRow = tmp;
+		}
+
+		for (i = startRow; i <= endRow; i++) {
+			if (this._is_selected(i)) {
+				selectedCount++;
 			}
+		}
+
+		if (!dir) {
+			dontdeselect = -1;
 		}
 		else {
-			for (i = startRow; i <= endRow; i++) {
+			dontdeselect = (dir == 'up') ? startRow : endRow;
+		}
+
+		for (i = startRow; i <= endRow; i++) {
+			if (selectedCount == (endRow - startRow + 1)) {
+				if (i != dontdeselect) {
+					this._do_deselect(i, true);
+				}
+			}
+			else {
 				rows.push(i);
 			}
 		}
-
-		this._doMultiSelect(rows, true, true);
+		this._doMultiSelect(rows, true);
 		this._changeIndex(FinalRow);
 	};
 
@@ -2597,7 +2670,7 @@ if (!nexacro.ListBox) {
 		return params[0] === attempted;
 	};
 
-	_pListBox._select_commit = function (jobgbn, row, params, isNotFireEvent) {
+	_pListBox._select_commit = function (jobgbn, row, params) {
 		var info = this._select_multi;
 		var len = info.length;
 		switch (jobgbn) {
@@ -2614,7 +2687,7 @@ if (!nexacro.ListBox) {
 				params[0] = true;
 				break;
 			case "multiselect":
-				this._select_add(row, isNotFireEvent);
+				this._select_add(row);
 				params[0] = true;
 				break;
 		}
@@ -2630,7 +2703,7 @@ if (!nexacro.ListBox) {
 	};
 
 	_pListBox._on_select_change = function (idx, isSelected, jobgbn, params, isNotFireEvent) {
-		if (this._select_commit(jobgbn, idx, params, isNotFireEvent) !== false) {
+		if (this._select_commit(jobgbn, idx, params) !== false) {
 			var rowobj = this._getItem(idx);
 			if (rowobj) {
 				if (isSelected) {
@@ -2659,10 +2732,10 @@ if (!nexacro.ListBox) {
 				if (vscrollbar) {
 					var new_pos = vscrollbar.pos;
 					if (newFocused <= visible_start) {
-						new_pos = newFocused *  this._getItemHeight();
+						new_pos = newFocused * this._getItemHeight();
 					}
 					else if (newFocused >= visible_end) {
-						new_pos = (newFocused + 1) *  this._getItemHeight() - control_elem.client_height;
+						new_pos = (newFocused + 1) * this._getItemHeight() - control_elem.client_height;
 					}
 
 					if (vscrollbar.pos != new_pos) {
@@ -2690,8 +2763,8 @@ if (!nexacro.ListBox) {
 		}
 	};
 
-	_pListBox._changeIndex = function (v, change_by_script, isNotFireEvent) {
-		if (this.index != v && !isNotFireEvent) {
+	_pListBox._changeIndex = function (v, change_by_script) {
+		if (this.index != v) {
 			var dataset = this._innerdataset;
 			var postindex = parseInt(v, 10) | 0;
 
@@ -2706,10 +2779,6 @@ if (!nexacro.ListBox) {
 
 				var posttext = datavalue == undefined ? "" : datavalue;
 				var postvalue = codevalue;
-
-				if (change_by_script == undefined) {
-					change_by_script = this._change_by_script;
-				}
 
 				if (change_by_script != true) {
 					if (this.on_fire_canitemchange(this, preidx, pretext, prevalue, postindex, posttext, postvalue) != false) {
@@ -2954,7 +3023,7 @@ if (!nexacro.ListBox) {
 				return;
 			}
 
-			nextTopPos = (rowidx < 0 ? 0 : rowidx) *  itemheight;
+			nextTopPos = (rowidx < 0 ? 0 : rowidx) * itemheight;
 			nextBottom = nextTopPos + itemheight;
 
 			if ((nextBottom > this._getClientHeight() + currVScrollTopPos) && direction === 0) {
@@ -3165,13 +3234,7 @@ if (!nexacro.ListBox) {
 				total_h += padding.top + padding.bottom;
 			}
 
-			var text;
-			if (this._displaytext && this._displaytext !== "") {
-				text = this._displaytext;
-			}
-			else {
-				text = this.text;
-			}
+			var text = this.text;
 			var font = this._getCurrentStyleInheritValue("font");
 			var wordspace = this._getCurrentStyleInheritValue("wordSpacing");
 			var letterspace = this._getCurrentStyleInheritValue("letterSpacing");
@@ -3185,66 +3248,6 @@ if (!nexacro.ListBox) {
 		}
 
 		return [this._adjust_width, this._adjust_height];
-	};
-
-
-	_pListBoxItemControl.on_tap_default_action = function (elem, canvasX, canvasY, screenX, screenY, refer_comp) {
-		var listbox = this.parent;
-		var up_obj = this._getWindow().findComponent(elem);
-		var sel_info_list = listbox._selectinfo_list;
-		while (sel_info_list.length) {
-			var down_item = sel_info_list[0].obj;
-			if (down_item) {
-				var change_item;
-				if (this._contains(up_obj)) {
-					if (elem) {
-						var border = listbox._getCurrentStyleBorder();
-						var c_l_border = border ? border._getBorderLeftWidth() : 0;
-						var c_t_border = border ? border._getBorderTopWidth() : 0;
-						canvasX = canvasX - ((elem.scroll_left ? elem.scroll_left : 0) - c_l_border);
-						canvasY = canvasY - ((elem.scroll_top ? elem.scroll_top : 0) - c_t_border);
-
-						if (canvasX < 0) {
-							canvasX = c_l_border;
-						}
-						if (canvasY < 0) {
-							canvasY = c_t_border;
-						}
-					}
-
-					var clientXY = listbox._getClientXY(canvasX, canvasY);
-					listbox.on_fire_onitemclick(listbox, up_obj.index, up_obj.text, up_obj.value, undefined, listbox._altKey, listbox._ctrlKey, listbox._shiftKey, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1]);
-					change_item = down_item;
-
-					var change_index = change_item.index;
-
-					if (listbox.multiselect) {
-						if (listbox._shiftKey === true || listbox._ctrlKey === true) {
-							listbox._select_withmouseevent(change_index);
-						}
-						else {
-							listbox._do_select(change_index, false);
-						}
-					}
-					else {
-						if (listbox._changeIndex(change_index)) {
-							listbox.on_apply_index(change_index);
-						}
-						else {
-							if (!down_item.selected) {
-								down_item._changeUserStatus("selected", false);
-							}
-						}
-					}
-				}
-				else {
-					if (!down_item.selected) {
-						down_item._changeUserStatus("selected", false);
-					}
-				}
-			}
-			sel_info_list.shift();
-		}
 	};
 
 	_pListBoxItemControl.set_index = function (v) {

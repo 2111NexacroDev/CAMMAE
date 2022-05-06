@@ -58,8 +58,7 @@ if (!nexacro.ScrollBarControl) {
 		"onrbuttondown" : 1, 
 		"onrbuttonup" : 1, 
 		"onsize" : 1, 
-		"onscroll" : 1, 
-		"ondevicebuttonup" : 1
+		"onscroll" : 1
 	};
 
 
@@ -200,15 +199,19 @@ if (!nexacro.ScrollBarControl) {
 		if (!this._is_alive) {
 			return;
 		}
-
+		var _window = this._getWindow();
+		var wheelZoom = 1.0;
+		if (_window && (_window._wheelZoom != undefined)) {
+			wheelZoom = _window._wheelZoom / 100;
+		}
 		var fromObject = fromComp;
 		var btn, left, top, width, height;
 		if (fromObject == this.decbutton) {
 			btn = this.decbutton;
 			left = btn._adjust_left;
 			top = btn._adjust_top;
-			width = btn._adjust_width *  scale;
-			height = btn._adjust_height *  scale;
+			width = btn._adjust_width * scale * wheelZoom;
+			height = btn._adjust_height * scale * wheelZoom;
 
 			if (left <= x && (left + width) >= x && top <= y && (top + height) >= y) {
 				this.on_decbutton_lbuttondown(this);
@@ -218,15 +221,15 @@ if (!nexacro.ScrollBarControl) {
 			btn = this.incbutton;
 			left = btn._adjust_left;
 			top = btn._adjust_top;
-			width = btn._adjust_width *  scale;
-			height = btn._adjust_height *  scale;
+			width = btn._adjust_width * scale * wheelZoom;
+			height = btn._adjust_height * scale * wheelZoom;
 
 			if (left <= x && (left + width) >= x && top <= y && (top + height) >= y) {
 				this.on_incbutton_lbuttondown(this);
 			}
 		}
 		else if (fromObject == this) {
-			this.on_page_click(this, x, y);
+			this.on_page_click(this, x / wheelZoom, y / wheelZoom);
 		}
 	};
 
@@ -237,15 +240,19 @@ if (!nexacro.ScrollBarControl) {
 			return;
 		}
 
-
+		var _window = this._getWindow();
+		var wheelZoom = 1.0;
+		if (_window && (_window._wheelZoom != undefined)) {
+			wheelZoom = _window._wheelZoom / 100;
+		}
 		var btn, fromObject = fromComp;
 		var left, top, width, height;
 		if (fromObject == this.decbutton) {
 			btn = this.decbutton;
 			left = btn._adjust_left;
 			top = btn._adjust_top;
-			width = btn._adjust_width *  scale;
-			height = btn._adjust_height *  scale;
+			width = btn._adjust_width * scale * wheelZoom;
+			height = btn._adjust_height * scale * wheelZoom;
 
 			if (left <= x && (left + width) >= x && top <= y && (top + height) >= y) {
 				this.on_decbutton_lbuttondown(this, null);
@@ -255,8 +262,8 @@ if (!nexacro.ScrollBarControl) {
 			btn = this.incbutton;
 			left = btn._adjust_left;
 			top = btn._adjust_top;
-			width = btn._adjust_width *  scale;
-			height = btn._adjust_height *  scale;
+			width = btn._adjust_width * scale * wheelZoom;
+			height = btn._adjust_height * scale * wheelZoom;
 
 			if (left <= x && (left + width) >= x && top <= y && (top + height) >= y) {
 				this.on_incbutton_lbuttondown(this, null);
@@ -266,28 +273,28 @@ if (!nexacro.ScrollBarControl) {
 			btn = this.trackbar;
 			left = btn._adjust_left;
 			top = btn._adjust_top;
-			width = btn._adjust_width *  scale;
-			height = btn._adjust_height *  scale;
+			width = btn._adjust_width * scale;
+			height = btn._adjust_height * scale;
 
 			var eType = "";
 			if (this.direction == "vertical") {
-				if (y < top) {
+				if (y / wheelZoom < top) {
 					eType = "pageup";
 				}
-				else if (y > (top + height)) {
+				else if (y / wheelZoom > (top + height)) {
 					eType = "pagedown";
 				}
 			}
 			else {
-				if (x < left) {
+				if (x / wheelZoom < left) {
 					eType = "pageleft";
 				}
-				else if (x > (left + width)) {
+				else if (x / wheelZoom > (left + width)) {
 					eType = "pageright";
 				}
 			}
 			this._start_page_navi = eType;
-			this.on_page_click(this, x, y);
+			this.on_page_click(this, x / wheelZoom, y / wheelZoom);
 		}
 	};
 
@@ -843,7 +850,7 @@ if (!nexacro.ScrollBarControl) {
 						baroutsize = r - l;
 					}
 					if (barminsize < 0) {
-						barminsize = ((r - l) *  0.60) | 0;
+						barminsize = ((r - l) * 0.60) | 0;
 						if (barminsize < nexacro.ScrollBarControl.TRACKBAR_SIZE_MIN) {
 							barminsize = nexacro.ScrollBarControl.TRACKBAR_SIZE_MIN;
 						}
@@ -857,7 +864,7 @@ if (!nexacro.ScrollBarControl) {
 							this._trackbarsize = this.trackbarsize;
 						}
 						else {
-							tracksize = (shaftsize *  (view / (view + size))) | 0;
+							tracksize = (shaftsize * (view / (view + size))) | 0;
 							this._trackbarsize = (tracksize < barminsize) ? barminsize : tracksize;
 						}
 					}
@@ -920,7 +927,7 @@ if (!nexacro.ScrollBarControl) {
 						baroutsize = b - t;
 					}
 					if (barminsize < 0) {
-						barminsize = parseInt((b - t) *  0.60);
+						barminsize = parseInt((b - t) * 0.60);
 						if (barminsize < nexacro.ScrollBarControl.TRACKBAR_SIZE_MIN) {
 							barminsize = nexacro.ScrollBarControl.TRACKBAR_SIZE_MIN;
 						}
@@ -937,7 +944,7 @@ if (!nexacro.ScrollBarControl) {
 							this._trackbarsize = this.trackbarsize;
 						}
 						else {
-							tracksize = (shaftsize *  (view / (view + size))) | 0;
+							tracksize = (shaftsize * (view / (view + size))) | 0;
 							this._trackbarsize = (tracksize < barminsize) ? barminsize : tracksize;
 						}
 					}
@@ -983,7 +990,7 @@ if (!nexacro.ScrollBarControl) {
 			var shaftsize, trackstart;
 			if (this.direction == "vertical") {
 				shaftsize = b - t;
-				trackstart = ((pos - min) *  (shaftsize - tracksize) / size) | 0;
+				trackstart = ((pos - min) * (shaftsize - tracksize) / size) | 0;
 
 				rl = l;
 				rr = r;
@@ -997,7 +1004,7 @@ if (!nexacro.ScrollBarControl) {
 			}
 			else {
 				shaftsize = r - l;
-				trackstart = parseInt((pos - min) *  (shaftsize - tracksize) / size);
+				trackstart = parseInt((pos - min) * (shaftsize - tracksize) / size);
 
 				rl = l + trackstart;
 				rr = rl + tracksize;
@@ -1087,7 +1094,11 @@ if (!nexacro.ScrollBarControl) {
 	_pScrollBar._movetrack = function (x, y) {
 		var nX = x;
 		var nY = y;
-
+		var _window = this._getWindow();
+		if (_window && (_window._wheelZoom != undefined)) {
+			nX = nX * 100 / _window._wheelZoom;
+			nY = nY * 100 / _window._wheelZoom;
+		}
 		var min = this._min;
 		var max = this._max;
 		var pos = this._pos;
@@ -1125,7 +1136,7 @@ if (!nexacro.ScrollBarControl) {
 				rctrack.top += nDiff;
 				rctrack.bottom += nDiff;
 
-				newpos = (size *  (rctrack.top - rc.top) / ((rc.bottom - rc.top) - (rctrack.bottom - rctrack.top)));
+				newpos = (size * (rctrack.top - rc.top) / ((rc.bottom - rc.top) - (rctrack.bottom - rctrack.top)));
 				this._moveTrackBar(rctrack, rc);
 
 				if (trackbar._adjust_top - rctrackorigin.top == 0) {
@@ -1145,7 +1156,7 @@ if (!nexacro.ScrollBarControl) {
 				rctrack.left += nDiff;
 				rctrack.right += nDiff;
 
-				newpos = parseInt(size *  ((rctrack.left - rc.left) / ((rc.right - rc.left) - (rctrack.right - rctrack.left))));
+				newpos = parseInt(size * ((rctrack.left - rc.left) / ((rc.right - rc.left) - (rctrack.right - rctrack.left))));
 				this._moveTrackBar(rctrack, rc);
 				if (trackbar._adjust_left - rctrackorigin.left == 0) {
 					this._mousepoint.x = nX;
@@ -1333,7 +1344,7 @@ if (!nexacro.ScrollIndicatorControl) {
 						baroutsize = client_width;
 					}
 					if (barminsize < 0) {
-						barminsize = (client_width *  0.60) | 0;
+						barminsize = (client_width * 0.60) | 0;
 						if (barminsize < nexacro.ScrollIndicatorControl.TRACKBAR_SIZE_MIN) {
 							barminsize = nexacro.ScrollIndicatorControl.TRACKBAR_SIZE_MIN;
 						}
@@ -1347,7 +1358,7 @@ if (!nexacro.ScrollIndicatorControl) {
 							this._trackbarsize = this.trackbarsize;
 						}
 						else {
-							tracksize = (shaftsize *  (view / (view + size))) | 0;
+							tracksize = (shaftsize * (view / (view + size))) | 0;
 							this._trackbarsize = (tracksize < barminsize) ? barminsize : tracksize;
 						}
 					}
@@ -1380,7 +1391,7 @@ if (!nexacro.ScrollIndicatorControl) {
 						baroutsize = client_height;
 					}
 					if (barminsize < 0) {
-						barminsize = parseInt(client_height *  0.60) | 0;
+						barminsize = parseInt(client_height * 0.60) | 0;
 						if (barminsize < nexacro.ScrollIndicatorControl.TRACKBAR_SIZE_MIN) {
 							barminsize = nexacro.ScrollIndicatorControl.TRACKBAR_SIZE_MIN;
 						}
@@ -1397,7 +1408,7 @@ if (!nexacro.ScrollIndicatorControl) {
 							this._trackbarsize = this.trackbarsize;
 						}
 						else {
-							tracksize = (shaftsize *  (view / (view + size))) | 0;
+							tracksize = (shaftsize * (view / (view + size))) | 0;
 							this._trackbarsize = (tracksize < barminsize) ? barminsize : tracksize;
 						}
 					}
