@@ -47,6 +47,7 @@ public class SupportController {
 				mv.addObject("sList",sList);
 				mv.addObject("pageInfo", pageInfo);
 				mv.setViewName("support/supportList");
+				mv.addObject("menu", "support");
 			}else {
 				mv.setViewName("support/supportList");
 			}
