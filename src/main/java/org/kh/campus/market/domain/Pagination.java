@@ -4,7 +4,7 @@ public class Pagination {
 	public static PageInfo getPageInfo(int currentPage, int totalCount ,String searchCondition, String searchValue) {
 		PageInfo pi = null;
 		
-		int marketLimit = 5;
+		int marketLimit = 10;
 		int naviLimit = 5;
 		int maxPage;
 		int startNavi;
