@@ -78,7 +78,7 @@
 		, RECRUITMENT_SALARY		= #{recruitmentSalary}
 		, RECRUITMENT_REGION		= #{recruitmentRegion}
 		, RECRUITMENT_DATE			= DEFAULT
-		, RECRUITMENT_START_DATE	= #{recruitmentStartDate}
+		, RECRUITMENT_START_DATE	= DEFAULT
 		, RECRUITMENT_END_DATE		= #{recruitmentEndDate}
 		WHERE RECRUITMENT_NO		= ${recruitmentNo}
 	</update>

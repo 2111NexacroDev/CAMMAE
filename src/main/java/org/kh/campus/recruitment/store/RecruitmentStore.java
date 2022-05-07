@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.recruitment.domain.PageInfo;
 import org.kh.campus.recruitment.domain.Recruitment;
-import org.kh.campus.recruitment.domain.RecruitmentSearch;
 
 
 public interface RecruitmentStore {

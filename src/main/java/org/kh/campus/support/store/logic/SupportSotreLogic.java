@@ -6,7 +6,6 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.support.domain.PageInfo;
 import org.kh.campus.support.domain.Support;
-import org.kh.campus.support.domain.SupportSearch;
 import org.kh.campus.support.store.SupportStore;
 import org.springframework.stereotype.Repository;
 

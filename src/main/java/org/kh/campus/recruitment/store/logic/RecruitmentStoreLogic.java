@@ -6,7 +6,6 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.recruitment.domain.PageInfo;
 import org.kh.campus.recruitment.domain.Recruitment;
-import org.kh.campus.recruitment.domain.RecruitmentSearch;
 import org.kh.campus.recruitment.store.RecruitmentStore;
 import org.springframework.stereotype.Repository;
 

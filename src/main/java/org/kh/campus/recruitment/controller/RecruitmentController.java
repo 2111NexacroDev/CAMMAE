@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.kh.campus.recruitment.domain.PageInfo;
 import org.kh.campus.recruitment.domain.Pagination;
 import org.kh.campus.recruitment.domain.Recruitment;
-import org.kh.campus.recruitment.domain.RecruitmentSearch;
 import org.kh.campus.recruitment.service.RecruitmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
