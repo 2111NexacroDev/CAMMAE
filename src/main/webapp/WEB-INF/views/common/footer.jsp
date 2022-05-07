@@ -9,6 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<br><br>
 	<footer>
 		<div class="footer_tit">서울특별시 중구 남대문로 120 대일빌딩 2F, 3F (T:
 			1544-9970) / F: 02-722-0858)</div>
