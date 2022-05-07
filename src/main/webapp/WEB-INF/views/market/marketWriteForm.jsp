@@ -13,8 +13,12 @@
 .c-main {
 	border: 1px solid #ccc;
 	border-radius: 5px;
-	width: 600px;
+	width: 740px;
 	padding: 30px 30px 30px 30px;
+	margin-top: 45px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    margin-left: 0px;
 }
 </style>
 </head>
@@ -32,8 +36,11 @@
 		<div id="center">
 			<form action="/market/register" method="POST"
 				enctype="multipart/form-data">
-				<h3 id="b-title">질의응답 게시판</h3>
-				<br>
+				<div class="c-title">
+				<div class="b-title">
+					<h2>질의응답게시판</h2>
+				</div>
+				</div>
 				<div class="c-main">
 					<div class="selectBox" style="padding: 10px;">
 						<select id="marketType" name="marketType"
@@ -47,7 +54,7 @@
 						<input type="text" size="50" name="marketTitle"
 							placeholder="제목을 입력하세요" style="border: none; padding: 10px;">
 					</div>
-					<hr style="width: 585px; text-align: center;">
+					<hr style="width: 740px; text-align: center;">
 
 					<div>
 						상품명 &emsp;<input type="text" size="35" name="marketGoods"
@@ -63,7 +70,7 @@
 						<textarea name="marketContent" id="marketContent"></textarea>
 					</div>
 
-					<hr style="width: 585px; text-align: center;">
+					<hr style="width: 740px; text-align: center;">
 					<div align="center" style="padding: 15px;">
 						<button class="btn" type="submit">등록</button>
 						<button type="reset" class="btn" onclick="location.href='/market/list'">취소</button>

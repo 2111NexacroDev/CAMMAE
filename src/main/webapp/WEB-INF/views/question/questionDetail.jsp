@@ -15,11 +15,27 @@
 	width: 740px;
 	padding: 30px 30px 30px 30px;
 	margin-top: 45px;
-    margin-right: 10px;
-    margin-bottom: 20px;
-    margin-left: 0px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+	margin-left: 0px;
+}
+.title{
+	font-size:18.5px;
+}
+#writer {
+	width: 70%;
+	float: left;
+	margin-top:10px;
+	margin-bottom: 10px;
 }
 
+#date {
+	width: 30%;
+	text-align:right;
+	float: left;
+	margin-top:10px;
+	margin-bottom: 10px;
+}
 /* 댓글 */
 #rQuestionWriter {
 	width: 80%;
@@ -64,12 +80,14 @@
 					<button class="btn" onclick="location.href='/question/list'">목록</button>
 				</div>
 			</div>
-			
+
 			<div class="c-main">
 				<div class="title">[${question.professorName }교수 _
 					${question.lectureName }] ${question.questionTitle }</div>
-				<br>
-				<div>${question.questionWriter }${question.questionDate }</div>
+				<div id="writerDate">
+					<div id="writer">1${question.questionWriter }</div>
+					<div id="date">${question.questionDate }</div>
+				</div>
 
 				<hr style="width: 740px; text-align: center;">
 				<div class="content" style="padding: 10px;">
