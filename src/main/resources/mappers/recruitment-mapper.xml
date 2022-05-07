@@ -60,7 +60,7 @@
 		, #{recruitmentSalary}
 		, #{recruitmentRegion}
 		, DEFAULT
-		, #{recruitmentStartDate}
+		, DEFAULT
 		, #{recruitmentEndDate}
 		, #{recruitmentWriter}
 		, DEFAULT

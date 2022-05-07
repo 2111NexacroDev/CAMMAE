@@ -79,7 +79,7 @@ public class RecruitmentController {
 	 
 	//채용공고 등록 화면
 	@RequestMapping(value="/recruitment/writeView.kh")
-	public String recruitmentWriteView() {
+	public String recruitmentWriteView(Model model) {
 		return "/recruitment/recruitmentWriteForm";
 	}
 	
