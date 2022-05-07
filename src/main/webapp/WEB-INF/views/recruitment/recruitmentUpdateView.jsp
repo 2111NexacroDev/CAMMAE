@@ -4,11 +4,26 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="/resources/menuBar.css">
+<link rel="stylesheet" href="/resources/contents.css">
 <title>채용공고 수정</title>
 </head>
 <body>
-	<h1 align="center">채용공고 수정</h1>
+	<!-- header  -->
+	<jsp:include page="../common/menuBar.jsp"></jsp:include>
+
+	<!-- contents영역 -->
+	<div id="content">
+		<div id="left">
+			<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
+		</div>
+
+		<div id="center">
 	<form action="/recruitment/update.kh" method="post">
+			<div class="c-title">
+				<div class="b-title"><h2>채용공고</h2></div>
+				<div class="btn_1"><input class="btn" type="submit" value="수정하기"></div>
+			</div>
 		<input type="hidden" name="recruitmentNo" value="${recruitment.recruitmentNo }">
 		<table>
 			<tr>
@@ -44,19 +59,15 @@
 				<td><input type="text" name="recruitmentRegion" value="${recruitment.recruitmentRegion }"></td>
 			</tr>
 			<tr>
-				<td>시작일</td>
-				<td><input type="date" name="recruitmentStartDate" value="${recruitment.recruitmentStartDate }"></td>
-			</tr>
-			<tr>
 				<td>마감일</td>
 				<td><input type="date" name="recruitmentEndDate" value="${recruitment.recruitmentEndDate }"></td>
 			</tr>
-			<tr>
-				<td colspan="2" align="center">
-					<input type="submit" value="수정하기">
-				</td>
-			</tr>
+			
 		</table>
 	</form>
+	</div>
+	</div>
+	<!-- footer -->
+	<jsp:include page="../common/footer.jsp"></jsp:include>
 </body>
 </html>

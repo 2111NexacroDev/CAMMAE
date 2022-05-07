@@ -49,9 +49,10 @@ table.type02 td {
 	padding : 10px;
 }
 .main_content{
-	width : 100%;
-	height: 100%;
-	
+	width : 800px;
+	height: 360px;
+	border-bottom: 2px solid #ccc;
+	margin-bottom: 40px;
 }
 	.main_content1{
 		height:90%;
@@ -63,13 +64,6 @@ table.type02 td {
 		width:50%;
 		float: left;
 	}
-.main_btn{
-	width:100%;
-	height: 250px;
-	border-bottom: 1px solid #ccc;
-}
-	
-
 #span_1{
 	color:rgb(158, 158, 158);
 	font-size: 14px;
@@ -98,12 +92,14 @@ table.type02 td {
 		<div id="center">
 
 
+			<form action="/recruitment/register.kh" method="post">
 			<div class="c-title">
 				<div class="b-title"><h2>채용공고</h2></div>
-				<div class="btn_1"><button style="width: 50px" class="btn"onclick="location.href='/recruitment/list.kh'">목록</button></div>
+				<div class="btn_1"><input class="btn"  type="submit" value="등록"><button style="width: 50px" class="btn"onclick="location.href='/recruitment/list.kh'">목록</button></div>
 			</div>
-			<br>
-			<form action="/recruitment/register.kh" method="post">
+			
+			<br><br>
+			
 				<table class="type02">
 					<tr>
 						<th scope="row">제목</th>
@@ -142,9 +138,8 @@ table.type02 td {
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div id="map" style="width: 300px; height: 150px; margin-top: 10px; display: none"></div>					
 						</div>
 					</div>
-					<div class="main_btn">
-						<input class="btn"  type="submit" value="등록">										
-					</div>
+																
+					
 			</form>
 			<!-- c27b638af6c98ea42aa55b7709a8c29c -->
 		</div>

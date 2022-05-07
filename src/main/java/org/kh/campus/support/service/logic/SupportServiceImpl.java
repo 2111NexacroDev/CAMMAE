@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.support.domain.PageInfo;
 import org.kh.campus.support.domain.Support;
-import org.kh.campus.support.domain.SupportSearch;
 import org.kh.campus.support.service.SupportService;
 import org.kh.campus.support.store.SupportStore;
 import org.springframework.beans.factory.annotation.Autowired;
