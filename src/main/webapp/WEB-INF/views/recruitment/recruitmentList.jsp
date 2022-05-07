@@ -32,12 +32,12 @@
 			<table class="type01">
 				<thead>
 					<tr>
-						<th scope="cols">번호</th>
-						<th scope="cols">제목</th>
-						<th scope="cols">작성자</th>
-						<th scope="cols">작성일</th>
-						<th scope="cols">조회수</th>
-						<th scope="cols">마감일</th>
+						<th>번호</th>
+						<th>제목</th>
+						<th>작성자</th>
+						<th>작성일</th>
+						<th>조회수</th>
+						<th>마감일</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -48,11 +48,11 @@
 								<c:param name="recruitmentNo"
 									value="${recruitment.recruitmentNo }"></c:param>
 							</c:url>
-							<td scope="row"><a href="${rDetail }">${recruitment.recruitmentTitle }</a></td>
-							<td scope="row">${recruitment.recruitmentWriter }</td>
-							<td scope="row">${recruitment.recruitmentDate }</td>
-							<td scope="row">${recruitment.recruitmentCount }</td>
-							<td scope="row">${recruitment.recruitmentEndDate }</td>
+							<td><a href="${rDetail }">${recruitment.recruitmentTitle }</a></td>
+							<td>${recruitment.recruitmentWriter }</td>
+							<td>${recruitment.recruitmentDate }</td>
+							<td>${recruitment.recruitmentCount }</td>
+							<td>${recruitment.recruitmentEndDate }</td>
 						</tr>
 					</c:forEach>
 				</tbody>
