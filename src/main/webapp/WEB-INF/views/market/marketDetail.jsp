@@ -15,31 +15,42 @@
 	width: 740px;
 	padding: 30px 30px 30px 30px;
 	margin-top: 45px;
-	margin-right: 10px;
-	margin-bottom: 20px;
+	margin-right: 10px; margin-bottom : 20px;
 	margin-left: 0px;
+	margin-bottom: 20px;
 }
-.title{
-	font-size:18.5px;
+
+hr {
+	width: 740px;
+	text-align: center;
+	margin-top:10px;
+	margin-bottom:10px;
 }
-#writerDate{
-	
+
+.title {
+	font-size: 18.5px;
 }
+
 #writer {
 	width: 70%;
 	float: left;
-	margin-top:10px;
+	margin-top: 10px;
 	margin-bottom: 10px;
 }
 
 #date {
 	width: 30%;
-	text-align:right;
+	text-align: right;
 	float: left;
-	margin-top:10px;
+	margin-top: 10px;
 	margin-bottom: 10px;
 }
-
+#mGoods{
+	margin-bottom: 10px;
+}
+#mPrice{
+	margin-bottom: 10px;
+}
 /* 게시물 이미지 크기*/
 .content img {
 	max-width: 100%;
@@ -47,6 +58,17 @@
 }
 
 /* 댓글 */
+#rContents {
+	float: left;
+}
+
+#rbtn {
+	float: left;
+	margin-left: 15px;
+	margin-top: 38px;
+	margin-bottom:10px
+}
+
 #rMarketWriter {
 	width: 80%;
 	float: left;
@@ -99,28 +121,31 @@
 						] ${market.marketTitle }
 					</div>
 					<div id="writerDate">
-						<div  id="writer">1${market.marketWriter }</div>
+						<div id="writer">1${market.marketWriter }</div>
 						<div id="date">${market.marketDate }</div>
 					</div>
-					<hr style="width: 740px; text-align: center;">
-
-					<div>상품명 &emsp;${market.marketGoods }</div>
-					<div>판매가격 ${market.marketPrice } 원</div>
+					
+					<hr>
+					
+					<div id="mGoods">상품명 &emsp;${market.marketGoods }</div>
+					<div id="mPrice">판매가격 ${market.marketPrice } 원</div>
 					<div>
 						<button class="btn" onclick="chatOpen();">판매자와 채팅하기</button>
 					</div>
 
 					<div class="content" style="padding: 10px;">
 						${market.marketContent }</div>
-					<br> 댓글
-					<hr style="width: 740px; text-align: center;">
+					<br> 
+					댓글
+					<hr>
 					<!-- 댓글 입력 -->
 					<div>
 						<input type="hidden" id="marketNo" value="${market.marketNo }">
-						<textarea rows="3" cols="91" id="rContents"></textarea>
+						<textarea rows="4" cols="91" id="rContents"></textarea>
 						<button class="btn" id="rbtn">등록</button>
 					</div>
-					<hr style="width: 740px; text-align: center;">
+					
+					<hr>
 					<!-- 댓글 조회 -->
 					<div id="replyArea">
 						<table align="center" width="740px" id="rtb">

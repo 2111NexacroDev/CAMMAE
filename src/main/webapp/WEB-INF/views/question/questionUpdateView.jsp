@@ -18,6 +18,12 @@
 	margin-bottom: 20px;
 	margin-left: 0px;
 }
+hr {
+	width: 740px;
+	text-align: center;
+	margin-top:10px;
+	margin-bottom:10px;
+}
 </style>
 </head>
 
@@ -62,14 +68,14 @@
 						</select>
 					</div>
 					<div class="title">
-						<input type="text" size="50" name="questionTitle"
+						<input type="text" size="95" name="questionTitle"
 							style="border: none; padding: 10px;"
 							value="${question.questionTitle }">
 
 					</div>
-					<hr style="width: 740px; text-align: center;">
-					<div class="content" style="padding: 10px;">
-						<textarea rows="20" cols="98" id="questionContent"
+					<hr>
+					<div class="content">
+						<textarea rows="20" cols="101" id="questionContent"
 							name="questionContent">	${question.questionContent }</textarea>
 					</div>
 
@@ -78,7 +84,7 @@
 						${question.questionFileName}
 					</div>
 
-					<hr style="width: 740px; text-align: center;">
+					<hr>
 					<div align="center" style="padding: 15px;">
 						<button class="btn" type="submit">수정</button>
 						<button type="reset" class="btn" onclick="location.href='/question/list'">취소</button>

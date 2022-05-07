@@ -54,13 +54,13 @@
 
 					</div>
 					<div class="title">
-						<input type="text" size="50" name="questionTitle"
+						<input type="text" size="95" name="questionTitle"
 							placeholder="제목을 입력하세요" style="border: none; padding: 10px;">
 					</div>
 
 					<hr style="width: 740px; text-align: center;">
-					<div class="content" style="padding: 10px;">
-						<textarea rows="20" cols="98" id="questionContent"
+					<div class="content" >
+						<textarea rows="20" cols="101" id="questionContent"
 							name="questionContent" placeholder="내용을 입력하세요"></textarea>
 					</div>
 

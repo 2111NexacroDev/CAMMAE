@@ -13,10 +13,10 @@
 	width:10%;
 }
 #q2{
-	width:33%;
+	width:22%;
 }
 #q3{
-	width:22%;
+	width:33%;
 }
 #q4{
 	width:10%;

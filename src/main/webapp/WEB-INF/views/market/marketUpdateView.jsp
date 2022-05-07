@@ -19,6 +19,13 @@
 	margin-bottom: 20px;
 	margin-left: 0px;
 }
+
+hr {
+	width: 740px;
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
 </style>
 </head>
 
@@ -60,12 +67,12 @@
 						</select>
 					</div>
 					<div class="title">
-						<input type="text" size="50" name="marketTitle"
+						<input type="text" size="95" name="marketTitle"
 							style="border: none; padding: 10px;"
 							value="${market.marketTitle }">
 
 					</div>
-					<hr style="width: 740px; text-align: center;">
+					<hr>
 
 					<div>
 						상품명 &emsp;<input type="text" size="35" name="marketGoods"
@@ -79,13 +86,14 @@
 					</div>
 
 
-					<div class="content" style="padding: 10px;">
-						<textarea rows="20" cols="98" id="marketContent"
-							name="marketContent">	${market.marketContent }</textarea>
+					<div class="content">
+						<textarea rows="20" cols="98" id="marketContent"name="marketContent">
+						${market.marketContent }
+						</textarea>
 					</div>
 
 
-					<hr style="width: 740px; text-align: center;">
+					<hr>
 					<div align="center" style="padding: 15px;">
 						<button class="btn" type="submit">수정</button>
 						<button type="reset" class="btn"
