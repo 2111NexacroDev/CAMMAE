@@ -20,6 +20,12 @@
     margin-bottom: 20px;
     margin-left: 0px;
 }
+hr {
+	width: 740px;
+	text-align: center;
+	margin-top:10px;
+	margin-bottom:10px;
+}
 </style>
 </head>
 
@@ -51,11 +57,10 @@
 
 					</div>
 					<div class="title">
-						<input type="text" size="50" name="marketTitle"
+						<input type="text" size="95" name="marketTitle"
 							placeholder="제목을 입력하세요" style="border: none; padding: 10px;">
 					</div>
-					<hr style="width: 740px; text-align: center;">
-
+					<hr>
 					<div>
 						상품명 &emsp;<input type="text" size="35" name="marketGoods"
 							placeholder="상품명을 입력해주세요" style="border: none; padding: 10px;">
@@ -67,10 +72,9 @@
 					</div>
 
 					<div>
-						<textarea name="marketContent" id="marketContent"></textarea>
+						<textarea rows="20" cols="98" name="marketContent" id="marketContent"></textarea>
 					</div>
-
-					<hr style="width: 740px; text-align: center;">
+					<hr>
 					<div align="center" style="padding: 15px;">
 						<button class="btn" type="submit">등록</button>
 						<button type="reset" class="btn" onclick="location.href='/market/list'">취소</button>

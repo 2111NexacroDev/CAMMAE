@@ -19,6 +19,12 @@
 	margin-bottom: 20px;
 	margin-left: 0px;
 }
+hr {
+	width: 740px;
+	text-align: center;
+	margin-top:10px;
+	margin-bottom:10px;
+}
 .title{
 	font-size:18.5px;
 }
@@ -37,6 +43,16 @@
 	margin-bottom: 10px;
 }
 /* 댓글 */
+#rContents {
+	float: left;
+}
+
+#rbtn {
+	float: left;
+	margin-left: 15px;
+	margin-top: 38px;
+	margin-bottom:10px
+}
 #rQuestionWriter {
 	width: 80%;
 	float: left;
@@ -89,7 +105,7 @@
 					<div id="date">${question.questionDate }</div>
 				</div>
 
-				<hr style="width: 740px; text-align: center;">
+				<hr>
 				<div class="content" style="padding: 10px;">
 					${question.questionContent }
 					<c:if test="${not empty question.questionFileReNeme }">
@@ -101,15 +117,15 @@
 					</c:if>
 				</div>
 				<br> 댓글
-				<hr style="width: 740px; text-align: center;">
+				<hr>
 				<!-- 댓글 입력 -->
 				<div>
 					<input type="hidden" id="questionNo"
 						value="${question.questionNo }">
-					<textarea rows="3" cols="91" id="rContents"></textarea>
+					<textarea rows="4" cols="91" id="rContents"></textarea>
 					<button class="btn" id="rbtn">등록</button>
 				</div>
-				<hr style="width: 740px; text-align: center;">
+				<hr>
 				<!-- 댓글 조회 -->
 				<div id="replyArea">
 					<table align="center" width="700px" id="rtb">
