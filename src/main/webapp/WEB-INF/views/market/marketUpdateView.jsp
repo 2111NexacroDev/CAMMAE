@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,8 +12,12 @@
 .c-main {
 	border: 1px solid #ccc;
 	border-radius: 5px;
-	width: 600px;
+	width: 740px;
 	padding: 30px 30px 30px 30px;
+	margin-top: 45px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+	margin-left: 0px;
 }
 </style>
 </head>
@@ -33,14 +38,25 @@
 				<input type="hidden" name="marketNo" value="${market.marketNo }">
 
 
-				<h3 id="b-title">중고거래 게시판</h3>
-				<br>
+				<div class="c-title">
+					<div class="b-title">
+						<h2>중고거래게시판</h2>
+					</div>
+				</div>
 				<div class="c-main">
 					<div class="selectBox" style="padding: 10px;">
 						<select id="marketType" name="marketType"
 							style="border: none; width: 250px;">
-							<option value="S">팝니다</option>
-							<option value="B">삽니다</option>
+							<option value="${market.marketType }">
+								<c:if test="${market.marketType eq 'S' }">팝니다</c:if>
+								<c:if test="${market.marketType eq 'B'}">삽니다</c:if>
+							</option>
+							<c:if test="${market.marketType eq 'S' }">
+								<option value="B">삽니다</option>
+							</c:if>
+							<c:if test="${market.marketType eq 'B'}">
+								<option value="S">팝니다</option>
+							</c:if>
 						</select>
 					</div>
 					<div class="title">
@@ -49,7 +65,7 @@
 							value="${market.marketTitle }">
 
 					</div>
-					<hr style="width: 585px; text-align: center;">
+					<hr style="width: 740px; text-align: center;">
 
 					<div>
 						상품명 &emsp;<input type="text" size="35" name="marketGoods"
@@ -64,15 +80,16 @@
 
 
 					<div class="content" style="padding: 10px;">
-						<textarea rows="20" cols="75" id="marketContent"
+						<textarea rows="20" cols="98" id="marketContent"
 							name="marketContent">	${market.marketContent }</textarea>
 					</div>
 
 
-					<hr style="width: 585px; text-align: center;">
+					<hr style="width: 740px; text-align: center;">
 					<div align="center" style="padding: 15px;">
 						<button class="btn" type="submit">수정</button>
-						<button type="reset" class="btn" onclick="location.href='/market/list'">취소</button>
+						<button type="reset" class="btn"
+							onclick="location.href='/market/list'">취소</button>
 					</div>
 				</div>
 			</form>

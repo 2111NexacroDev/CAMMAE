@@ -6,7 +6,28 @@
 <head>
 <meta charset="UTF-8">
 <title>중고거래 게시판</title>
+<link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
+<style>
+#m1{
+	width:10%;
+}
+#m2{
+	width:15%;
+}
+#m3{
+	width:40%;
+}
+#m4{
+	width:10%;
+}
+#m5{
+	width:15%;
+}
+#m6{
+	width:10%;
+}
+</style>
 </head>
 
 <body>
@@ -20,21 +41,22 @@
 		</div>
 		<!-- contents-main -->
 		<div id="center">
-			<h3 id="b-title">중고거래 게시판</h3>
-			<br>
-			<div>
-				<button class="btn" onclick="location.href='/market/registerView'">글쓰기</button>
+			<div class="c-title">
+				<div class="b-title"><h2>중고거래게시판</h2></div>
+				<div class="btn_1"><button class="btn" style="width: 80px"onclick="location.href='/market/registerView'">글쓰기</button></div>
 			</div>
-			<br>
-			<table width="600px" border="1">
+			<table class="type01">
+			<thead>
 				<tr>
-					<th>번호</th>
-					<th>구분</th>
-					<th>제목</th>
-					<th>작성자</th>
-					<th>작성일</th>
-					<th>조회수</th>
+					<th id="m1">번호</th>
+					<th id="m2">구분</th>
+					<th id="m3">제목</th>
+					<th id="m4">작성자</th>
+					<th id="m5">작성일</th>
+					<th id="m6">조회수</th>
 				</tr>
+			</thead>
+			<tbody>
 				<c:forEach items="${mList }" var="market">
 					<tr>
 						<td>${market.marketNo }</td>
@@ -49,10 +71,11 @@
 						<td>${market.marketCount }</td>
 					</tr>
 				</c:forEach>
+			</tbody>
 			</table>
 			<br>
 			<!-- 게시글 검색 -->
-			<div>
+			<div align="center">
 				<form action="/market/list" method="get">
 					<select name="searchCondition">
 						<option value="all">전체</option>
@@ -65,11 +88,10 @@
 			</div>
 			<br>
 			<!-- 페이지 -->
-			<div>
+			<div class="paging" align="center">
 				<c:if test="${pi.startNavi !=1 }">
-
 					<a href="/market/list?page=${pi.startNavi-1}">
-						<button>이전</button>
+						<button class="pbtn">＜</button>
 					</a>
 
 				</c:if>
@@ -93,12 +115,12 @@
 					</c:if>
 
 
-					<a href="${pagination }">${p }</a>&nbsp;
+					 <a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
 			</c:forEach>
 				<c:if test="${pi.next && pi.endNavi > 0}">
 
 					<a href="/market/list?page=${pi.endNavi+1}">
-						<button>다음</button>
+						<button class="pbtn">＞</button>
 					</a>
 
 				</c:if>

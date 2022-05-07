@@ -68,6 +68,7 @@ public class MarketController {
 				mv.addObject("mList", mList);
 				mv.addObject("pageInfo", pageInfo);
 				mv.addObject("menu", "market");
+				mv.addObject("currentPage", currentPage);
 				mv.setViewName("market/marketList");
 			} else {
 				mv.setViewName("market/marketList");
