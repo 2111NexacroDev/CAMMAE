@@ -48,6 +48,7 @@ hr {
 				</div>
 				</div>
 				<div class="c-main">
+				<input type="hidden" name="marketWriter" value="${loginUser.studentName}">
 					<div class="selectBox" style="padding: 10px;">
 						<select id="marketType" name="marketType"
 							style="border: none; width: 250px;">
