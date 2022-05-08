@@ -112,8 +112,13 @@ public class QuestionController {
 		
 		List<Lecture> lList = qService.printAllPro();
 		Student student = (Student)session.getAttribute("loginUser");
+		
+		if(session.getAttribute("loginUser")==null) {
+			return "/login/login";
+		}
+		
 		if(!lList.isEmpty()) {
-			model.addAttribute("studentName", student.getStudentName());
+			model.addAttribute("questionWriter", student.getStudentName());
 			model.addAttribute("lList", lList);
 			model.addAttribute("menu", "question");
 		}

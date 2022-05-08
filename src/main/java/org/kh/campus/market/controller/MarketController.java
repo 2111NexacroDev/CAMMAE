@@ -120,8 +120,11 @@ public class MarketController {
 	// 게시글 등록 페이지
 	@RequestMapping(value = "/market/registerView")
 	public String marketWirteView(Model model, HttpSession session) {
+		if(session.getAttribute("loginUser")==null) {
+			return "/login/login";
+		}
 		Student student = (Student)session.getAttribute("loginUser");
-		model.addAttribute("studentName", student.getStudentName());
+		model.addAttribute("marketWriter", student.getStudentName());
 		model.addAttribute("menu", "market");
 		return "market/marketWriteForm";
 	}

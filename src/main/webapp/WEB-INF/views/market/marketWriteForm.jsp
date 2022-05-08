@@ -44,7 +44,7 @@ hr {
 				enctype="multipart/form-data">
 				<div class="c-title">
 				<div class="b-title">
-					<h2>질의응답게시판</h2>
+					<h2>중고거래게시판</h2>
 				</div>
 				</div>
 				<div class="c-main">
