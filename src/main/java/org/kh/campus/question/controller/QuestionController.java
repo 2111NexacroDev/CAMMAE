@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.question.domain.PageInfo;
@@ -14,6 +15,7 @@ import org.kh.campus.question.domain.Pagination;
 import org.kh.campus.question.domain.Question;
 import org.kh.campus.question.domain.QuestionReply;
 import org.kh.campus.question.service.QuestionService;
+import org.kh.campus.student.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -106,10 +108,17 @@ public class QuestionController {
 
 	// 게시글 등록페이지
 	@RequestMapping(value = "/question/registerView")
-	public String questionWriteView(Model model) {
+	public String questionWriteView(Model model, HttpSession session) {
 		
 		List<Lecture> lList = qService.printAllPro();
+		Student student = (Student)session.getAttribute("loginUser");
+		
+		if(session.getAttribute("loginUser")==null) {
+			return "/login/login";
+		}
+		
 		if(!lList.isEmpty()) {
+			model.addAttribute("questionWriter", student.getStudentName());
 			model.addAttribute("lList", lList);
 			model.addAttribute("menu", "question");
 		}

@@ -99,7 +99,7 @@ hr {
 		<div id="center">
 			<div class="c-title">
 				<div class="b-title">
-					<h2>질의응답게시판</h2>
+					<h2>중고거래게시판</h2>
 				</div>
 				<div class="btn_1">
 					<c:url var="mModify" value="/market/modifyView">

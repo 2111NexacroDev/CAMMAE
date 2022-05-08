@@ -44,10 +44,11 @@ hr {
 				enctype="multipart/form-data">
 				<div class="c-title">
 				<div class="b-title">
-					<h2>질의응답게시판</h2>
+					<h2>중고거래게시판</h2>
 				</div>
 				</div>
 				<div class="c-main">
+				<input type="hidden" name="marketWriter" value="${loginUser.studentName}">
 					<div class="selectBox" style="padding: 10px;">
 						<select id="marketType" name="marketType"
 							style="border: none; width: 250px;">

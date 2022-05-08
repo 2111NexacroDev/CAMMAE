@@ -40,6 +40,7 @@
 				</div>
 				</div>
 				<div class="c-main">
+				<input type="hidden" name="questionWriter" value="${loginUser.studentName}">
 					<div class="selectBox" style="padding:10px;">
 						<select id="professorName" name="professorName"
 							onchange="getProName()" style="border: none; width: 330px;">

@@ -15,11 +15,13 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.kh.campus.market.domain.Market;
 import org.kh.campus.market.domain.MarketReply;
 import org.kh.campus.market.service.MarketService;
 import org.kh.campus.question.domain.QuestionReply;
+import org.kh.campus.student.domain.Student;
 import org.kh.campus.market.domain.PageInfo;
 import org.kh.campus.market.domain.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +119,12 @@ public class MarketController {
 
 	// 게시글 등록 페이지
 	@RequestMapping(value = "/market/registerView")
-	public String marketWirteView(Model model) {
+	public String marketWirteView(Model model, HttpSession session) {
+		if(session.getAttribute("loginUser")==null) {
+			return "/login/login";
+		}
+		Student student = (Student)session.getAttribute("loginUser");
+		model.addAttribute("marketWriter", student.getStudentName());
 		model.addAttribute("menu", "market");
 		return "market/marketWriteForm";
 	}
