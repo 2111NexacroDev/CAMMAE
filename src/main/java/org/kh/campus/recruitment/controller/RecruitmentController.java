@@ -63,7 +63,7 @@ public class RecruitmentController {
 			Recruitment recruitment = rService.printOneRecruitment(recruitmentNo);
 			if(recruitment != null) {
 				rService.recruitmentCountUpdate(recruitment.getRecruitmentNo());
-				
+				mv.addObject("menu", "recruitment");
 				mv.addObject("recruitment",recruitment);
 				mv.setViewName("/recruitment/recruitmentDetail");
 			}else {
@@ -79,6 +79,7 @@ public class RecruitmentController {
 	//채용공고 등록 화면
 	@RequestMapping(value="/recruitment/writeView.kh")
 	public String recruitmentWriteView(Model model) {
+		model.addAttribute("menu", "recruitment");
 		return "/recruitment/recruitmentWriteForm";
 	}
 	
@@ -108,6 +109,7 @@ public class RecruitmentController {
 		try {
 			Recruitment recruitment = rService.printOneRecruitment(recruitmentNo);
 			if(recruitment != null) {
+				model.addAttribute("menu", "recruitment");
 				model.addAttribute("recruitment", recruitment);
 				return "recruitment/recruitmentUpdateView";
 			}else {
