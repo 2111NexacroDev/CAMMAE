@@ -296,8 +296,8 @@ public class QuestionController {
 	@RequestMapping(value = "/question/replyAdd", method = RequestMethod.POST)
 	public String questionReplyAdd(@ModelAttribute QuestionReply questionReply) {
 		// 로그인 완성 후 변경 예정
-		String questionReplyWriter = "교수";
-		questionReply.setQuestionReplyWriter(questionReplyWriter);
+		//String questionReplyWriter = "교수";
+		//questionReply.setQuestionReplyWriter(questionReplyWriter);
 
 		int result = qService.registerReply(questionReply);
 		if (result > 0) {
