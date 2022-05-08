@@ -90,8 +90,6 @@ table.type02 td {
 		</div>
 
 		<div id="center">
-
-
 			<form action="/recruitment/register.kh" method="post">
 			<div class="c-title">
 				<div class="b-title"><h2>채용공고</h2></div>
@@ -115,7 +113,7 @@ table.type02 td {
 					</tr>
 					</table>
 					<br>
-					<input class="companyName"type="text" name="recruitmentCompanyName" placeholder="기업명" style="text-align: center">
+					<input class="companyName" type="text" name="recruitmentCompanyName" placeholder="기업명" style="text-align: center">
 					<br><br><br><br>
 					<div class="main_content">
 						<div class="main_content1">
