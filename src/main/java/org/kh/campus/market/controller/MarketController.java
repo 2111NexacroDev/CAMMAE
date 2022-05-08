@@ -314,8 +314,8 @@ public class MarketController {
 		@RequestMapping(value = "/market/replyAdd", method = RequestMethod.POST)
 		public String questionReplyAdd(@ModelAttribute MarketReply marketReply) {
 			// 로그인 완성 후 변경 예정
-			String mReplyWriter = "학생";
-			marketReply.setmReplyWriter(mReplyWriter);
+			//String mReplyWriter = "학생";
+			//marketReply.setmReplyWriter(mReplyWriter);
 
 			int result = mService.registerReply(marketReply);
 			if (result > 0) {

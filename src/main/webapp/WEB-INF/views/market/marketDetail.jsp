@@ -15,7 +15,8 @@
 	width: 740px;
 	padding: 30px 30px 30px 30px;
 	margin-top: 45px;
-	margin-right: 10px; margin-bottom : 20px;
+	margin-right: 10px;
+	margin-bottom: 20px;
 	margin-left: 0px;
 	margin-bottom: 20px;
 }
@@ -23,8 +24,8 @@
 hr {
 	width: 740px;
 	text-align: center;
-	margin-top:10px;
-	margin-bottom:10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .title {
@@ -45,10 +46,12 @@ hr {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
-#mGoods{
+
+#mGoods {
 	margin-bottom: 10px;
 }
-#mPrice{
+
+#mPrice {
 	margin-bottom: 10px;
 }
 /* 게시물 이미지 크기*/
@@ -66,7 +69,7 @@ hr {
 	float: left;
 	margin-left: 15px;
 	margin-top: 38px;
-	margin-bottom:10px
+	margin-bottom: 10px
 }
 
 #rMarketWriter {
@@ -121,12 +124,12 @@ hr {
 						] ${market.marketTitle }
 					</div>
 					<div id="writerDate">
-						<div id="writer">1${market.marketWriter }</div>
+						<div id="writer">${market.marketWriter }</div>
 						<div id="date">${market.marketDate }</div>
 					</div>
-					
+
 					<hr>
-					
+
 					<div id="mGoods">상품명 &emsp;${market.marketGoods }</div>
 					<div id="mPrice">판매가격 ${market.marketPrice } 원</div>
 					<div>
@@ -135,8 +138,7 @@ hr {
 
 					<div class="content" style="padding: 10px;">
 						${market.marketContent }</div>
-					<br> 
-					댓글
+					<br> 댓글
 					<hr>
 					<!-- 댓글 입력 -->
 					<div>
@@ -144,7 +146,7 @@ hr {
 						<textarea rows="4" cols="91" id="rContents"></textarea>
 						<button class="btn" id="rbtn">등록</button>
 					</div>
-					
+
 					<hr>
 					<!-- 댓글 조회 -->
 					<div id="replyArea">
@@ -176,15 +178,22 @@ hr {
 	<!-- 댓글동작  -->
 	<script>
 		getMarketReplyList(); //페이지가 로드 시 함수 동작
+		
 		$("#rbtn").on("click", function() {
 			var marketNo = $("#marketNo").val(); /* 어떤 게시글에 대한 댓글인지 알기 위함 */
 			var rContents = $("#rContents").val();
+			var rWriter = "${loginUser.studentName}";
+			<c:if test="${empty sessionScope.loginUser }">
+			alert("로그인을 해주세요.");
+			</c:if>
+			<c:if test="${not empty loginUser }">
 			$.ajax({
 				url : "/market/replyAdd",
 				type : "post",
 				data : {
 					"marketNo" : marketNo,
-					"mReplyContent" : rContents
+					"mReplyContent" : rContents,
+					"mReplyWriter": rWriter
 				}, //json형태
 				success : function(data) {
 					getMarketReplyList();
@@ -195,6 +204,7 @@ hr {
 					alert("ajax 실패")
 				}
 			});
+			</c:if>
 		})
 
 		//댓글 불러오는 함수
