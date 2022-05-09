@@ -26,9 +26,4 @@ public class StudentServiceImpl implements StudentService {
 		int result = sStore.updateStudent(student, sqlSession);
 		return result;
 	}
-	@Override
-	public Student loginStudent(Student student) {
-		Student studentOne = sStore.selectLoginStudent(sqlSession, student);
-		return studentOne;
-	}
 }
