@@ -90,7 +90,7 @@ hr {
 				</div>
 				<div class="btn_1">
 					<c:if
-						test="${sessionScope.loginUser.studentName eq question.questionWriter || sessionScope.loginManager ne null}">
+						test="${sessionScope.loginUser.studentNo eq question.questionId || sessionScope.loginManager ne null}">
 						<c:url var="qModify" value="/question/modifyView">
 							<c:param name="questionNo" value="${question.questionNo }"></c:param>
 						</c:url>
