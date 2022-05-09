@@ -105,7 +105,7 @@ table.type02 td {
 					</div>
 					<div class="btn_1">
 						<input class="btn" type="submit" value="등록">
-						<button style="width: 50px" class="btn"
+						<button type="reset" style="width: 50px" class="btn"
 							onclick="location.href='/recruitment/list.kh'">목록</button>
 					</div>
 				</div>
