@@ -110,9 +110,6 @@ public class ScholarshipController {
 		String scholarship_college = dsGet(dsScholar, 0, "scholarship_college");
 		Scholarship scholarship = new Scholarship(scholarship_year, scholarship_term, scholarship_college);
 		List<Scholarship> sList = sService.printAllScholar(scholarship);
-		System.out.println(scholarship_year);
-		System.out.println(scholarship_term);
-		System.out.println(scholarship_college);
 
 		result.addDataSet("out_scholarship", sList);
 		result.addVariable("ErrorCode", nErrorCode);

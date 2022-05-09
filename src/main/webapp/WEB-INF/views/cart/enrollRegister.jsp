@@ -7,10 +7,22 @@
 <meta charset="UTF-8">
 <title>수강신청</title>
 </head>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <body>
 	<h1 align="center">수강신청</h1>
 	<br><br>
-	<table align="center" width="600" border="1">
+	<label for="lectureSelect">학과</label>
+	<select id="lecList"> 
+		<option value="전체" >전체</option> 
+		<option value="1">컴퓨터공학과</option> 
+		<option value="2">전자전기공학과</option>
+		<option value="3">산업디자인학과</option>
+		<option value="4">중국어학과</option>
+		<option value="5">유비쿼터스학과</option>
+		<option value="6">국어국문학과</option>
+	</select>
+	<input type="button" value="검색"  onclick="getList();">
+	<table align="center" width="1200" border="1" id="lectureTable">
 		<tr>
 			<th>신청하기</th>
 			<th>과목코드</th>
@@ -25,7 +37,7 @@
 			<th>강의시간</th>
 		</tr>
 		<c:forEach items="${lList }" var="lList">
-			<tr>
+			<tr class="lecTr">
 				<td>
 				<c:url var="lPick" value="/cart/lectureEnroll.kh">
 				<c:param name="lectureNo" value="${lList.lectureNo }"></c:param></c:url>
@@ -45,5 +57,70 @@
 		
 		</c:forEach>
 	</table>
+	
+	<script>
+		function getList() {
+			var lectureDepartment = $('#lecList').val();
+			$.ajax({
+				url : "/cart/enrollRegister2.kh",
+				type : "get",
+				data : { "lecturedep" : lectureDepartment },
+				success : function(data) {
+					$(".lecTr").remove();
+					var $tableBody = $("#lectureTable");
+					var $tr;
+					var $lecNo;
+					var $lecDep
+					var $lecUniCol;
+					var $lecName;
+					var $lecProName;
+					var $lecDivision;
+					var $lecGrade;
+					var $lecRoom;
+					var $lecPeople;
+					var $lecTime;
+					var $btnArea;
+					
+					
+					var $tr;
+					$("#rCount").text("댓글 (" + data.length + ")"); //댓글 갯수 표시
+					// document.querySelector("#rCount").value = "댓글 (" + data.length + ")";
+					if(data.length > 0) {
+						for(var i in data) {
+							$tr = $("<tr>");
+							
+							$lecNo = $("<td width='100'>").text(data[i].lectureNo);
+							$lecDep = $("<td width='100'>").text(data[i].lectureDepartment);
+							$lecUniCol = $("<td width='100'>").text(data[i].universityCollege);
+							$lecName = $("<td width='100'>").text(data[i].lectureName);
+							$lecProName = $("<td width='100'>").text(data[i].professorName);
+							$lecDivision = $("<td width='100'>").text(data[i].lectureDivision);
+							$lecGrade = $("<td width='100'>").text(data[i].lectureGrade);
+							$lecRoom = $("<td width='100'>").text(data[i].lectureRoom);
+							$lecPeople = $("<td width='100'>").text(data[i].lecturePeople);
+							$lecTime = $("<td width='100'>").text(data[i].lectureTime);
+							$btnArea = $("<td width='80'>")
+							.append("<a href='javascript:void(0);' onclick='/cart/lectureEnroll.kh?lectureNo="+data[i].lectureNo+"'>신청</a>");
+							$tr.append($btnArea);
+							$tr.append($lecNo);
+							$tr.append($lecDep);
+							$tr.append($lecUniCol);
+							$tr.append($lecName);
+							$tr.append($lecProName);
+							$tr.append($lecDivision);
+							$tr.append($lecGrade);
+							$tr.append($lecRoom);
+							$tr.append($lecPeople);
+							$tr.append($lecTime);
+							$tableBody.append($tr);
+						}
+					}
+				},
+				error : function() {
+					alert("ajax 통신 실패! 관리자에게 문의하세요.");
+				}
+			});
+		}
+	</script>
 </body>
 </html>

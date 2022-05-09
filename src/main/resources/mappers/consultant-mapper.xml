@@ -34,7 +34,7 @@
 	</select>
 	
 	<select id="selectAllCons" resultMap="consultantResultMap">
-	 SELECT * FROM CONSULTANT_TBL WHERE CONS_STUDENT_NO = #{cons_student_no}
+	 SELECT * FROM CONSULTANT_TBL WHERE CONS_STUDENT_NO = #{cons_student_no} ORDER BY  CONS_NO
 	</select>
 	
 	<select id="printByStNo" parameterType="Consultant" resultMap="consultantResultMap">

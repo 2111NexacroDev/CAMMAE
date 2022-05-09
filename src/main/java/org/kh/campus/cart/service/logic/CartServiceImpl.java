@@ -51,8 +51,8 @@ public class CartServiceImpl implements CartService {
 	
 	
 	@Override
-	public List<Lecture> printAllenroll() {
-		List<Lecture> lList = cStore.selectAllEnroll(sqlSession);
+	public List<Lecture> printAllenroll(String lectureDepartment) {
+		List<Lecture> lList = cStore.selectAllEnroll(sqlSession, lectureDepartment);
 		return lList;
 	}
 
@@ -72,6 +72,12 @@ public class CartServiceImpl implements CartService {
 	public int removeEnroll(HashMap<String, Integer> map) {
 		int result = cStore.deleteEnroll(sqlSession, map);
 		return result;
+	}
+
+	@Override
+	public List<Lecture> printAllenroll2(String lectureDepartment) {
+		List<Lecture> lList = cStore.selectAllEnroll2(sqlSession, lectureDepartment);
+		return lList;
 	}
 
 

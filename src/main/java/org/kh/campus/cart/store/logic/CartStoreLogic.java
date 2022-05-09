@@ -37,8 +37,8 @@ public class CartStoreLogic implements CartStore {
 	}
 
 	@Override
-	public List<Lecture> selectAllEnroll(SqlSession sqlSession) {
-		List<Lecture> lList = sqlSession.selectList("CartMapper.selectAllEnroll");
+	public List<Lecture> selectAllEnroll(SqlSession sqlSession, String lectureDepartment) {
+		List<Lecture> lList = sqlSession.selectList("CartMapper.selectAllEnroll", lectureDepartment);
 		return lList;
 	}
 
@@ -57,6 +57,12 @@ public class CartStoreLogic implements CartStore {
 	@Override
 	public List<Lecture> selectMyEnroll(SqlSession sqlSession) {
 		List<Lecture> lList = sqlSession.selectList("CartMapper.selectMyEnroll");
+		return lList;
+	}
+
+	@Override
+	public List<Lecture> selectAllEnroll2(SqlSession sqlSession, String lectureDepartment) {
+		List<Lecture> lList = sqlSession.selectList("CartMapper.selectAllEnroll2", lectureDepartment);
 		return lList;
 	}
 
