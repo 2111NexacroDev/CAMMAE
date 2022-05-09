@@ -6,7 +6,7 @@ public class Question {
 	private String lectureName;
 	private String questionTitle;
 	private String questionContent;
-	private String questionId;
+	private int questionId;
 	private String questionWriter;
 	private String questionDate;
 	private String questionUpdateDate;
@@ -18,7 +18,7 @@ public class Question {
 	public Question() {}
 
 	public Question(int questionNo, String professorName, String lectureName, String questionTitle,
-			String questionContent, String questionId, String questionWriter, String questionDate,
+			String questionContent, int questionId, String questionWriter, String questionDate,
 			String questionUpdateDate, int questionCount, String questionFileName, String questionFileReNeme,
 			String questionFilePath) {
 		super();
@@ -77,11 +77,11 @@ public class Question {
 		this.questionContent = questionContent;
 	}
 
-	public String getQuestionId() {
+	public int getQuestionId() {
 		return questionId;
 	}
 
-	public void setQuestionId(String questionId) {
+	public void setQuestionId(int questionId) {
 		this.questionId = questionId;
 	}
 
@@ -151,6 +151,7 @@ public class Question {
 				+ ", questionFilePath=" + questionFilePath + "]";
 	}
 
+	
 	
 	
 	
