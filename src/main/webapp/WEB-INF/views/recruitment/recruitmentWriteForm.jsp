@@ -155,7 +155,6 @@ table.type02 td {
 					</div>
 					<br>
 					<br>
-					<!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
 				</div>
 			</form>
 			<!-- c27b638af6c98ea42aa55b7709a8c29c -->
