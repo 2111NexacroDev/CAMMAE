@@ -31,8 +31,4 @@
 		STUDENT_EMAIL = #{studentEmail}
 		WHERE STUDENT_NO = #{studentNo}
 	</update>
-	
-	<select id="selectLoginStudent" resultMap="studentResultMap">
-		SELECT * FROM STUDENT_TBL WHERE STUDENT_NO = #{studentNo} AND STUDENT_PASSWORD = #{studentPassword}
-	</select>
 </mapper>
