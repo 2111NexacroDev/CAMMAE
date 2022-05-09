@@ -54,7 +54,6 @@ public class BoardController {
 		} else if(session.getAttribute("loginProfessor")!=null) {
 			String universityCodePrf = ((Professor)(session.getAttribute("loginProfessor"))).getUniversityCode();
 			universityCode = (universityCode != null) ? universityCode : universityCodePrf;	
-			System.out.println(universityCode+"test");
 		}
 		
 		
@@ -176,7 +175,6 @@ public class BoardController {
 			}
 			String universityCode = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
 			board.setUniversityCode(universityCode);
-			System.out.println(universityCode);
 			int result = service.registerBoard(board);
 			if (result > 0) {
 				mv.setViewName("redirect:/board/list.kh?universityCode="+universityCode);
