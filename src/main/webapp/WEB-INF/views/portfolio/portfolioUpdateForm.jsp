@@ -1,77 +1,70 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>학생 포트폴리오 수정 페이지</title>
+<title>학생 포트폴리오 목록 조회 페이지</title>
+<link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
 <style>
-.tb1{
-position: relative;
-border-top: 1px solid #ccc;
-font-size: 16px;
+.bbs {
+	position: relative;
+	margin-bottom: 40px;
 }
 
-.tb1 table{
-position: relative;
-border-top: 1px solid #fff;
-width: 100%;
+.bbs table {
+	width: 1000px;
+	border-top: 1px solid #343434;
 }
-colgroup {
-    display: table-column-group;
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
 }
-tbody {
-    display: table-row-group;
-    vertical-align: middle;
-    border-color: inherit;
+
+thead {
+	background: rgb(237, 237, 237);
+	height: 50px;
+	border-bottom: 2px solid #c2c2c2;
 }
+
 tr {
-    display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;
-}
-.tb1 table tbody th {
-    padding: 17px 12px;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    color: white;
-    background: #10412C;
+	display: table-row;
+	border-color: inherit;
 }
 
-.tb1 table tbody td {
-    padding: 17px 12px;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    color: #000;
+tbody {
+	display: table-row-group;
+	vertical-align: middle;
+	border-color: inherit;
 }
 
-.ta_l {
-    text-align: left !important;
+.bbs_ table th, .bbs table td {
+	padding: 12px 10px;
+	border-bottom: 1px solid #c2c2c2;
+	font-size: 16px;
 }
 
-.input-btn{
+.bbs table .space {
+	background: #fdfdfd;
+}
+
+.ta {
 	text-align: center;
-
 }
-.a-btn{
-	float: right;
-}
-
-#btn{
-cursor: pointer;
+td a{
+	text-decoration: none;
+	color: black;
 }
 </style>
 </head>
-
+<c:if test="${empty sessionScope}">
+	<jsp:forward page="/login/loginPage.kh" />
+</c:if>
+<c:if test="${not empty sessionScope.loginUser}">
 <body>
-	<c:if test="${empty sessionScope}">
-		<jsp:forward page="/login/loginPage.kh" />
-	</c:if>
-
-	<c:if test="${not empty sessionScope.loginUser }">
-	<!-- header  -->
+<!-- header  -->
 	<jsp:include page="../common/menuBar.jsp"></jsp:include>
 	<!-- contents -->
 	<div id="content">
@@ -80,86 +73,71 @@ cursor: pointer;
 		</div>
 		<!-- contents-main -->
 		<div id="center">
-			<br>
-			<div class="bbs">
-				<h2 align="left" style="color: rgb(0, 74, 38)">포트폴리오</h2>
-				<form action="/portfolio/modify.kh" method="post"
-					enctype="multipart/form-data">
-					<input type="hidden" name="port_no" value="${portfolio.port_no}" />
-					<input type="hidden" name="port_licenseRename" value="${portfolio.port_licenseRename}"> 
-					<input type="hidden" name="port_licenseFilePath" value="${portfolio.port_licenseFilePath}"> 
-					<input type="hidden" name="port_award_historyRename" value="${portfolio.port_award_historyRename}">
-					<input type="hidden" name="port_awardFilePath" value="${portfolio.port_awardFilePath}">
-					
-					
-					<div class="tb1">
-					<table>
-						<colgroup>
-							<col style="width:180px;">
-							<col>
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="ta_l">제목</th>
-								<td class="ta_l"><input type="text" name="port_title" value="${portfolio.port_title}"></td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">이름</th>
-								<td class="ta_l"><input type="text" name="port_name" value="${portfolio.port_name}"></td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">학번</th>
-								<td class="ta_l"><input type="text" name="port_college" readonly value="${portfolio.port_college }"></td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">학과명</th>
-								<td class="ta_l"><input type="text" name="port_student_number"	value="${portfolio.port_student_number}" readonly></td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">단과대학</th>
-								<td class="ta_l"><input type="text" name="port_university_code" value="${portfolio.port_university_code }" /></td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">전화번호</th>
-								<td class="ta_l"><input type="text" name="port_student_number"	value="${portfolio.port_student_number}" readonly></td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">자격증 첨부</th>
-								<td class="ta_l"><input type="file" name="reloadFile" >${portfolio.port_license}</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">수상이력 첨부</th>
-								<td class="ta_l"> <input type="file" name="reloadFile1">${portfolio.port_award_history}</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">작성날짜</th>
-								<td class="ta_l"> <input type="text" name="port_writerDate" value="${portfolio.port_writerDate}" readonly></td>
-							</tr>
-							
-							<tr>
-								<th scope="row" class="ta_l">내용</th>
-								<td class="ta_l"> <textarea type="text" name="port_content" value="${portfolio.port_content}"></textarea></td>
-							</tr>
-						</tbody>
-					  </table>
-					</div>
-					<br>
-					<div class="enr_btn">
-						<div class="input-btn">
-							<button type="submit"  id="btn" class="btn" >수정</button><br> 
+				<h3 id="b-title">포트폴리오 관리</h3>
+				<br>
+				  <div class="bbs">
+							<table>
+								
+								<thead>
+									<tr >
+										<th>번호</th>
+										<th>제목</th>
+										<th>작성자</th>
+										<th>내용</th>
+										<th>자격증첨부</th>
+										<th>수상이력첨부</th>
+										<th>작성날짜</th>	
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach items="${pList}" var="portfolio">
+										<tr class="space">
+											<td class="ta">${portfolio.port_no}</td>
+											<c:url var="pDetail" value="/portfolio/Detail.kh">
+												<c:param name="port_no" value="${portfolio.port_no}"></c:param>
+											</c:url>
+											<td class="ta"><a href="${pDetail}">${portfolio.port_title }</a></td>
+											<td>${portfolio.port_name}</td>
+											<td >${portfolio.port_content}</td>	
+											<td class="ta" id="license">${portfolio.port_license}</td>
+											<td class="ta" id="award_history">${portfolio.port_award_history}</td>
+											<td class="ta" id="writeDate">${portfolio.port_writerDate}</td>		
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+							<div class="paging" align="center">
+
+								<c:if test="${pi.startNavi !=1}">
+
+									<a href="/portfolio/adminListView.kh?page=${pi.startNavi-1}"> 
+										<button class="pbtn">＜</button>
+									</a>
+
+								</c:if>
+
+								<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
+									<c:url var="pagination" value="/portfolio/listView.kh">
+										<c:param name="page" value="${p }"></c:param>
+									</c:url>
+
+									<a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
+																		
+									</c:forEach>
+
+
+								<c:if test="${pi.next && pi.endNavi > 0}">
+
+									<a href="/portfolio/listView.kh?page=${pi.endNavi+1}">
+										<button class="pbtn">＞</button>
+									</a>
+								</c:if>
+								</div>
+							</div>
 						</div>
-						
 					</div>
-					<br>
-					<div class="a-btn">
-						   <a href="/portfolio/listView.kh" id="list_l">
-						   	  <button id="btn" class="btn">목록</button>
-						   </a>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+			
+				<!-- footer -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>
 	</c:if>
 </body>
