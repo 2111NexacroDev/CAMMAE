@@ -7,7 +7,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
 import org.kh.campus.board.domain.PageInfo;
-import org.kh.campus.board.domain.Search;
 import org.kh.campus.board.domain.University;
 import org.kh.campus.board.store.BoardStore;
 import org.springframework.stereotype.Repository;
@@ -30,13 +29,6 @@ public class BoardStoreLogic implements BoardStore {
 		Board board = sqlSession.selectOne("BoardMapper.selectOneBoard", boardNo);
 		return board;
 	}
-
-	
-	  @Override public List<Board> selectSearchBoard(SqlSession sqlSession, Search
-	  search) { List<Board> searchList =
-	  sqlSession.selectList("BoardMapper.selectSearchBoder", search); 
-	  return searchList; }
-	 
 
 	@Override
 	public int insertBoard(Board board, SqlSession sqlSession) {

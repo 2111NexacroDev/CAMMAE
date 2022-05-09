@@ -6,7 +6,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
 import org.kh.campus.board.domain.PageInfo;
-import org.kh.campus.board.domain.Search;
 import org.kh.campus.board.domain.University;
 import org.kh.campus.board.service.BoardService;
 import org.kh.campus.board.store.BoardStore;
@@ -28,12 +27,7 @@ public class BoardServiceImpl implements BoardService{
 		List<Board> bList = bStore.selectAllBoard(sqlSession, pi);
 		return bList;
 	}
-	//게시판 검색기능
-	@Override
-	public List<Board> printSearchBoard(Search search) {
-		List<Board> searchList = bStore.selectSearchBoard(sqlSession, search);
-		return searchList;
-	}
+
 	//게시판 상세조회
 	@Override
 	public Board printOneBoard(int boardNo) {
