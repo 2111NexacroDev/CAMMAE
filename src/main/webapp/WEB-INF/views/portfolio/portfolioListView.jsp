@@ -7,6 +7,57 @@
 <title>학생 포트폴리오 목록 조회 페이지</title>
 <link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
+<style>
+.bbs {
+	position: relative;
+	margin-bottom: 40px;
+}
+
+.bbs table {
+	width: 1000px;
+	border-top: 1px solid #343434;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+thead {
+	background: rgb(237, 237, 237);
+	height: 50px;
+	border-bottom: 2px solid #c2c2c2;
+}
+
+tr {
+	display: table-row;
+	border-color: inherit;
+}
+
+tbody {
+	display: table-row-group;
+	vertical-align: middle;
+	border-color: inherit;
+}
+
+.bbs_ table th, .bbs table td {
+	padding: 12px 10px;
+	border-bottom: 1px solid #c2c2c2;
+	font-size: 16px;
+}
+
+.bbs table .space {
+	background: #fdfdfd;
+}
+
+.ta {
+	text-align: center;
+}
+td a{
+	text-decoration: none;
+	color: black;
+}
+</style>
 </head>
 <c:if test="${empty sessionScope}">
 	<jsp:forward page="/login/loginPage.kh" />
@@ -24,11 +75,12 @@
 		<div id="center">
 				<h3 id="b-title">포트폴리오 관리</h3>
 				<br>
-							<table style="width: 800px;">
+				  <div class="bbs">
+							<table>
 								
 								<thead>
 									<tr >
-										<th height="40px">번호</th>
+										<th>번호</th>
 										<th>제목</th>
 										<th>작성자</th>
 										<th>내용</th>
@@ -40,11 +92,11 @@
 								<tbody>
 									<c:forEach items="${pList}" var="portfolio">
 										<tr class="space">
-											<td height="40px">${portfolio.port_no}</td>
+											<td class="ta">${portfolio.port_no}</td>
 											<c:url var="pDetail" value="/portfolio/Detail.kh">
 												<c:param name="port_no" value="${portfolio.port_no}"></c:param>
 											</c:url>
-											<td ><a href="${pDetail}">${portfolio.port_title }</a></td>
+											<td class="ta"><a href="${pDetail}">${portfolio.port_title }</a></td>
 											<td>${portfolio.port_name}</td>
 											<td >${portfolio.port_content}</td>	
 											<td class="ta" id="license">${portfolio.port_license}</td>
@@ -80,7 +132,7 @@
 										<button class="pbtn">＞</button>
 									</a>
 								</c:if>
-
+								</div>
 							</div>
 						</div>
 					</div>
