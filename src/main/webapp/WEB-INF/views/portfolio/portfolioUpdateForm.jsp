@@ -119,11 +119,11 @@ cursor: pointer;
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">자격증 첨부</th>
-								<td class="ta_l"><input type="file" name="reloadFile">${portfolio.port_license}</td>
+								<td class="ta_l"><input type="file" name="reloadFile" >${portfolio.port_license}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">수상이력 첨부</th>
-								<td class="ta_l">${portfolio.port_award_history}</td>
+								<td class="ta_l"><input type="file" name="reloadFile1">${portfolio.port_award_history}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">작성날짜</th>
@@ -132,18 +132,21 @@ cursor: pointer;
 							
 							<tr>
 								<th scope="row" class="ta_l">내용</th>
-								<td class="ta_l">${portfolio.port_content}</td>
+								<td class="ta_l"><input type="text" name="port_content" value="${portfolio.port_content}"></td>
 							</tr>
 						</tbody>
+				
 					</table>
-					</div>
 					<br>
-					<div class="enr_btn">
+						<div class="enr_btn">
 						<div class="input-btn">
 							<input type="submit" id="btn" class="btn" value="수정"><br> 
 						</div>
-						
+						</div>
 					</div>
+					</div>
+					<br>
+					
 					<div class="a-btn">
 							<a href="/portfolio/listView.kh" id="list_l">
 								<button class="btn" id="btn">목록</button>
