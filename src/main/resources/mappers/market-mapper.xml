@@ -10,6 +10,7 @@
 		<result property="marketPrice" column="MARKET_PRICE"></result>
 		<result property="marketTitle" column="MARKET_TITLE"></result>
 		<result property="marketContent" column="MARKET_CONTENT"></result>
+		<result property="marketId" column="MARKET_Id"></result>
 		<result property="marketWriter" column="MARKET_WRITER"></result>
 		<result property="marketDate" column="MARKET_DATE"></result>
 		<result property="marketUpdateDate" column="MARKET_UPDATEDATE"></result>
@@ -95,7 +96,7 @@
 	<insert id="insertMarket">
 		INSERT INTO MARKET_TBL VALUES(SEQ_MARKET_NO.NEXTVAL,
 		#{marketType}, #{marketGoods}, #{marketPrice}, #{marketTitle},
-		#{marketContent}, #{marketWriter}, DEFAULT, DEFAULT,DEFAULT)
+		#{marketContent},#{marketId}, #{marketWriter}, DEFAULT, DEFAULT,DEFAULT)
 	</insert>
 
 	<update id="updateCount">

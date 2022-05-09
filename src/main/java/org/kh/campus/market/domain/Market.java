@@ -7,6 +7,7 @@ public class Market {
 	private String marketPrice;
 	private String marketTitle;
 	private String marketContent;
+	private int marketId;
 	private String marketWriter;
 	private String marketDate;
 	private String marketUpdateDate;
@@ -15,7 +16,8 @@ public class Market {
 	public Market() {}
 
 	public Market(int marketNo, String marketType, String marketGoods, String marketPrice, String marketTitle,
-			String marketContent, String marketWriter, String marketDate, String marketUpdateDate, int marketCount) {
+			String marketContent, int marketId, String marketWriter, String marketDate, String marketUpdateDate,
+			int marketCount) {
 		super();
 		this.marketNo = marketNo;
 		this.marketType = marketType;
@@ -23,6 +25,7 @@ public class Market {
 		this.marketPrice = marketPrice;
 		this.marketTitle = marketTitle;
 		this.marketContent = marketContent;
+		this.marketId = marketId;
 		this.marketWriter = marketWriter;
 		this.marketDate = marketDate;
 		this.marketUpdateDate = marketUpdateDate;
@@ -77,6 +80,14 @@ public class Market {
 		this.marketContent = marketContent;
 	}
 
+	public int getMarketId() {
+		return marketId;
+	}
+
+	public void setMarketId(int marketId) {
+		this.marketId = marketId;
+	}
+
 	public String getMarketWriter() {
 		return marketWriter;
 	}
@@ -113,9 +124,11 @@ public class Market {
 	public String toString() {
 		return "Market [marketNo=" + marketNo + ", marketType=" + marketType + ", marketGoods=" + marketGoods
 				+ ", marketPrice=" + marketPrice + ", marketTitle=" + marketTitle + ", marketContent=" + marketContent
-				+ ", marketWriter=" + marketWriter + ", marketDate=" + marketDate + ", marketUpdateDate="
-				+ marketUpdateDate + ", marketCount=" + marketCount + "]";
+				+ ", marketId=" + marketId + ", marketWriter=" + marketWriter + ", marketDate=" + marketDate
+				+ ", marketUpdateDate=" + marketUpdateDate + ", marketCount=" + marketCount + "]";
 	}
+
+	
 
 
 	
