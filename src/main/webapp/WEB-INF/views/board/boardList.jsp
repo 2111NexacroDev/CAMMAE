@@ -57,7 +57,8 @@
 					</c:forEach>
 				</tbody>
 			</table>
-			<div>
+			<div align="center">
+			
 				<form action="/board/list.kh" method="get">
 					<input type="hidden" name="universityCode" value="${loginUser.universityCode }" />
 					<select name="searchCondition">
@@ -67,13 +68,13 @@
 						<option value="writer">작성자</option>
 					</select> <input type="text" name="searchValue"> <input class="btn"
 						type="submit" value="검색">
+						
 				</form>
 			</div>
 			<!-- 페이징-->			
-			<div>
+			<div class="paging" align="center">
 				<c:if test="${pi.startNavi !=1 }">
-
-					<a href="/board/list.kh?universityCode=${pi.universityCode}&page=${pi.startNavi-1}">
+					<a class="pbtn" href="/board/list.kh?universityCode=${pi.universityCode}&page=${pi.startNavi-1}">
 						<button class="pbtn">＜</button>
 					</a>
 
@@ -87,11 +88,12 @@
 					</c:if>
 					<c:if test="${not empty pageInfo.searchValue }">
 						<c:url var="pagination" value="/board/list.kh?universityCode=${pi.universityCode}&searchCondition=${pageInfo.searchCondition}&searchValue=${pageInfo.searchValue}">
-							
-							 <a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
+							<c:param name="page" value="${p }"></c:param>
+							<%--  <a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp; --%>
 						</c:url>
 					</c:if>
-					<a href="${pagination }">${p }</a>&nbsp;
+					<a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
+			
 			</c:forEach>
 				<c:if test="${pi.next && pi.endNavi > 0}">
 
