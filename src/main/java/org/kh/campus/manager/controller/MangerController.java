@@ -52,7 +52,7 @@ public class MangerController {
 			}
 		
 		// INSERT, UPDATE
-		// RowType에 따라서 INSERT OR UPDATE
+		// RowType에 따라서 INSERT OR UPDATEㅎㅎ
 				int iResult = 0;
 				int uResult = 0;
 				for(i = 0; i < inStd.getRowCount(); i++) {
