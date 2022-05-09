@@ -46,8 +46,9 @@ public class SupportController {
 			if(!sList.isEmpty()) {
 				mv.addObject("sList",sList);
 				mv.addObject("pageInfo", pageInfo);
-				mv.setViewName("support/supportList");
+				mv.addObject("currentPage", currentPage);
 				mv.addObject("menu", "support");
+				mv.setViewName("support/supportList");
 			}else {
 				mv.setViewName("support/supportList");
 			}

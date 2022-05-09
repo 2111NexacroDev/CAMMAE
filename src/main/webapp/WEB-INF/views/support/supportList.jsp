@@ -119,12 +119,12 @@
 			<input class="btn"type="submit" value="검색">
 		</form>
 	</div>
-	<div class="paging">
+	<div class="paging"  align="center">
 
 		<c:if test="${pi.startNavi !=1 }">
 
 			<a href="/support/list.kh?page=${pi.startNavi-1 }"> 
-				<button>이전</button>
+				<button class="pbtn">＜</button>
 			</a>
 
 		</c:if>
@@ -140,11 +140,11 @@
 					<c:param name="page" value="${p }"></c:param>
 				</c:url>
 			</c:if>
-			<a href="${pagination }">${p }</a>&nbsp;
+			<a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
 		</c:forEach>
 		<c:if test="${pi.next && pi.endNavi > 0 }">
 			<a href="/support/list.kh?page=${pi.endNavi+1 }">
-				<button>다음</button>
+				<button class="pbtn">＞</button>
 			</a>
 		</c:if>						
 	</div>

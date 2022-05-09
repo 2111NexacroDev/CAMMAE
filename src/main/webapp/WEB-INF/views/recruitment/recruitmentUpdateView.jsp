@@ -103,9 +103,7 @@ table.type02 td {
 					<div class="b-title">
 						<h2>채용공고</h2>
 					</div>
-					<div class="btn_1">
-						<input class="btn" type="submit" value="수정하기">
-					</div>
+
 				</div>
 				<input type="hidden" name="recruitmentNo"
 					value="${recruitment.recruitmentNo }"> <br> <br>
@@ -154,7 +152,6 @@ table.type02 td {
 					</div>
 					<br> <br>
 				</div>
-			</form>
 			<!-- c27b638af6c98ea42aa55b7709a8c29c -->
 			<div>
 				<div id="map"
@@ -164,7 +161,10 @@ table.type02 td {
 			</div>
 
 
-
+			<div align="center">
+				<input class="btn" type="submit" value="수정하기">
+			</div>
+			</form>
 		</div>
 	</div>
 
