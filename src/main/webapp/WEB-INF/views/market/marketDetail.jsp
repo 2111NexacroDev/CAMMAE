@@ -105,14 +105,16 @@ hr {
 					<h2>중고거래게시판</h2>
 				</div>
 				<div class="btn_1">
-					<c:url var="mModify" value="/market/modifyView">
-						<c:param name="marketNo" value="${market.marketNo }"></c:param>
-					</c:url>
-					<button class="btn" onclick="location.href='${mModify }'">수정</button>
-					<c:url var="mDelete" value="/market/delete">
-						<c:param name="marketNo" value="${market.marketNo }"></c:param>
-					</c:url>
-					<button class="btn" onclick="location.href='${mDelete }'">삭제</button>
+					<c:if test="${sessionScope.loginUser.studentNo eq market.marketId || sessionScope.loginManager ne null}">
+						<c:url var="mModify" value="/market/modifyView">
+							<c:param name="marketNo" value="${market.marketNo }"></c:param>
+						</c:url>
+						<button class="btn" onclick="location.href='${mModify }'">수정</button>
+						<c:url var="mDelete" value="/market/delete">
+							<c:param name="marketNo" value="${market.marketNo }"></c:param>
+						</c:url>
+						<button class="btn" onclick="location.href='${mDelete }'">삭제</button>
+					</c:if>
 					<button class="btn" onclick="location.href='/market/list'">목록</button>
 				</div>
 				<br>
@@ -178,7 +180,7 @@ hr {
 	<!-- 댓글동작  -->
 	<script>
 		getMarketReplyList(); //페이지가 로드 시 함수 동작
-		
+
 		$("#rbtn").on("click", function() {
 			var marketNo = $("#marketNo").val(); /* 어떤 게시글에 대한 댓글인지 알기 위함 */
 			var rContents = $("#rContents").val();
@@ -193,7 +195,7 @@ hr {
 				data : {
 					"marketNo" : marketNo,
 					"mReplyContent" : rContents,
-					"mReplyWriter": rWriter
+					"mReplyWriter" : rWriter
 				}, //json형태
 				success : function(data) {
 					getMarketReplyList();
