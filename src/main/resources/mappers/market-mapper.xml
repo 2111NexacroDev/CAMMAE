@@ -123,6 +123,7 @@
 	<resultMap type="MarketReply" id="mReplyResult">
 		<id property="marketReplyNo" column="MARKETREPLY_NO"></id>
 		<result property="marketNo" column="MARKET_NO" />
+		<result property="mReplyId" column="MARKETREPLY_ID" />
 		<result property="mReplyWriter" column="M_REPLY_WRITER" />
 		<result property="mReplyContent" column="M_REPLY_CONTENT" />
 		<result property="mReplyDate" column="M_REPLY_DATE" />
@@ -138,7 +139,7 @@
 
 	<insert id="insertReply">
 		INSERT INTO MARKETREPLY_TBL
-		VALUES(SEQ_MARKETREPLY_NO.NEXTVAL, #{marketNo}, #{mReplyWriter},
+		VALUES(SEQ_MARKETREPLY_NO.NEXTVAL, #{marketNo}, #{mReplyId}, #{mReplyWriter},
 		#{mReplyContent}, DEFAULT, DEFAULT)
 	</insert>
 

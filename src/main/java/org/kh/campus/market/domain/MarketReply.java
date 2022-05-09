@@ -3,6 +3,7 @@ package org.kh.campus.market.domain;
 public class MarketReply {
 	private int marketReplyNo;
 	private int marketNo;
+	private int mReplyId;
 	private String mReplyWriter;
 	private String mReplyContent;
 	private String mReplyDate;
@@ -10,11 +11,12 @@ public class MarketReply {
 	
 	public MarketReply () {}
 
-	public MarketReply(int marketReplyNo, int marketNo, String mReplyWriter, String mReplyContent, String mReplyDate,
-			String mReplyUpdateDat) {
+	public MarketReply(int marketReplyNo, int marketNo, int mReplyId, String mReplyWriter, String mReplyContent,
+			String mReplyDate, String mReplyUpdateDat) {
 		super();
 		this.marketReplyNo = marketReplyNo;
 		this.marketNo = marketNo;
+		this.mReplyId = mReplyId;
 		this.mReplyWriter = mReplyWriter;
 		this.mReplyContent = mReplyContent;
 		this.mReplyDate = mReplyDate;
@@ -35,6 +37,14 @@ public class MarketReply {
 
 	public void setMarketNo(int marketNo) {
 		this.marketNo = marketNo;
+	}
+
+	public int getmReplyId() {
+		return mReplyId;
+	}
+
+	public void setmReplyId(int mReplyId) {
+		this.mReplyId = mReplyId;
 	}
 
 	public String getmReplyWriter() {
@@ -69,12 +79,8 @@ public class MarketReply {
 		this.mReplyUpdateDat = mReplyUpdateDat;
 	}
 
-	@Override
-	public String toString() {
-		return "MarketReply [marketReplyNo=" + marketReplyNo + ", marketNo=" + marketNo + ", mReplyWriter="
-				+ mReplyWriter + ", mReplyContent=" + mReplyContent + ", mReplyDate=" + mReplyDate
-				+ ", mReplyUpdateDat=" + mReplyUpdateDat + "]";
-	}
+	
+
 	
 	
 
