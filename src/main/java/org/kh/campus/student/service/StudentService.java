@@ -8,6 +8,4 @@ public interface StudentService {
 	public Student printStudent(int studentNo);
 	// 수정
 	public int modifyStudent(Student student);
-	
-	public Student loginStudent(Student student);
 }

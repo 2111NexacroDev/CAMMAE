@@ -10,8 +10,6 @@ public interface StudentStore {
 
 	public int updateStudent(Student student, SqlSession sqlSession);
 
-	public Student selectLoginStudent(SqlSession sqlSession, Student student);
-
 
 
 }
