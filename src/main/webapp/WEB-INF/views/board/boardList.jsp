@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="/resources/menuBar.css">
 <meta charset="UTF-8">
 <title>학과 게시판</title>
+<link rel="stylesheet" href="/resources/common.css">
+<link rel="stylesheet" href="/resources/contents.css">
 <style>
 #contents {
 	width: 100%;
@@ -150,7 +152,7 @@ h3 {
 				<c:if test="${pi.startNavi !=1 }">
 
 					<a href="/board/list.kh?universityCode=${pi.universityCode}&page=${pi.startNavi-1}">
-						<button>이전</button>
+						<button class="pbtn">＜</button>
 					</a>
 
 				</c:if>
@@ -172,7 +174,7 @@ h3 {
 				<c:if test="${pi.next && pi.endNavi > 0}">
 
 					<a href="/board/list.kh?universityCode=${pi.universityCode}&page=${pi.endNavi+1}">
-						<button>다음</button>
+						<button class="pbtn">＞</button>
 					</a>
 
 				</c:if>
@@ -184,12 +186,8 @@ h3 {
 			</div>
 		</div>
 	</div>
-	<footer>
-		<div class="footer_tit">서울특별시 중구 남대문로 120 대일빌딩 2F, 3F (T:
-			1544-9970) / F: 02-722-0858)</div>
-		<div id="footer_bottom">Copyright © 1998-2022 DI University All
-			Right Reserved</div>
-	</footer>
+	<!-- footer -->
+	<jsp:include page="../common/footer.jsp"></jsp:include>
 
 </body>
 </html>
