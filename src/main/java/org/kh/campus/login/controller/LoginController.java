@@ -27,10 +27,6 @@ public class LoginController {
 
 	@Autowired
 	private LoginService lService;
-	@Autowired
-	private StudentService sService;
-	@Autowired
-	private ManagerService mService;
 	
 	// 로그인 페이지
 	@RequestMapping(value="/login/loginPage.kh", method=RequestMethod.GET)
@@ -53,44 +49,30 @@ public class LoginController {
 				Student student = new Student();
 				student.setStudentNo(id);
 				student.setStudentPassword(pw);
-				Student loginUser = sService.loginStudent(student);
+				Student loginUser = lService.loginStudent(student);
 				if(loginUser != null) {
 					session.setAttribute("loginUser", loginUser);
 				}
-				
-				
-				lService.loginStudent(student);
-				
-				int stdNo = 0;
-			
-				
-				session.setAttribute("login", "std");
-				session.setAttribute("id", stdNo);
 				// 교수
 			} else if(type.equals("professor")) {
 				Professor professor = new Professor();
 				professor.setProfessorNo(id);
 				professor.setProfessorPassword(pw);
-				int prfNo = 0;
-				prfNo = lService.loginProfessor(professor);
 				
-				session.setAttribute("login", "prf");
-				session.setAttribute("id", prfNo);
+				Professor loginProfessor = lService.loginProfessor(professor);
+				if(loginProfessor != null) {
+					session.setAttribute("loginProfessor", loginProfessor);
+				}
 				// 관리자
 			} else {
 				Manager manager = new Manager();
 				manager.setManagerNo(id);
 				manager.setManagerPassword(pw);
 				
-				Manager loginManager = mService.loginManager(manager);
+				Manager loginManager = lService.loginManager(manager);
 				if(loginManager != null) {
 					session.setAttribute("loginManager", loginManager);
 				}
-				int magNo = 0;
-				magNo = lService.loginManager(manager);
-				
-				session.setAttribute("login", "mag");
-				session.setAttribute("id", magNo);
 			}
 			
 			mv.setViewName("redirect:/main.kh");

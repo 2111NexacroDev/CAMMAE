@@ -15,6 +15,7 @@ import org.kh.campus.board.domain.PageInfo;
 import org.kh.campus.board.domain.Pagination;
 import org.kh.campus.board.domain.University;
 import org.kh.campus.board.service.BoardService;
+import org.kh.campus.professor.domain.Professor;
 import org.kh.campus.student.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,18 +41,27 @@ public class BoardController {
 	@RequestMapping(value = "/board/list.kh", method = RequestMethod.GET)
 	public ModelAndView boardListView(ModelAndView mv, @RequestParam(value = "page", required = false) Integer page
 			,HttpSession session
-			, @RequestParam(value = "universityCode", required = false) Integer universityCode
+			, @RequestParam(value = "universityCode", required = false) String universityCode
 			, @ModelAttribute PageInfo pageInfo) {
-
-		int universityCodeStd = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
+		/*
+		 * Student student = (Student)session.getAttribute("loginUser"); Professor
+		 * professor = (Professor)session.getAttribute("loginProfessor");
+		 */
+		
+		if(session.getAttribute("loginUser")!=null) {
+			String universityCodeStd = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
+			universityCode = (universityCode != null) ? universityCode : universityCodeStd;	
+		} else if(session.getAttribute("loginProfessor")!=null) {
+			String universityCodePrf = ((Professor)(session.getAttribute("loginProfessor"))).getUniversityCode();
+			universityCode = (universityCode != null) ? universityCode : universityCodePrf;	
+		}
 		
 		
-		universityCode = (universityCode != null) ? universityCode : universityCodeStd;
 		int currentPage = (page != null) ? page : 1;
 		System.out.println(universityCode+"test");
 		int totalCount = service.getListCount(pageInfo);
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
-		
+		List<University> uList = service.printAllUniversity();
 		pi.setUniversityCode(universityCode);
 		pi.setSearchCondition(pageInfo.getSearchCondition());
 		pi.setSearchValue(pageInfo.getSearchValue());
@@ -61,8 +71,10 @@ public class BoardController {
 				mv.addObject("bList", bList);
 				mv.setViewName("board/boardList");
 				mv.addObject("menu", "board");
+				mv.addObject("currentPage", currentPage);
 				mv.addObject("pi", pi);
-				System.out.println(pi.toString()+"test");
+				mv.addObject("uList", uList);
+				mv.addObject("universityCode", universityCode);
 
 			} else {
 				mv.setViewName("board/boardList");
@@ -79,11 +91,16 @@ public class BoardController {
 			HttpSession session ) {
 			
 		try {
-			String login = session.getAttribute("login").toString();
-			if (login.contentEquals("std") || login.contentEquals("prf")) {
-				int universityCodeStd = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
+			if (session.getAttribute("loginUser")!=null) {
+				String universityCodeStd = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
 				mv.setViewName("redirect:/board/list.kh?universityCode="+universityCodeStd);
-			} else {
+				
+			} else if (session.getAttribute("loginProfessor")!=null){
+				String universityCodePrf = ((Professor)(session.getAttribute("loginProfessor"))).getUniversityCode();
+				mv.setViewName("redirect:/board/list.kh?universityCode="+universityCodePrf);
+			} 
+			
+			else {
 			List<University> uList = service.printAllUniversity();
 			if (!uList.isEmpty()) {
 				mv.addObject("uList", uList);
@@ -102,10 +119,13 @@ public class BoardController {
 	}
 	// 게시판 상세 조회
 	@RequestMapping(value = "/board/detail.kh", method = RequestMethod.GET)
-	public ModelAndView boardOneView(ModelAndView mv, @RequestParam("boardNo") int boardNo) {
+	public ModelAndView boardOneView(ModelAndView mv
+			, @RequestParam("boardNo") int boardNo
+			, @RequestParam(value = "universityCode", required = false) String universityCode) {
 		try {
 			Board board = service.printOneBoard(boardNo);
 			if (board != null) {
+				mv.addObject("universityCode", universityCode);
 				mv.addObject("board", board);
 				mv.setViewName("board/board");
 			} else {
@@ -153,9 +173,8 @@ public class BoardController {
 				}
 
 			}
-			int universityCode = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
+			String universityCode = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
 			board.setUniversityCode(universityCode);
-			System.out.println(universityCode);
 			int result = service.registerBoard(board);
 			if (result > 0) {
 				mv.setViewName("redirect:/board/list.kh?universityCode="+universityCode);

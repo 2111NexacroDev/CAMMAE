@@ -88,11 +88,11 @@ h3{
          <jsp:include page="../common/sideBMenu.jsp"></jsp:include>
       </div>
 	<div class="center">
-		<h3 id="b-title">학과 리스트</h3>
+		<h3 id="b-title">학과게시판</h3>
 			<table width="600px" border="1">
 				<thead>
 				<tr>
-					<th>단과대학</th>
+					<th>학과리스트</th>
 			
 				</tr>
 				<thead>

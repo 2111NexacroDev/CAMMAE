@@ -20,19 +20,19 @@ public class LoginServiceImpl implements LoginService {
 	private SqlSession sqlSession;
 	
 	@Override
-	public int loginStudent(Student student) {
-		int result = lStore.selectStudent(sqlSession, student);
-		return result;
+	public Student loginStudent(Student student) {
+		Student std = lStore.selectStudent(sqlSession, student);
+		return std;
 	}
 	@Override
-	public int loginProfessor(Professor professor) {
-		int result = lStore.selectProfessor(sqlSession, professor);
-		return result;
+	public Professor loginProfessor(Professor professor) {
+		Professor prf = lStore.selectProfessor(sqlSession, professor);
+		return prf;
 	}
 	@Override
-	public int loginManager(Manager manager) {
-		int result = lStore.selectManager(sqlSession, manager);
-		return result;
+	public Manager loginManager(Manager manager) {
+		Manager mag = lStore.selectManager(sqlSession, manager);
+		return mag;
 	}
 	@Override
 	public String findPwdStd(Student std) {

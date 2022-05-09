@@ -7,13 +7,12 @@
 <meta charset="UTF-8">
 <title>관리자 상담신청 전체조회 페이지</title>
 <link rel="stylesheet" href="/resources/contents.css">
-</head>
 <body>
 	<c:if test="${empty sessionScope}">
 		<jsp:forward page="/login/loginPage.kh" />
 	</c:if>
 
-	<c:if test="${not empty sessionScope }">
+	<c:if test="${not empty sessionScope.loginManager }">
 		<jsp:include page="../common/menuBar.jsp"></jsp:include>
 		<!-- contents -->
 		<div id="content">
@@ -56,7 +55,7 @@
 											href="${cDetail}">${consultant.cons_title }</a></td>
 										<td class="ta" id="writer">${consultant.cons_student_name}</td>
 										<td class="ta" id="stu_number">${consultant.cons_student_number}</td>
-										<td class="ta" id="college">${consultant.cons_college == '1' ? '컴퓨터공학과' : '2' ? '전자전기공학과' : '3' ? '산업디자인학과' : '4' ? '중국어학과' : '5' ? '유비쿼터스학과' : '국어국문학과'}</td>
+										<td class="ta" id="college">${consultant.cons_college}</td>
 										<td class="ta" id="date">${consultant.cons_date}</td>
 										<td class="ta" id="time">${consultant.cons_time}</td>
 										<td class="ta" id="counselor">${consultant.cons_counselor}</td>
@@ -82,7 +81,7 @@
 								<c:param name="page" value="${p }"></c:param>
 							</c:url>
 
-							<a href="${pagination }"><button class="on1">${p }</button></a>&nbsp;
+							<a href="${pagination }">${p }</a>&nbsp;
 																		
 									</c:forEach>
 

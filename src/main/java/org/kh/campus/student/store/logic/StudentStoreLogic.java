@@ -21,12 +21,6 @@ public class StudentStoreLogic implements StudentStore {
 		return result;
 	}
 
-	@Override
-	public Student selectLoginStudent(SqlSession sqlSession, Student student) {
-		Student studentOne = sqlSession.selectOne("StudentMapper.selectLoginStudent", student);
-		return studentOne;
-	}
-
 	
 
 }

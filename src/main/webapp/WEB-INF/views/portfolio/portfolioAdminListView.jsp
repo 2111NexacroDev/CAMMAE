@@ -6,20 +6,22 @@
 <head>
 <meta charset="UTF-8">
 <title>관리자 포트폴리오 전체조회 페이지</title>
+<link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
 </head>
+
 <body>
 
 <c:if test="${empty sessionScope}">
 	<jsp:forward page="/login/loginPage.kh" />
 </c:if>
 	
-<c:if test="${not empty sessionScope}">
+<c:if test="${not empty sessionScope.loginManager}">
 	<jsp:include page="../common/menuBar.jsp"></jsp:include>
 	<!-- contents -->
 	<div id="content">
 		<div id="left">
-			<jsp:include page="../common/sideBMenu.jsp"></jsp:include>
+			<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
 		</div>
 		<!-- contents-main -->
 		<div id="center">
@@ -55,7 +57,7 @@
 											<td class="ta" id="detail" style="text-align:left"><a href="${pDetail}">${portfolio.port_title }</a></td>
 											<td class="ta" id="writer">${portfolio.port_name}</td>
 											<td class="ta" id="stu_number">${portfolio.port_student_no}</td>
-											<td class="ta" id="college">${portfolio.port_college == '1' ? '컴퓨터공학과' : '2' ? '전자전기공학과' : '3' ? '산업디자인학과' : '4' ? '중국어학과' : '5' ? '유비쿼터스학과' : '국어국문학과'}</td>
+											<td class="ta" id="college">${portfolio.port_college}</td>
 											<td class="ta" id="stu_phonenumber">${portfolio.port_student_number}</td>
 											<td class="ta" id="license">${portfolio.port_license}</td>
 											<td class="ta" id="award_history">${portfolio.port_award_history}</td>
@@ -67,32 +69,22 @@
 								</tbody>
 							</table>
 				
-							<div class="paging">
+							<div class="paging" align="center">
 
-							<%-- 	<c:if test="${pi.startNavi ==1 }">
-
-									<a href="/portfolio/adminListView.kh?page=1"></a>
-
-								</c:if> --%>
-
-
-								<c:if test="${pi.prev}">
+								<c:if test="${pi.startNavi !=1}">
 
 									<a href="/portfolio/adminListView.kh?page=${pi.startNavi-1}"> 
+										<button class="pbtn">＜</button>
 									</a>
 
 								</c:if>
-
-
-
-
 
 								<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
 									<c:url var="pagination" value="/portfolio/adminListView.kh">
 										<c:param name="page" value="${p }"></c:param>
 									</c:url>
 
-									<a href="${pagination }"><button class="on1">${p }</button></a>&nbsp;
+									<a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
 																		
 									</c:forEach>
 
@@ -100,6 +92,7 @@
 								<c:if test="${pi.next && pi.endNavi > 0}">
 
 									<a href="/portfolio/adminListView.kh?page=${pi.endNavi+1}">
+										<button class="pbtn">＞</button>
 									</a>
 								</c:if>
 

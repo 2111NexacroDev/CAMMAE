@@ -5,9 +5,13 @@
 <head>
 <meta charset="UTF-8">
 <title>학생 포트폴리오 목록 조회 페이지</title>
+<link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
 </head>
-
+<c:if test="${empty sessionScope}">
+	<jsp:forward page="/login/loginPage.kh" />
+</c:if>
+<c:if test="${not empty sessionScope.loginUser}">
 <body>
 <!-- header  -->
 	<jsp:include page="../common/menuBar.jsp"></jsp:include>
@@ -50,11 +54,39 @@
 									</c:forEach>
 								</tbody>
 							</table>
-			
+							<div class="paging" align="center">
+
+								<c:if test="${pi.startNavi !=1}">
+
+									<a href="/portfolio/adminListView.kh?page=${pi.startNavi-1}"> 
+										<button class="pbtn">＜</button>
+									</a>
+
+								</c:if>
+
+								<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
+									<c:url var="pagination" value="/portfolio/listView.kh">
+										<c:param name="page" value="${p }"></c:param>
+									</c:url>
+
+									<a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
+																		
+									</c:forEach>
+
+
+								<c:if test="${pi.next && pi.endNavi > 0}">
+
+									<a href="/portfolio/listView.kh?page=${pi.endNavi+1}">
+										<button class="pbtn">＞</button>
+									</a>
+								</c:if>
+
+							</div>
 						</div>
 					</div>
 			
 				<!-- footer -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>
+	</c:if>
 </body>
 </html>

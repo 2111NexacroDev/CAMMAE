@@ -4,7 +4,7 @@ public class Pagination {
 	public static PageInfo getPageInfo(int currentPage, int totalCount) {
 		PageInfo pi = null;
 		
-		int boardLimit = 5;
+		int boardLimit = 10;
 		int naviLimit = 5;
 		int maxPage;
 		int startNavi;
@@ -25,7 +25,7 @@ public class Pagination {
 		}
 		String searchCondition = "";
 		String searchValue = "";
-		int universityCode = 0;
+		String universityCode = "";
 		pi = new PageInfo(currentPage, boardLimit, 
 				naviLimit, startNavi, endNavi, totalCount, maxPage, prev, next, universityCode, searchCondition, searchValue);
 		return pi;

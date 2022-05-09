@@ -150,12 +150,18 @@ hr {
 		$("#rbtn").on("click", function() {
 			var questionNo = $("#questionNo").val(); /* 어떤 게시글에 대한 댓글인지 알기 위함 */
 			var rContents = $("#rContents").val();
+			var rWriter = "${loginUser.studentName}";
+			<c:if test="${empty sessionScope.loginUser }">
+			alert("로그인을 해주세요.");
+			</c:if>
+			<c:if test="${not empty loginUser }">
 			$.ajax({
 				url : "/question/replyAdd",
 				type : "post",
 				data : {
 					"questionNo" : questionNo,
-					"questionReplyContent" : rContents
+					"questionReplyContent" : rContents,
+					"questionReplyWriter": rWriter
 				}, //json형태
 				success : function(data) {
 					getQuestionReplyList();
@@ -166,6 +172,7 @@ hr {
 					alert("ajax 실패")
 				}
 			});
+			</c:if>
 		})
 
 		//댓글 불러오는 함수

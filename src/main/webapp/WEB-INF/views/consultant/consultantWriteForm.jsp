@@ -9,13 +9,37 @@
 <title>상담신청 페이지</title>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link rel="stylesheet" href="/resources/contents.css">
+<style>
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table td* {
+	vertical-align: middle;
+}
+
+table td {
+	padding: 15px 5px;
+	border-bottom: 1px solid #c2c2c2;
+	font-size: 16px;
+}
+
+.td-left {
+	width: 100px;
+}
+
+.td_sub {
+	border: none;
+}
+</style>
 </head>
 <body>
 	<c:if test="${empty sessionScope}">
 		<jsp:forward page="/login/loginPage.kh" />
 	</c:if>
 
-	<c:if test="${not empty sessionScope}">
+	<c:if test="${not empty sessionScope.loginUser}">
 		<!-- header  -->
 		<jsp:include page="../common/menuBar.jsp"></jsp:include>
 		<!-- contents -->
@@ -29,24 +53,72 @@
 					<h3 id="b-title">상담관리</h3>
 					<br>
 					<div id="c-main" style="width: 800px; height: 800px;">
-						상담제목 <input type="text" name="cons_title"><br> 
-						이름 <input type="text" name="cons_student_name" value="${loginUser.studentName}"><br>
-						학번 <input type="text" name="cons_student_no" value="${loginUser.studentNo }"><br>
-						학과명 <input type="text" name="cons_college" value="${loginUser.universityCollege}"><br> 
-						단과대학 <input type="text" name="cons_university_code"	 value="${loginUser.departmentName}"><br>
-						전화번호 <input	 type="text" name="cons_student_number" value="${loginUser.studentPhonenumber}"><br>
-						상담희망날짜 <input type="date" name="cons_date"><br>	
-						상담희망시간 <input type="time" name="cons_time"><br> 
-						상담사 <select	id="cons_counselor" class="select" name="cons_counselor" onclick="conChange()">
+					<table>
+					<tr>
+						<td class="td_left">상담제목</td>
+						<td class="td_right"><input type="text" name="cons_title"></td>
+					</tr>
+					
+					<tr>
+						<td class="td_left">이름</td>
+						<td class="td_right"> <input type="text" name="cons_student_name" value="${loginUser.studentName}"></td>
+					</tr>
+					
+					<tr>
+						<td class="td_left">학번</td>
+						<td class="td_right"><input type="text" name="cons_student_no" value="${loginUser.studentNo }"></td>
+					</tr>
+					
+					<tr>
+						<td class="td_left">학과명</td>
+						<td class="td_right"><input type="text" name="cons_college" value="${loginUser.departmentName}"></td>
+					</tr>
+					
+					<tr>
+						<td class="td_left">단과대학</td>
+						<td class="td_right"><input type="text" name="cons_university_code"	 value="${loginUser.universityCollege}"></td>
+					</tr>
+					
+					<tr>
+						<td class="td_left">전화번호</td>
+						<td class="td_right"><input	 type="text" name="cons_student_number" value="${loginUser.studentPhonenumber}"></td>
+					</tr>
+					
+					<tr>
+						<td class="td_left">상담희망날짜</td>
+						<td class="td_right"><input type="date" name="cons_date"></td>
+					</tr>
+					
+					<tr>
+						<td class="td_left">상담희망시간</td>
+						<td class="td_right"><input type="time" name="cons_time"></td>
+					</tr>
+					
+					
+					<tr>
+						<td class="td_left">상담사</td>
+						<td class="td_right">
+							<select	id="cons_counselor" class="select" name="cons_counselor" onclick="conChange()">
 								<option value="">선택</option>
 									<c:forEach items="${mList}" var="mList">
 											<option value="${mList.managerName}">${mList.managerName}</option>
 									</c:forEach>
 						
-							 </select><br>
-						상담내용 <textarea name="cons_content"></textarea><br> 
-						<input type="submit" value="상담신청">
-							
+							 </select>
+						</td>
+					</tr>
+						
+					
+					
+					<tr>
+						<td class="td_left">상담내용</td>
+						<td class="td_right"><textarea name="cons_content"></textarea></td>
+					</tr>
+					
+					<tr>
+						<td colspan="2" align="center" class="td_sub"><input type="submit" value="상담신청"></td>
+					</tr>
+					</table>
 					</div>
 				</form>
 			</div>
