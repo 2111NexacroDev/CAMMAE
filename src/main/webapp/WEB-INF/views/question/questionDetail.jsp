@@ -129,11 +129,11 @@ hr {
 				<div>
 					<input type="hidden" id="questionNo"
 						value="${question.questionNo }">
-					<c:if test="${sessionScope.loginProfessor ne null}">
+
 						<textarea rows="4" cols="91" id="rContents"></textarea>
 						<button class="btn" id="rbtn">등록</button>
 						<hr>
-					</c:if>
+
 				</div>
 				<!-- 댓글 조회 -->
 				<div id="replyArea">
@@ -191,6 +191,7 @@ hr {
 			var questionNo = $("#questionNo").val();
 			var rWriter = "${loginProfessor.professorName}";
 			var rWriterId = "${loginProfessor.professorNo}";
+			
 			$.ajax({
 				url : "/question/replyList",
 				type : "get",

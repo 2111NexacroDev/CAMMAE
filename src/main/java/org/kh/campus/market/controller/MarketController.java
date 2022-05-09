@@ -124,6 +124,7 @@ public class MarketController {
 			return "/login/login";
 		}
 		Student student = (Student)session.getAttribute("loginUser");
+		model.addAttribute("marketId", student.getStudentNo());
 		model.addAttribute("marketWriter", student.getStudentName());
 		model.addAttribute("menu", "market");
 		return "market/marketWriteForm";
