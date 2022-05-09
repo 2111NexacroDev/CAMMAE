@@ -5,7 +5,7 @@ import java.util.List;
 import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
 import org.kh.campus.board.domain.PageInfo;
-import org.kh.campus.board.domain.Search;
+
 import org.kh.campus.board.domain.University;
 
 public interface BoardService {
@@ -13,7 +13,6 @@ public interface BoardService {
 	public List<Board> printAllBoard(PageInfo pi);//목록 보여주기
 	public Board printOneBoard(int boardNo);//게시판 상세
 	public int registerBoard(Board board);//게시판 등록
-	public List<Board> printSearchBoard(Search search);//게시판 검색
 	public int modifyBoard(Board board);//게시판 수정
 	public int removeBoard(int boardNo);//게시판 삭제
 	
