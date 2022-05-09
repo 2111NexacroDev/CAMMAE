@@ -32,6 +32,10 @@ table td {
 .td_sub {
 	border: none;
 }
+
+button { cursor:pointer; }
+	
+}
 </style>
 </head>
 <body>
@@ -86,7 +90,7 @@ table td {
 					
 					<tr>
 						<td class="td_left">상담희망날짜</td>
-						<td class="td_right"><input type="date" name="cons_date"></td>
+						<td class="td_right"><input type="date" name="cons_date" min="2019-01-01" max="2060-12-31"></td>
 					</tr>
 					
 					<tr>
@@ -116,7 +120,7 @@ table td {
 					</tr>
 					
 					<tr>
-						<td colspan="2" align="center" class="td_sub"><input type="submit" value="상담신청"></td>
+						<td colspan="2" align="center" class="td_sub"><button class="btn" type="submit"  >상담신청</button></td>
 					</tr>
 					</table>
 					</div>

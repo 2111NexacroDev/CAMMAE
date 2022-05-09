@@ -116,11 +116,6 @@ public class ConsultantController {
 			HttpServletRequest request) {
 		
 		int consultantReply = cService.countReply(cons_no);
-		
-		System.out.println(consultantReply +"test");
-		
-		
-		
 		if(consultantReply < 1) {
 			int result = cService.printByNo(cons_no);
 		 if(result >0) {

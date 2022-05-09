@@ -89,13 +89,13 @@ public class PortfolioController {
 
 			int result = pService.insertPort(portfolio);
 			if (result > 0) {
+				mv.setViewName("redirect:/portfolio/listView.kh");
 				HttpSession session = request.getSession();
 				int port_student_no = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
 				List<Portfolio> pList = pService.printOneByStNo(port_student_no);
 				if (pList != null) {
 					mv.addObject("pList", pList);
-					mv.setViewName("portfolio/portfolioListView");
-
+					
 				}
 			} else {
 				mv.addObject("msg", "포트폴리오 등록실패");

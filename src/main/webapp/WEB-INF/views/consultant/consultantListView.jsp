@@ -6,8 +6,63 @@
 <head>
 <meta charset="UTF-8">
 <title>학생 상담신청 전체조회 페이지</title>
+<link rel="stylesheet" href="/resources/menuBar.css">
 <link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
+<style>
+.bbs {
+	position: relative;
+	margin-bottom: 40px;
+}
+
+.bbs table {
+	width: 1000px;
+	border-top: 1px solid #343434;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+thead {
+	background: rgb(237, 237, 237);
+	height: 50px;
+	border-bottom: 2px solid #c2c2c2;
+}
+
+tr {
+	display: table-row;
+	border-color: inherit;
+}
+
+tbody {
+	display: table-row-group;
+	vertical-align: middle;
+	border-color: inherit;
+}
+
+.bbs_ table th, .bbs table td {
+	padding: 12px 10px;
+	border-bottom: 1px solid #c2c2c2;
+	font-size: 16px;
+}
+
+.bbs table .space {
+	background: #fdfdfd;
+}
+
+.ta {
+	text-align: center;
+}
+
+td a{
+	text-decoration: none;
+	color: black;
+}
+
+</style>
+
 </head>
 <body>
 	<c:if test="${empty sessionScope}">
@@ -23,13 +78,13 @@
 			</div>
 			<!-- contents-main -->
 			<div id="center">
-				<h3 id="b-title">상담관리</h3>
+				<h2 id="b-title">상담관리</h2>
 				<br>
 
 				<div class="bbs">
 
 
-					<table style="width: 1000px;">
+					<table>
 
 						<thead>
 							<tr>
@@ -55,8 +110,8 @@
 										<c:param name="cons_no" value="${consultant.cons_no}"></c:param>
 									</c:url>
 
-									<td class="ta" id="detail" style="text-align: left"><a
-										href="${cDetail}">${consultant.cons_title }</a></td>
+									<td class="ta" id="title" ><a href="${cDetail}">${consultant.cons_title }</a></td>
+										
 									<td class="ta" id="writer">${consultant.cons_student_name}</td>
 									<td class="ta" id="stu_number">${consultant.cons_student_no}</td>
 									<td class="ta" id="college">${consultant.cons_college}</td>

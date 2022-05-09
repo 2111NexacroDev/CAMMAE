@@ -7,6 +7,62 @@
 <meta charset="UTF-8">
 <title>학생 포트폴리오 수정 페이지</title>
 <link rel="stylesheet" href="/resources/contents.css">
+<style>
+.tb1{
+position: relative;
+border-top: 1px solid #ccc;
+font-size: 16px;
+}
+
+.tb1 table{
+position: relative;
+border-top: 1px solid #fff;
+width: 100%;
+}
+colgroup {
+    display: table-column-group;
+}
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+.tb1 table tbody th {
+    padding: 17px 12px;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    color: white;
+    background: #10412C;
+}
+
+.tb1 table tbody td {
+    padding: 17px 12px;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    color: #000;
+}
+
+.ta_l {
+    text-align: left !important;
+}
+
+.input-btn{
+	text-align: center;
+
+}
+.a-btn{
+	float: right;
+}
+
+#btn{
+cursor: pointer;
+}
+</style>
 </head>
 
 <body>
@@ -34,24 +90,71 @@
 					<input type="hidden" name="port_licenseFilePath" value="${portfolio.port_licenseFilePath}"> 
 					<input type="hidden" name="port_award_historyRename" value="${portfolio.port_award_historyRename}">
 					<input type="hidden" name="port_awardFilePath" value="${portfolio.port_awardFilePath}">
-					제목 <input type="text" name="port_title" value="${portfolio.port_title}"><br>	
-					이름 <input type="text" name="port_name" value="${portfolio.port_name}"><br> 
-					학번 <input type="text" name="port_student_no" value="${portfolio.port_student_no}" readonly><br>	
-					학과명 <input type="text" name="port_college" readonly	value="${portfolio.port_college }"><br>
-					전화번호 <input type="text" name="port_student_number"	value="${portfolio.port_student_number}" readonly><br>
-					자격증 첨부 <input type="file" name="reloadFile">${portfolio.port_license}<br>
-					수상이력 첨부 <input type="file" name="reloadFile1">${portfolio.port_award_history}<br>
-					작성날짜 <input type="text" name="port_writerDate" value="${portfolio.port_writerDate}" readonly><br>
-					내용 <textarea type="text" name="port_content" value="${portfolio.port_content}"></textarea><br>
-					단과 <input type="text" name="port_university_code" value="${portfolio.port_university_code }" />		
+					
+					
+					<div class="tb1">
+					<table>
+						<colgroup>
+							<col style="width:180px;">
+							<col>
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row" class="ta_l">제목</th>
+								<td class="ta_l"><input type="text" name="port_title" value="${portfolio.port_title}"></td>
+							</tr>
+							<tr>
+								<th scope="row" class="ta_l">이름</th>
+								<td class="ta_l"><input type="text" name="port_name" value="${portfolio.port_name}"></td>
+							</tr>
+							<tr>
+								<th scope="row" class="ta_l">학번</th>
+								<td class="ta_l"><input type="text" name="port_college" readonly value="${portfolio.port_college }"></td>
+							</tr>
+							<tr>
+								<th scope="row" class="ta_l">학과명</th>
+								<td class="ta_l"><input type="text" name="port_student_number"	value="${portfolio.port_student_number}" readonly></td>
+							</tr>
+							<tr>
+								<th scope="row" class="ta_l">단과대학</th>
+								<td class="ta_l"><input type="text" name="port_university_code" value="${portfolio.port_university_code }" /></td>
+							</tr>
+							<tr>
+								<th scope="row" class="ta_l">전화번호</th>
+								<td class="ta_l"><input type="text" name="port_student_number"	value="${portfolio.port_student_number}" readonly></td>
+							</tr>
+							<tr>
+								<th scope="row" class="ta_l">자격증 첨부</th>
+								<td class="ta_l"><input type="file" name="reloadFile" >${portfolio.port_license}</td>
+							</tr>
+							<tr>
+								<th scope="row" class="ta_l">수상이력 첨부</th>
+								<td class="ta_l"> <input type="file" name="reloadFile1">${portfolio.port_award_history}</td>
+							</tr>
+							<tr>
+								<th scope="row" class="ta_l">작성날짜</th>
+								<td class="ta_l"> <input type="text" name="port_writerDate" value="${portfolio.port_writerDate}" readonly></td>
+							</tr>
+							
+							<tr>
+								<th scope="row" class="ta_l">내용</th>
+								<td class="ta_l"> <textarea type="text" name="port_content" value="${portfolio.port_content}"></textarea></td>
+							</tr>
+						</tbody>
+					  </table>
+					</div>
+					<br>
 					<div class="enr_btn">
 						<div class="input-btn">
-							<input type="submit" id="btn1" value="수정"><br> 
-							<input type="button" id="btn2" onclick="location.href='/portfolio/delete.kh?port_no=${portfolio.port_no}'" value="삭제">			
+							<button type="submit"  id="btn" class="btn" >수정</button><br> 
 						</div>
-						<div class="a-btn">
-							<a href="/portfolio/listView.kh" id="list_l">목록</a>
-						</div>
+						
+					</div>
+					<br>
+					<div class="a-btn">
+						   <a href="/portfolio/listView.kh" id="list_l">
+						   	  <button id="btn" class="btn">목록</button>
+						   </a>
 					</div>
 				</form>
 			</div>
