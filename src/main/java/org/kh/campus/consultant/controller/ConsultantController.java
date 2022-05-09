@@ -46,6 +46,8 @@ public class ConsultantController {
 		if(!cList.isEmpty()) {
 			model.addAttribute("cList", cList);
 			model.addAttribute("pi", pi);
+			model.addAttribute("menu", "consultant");
+			model.addAttribute("currentPage", currentPage);
 			return "consultant/consultantListView";
 		}else {
 			model.addAttribute("msg", "상담 전체 조회 실패");
