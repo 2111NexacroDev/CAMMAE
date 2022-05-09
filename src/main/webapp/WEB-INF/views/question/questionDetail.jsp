@@ -202,13 +202,14 @@ hr {
 					$tableBody.html("");
 					for (var i = 0; i < data.length; i++) {
 						var $tr = $("<tr>");
-						var $rWriter = $("<td width='100'>").text(
+						var $tr2 = $("<tr>");
+						var $rWriter = $("<td width='100%'>").text(
 								data[i].questionReplyWriter);
-						var $rContent = $("<td>").text(
+						var $rContent = $("<td width='100%' align='left'>").text(
 								data[i].questionReplyContent);
-						var $rDate = $("<td width='100'>").text(
+						var $rDate = $("<td width='10%' align='right'>").text(
 								data[i].questionReplyDate);
-						var $btnArea = $("<td width='80'>").append(
+						var $btnArea = $("<td align='right'>").append(
 								"<a href='javascript:void(0)' onclick='modifyReplyView(this,"
 										+ data[i].questionNo + ", "
 										+ data[i].questionReplyNo + ", \""
@@ -218,13 +219,18 @@ hr {
 										+ data[i].questionNo + ","
 										+ data[i].questionReplyNo
 										+ ");'>삭제</a>");
+						var $rLine = $("<tr><td colspan='4'><hr style='width:740px;'>");
+						
 						$tr.append($rWriter);
-						$tr.append($rContent);
 						$tr.append($rDate);
-						if (data[i].questionReplyId == rWriterId) {
-							$tr.append($btnArea);
-						}
+						$tr2.append($rContent);
+						 if (data[i].questionReplyId == rWriterId) { 
+							$tr2.append($btnArea);
+						 } 
+						
 						$tableBody.append($tr);
+						$tableBody.append($tr2);
+						$tableBody.append($rLine);
 					}
 				},
 				error : function() {
