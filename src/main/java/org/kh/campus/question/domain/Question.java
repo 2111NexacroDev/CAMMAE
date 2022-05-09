@@ -6,6 +6,7 @@ public class Question {
 	private String lectureName;
 	private String questionTitle;
 	private String questionContent;
+	private String questionId;
 	private String questionWriter;
 	private String questionDate;
 	private String questionUpdateDate;
@@ -17,14 +18,16 @@ public class Question {
 	public Question() {}
 
 	public Question(int questionNo, String professorName, String lectureName, String questionTitle,
-			String questionContent, String questionWriter, String questionDate, String questionUpdateDate,
-			int questionCount, String questionFileName, String questionFileReNeme, String questionFilePath) {
+			String questionContent, String questionId, String questionWriter, String questionDate,
+			String questionUpdateDate, int questionCount, String questionFileName, String questionFileReNeme,
+			String questionFilePath) {
 		super();
 		this.questionNo = questionNo;
 		this.professorName = professorName;
 		this.lectureName = lectureName;
 		this.questionTitle = questionTitle;
 		this.questionContent = questionContent;
+		this.questionId = questionId;
 		this.questionWriter = questionWriter;
 		this.questionDate = questionDate;
 		this.questionUpdateDate = questionUpdateDate;
@@ -72,6 +75,14 @@ public class Question {
 
 	public void setQuestionContent(String questionContent) {
 		this.questionContent = questionContent;
+	}
+
+	public String getQuestionId() {
+		return questionId;
+	}
+
+	public void setQuestionId(String questionId) {
+		this.questionId = questionId;
 	}
 
 	public String getQuestionWriter() {
@@ -134,11 +145,13 @@ public class Question {
 	public String toString() {
 		return "Question [questionNo=" + questionNo + ", professorName=" + professorName + ", lectureName="
 				+ lectureName + ", questionTitle=" + questionTitle + ", questionContent=" + questionContent
-				+ ", questionWriter=" + questionWriter + ", questionDate=" + questionDate + ", questionUpdateDate="
-				+ questionUpdateDate + ", questionCount=" + questionCount + ", questionFileName=" + questionFileName
-				+ ", questionFileReNeme=" + questionFileReNeme + ", questionFilePath=" + questionFilePath + "]";
+				+ ", questionId=" + questionId + ", questionWriter=" + questionWriter + ", questionDate=" + questionDate
+				+ ", questionUpdateDate=" + questionUpdateDate + ", questionCount=" + questionCount
+				+ ", questionFileName=" + questionFileName + ", questionFileReNeme=" + questionFileReNeme
+				+ ", questionFilePath=" + questionFilePath + "]";
 	}
 
+	
 	
 	
 

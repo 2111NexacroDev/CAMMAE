@@ -3,6 +3,7 @@ package org.kh.campus.question.domain;
 public class QuestionReply {
 	private int questionReplyNo;
 	private int questionNo;
+	private String questionReplyId;
 	private String questionReplyWriter;
 	private String questionReplyContent;
 	private String questionReplyDate;
@@ -10,11 +11,12 @@ public class QuestionReply {
 	
 	public QuestionReply () {}
 
-	public QuestionReply(int questionReplyNo, int questionNo, String questionReplyWriter, String questionReplyContent,
-			String questionReplyDate, String questionReplyUpdateDate) {
+	public QuestionReply(int questionReplyNo, int questionNo, String questionReplyId, String questionReplyWriter,
+			String questionReplyContent, String questionReplyDate, String questionReplyUpdateDate) {
 		super();
 		this.questionReplyNo = questionReplyNo;
 		this.questionNo = questionNo;
+		this.questionReplyId = questionReplyId;
 		this.questionReplyWriter = questionReplyWriter;
 		this.questionReplyContent = questionReplyContent;
 		this.questionReplyDate = questionReplyDate;
@@ -35,6 +37,14 @@ public class QuestionReply {
 
 	public void setQuestionNo(int questionNo) {
 		this.questionNo = questionNo;
+	}
+
+	public String getQuestionReplyId() {
+		return questionReplyId;
+	}
+
+	public void setQuestionReplyId(String questionReplyId) {
+		this.questionReplyId = questionReplyId;
 	}
 
 	public String getQuestionReplyWriter() {
@@ -71,11 +81,13 @@ public class QuestionReply {
 
 	@Override
 	public String toString() {
-		return "QuestionReply [questionReplyNo=" + questionReplyNo + ", questionNo=" + questionNo
-				+ ", questionReplyWriter=" + questionReplyWriter + ", questionReplyContent=" + questionReplyContent
-				+ ", questionReplyDate=" + questionReplyDate + ", questionReplyUpdateDate=" + questionReplyUpdateDate
-				+ "]";
+		return "QuestionReply [questionReplyNo=" + questionReplyNo + ", questionNo=" + questionNo + ", questionReplyId="
+				+ questionReplyId + ", questionReplyWriter=" + questionReplyWriter + ", questionReplyContent="
+				+ questionReplyContent + ", questionReplyDate=" + questionReplyDate + ", questionReplyUpdateDate="
+				+ questionReplyUpdateDate + "]";
 	}
+
+	
 	
 	
 

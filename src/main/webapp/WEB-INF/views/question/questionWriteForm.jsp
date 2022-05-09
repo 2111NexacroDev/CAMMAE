@@ -41,6 +41,7 @@
 				</div>
 				<div class="c-main">
 				<input type="hidden" name="questionWriter" value="${loginUser.studentName}">
+				<input type="hidden" name="questionId" value="${loginUser.studentNo}">
 					<div class="selectBox" style="padding:10px;">
 						<select id="professorName" name="professorName"
 							onchange="getProName()" style="border: none; width: 330px;">
