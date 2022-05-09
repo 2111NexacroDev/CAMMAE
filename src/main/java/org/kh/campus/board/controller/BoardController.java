@@ -61,8 +61,8 @@ public class BoardController {
 				mv.addObject("bList", bList);
 				mv.setViewName("board/boardList");
 				mv.addObject("menu", "board");
+				mv.addObject("currentPage", "currentPage");
 				mv.addObject("pi", pi);
-				System.out.println(pi.toString()+"test");
 
 			} else {
 				mv.setViewName("board/boardList");
