@@ -160,6 +160,7 @@ hr {
 			var questionNo = $("#questionNo").val(); /* 어떤 게시글에 대한 댓글인지 알기 위함 */
 			var rContents = $("#rContents").val();
 			var rWriter = "${loginProfessor.professorName}";
+			var rWriterId = "${loginProfessor.professorNo}";
 			<c:if test="${empty sessionScope.loginProfessor }">
 			alert("교수 로그인을 해주세요.");
 			</c:if>
@@ -170,7 +171,8 @@ hr {
 				data : {
 					"questionNo" : questionNo,
 					"questionReplyContent" : rContents,
-					"questionReplyWriter" : rWriter
+					"questionReplyWriter" : rWriter,
+					"questionReplyId" : rWriterId
 				}, //json형태
 				success : function(data) {
 					getQuestionReplyList();
@@ -188,6 +190,7 @@ hr {
 		function getQuestionReplyList() {
 			var questionNo = $("#questionNo").val();
 			var rWriter = "${loginProfessor.professorName}";
+			var rWriterId = "${loginProfessor.professorNo}";
 			$.ajax({
 				url : "/question/replyList",
 				type : "get",
@@ -218,7 +221,7 @@ hr {
 						$tr.append($rWriter);
 						$tr.append($rContent);
 						$tr.append($rDate);
-						if (data[i].questionReplyWriter == rWriter) {
+						if (data[i].questionReplyId == rWriterId) {
 							$tr.append($btnArea);
 						}
 						$tableBody.append($tr);

@@ -159,6 +159,8 @@
 	<resultMap type="QuestionReply" id="qReplyResult">
 		<id property="questionReplyNo" column="QUESTIONREPLY_NO"></id>
 		<result property="questionNo" column="QUESTION_NO" />
+		<result property="questionReplyId"
+			column="QUESTIONREPLY_ID" />
 		<result property="questionReplyWriter"
 			column="QUESTIONREPLY_WRITER" />
 		<result property="questionReplyContent"
@@ -179,6 +181,7 @@
 	<insert id="insertReply">
 		INSERT INTO QUESTIONREPLY_TBL
 		VALUES(SEQ_QUESTIONREPLY_NO.NEXTVAL, #{questionNo},
+		#{questionReplyId},
 		#{questionReplyWriter}, #{questionReplyContent}, DEFAULT, DEFAULT)
 	</insert>
 
