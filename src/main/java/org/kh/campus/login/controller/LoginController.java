@@ -49,9 +49,9 @@ public class LoginController {
 				Student student = new Student();
 				student.setStudentNo(id);
 				student.setStudentPassword(pw);
-				Student loginStd = lService.loginStudent(student);
-				if(loginStd != null) {
-					session.setAttribute("loginStd", loginStd);
+				Student loginUser = lService.loginStudent(student);
+				if(loginUser != null) {
+					session.setAttribute("loginUser", loginUser);
 				}
 				// 교수
 			} else if(type.equals("professor")) {
@@ -59,9 +59,9 @@ public class LoginController {
 				professor.setProfessorNo(id);
 				professor.setProfessorPassword(pw);
 				
-				Professor loginPrf = lService.loginProfessor(professor);
-				if(loginPrf != null) {
-					session.setAttribute("loginPrf", loginPrf);
+				Professor loginProfessor = lService.loginProfessor(professor);
+				if(loginProfessor != null) {
+					session.setAttribute("loginProfessor", loginProfessor);
 				}
 				// 관리자
 			} else {
@@ -69,9 +69,9 @@ public class LoginController {
 				manager.setManagerNo(id);
 				manager.setManagerPassword(pw);
 				
-				Manager loginMag = lService.loginManager(manager);
-				if(loginMag != null) {
-					session.setAttribute("loginMag", loginMag);
+				Manager loginManager = lService.loginManager(manager);
+				if(loginManager != null) {
+					session.setAttribute("loginManager", loginManager);
 				}
 			}
 			
