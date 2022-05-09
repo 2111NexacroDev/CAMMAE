@@ -18,8 +18,8 @@ public class PortfolioServiceImpl implements PortfolioService {
 	@Autowired
 	private SqlSession sqlSession;
 	@Override
-	public List<Portfolio> printAllPort(int studentNo) {
-		List<Portfolio>pList = pStore.selectAllPort(sqlSession, studentNo);
+	public List<Portfolio> printAllPort(int studentNo, PageInfo pi) {
+		List<Portfolio>pList = pStore.selectAllPort(sqlSession, studentNo, pi);
 		return pList;
 	}
 

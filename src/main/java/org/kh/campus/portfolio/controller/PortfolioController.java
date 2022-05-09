@@ -33,11 +33,17 @@ public class PortfolioController {
 	public String portListView(Model model, @RequestParam(value = "page", required = false) Integer page,
 			HttpServletRequest request) {
 		try {
+			int currentPage = (page != null) ? page : 1;
+			int totalCount = pService.getListCount();
+			PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
 			HttpSession session = request.getSession();
 			int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
-			List<Portfolio> pList = pService.printAllPort(studentNo);
+			List<Portfolio> pList = pService.printAllPort(studentNo, pi);
 			if (!pList.isEmpty()) {
 				model.addAttribute("pList", pList);
+				model.addAttribute("pi", pi);
+				model.addAttribute("menu", "portfolio");
+				model.addAttribute("currentPage", currentPage);
 				return "portfolio/portfolioListView";
 			} else {
 				model.addAttribute("msg", "포트폴리오 전체조회 실패");
@@ -248,6 +254,8 @@ public class PortfolioController {
 		if (!pList.isEmpty()) {
 			model.addAttribute("pList", pList);
 			model.addAttribute("pi", pi);
+			model.addAttribute("menu", "portfolio");
+			model.addAttribute("currentPage", currentPage);
 			return "portfolio/portfolioAdminListView";
 		} else {
 			model.addAttribute("msg", "포트폴리오 전체조회 실패");

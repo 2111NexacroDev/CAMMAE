@@ -5,9 +5,9 @@ import org.kh.campus.professor.domain.Professor;
 import org.kh.campus.student.domain.Student;
 
 public interface LoginService {
-	public int loginStudent(Student student);
-	public int loginProfessor(Professor professor);
-	public int loginManager(Manager manager);
+	public Student loginStudent(Student student);
+	public Professor loginProfessor(Professor professor);
+	public Manager loginManager(Manager manager);
 	public String findPwdStd(Student std);
 	public int pwdSame(String type, int id, String pwd);
 	public int pwdChange(String type, int id, String pwd);

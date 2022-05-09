@@ -13,21 +13,21 @@ import org.springframework.stereotype.Repository;
 public class LoginStoreLogic implements LoginStore {
 
 	@Override
-	public int selectStudent(SqlSession sqlSession, Student student) {
-		int result = sqlSession.selectOne("LoginMapper.studentLogin", student);
-		return result;
+	public Student selectStudent(SqlSession sqlSession, Student student) {
+		Student std = sqlSession.selectOne("LoginMapper.studentLogin", student);
+		return std;
 	}
 
 	@Override
-	public int selectProfessor(SqlSession sqlSession, Professor professor) {
-		int result = sqlSession.selectOne("LoginMapper.professorLogin", professor);
-		return result;
+	public Professor selectProfessor(SqlSession sqlSession, Professor professor) {
+		Professor prf = sqlSession.selectOne("LoginMapper.professorLogin", professor);
+		return prf;
 	}
 
 	@Override
-	public int selectManager(SqlSession sqlSession, Manager manager) {
-		int result = sqlSession.selectOne("LoginMapper.managerLogin", manager);
-		return result;
+	public Manager selectManager(SqlSession sqlSession, Manager manager) {
+		Manager mag = sqlSession.selectOne("LoginMapper.managerLogin", manager);
+		return mag;
 	}
 
 	@Override

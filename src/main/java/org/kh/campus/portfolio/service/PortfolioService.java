@@ -7,7 +7,7 @@ import org.kh.campus.portfolio.domain.Portfolio;
 public interface PortfolioService {
 	
 	
-	public List<Portfolio>printAllPort(int studentNo); //포트폴리오 목록 조회
+	public List<Portfolio>printAllPort(int studentNo, PageInfo pi); //포트폴리오 목록 조회
 	public int insertPort(Portfolio portfolio); //포트폴리오 등록
 	public List<Portfolio>printAdminAllPort(PageInfo pi); //관리자 포트폴리오 목록 조회
 	public Portfolio printAdminDetailPort(int port_no); //관리자 포트폴리오 상세조회

@@ -13,8 +13,12 @@ import org.springframework.stereotype.Repository;
 public class PortfolioStoreLogic implements PortfolioStore {
 
 	@Override
-	public List<Portfolio> selectAllPort(SqlSession sqlSession, int studentNo) {
-		List<Portfolio> pList = sqlSession.selectList("PortfolioMapper.selectAllPort", studentNo);
+	public List<Portfolio> selectAllPort(SqlSession sqlSession, int studentNo, PageInfo pi) {
+		int limit = pi.getPortfolioLimit();
+		int currentPage = pi.getCurrentPage();
+		int offset = (currentPage -1) * limit ;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		List<Portfolio> pList = sqlSession.selectList("PortfolioMapper.selectAllPort", studentNo, rowBounds);
 		return pList;
 	}
 

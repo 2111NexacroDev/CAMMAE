@@ -9,6 +9,12 @@
 <link rel="stylesheet" href="/resources/contents.css">
 </head>
 <body>
+
+	<c:if test="${empty sessionScope}">
+		<jsp:forward page="/login/loginPage.kh" />
+	</c:if>
+
+	<c:if test="${not empty sessionScope.loginManager }">
 	<!-- header  -->
 	<jsp:include page="../common/menuBar.jsp"></jsp:include>
 	<!-- contents -->
@@ -37,5 +43,6 @@
 		</div>
 	</div>
 	<jsp:include page="../common/footer.jsp"></jsp:include>
+</c:if>
 </body>
 </html>
