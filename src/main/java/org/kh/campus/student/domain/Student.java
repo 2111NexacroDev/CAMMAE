@@ -15,7 +15,7 @@ public class Student {
 	private String studentState;
 	private String professorName;
 	private String chk;
-	private int universityCode;
+	private String universityCode;
 	
 	public Student() {}
 
@@ -71,7 +71,7 @@ public class Student {
 
 	public Student(int studentNo, String universityCollege, String departmentName, String studentName, int studentGrade,
 			String studentBirth, String studentAddress, String studentPhonenumber, String studentEmail,
-			String studentPassword, String professorNo, String studentState, String professorName, int universityCode) {
+			String studentPassword, String professorNo, String studentState, String professorName, String universityCode) {
 		super();
 		this.studentNo = studentNo;
 		this.universityCollege = universityCollege;
@@ -201,11 +201,11 @@ public class Student {
 		this.professorName = professorName;
 	}
 
-	public int getUniversityCode() {
+	public String getUniversityCode() {
 		return universityCode;
 	}
 
-	public void setUniversityCode(int universityCode) {
+	public void setUniversityCode(String universityCode) {
 		this.universityCode = universityCode;
 	}
 

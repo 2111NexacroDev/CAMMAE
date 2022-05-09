@@ -25,7 +25,7 @@ public class Pagination {
 		}
 		String searchCondition = "";
 		String searchValue = "";
-		int universityCode = 0;
+		String universityCode = "";
 		pi = new PageInfo(currentPage, boardLimit, 
 				naviLimit, startNavi, endNavi, totalCount, maxPage, prev, next, universityCode, searchCondition, searchValue);
 		return pi;

@@ -12,13 +12,13 @@ public class Board {
 	private String boardFilename;
 	private String boardFilerename;
 	private String boardFilepath;
-	private int universityCode;
+	private String universityCode;
 	
 	public Board() {}
 
 	public Board(int boardNo, String boardTitle, String boardContent, String boardWriter, String boardDate,
 			String boardUpdatedate, int boardCount, String boardFilename, String boardFilerename, String boardFilepath,
-			int universityCode) {
+			String universityCode) {
 		super();
 		this.boardNo = boardNo;
 		this.boardTitle = boardTitle;
@@ -113,11 +113,11 @@ public class Board {
 		this.boardFilepath = boardFilepath;
 	}
 
-	public int getUniversityCode() {
+	public String getUniversityCode() {
 		return universityCode;
 	}
 
-	public void setUniversityCode(int universityCode) {
+	public void setUniversityCode(String universityCode) {
 		this.universityCode = universityCode;
 	}
 
