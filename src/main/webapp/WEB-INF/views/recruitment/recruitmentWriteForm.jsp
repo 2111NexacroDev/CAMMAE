@@ -9,7 +9,7 @@ input::placeholder {
   font-weight: bold;
 }
 input{
-  color: rgb(52, 152, 219);
+/*   color: rgb(52, 152, 219); */
   font-weight: bold;
 }
 span{
@@ -93,7 +93,7 @@ table.type02 td {
 			<form action="/recruitment/register.kh" method="post">
 			<div class="c-title">
 				<div class="b-title"><h2>채용공고</h2></div>
-				<div class="btn_1"><input class="btn"  type="submit" value="등록"><button style="width: 50px" class="btn"onclick="location.href='/recruitment/list.kh'">목록</button></div>
+				<div class="btn_1"><input class="btn"  type="submit" value="등록"><button type="reset" style="width: 50px" class="btn" onclick="location.href='/recruitment/list.kh'">목록</button></div>
 			</div>
 			
 			<br><br>

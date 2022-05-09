@@ -79,8 +79,173 @@
 	width: 350px;
 	height: 200px;
 }
+
+/* 조회부분 */
+
+#title_1{
+	height:50px;
+	width: 800px;
+	margin-top: 50px;
+	border-top: 2px solid #ccc;
+	border-bottom: 2px solid #ccc;
+}
+	#title_2{
+		height: inherit;
+		width: 70%;
+		float: left;
+		line-height: 50px;
+	}
+	#title_3{
+		height: inherit;
+		width: 30%;
+		float: left;
+		line-height: 50px;
+	}
 </style>
 
+
+</head>
+<body>
+	<!-- header  -->
+	<jsp:include page="../common/menuBar.jsp"></jsp:include>
+
+	<!-- contents영역 -->
+	<div id="content">
+		<div id="left">
+			<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
+		</div>
+
+		<div id="center">
+			<div class="c-title">
+				<div class="b-title"><h2>채용공고</h2></div>
+				<div class="btn_1"><button style="width: 50px" class="btn" onclick="location.href='/recruitment/list.kh'">목록</button></div>
+			</div>
+			<div id="title_1">
+				<div id="title_2">
+					<span>${recruitment.recruitmentTitle }</span>
+				</div>
+				<div id="title_3">
+					<span>${recruitment.recruitmentWriter }</span>
+				</div>
+			</div>
+				
+				
+					기업명
+					${recruitment.recruitmentCompanyName }
+				
+					경력
+					${recruitment.recruitmentCareer }
+				
+			
+					학력
+					${recruitment.recruitmentEducation }
+				
+				
+					우대
+					${recruitment.recruitmentPrefer }
+				
+				
+					교용형태
+					${recruitment.recruitmentType }
+				
+				
+					급여
+					${recruitment.recruitmentSalary }
+				
+				
+					지역
+					 	${recruitment.recruitmentRegion }
+				
+				
+					
+						<Button onclick="mapView()">지도</Button>
+						<div id="map" style="width: 100%; height: 350px;"></div> <!--    <div id="clickLatlng"></div> -->
+					
+				
+				<table>
+				<tr>
+					<td>마감일</td>
+					<td id="endDate">${recruitment.recruitmentEndDate }</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><c:url var="rModify"
+							value="/recruitment/modifyView.kh">
+							<c:param name="recruitmentNo"
+								value="${recruitment.recruitmentNo }"></c:param>
+						</c:url> <c:url var="rDelete" value="/recruitment/delete.kh">
+							<c:param name="recruitmentNo"
+								value="${recruitment.recruitmentNo }"></c:param>
+						</c:url>
+						<a href="${rModify }">수정하기</a> <a href="${rDelete }">삭제하기</a>
+						<button class="btn-modal">지원하기</button></td>
+				</tr>
+			</table>
+			<form action="/support/register.kh" method="post"
+				enctype="multipart/form-data">
+				<div id="modal" class="modal-overlay">
+					<div class="modal-window">
+						<div class="close-area">X</div>
+						<div class="content">
+							<p>이력서 지원</p>
+							이력서<input type="file" multiple="multiple" size="50"
+								name="uploadFile"><br> 포트폴리오<input type="file"
+								multiple="multiple" size="50" name="uploadFile1"><br>
+							<input type="hidden" value="${recruitment.recruitmentNo }"
+								name="recruitmentNo"> <input type="hidden"
+								value="${recruitment.recruitmentTitle }" name="recruitmentTitle">
+							<button type="submit" id="completion">완료</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<!-- footer -->
+	<jsp:include page="../common/footer.jsp"></jsp:include>
+
+
+
+
+
+
+
+<script>
+	    function mapView() {
+	           var mapContainer = document.getElementById('map'),
+	           mapOption = {
+	              center: new kakao.maps.LatLng(33.450701, 126.570608),
+	              level: 3
+	           };
+	       
+	         	 
+	               
+
+ 				if($("#map").html()== ""){
+ 					var map = new daum.maps.Map(mapContainer, mapOption);
+ 		             var geocoder = new daum.maps.services.Geocoder();
+ 		            
+ 		               geocoder.addressSearch('${recruitment.recruitmentRegion}', function(results, status) {
+ 		               var coords=new kakao.maps.LatLng(results[0].y, results[0].x);
+ 		              
+ 		                   
+ 		                   var marker = new kakao.maps.Marker({
+ 		                      map:map,
+ 		                      position: coords
+ 		                   });
+ 		                   var infowindow = new kakao.maps.InfoWindow({
+ 		                      content :'<div style="width: 300px; text-align:center;padding: 6px 0;">${recruitment.recruitmentCompanyName }</div>'
+ 		                   });
+ 		                   infowindow.open(map, marker);
+ 		                   map.setCenter(coords);
+ 		                   
+ 		               });
+ 					
+ 				}else{
+ 					$("#map").html("");
+ 					$('#map').css('background-image', 'url("")');
+ 				}
+	       };        
+</script>
 <script>
 	window.onload = function(){
 	   const modal = document.getElementById("modal")
@@ -134,151 +299,6 @@
 	       });
 	    
 	}
-</script>
-</head>
-<body>
-	<!-- header  -->
-	<jsp:include page="../common/menuBar.jsp"></jsp:include>
-
-	<!-- contents영역 -->
-	<div id="content">
-		<div id="left">
-			<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
-		</div>
-
-		<div id="center">
-			<div class="c-title">
-				<div class="b-title"><h2>채용공고</h2></div>
-				<div class="btn_1"><button style="width: 50px" class="btn"onclick="location.href='/recruitment/list.kh'">목록</button></div>
-			</div>
-					제목
-					${recruitment.recruitmentTitle }
-				
-					작성자
-					${recruitment.recruitmentWriter }
-				
-				
-					기업명
-					${recruitment.recruitmentCompanyName }
-				
-					경력
-					${recruitment.recruitmentCareer }
-				
-			
-					학력
-					${recruitment.recruitmentEducation }
-				
-				
-					우대
-					${recruitment.recruitmentPrefer }
-				
-				
-					교용형태
-					${recruitment.recruitmentType }
-				
-				
-					급여
-					${recruitment.recruitmentSalary }
-				
-				
-					지역
-					 	${recruitment.recruitmentRegion }
-				
-				
-					
-						<Button onclick="mapView()">지도</Button>
-						<div id="map" style="width: 100%; height: 350px;"></div> <!--    <div id="clickLatlng"></div> -->
-					
-				
-				<table>
-				<tr>
-					<td>마감일</td>
-					<td id="endDate">${recruitment.recruitmentEndDate }</td>
-				</tr>
-				<tr>
-					<td colspan="2" align="center"><c:url var="rModify"
-							value="/recruitment/modifyView.kh">
-							<c:param name="recruitmentNo"
-								value="${recruitment.recruitmentNo }"></c:param>
-						</c:url> <c:url var="rDelete" value="/recruitment/delete.kh">
-							<c:param name="recruitmentNo"
-								value="${recruitment.recruitmentNo }"></c:param>
-						</c:url>
-						<button onclick="location.href='/recruitment/list.kh'">목록</button>
-						<a href="${rModify }">수정하기</a> <a href="${rDelete }">삭제하기</a>
-						<button class="btn-modal">지원하기</button></td>
-				</tr>
-			</table>
-			<form action="/support/register.kh" method="post"
-				enctype="multipart/form-data">
-				<div id="modal" class="modal-overlay">
-					<div class="modal-window">
-						<div class="close-area">X</div>
-						<div class="content">
-							<p>이력서 지원</p>
-							이력서<input type="file" multiple="multiple" size="50"
-								name="uploadFile"><br> 포트폴리오<input type="file"
-								multiple="multiple" size="50" name="uploadFile1"><br>
-							<input type="hidden" value="${recruitment.recruitmentNo }"
-								name="recruitmentNo"> <input type="hidden"
-								value="${recruitment.recruitmentTitle }" name="recruitmentTitle">
-							<button type="submit" id="completion">완료</button>
-						</div>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-	<!-- footer -->
-	<jsp:include page="../common/footer.jsp"></jsp:include>
-
-
-
-
-
-
-
-
-	<script>
-	
-	    function mapView() {
-	           var mapContainer = document.getElementById('map'),
-	           mapOption = {
-	              center: new kakao.maps.LatLng(33.450701, 126.570608),
-	              level: 3
-	           };
-	       
-	         	 
-	               
-
- 				if($("#map").html()== ""){
- 					var map = new daum.maps.Map(mapContainer, mapOption);
- 		             var geocoder = new daum.maps.services.Geocoder();
- 		            
- 		               geocoder.addressSearch('${recruitment.recruitmentRegion}', function(results, status) {
- 		               var coords=new kakao.maps.LatLng(results[0].y, results[0].x);
- 		              
- 		                   
- 		                   var marker = new kakao.maps.Marker({
- 		                      map:map,
- 		                      position: coords
- 		                   });
- 		                   var infowindow = new kakao.maps.InfoWindow({
- 		                      content :'<div style="width: 300px; text-align:center;padding: 6px 0;">${recruitment.recruitmentCompanyName }</div>'
- 		                   });
- 		                   infowindow.open(map, marker);
- 		                   map.setCenter(coords);
- 		                   
- 		               });
- 					
- 				}else{
- 					$("#map").html("");
- 					$('#map').css('background-image', 'url("")');
- 				}
-	       };        
-	               
- 
-
 </script>
 </body>
 </html>
