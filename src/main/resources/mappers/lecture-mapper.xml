@@ -56,4 +56,9 @@
 	<delete id="deleteLecture">
 		DELETE FROM LECTURE_TBL WHERE LECTURE_NO = #{lectureNo}
 	</delete>
+	
+	<select id="selectAllProName" resultMap="lectureResultMap">
+		SELECT DISTINCT
+		PROFESSOR_NAME FROM LECTURE_TBL ORDER BY PROFESSOR_NAME ASC
+	</select>
 </mapper>

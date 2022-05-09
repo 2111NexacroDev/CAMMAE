@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
 
 @Controller
 public class LectureController {
@@ -119,7 +122,18 @@ public class LectureController {
 	}
 	}
 	
-	
+	@ResponseBody
+	@RequestMapping(value = "/lecture/selectLecture", method =RequestMethod.GET, produces = "application/json;charset=utf-8") 
+	public String lectureProList(@RequestParam("professorName") String professorName) {
+		List<Lecture> lList = lService.printAllProName(professorName);
+	  
+	  if (!lList.isEmpty()) { 
+		 Gson gson = new Gson();
+		 return gson.toJson(lList);
+	  }
+	  
+	  return null;
+	  }
 	
 	
 

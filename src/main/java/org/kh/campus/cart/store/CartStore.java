@@ -17,13 +17,15 @@ public interface CartStore {
 
 	int deleteCart(SqlSession sqlSession, int cartNo);
 
-	List<Lecture> selectAllEnroll(SqlSession sqlSession);
+	List<Lecture> selectAllEnroll(SqlSession sqlSession, String lectureDepartment);
 
 	List<Lecture> selectMyEnroll(SqlSession sqlSession);
 
 	int insertEnroll(SqlSession sqlSession, Lecture lecture);
 
 	int deleteEnroll(SqlSession sqlSession, HashMap<String, Integer> map);
+
+	List<Lecture> selectAllEnroll2(SqlSession sqlSession, String lectureDepartment);
 
 
 }
