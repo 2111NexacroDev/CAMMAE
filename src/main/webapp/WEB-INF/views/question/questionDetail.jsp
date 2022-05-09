@@ -101,7 +101,7 @@ hr {
 				<div class="title">[${question.professorName }교수 _
 					${question.lectureName }] ${question.questionTitle }</div>
 				<div id="writerDate">
-					<div id="writer">1${question.questionWriter }</div>
+					<div id="writer">${question.questionWriter }</div>
 					<div id="date">${question.questionDate }</div>
 				</div>
 
