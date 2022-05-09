@@ -1,24 +1,24 @@
 package org.kh.campus.board.domain;
 
 public class University {
-	private int universityCode;
+	private String universityCode;
 	private String universityName;
 	private String universityCollege;
 	
 	public University() {}
 
-	public University(int universityCode, String universityName, String universityCollege) {
+	public University(String universityCode, String universityName, String universityCollege) {
 		super();
 		this.universityCode = universityCode;
 		this.universityName = universityName;
 		this.universityCollege = universityCollege;
 	}
 
-	public int getUniversityCode() {
+	public String getUniversityCode() {
 		return universityCode;
 	}
 
-	public void setUniversityCode(int universityCode) {
+	public void setUniversityCode(String universityCode) {
 		this.universityCode = universityCode;
 	}
 
@@ -43,6 +43,7 @@ public class University {
 		return "University [universityCode=" + universityCode + ", universityName=" + universityName
 				+ ", universityCollege=" + universityCollege + "]";
 	}
-	
+
+
 	
 }

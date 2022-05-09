@@ -13,6 +13,8 @@
 		<result property="professorPhonenumber" column="PROFESSOR_PHONENUMBER"/>
 		<result property="professorEmail" column="PROFESSOR_EMAIL"/>
 		<result property="professorPassword" column="PROFESSOR_PASSWORD"/>
+		<result property="universityCode" column="UNIVERSITY_CODE"/>
+		<result property="chk" column="CHK"/>
 	</resultMap>
 	
 	<select id="selectProfessorInfoOne" resultMap="professorResultMap">

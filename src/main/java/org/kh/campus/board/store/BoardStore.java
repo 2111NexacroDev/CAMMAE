@@ -6,7 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.kh.campus.board.domain.Board;
 import org.kh.campus.board.domain.BoardReply;
 import org.kh.campus.board.domain.PageInfo;
-import org.kh.campus.board.domain.Search;
+
 import org.kh.campus.board.domain.University;
 
 public interface BoardStore {
@@ -14,8 +14,6 @@ public interface BoardStore {
 	public	List<Board> selectAllBoard(SqlSession sqlSession, PageInfo pi);
 
 	public Board selectOneBoard(SqlSession sqlSession, int boardNo);
-
-	public List<Board> selectSearchBoard(SqlSession sqlSession, Search search);
 
 	public int insertBoard(Board board, SqlSession sqlSession);
 

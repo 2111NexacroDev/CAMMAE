@@ -32,9 +32,9 @@
 				AND BOARD_CONTENT LIKE '%' || #{searchValue} || '%'
 			</if>
 			<if test="searchCondition.toString() == 'all'">
-				AND BOARD_CONTENT LIKE '%' || #{searchValue} || '%'
+				AND (BOARD_CONTENT LIKE '%' || #{searchValue} || '%'
 				OR BOARD_TITLE LIKE '%' || #{searchValue} || '%'
-				OR BOARD_WRITER LIKE '%' || #{searchValue} || '%'
+				OR BOARD_WRITER LIKE '%' || #{searchValue} || '%')
 			</if>
 		</if>
   	  ORDER BY BOARD_NO DESC
@@ -54,9 +54,9 @@
 				AND BOARD_CONTENT LIKE '%' || #{searchValue} || '%'
 			</if>
 			<if test="searchCondition.toString() == 'all'">
-				AND BOARD_CONTENT LIKE '%' || #{searchValue} || '%'
+				AND (BOARD_CONTENT LIKE '%' || #{searchValue} || '%'
 				OR BOARD_TITLE LIKE '%' || #{searchValue} || '%'
-				OR BOARD_WRITER LIKE '%' || #{searchValue} || '%'
+				OR BOARD_WRITER LIKE '%' || #{searchValue} || '%')
 			</if>
 		</if>
   		 ORDER BY BOARD_NO DESC
