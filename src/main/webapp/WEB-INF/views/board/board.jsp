@@ -63,7 +63,7 @@ h3 {
 	
 	<div class="center">
 
-		<h3 id="b-title">학과게시판 게시판</h3>
+		<h3 id="b-title">학과게시판</h3>
 		<br>
 		<div>
 			<c:url var="bModify" value="/board/modifyView.kh">
@@ -74,7 +74,7 @@ h3 {
 				<c:param name="boardNo" value="${board.boardNo }"></c:param>
 			</c:url>
 			<button class="btn" onclick="location.href='${bDelete }'">삭제</button>
-			<button class="btn" onclick="location.href='/board/list.kh'">목록</button>
+			<button class="btn" type="reset" onclick="location.href='/board/list.kh?universityCode=${universityCode}'">목록</button>
 		</div>
 		<br>
 		<div class="c-main">
