@@ -10,6 +10,11 @@
 <link rel="stylesheet" href="/resources/contents.css">
 </head>
 <body>
+	<c:if test="${empty sessionScope}">
+		<jsp:forward page="/login/loginPage.kh" />
+	</c:if>
+
+	<c:if test="${not empty sessionScope.loginManager }">
 	<!-- header  -->
 	<jsp:include page="../common/menuBar.jsp"></jsp:include>
 	<!-- contents -->
@@ -22,12 +27,15 @@
 			<h3 id="b-title">상담관리</h3>
 			<br>
 			<div>
-				<input type="hidden" name="consultant_no"
-					value="${consultant.cons_no}"> 상담제목 <span>${consultant.cons_title}</span><br>
-				이름 <span>${consultant.cons_student_name}</span><br> 학번 <span>${consultant.cons_student_no }</span><br>
-				학과명 <span>${consultant.cons_college == '1' ? '컴퓨터공학과' : '2' ? '전자전기공학과' : '3' ? '산업디자인학과' : '4' ? '중국어학과' : '5' ? '유비쿼터스학과' : '국어국문학과'}</span><br>
-				전화번호 <span>${consultant.cons_student_number }</span><br> 상담희망날짜<span>${consultant.cons_date}</span><br>
-				상담사 <span>${consultant.cons_counselor }</span><br> 단과대학 <span>${consultant.cons_university_code}</span><br>
+				<input type="hidden" name="consultant_no" value="${consultant.cons_no}"> 
+				상담제목 <span>${consultant.cons_title}</span><br>
+				이름 <span>${consultant.cons_student_name}</span><br> 
+				학번 <span>${consultant.cons_student_no }</span><br>
+				학과명 <span>${consultant.cons_college}</span><br> 
+				전화번호 <span>${consultant.cons_student_number }</span><br>
+				상담희망날짜<span>${consultant.cons_date}</span><br> 
+				상담사 <span>${consultant.cons_counselor }</span><br>
+				단과대학 <span>${consultant.cons_university_code}</span><br> 
 				상담내용 <span>${consultant.cons_content}</span>
 
 				<!-- 댓글 등록 -->
@@ -59,6 +67,7 @@
 	</div>
 	<!-- footer -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>
+	</c:if>
 	<script>
 		getReplyList();
 		$("#rSubmit").on("click", function() {
