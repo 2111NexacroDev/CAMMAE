@@ -4,90 +4,111 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="LoginMapper">
 	<resultMap type="Student" id="studentResultMap">
-		<id property="studentNo" column="STUDENT_NO"/>
-		<result property="universityCollege" column="UNIVERSITY_COLLEGE"/>
-		<result property="departmentName" column="DEPARTMENT_NAME"/>
-		<result property="studentName" column="STUDENT_NAME"/>
-		<result property="studentGrade" column="STUDENT_GRADE"/>
-		<result property="studentBirth" column="STUDENT_BIRTH"/>
-		<result property="studentAddress" column="STUDENT_ADDRESS"/>
-		<result property="studentPhonenumber" column="STUDENT_PHONENUMBER"/>
-		<result property="studentEmail" column="STUDENT_EMAIL"/>
-		<result property="studentPassword" column="STUDENT_PASSWORD"/>
-		<result property="professorNo" column="PROFESSOR_NO"/>
-		<result property="studentState" column="STUDENT_STATE"/>
-		<result property="professorName" column="PROFESSOR_NAME"/>
-		<result property="universityCode" column="UNIVERSITY_CODE"/>
+		<id property="studentNo" column="STUDENT_NO" />
+		<result property="universityCollege"
+			column="UNIVERSITY_COLLEGE" />
+		<result property="departmentName" column="DEPARTMENT_NAME" />
+		<result property="studentName" column="STUDENT_NAME" />
+		<result property="studentGrade" column="STUDENT_GRADE" />
+		<result property="studentBirth" column="STUDENT_BIRTH" />
+		<result property="studentAddress" column="STUDENT_ADDRESS" />
+		<result property="studentPhonenumber"
+			column="STUDENT_PHONENUMBER" />
+		<result property="studentEmail" column="STUDENT_EMAIL" />
+		<result property="studentPassword" column="STUDENT_PASSWORD" />
+		<result property="professorNo" column="PROFESSOR_NO" />
+		<result property="studentState" column="STUDENT_STATE" />
+		<result property="professorName" column="PROFESSOR_NAME" />
+		<result property="universityCode" column="UNIVERSITY_CODE" />
 	</resultMap>
-	
+
 	<select id="studentLogin" resultMap="studentResultMap">
-		SELECT * FROM STUDENT_TBL WHERE STUDENT_NO = #{studentNo} AND STUDENT_PASSWORD = #{studentPassword}
+		SELECT * FROM STUDENT_TBL
+		WHERE STUDENT_NO = #{studentNo} AND STUDENT_PASSWORD =
+		#{studentPassword}
 	</select>
-	
+
 	<resultMap type="Professor" id="professorResultMap">
-		<id property="professorNo" column="PROFESSOR_NO"/>
-		<result property="departmentName" column="DEPARTMENT_NAME"/>
-		<result property="professorName" column="PROFESSOR_NAME"/>
-		<result property="professorBirth" column="PROFESSOR_BIRTH"/>
-		<result property="professorAddress" column="PROFESSOR_ADDRESS"/>
-		<result property="professorPhonenumber" column="PROFESSOR_PHONENUMBER"/>
-		<result property="professorEmail" column="PROFESSOR_EMAIL"/>
-		<result property="professorPassword" column="PROFESSOR_PASSWORD"/>
+		<id property="professorNo" column="PROFESSOR_NO" />
+		<result property="departmentName" column="DEPARTMENT_NAME" />
+		<result property="professorName" column="PROFESSOR_NAME" />
+		<result property="professorBirth" column="PROFESSOR_BIRTH" />
+		<result property="professorAddress" column="PROFESSOR_ADDRESS" />
+		<result property="professorPhonenumber"
+			column="PROFESSOR_PHONENUMBER" />
+		<result property="professorEmail" column="PROFESSOR_EMAIL" />
+		<result property="professorPassword"
+			column="PROFESSOR_PASSWORD" />
+		<result property="universityCode" column="UNIVERSITY_CODE" />
+		<result property="chk" column="CHK" />
 	</resultMap>
-	
+
 	<select id="professorLogin" resultMap="professorResultMap">
-		SELECT * FROM PROFESSOR_TBL WHERE PROFESSOR_NO = #{professorNo} AND PROFESSOR_PASSWORD = #{professorPassword}
+		SELECT * FROM
+		PROFESSOR_TBL WHERE PROFESSOR_NO = #{professorNo} AND
+		PROFESSOR_PASSWORD = #{professorPassword}
 	</select>
-	
+
 	<resultMap type="Manager" id="managerResultMap">
-		<id property="managerNo" column="MANAGER_NO"/>
-		<result property="managerName" column="MANAGER_NAME"/>
-		<result property="managerBirth" column="MANAGER_BIRTH"/>
-		<result property="managerAddress" column="MANAGER_ADDRESS"/>
-		<result property="managerPhonenumber" column="MANAGER_PHONENUMBER"/>
-		<result property="managerEmail" column="MANAGER_EMAIL"/>
-		<result property="managerPassword" column="MANAGER_PASSWORD"/>
-		<result property="managerTeam" column="MANAGER_TEAM"/>
+		<id property="managerNo" column="MANAGER_NO" />
+		<result property="managerName" column="MANAGER_NAME" />
+		<result property="managerBirth" column="MANAGER_BIRTH" />
+		<result property="managerAddress" column="MANAGER_ADDRESS" />
+		<result property="managerPhonenumber"
+			column="MANAGER_PHONENUMBER" />
+		<result property="managerEmail" column="MANAGER_EMAIL" />
+		<result property="managerPassword" column="MANAGER_PASSWORD" />
+		<result property="managerTeam" column="MANAGER_TEAM" />
 	</resultMap>
-	
+
 	<select id="managerLogin" resultMap="managerResultMap">
-		SELECT * FROM MANAGER_TBL WHERE MANAGER_NO = #{managerNo} AND MANAGER_PASSWORD = #{managerPassword}
+		SELECT * FROM MANAGER_TBL
+		WHERE MANAGER_NO = #{managerNo} AND MANAGER_PASSWORD =
+		#{managerPassword}
 	</select>
-	
+
 	<select id="selectPwdStd" resultType="string">
-		SELECT STUDENT_EMAIL FROM STUDENT_TBL
+		SELECT STUDENT_EMAIL FROM
+		STUDENT_TBL
 		WHERE STUDENT_NO = #{studentNo}
-		AND STUDENT_NAME = #{studentName}
+		AND STUDENT_NAME =
+		#{studentName}
 		AND STUDENT_PHONENUMBER = #{studentPhonenumber}
 	</select>
-	
+
 	<select id="stdPwdSame" resultType="_int">
-		SELECT COUNT(*) FROM STUDENT_TBL
+		SELECT COUNT(*) FROM
+		STUDENT_TBL
 		WHERE STUDENT_NO = #{id} AND STUDENT_PASSWORD = #{pwd}
 	</select>
-	
+
 	<select id="prfPwdSame" resultType="_int">
-		SELECT COUNT(*) FROM PROFESSOR_TBL
-		WHERE PROFESSOR_NO = #{id} AND PROFESSOR_PASSWORD = #{pwd}
+		SELECT COUNT(*) FROM
+		PROFESSOR_TBL
+		WHERE PROFESSOR_NO = #{id} AND PROFESSOR_PASSWORD =
+		#{pwd}
 	</select>
-	
+
 	<select id="magPwdSame" resultType="_int">
-		SELECT COUNT(*) FROM MANAGER_TBL
+		SELECT COUNT(*) FROM
+		MANAGER_TBL
 		WHERE MANAGER_NO = #{id} AND MANAGER_PASSWORD = #{pwd}
 	</select>
-	
+
 	<update id="stdPwdChange">
 		UPDATE STUDENT_TBL SET STUDENT_PASSWORD =#{pwd}
-		WHERE STUDENT_NO = #{id}
+		WHERE
+		STUDENT_NO = #{id}
 	</update>
-	
+
 	<update id="prfPwdChange">
 		UPDATE PROFESSOR_TBL SET PROFESSOR_PASSWORD =#{pwd}
 		WHERE PROFESSOR_NO = #{id}
 	</update>
-	
+
 	<update id="magPwdChange">
 		UPDATE MANAGER_TBL SET MANAGER_PASSWORD =#{pwd}
-		WHERE MANAGER_NO = #{id}
+		WHERE
+		MANAGER_NO = #{id}
 	</update>
 </mapper>

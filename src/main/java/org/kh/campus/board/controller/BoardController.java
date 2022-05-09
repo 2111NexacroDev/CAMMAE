@@ -43,15 +43,26 @@ public class BoardController {
 			,HttpSession session
 			, @RequestParam(value = "universityCode", required = false) String universityCode
 			, @ModelAttribute PageInfo pageInfo) {
-		String universityCodeStd = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
+		/*
+		 * Student student = (Student)session.getAttribute("loginUser"); Professor
+		 * professor = (Professor)session.getAttribute("loginProfessor");
+		 */
+		
+		if(session.getAttribute("loginUser")!=null) {
+			String universityCodeStd = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
+			universityCode = (universityCode != null) ? universityCode : universityCodeStd;	
+		} else if(session.getAttribute("loginProfessor")!=null) {
+			String universityCodePrf = ((Professor)(session.getAttribute("loginProfessor"))).getUniversityCode();
+			universityCode = (universityCode != null) ? universityCode : universityCodePrf;	
+			System.out.println(universityCode+"test");
+		}
 		
 		
-		universityCode = (universityCode != null||!universityCode.equals("")) ? universityCode : universityCodeStd;
 		int currentPage = (page != null) ? page : 1;
 		System.out.println(universityCode+"test");
 		int totalCount = service.getListCount(pageInfo);
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
-		
+		List<University> uList = service.printAllUniversity();
 		pi.setUniversityCode(universityCode);
 		pi.setSearchCondition(pageInfo.getSearchCondition());
 		pi.setSearchValue(pageInfo.getSearchValue());
@@ -63,6 +74,8 @@ public class BoardController {
 				mv.addObject("menu", "board");
 				mv.addObject("currentPage", currentPage);
 				mv.addObject("pi", pi);
+				mv.addObject("uList", uList);
+				mv.addObject("universityCode", universityCode);
 
 			} else {
 				mv.setViewName("board/boardList");
@@ -107,10 +120,13 @@ public class BoardController {
 	}
 	// 게시판 상세 조회
 	@RequestMapping(value = "/board/detail.kh", method = RequestMethod.GET)
-	public ModelAndView boardOneView(ModelAndView mv, @RequestParam("boardNo") int boardNo) {
+	public ModelAndView boardOneView(ModelAndView mv
+			, @RequestParam("boardNo") int boardNo
+			, @RequestParam(value = "universityCode", required = false) String universityCode) {
 		try {
 			Board board = service.printOneBoard(boardNo);
 			if (board != null) {
+				mv.addObject("universityCode", universityCode);
 				mv.addObject("board", board);
 				mv.setViewName("board/board");
 			} else {
