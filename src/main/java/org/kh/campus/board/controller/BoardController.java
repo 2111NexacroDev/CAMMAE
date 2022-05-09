@@ -43,11 +43,10 @@ public class BoardController {
 			,HttpSession session
 			, @RequestParam(value = "universityCode", required = false) String universityCode
 			, @ModelAttribute PageInfo pageInfo) {
-
 		String universityCodeStd = ((Student)(session.getAttribute("loginUser"))).getUniversityCode();
 		
 		
-		universityCode = (universityCode != null) ? universityCode : universityCodeStd;
+		universityCode = (universityCode != null||!universityCode.equals("")) ? universityCode : universityCodeStd;
 		int currentPage = (page != null) ? page : 1;
 		System.out.println(universityCode+"test");
 		int totalCount = service.getListCount(pageInfo);
