@@ -10,14 +10,14 @@ public class PageInfo {
 	private int maxPage;  // �������� ������ ��ȣ
 	private boolean prev;  //����
 	private boolean next; //����
-	private int universityCode;
+	private String universityCode;
 	private String searchCondition;
 	private String searchValue;
 	
 	public PageInfo() {}
 
 	public PageInfo(int currentPage, int boardLimit, int naviLimit, int startNavi, int endNavi, int totalCount,
-			int maxPage, boolean prev, boolean next, int universityCode, String searchCondition, String searchValue) {
+			int maxPage, boolean prev, boolean next, String universityCode, String searchCondition, String searchValue) {
 		super();
 		this.currentPage = currentPage;
 		this.boardLimit = boardLimit;
@@ -105,11 +105,11 @@ public class PageInfo {
 		this.next = next;
 	}
 
-	public int getUniversityCode() {
+	public String getUniversityCode() {
 		return universityCode;
 	}
 
-	public void setUniversityCode(int universityCode) {
+	public void setUniversityCode(String universityCode) {
 		this.universityCode = universityCode;
 	}
 

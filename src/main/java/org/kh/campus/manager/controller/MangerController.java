@@ -148,6 +148,8 @@ public class MangerController {
 					String professorPhonenumber 	 = dsGet(inPrf, i, "professorPhonenumber");
 					String professorEmail = dsGet(inPrf, i, "professorEmail");
 					String professorPassword 	 = dsGet(inPrf, i, "professorNo");
+					String universityCode = dsGet(inPrf, i, "universityCode");
+					String chk = "0";
 					Professor professor = new Professor(
 							professorNo
 							,	departmentName
@@ -156,7 +158,9 @@ public class MangerController {
 							, 	professorAddress
 							, 	professorPhonenumber
 							, 	professorEmail
-							, 	professorPassword);
+							, 	professorPassword
+							,	universityCode
+							,	chk);
 					if( rowType == DataSet.ROW_TYPE_INSERTED) {
 						iResult += mService.registerProfessor(professor);
 					}else if( rowType == DataSet.ROW_TYPE_UPDATED) {

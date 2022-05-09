@@ -13,5 +13,5 @@ public interface LectureService {
 	public int modifyLecture(Lecture lecture); // 강의 수정
 	public int removeLecture(int lectureNo); // 강의 삭제
 	
-	
+	public List<Lecture> printAllProName(String professorName);
 }
