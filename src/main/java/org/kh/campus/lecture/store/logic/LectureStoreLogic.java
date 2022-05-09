@@ -15,6 +15,12 @@ public class LectureStoreLogic implements LectureStore{
 		List<Lecture> lList = sqlSession.selectList("LectureMapper.selectAllLecture");
 		return lList;
 	}
+	
+	@Override
+	public List<Lecture> selectAllProName(SqlSession sqlSession, String professorName) {
+		List<Lecture> lList = sqlSession.selectList("LectureMapper.selectAllProName", professorName);
+		return lList;
+	}
 
 	@Override
 	public int insertLecture(SqlSession sqlSession, Lecture lecture) {
