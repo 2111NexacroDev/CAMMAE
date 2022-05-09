@@ -3,7 +3,7 @@ package org.kh.campus.question.domain;
 public class QuestionReply {
 	private int questionReplyNo;
 	private int questionNo;
-	private String questionReplyId;
+	private int questionReplyId;
 	private String questionReplyWriter;
 	private String questionReplyContent;
 	private String questionReplyDate;
@@ -11,7 +11,7 @@ public class QuestionReply {
 	
 	public QuestionReply () {}
 
-	public QuestionReply(int questionReplyNo, int questionNo, String questionReplyId, String questionReplyWriter,
+	public QuestionReply(int questionReplyNo, int questionNo, int questionReplyId, String questionReplyWriter,
 			String questionReplyContent, String questionReplyDate, String questionReplyUpdateDate) {
 		super();
 		this.questionReplyNo = questionReplyNo;
@@ -39,11 +39,11 @@ public class QuestionReply {
 		this.questionNo = questionNo;
 	}
 
-	public String getQuestionReplyId() {
+	public int getQuestionReplyId() {
 		return questionReplyId;
 	}
 
-	public void setQuestionReplyId(String questionReplyId) {
+	public void setQuestionReplyId(int questionReplyId) {
 		this.questionReplyId = questionReplyId;
 	}
 
