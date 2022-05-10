@@ -15,6 +15,7 @@
   	<result property="boardFilerename" column="BOARD_FILERENAME"/>
 	<result property="boardFilepath" column="BOARD_FILEPATH"/>
 	<result property="universityCode" column="UNIVERSITY_CODE"/>
+	<result property="boardId" column="BOARD_ID"/>
 	
 	
   	</resultMap>
@@ -82,7 +83,8 @@
   	 	, #{boardFilename}
   	 	, #{boardFilerename}
   	 	, #{boardFilepath}
-  	 	, #{universityCode})  
+  	 	, #{universityCode}  
+  	 	, #{boardId})
   	</insert>
   	<update id="updateBoard">
   		UPDATE BOARD_TBL
@@ -105,10 +107,11 @@
   	<result property="boardreplyContent" column="BOARDREPLY_CONTENT"/>
   	<result property="boardreplyDate" column="BOARDREPLY_DATE"/>
   	<result property="boardreplyUpdatedate" column="BOARDREPLY_UPDATEDATE"/>
+  	<result property="boardId" column="BOARD_ID"/>
   	</resultMap>
   	
   	<insert id="insertBoardReply" parameterType="BoardReply">
-  	 INSERT INTO BOARDREPLY_TBL VALUES(SEQ_BOARDREPLY_NO.NEXTVAL, #{boardNo}, #{boardreplyWriter}, #{boardreplyContent}, #{boardreplyDate}, #{boardreplyUpdatedate})
+  	 INSERT INTO BOARDREPLY_TBL VALUES(SEQ_BOARDREPLY_NO.NEXTVAL, #{boardNo}, #{boardreplyWriter}, #{boardreplyContent}, #{boardreplyDate}, #{boardreplyUpdatedate}, #{boardId})
   	</insert>
   	
   	<select id="selectAllBoardReply" resultMap= "boardReplyResultMap">

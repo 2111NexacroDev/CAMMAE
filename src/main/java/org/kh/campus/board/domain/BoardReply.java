@@ -8,12 +8,14 @@ public class BoardReply {
 	private String boardreplyContent;
 	private String boardreplyDate;
 	private String boardreplyUpdatedate;
+	private int boardId;
 	
 	
 	public BoardReply() {}
-	
+
+
 	public BoardReply(int boardreplyNo, int boardNo, String boardreplyWriter, String boardreplyContent,
-			String boardreplyDate, String boardreplyUpdatedate) {
+			String boardreplyDate, String boardreplyUpdatedate, int boardId) {
 		super();
 		this.boardreplyNo = boardreplyNo;
 		this.boardNo = boardNo;
@@ -21,6 +23,7 @@ public class BoardReply {
 		this.boardreplyContent = boardreplyContent;
 		this.boardreplyDate = boardreplyDate;
 		this.boardreplyUpdatedate = boardreplyUpdatedate;
+		this.boardId = boardId;
 	}
 
 
@@ -84,12 +87,23 @@ public class BoardReply {
 	}
 
 
+	public int getBoardId() {
+		return boardId;
+	}
+
+
+	public void setBoardId(int boardId) {
+		this.boardId = boardId;
+	}
+
+
 	@Override
 	public String toString() {
 		return "BoardReply [boardreplyNo=" + boardreplyNo + ", boardNo=" + boardNo + ", boardreplyWriter="
 				+ boardreplyWriter + ", boardreplyContent=" + boardreplyContent + ", boardreplyDate=" + boardreplyDate
-				+ ", boardreplyUpdatedate=" + boardreplyUpdatedate + "]";
+				+ ", boardreplyUpdatedate=" + boardreplyUpdatedate + ", boardId=" + boardId + "]";
 	}
+	
 	
 	
 
