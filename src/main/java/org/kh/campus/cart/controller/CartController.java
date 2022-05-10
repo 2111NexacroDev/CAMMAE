@@ -30,7 +30,7 @@ public class CartController {
 	@Autowired
 	private LectureService lService;
 
-	// 예비수강신청 목록, 등록페이지
+	// 예비수강신청 목록, 등록페이지 ㅎㅎ
 	@RequestMapping(value = "/cart/preCartListView.kh", method = RequestMethod.GET)
 	public ModelAndView cartListView(ModelAndView mv) {
 		List<Lecture> lList = cService.printAllCart();
