@@ -95,6 +95,9 @@ hr {
 					<h2>학과게시판</h2>
 				</div>
 				<div class="btn_1">
+				
+					<c:if
+						test="${sessionScope.loginUser.studentNo eq board.boardId || sessionScope.loginManager ne null}">
 					<c:url var="bModify" value="/board/modifyView.kh">
 						<c:param name="boardNo" value="${board.boardNo }"></c:param>
 					</c:url>
@@ -103,6 +106,7 @@ hr {
 						<c:param name="boardNo" value="${board.boardNo }"></c:param>
 					</c:url>
 					<button class="btn" onclick="location.href='${bDelete }'">삭제</button>
+					</c:if>
 					<button class="btn"
 						onclick="location.href='/board/list.kh?universityCode=${universityCode}'">목록</button>
 				</div>
@@ -233,9 +237,9 @@ hr {
 								$tr.append($rWriter);
 								$tr.append($rDate);
 								$tr2.append($rContent);
-								//if (data[i].boardId == rWriterId&& data[i].bordReplyWriter == rWriter) {
-								$tr2.append($btnArea);
-								//}
+								if (data[i].boardId == rWriterId && data[i].boardreplyWriter == rWriter) {
+									$tr2.append($btnArea);
+								}
 								$tableBody.append($tr);
 								$tableBody.append($tr2);
 								$tableBody.append($rLine);
