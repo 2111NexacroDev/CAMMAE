@@ -8,6 +8,62 @@
 <title>관리자 포트폴리오 전체조회 페이지</title>
 <link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
+<style>
+
+
+.bbs {
+	position: relative;
+	margin-bottom: 40px;
+}
+
+.bbs table {
+	width: 1000px;
+	border-top: 1px solid #343434;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+thead {
+	background: rgb(237, 237, 237);
+	height: 50px;
+	border-bottom: 2px solid #c2c2c2;
+}
+
+tr {
+	display: table-row;
+	border-color: inherit;
+}
+
+tbody {
+	display: table-row-group;
+	vertical-align: middle;
+	border-color: inherit;
+}
+
+.bbs_ table th, .bbs table td {
+	padding: 12px 10px;
+	border-bottom: 1px solid #c2c2c2;
+	font-size: 16px;
+}
+
+.bbs table .space {
+	background: #fdfdfd;
+}
+
+.ta {
+	text-align: center;
+}
+
+td a{
+	text-decoration: none;
+	color: black;
+}
+
+</style>
+
 </head>
 
 <body>
@@ -25,9 +81,11 @@
 		</div>
 		<!-- contents-main -->
 		<div id="center">
-			<h3 id="b-title">포트폴리오</h3>
-			<br>
-			<div>
+			<div class="c-title">
+			<h2 id="b-title">포트폴리오</h2>
+			</div>
+			<br><br><br>
+			<div class="bbs">
 							
 							<table >
 								
@@ -68,7 +126,7 @@
 									</c:forEach>
 								</tbody>
 							</table>
-				
+							<br>
 							<div class="paging" align="center">
 
 								<c:if test="${pi.startNavi !=1}">

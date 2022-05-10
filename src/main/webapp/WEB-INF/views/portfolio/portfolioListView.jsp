@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
 <style>
+
 .bbs {
 	position: relative;
 	margin-bottom: 40px;
@@ -73,8 +74,10 @@ td a{
 		</div>
 		<!-- contents-main -->
 		<div id="center">
-				<h3 id="b-title">포트폴리오 관리</h3>
-				<br>
+				<div class="c-title">
+				<h2 id="b-title">포트폴리오 관리</h2>
+				</div>
+				<br><br><br>
 				  <div class="bbs">
 							<table>
 								
@@ -106,6 +109,7 @@ td a{
 									</c:forEach>
 								</tbody>
 							</table>
+							<br>
 							<div class="paging" align="center">
 
 								<c:if test="${pi.startNavi !=1}">
