@@ -346,7 +346,7 @@ hr {
 					alert("ajax 실패")
 				}
 			});
-		}
+		}//커밋
 	</script>
 </body>
 </html>
