@@ -11,9 +11,9 @@ public interface CartStore {
 
 	List<Lecture> selectAllCart(SqlSession sqlSession);
 
-	List<Cart> selectMyCart(SqlSession sqlSession);
+	List<Cart> selectMyCart(SqlSession sqlSession, int studentNo);
 
-	int insertCart(SqlSession sqlSession, int lectureNo);
+	int insertCart(SqlSession sqlSession, HashMap<String, Integer> map);
 
 	int deleteCart(SqlSession sqlSession, int cartNo);
 
