@@ -28,10 +28,12 @@ hr {
 }
 
 .title {
+	font-weight: bold;
 	font-size: 18.5px;
 }
 
 #writer {
+	font-size: 14px;
 	width: 70%;
 	float: left;
 	margin-top: 10px;
@@ -39,6 +41,7 @@ hr {
 }
 
 #date {
+	font-size: 14px;
 	width: 30%;
 	text-align: right;
 	float: left;
@@ -47,14 +50,25 @@ hr {
 }
 
 /* 댓글 */
+#rWriter {
+	font-weight: bold;
+}
+
+#rDate {
+	font-size: 14px;
+}
+
+#btnArea {
+	font-size: 14px;
+}
+
 #rBoardWriter {
 	width: 80%;
 	float: left;
 }
 
 #rBoardDate {
-	width: 20%;
-	float: left;
+	width: 20% float: left;
 }
 
 #rBoardContent {
@@ -146,7 +160,7 @@ hr {
 		getBoardReplyList();
 		$("#rbtn").on("click", function() {
 			var rWriter = "${loginUser.studentName}";
-
+			var rWriterId = "${loginUser.studentNo}";
 			var boardNo = "${board.boardNo}";
 			var rContents = $("#rContents").val();
 			<c:if test="${empty sessionScope.loginUser }">
@@ -159,7 +173,8 @@ hr {
 				data : {
 					"boardNo" : boardNo,
 					"boardreplyContent" : rContents,
-					"boardreplyWriter" : rWriter
+					"boardreplyWriter" : rWriter,
+					"boardId" : rWriterId
 				}, //json형태
 				success : function(data) {
 					getBoardReplyList();
@@ -176,49 +191,61 @@ hr {
 			var boardNo = "${board.boardNo}";
 			var rWriter = "${loginUser.studentName}";
 			var rWriterId = "${loginUser.studentNo}";
-
-			$.ajax({
-				url : "/board/replyList.kh",
-				type : "get",
-				data : {
-					"boardNo" : boardNo
-				},
-				success : function(data) {
-					var $tableBody = $("#rtb tbody");
-					$tableBody.html("");
-					for (var i = 0; i < data.length; i++) {
-						console.log(data[i]);
-						var $tr = $("<tr>");
-						var $rWriter = $("<td width='100'>").text(
-								data[i].boardreplyWriter);
-						var $rContent = $("<td>").text(
-								data[i].boardreplyContent);
-						var $rDate = $("<td width='100'>").text(
-								data[i].boardReplyDate);
-						var $btnArea = $("<td width='80'>").append(
-								"<a href='javascript:void(0)' onclick='modifyReplyView(this,"
-										+ data[i].boardNo + ", "
-										+ data[i].boardreplyNo + ", \""
-										+ data[i].boardreplyContent
-										+ "\");'>수정</a> ").append(
-								"<a href='javascript:void(0)' onclick='removeReply("
-										+ data[i].boardNo + ","
-										+ data[i].boardreplyNo + ");'>삭제</a>");
-						$tr.append($rWriter);
-						$tr.append($rContent);
-						$tr.append($rDate);
-						//if (data[i].boardId == rWriterId
-								//&& data[i].bordReplyWriter == rWriter) {
-							$tr.append($btnArea);
-						//}
-						$tableBody.append($tr);
-					}
-				},
-				error : function() {
-					var $tableBody = $("#rtb tbody");
-					$tableBody.html(""); //기존댓글 내용 비우기
-				}
-			});
+			$
+					.ajax({
+						url : "/board/replyList.kh",
+						type : "get",
+						data : {
+							"boardNo" : boardNo
+						},
+						success : function(data) {
+							var $tableBody = $("#rtb tbody");
+							$tableBody.html("");
+							for (var i = 0; i < data.length; i++) {
+								console.log(data[i]);
+								var $tr = $("<tr>");
+								var $tr2 = $("<tr>");
+								var $rWriter = $(
+										"<td id='rWriter' width='100%'>").text(
+										data[i].boardreplyWriter);
+								var $rContent = $(
+										"<td width='100%' align='left'>").text(
+										data[i].boardreplyContent);
+								var $rDate = $(
+										"<td id='rDate' width='10%' align='right'>")
+										.text(data[i].boardreplyDate);
+								var $btnArea = $(
+										"<td id='btnArea' align='right'>")
+										.append(
+												"<a href='javascript:void(0)' onclick='modifyReplyView(this,"
+														+ data[i].boardNo
+														+ ", "
+														+ data[i].boardreplyNo
+														+ ", \""
+														+ data[i].boardreplyContent
+														+ "\");'>수정</a> ")
+										.append(
+												"<a href='javascript:void(0)' onclick='removeReply("
+														+ data[i].boardNo + ","
+														+ data[i].boardreplyNo
+														+ ");'>삭제</a>");
+								var $rLine = $("<tr><td colspan='4'><hr style='width:740px;'>");
+								$tr.append($rWriter);
+								$tr.append($rDate);
+								$tr2.append($rContent);
+								//if (data[i].boardId == rWriterId&& data[i].bordReplyWriter == rWriter) {
+								$tr2.append($btnArea);
+								//}
+								$tableBody.append($tr);
+								$tableBody.append($tr2);
+								$tableBody.append($rLine);
+							}
+						},
+						error : function() {
+							var $tableBody = $("#rtb tbody");
+							$tableBody.html(""); //기존댓글 내용 비우기
+						}
+					});
 		}
 
 		/* 댓글 삭제 */
@@ -246,12 +273,12 @@ hr {
 		/* 댓글 수정 */
 		function modifyReplyView(obj, boardNo, boardReplyNo, boardReplyContent) {
 			var $trModify = $("<tr>");
-			var $tdModify = $("<td colspan='3'>");
-			var $tdModifyBtn = $("<td>");
+			var $tdModify = $("<td width='90%' align='left'>");
+			var $tdModifyBtn = $("<td  width='10%'>");
 			$tdModify
-					.append("<input type='text' size='50' value='"+boardReplyContent+"' id='modifyData'>");
-			$tdModifyBtn.append("<button onclick='modifyReply(" + boardNo + ","
-					+ boardReplyNo + ");'>수정완료</button>");
+					.append("<input type='text' size='86' value='"+boardReplyContent+"' id='modifyData'>");
+			$tdModifyBtn.append("<button class='btn' onclick='modifyReply(" + boardNo + ","
+					+ boardReplyNo + ");'>수정</button>");
 			$trModify.append($tdModify);
 			$trModify.append($tdModifyBtn);
 			$(obj).parent().parent().after($trModify);
