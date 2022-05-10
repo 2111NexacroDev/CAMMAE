@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
 <style>
+
+
 .bbs {
 	position: relative;
 	margin-bottom: 40px;
@@ -78,8 +80,10 @@ td a{
 			</div>
 			<!-- contents-main -->
 			<div id="center">
+				<div class="c-title">
 				<h2 id="b-title">상담관리</h2>
-				<br>
+				</div>
+				<br><br><br>
 
 				<div class="bbs">
 
@@ -125,6 +129,8 @@ td a{
 							</c:forEach>
 						</tbody>
 					</table>
+					<br>
+					<br>
 					<div class="paging" align="center">
 
 						<c:if test="${pi.startNavi !=1}">

@@ -59,8 +59,13 @@ tr {
 #btn_d{
 	text-align: center;
 }
+
+#btn{
+	cursor: pointer;
+}
 #btn1{
 	float: right;
+	cursor: pointer;
 }
 
 #rtb{
@@ -95,7 +100,10 @@ tr {
 			</div>
 			<!-- contents-main -->
 			<div id="center">
-				<h2 id="b-title">상담관리</h2><br>
+				<div class="c-title">
+				<h2 id="b-title">상담관리</h2>
+				</div>
+				<br><br>
 				<div class="tb1">
 					<table>
 						<colgroup>
@@ -148,7 +156,7 @@ tr {
 				<input type="hidden" name="cons_student_no" value="${consultant.cons_student_no}" />
 				<br>
 				<div id="btn_d">
-					<button class="btn"  type="submit" onclick="location.href='/consultant/cancel.kh?cons_no=${consultant.cons_no}'">상담취소
+					<button class="btn" id="btn"  type="submit" onclick="location.href='/consultant/cancel.kh?cons_no=${consultant.cons_no}'">상담취소
 					</button>
 				</div>
 				
