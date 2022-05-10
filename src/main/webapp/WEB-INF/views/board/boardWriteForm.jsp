@@ -35,7 +35,7 @@
 		
 		<!-- contents-main -->
 		<div id="center">
-			<form action="/question/register" method="POST"
+			<form action="/board/register.kh" method="POST"
 				enctype="multipart/form-data">
 				<div class="c-title">
 				<div class="b-title">
@@ -63,8 +63,8 @@
 				</div>
 				
 				<div>
-					<input type="hidden" size="50" name="boardWriter" value="${loginUser.studentName}"
-						placeholder="이름을 입력해주세요" style="border: none; padding: 10px;">
+					<input type="hidden" size="50" name="boardWriter" value="${loginUser.studentName}">
+					<input type="hidden" size="50" name="boardId" value="${loginUser.studentNo}">
 				</div>
 
 				<div style="padding: 10px;">

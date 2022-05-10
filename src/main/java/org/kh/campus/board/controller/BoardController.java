@@ -299,8 +299,7 @@ public class BoardController {
 	@RequestMapping(value="/board/replyAdd.kh", method=RequestMethod.POST)
 	public String boardReplyAdd(
 			@ModelAttribute BoardReply boardReply) {
-		String replyWriter = "anonymous";
-		boardReply.setBoardreplyWriter(replyWriter);
+		
 		int result = service.registerBoardReply(boardReply);
 		if(result > 0) {
 			return "success";
