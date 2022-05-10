@@ -9,37 +9,43 @@
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link rel="stylesheet" href="/resources/contents.css">
 <style>
-.left {
-	width: 32%;
-	float: left;
-}
-
-.center {
-	width: 50%;
-	float: left;
-}
-
 .c-main {
 	border: 1px solid #ccc;
 	border-radius: 5px;
-	width: 600px;
+	width: 740px;
 	padding: 30px 30px 30px 30px;
+	margin-top: 45px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+	margin-left: 0px;
 }
 
-h3 {
-	color: #10412C;
+hr {
+	width: 740px;
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
-.btn {
-	border: 1px solid #10412C;
-	background-color: #10412C;
-	color: white;
-	border-radius: 5px;
-	padding: 5px 10px;
-	font-size: 13px;
-	font-weight: bold;
-	margin-right: 5px;
+.title {
+	font-size: 18.5px;
 }
+
+#writer {
+	width: 70%;
+	float: left;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#date {
+	width: 30%;
+	text-align: right;
+	float: left;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
 
 /* 댓글 */
 #rBoardWriter {
@@ -61,11 +67,21 @@ h3 {
 
 <body>
 	
-	<div class="center">
-
-		<h3 id="b-title">학과게시판</h3>
-		<br>
-		<div>
+	<!-- header  -->
+	<jsp:include page="../common/menuBar.jsp"></jsp:include>
+	
+	<!-- contents -->
+	<div id="content">
+		<div id="left">
+			<jsp:include page="../common/sideBMenu.jsp"></jsp:include>
+		</div>
+		<!-- contents-main -->
+		<div id="center">
+			<div class="c-title">
+				<div class="b-title">
+					<h2>학과게시판</h2>
+				</div>
+		<div class="btn_1">
 			<c:url var="bModify" value="/board/modifyView.kh">
 				<c:param name="boardNo" value="${board.boardNo }"></c:param>
 			</c:url>
@@ -74,15 +90,17 @@ h3 {
 				<c:param name="boardNo" value="${board.boardNo }"></c:param>
 			</c:url>
 			<button class="btn" onclick="location.href='${bDelete }'">삭제</button>
-			<button class="btn" type="reset" onclick="location.href='/board/list.kh?universityCode=${universityCode}'">목록</button>
+			<button class="btn" onclick="location.href='/board/list.kh?universityCode=${universityCode}'">목록</button>
 		</div>
 		<br>
 		<div class="c-main">
 			<div class="title"> ${board.boardTitle }</div>
-			<br>
-			<div>${board.boardWriter }${board.boardDate }</div>
-
-			<hr style="width: 585px; text-align: center;">
+					<div id = "writerDate">
+						<div id = "writer">${board.boardWriter }</div>
+						<div id = "date">${board.boardDate }</div>
+					</div>
+					<hr>
+			
 			<div class="content" style="padding: 10px;">
 				${board.boardContent }
 				<c:if test="${not empty board.boardFilerename}">
@@ -93,27 +111,35 @@ h3 {
 					</span>
 				</c:if>
 			</div>
+			
 			<br> 댓글
-			<hr style="width: 585px; text-align: center;">
+			<hr>
+			
 			<!-- 댓글 입력 -->
 			<div>
-				<textarea rows="3" cols="70" id="rContents"></textarea>
+				<textarea rows="4" cols="91" id="rContents"></textarea>
 				<button class="btn" id="rbtn">등록</button>
 			</div>
-			<hr style="width: 585px; text-align: center;">
+			<hr>
+			
 			<!-- 댓글 조회 -->
 			<div id="replyArea">
-			<table align="center" width="600px" id="rtb">
+			<table align="center" width="700px" id="rtb">
 				<thead>
 				</thead>
 				<tbody>
 				</tbody>
 			</table>
-
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 	
+	
+	
+	<!-- footer -->
+	<jsp:include page="../common/footer.jsp"></jsp:include>
 	
 	<!-- 댓글동작  -->
 	<script>
@@ -212,7 +238,8 @@ h3 {
 						alert("댓글 수정 실패")
 					}
 				},
-				error : function(data) { alert("ajax 실패")}
+				error : function(data) 
+				{ alert("ajax 실패")}
 			});
 		}
 	</script>

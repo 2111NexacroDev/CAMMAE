@@ -87,6 +87,13 @@ public class BoardServiceImpl implements BoardService{
 		List<University> uList = bStore.selectAllUniversity(sqlSession);
 		return uList;
 	}
+
+	@Override
+	public int boardCountUpdate(int boardNo) {
+		int result = bStore.updateCount(boardNo, sqlSession);
+		return result;
+		
+	}
 	
 
 }
