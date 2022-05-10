@@ -346,7 +346,7 @@ hr {
 					alert("ajax 실패")
 				}
 			});
-		}//커밋
+		}// 댓글 수정 커밋(css)
 	</script>
 </body>
 </html>
