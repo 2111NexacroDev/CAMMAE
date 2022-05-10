@@ -9,6 +9,7 @@
 		<result property="lectureName" column="LECTURE_NAME" />
 		<result property="questionTitle" column="QUESTION_TITLE" />
 		<result property="questionContent" column="QUESTION_CONTENT" />
+		<result property="questionId" column="QUESTION_ID" />
 		<result property="questionWriter" column="QUESTION_WRITER" />
 		<result property="questionDate" column="QUESTION_DATE" />
 		<result property="questionUpdateDate"
@@ -100,7 +101,7 @@
 	<insert id="insertQuestion">
 		INSERT INTO QUESTION_TBL
 		VALUES(SEQ_QUESTION_NO.NEXTVAL, #{professorName}, #{lectureName},
-		#{questionTitle}, #{questionContent}, #{questionWriter}, DEFAULT,
+		#{questionTitle}, #{questionContent}, #{questionId}, #{questionWriter}, DEFAULT,
 		DEFAULT, DEFAULT, #{questionFileName}, #{questionFileReNeme},
 		#{questionFilePath})
 	</insert>
@@ -158,6 +159,8 @@
 	<resultMap type="QuestionReply" id="qReplyResult">
 		<id property="questionReplyNo" column="QUESTIONREPLY_NO"></id>
 		<result property="questionNo" column="QUESTION_NO" />
+		<result property="questionReplyId"
+			column="QUESTIONREPLY_ID" />
 		<result property="questionReplyWriter"
 			column="QUESTIONREPLY_WRITER" />
 		<result property="questionReplyContent"
@@ -178,6 +181,7 @@
 	<insert id="insertReply">
 		INSERT INTO QUESTIONREPLY_TBL
 		VALUES(SEQ_QUESTIONREPLY_NO.NEXTVAL, #{questionNo},
+		#{questionReplyId},
 		#{questionReplyWriter}, #{questionReplyContent}, DEFAULT, DEFAULT)
 	</insert>
 

@@ -105,14 +105,16 @@ hr {
 					<h2>중고거래게시판</h2>
 				</div>
 				<div class="btn_1">
-					<c:url var="mModify" value="/market/modifyView">
-						<c:param name="marketNo" value="${market.marketNo }"></c:param>
-					</c:url>
-					<button class="btn" onclick="location.href='${mModify }'">수정</button>
-					<c:url var="mDelete" value="/market/delete">
-						<c:param name="marketNo" value="${market.marketNo }"></c:param>
-					</c:url>
-					<button class="btn" onclick="location.href='${mDelete }'">삭제</button>
+					<c:if test="${sessionScope.loginUser.studentNo eq market.marketId || sessionScope.loginManager ne null}">
+						<c:url var="mModify" value="/market/modifyView">
+							<c:param name="marketNo" value="${market.marketNo }"></c:param>
+						</c:url>
+						<button class="btn" onclick="location.href='${mModify }'">수정</button>
+						<c:url var="mDelete" value="/market/delete">
+							<c:param name="marketNo" value="${market.marketNo }"></c:param>
+						</c:url>
+						<button class="btn" onclick="location.href='${mDelete }'">삭제</button>
+					</c:if>
 					<button class="btn" onclick="location.href='/market/list'">목록</button>
 				</div>
 				<br>
@@ -178,13 +180,14 @@ hr {
 	<!-- 댓글동작  -->
 	<script>
 		getMarketReplyList(); //페이지가 로드 시 함수 동작
-		
+
 		$("#rbtn").on("click", function() {
 			var marketNo = $("#marketNo").val(); /* 어떤 게시글에 대한 댓글인지 알기 위함 */
 			var rContents = $("#rContents").val();
 			var rWriter = "${loginUser.studentName}";
+			var rWriterId = "${loginUser.studentNo}";
 			<c:if test="${empty sessionScope.loginUser }">
-			alert("로그인을 해주세요.");
+			alert("학생 로그인을 해주세요.");
 			</c:if>
 			<c:if test="${not empty loginUser }">
 			$.ajax({
@@ -193,7 +196,8 @@ hr {
 				data : {
 					"marketNo" : marketNo,
 					"mReplyContent" : rContents,
-					"mReplyWriter": rWriter
+					"mReplyWriter" : rWriter,
+					"mReplyId" : rWriterId
 				}, //json형태
 				success : function(data) {
 					getMarketReplyList();
@@ -210,8 +214,9 @@ hr {
 		//댓글 불러오는 함수
 		function getMarketReplyList() {
 			var marketNo = $("#marketNo").val();
-			$
-					.ajax({
+			var rWriter = "${loginUser.studentName}";
+			var rWriterId = "${loginUser.studentNo}";
+			$.ajax({
 						url : "/market/replyList",
 						type : "get",
 						data : {
@@ -222,13 +227,14 @@ hr {
 							$tableBody.html("");
 							for (var i = 0; i < data.length; i++) {
 								var $tr = $("<tr>");
-								var $rWriter = $("<td width='100'>").text(
+								var $tr2 = $("<tr>");
+								var $rWriter = $("<td width='100%'>").text(
 										data[i].mReplyWriter);
-								var $rContent = $("<td>").text(
+								var $rContent = $("<tdwidth='100%' align='left'>").text(
 										data[i].mReplyContent);
-								var $rDate = $("<td width='100'>").text(
+								var $rDate = $("<td width='10%' align='right'>").text(
 										data[i].mReplyDate);
-								var $btnArea = $("<td width='80'>").append(
+								var $btnArea = $("<td align='right'>").append(
 										"<a href='javascript:void(0)' onclick='modifyReplyView(this,"
 												+ data[i].marketNo + ", "
 												+ data[i].marketReplyNo
@@ -239,11 +245,17 @@ hr {
 												+ data[i].marketNo + ","
 												+ data[i].marketReplyNo
 												+ ");'>삭제</a>");
+								var $rLine = $("<tr><td colspan='4'><hr style='width:740px;'>");
 								$tr.append($rWriter);
-								$tr.append($rContent);
 								$tr.append($rDate);
-								$tr.append($btnArea);
+								$tr2.append($rContent);
+								 if (data[i].mReplyId == rWriterId) { 
+									$tr2.append($btnArea);
+								 } 
+								
 								$tableBody.append($tr);
+								$tableBody.append($tr2);
+								$tableBody.append($rLine);
 							}
 						},
 						error : function() {
