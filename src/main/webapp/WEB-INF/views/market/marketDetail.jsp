@@ -29,10 +29,12 @@ hr {
 }
 
 .title {
+	font-weight: bold;
 	font-size: 18.5px;
 }
 
 #writer {
+	font-size: 14px;
 	width: 70%;
 	float: left;
 	margin-top: 10px;
@@ -40,6 +42,7 @@ hr {
 }
 
 #date {
+	font-size: 14px;
 	width: 30%;
 	text-align: right;
 	float: left;
@@ -61,6 +64,18 @@ hr {
 }
 
 /* 댓글 */
+#rWriter {
+	font-weight: bold;
+}
+
+#rDate {
+	font-size: 14px;
+}
+
+#btnArea {
+	font-size: 14px;
+}
+
 #rContents {
 	float: left;
 }
@@ -105,7 +120,8 @@ hr {
 					<h2>중고거래게시판</h2>
 				</div>
 				<div class="btn_1">
-					<c:if test="${sessionScope.loginUser.studentNo eq market.marketId || sessionScope.loginManager ne null}">
+					<c:if
+						test="${sessionScope.loginUser.studentNo eq market.marketId || sessionScope.loginManager ne null}">
 						<c:url var="mModify" value="/market/modifyView">
 							<c:param name="marketNo" value="${market.marketNo }"></c:param>
 						</c:url>
@@ -228,31 +244,39 @@ hr {
 							for (var i = 0; i < data.length; i++) {
 								var $tr = $("<tr>");
 								var $tr2 = $("<tr>");
-								var $rWriter = $("<td width='100%'>").text(
+								var $rWriter = $(
+										"<td id='rWriter' width='100%'>").text(
 										data[i].mReplyWriter);
-								var $rContent = $("<tdwidth='100%' align='left'>").text(
+								var $rContent = $(
+										"<td width='100%' align='left'>").text(
 										data[i].mReplyContent);
-								var $rDate = $("<td width='10%' align='right'>").text(
-										data[i].mReplyDate);
-								var $btnArea = $("<td align='right'>").append(
-										"<a href='javascript:void(0)' onclick='modifyReplyView(this,"
-												+ data[i].marketNo + ", "
-												+ data[i].marketReplyNo
-												+ ", \""
-												+ data[i].mReplyContent
-												+ "\");'>수정</a> ").append(
-										"<a href='javascript:void(0)' onclick='removeReply("
-												+ data[i].marketNo + ","
-												+ data[i].marketReplyNo
-												+ ");'>삭제</a>");
+								var $rDate = $(
+										"<td id='rDate' width='10%' align='right'>")
+										.text(data[i].mReplyDate);
+								var $btnArea = $(
+										"<td id='btnArea' align='right'>")
+										.append(
+												"<a href='javascript:void(0)' onclick='modifyReplyView(this,"
+														+ data[i].marketNo
+														+ ", "
+														+ data[i].marketReplyNo
+														+ ", \""
+														+ data[i].mReplyContent
+														+ "\");'>수정</a> ")
+										.append(
+												"<a href='javascript:void(0)' onclick='removeReply("
+														+ data[i].marketNo
+														+ ","
+														+ data[i].marketReplyNo
+														+ ");'>삭제</a>");
 								var $rLine = $("<tr><td colspan='4'><hr style='width:740px;'>");
 								$tr.append($rWriter);
 								$tr.append($rDate);
 								$tr2.append($rContent);
-								 if (data[i].mReplyId == rWriterId) { 
+								if (data[i].mReplyId == rWriterId && data[i].mReplyWriter == rWriter) {
 									$tr2.append($btnArea);
-								 } 
-								
+								}
+
 								$tableBody.append($tr);
 								$tableBody.append($tr2);
 								$tableBody.append($rLine);
@@ -290,12 +314,12 @@ hr {
 		/* 댓글 수정 */
 		function modifyReplyView(obj, marketNo, marketReplyNo, mReplyContent) {
 			var $trModify = $("<tr>");
-			var $tdModify = $("<td colspan='3'>");
-			var $tdModifyBtn = $("<td>");
+			var $tdModify = $("<td width='90%' align='left'>");
+			var $tdModifyBtn = $("<td width='10%'>");
 			$tdModify
-					.append("<input type='text' size='50' value='"+mReplyContent+"' id='modifyData'>");
-			$tdModifyBtn.append("<button onclick='modifyReply(" + marketNo
-					+ "," + marketReplyNo + ");'>수정완료</button>");
+					.append("<input type='text' size='86' value='"+mReplyContent+"' id='modifyData'>");
+			$tdModifyBtn.append("<button class='btn' onclick='modifyReply(" + marketNo
+					+ "," + marketReplyNo + ");'>수정</button>");
 			$trModify.append($tdModify);
 			$trModify.append($tdModifyBtn);
 			$(obj).parent().parent().after($trModify);
