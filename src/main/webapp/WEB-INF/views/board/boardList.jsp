@@ -45,8 +45,8 @@
 						<th id="b1">번호</th>
 						<th>제목</th>
 						<th id="b2">작성자</th>
-						<th id="b1">조회수</th>
 						<th id="b2">작성일</th>
+						<th id="b1">조회수</th>
 						
 					</tr>
 				<thead>
@@ -61,8 +61,8 @@
 							</c:url>
 							<td><a href="${bDetail}">${board.boardTitle }</a></td>
 							<td>${board.boardWriter }</td>
-							<td>${board.boardCount }</td>
 							<td>${board.boardDate }</td>
+							<td>${board.boardCount }</td>
 
 						</tr>
 
