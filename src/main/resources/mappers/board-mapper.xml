@@ -111,7 +111,7 @@
   	</resultMap>
   	
   	<insert id="insertBoardReply" parameterType="BoardReply">
-  	 INSERT INTO BOARDREPLY_TBL VALUES(SEQ_BOARDREPLY_NO.NEXTVAL, #{boardNo}, #{boardreplyWriter}, #{boardreplyContent}, #{boardreplyDate}, #{boardreplyUpdatedate}, #{boardId})
+  	 INSERT INTO BOARDREPLY_TBL VALUES(SEQ_BOARDREPLY_NO.NEXTVAL, #{boardNo}, #{boardreplyWriter}, #{boardreplyContent},default, default, #{boardId})
   	</insert>
   	
   	<select id="selectAllBoardReply" resultMap= "boardReplyResultMap">
