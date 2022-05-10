@@ -67,6 +67,7 @@ public class GradeController {
 		int lectureNo = Integer.parseInt(dsGet(stdObj, 0, "lectureNo"));
 		String objectionContent = dsGet(stdObj, 0, "objectionContent");
 		int studentNo = 0;
+		
 		Grade grade = new Grade(lectureNo, studentNo, objectionContent);
 		
 		gService.registerObjection(grade);
@@ -83,7 +84,7 @@ public class GradeController {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
-		int prfNo = 1;
+		int prfNo = 0;
 		
 		List<Grade> gList = gService.printGradeProfessor(prfNo);
 		
