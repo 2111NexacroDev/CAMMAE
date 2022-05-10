@@ -80,6 +80,6 @@ hr {
 	</div>
 	<!-- footer -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>
-
+<!-- 깃 -->
 </body>
 </html>
