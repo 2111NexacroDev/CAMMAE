@@ -25,10 +25,9 @@
 		</div>
 
 		<div id="center">
-			<h3>공지사항</h3>
-			<br>
-			<div class="btn_1">
-				<button class="btn" onclick="location.href='/notice/writeView.kh'">글쓰기</button>
+		<div class="c-title">
+				<div class="b-title"><h2>공지사항</h2></div>
+				<div class="btn_1"><button style="width: 80px" class="btn"onclick="location.href='/notice/writeView.kh'">글쓰기</button></div>
 			</div>
 			<table class="type01">
 				<thead>
@@ -61,14 +60,12 @@
 					</c:forEach>
 				</tbody>
 			</table>
-			<div class="paging" >
+			<br>
+			<div class="paging" align="center" >
 
 				<c:if test="${pi.startNavi !=1 }">
 
-					<a href="/notice/list.kh?page=1"> <i class="fas fa-angle-left">
-							<button class="on">
-					</i>
-						</button></a>
+					<a href="/notice/list.kh?page=1"> <button class="pbtn">＜</button></a>
 
 				</c:if>
 				<c:if test="${pi.prev}">
@@ -86,18 +83,14 @@
 						<c:param name="page" value="${p }"></c:param>
 					</c:url>
 
-					<a href="${pagination }"><button class="on1">${p }</button></a>&nbsp;
+					<a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
 																		
 									</c:forEach>
 
 
 				<c:if test="${pi.next && pi.endNavi > 0}">
 
-					<a href="/notice/list.kh?page=${pi.endNavi+1}"> <i
-						class="fas fa-angle-right">
-							<button class="on2">
-					</i>
-						</button>
+					<a href="/notice/list.kh?page=${pi.endNavi+1}"> <button class="pbtn">＞</button>
 					</a>
 				</c:if>
 			</div>
