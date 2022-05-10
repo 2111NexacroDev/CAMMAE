@@ -9,6 +9,12 @@
 <link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
 <style>
+#b1{
+ width:10%;
+}
+#b2{
+ width:15%;
+}
 </style>
 </head>
 
@@ -36,11 +42,11 @@
 			<table class="type01">
 				<thead>
 					<tr>
-						<th>번호</th>
+						<th id="b1">번호</th>
 						<th>제목</th>
-						<th>작성자</th>
-						<th>조회수</th>
-						<th>작성일</th>
+						<th id="b2">작성자</th>
+						<th id="b2">작성일</th>
+						<th id="b1">조회수</th>
 						
 					</tr>
 				<thead>
@@ -55,8 +61,8 @@
 							</c:url>
 							<td><a href="${bDetail}">${board.boardTitle }</a></td>
 							<td>${board.boardWriter }</td>
-							<td>${board.boardCount }</td>
 							<td>${board.boardDate }</td>
+							<td>${board.boardCount }</td>
 
 						</tr>
 

@@ -130,6 +130,7 @@ public class RecruitmentController {
 		try {
 			int result = rService.modifyRecruitment(recruitment);
 			if(result > 0) {
+				mv.addObject("menu", "recruitment");
 				mv.setViewName("recruitment/recruitmentDetail");
 			}else {
 				mv.addObject("msg","채용공고 수정 실패");

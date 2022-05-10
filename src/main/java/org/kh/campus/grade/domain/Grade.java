@@ -15,7 +15,16 @@ public class Grade {
 	private String gradeChange;
 	private String objectionContent;
 	private String feedbackContent;
+	private String studentName;
 	
+	public String getStudentName() {
+		return studentName;
+	}
+
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
+	}
+
 	public Grade() {}
 
 	@Override
@@ -30,6 +39,7 @@ public class Grade {
 	
 	
 
+	// 교수의 학생 성적 입력할때
 	public Grade(String feedbackContent, int lectureNo, int studentNo) {
 		super();
 		this.lectureNo = lectureNo;
@@ -37,6 +47,7 @@ public class Grade {
 		this.feedbackContent = feedbackContent;
 	}
 
+	// 학생이 이의 신청할때
 	public Grade(int lectureNo, int studentNo, String objectionContent) {
 		super();
 		this.lectureNo = lectureNo;
@@ -44,6 +55,7 @@ public class Grade {
 		this.objectionContent = objectionContent;
 	}
 
+	// 성적조회
 	public Grade(int lectureNo, int studentNo, String gradeScore, int gradeAvg) {
 		super();
 		this.lectureNo = lectureNo;
@@ -51,10 +63,13 @@ public class Grade {
 		this.gradeScore = gradeScore;
 		this.gradeAvg = gradeAvg;
 	}
+	
+	
 
 	public Grade(int lectureNo, int studentNo, String gradeYear, String gradeSession, String gradeSubject,
 			String gradeComplete, int lectureGrade, String gradeScore, int gradeAvg, String gradeFeedback,
-			String gradeObjection, String gradeChange, String objectionContent, String feedbackContent) {
+			String gradeObjection, String gradeChange, String objectionContent, String feedbackContent,
+			String studentName) {
 		super();
 		this.lectureNo = lectureNo;
 		this.studentNo = studentNo;
@@ -70,6 +85,7 @@ public class Grade {
 		this.gradeChange = gradeChange;
 		this.objectionContent = objectionContent;
 		this.feedbackContent = feedbackContent;
+		this.studentName = studentName;
 	}
 
 	public int getLectureNo() {

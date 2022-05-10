@@ -41,6 +41,7 @@ public class NoticeController {
 				mv.addObject("nList", nList);
 				mv.addObject("pi", pi);
 				mv.addObject("menu", "notice");
+				mv.addObject("currentPage", currentPage);
 			}else {
 				mv.addObject("nList", null);
 				/*
@@ -62,7 +63,7 @@ public class NoticeController {
 			Notice notice = nService.printOneNotice(noticeNo);
 			if(notice != null) {
 				nService.noticeCountUpdate(notice.getNoticeNo());
-				
+				mv.addObject("menu", "notice");
 				mv.addObject("notice",notice);
 				mv.setViewName("/notice/noticeDetail");
 			}else {
@@ -78,7 +79,8 @@ public class NoticeController {
 	
 	//관리자 공지사항 등록화면
 	@RequestMapping(value="/notice/writeView.kh", method=RequestMethod.GET)
-	public String noticeWriteView() {
+	public String noticeWriteView(Model model) {
+		model.addAttribute("menu", "notice");
 		return "notice/noticeWriteForm";
 	}
 	
@@ -144,6 +146,7 @@ public class NoticeController {
 		try {
 			Notice notice = nService.printOneNotice(noticeNo);
 			if(notice != null) {
+				model.addAttribute("menu", "notice");
 				model.addAttribute("notice",notice);
 				return "notice/noticeUpdateView";
 			}else {
@@ -178,6 +181,7 @@ public class NoticeController {
 			int result = nService.modifyNotice(notice);
 			if(result > 0) {
 				mv.setViewName("notice/noticeDetail");
+				mv.addObject("menu", "notice");
 			}else {
 				mv.addObject("msg","공지사항 수정 실패");
 				mv.setViewName("common/errorPage");
