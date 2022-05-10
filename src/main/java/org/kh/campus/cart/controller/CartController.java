@@ -53,7 +53,11 @@ public class CartController {
 	@RequestMapping(value = "/cart/cartPick.kh", method = RequestMethod.GET)
 	public ModelAndView cartRegister(ModelAndView mv, @RequestParam("lectureNo") int lectureNo) {
 		try {
-			int result = cService.registerCart(lectureNo);
+			int studentNo = 0;
+			HashMap<String, Integer> map = new HashMap<String, Integer>();
+			map.put("lectureNo", lectureNo);
+			map.put("studentNo", studentNo);
+			int result = cService.registerCart(map);
 			if (result > 0) {
 				mv.setViewName("redirect:/cart/preCartListView.kh");
 			} else {
@@ -70,7 +74,8 @@ public class CartController {
 //	 예비수강신청 내역 목록
 	@RequestMapping(value = "/cart/myCartList.kh", method = RequestMethod.GET)
 	public ModelAndView myCartList(ModelAndView mv) {
-		List<Cart> cList = cService.printMyCart();
+		int studentNo = 0;
+		List<Cart> cList = cService.printMyCart(studentNo);
 		try {
 			if (!cList.isEmpty()) {
 				mv.addObject("cList", cList);
