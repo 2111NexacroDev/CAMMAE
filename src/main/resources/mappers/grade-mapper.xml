@@ -18,6 +18,7 @@
 		<result property="gradeChange" column="GRADE_CHANGE"/>
 		<result property="objectionContent" column="OBJECTION_CONTENT"/>
 		<result property="feedbackContent" column="FEEDBACK_CONTENT"/>
+		<result property="studentName" column="STUDENT_NAME"/>
 	</resultMap>
 	
 	<!-- 학생 -->
@@ -43,7 +44,9 @@
 	
 	<!-- 교수 -->
 	<select id="selectGradeProfessor" resultMap="gradeResultMap">
-		SELECT * FROM GRADE_TBL WHERE PROFESSOR_NO = #{professorNo}
+		SELECT * FROM GRADE_TBL G
+		LEFT JOIN STUDENT_TBL S ON
+		(G.STUDENT_NO = S.STUDENT_NO AND G.PROFESSOR_NO = #{professorNo})
 	</select>
 	
 	<select id="selectFeedbackProfessor" resultMap="gradeResultMap">

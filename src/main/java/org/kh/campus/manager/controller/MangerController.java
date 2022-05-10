@@ -57,11 +57,13 @@ public class MangerController {
 				int uResult = 0;
 				for(i = 0; i < inStd.getRowCount(); i++) {
 					int rowType = inStd.getRowType(i);
-					int studentNo 	 = Integer.parseInt(dsGet(inStd, i, "studentNo"));
+					int studentNo 	 = dsGet(inStd, i, "studentNo") != "" 
+							? Integer.parseInt(dsGet(inStd, i, "studentNo")) : 0;
 					String universityCollege = dsGet(inStd, i, "universityCollege");
 					String departmentName = dsGet(inStd, i, "departmentName");
 					String studentName 	 = dsGet(inStd, i, "studentName");
-					int studentGrade 	 = Integer.parseInt(dsGet(inStd, i, "studentGrade"));
+					int studentGrade 	 = dsGet(inStd, i, "studentGrade") != "" 
+							? Integer.parseInt(dsGet(inStd, i, "studentGrade")) : 0;
 					String studentBirth 	 = dsGet(inStd, i, "studentBirth");
 					String studentAddress = dsGet(inStd, i, "studentAddress");
 					String studentPhonenumber 	 = dsGet(inStd, i, "studentPhonenumber");
@@ -69,6 +71,8 @@ public class MangerController {
 					String professorNo 	 = dsGet(inStd, i, "professorNo");
 					String studentState 	 = dsGet(inStd, i, "studentState");
 					String professorName 	 = dsGet(inStd, i, "professorName");
+					String universityCode 	 = dsGet(inStd, i, "universityCode");
+					String studentPassword = dsGet(inStd, i, "studentPassword");
 					Student student = new Student(
 							studentNo
 							,	universityCollege
@@ -79,11 +83,13 @@ public class MangerController {
 							, 	studentAddress
 							, 	studentPhonenumber
 							, 	studentEmail
+							, 	studentPassword
 							, 	professorNo
 							,	studentState
-							,	professorName);
+							,	professorName
+							, 	universityCode);
 					if( rowType == DataSet.ROW_TYPE_INSERTED) {
-						student.setStudentPassword(Integer.toString(studentNo));
+						System.out.println(student.toString() +"test111");
 						iResult += mService.registerStudent(student);
 					}else if( rowType == DataSet.ROW_TYPE_UPDATED) {
 						String sStdNo = inStd.getSavedData(i, "studentNo").toString();

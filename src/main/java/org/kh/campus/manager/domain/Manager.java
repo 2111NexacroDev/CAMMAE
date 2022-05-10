@@ -9,6 +9,7 @@ public class Manager {
 	private String managerEmail;
 	private String managerPassword;
 	private String managerTeam;
+	private String chk;
 	
 	public Manager() {}
 
@@ -96,6 +97,15 @@ public class Manager {
 	public void setManagerTeam(String managerTeam) {
 		this.managerTeam = managerTeam;
 	}
+
+	public String getChk() {
+		return chk;
+	}
+
+	public void setChk(String chk) {
+		this.chk = chk;
+	}
+	
 	
 	
 }
