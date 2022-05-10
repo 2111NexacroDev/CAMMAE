@@ -21,27 +21,27 @@
 	left: 0;
 	top: 0;
 	display: none;
-	flex-direction: column;
+	/* flex-direction: column; */
 	align-items: center;
 	justify-content: center;
-	background: rgba(255, 255, 255, 0.25);
-	box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-	backdrop-filter: blur(1.5px);
-	-webkit-backdrop-filter: blur(1.5px);
+	/* background: rgba(255, 255, 255, 0.25);
+	box-shadow: 0 8px 32px 0 gray; */
+	/* backdrop-filter: blur(1.5px);
+	-webkit-backdrop-filter: blur(1.5px); */
 	border-radius: 10px;
 	border: 1px solid rgba(255, 255, 255, 0.18);
 	z-index: 1000;
 }
 /*         modal창 (파란색 배경) */
 #modal .modal-window {
-	background: rgba(69, 139, 197, 0.70);
-	box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+	background: white;
+	box-shadow: 0 8px 32px 0 gray;
 	backdrop-filter: blur(13.5px);
-	-webkit-backdrop-filter: blur(13.5px);
+	webkit-backdrop-filter: blur(13.5px);
 	border-radius: 10px;
-	border: 1px solid rgba(255, 255, 255, 0.18);
+	border: 20px solid #10412C;
 	width: 400px;
-	height: 400px;
+	height: 200px;
 	position: relative;
 	top: 50px;
 	padding: 10px;
@@ -63,21 +63,46 @@
 	float: right;
 	padding-right: 10px;
 	cursor: pointer;
-	text-shadow: 1px 1px 2px gray;
-	color: white;
+	color: black;
 }
 
 #modal .content {
 	margin-top: 20px;
 	padding: 0px 10px;
-	text-shadow: 1px 1px 2px gray;
-	color: white;
+	color: black;
 	text-align: center;
 }
 
 #modal #reportContents {
 	width: 350px;
 	height: 200px;
+}
+
+table.type04 {
+  border-collapse: collapse;
+  text-align: left;
+  line-height: 1.5;
+  border-left: 1px solid #ccc;
+  /* margin: 20px 10px; */
+}
+
+table.type04 tbody th {
+  width: 150px;
+  padding: 10px;
+  vertical-align: top;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  background: rgb(231, 232, 226);
+}
+table.type04 td {
+  width: 350px;
+  padding: 10px;
+  vertical-align: top;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+}
+#r1{
+	width: 30%;
 }
 
 /* 조회부분 */
@@ -107,6 +132,7 @@
 	margin-left: 280px;
 	width: 250px;
 	padding: 10px;
+	font-weight: bold;
 }
 
 .main_content {
@@ -140,7 +166,7 @@ input::placeholder {
 	font-weight: bold;
 }
 
-input {
+#span_2 {
 	color: rgb(52, 152, 219);
 	font-weight: bold;
 }
@@ -150,7 +176,7 @@ span {
 }
 
 #btn1 {
-	border: 1pxsolid #10412C;
+	border: 1px solid #10412C;
 	background-color: #10412C;
 	color: white;
 	border-radius: 5px;
@@ -158,13 +184,13 @@ span {
 	font-size: 13px;
 	font-weight: bold;
 	margin-right: 5px;
-	border: 1pxsolid #10412C;
 }
 
 #map_btn {
 	color: rgb(243, 156, 18)
 }
 
+/* 지도 > */
 #btn {
 	border: none;
 	background-color: transparent;
@@ -223,20 +249,20 @@ span {
 				<div class="main_content1">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>지원자격</span> <br> <br>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">경력</span>&nbsp;&nbsp;&nbsp;
-					<span>${recruitment.recruitmentCareer }</span> <br> <br>
+					<span id="span_2">${recruitment.recruitmentCareer }</span> <br> <br>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">학력</span>&nbsp;&nbsp;&nbsp;
-					<input type="text" value="${recruitment.recruitmentEducation }">
+					<span id="span_2">${recruitment.recruitmentEducation }</span>
 					<br> <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">우대</span>&nbsp;&nbsp;&nbsp;
-					<input type="text" value="${recruitment.recruitmentPrefer }">
+					<span id="span_2">${recruitment.recruitmentPrefer }</span>
 				</div>
 				<div class="main_content2">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>지원자격</span> <br> <br>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">고용형태</span>&nbsp;&nbsp;&nbsp;
-					<input type="text" value="${recruitment.recruitmentType }">
+					<span id="span_2">${recruitment.recruitmentType }</span>
 					<br> <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">급여</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="text" value="${recruitment.recruitmentSalary }">
+					<span id="span_2">${recruitment.recruitmentSalary }</span>
 					<br> <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">지역</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="text" value="${recruitment.recruitmentRegion }">&nbsp;
+					<span id="span_2">${recruitment.recruitmentRegion }</span>&nbsp;
 					<br> &nbsp;&nbsp;&nbsp;
 					<Button id="btn" onclick="mapView()">
 						지도<span id="map_btn">＞</span>
@@ -244,7 +270,7 @@ span {
 				</div>
 			</div>
 			<br>
-			<div id="map" style="width: 800px; height: 300px; margin-top: 10px;"></div>
+			<div id="map" style="width: 800px; height: 300px; margin-top: 10px; display: none;"></div>
 			<br>
 			<div>
 				<hr style="width: 800px; color: #ccc;">
@@ -268,15 +294,24 @@ span {
 		enctype="multipart/form-data">
 		<div id="modal" class="modal-overlay">
 			<div class="modal-window">
-				<div class="close-area">X</div>
+				<div class="close-area"><b>X</b></div>
 				<div class="content">
-					<p>이력서 지원</p>
-					이력서<input type="file" multiple="multiple" size="50"
-						name="uploadFile"><br> 포트폴리오<input type="file"
-						multiple="multiple" size="50" name="uploadFile1"><br>
-					<input type="hidden" value="${recruitment.recruitmentNo }"
-						name="recruitmentNo"> <input type="hidden"
-						value="${recruitment.recruitmentTitle }" name="recruitmentTitle">
+					<p><b>이력서 지원</b></p>
+					<table class="type04">
+						<tbody>
+							<tr>
+								<th id="r1" scope="row">이력서</th>
+								<td><input type="file" multiple="multiple" size="50" name="uploadFile"></td>
+							<tr>
+							<tr>
+								<th id="r1" scope="row">포트폴리오</th>
+								<td><input type="file" multiple="multiple" size="50" name="uploadFile1"></td>
+							</tr>
+						
+						</tbody>
+					</table>
+					<input type="hidden" value="${recruitment.recruitmentNo }" name="recruitmentNo"> 
+					<input type="hidden" value="${recruitment.recruitmentTitle }" name="recruitmentTitle"><br>
 					<button type="submit" id="completion">완료</button>
 				</div>
 			</div>
@@ -294,6 +329,11 @@ span {
 
 	<script>
 	    function mapView() {
+	    	   if($("#map").css("display") == "none") {
+		    	   $("#map").show();
+	    	   }else {
+	    		   $("#map").hide();
+	    	   } 
 	           var mapContainer = document.getElementById('map'),
 	           mapOption = {
 	              center: new kakao.maps.LatLng(33.450701, 126.570608),

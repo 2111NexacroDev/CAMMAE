@@ -28,8 +28,8 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public int registerCart(int lectureNo) {
-		int result = cStore.insertCart(sqlSession, lectureNo);
+	public int registerCart(HashMap<String, Integer> map) {
+		int result = cStore.insertCart(sqlSession, map);
 		return result;
 	}
 	
@@ -41,8 +41,8 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public List<Cart> printMyCart() {
-		List<Cart> cList = cStore.selectMyCart(sqlSession);
+	public List<Cart> printMyCart(int studentNo) {
+		List<Cart> cList = cStore.selectMyCart(sqlSession, studentNo);
 		return cList;
 	}
 

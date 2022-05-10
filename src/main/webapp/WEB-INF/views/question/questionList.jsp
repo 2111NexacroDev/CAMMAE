@@ -42,7 +42,9 @@
 		<div id="center">
 			<div class="c-title">
 				<div class="b-title"><h2>질의응답게시판</h2></div>
+				<c:if test="${sessionScope.loginUser ne null}">
 				<div class="btn_1"><button class="btn" style="width: 80px"onclick="location.href='/question/registerView'">글쓰기</button></div>
+			</c:if>
 			</div>
 			<table class="type01">
 				<thead>

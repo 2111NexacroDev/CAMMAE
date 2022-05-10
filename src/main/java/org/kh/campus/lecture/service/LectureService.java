@@ -2,7 +2,9 @@ package org.kh.campus.lecture.service;
 
 import java.util.List;
 
+import org.kh.campus.board.domain.University;
 import org.kh.campus.lecture.domain.Lecture;
+import org.kh.campus.professor.domain.Professor;
 
 public interface LectureService {
 	
@@ -13,5 +15,6 @@ public interface LectureService {
 	public int modifyLecture(Lecture lecture); // 강의 수정
 	public int removeLecture(int lectureNo); // 강의 삭제
 	
-	public List<Lecture> printAllProName(String professorName);
+	public List<Professor> printAllProName();
+	public List<University> printAllDep();
 }

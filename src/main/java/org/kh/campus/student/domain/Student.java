@@ -60,6 +60,7 @@ public class Student {
 		this.professorName = professorName;
 	}
 
+	// 학생 개인정보 수정
 	public Student(String studentAddress, String studentPhonenumber, String studentEmail) {
 		super();
 		this.studentAddress = studentAddress;

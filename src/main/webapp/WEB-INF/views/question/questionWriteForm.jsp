@@ -80,8 +80,8 @@
 		</div>
 	</div>
 
-	<!-- footer -->
-	<jsp:include page="../common/footer.jsp"></jsp:include>
+		<!-- footer -->
+		<jsp:include page="../common/footer.jsp"></jsp:include>
 
 
 

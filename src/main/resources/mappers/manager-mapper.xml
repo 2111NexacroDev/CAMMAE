@@ -29,7 +29,7 @@
 	<insert id="insertStudent">
 		INSERT INTO STUDENT_TBL VALUES(#{studentNo}, #{universityCollege}, #{departmentName}, #{studentName}
 		, #{studentGrade}, #{studentBirth}, #{studentAddress}, #{studentPhonenumber}, #{studentEmail}, #{studentPassword}, #{professorNo}
-		, #{studentState}, #{studentState}, #{professorName}, DEFAULT)
+		, #{studentState}, #{professorName}, #{universityCode}, DEFAULT)
 	</insert>
 	
 	<update id="updateStudent">
@@ -63,6 +63,8 @@
 		<result property="professorPhonenumber" column="PROFESSOR_PHONENUMBER"/>
 		<result property="professorEmail" column="PROFESSOR_EMAIL"/>
 		<result property="professorPassword" column="PROFESSOR_PASSWORD"/>
+		<result property="chk" column="CHK"/>
+		<result property="universityCode" column="UNIVERSITY_CODE"/>
 	</resultMap>
 	
 	<select id="selectProfessorList" resultMap="professorResultMap">
@@ -70,8 +72,8 @@
 	</select>
 	
 	<insert id="insertProfessor">
-		INSERT INTO PROFESSOR_TBL VALUES(#{professorNo}, #{departmentName}, #{professorName}, #{professorBirth}
-		, #{professorAddress}, #{professorPhonenumber}, #{professorEmail}, #{professorPassword})
+		INSERT INTO PROFESSOR_TBL VALUES(#{professorNo}, #{universityCode}, #{professorName}, #{professorBirth}
+		,#{professorAddress}, #{professorPhonenumber}, #{professorEmail}, #{professorPassword},#{departmentName}, DEFAULT)
 	</insert>
 	
 	<update id="updateProfessor">
@@ -100,11 +102,12 @@
 		<result property="managerEmail" column="MANAGER_EMAIL"/>
 		<result property="managerPassword" column="MANAGER_PASSWORD"/>
 		<result property="managerTeam" column="MANAGER_TEAM"/>
+		<result property="chk" column="CHK"/>
 	</resultMap>
 	
 	<insert id="insertManager">
 		INSERT INTO MANAGER_TBL VALUES(#{managerNo}, #{managerName}, #{managerBirth}, #{managerAddress}
-		, #{managerPhonenumber}, #{managerEmail}, #{managerPassword}, #{managerTeam})
+		, #{managerPhonenumber}, #{managerEmail}, #{managerPassword}, #{managerTeam}, DEFAULT)
 	</insert>
 	
 	<update id="updateManager">
