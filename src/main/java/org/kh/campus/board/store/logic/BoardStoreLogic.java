@@ -85,4 +85,10 @@ public class BoardStoreLogic implements BoardStore {
 		return uList;
 	}
 
+	@Override
+	public int updateCount(int boardNo, SqlSession sqlSession) {
+		int result = sqlSession.update("BoardMapper.updateCount", boardNo);
+		return result;
+	}
+
 }

@@ -22,6 +22,7 @@ public interface BoardService {
 	public int removeBoardReply(BoardReply boardReply);//댓글 삭제
 	public int getListCount(PageInfo pageInfo);
 	public List<University> printAllUniversity();
+	public int boardCountUpdate(int boardNo);
 	
 
 	

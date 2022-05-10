@@ -16,6 +16,7 @@
 	<result property="boardFilepath" column="BOARD_FILEPATH"/>
 	<result property="universityCode" column="UNIVERSITY_CODE"/>
 	
+	
   	</resultMap>
   	
   	
@@ -88,7 +89,11 @@
   		SET BOARD_TITLE = #{boardTitle}, BOARD_CONTENT = #{boardContent}, BOARD_FILENAME = #{boardFilename}, 
   		BOARD_FILEPATH = #{boardFilepath}, BOARD_UPDATEDATE = DEFAULT
   		WHERE BOARD_NO = #{boardNo}
+  		
   	</update>
+  	<update id = "updateCount">
+  		UPDATE BOARD_TBL SET BOARD_COUNT = BOARD_COUNT+1 WHERE BOARD_NO = #{boardNo}
+  	</update> 
   	<delete id="deleteBoard">
   		DELETE FROM BOARD_TBL WHERE BOARD_NO = #{boardNo}
   	</delete>

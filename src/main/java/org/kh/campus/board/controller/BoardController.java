@@ -105,6 +105,7 @@ public class BoardController {
 			if (!uList.isEmpty()) {
 				mv.addObject("uList", uList);
 				mv.setViewName("board/boardUnList2");
+				mv.addObject("menu", "board");
 			} else {
 				mv.addObject("msg", "학과게시판 조회 실패");
 				mv.setViewName("common/errorPage");
@@ -125,9 +126,12 @@ public class BoardController {
 		try {
 			Board board = service.printOneBoard(boardNo);
 			if (board != null) {
+				service.boardCountUpdate(board.getBoardNo());
+				mv.addObject("menu", "board");
 				mv.addObject("universityCode", universityCode);
 				mv.addObject("board", board);
 				mv.setViewName("board/board");
+				
 			} else {
 				mv.addObject("msg", " 학과게시판 상세조회 실패");
 				mv.setViewName("common/errorPage");
@@ -152,7 +156,8 @@ public class BoardController {
 	 */
 	// 학과게시판 등록화면
 	@RequestMapping(value = "/board/writeView.kh")
-	public String boardWriteView() {
+	public String boardWriteView(Model model) {
+		model.addAttribute("menu", "board");
 		return "board/boardWriteForm";
 	}
 
@@ -219,6 +224,7 @@ public class BoardController {
 		try {
 			Board board = service.printOneBoard(boardNo);
 			if (board != null) {
+				model.addAttribute("menu","board");
 				model.addAttribute("board", board);
 				return "board/boardUpdateView";
 			} else {
