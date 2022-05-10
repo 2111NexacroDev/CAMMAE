@@ -4,6 +4,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+#s0{
+	width:5%;
+}
+#s1{
+	width:7%;
+}
+</style>
 <link rel="stylesheet" href="/resources/menuBar.css">
 <link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
@@ -40,7 +48,7 @@
 				alert("선택된 글이 없습니다.");
 			}
 			else{
-				var chk = confirm("정말 삭제하시겠습니까?");
+				var chk = confirm("정말 취소하시겠습니까?");
 				if(chk) {
 				$.ajax({
 					url : "/deleteSupport",
@@ -77,17 +85,22 @@
 		</div>
 		
 		<div id="center">
-	<h3>지원현황</h3>
-	<br><br>
+
+			<div class="c-title">
+				<div class="b-title"><h2>지원현황</h2></div>
+																
+				<div class="btn_1"><input class="btn" type="button" value="취소" class="btn-delete" onclick="deleteValue();"></div>
+			</div>
 	<table class="type01">
 	<thead>
 		<tr>
-			<th><input id="allCheck" type="checkbox" name="allCheck"></th>
-			<th>번호</th>
+			<th id="s0"><input id="allCheck" type="checkbox" name="allCheck"></th>
+			<th id="s1">번호</th>
 			<th>제목</th>
-			<th>지원자</th>
-			<th>지원일</th>
-			<th>파일이름</th>
+			<th id="s1">지원자</th>
+			<th id="s1">지원일</th>
+			<th>이력서</th>
+			<th>포트폴리오</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -100,6 +113,8 @@
 				<td>${support.supportDate }</td>
 				<td>
 				<a href="../../../resources/supportUploadFiles/${support.supFileRename }"download>${support.supFileName }</a><br>
+				</td>
+				<td>
 				<a href="../../../resources/supportUploadFiles/${support.supPortFileRename }"download>${support.supPortFileName }</a>
 				</td>
 			</tr>
@@ -107,7 +122,7 @@
 	</tbody>
 	</table>
 	<br>
-	<div align="center"><input type="button" value="삭제" class="btn-delete" onclick="deleteValue();"></div>
+	
 	<br>
 	<div align="center">
 		<form action="/support/list.kh" method="get">

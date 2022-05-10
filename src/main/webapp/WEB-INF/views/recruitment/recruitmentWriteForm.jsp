@@ -9,9 +9,9 @@ input::placeholder {
    font-weight: bold;
 }
 
-input {
-   color: rgb(52, 152, 219);
-   font-weight: bold;
+#input_1 {
+	color: rgb(52, 152, 219);
+	font-weight: bold;
 }
 
 span {
@@ -50,8 +50,11 @@ table.type02 td {
    margin-left: 280px;
    width: 250px;
    padding: 10px;
+   font-weight: bold;  
 }
-
+.companyName::placeholder{
+	color: black;
+}
 .main_content {
    width: 800px;
    /*    height: 360px; */
@@ -132,23 +135,23 @@ table.type02 td {
             <div class="main_content">
                <div class="main_content1">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>지원자격</span> <br> <br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">경력</span>&nbsp;&nbsp;&nbsp;<input
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">경력</span>&nbsp;&nbsp;&nbsp;<input id="input_1"
                      type="text" name="recruitmentCareer" placeholder="내용을 입력하세요.">
                   <br> <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
-                     id="span_1">학력</span>&nbsp;&nbsp;&nbsp;<input type="text"
+                     id="span_1">학력</span>&nbsp;&nbsp;&nbsp;<input type="text" id="input_1"
                      name="recruitmentEducation" placeholder="내용을 입력하세요."> <br>
-                  <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">우대</span>&nbsp;&nbsp;&nbsp;<input
+                  <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">우대</span>&nbsp;&nbsp;&nbsp;<input id="input_1"
                      type="text" name="recruitmentPrefer" placeholder="내용을 입력하세요.">
                </div>
                <div class="main_content2">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>지원자격</span> <br> <br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">고용형태</span>&nbsp;&nbsp;&nbsp;<input
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">고용형태</span>&nbsp;&nbsp;&nbsp;<input id="input_1"
                      type="text" name="recruitmentType" placeholder="내용을 입력하세요.">
                   <br> <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
-                     id="span_1">급여</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+                     id="span_1">급여</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="input_1"
                      type="text" name="recruitmentSalary" placeholder="내용을 입력하세요.">
                   <br> <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
-                     id="span_1">지역</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+                     id="span_1">지역</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="input_1"
                      type="text" id="sample5_address" placeholder="주소"
                      name="recruitmentRegion"> <input type="button"
                      onclick="sample5_execDaumPostcode()" value="주소 검색"><br>
