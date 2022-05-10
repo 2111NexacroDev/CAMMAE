@@ -333,7 +333,7 @@ span {
 		    	   $("#map").show();
 	    	   }else {
 	    		   $("#map").hide();
-	    	   }
+	    	   } 
 	           var mapContainer = document.getElementById('map'),
 	           mapOption = {
 	              center: new kakao.maps.LatLng(33.450701, 126.570608),
