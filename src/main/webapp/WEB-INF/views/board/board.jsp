@@ -191,8 +191,7 @@ hr {
 			var boardNo = "${board.boardNo}";
 			var rWriter = "${loginUser.studentName}";
 			var rWriterId = "${loginUser.studentNo}";
-			$
-					.ajax({
+			$.ajax({
 						url : "/board/replyList.kh",
 						type : "get",
 						data : {
@@ -233,9 +232,9 @@ hr {
 								$tr.append($rWriter);
 								$tr.append($rDate);
 								$tr2.append($rContent);
-								//if (data[i].boardId == rWriterId&& data[i].bordReplyWriter == rWriter) {
+								if (data[i].boardId == rWriterId&& data[i].boardReplyWriter == rWriter) {
 								$tr2.append($btnArea);
-								//}
+								}
 								$tableBody.append($tr);
 								$tableBody.append($tr2);
 								$tableBody.append($rLine);
