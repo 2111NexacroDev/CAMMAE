@@ -232,8 +232,7 @@ hr {
 			var marketNo = $("#marketNo").val();
 			var rWriter = "${loginUser.studentName}";
 			var rWriterId = "${loginUser.studentNo}";
-			$
-					.ajax({
+			$.ajax({
 						url : "/market/replyList",
 						type : "get",
 						data : {
@@ -274,7 +273,7 @@ hr {
 								$tr.append($rWriter);
 								$tr.append($rDate);
 								$tr2.append($rContent);
-								if (data[i].mReplyId == rWriterId) {
+								if (data[i].mReplyId == rWriterId && data[i].mReplyWriter == rWriter) {
 									$tr2.append($btnArea);
 								}
 
@@ -315,12 +314,12 @@ hr {
 		/* 댓글 수정 */
 		function modifyReplyView(obj, marketNo, marketReplyNo, mReplyContent) {
 			var $trModify = $("<tr>");
-			var $tdModify = $("<td colspan='3'>");
-			var $tdModifyBtn = $("<td>");
+			var $tdModify = $("<td width='90%' align='left'>");
+			var $tdModifyBtn = $("<td width='10%'>");
 			$tdModify
-					.append("<input type='text' size='50' value='"+mReplyContent+"' id='modifyData'>");
-			$tdModifyBtn.append("<button onclick='modifyReply(" + marketNo
-					+ "," + marketReplyNo + ");'>수정완료</button>");
+					.append("<input type='text' size='86' value='"+mReplyContent+"' id='modifyData'>");
+			$tdModifyBtn.append("<button class='btn' onclick='modifyReply(" + marketNo
+					+ "," + marketReplyNo + ");'>수정</button>");
 			$trModify.append($tdModify);
 			$trModify.append($tdModifyBtn);
 			$(obj).parent().parent().after($trModify);

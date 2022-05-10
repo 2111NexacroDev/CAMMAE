@@ -244,7 +244,7 @@ hr {
 								$tr.append($rWriter);
 								$tr.append($rDate);
 								$tr2.append($rContent);
-								if (data[i].questionReplyId == rWriterId) {
+								if (data[i].questionReplyId == rWriterId && data[i].questionReplyWriter == rWriter) {
 									$tr2.append($btnArea);
 								}
 
