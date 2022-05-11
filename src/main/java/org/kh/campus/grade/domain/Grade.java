@@ -9,7 +9,7 @@ public class Grade {
 	private String gradeComplete;
 	private int lectureGrade;
 	private String gradeScore;
-	private int gradeAvg;
+	private String gradeAvg;
 	private String gradeFeedback;
 	private String gradeObjection;
 	private String gradeChange;
@@ -56,7 +56,7 @@ public class Grade {
 	}
 
 	// 성적조회
-	public Grade(int lectureNo, int studentNo, String gradeScore, int gradeAvg) {
+	public Grade(int lectureNo, int studentNo, String gradeScore, String gradeAvg) {
 		super();
 		this.lectureNo = lectureNo;
 		this.studentNo = studentNo;
@@ -67,7 +67,7 @@ public class Grade {
 	
 
 	public Grade(int lectureNo, int studentNo, String gradeYear, String gradeSession, String gradeSubject,
-			String gradeComplete, int lectureGrade, String gradeScore, int gradeAvg, String gradeFeedback,
+			String gradeComplete, int lectureGrade, String gradeScore, String gradeAvg, String gradeFeedback,
 			String gradeObjection, String gradeChange, String objectionContent, String feedbackContent,
 			String studentName) {
 		super();
@@ -152,11 +152,11 @@ public class Grade {
 		this.gradeScore = gradeScore;
 	}
 
-	public int getGradeAvg() {
+	public String getGradeAvg() {
 		return gradeAvg;
 	}
 
-	public void setGradeAvg(int gradeAvg) {
+	public void setGradeAvg(String gradeAvg) {
 		this.gradeAvg = gradeAvg;
 	}
 
