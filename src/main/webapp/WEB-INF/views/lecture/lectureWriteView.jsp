@@ -27,10 +27,10 @@
 		</select><br> 
 		이수구분 <select name="lectureDivision">
 			<option>선택하세요</option>
-			<option>전필</option>
-			<option>전선</option>
-			<option>교필</option>
-			<option>교선</option>
+			<option>전공필수</option>
+			<option>전공선택</option>
+			<option>교양필수</option>
+			<option>교양선택</option>
 		</select><br> 
 		학점 <input type="number" name="lectureGrade"><br>
 		강의실 <input type="text" name="lectureRoom"><br> 
