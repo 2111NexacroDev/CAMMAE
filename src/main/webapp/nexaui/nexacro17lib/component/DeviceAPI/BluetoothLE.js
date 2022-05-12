@@ -12,13 +12,8 @@
 //==============================================================================
 
 if (!nexacro.BluetoothLE) {
-	nexacro.BluetoothLE = function (name, parent) {
-		this.id = this.name = name || null;
-		if (parent) {
-			this.parent = parent;
-		}
-
-
+	nexacro.BluetoothLE = function (id, parent) {
+		nexacro._EventSinkObject.call(this, id, parent);
 
 		this._id = nexacro.Device.makeID();
 		nexacro.Device._userCreatedObj[this._id] = this;
@@ -150,9 +145,6 @@ if (!nexacro.BluetoothLE) {
 		else {
 		}
 		return OSSpecifiedJSONString;
-	};
-
-	_pBluetoothLE.on_created = function () {
 	};
 
 	_pBluetoothLE.hasBluetoothLE = function () {

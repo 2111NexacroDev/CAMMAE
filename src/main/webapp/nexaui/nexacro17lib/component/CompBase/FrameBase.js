@@ -745,9 +745,7 @@ if (!nexacro.Frame) {
 		if (this._is_window && nexacro._Browser == "Runtime") {
 			var _window = this._window;
 			if (_window) {
-				if (!this._is_initcssselector) {
-					this._initCSSSelector();
-				}
+				this._initCSSSelector();
 
 				if (resize_flag) {
 					_window.setSize(this._adjust_width, this._adjust_height);
@@ -989,6 +987,17 @@ if (!nexacro.Frame) {
 		return -1;
 	};
 
+	_pFrame.getNativeHandle = function () {
+		if (nexacro._Browser == "Runtime") {
+			var _win = this._getWindow();
+			if (_win) {
+				return nexacro._getWindowHwndHandle(_win.handle);
+			}
+		}
+
+		return undefined;
+	};
+
 	_pFrame.getOwnerFrame = function () {
 		if (this.parent && this.parent._is_frame) {
 			return this.parent;
@@ -1100,24 +1109,32 @@ if (!nexacro.Frame) {
 
 		var obj = this[id];
 		if (obj) {
+			var _is_focused = false;
 			var _window = this._getWindow();
 
+			if (_window) {
+				_is_focused = (_window._indexOfCurrentFocusPaths(obj) > -1);
+			}
+
 			var nextframe = null;
-			if (this._is_frameset) {
+			if (this._is_frameset && this._active_frame == obj) {
 				nextframe = this._getNextOrderFrame(obj);
 			}
 
 			if (obj._is_frame) {
 				if (obj._activate == true) {
 					obj._changeStateActivate(false);
+				}
 
-					if (this._is_alive) {
-						if (_window.id == obj._getWindow().id) {
-							_window._removeFromCurrentFocusPath(obj, true);
+				if (this._is_alive) {
+					if (_window.id == obj._getWindow().id) {
+						_window._removeFromCurrentFocusPath(obj, true);
+						if (_is_focused) {
 							_window._last_focused_elem = this._control_element;
 						}
 					}
 				}
+
 				if (_window.id != obj._getWindow().id) {
 					if (nexacro._Browser == "Runtime" && (nexacro._SystemType.toLowerCase() == "win32" || nexacro._SystemType.toLowerCase() == "win64")) {
 						if (obj._window_type == 5) {
@@ -1278,6 +1295,10 @@ if (!nexacro.Frame) {
 		if (_pos == null) {
 			return;
 		}
+		if (this._window_type != 0) {
+			windowX = windowX / nexacro._getDevicePixelRatio(this.titlebar.getElement());
+			windowY = windowY / nexacro._getDevicePixelRatio(this.titlebar.getElement());
+		}
 
 		if (!this._is_window && (windowX != undefined && windowY != undefined)) {
 			var mainframe;
@@ -1299,6 +1320,10 @@ if (!nexacro.Frame) {
 			if (!(mainframe_left <= winX && r >= winX && mainframe_top <= winY && b >= winY)) {
 				return;
 			}
+		}
+		if (this._window_type != 0) {
+			x = x *  nexacro._getDevicePixelRatio(this.titlebar.getElement());
+			y = y *  nexacro._getDevicePixelRatio(this.titlebar.getElement());
 		}
 
 		if (!this._is_window) {
@@ -1349,13 +1374,6 @@ if (!nexacro.Frame) {
 			return;
 		}
 
-		var _window = this._getWindow();
-
-		if (_window && (_window._wheelZoom != undefined)) {
-			var wheelZoom = _window._wheelZoom / 100;
-			x = x / wheelZoom;
-			y = y / wheelZoom;
-		}
 
 		var left, top, width, height;
 		left = this._starttrack_position.left;
@@ -1396,7 +1414,7 @@ if (!nexacro.Frame) {
 		this._move(left, top, width, height);
 	};
 
-	_pFrame.on_fire_sys_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
+	_pFrame.on_fire_sys_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, meta_key) {
 		this._changeStateActivate(true);
 	};
 
@@ -1989,7 +2007,7 @@ if (!nexacro.Frame) {
 			}
 
 			var titlebar = this.titlebar;
-			if (titlebar) {
+			if (titlebar && titlebar._is_created) {
 				titlebar._changeOpenStatus(cur);
 			}
 
@@ -2162,6 +2180,10 @@ if (!nexacro.Frame) {
 			this._move(after_align_pos.left, after_align_pos.top, width, height);
 		}
 
+		if (win) {
+			nexacro._refreshWindow(win.handle, true);
+		}
+
 		if (control_element) {
 			nexacro._refreshWindowRegion(win.handle, control_element.handle);
 		}
@@ -2203,6 +2225,7 @@ if (!nexacro.Frame) {
 
 		if (window) {
 			window._keydown_element = null;
+			window._keydown_element_list.clear();
 		}
 
 		return nexacro.Frame.prototype._on_deactivate.call(this);
@@ -2955,12 +2978,7 @@ if (!nexacro.Frame) {
 		var old_height = this._adjust_height;
 		var bsize = false, bmove = false;
 
-		var check_arg_count = 6;
-		if (nexacro._Browser == "Runtime" && (nexacro._SystemType.toLowerCase() == "win32" || nexacro._SystemType.toLowerCase() == "win64")) {
-			check_arg_count = 5;
-		}
-
-		if (arguments.length >= check_arg_count) {
+		if (arguments.length >= 5) {
 			if (this._is_window && this._window) {
 				this._adjustPosition(left, top, right, bottom, width, height);
 			}
@@ -2981,7 +2999,6 @@ if (!nexacro.Frame) {
 			this.set_formurl(strurl);
 		}
 	};
-
 
 	_pChildFrame._addVariable = function (id, val) {
 		this[id] = val;
@@ -3114,7 +3131,7 @@ if (!nexacro.Frame) {
 			this.top = after_align_pos.top;
 		}
 
-		if (opener == null) {
+		if (!this.opener || (this.opener && !this.opener._is_form && !this.opener._is_application)) {
 			var _focus_obj = null;
 			if (parent_frame && parent_frame._focusManager) {
 				_focus_obj = parent_frame._focusManager[0];
@@ -3142,7 +3159,7 @@ if (!nexacro.Frame) {
 			mainframe._changeStateActivate(false, this);
 		}
 
-		var recalculated_pos = this._recalcModalPosition((this.left == null) ? null : this.left * wheelZoomScale, (this.top == null) ? null : this.top * wheelZoomScale, this.width, this.height);
+		var recalculated_pos = this._recalcModalPosition((this.left == null) ? null : this.left *  wheelZoomScale, (this.top == null) ? null : this.top *  wheelZoomScale, this.width, this.height);
 		this.left = recalculated_pos.left;
 		this.top = recalculated_pos.top;
 		this.width = recalculated_pos.width;
@@ -3241,7 +3258,7 @@ if (!nexacro.Frame) {
 			this.top = after_align_pos.top;
 		}
 
-		if (opener == null) {
+		if (!this.opener || (this.opener && !this.opener._is_form && !this.opener._is_application)) {
 			var _focus_obj = null;
 			if (parent_frame && parent_frame._focusManager) {
 				_focus_obj = parent_frame._focusManager[0];
@@ -3269,7 +3286,7 @@ if (!nexacro.Frame) {
 		if (_window && (_window._wheelZoom != undefined) && (_window._wheelZoom != 100)) {
 			wheelZoomScale = _window._wheelZoom / 100.0;
 		}
-		var recalculated_pos = this._recalcModalPosition((this.left == null) ? null : this.left * wheelZoomScale, (this.top == null) ? null : this.top * wheelZoomScale, this.width, this.height);
+		var recalculated_pos = this._recalcModalPosition((this.left == null) ? null : this.left *  wheelZoomScale, (this.top == null) ? null : this.top *  wheelZoomScale, this.width, this.height);
 		this.left = recalculated_pos.left;
 		this.top = recalculated_pos.top;
 		this.width = recalculated_pos.width;
@@ -3358,8 +3375,12 @@ if (!nexacro.Frame) {
 		var height = this._adjust_height;
 
 		if (parent_window) {
-			left = parent_window.getLeft();
-			top = parent_window.getTop();
+			if (this.autosize == false && (this._openalign == null || this._openalign && this._openalign.value == "")) {
+			}
+			else {
+				left = parent_window.getLeft();
+				top = parent_window.getTop();
+			}
 		}
 
 		var is_form_loaded = false;
@@ -3475,6 +3496,10 @@ if (!nexacro.Frame) {
 			}
 
 			this.init(this.name, left, top, width, height, null, null, formurl);
+
+			if (nexacro.__setViewportScale) {
+				nexacro.__setViewportScale();
+			}
 		}
 	};
 
@@ -3633,33 +3658,33 @@ if (!nexacro.Frame) {
 		return this.form ? this.form : null;
 	};
 
-	_pChildFrame.on_fire_sys_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+	_pChildFrame.on_fire_sys_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
 		if (this._window_type == 1) {
 			return true;
 		}
-		var ret = nexacro.Frame.prototype.on_fire_sys_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
+		var ret = nexacro.Frame.prototype.on_fire_sys_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+	_pChildFrame.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
 		if (this._window_type == 1) {
 			return true;
 		}
-		var ret = nexacro.Frame.prototype.on_fire_sys_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
+		var ret = nexacro.Frame.prototype.on_fire_sys_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_sys_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pChildFrame.on_fire_sys_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this._window_type == 1) {
 			return true;
 		}
-		var ret = nexacro.Frame.prototype.on_fire_sys_onlbuttondown.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+		var ret = nexacro.Frame.prototype.on_fire_sys_onlbuttondown.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_loadform_failed && this._isShowTitleBar() == false) {
 			var owner_frame = this.getOwnerFrame();
 			if (owner_frame) {
@@ -3689,90 +3714,90 @@ if (!nexacro.Frame) {
 		return ret;
 	};
 
-	_pChildFrame.on_fire_sys_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pChildFrame.on_fire_sys_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this._window_type == 1) {
 			return true;
 		}
-		var ret = nexacro.Frame.prototype.on_fire_sys_onlbuttonup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+		var ret = nexacro.Frame.prototype.on_fire_sys_onlbuttonup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_sys_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pChildFrame.on_fire_sys_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this._window_type == 1) {
 			return true;
 		}
-		var ret = nexacro.Frame.prototype.on_fire_sys_onrbuttondown.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+		var ret = nexacro.Frame.prototype.on_fire_sys_onrbuttondown.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_sys_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pChildFrame.on_fire_sys_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this._window_type == 1) {
 			return true;
 		}
-		var ret = nexacro.Frame.prototype.on_fire_sys_onrbuttonup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+		var ret = nexacro.Frame.prototype.on_fire_sys_onrbuttonup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_sys_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pChildFrame.on_fire_sys_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this._window_type == 1) {
 			return true;
 		}
-		var ret = nexacro.Frame.prototype.on_fire_sys_onmousedown.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+		var ret = nexacro.Frame.prototype.on_fire_sys_onmousedown.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_sys_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pChildFrame.on_fire_sys_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this._window_type == 1) {
 			return true;
 		}
-		var ret = nexacro.Frame.prototype.on_fire_sys_onmouseup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+		var ret = nexacro.Frame.prototype.on_fire_sys_onmouseup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_sys_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		var ret = nexacro.Frame.prototype.on_fire_sys_onmouseenter.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+	_pChildFrame.on_fire_sys_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_sys_onmouseenter.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_sys_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		var ret = nexacro.Frame.prototype.on_fire_sys_onmouseleave.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+	_pChildFrame.on_fire_sys_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_sys_onmouseleave.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_sys_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pChildFrame.on_fire_sys_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this._window_type == 1) {
 			return true;
 		}
-		var ret = nexacro.Frame.prototype.on_fire_sys_onmousemove.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+		var ret = nexacro.Frame.prototype.on_fire_sys_onmousemove.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_sys_onmousewheel = function (wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		var ret = nexacro.Frame.prototype.on_fire_sys_onmousewheel.call(this, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+	_pChildFrame.on_fire_sys_onmousewheel = function (wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_sys_onmousewheel.call(this, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
@@ -3780,99 +3805,99 @@ if (!nexacro.Frame) {
 	};
 
 
-	_pChildFrame.on_fire_user_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
-		var ret = nexacro.Frame.prototype.on_fire_user_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
+	_pChildFrame.on_fire_user_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_user_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_user_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
-		var ret = nexacro.Frame.prototype.on_fire_user_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
+	_pChildFrame.on_fire_user_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_user_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		var ret = nexacro.Frame.prototype.on_fire_user_onlbuttondown.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+	_pChildFrame.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_user_onlbuttondown.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem) {
-		var ret = nexacro.Frame.prototype.on_fire_user_onlbuttonup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem);
+	_pChildFrame.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_user_onlbuttonup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_user_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		var ret = nexacro.Frame.prototype.on_fire_user_onrbuttondown.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+	_pChildFrame.on_fire_user_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_user_onrbuttondown.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_user_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem) {
-		var ret = nexacro.Frame.prototype.on_fire_user_onrbuttonup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem);
+	_pChildFrame.on_fire_user_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_user_onrbuttonup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_user_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem) {
-		var ret = nexacro.Frame.prototype.on_fire_user_onmouseup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem);
+	_pChildFrame.on_fire_user_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_user_onmouseup.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_user_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		var ret = nexacro.Frame.prototype.on_fire_user_onmousedown.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+	_pChildFrame.on_fire_user_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_user_onmousedown.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_user_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		var ret = nexacro.Frame.prototype.on_fire_user_onmouseenter.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+	_pChildFrame.on_fire_user_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_user_onmouseenter.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_user_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		var ret = nexacro.Frame.prototype.on_fire_user_onmouseleave.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+	_pChildFrame.on_fire_user_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_user_onmouseleave.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_user_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pChildFrame.on_fire_user_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this._window_type == 1) {
 			return true;
 		}
-		var ret = nexacro.Frame.prototype.on_fire_user_onmousemove.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+		var ret = nexacro.Frame.prototype.on_fire_user_onmousemove.call(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
 		return ret;
 	};
 
-	_pChildFrame.on_fire_user_onmousewheel = function (wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		var ret = nexacro.Frame.prototype.on_fire_user_onmousewheel.call(this, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+	_pChildFrame.on_fire_user_onmousewheel = function (wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Frame.prototype.on_fire_user_onmousewheel.call(this, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 		if (this._is_window) {
 			return true;
 		}
@@ -3885,6 +3910,14 @@ if (!nexacro.Frame) {
 		if (!formurl) {
 			formurl = "";
 		}
+
+		var application = nexacro.getApplication();
+		if (application) {
+			if (application.key === "designform") {
+				return null;
+			}
+		}
+
 		var form = this.form;
 		if (form) {
 			if (form._url != this._formurl) {
@@ -4359,10 +4392,10 @@ if (!nexacro.Frame) {
 					left = p_l;
 					break;
 				case "center":
-					left = p_l + Math.round((p_w - width * wheelZoomScale) / 2);
+					left = p_l + Math.round((p_w - width *  wheelZoomScale) / 2);
 					break;
 				case "right":
-					left = p_l + p_w - width * wheelZoomScale;
+					left = p_l + p_w - width *  wheelZoomScale;
 					break;
 			}
 			switch (this._openalign.valign) {
@@ -4370,10 +4403,10 @@ if (!nexacro.Frame) {
 					top = p_t;
 					break;
 				case "middle":
-					top = p_t + Math.round((p_h - height * wheelZoomScale) / 2);
+					top = p_t + Math.round((p_h - height *  wheelZoomScale) / 2);
 					break;
 				case "bottom":
-					top = p_t + p_h - height * wheelZoomScale;
+					top = p_t + p_h - height *  wheelZoomScale;
 					break;
 			}
 			return {
@@ -4384,7 +4417,7 @@ if (!nexacro.Frame) {
 		return null;
 	};
 
-	if (nexacro._Browser == "IE" || nexacro._Browser == "Gecko") {
+	if (nexacro._Browser == "IE" || nexacro._Browser == "Gecko" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
 		_pChildFrame._checkValidWindowSize = function () {
 			var _window = this._window;
 			if (!_window) {
@@ -4600,11 +4633,11 @@ if (!nexacro.Frame) {
 			titleheight = this._defaulttitleheight;
 		}
 
-		if (left + width * wheelZoomScale > win.clientWidth) {
-			left = win.clientWidth - width * wheelZoomScale;
+		if (left + width *  wheelZoomScale > win.clientWidth) {
+			left = win.clientWidth - width *  wheelZoomScale;
 		}
-		if (top + titleheight * wheelZoomScale > win.clientHeight) {
-			top = win.clientHeight - titleheight * wheelZoomScale;
+		if (top + titleheight *  wheelZoomScale > win.clientHeight) {
+			top = win.clientHeight - titleheight *  wheelZoomScale;
 		}
 		if (left < 0) {
 			left = 0;
@@ -4627,8 +4660,15 @@ if (!nexacro.Frame) {
 
 		var form = this.form;
 		if (form && form._is_loading == false) {
-			width = form._init_width;
-			height = form._init_height;
+			var layout = form._checkValidLayout();
+			if (layout) {
+				width = layout.width;
+				height = layout.height;
+			}
+			else {
+				width = form._init_width;
+				height = form._init_height;
+			}
 		}
 
 		if (include_frame_nc) {
@@ -4720,8 +4760,8 @@ if (!nexacro.Frame) {
 		var defaultwidth = 0, defaultheight = 0;
 		var control_elem = this._control_element;
 		if (control_elem) {
-			defaultwidth = control_elem.client_width / 5 * 3;
-			defaultheight = control_elem.client_height / 5 * 3;
+			defaultwidth = control_elem.client_width / 5 *  3;
+			defaultheight = control_elem.client_height / 5 *  3;
 
 			lasty = control_elem.client_top;
 		}
@@ -4762,6 +4802,8 @@ if (!nexacro.Frame) {
 
 	_pFrameSetBase.set_ctrltabtype = function () {
 	};
+
+	_pFrameSetBase.set_tabkeycirculation = nexacro._emptyFn;
 
 	_pFrameSetBase.set_separatesize = function (v) {
 		if (v && this.separatesize != v) {
@@ -5066,7 +5108,7 @@ if (!nexacro.Frame) {
 
 				if (ntimes > 0) {
 					dividecnt += ntimes;
-					separateframesize[i] = ntimes * size;
+					separateframesize[i] = ntimes *  size;
 				}
 				else {
 					dividecnt++;
@@ -5092,7 +5134,7 @@ if (!nexacro.Frame) {
 
 		for (i = 0; i < framecnt; i++) {
 			if (separateframesize[i] < 0) {
-				separateframesize[i] = Math.abs(separateframesize[i]) * dividesize;
+				separateframesize[i] = Math.abs(separateframesize[i]) *  dividesize;
 			}
 			else if (separateframesize[i] == undefined) {
 				separateframesize[i] = 0;
@@ -5138,6 +5180,202 @@ if (!nexacro.Frame) {
 		return statustext;
 	};
 
+	_pFrameSetBase._getFocusChildFrame = function (frame) {
+		var _tabkeycirculation = this._tabkeycirculation;
+		var _last_focused = this._last_focused;
+		if (this._is_frameset && 
+			this instanceof nexacro.FrameSet) {
+			if (_tabkeycirculation == 2 || _tabkeycirculation == 3) {
+				if (((_tabkeycirculation == 2 || _tabkeycirculation == 3) && this._arrange == 0) || (_tabkeycirculation == 2 && this._arrange != 0)) {
+					if (_last_focused) {
+						if (_last_focused._isFocusAcceptable()) {
+							return _last_focused;
+						}
+						else {
+							if (frame._isFocusAcceptable()) {
+								return frame;
+							}
+						}
+					}
+					else {
+						if (frame._isFocusAcceptable()) {
+							return frame;
+						}
+					}
+				}
+				else if (_tabkeycirculation == 3) {
+					if (frame._isFocusAcceptable()) {
+						return frame;
+					}
+				}
+			}
+			else {
+				if (_tabkeycirculation == 0 || (_tabkeycirculation == 1 && frame._state_openstatus != 2)) {
+					if (frame._isFocusAcceptable()) {
+						return frame;
+					}
+				}
+			}
+		}
+		else if (frame._isFocusAcceptable()) {
+			return frame;
+		}
+
+		return null;
+	};
+
+	_pFrameSetBase._getNextChildFrame = function (frames) {
+		var n = frames ? frames.length : 0;
+		for (var i = 0; i < n; i++) {
+			var frame_ = frames[i];
+			if (frame_._is_frameset) {
+				if (frame_._getNextChildFrame) {
+					var ret = frame_._getNextChildFrame(frame_.frames);
+					if (ret) {
+						return ret;
+					}
+				}
+			}
+			else {
+				if (frame_.parent._is_frameset) {
+					var f = frame_.parent._getFocusChildFrame(frame_);
+					if (f) {
+						return f;
+					}
+					else {
+						continue;
+					}
+				}
+			}
+		}
+
+		return null;
+	};
+
+	_pFrameSetBase._getNextFrame = function (id, cycle) {
+		var frames = this.frames;
+		var n = frames ? frames.length : 0;
+		var frame = null;
+		for (var i = 0; i < n; i++) {
+			if (frames[i]._is_frameset) {
+				if (id != frames[i].id) {
+					if (frames[i]._isFocusAcceptable()) {
+						frame = frames[i]._getNextChildFrame(frames[i].frames);
+						break;
+					}
+				}
+			}
+			else if (frames[i] instanceof nexacro.ChildFrame) {
+				if (frames[i]._isFocusAcceptable()) {
+					frame = this._getFocusChildFrame(frames[i]);
+					break;
+				}
+				else {
+					continue;
+				}
+			}
+		}
+
+		if (this.parent._is_frameset) {
+			return this.parent._getNextFrame(this.parent.id, cycle);
+		}
+		else {
+			if (cycle) {
+				if (frame) {
+					return frame;
+				}
+			}
+			else {
+				return null;
+			}
+		}
+
+		return null;
+	};
+	_pFrameSetBase._getPrevChildFrame = function (frames) {
+		var _frames = frames ? frames : null;
+		if (_frames) {
+			var n = _frames.length;
+			for (var i = n - 1; i >= 0; i--) {
+				var frame_ = _frames[i];
+				if (frame_._getPrevChildFrame) {
+					var ret = frame_._getPrevChildFrame(frame_.frames);
+					if (ret) {
+						return ret;
+					}
+				}
+				else {
+					if (frame_.parent._is_frameset) {
+						var f = frame_.parent._getFocusChildFrame(frame_);
+						if (f) {
+							return f;
+						}
+						else {
+							continue;
+						}
+					}
+				}
+			}
+		}
+		return null;
+	};
+
+	_pFrameSetBase._getPrevFrame_ = function (id, cycle) {
+		var childframe_idx = -1;
+		var frameset_idx = -1;
+		var frames = this.frames;
+		var n = frames ? frames.length : 0;
+		var frame = null;
+		for (var i = n - 1; i >= 0; i--) {
+			if (frames[i]._is_frameset) {
+				if (id == frames[i].id) {
+					frameset_idx = i;
+				}
+				else {
+					if (frames[i]._isFocusAcceptable()) {
+						frame = frames[i]._getPrevChildFrame(frames[i].frames);
+						break;
+					}
+				}
+			}
+			else if (frames[i] instanceof nexacro.ChildFrame) {
+				if (childframe_idx == -1 && frames[i]._isFocusAcceptable()) {
+					childframe_idx = i;
+					frame = this._getFocusChildFrame(frames[i]);
+					break;
+				}
+				else {
+					continue;
+				}
+			}
+		}
+
+		if (childframe_idx != -1 && childframe_idx < frameset_idx) {
+			{
+
+				if (frame) {
+					return frame;
+				}
+			}
+		}
+		else {
+			if (this.parent._is_frameset) {
+				return this.parent._getPrevFrame_(this.parent.id, cycle);
+			}
+			else {
+				if (cycle) {
+					if (frame) {
+						return frame;
+					}
+				}
+				else {
+					return null;
+				}
+			}
+		}
+
+		return null;
+	};
 	_pFrameSetBase._on_apply_locale = function (v) {
 		var frames = this.frames;
 		if (frames) {
@@ -5169,10 +5407,32 @@ if (!nexacro.Frame) {
 	_pFrameSet.ctrltaborder = 0;
 	_pFrameSet.ctrltabtype = 0;
 	_pFrameSet.minimizedchildposition = "bottom";
+	_pFrameSet.tabkeycirculation = "all";
+	_pFrameSet._tabkeycirculation = 0;
 	_pFrameSet.restorechildpositiontype = "normal";
 	_pFrameSet._minimizedchildposition = 3;
 	_pFrameSet._is_autorecalc_frame = false;
+	_pFrameSet._arrange = 0;
 
+
+	_pFrameSet.set_tabkeycirculation = function (v) {
+		this.tabkeycirculation = v;
+		switch (v) {
+			case "all,no_minimize":
+				this._tabkeycirculation = 1;
+				break;
+			case "active_only":
+				this._tabkeycirculation = 2;
+				break;
+			case "auto":
+				this._tabkeycirculation = 3;
+				break;
+			default:
+				this._tabkeycirculation = 0;
+				this.tabkeycirculation = "all";
+				break;
+		}
+	};
 
 	_pFrameSet.set_minimizewidth = function (minimizewidth) {
 		minimizewidth = parseInt(minimizewidth);
@@ -5304,26 +5564,27 @@ if (!nexacro.Frame) {
 		var framewidth = this._getClientWidth();
 		var frameheight = this._getClientHeight();
 		if (v == "cascade") {
+			this._arrange = 0;
 			var cascadecnt = 0;
 			for (var temp = 100; ; cascadecnt++) {
 				if (this._getClientHeight() < temp) {
 					break;
 				}
-				temp += (60 + (cascadecnt * 10));
+				temp += (60 + (cascadecnt *  10));
 			}
 
 			var cascadegapx = parseInt(this._titlebarheight) | this._defaulttitleheight;
 			var cascadegapy = cascadegapx;
-			framewidth = this._getClientWidth() - (cascadegapx * cascadecnt);
-			frameheight = this._getClientHeight() - (cascadegapy * cascadecnt);
+			framewidth = this._getClientWidth() - (cascadegapx *  cascadecnt);
+			frameheight = this._getClientHeight() - (cascadegapy *  cascadecnt);
 			for (i = 0, j = 0; i < this.frames.length; i++) {
 				child = this._zordermap[i];
 				if (child.visible == false || child._state_openstatus == 2) {
 					continue;
 				}
 
-				frameleft = cascadegapx * (j % (cascadecnt + 1));
-				frametop = cascadegapy * (j % (cascadecnt + 1));
+				frameleft = cascadegapx *  (j % (cascadecnt + 1));
+				frametop = cascadegapy *  (j % (cascadecnt + 1));
 
 				child._move(frameleft, frametop, framewidth, frameheight);
 
@@ -5331,6 +5592,7 @@ if (!nexacro.Frame) {
 			}
 		}
 		if (v == "tilevertical") {
+			this._arrange = 1;
 			fixed = true;
 			rowcnt = parseInt(Math.sqrt(arrangecnt)) | 0;
 			colcnt = parseInt(arrangecnt / rowcnt) | 0;
@@ -5359,10 +5621,10 @@ if (!nexacro.Frame) {
 
 					width = rc.right - rc.left;
 					height = rc.bottom - rc.top;
-					rc.left += (colcnt - col - 1) * width;
-					rc.top += (rowcnt - row - 1) * height;
-					rc.right += (colcnt - col - 1) * width;
-					rc.bottom += (rowcnt - row - 1) * height;
+					rc.left += (colcnt - col - 1) *  width;
+					rc.top += (rowcnt - row - 1) *  height;
+					rc.right += (colcnt - col - 1) *  width;
+					rc.bottom += (rowcnt - row - 1) *  height;
 
 					child._move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
 					row++;
@@ -5377,6 +5639,7 @@ if (!nexacro.Frame) {
 			}
 		}
 		if (v == "tilehorizontal") {
+			this._arrange = 2;
 			fixed = true;
 			colcnt = parseInt(Math.sqrt(arrangecnt)) | 0;
 			rowcnt = parseInt(arrangecnt / colcnt) | 0;
@@ -5405,10 +5668,10 @@ if (!nexacro.Frame) {
 
 					width = rc.right - rc.left;
 					height = rc.bottom - rc.top;
-					rc.left += (colcnt - col - 1) * width;
-					rc.top += (rowcnt - row - 1) * height;
-					rc.right += (colcnt - col - 1) * width;
-					rc.bottom += (rowcnt - row - 1) * height;
+					rc.left += (colcnt - col - 1) *  width;
+					rc.top += (rowcnt - row - 1) *  height;
+					rc.right += (colcnt - col - 1) *  width;
+					rc.bottom += (rowcnt - row - 1) *  height;
 
 					child._move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
 					row++;
@@ -5423,17 +5686,19 @@ if (!nexacro.Frame) {
 			}
 		}
 		if (v == "vertical") {
+			this._arrange = 3;
 			for (i = 0, j = 0; i < this.frames.length; i++) {
 				child = this._zordermap[i];
 				if (child.visible == false || child._state_openstatus == 2) {
 					continue;
 				}
 
-				child._move(frameleft + (j * (framewidth / arrangecnt)), frametop, (framewidth / arrangecnt), frameheight);
+				child._move(frameleft + (j *  (framewidth / arrangecnt)), frametop, (framewidth / arrangecnt), frameheight);
 				j++;
 			}
 		}
 		if (v == "horizontal") {
+			this._arrange = 4;
 			var top = frametop;
 			for (i = 0; i < this.frames.length; i++) {
 				child = this._zordermap[i];
@@ -5494,7 +5759,14 @@ if (!nexacro.Frame) {
 						maxidx = i;
 						continue;
 					}
-					titleheight = child._titlebarheight;
+					if (child instanceof nexacro.FrameSetBase) {
+						var h = child.frames ? child.frames[0]._titlebarheight : 0;
+						titleheight = h;
+					}
+					else {
+						titleheight = child._titlebarheight;
+					}
+
 					minheight = parseInt(titleheight) | 0;
 
 
@@ -5860,7 +6132,7 @@ if (!nexacro.Frame) {
 
 
 			var defaultminwidth = this.minimizewidth ? this.minimizewidth : 150;
-			var minwidth = width - (minimizeframecnt * defaultminwidth);
+			var minwidth = width - (minimizeframecnt *  defaultminwidth);
 			minwidth = minwidth > 0 ? defaultminwidth : (width / minimizeframecnt);
 			minwidth = minwidth < 100 ? 100 : minwidth;
 
@@ -6045,7 +6317,7 @@ if (!nexacro.Frame) {
 						}
 
 						var cur_pos = progressbar.pos;
-						cur_pos += Math.max(1, (1000 - cur_pos) / (100 * this._comm_progress_ref));
+						cur_pos += Math.max(1, (1000 - cur_pos) / (100 *  this._comm_progress_ref));
 						if (cur_pos > 990) {
 							cur_pos = 990;
 						}

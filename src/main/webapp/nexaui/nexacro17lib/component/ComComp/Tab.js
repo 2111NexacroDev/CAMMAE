@@ -24,8 +24,8 @@ _pTabIndexChangeEventInfo._type_name = "TabIndexChangeEventInfo";
 
 delete _pTabIndexChangeEventInfo;
 
-nexacro.TabMouseEventInfo = function (obj, id, index, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-	nexacro.MouseEventInfo.call(this, obj, id || "onextrabuttonclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+nexacro.TabMouseEventInfo = function (obj, id, index, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+	nexacro.MouseEventInfo.call(this, obj, id || "onextrabuttonclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 
 	this.index = index;
 };
@@ -73,6 +73,7 @@ if (!nexacro.Tab) {
 	_pTab._prevbutton_size = null;
 	_pTab._nextbutton_size = null;
 	_pTab._is_containerset = true;
+	_pTab._is_changed_focus = false;
 	_pTab._init_tabindex = 0;
 	_pTab._next_button_idx = 0;
 
@@ -635,10 +636,19 @@ if (!nexacro.Tab) {
 			}
 
 			this._addChild(strId, tabpage, true, idx);
+
+			if (this._is_canchange) {
+				this.tabindex = idx;
+			}
+			else {
+				if (this.tabindex >= idx) {
+					this.tabindex = this.tabindex + 1;
+				}
+			}
 		}
+
 		var newtabbtn;
 		if (this._is_canchange) {
-			this.tabindex = idx;
 			newtabbtn = this._tabbutton_obj = tabbuttonitems[idx] = this._createTabbutton(idx, tabpage, false);
 			if (strUrl && !this.preload) {
 				tabpage.set_url(strUrl);
@@ -652,9 +662,6 @@ if (!nexacro.Tab) {
 			this._last_focused = null;
 		}
 		else {
-			if (this.tabindex >= idx) {
-				this.tabindex = this.tabindex + 1;
-			}
 			newtabbtn = tabbuttonitems[idx] = this._createTabbutton(idx, tabpage, false);
 			newtabbtn._changeUserStatus("selected", false);
 			newtabbtn._setAccessibilityStatSelected(false);
@@ -829,53 +836,53 @@ if (!nexacro.Tab) {
 	};
 
 
-	_pTab.on_fire_user_onmousedown = function (button, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pTab.on_fire_user_onmousedown = function (button, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, metaKey) {
 		if (this.onmousedown && this.onmousedown._has_handlers) {
 			var rootComp = this._getRootComponent(from_comp);
 
 			if (from_comp instanceof nexacro.Tabpage) {
 				rootComp = from_comp;
 			}
-			var evt = new nexacro.MouseEventInfo(rootComp, "onmousedown", button, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(rootComp, "onmousedown", button, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, metaKey);
 			return this.onmousedown._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pTab.on_fire_sys_onmousedown = function (button, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pTab.on_fire_sys_onmousedown = function (button, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, metaKey) {
 		if (this.onmousedown && this.onmousedown._has_handlers) {
 			var rootComp = this._getRootComponent(from_comp);
 
 			if (from_comp instanceof nexacro.Tabpage) {
 				rootComp = from_comp;
 			}
-			var evt = new nexacro.MouseEventInfo(rootComp, "onmousedown", button, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(rootComp, "onmousedown", button, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, metaKey);
 			return this.onmousedown._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pTab.on_fire_user_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pTab.on_fire_user_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmouseup && this.onmouseup._has_handlers) {
 			var rootComp = this._getRootComponent(from_comp);
 
 			if (from_comp instanceof nexacro.Tabpage) {
 				rootComp = from_comp;
 			}
-			var evt = new nexacro.MouseEventInfo(rootComp, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(rootComp, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmouseup._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pTab.on_fire_sys_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pTab.on_fire_sys_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmouseup && this.onmouseup._has_handlers) {
 			var rootComp = this._getRootComponent(from_comp);
 
 			if (from_comp instanceof nexacro.Tabpage) {
 				rootComp = from_comp;
 			}
-			var evt = new nexacro.MouseEventInfo(rootComp, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(rootComp, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmouseup._fireSysEvent(this, evt);
 		}
 		return false;
@@ -890,6 +897,8 @@ if (!nexacro.Tab) {
 	};
 
 	_pTab.on_killfocus_basic_action = function (new_focus, new_ref_focus) {
+		nexacro.Component.prototype.on_killfocus_basic_action.call(this);
+
 		if (new_focus === this) {
 			return;
 		}
@@ -901,119 +910,134 @@ if (!nexacro.Tab) {
 		this._focusobj = null;
 	};
 
-	_pTab.on_fire_user_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+	_pTab.on_fire_user_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
 		var ret = false;
 		if (!this.onkeydown || (this.onkeydown && !this.onkeydown.defaultprevented)) {
 			if (key_code == nexacro.Event.KEY_TAB || key_code == nexacro.Event.KEY_RIGHT || key_code == nexacro.Event.KEY_LEFT || key_code == nexacro.Event.KEY_BACKSPACE) {
-				if (this._keydown_filter(null, key_code, alt_key, ctrl_key, shift_key, undefined, from_comp, from_refer_comp)) {
-					this._getWindow()._keydown_element._event_stop = true;
+				if (this._keydown_filter(null, key_code, alt_key, ctrl_key, shift_key, undefined, from_comp, from_refer_comp, meta_key)) {
+					if (this._getWindow()._keydown_element) {
+						this._getWindow()._keydown_element._event_stop = true;
+					}
+
 					return true;
 				}
 			}
 			else if (nexacro._enableaccessibility) {
 				if (key_code == nexacro.Event.KEY_DOWN || key_code == nexacro.Event.KEY_UP) {
-					if (this._keydown_filter(null, key_code, alt_key, ctrl_key, shift_key, undefined, from_comp, from_refer_comp)) {
+					if (this._keydown_filter(null, key_code, alt_key, ctrl_key, shift_key, undefined, from_comp, from_refer_comp, meta_key)) {
 						return true;
 					}
 				}
 			}
 		}
-		ret = nexacro.Component.prototype.on_fire_user_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
+		ret = nexacro.Component.prototype.on_fire_user_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
 		return ret;
 	};
 
-	_pTab.on_fire_sys_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+	_pTab.on_fire_sys_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
 		if (this.onkeydown && this.onkeydown._has_handlers) {
-			var evt = new nexacro.KeyEventInfo(this, "onkeydown", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp);
+			var evt = new nexacro.KeyEventInfo(this, "onkeydown", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp, meta_key);
 			return this.onkeydown._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pTab.on_fire_user_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+	_pTab.on_fire_user_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
 		if (this.onkeyup && this.onkeyup._has_handlers) {
-			var evt = new nexacro.KeyEventInfo(this, "onkeyup", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp);
+			var evt = new nexacro.KeyEventInfo(this, "onkeyup", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp, meta_key);
 			return this.onkeyup._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pTab.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+	_pTab.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
 		if (this.onkeyup && this.onkeyup._has_handlers) {
-			var evt = new nexacro.KeyEventInfo(this, "onkeyup", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp);
+			var evt = new nexacro.KeyEventInfo(this, "onkeyup", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp, meta_key);
 			return this.onkeyup._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pTab.on_lbuttondown_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp) {
-		var ret = nexacro.Component.prototype.on_lbuttondown_basic_action.call(this, elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+	_pTab.on_lbuttondown_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
+		var ret = nexacro.Component.prototype.on_lbuttondown_basic_action.call(this, elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 
 		if (!this.visible || this._isEnable() == false) {
 			return ret;
 		}
 
-		var tabbutton_obj = this._tabbutton_obj;
-		if (tabbutton_obj && tabbutton_obj.name == "extrabutton") {
-			if (this._tabbuttonitems[tabbutton_obj._tabindex]) {
-				this._tabbuttonitems[tabbutton_obj._tabindex]._setFocus();
-			}
-		}
+		this._is_changed_focus = false;
 
-
-		if (tabbutton_obj && this.selectchangetype == "down") {
-			var idx = tabbutton_obj._tabindex;
-
-			var oldindex = this.tabindex;
-			var bcanchange = this._changeTabIndex(idx, true);
-			if (bcanchange) {
-				if (this.enableevent && oldindex != this.tabindex) {
-					this.on_fire_onchanged(tabbutton_obj, idx, oldindex);
+		if (refer_comp && ((refer_comp instanceof nexacro._TabButtonItemControl) || refer_comp.parent instanceof nexacro._TabButtonItemControl)) {
+			var tabbutton_obj = this._tabbutton_obj;
+			if (tabbutton_obj && tabbutton_obj.name == "extrabutton") {
+				if (this._tabbuttonitems[tabbutton_obj._tabindex]) {
+					this._tabbuttonitems[tabbutton_obj._tabindex]._setFocus();
 				}
 			}
 
-			this._rearrangeContents(-1);
+
+			if (tabbutton_obj && this.selectchangetype == "down") {
+				var idx = tabbutton_obj._tabindex;
+
+				var oldindex = this.tabindex;
+				var focusobj = this._focusobj;
+
+				var bcanchange = this._changeTabIndex(idx, true, true);
+				if (bcanchange) {
+					if (this.enableevent && oldindex != this.tabindex) {
+						this.on_fire_onchanged(tabbutton_obj, idx, oldindex);
+					}
+
+					if (focusobj != this._focusobj) {
+						this._is_changed_focus = true;
+					}
+				}
+
+				this._rearrangeContents(-1);
+			}
 		}
 
 		return ret;
 	};
 
-	_pTab.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pTab.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (from_refer_comp.name == "extrabutton") {
 			var tabbutton = from_refer_comp.parent;
 			var idx = tabbutton._tabindex;
 			if (idx >= 0) {
-				this.on_fire_onextrabuttonclick(tabbutton, idx, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+				this.on_fire_onextrabuttonclick(tabbutton, idx, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			}
 		}
 
 		if (this.onlbuttondown && this.onlbuttondown._has_handlers) {
-			var evt = new nexacro.TabMouseEventInfo(this, "onlbuttondown", this.tabindex, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.TabMouseEventInfo(this, "onlbuttondown", this.tabindex, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onlbuttondown._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pTab.on_lbuttonup_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp) {
-		var ret = nexacro.Component.prototype.on_lbuttonup_basic_action.call(this, elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+	_pTab.on_lbuttonup_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
+		var ret = nexacro.Component.prototype.on_lbuttonup_basic_action.call(this, elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 
 		if (!this.visible || this._isEnable() == false) {
 			return ret;
 		}
 
-		if (this._tabbutton_obj && this.selectchangetype == "up") {
-			var tabbutton_obj = this._tabbutton_obj;
-			var idx = tabbutton_obj._tabindex;
+		if (refer_comp && ((refer_comp instanceof nexacro._TabButtonItemControl) || refer_comp.parent instanceof nexacro._TabButtonItemControl)) {
+			if (this._tabbutton_obj && this.selectchangetype == "up") {
+				var tabbutton_obj = this._tabbutton_obj;
+				var idx = tabbutton_obj._tabindex;
 
-			var oldindex = this.tabindex;
-			var bcanchange = this._changeTabIndex(idx, true);
-			if (bcanchange) {
-				if (this.enableevent && oldindex != this.tabindex) {
-					this.on_fire_onchanged(tabbutton_obj, idx, oldindex);
+				var oldindex = this.tabindex;
+				var bcanchange = this._changeTabIndex(idx, true, true);
+				if (bcanchange) {
+					if (this.enableevent && oldindex != this.tabindex) {
+						this.on_fire_onchanged(tabbutton_obj, idx, oldindex);
+					}
 				}
-			}
 
-			this._rearrangeContents(-1);
+				this._rearrangeContents(-1);
+			}
 		}
 	};
 
@@ -1028,20 +1052,22 @@ if (!nexacro.Tab) {
 			if (control instanceof nexacro._TabExtraButtonControl) {
 				var tabbuttonitem = control.parent;
 				idx = tabbuttonitem._tabindex;
+
+				var screenX, screenY, canvasX, canvasY, clientX, clientY;
+				if (touchinfos && touchinfos.length > 0) {
+					screenX = touchinfos[0].screenx;
+					screenY = touchinfos[0].screeny;
+					canvasX = touchinfos[0].canvasx;
+					canvasY = touchinfos[0].canvasy;
+					clientX = touchinfos[0].clientx;
+					clientY = touchinfos[0].clienty;
+				}
+
+				if (idx >= 0) {
+					this.on_fire_onextrabuttonclick(tabbuttonitem, idx, "touch", null, null, null, screenX, screenY, canvasX, canvasY, clientX, clientY, this, control);
+				}
 				var curindex = this.tabindex;
 				if (curindex == idx) {
-					if (idx >= 0) {
-						var screenX, screenY, canvasX, canvasY, clientX, clientY;
-						if (touchinfos && touchinfos.length > 0) {
-							screenX = touchinfos[0].screenx;
-							screenY = touchinfos[0].screeny;
-							canvasX = touchinfos[0].canvasx;
-							canvasY = touchinfos[0].canvasy;
-							clientX = touchinfos[0].clientx;
-							clientY = touchinfos[0].clienty;
-						}
-						this.on_fire_onextrabuttonclick(tabbuttonitem, idx, "touch", null, null, null, screenX, screenY, canvasX, canvasY, clientX, clientY, this, control);
-					}
 					return ret;
 				}
 				else {
@@ -1056,7 +1082,7 @@ if (!nexacro.Tab) {
 				idx = tabbutton_obj._tabindex;
 
 				var oldindex = this.tabindex;
-				var bcanchange = this._changeTabIndex(idx, true);
+				var bcanchange = this._changeTabIndex(idx, true, true);
 				if (bcanchange) {
 					if (this.enableevent && oldindex != this.tabindex) {
 						this.on_fire_onchanged(tabbutton_obj, idx, oldindex);
@@ -1070,33 +1096,33 @@ if (!nexacro.Tab) {
 		return ret;
 	};
 
-	_pTab.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem) {
+	_pTab.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
 		if (this.onlbuttonup && this.onlbuttonup._has_handlers) {
-			var evt = new nexacro.TabMouseEventInfo(this, "onlbuttonup", this.tabindex, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.TabMouseEventInfo(this, "onlbuttonup", this.tabindex, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onlbuttonup._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pTab.on_fire_user_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem) {
+	_pTab.on_fire_user_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
 		if (this.onrbuttonup && this.onrbuttonup._has_handlers) {
-			var evt = new nexacro.TabMouseEventInfo(this, "onrbuttonup", this.tabindex, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.TabMouseEventInfo(this, "onrbuttonup", this.tabindex, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onrbuttonup._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pTab.on_fire_user_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pTab.on_fire_user_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onrbuttondown && this.onrbuttondown._has_handlers) {
-			var evt = new nexacro.TabMouseEventInfo(this, "onrbuttondown", this.tabindex, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.TabMouseEventInfo(this, "onrbuttondown", this.tabindex, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onrbuttondown._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pTab.on_fire_onextrabuttonclick = function (obj, index, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pTab.on_fire_onextrabuttonclick = function (obj, index, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onextrabuttonclick && this.onextrabuttonclick._has_handlers) {
-			var evt = new nexacro.TabMouseEventInfo(this, "onextrabuttonclick", index, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, this, this);
+			var evt = new nexacro.TabMouseEventInfo(this, "onextrabuttonclick", index, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, this, this, meta_key);
 			return this.onextrabuttonclick._fireEvent(this, evt);
 		}
 		return true;
@@ -1467,7 +1493,7 @@ if (!nexacro.Tab) {
 		this._rearrangeContents(begin_idx);
 	};
 
-	_pTab._changeTabIndex = function (index, is_apply_focus) {
+	_pTab._changeTabIndex = function (index, is_apply_focus, is_mouse_action) {
 		var nindex = +index;
 		if (!this._is_created || this.tabindex == index || (nindex != nindex) || index < 0 || (this.tabpages && index >= this.tabpages.length)) {
 			return;
@@ -1499,6 +1525,9 @@ if (!nexacro.Tab) {
 
 			if (oldtabtn.visible) {
 				oldtabtn._changeUserStatus("selected", false);
+				if (is_mouse_action) {
+					oldtabtn._changeStatus("mouseover", false);
+				}
 			}
 			oldtabpage.set_visible(false);
 
@@ -1894,10 +1923,10 @@ if (!nexacro.Tab) {
 								tabbuttonitem_pos.width += remainning;
 							}
 							else {
-								tabbuttonitem_pos.width += Math.ceil(extra_width * ratio);
+								tabbuttonitem_pos.width += Math.ceil(extra_width *  ratio);
 							}
 
-							remainning -= Math.ceil(extra_width * ratio);
+							remainning -= Math.ceil(extra_width *  ratio);
 						}
 						else {
 							ratio = tabbuttonitem_pos.height / cur_line_height;
@@ -1905,10 +1934,10 @@ if (!nexacro.Tab) {
 								tabbuttonitem_pos.height += remainning;
 							}
 							else {
-								tabbuttonitem_pos.height += Math.ceil(extra_height * ratio);
+								tabbuttonitem_pos.height += Math.ceil(extra_height *  ratio);
 							}
 
-							remainning -= Math.ceil(extra_height * ratio);
+							remainning -= Math.ceil(extra_height *  ratio);
 						}
 					}
 				}
@@ -2002,7 +2031,7 @@ if (!nexacro.Tab) {
 
 				if (tabposition == "top") {
 					if (bmultiline) {
-						top = tabbuttonitem_max_height * (line_count - cur_line_index - 1);
+						top = tabbuttonitem_max_height *  (line_count - cur_line_index - 1);
 					}
 					else {
 						top = tabbuttonitem_max_height - tabbuttonitem_pos.height;
@@ -2012,7 +2041,7 @@ if (!nexacro.Tab) {
 				}
 				else {
 					if (bmultiline) {
-						top = tab_max_height - tabbuttonitem_max_height * (line_count - cur_line_index);
+						top = tab_max_height - tabbuttonitem_max_height *  (line_count - cur_line_index);
 					}
 					else {
 						top = tab_max_height - tabbuttonitem_max_height;
@@ -2056,7 +2085,7 @@ if (!nexacro.Tab) {
 
 				if (tabposition == "left") {
 					if (bmultiline) {
-						left = tabbuttonitem_max_width * (line_count - (cur_line_index + 1));
+						left = tabbuttonitem_max_width *  (line_count - (cur_line_index + 1));
 					}
 					else {
 						left = tabbuttonitem_max_width - tabbuttonitem_pos.width;
@@ -2066,7 +2095,7 @@ if (!nexacro.Tab) {
 				}
 				else {
 					if (bmultiline) {
-						left = tab_max_width - tabbuttonitem_max_width * (line_count - cur_line_index);
+						left = tab_max_width - tabbuttonitem_max_width *  (line_count - cur_line_index);
 					}
 					else {
 						left = tab_max_width - tabbuttonitem_max_width;
@@ -2129,15 +2158,15 @@ if (!nexacro.Tab) {
 		}
 
 		if (tabposition == "top" || tabposition == "bottom") {
-			tabpage_position.height -= tabbuttonitem_max_height * adjust_count;
+			tabpage_position.height -= tabbuttonitem_max_height *  adjust_count;
 			if (tabposition == "top") {
-				tabpage_position.top += tabbuttonitem_max_height * adjust_count;
+				tabpage_position.top += tabbuttonitem_max_height *  adjust_count;
 			}
 		}
 		else {
-			tabpage_position.width -= tabbuttonitem_max_width * adjust_count;
+			tabpage_position.width -= tabbuttonitem_max_width *  adjust_count;
 			if (tabposition == "left") {
-				tabpage_position.left += tabbuttonitem_max_width * adjust_count;
+				tabpage_position.left += tabbuttonitem_max_width *  adjust_count;
 			}
 		}
 
@@ -2145,6 +2174,9 @@ if (!nexacro.Tab) {
 			tabpage = tabpages[i];
 
 			tabpage.move(tabpage_position.left, tabpage_position.top, tabpage_position.width, tabpage_position.height);
+			if (tabpage.form && tabpage.form._is_loaded == true && (!tabpage.url || tabpage.url.length <= 0)) {
+				tabpage.form.resetScroll();
+			}
 		}
 
 
@@ -2264,7 +2296,7 @@ if (!nexacro.Tab) {
 		var btabjustify = this.tabjustify;
 		var tabposition = this.tabposition;
 		var tab_buttonwidth = this.tabbuttonwidth;
-		var tab_buttonheight = this.tabbuttonheight;
+		var tab_buttonheight = bmultiline ? undefined : this.tabbuttonheight;
 		var tab_selectedbuttonwidth = this.selectedtabbuttonwidth;
 		var tab_selectedbuttonheight = this.selectedtabbuttonheight;
 		var prop_tabbuttonitemwidth, prop_tabbuttonitemheight;
@@ -2447,7 +2479,7 @@ if (!nexacro.Tab) {
 		this._rearrangeContents();
 	};
 
-	_pTab._keydown_filter = function (elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp) {
+	_pTab._keydown_filter = function (elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp, meta_key) {
 		var tabpagecnt = this.tabpages.length;
 		if (tabpagecnt <= 0) {
 			return false;
@@ -2859,39 +2891,32 @@ if (!nexacro.Tab) {
 			return nexacro.FormBase._getComponentsByTaborder.call(this, p, filter_type);
 		}
 
-		var comps = [];
+		if (!this._isEnable()) {
+			return null;
+		}
+
 		var tabpage = this.tabpages[this.tabindex];
 		var tabbuttonitem = this._tabbuttonitems[this.tabindex];
 
-		if (this.focusacceptable && tabbuttonitem) {
-			comps = [tabbuttonitem];
-		}
+		var comp;
+		var comps = (this.focusacceptable && tabbuttonitem) ? [tabbuttonitem] : [];
 
 		if ((filter_type & 4) || (tabpage && tabpage.form._child_list && tabpage.form._child_list.length > 0)) {
 			comps.push(tabpage);
 		}
 
-		if (!this._isEnable()) {
-			return null;
-		}
-
-		var ar = [];
-
-		{
-
-			var comp_len = comps.length;
-			for (var i = 0; i < comp_len; i++) {
-				var comp = comps[i];
-				if (!comp || !comp._is_created || !comp.visible || ((comp._isEnable && !comp._isEnable() || !comp.enable) && !(filter_type & 2)) || comp._popup) {
-					continue;
-				}
-
-				if (!(filter_type & 1) && !comp.on_get_prop_tabstop()) {
-					continue;
-				}
-
-				ar[ar.length] = comp;
+		var comp_len = comps.length;
+		for (var i = 0, ar = []; i < comp_len; i++) {
+			comp = comps[i];
+			if (!comp || !comp._is_created || !comp.visible || ((comp._isEnable && !comp._isEnable() || !comp.enable) && !(filter_type & 2)) || comp._popup) {
+				continue;
 			}
+
+			if (!(filter_type & 1) && !comp.on_get_prop_tabstop()) {
+				continue;
+			}
+
+			ar[ar.length] = comp;
 		}
 
 		return ar;
@@ -2989,81 +3014,151 @@ if (!nexacro.Tab) {
 
 	_pTab._setContents = function (str) {
 		var doc = nexacro._parseXMLDocument(str);
-		var tabpages = doc.getElementsByTagName("Tabpages")[0];
 
+		var tabpages = doc.getElementsByTagName("Tabpages")[0];
 		if (!tabpages) {
 			return false;
 		}
 
-		var ret = true;
+		var i, i_len;
+		var j, j_len;
+		var name, val;
 		var cur_tabindex = this.tabindex;
 
-		var i;
-		var len = this.tabpages.length;
-		for (i = 0; i < len; i++) {
+		for (i = 0, i_len = this.tabpages.length; i < i_len; i++) {
 			this.removeTabpage(0);
 		}
 
-		var node = tabpages.firstChild;
-		while (node) {
-			var className = nexacro._getRegisterClass(node.tagName);
-			if (!className) {
-				return false;
-			}
-			var fnConstructor = nexacro._executeGlobalEvalStr(className);
-			if (!fnConstructor) {
-				return false;
+		var tabpage_nodes = tabpages.getElementsByTagName("Tabpage");
+		var tabpage_node;
+		var tabpage_obj;
+		var init_tabpage_props = {
+		};
+		var set_tabpage_props = {
+		};
+
+		var layout_node;
+		var contents_node;
+		var contents_obj;
+		var init_contents_props = {
+		};
+		var set_contents_props = {
+		};
+
+		var class_name, fn_constructor;
+
+		for (i = 0; i < tabpage_nodes.length; i++) {
+			tabpage_node = tabpage_nodes[i];
+			init_tabpage_props = {
+			};
+			set_tabpage_props = {
+			};
+
+			for (j = 0, j_len = tabpage_node.attributes.length; j < j_len; j++) {
+				name = tabpage_node.attributes[j].name;
+				val = tabpage_node.attributes[j].value;
+				if (/^(id|text|)$/.test(name)) {
+					init_tabpage_props[name] = val;
+				}
+				else {
+					set_tabpage_props[name] = val;
+				}
 			}
 
-			if (fnConstructor.prototype && fnConstructor.prototype._is_component) {
-				var attr = {
-				};
-				var attr_props = {
-				};
-				for (i = 0; i < node.attributes.length; i++) {
-					var name = node.attributes[i].name;
-					if (/^(id|left|top|width|height|right|bottom|minwidth|maxwidth|minheight|maxheight|)$/.test(name)) {
-						attr[name] = node.attributes[i].value;
-					}
-					else {
-						attr_props[name] = node.attributes[i].value;
-					}
+
+			tabpage_obj = new nexacro.Tabpage(init_tabpage_props["id"], this);
+
+			tabpage_obj._refobj = this;
+			tabpage_obj._preload = this.preload;
+
+			tabpage_obj.set_text(init_tabpage_props["text"] || init_tabpage_props["id"]);
+
+			for (name in set_tabpage_props) {
+				if (tabpage_obj["set_" + name]) {
+					tabpage_obj["set_" + name](set_tabpage_props[name]);
+				}
+				else {
+					tabpage_obj[name] = set_tabpage_props[name];
+				}
+			}
+
+			tabpage_obj.createComponent(false);
+
+			this._addChild(init_tabpage_props["id"], tabpage_obj);
+
+			if (!set_tabpage_props["url"]) {
+				layout_node = tabpage_node.getElementsByTagName("Layout")[0];
+				if (!layout_node) {
+					continue;
 				}
 
-				var obj = new fnConstructor(attr["id"], this);
-
-				for (var v in attr_props) {
-					if (obj["set_" + v]) {
-						obj["set_" + v](attr_props[v]);
+				contents_node = layout_node.firstChild;
+				while (contents_node) {
+					if (contents_node.nodeType != 1) {
+						contents_node = contents_node.nextSibling;
+						continue;
 					}
-					else {
-						obj[v] = attr_props[v];
+
+					class_name = nexacro._getRegisterClass(contents_node.tagName);
+					if (!class_name) {
+						return false;
 					}
-				}
 
-				if (node.firstChild) {
-					var childnode = node.firstChild;
+					fn_constructor = nexacro._executeGlobalEvalStr(class_name);
+					if (!fn_constructor) {
+						return false;
+					}
 
-					var strXML = "";
-					while (childnode) {
-						if (node.nodeType == 1) {
-							strXML += nexacro._documentToXml(childnode);
+					if (fn_constructor.prototype && fn_constructor.prototype._is_component) {
+						init_contents_props = {
+						};
+						set_contents_props = {
+						};
+						for (j = 0; j < contents_node.attributes.length; j++) {
+							name = contents_node.attributes[j].name;
+							val = contents_node.attributes[j].value;
+							if (/^(id|left|top|width|height|right|bottom|minwidth|maxwidth|minheight|maxheight|)$/.test(name)) {
+								init_contents_props[name] = val;
+							}
+							else {
+								set_contents_props[name] = val;
+							}
 						}
-						childnode = childnode.nextSibling;
+
+						contents_obj = new fn_constructor(init_contents_props["id"], init_contents_props["left"], init_contents_props["top"], init_contents_props["width"], init_contents_props["height"], init_contents_props["right"], init_contents_props["bottom"], init_contents_props["minwidth"], init_contents_props["maxwidth"], init_contents_props["minheight"], init_contents_props["maxheight"], tabpage_obj.form);
+
+						for (name in set_contents_props) {
+							if (contents_obj["set_" + name]) {
+								contents_obj["set_" + name](set_contents_props[name]);
+							}
+							else {
+								contents_obj[name] = set_contents_props[name];
+							}
+						}
+
+						if (contents_node.firstChild) {
+							var childnode = contents_node.firstChild;
+
+							var strXML = "";
+							while (childnode) {
+								if (childnode.nodeType == 1) {
+									strXML += nexacro._documentToXml(childnode);
+								}
+								childnode = childnode.nextSibling;
+							}
+
+							if (!contents_obj._setContents(strXML)) {
+								return false;
+							}
+						}
+
+						tabpage_obj.form.addChild(contents_obj.id, contents_obj);
+						contents_obj.show();
 					}
-					ret = obj._setContents(strXML);
-				}
 
-				if (!ret) {
-					return ret;
+					contents_node = contents_node.nextSibling;
 				}
-
-				this.addChild(obj.id, obj);
-				obj.set_visible(false);
-				obj.show();
 			}
-
-			node = node.nextSibling;
 		}
 
 		if (this._is_created) {
@@ -3073,9 +3168,21 @@ if (!nexacro.Tab) {
 			this._rearrangeContents();
 		}
 
-		return ret;
+		return true;
 	};
 
+	_pTab._applyMultiContainerScrollPos = function () {
+		var tabpages = this.tabpages;
+		var tabpages_length = tabpages.length;
+		var i = 0;
+		var tabpage;
+		for (i = tabpages_length - 1; i >= 0; i--) {
+			tabpage = tabpages[i];
+			if (tabpage && tabpage.form) {
+				tabpage.form._applyScrollPos();
+			}
+		}
+	};
 	delete _pTab;
 }
 
@@ -3122,6 +3229,15 @@ if (!nexacro.Tabpage) {
 		}
 	};
 
+	_pTabpage._getForm = function () {
+		var form = this._refform;
+		if (form instanceof nexacro.Tab) {
+			return form._refform;
+		}
+
+		return this._refform;
+	};
+
 	_pTabpage.on_apply_prop_tooltip = function () {
 		var control_elem = this.getElement();
 		if (control_elem) {
@@ -3132,7 +3248,7 @@ if (!nexacro.Tabpage) {
 	};
 
 	_pTabpage.set_tabbuttonwidth = function (v) {
-		this.tabbuttonwidth = parseInt(v) | 0;
+		this.tabbuttonwidth = (v === null || v === undefined) ? undefined : parseInt(v) | 0;
 
 		var tab = this.parent;
 		if (tab) {
@@ -3141,7 +3257,7 @@ if (!nexacro.Tabpage) {
 	};
 
 	_pTabpage.set_tabbuttonheight = function (v) {
-		this.tabbuttonheight = parseInt(v) | 0;
+		this.tabbuttonheight = (v === null || v === undefined) ? undefined : parseInt(v) | 0;
 
 		var tab = this.parent;
 		if (tab) {
@@ -3159,6 +3275,16 @@ if (!nexacro.Tabpage) {
 		if (tabbuttonitem) {
 			tabbuttonitem.set_cssclass(v);
 		}
+	};
+
+	_pTabpage.on_created = function (win) {
+		this._registerHotkey();
+		return nexacro.Div.prototype.on_created.call(this, win);
+	};
+
+	_pTabpage.createCommand = function () {
+		this._registerHotkey();
+		return nexacro.Div.prototype.createCommand.call(this);
 	};
 
 	_pTabpage.set_url = function (v) {
@@ -3212,7 +3338,7 @@ if (!nexacro.Tabpage) {
 	_pTabpage._on_focus = function (self_flag, evt_name, lose_focus, refer_lose_focus, new_focus, refer_new_focus) {
 		nexacro.Component.prototype._on_focus.call(this, self_flag, evt_name, lose_focus, refer_lose_focus, new_focus, refer_new_focus);
 
-		if (new_focus) {
+		if (nexacro._enableAccessibility && new_focus && this._contains(new_focus)) {
 			this._setTabFocusObj(new_focus);
 		}
 		else {
@@ -3221,6 +3347,8 @@ if (!nexacro.Tabpage) {
 	};
 
 	_pTabpage.on_killfocus_basic_action = function (new_focus, new_ref_focus) {
+		nexacro.Component.prototype.on_killfocus_basic_action.call(this);
+
 		if (new_focus === this) {
 			return;
 		}
@@ -3228,16 +3356,14 @@ if (!nexacro.Tabpage) {
 		if (new_focus == null && new_ref_focus == null) {
 			return;
 		}
-
-		this.form._last_focused = null;
 	};
 
-	_pTabpage.on_fire_user_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+	_pTabpage.on_fire_user_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
 		if (!this.enable || key_code == nexacro.Event.KEY_TAB) {
 			return;
 		}
 
-		return nexacro.Div.prototype.on_fire_user_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
+		return nexacro.Div.prototype.on_fire_user_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
 	};
 
 	_pTabpage.on_destroy_contents = function () {
@@ -3453,9 +3579,9 @@ if (!nexacro._TabButtonItemControl) {
 	};
 
 
-	_pTabButtonItemControl.on_lbuttondown_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp) {
+	_pTabButtonItemControl.on_lbuttondown_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 		this.parent._tabbutton_obj = this;
-		var ret = nexacro.Component.prototype.on_lbuttondown_basic_action.call(this, elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+		var ret = nexacro.Component.prototype.on_lbuttondown_basic_action.call(this, elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 
 		return ret;
 	};
@@ -3475,9 +3601,13 @@ if (!nexacro._TabButtonItemControl) {
 			}
 		}
 		else {
-			nexacro.Component.prototype._on_focus.call(this, self_flag, evt_name, lose_focus, refer_lose_focus, new_focus, refer_new_focus);
-			this._setTabFocusObj(this);
+			if (!this.parent._is_changed_focus) {
+				nexacro.Component.prototype._on_focus.call(this, self_flag, evt_name, lose_focus, refer_lose_focus, new_focus, refer_new_focus);
+				this._setTabFocusObj(this);
+			}
 		}
+
+		this.parent._is_changed_focus = false;
 	};
 
 	_pTabButtonItemControl._setTabFocusObj = function (focusobj) {

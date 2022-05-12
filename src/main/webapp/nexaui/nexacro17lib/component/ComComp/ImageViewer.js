@@ -64,7 +64,8 @@ if (!nexacro.ImageViewer) {
 		"oncontextmenu" : 1, 
 		"ontouchstart" : 1, 
 		"ontouchmove" : 1, 
-		"ontouchend" : 1
+		"ontouchend" : 1, 
+		"ondevicebuttonup" : 1
 	};
 
 	_pImageViewer.on_create_contents = function () {
@@ -119,6 +120,20 @@ if (!nexacro.ImageViewer) {
 
 	_pImageViewer.on_destroy_contents = function () {
 		if (this._image) {
+			var image_width = this._image.width;
+			var image_height = this._image.height;
+
+			var image_url = nexacro._toString(this._image.image);
+			if (image_url) {
+				if (this._image._getImageType() == "url") {
+					image_url = nexacro._getURIValue(image_url);
+					image_url = nexacro._getImageLocation(image_url, this._getRefFormBaseUrl());
+				}
+			}
+
+			var _stretch_val = this._image._getstretchedmode(this.fittocontents);
+			nexacro._releaseImageViewUrl(image_url, image_width, image_height, _stretch_val);
+
 			this._image.destroy();
 			this._image = null;
 		}
@@ -132,6 +147,8 @@ if (!nexacro.ImageViewer) {
 	_pImageViewer.on_change_containerRect = function (width, height) {
 		if (this._image) {
 			this._image.resize(width, height);
+
+			nexacro._resizeImageViewManager(this);
 		}
 
 		if (this._imagetext) {
@@ -160,7 +177,13 @@ if (!nexacro.ImageViewer) {
 				total_h += padding.top + padding.bottom;
 			}
 
-			var text = this.text;
+			var text;
+			if (this._displaytext && this._displaytext !== "") {
+				text = this._displaytext;
+			}
+			else {
+				text = this.text;
+			}
 			if (text && this._imagetext) {
 				text_size = this._imagetext._on_getFitSize();
 			}
@@ -237,6 +260,20 @@ if (!nexacro.ImageViewer) {
 	_pImageViewer.on_apply_stretch = function () {
 		var image = this._image;
 		if (image) {
+			var image_width = this._image.width;
+			var image_height = this._image.height;
+
+			var image_url = nexacro._toString(this._image.image);
+			if (image_url) {
+				if (this._image._getImageType() == "url") {
+					image_url = nexacro._getURIValue(image_url);
+					image_url = nexacro._getImageLocation(image_url, this._getRefFormBaseUrl());
+				}
+			}
+
+			var _stretch_val = image._getstretchedmode(this.fittocontents);
+			nexacro._releaseImageViewUrl(image_url, image_width, image_height, _stretch_val);
+
 			image.set_stretch(this.stretch);
 		}
 	};
@@ -295,7 +332,7 @@ if (!nexacro.ImageViewer) {
 	};
 
 	_pImageViewer._on_image_onclick = function (obj, e) {
-		return this.on_fire_onclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, this, obj);
+		return this.on_fire_onclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, this, obj, e.metakey);
 	};
 
 	_pImageViewer.on_fire_onload = function (obj, url) {
@@ -307,22 +344,22 @@ if (!nexacro.ImageViewer) {
 		return true;
 	};
 
-	_pImageViewer.on_fire_sys_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
-		var ret = nexacro.Component.prototype.on_fire_sys_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
+	_pImageViewer.on_fire_sys_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Component.prototype.on_fire_sys_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
 		var window = this._getWindow();
 		this._cur_ldown_elem = window._cur_ldown_elem || window._keydown_element;
 		return ret;
 	};
 
-	_pImageViewer.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
-		var ret = nexacro.Component.prototype.on_fire_sys_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
+	_pImageViewer.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
+		var ret = nexacro.Component.prototype.on_fire_sys_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
 		var window = this._getWindow();
 		var elem = window._cur_ldown_elem || window._keydown_element;
 
 		if (!this._is_subcontrol) {
 			if (elem == this._cur_ldown_elem) {
 				if (key_code == 13 || key_code == 32) {
-					this.on_fire_onclick("none", alt_key, ctrl_key, shift_key, -1, -1, -1, -1, -1, -1, this, this);
+					this.on_fire_onclick("none", alt_key, ctrl_key, shift_key, -1, -1, -1, -1, -1, -1, this, this, meta_key);
 				}
 			}
 		}
@@ -372,21 +409,9 @@ if (!nexacro.ImageViewer) {
 			}
 			else {
 				v = v.toString();
-
-				var isBase64 = nexacro._checkBase64String(v);
-				if (isBase64) {
-					if (v.substring(0, 10).toLowerCase() == "data:image") {
-						if (v.substring(0, 17).toLowerCase() != "data:image;base64") {
-							var comma_idx = v.indexOf(",");
-							if (comma_idx > -1) {
-								var tmp = v.slice(comma_idx + 1, v.legnth);
-								v = "data:image;base64," + tmp;
-							}
-						}
-					}
-					else {
-						v = "data:image;base64," + v;
-					}
+				var format = nexacro._transImageBase64StringFormat(v);
+				if (format) {
+					v = format.alldata;
 				}
 			}
 		}
@@ -395,6 +420,12 @@ if (!nexacro.ImageViewer) {
 	};
 
 	_pImageViewer._setImageSize = function (width, height) {
+		if (this.imagewidth != width || this.imageheight != height) {
+			if (this.fittocontents != "none") {
+				this._update_position();
+			}
+		}
+
 		this.imagewidth = width;
 		this.imageheight = height;
 	};
@@ -448,8 +479,6 @@ if (!nexacro.ImageViewer) {
 		var ret = "";
 		var img_elem = this._img_elem;
 		if (img_elem) {
-			this.on_apply_image();
-
 			ret = img_elem.createCommand();
 		}
 
@@ -460,6 +489,7 @@ if (!nexacro.ImageViewer) {
 		var img_elem = this._img_elem;
 		if (img_elem) {
 			img_elem.attachHandle(win);
+			this.on_apply_image();
 		}
 	};
 
@@ -483,6 +513,8 @@ if (!nexacro.ImageViewer) {
 	_pImageAreaControl.set_image = function (v) {
 		v = this._convertImageValue(v);
 		if (this.image != v) {
+			this.chk_on_fire_onload = true;
+
 			this.image = v;
 			this.on_apply_image();
 		}
@@ -515,6 +547,7 @@ if (!nexacro.ImageViewer) {
 	};
 
 	_pImageAreaControl.on_apply_stretch = function () {
+		this._load_image();
 		this._updateElementPositions();
 	};
 
@@ -525,21 +558,9 @@ if (!nexacro.ImageViewer) {
 			}
 			else {
 				v = v.toString();
-
-				var isBase64 = nexacro._checkBase64String(v);
-				if (isBase64) {
-					if (v.substring(0, 10).toLowerCase() == "data:image") {
-						if (v.substring(0, 17).toLowerCase() != "data:image;base64") {
-							var comma_idx = v.indexOf(",");
-							if (comma_idx > -1) {
-								var tmp = v.slice(comma_idx + 1, v.legnth);
-								v = "data:image;base64," + tmp;
-							}
-						}
-					}
-					else {
-						v = "data:image;base64," + v;
-					}
+				var format = nexacro._transImageBase64StringFormat(v);
+				if (format) {
+					v = format.alldata;
 				}
 			}
 		}
@@ -552,7 +573,23 @@ if (!nexacro.ImageViewer) {
 		this._orgheight = h;
 
 		this._setImageSize(w, h);
-		this._load_image_completed(imgurl);
+
+		if (this.parent instanceof nexacro.ImageViewer) {
+			var pos = imgurl.indexOf("?size=");
+			if (pos > 0) {
+				var url = imgurl.substring(pos + 6);
+
+				var x = url.split(":")[0].split("x")[0];
+				var y = url.split(":")[0].split("x")[1];
+				var s = url.split(":")[1];
+
+				var _stretch_val = this._getstretchedmode(this.parent.fittocontents);
+				if (x != this.width || y != this.height || s != _stretch_val) {
+					nexacro._releaseImageViewUrl(nexacro._removeImageViewUrl(imgurl), x, y, s);
+				}
+			}
+		}
+		this._load_image_completed(imgurl, w, h);
 	};
 
 	_pImageAreaControl._load_image = function () {
@@ -565,12 +602,19 @@ if (!nexacro.ImageViewer) {
 					v = nexacro._getURIValue(v);
 					v = nexacro._getImageLocation(v, this._getRefFormBaseUrl());
 				}
+				var image_size = 0;
+				if (this.parent instanceof nexacro.ImageViewer) {
+					var _stretch_val = this._getstretchedmode(this.parent.fittocontents);
+					image_size = nexacro._getImageViewSize(v, this._on_load_image, this, undefined, this.image, true, this.width, this.height, _stretch_val);
+				}
+				else {
+					image_size = nexacro._getImageSize(v, this._on_load_image, this, undefined, this.image);
+				}
 
-				var image_size = nexacro._getImageSize(v, this._on_load_image, this, undefined, this.image);
 				if (image_size) {
 					this._orgwidth = image_size.width;
 					this._orgheight = image_size.height;
-					this._load_image_completed(v);
+					this._load_image_completed(v, image_size.width, image_size.height);
 				}
 			}
 			else {
@@ -584,18 +628,23 @@ if (!nexacro.ImageViewer) {
 		}
 	};
 
-	_pImageAreaControl._load_image_completed = function (url) {
+	_pImageAreaControl._load_image_completed = function (url, w, h) {
 		var img_elem = this._img_elem;
 		if (img_elem) {
 			var bChange = true;
 			var v = this.image;
-			if (!v) {
+			if (!v || (w == 0 && h == 0)) {
 				img_elem.setElementVisible(false);
 				img_elem.setElementImage("");
 				this._updateElementPositions();
 				this._setImageSize(0, 0);
 			}
 			else {
+				var _stretch_val = this.stretch;
+				if (this.parent instanceof nexacro.ImageViewer) {
+					_stretch_val = this._getstretchedmode(this.parent.fittocontents);
+				}
+
 				v = v.toString();
 				if (this._getImageType() == "url") {
 					if (v.substring(0, 4).toLowerCase() == "url(") {
@@ -603,25 +652,32 @@ if (!nexacro.ImageViewer) {
 					}
 
 					v = nexacro._getImageLocation(v, this._getRefFormBaseUrl());
+					url = nexacro._removeImageViewUrl(url);
 					if (v != url) {
 						bChange = false;
-						nexacro._releaseImageUrl(url);
+
+						nexacro._releaseImageViewUrl(url, this.width, this.height, _stretch_val);
 					}
 				}
 
 				if (bChange) {
 					url = nexacro.UrlObject(url);
 					img_elem.setElementVisible(true);
-					img_elem.setElementImage(url);
 
+					img_elem.setElementImage(url, w, h, _stretch_val, this);
 					this._updateElementPositions();
 				}
 			}
 		}
+
 		var imageviewer = this.parent;
 		if (imageviewer instanceof nexacro.ImageViewer) {
 			imageviewer._on_element_swap();
-			imageviewer.on_fire_onload(imageviewer, url);
+
+			if (this.chk_on_fire_onload == true) {
+				this.chk_on_fire_onload = false;
+				imageviewer.on_fire_onload(imageviewer, url);
+			}
 		}
 	};
 
@@ -695,10 +751,10 @@ if (!nexacro.ImageViewer) {
 
 				if (widthPer <= heightPer) {
 					width = span_width;
-					height = Math.floor(image_height * widthPer);
+					height = Math.floor(image_height *  widthPer);
 				}
 				else {
-					width = Math.floor(image_width * heightPer);
+					width = Math.floor(image_width *  heightPer);
 					height = span_height;
 				}
 			}
@@ -733,7 +789,8 @@ if (!nexacro.ImageViewer) {
 		var ret = "url";
 		var v = this.image;
 		if (v) {
-			if (v.substring(0, 17).toLowerCase() == "data:image;base64") {
+			var format = nexacro._transImageBase64StringFormat(v, false, true);
+			if (format && format.encode === ";base64,") {
 				ret = "base64";
 			}
 		}
@@ -760,6 +817,22 @@ if (!nexacro.ImageViewer) {
 			img_elem.setImageIndex(parseInt(nIndex) | 0);
 		}
 	};
+	_pImageAreaControl._isFocusAcceptable = function () {
+		return nexacro._enableaccessibility;
+	};
 
+	_pImageAreaControl._getstretchedmode = function (_imageViewer_fittocontents, _stretch) {
+		var _stretch_val = _stretch;
+		if (_stretch == undefined) {
+			_stretch_val = this.stretch;
+		}
+
+		if (nexacro && nexacro._Browser == "Runtime") {
+			if (_stretch_val == "fixaspectratio" && _imageViewer_fittocontents && _imageViewer_fittocontents != "none") {
+				_stretch_val = "none";
+			}
+		}
+		return _stretch_val;
+	};
 	delete _pImageAreaControl;
 }
