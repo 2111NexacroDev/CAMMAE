@@ -98,7 +98,7 @@ if (nexacro.Component) {
 			}
 
 			var p = this;
-			while (p && (p._is_form || p instanceof nexacro.Div || p instanceof nexacro.Tab || p instanceof nexacro.Tabpage)) {
+			while (p && (p._is_form || p instanceof nexacro.Div || p instanceof nexacro.Tab || p instanceof nexacro.Tabpage || p instanceof nexacro._CompositeComponent)) {
 				p._last_focused = comp;
 				comp = p;
 				p = p.parent;
@@ -127,73 +127,6 @@ if (nexacro.Component) {
 		for (var i = parent_path.length; i > 0; i--) {
 			_win.addCurrentFocusPaths(parent_path[i - 1]);
 		}
-	};
-
-	_pComponent._setVScrollDefaultAction = function (wheelDelta) {
-		var control_elem = this.getElement();
-
-		if (!control_elem) {
-			return false;
-		}
-
-		if (!this._is_scrollable) {
-			return false;
-		}
-
-		if (this.scrolltype == "none" || this.scrolltype == "horizontal") {
-			return false;
-		}
-
-		var old_value = this._vscroll_pos;
-		var value = old_value - wheelDelta;
-
-		var vscroll_limit = control_elem.vscroll_limit;
-		if (value > vscroll_limit) {
-			value = vscroll_limit;
-		}
-
-		this._scrollTo(this._hscroll_pos, value, true, true, undefined, "mousewheel_v");
-
-		var new_value = this._vscroll_pos;
-
-		if (old_value != new_value) {
-			return true;
-		}
-
-		return false;
-	};
-
-	_pComponent._setHScrollDefaultAction = function (wheelDelta) {
-		var control_elem = this.getElement();
-
-		if (!control_elem) {
-			return false;
-		}
-
-		if (!this._is_scrollable) {
-			return false;
-		}
-
-		if (this.scrolltype == "none" || this.scrolltype == "vertical") {
-			return false;
-		}
-
-		var old_value = this._hscroll_pos;
-		var value = old_value - wheelDelta;
-
-		var hscroll_limit = control_elem.hscroll_limit;
-		if (value > hscroll_limit) {
-			value = hscroll_limit;
-		}
-
-		this._scrollTo(value, this._vscroll_pos, true, true, undefined, "mousewheel_h");
-		var new_value = this._hscroll_pos;
-
-		if (old_value != new_value) {
-			return true;
-		}
-
-		return false;
 	};
 
 	_pComponent._isParentdefaultprevented = function (comp, event_name) {
@@ -233,7 +166,7 @@ if (nexacro.Component) {
 		}
 
 		var is_accessibility_mode = false;
-		if (nexacro._enableaccessibility && this._on_accessibility_focus) {
+		if (nexacro._enableaccessibility) {
 			is_accessibility_mode = true;
 		}
 
@@ -283,6 +216,9 @@ if (nexacro.Component) {
 				focuspath_index = nexacro._indexOf(cur_focus_paths, pThis);
 				if (focuspath_index > -1) {
 					if (focuspath_index == cur_focus_paths.length - 1) {
+						if (_win && _win._is_active_window == false) {
+							_win._setFocus();
+						}
 						if (is_accessibility_mode) {
 							if (this._getTabOrderFirst() == null && nexacro._accessibilitytype != 5) {
 								return;
@@ -468,6 +404,9 @@ if (nexacro.Component) {
 					this._changeStatus("mouseover", true);
 				}
 				else {
+					if (_win && _win._is_active_window == false) {
+						_win._setFocus();
+					}
 					if (_win._is_active_window !== false || this._is_frame) {
 						this._changeStatus("focused", true);
 					}
@@ -519,11 +458,10 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_focus_basic_action = function (self_flag, evt_name) {
+	_pComponent.on_focus_basic_action = function (self_flag, evt_name, lose_focus, refer_lose_focus, new_focus, refer_new_focus) {
 		if (nexacro._enableaccessibility) {
 			this._setAccessibilityStatFocus(evt_name);
 		}
-
 		this._apply_setfocus(evt_name, self_flag);
 	};
 
@@ -535,7 +473,10 @@ if (nexacro.Component) {
 		this.on_killfocus_basic_action(new_focus, new_refer_focus);
 	};
 
-	_pComponent.on_killfocus_basic_action = function () {
+	_pComponent.on_killfocus_basic_action = function (new_focus, new_refer_focus) {
+		if (this._use_pushed_status) {
+			this._changeUserStatus("pushed", false);
+		}
 		return;
 	};
 
@@ -559,23 +500,23 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent._on_click = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY) {
+	_pComponent._on_click = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
 
 		if (this.visible && this._isEnable() && this.enableevent) {
 			var clientXY = this._getClientXY(canvasX, canvasY);
-			this.on_fire_onclick(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, this);
-			this.on_click_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY);
+			this.on_fire_onclick(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, this, meta_key);
+			this.on_click_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key);
 		}
 	};
 
-	_pComponent.on_click_basic_action = function () {
+	_pComponent.on_click_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
 		return;
 	};
 
-	_pComponent._on_dblclick = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY) {
+	_pComponent._on_dblclick = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -584,20 +525,20 @@ if (nexacro.Component) {
 		if (pThis && (!pThis.onlbuttonup || (pThis.onlbuttonup && !pThis.onlbuttonup.defaultprevented))) {
 			if (this.visible && this._isEnable() && this.enableevent) {
 				var clientXY = this._getClientXY(canvasX, canvasY);
-				this.on_fire_ondblclick(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, this);
+				this.on_fire_ondblclick(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, this, meta_key);
 			}
 		}
 	};
 
-	_pComponent._on_keypress = function (elem, keycode, charcode, alt_key, ctrl_key, shift_key) {
+	_pComponent._on_keypress = function (elem, keycode, charcode, alt_key, ctrl_key, shift_key, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
 
-		return this.on_keypress_basic_action(keycode, charcode, alt_key, ctrl_key, shift_key);
+		return this.on_keypress_basic_action(keycode, charcode, alt_key, ctrl_key, shift_key, meta_key);
 	};
 
-	_pComponent.on_keypress_basic_action = function () {
+	_pComponent.on_keypress_basic_action = function (keycode, charcode, alt_key, ctrl_key, shift_key, meta_key) {
 		return;
 	};
 
@@ -609,7 +550,7 @@ if (nexacro.Component) {
 		return this.on_beforekeyinput_basic_action(value, status, begin, end, inputType);
 	};
 
-	_pComponent.on_beforekeyinput_basic_action = function () {
+	_pComponent.on_beforekeyinput_basic_action = function (value, status, begin, end) {
 		return;
 	};
 
@@ -623,11 +564,12 @@ if (nexacro.Component) {
 			if (ret !== false) {
 				this.on_fire_oninput();
 			}
+
 			this.on_keyinput_default_action();
 		}
 	};
 
-	_pComponent.on_keyinput_basic_action = function () {
+	_pComponent.on_keyinput_basic_action = function (input_text) {
 		return;
 	};
 
@@ -637,19 +579,12 @@ if (nexacro.Component) {
 
 	_pComponent._on_contextmenu = function () {
 		var root_comp = this._getFromComponent(this);
-		var ret;
+
 		if (!nexacro._CheckShowContextPrevented(root_comp, this)) {
-			ret = this._on_contextmenu_default_action();
-		}
-		else {
-			ret = false;
+			return this._on_contextmenu_default_action();
 		}
 
-		return ret;
-	};
-
-	_pComponent._on_contextmenu_basic_action = function () {
-		return;
+		return false;
 	};
 
 	_pComponent._on_contextmenu_default_action = function () {
@@ -678,32 +613,44 @@ if (nexacro.Component) {
 		}
 	};
 
+	_pComponent._on_starttrack = nexacro._emptyFn;
+	_pComponent._on_movetrack = nexacro._emptyFn;
+	_pComponent._on_endtrack = nexacro._emptyFn;
 
-	_pComponent._on_lbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_startrepeat = nexacro._emptyFn;
+	_pComponent._on_repeat = nexacro._emptyFn;
+	_pComponent._on_endrepeat = nexacro._emptyFn;
+
+	_pComponent._on_last_lbuttonup = nexacro._emptyFn;
+	_pComponent._on_last_keyup = nexacro._emptyFn;
+
+
+	_pComponent._on_lbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
 		nexacro._skipDragEventAfterMsgBox = false;
 
-		var ret = this._on_bubble_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true);
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true, meta_key);
 
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.onlbuttondown || (pThis.onlbuttondown && !pThis.onlbuttondown.defaultprevented))) {
-			this.on_lbuttondown_default_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, this._focus_refer_comp);
-			ret = this._on_bubble_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false);
+			this.on_lbuttondown_default_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, this._focus_refer_comp, meta_key);
+			ret = this._on_bubble_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false, meta_key);
 		}
 		return ret;
 	};
 
-	_pComponent._on_touch_lbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_touch_lbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, meta_key) {
 		nexacro._skipDragEventAfterMsgBox = false;
 
 		var ret;
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.onlbuttondown || (pThis.onlbuttondown && !pThis.onlbuttondown.defaultprevented))) {
-			ret = this._on_bubble_touch_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false);
+			ret = this._on_bubble_touch_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false, meta_key);
 		}
 		return ret;
 	};
 
-	_pComponent._on_bubble_touch_lbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+	_pComponent._on_bubble_touch_lbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -720,7 +667,7 @@ if (nexacro.Component) {
 			}
 
 			if (this.visible && this._isEnable()) {
-				var bubble = this.on_touch_lbuttondown_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, fire_comp, refer_comp);
+				var bubble = this.on_touch_lbuttondown_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, fire_comp, refer_comp, meta_key);
 				if (bubble) {
 					return;
 				}
@@ -736,7 +683,7 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_touch_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope);
+					return this.parent._on_bubble_touch_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope, meta_key);
 				}
 				else {
 					var select_mode = "select";
@@ -754,7 +701,7 @@ if (nexacro.Component) {
 						nexacro._setDragInfo(win, elem, win._curWindowX, win._curWindowY, win._curWindowX, win._curWindowY, null, null, null, "text");
 					}
 
-					return this.parent._on_bubble_touch_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope);
+					return this.parent._on_bubble_touch_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope, meta_key);
 				}
 			}
 		}
@@ -765,12 +712,12 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_touch_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope);
+				return this.parent._on_bubble_touch_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent._on_bubble_lbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+	_pComponent._on_bubble_lbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -781,7 +728,6 @@ if (nexacro.Component) {
 		if (event_bubbles === undefined) {
 			if (!refer_comp) {
 				refer_comp = this._focus_refer_comp = this;
-
 				if (!this._is_focus_accept) {
 					this._focus_refer_comp = this._getFocusAcceptableComponent(this);
 				}
@@ -790,10 +736,10 @@ if (nexacro.Component) {
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onlbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+					event_bubbles = this.on_fire_user_onlbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onlbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+					event_bubbles = this.on_fire_sys_onlbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 				}
 
 				if (event_bubbles === false) {
@@ -801,7 +747,7 @@ if (nexacro.Component) {
 				}
 
 				if (bubble_scope) {
-					var bubble = this.on_lbuttondown_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+					var bubble = this.on_lbuttondown_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 					if (bubble) {
 						return;
 					}
@@ -818,11 +764,11 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope);
+					return this.parent._on_bubble_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope, meta_key);
 				}
 				else {
 					nexacro._setDragInfo(win, elem, win._curWindowX, win._curWindowY, win._curWindowX, win._curWindowY, null, null, null, "text");
-					return this.parent._on_bubble_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope);
+					return this.parent._on_bubble_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope, meta_key);
 				}
 			}
 		}
@@ -831,10 +777,10 @@ if (nexacro.Component) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onlbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_user_onlbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onlbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_sys_onlbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 			}
 			if ((!this.onlbuttondown || (this.onlbuttondown && !this.onlbuttondown.stoppropagation)) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
@@ -843,12 +789,12 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope);
+				return this.parent._on_bubble_lbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_touch_lbuttondown_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, fire_comp, refer_comp) {
+	_pComponent.on_touch_lbuttondown_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, fire_comp, refer_comp, meta_key) {
 		var win = this._getWindow();
 
 		if (refer_comp === this) {
@@ -867,7 +813,7 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_lbuttondown_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp) {
+	_pComponent.on_lbuttondown_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 		var win = this._getWindow();
 		if (refer_comp === this) {
 			if (this._use_pushed_status) {
@@ -876,6 +822,17 @@ if (nexacro.Component) {
 		}
 
 		if (this._is_track) {
+			if (this.getOwnerFrame) {
+				if (this instanceof nexacro.ChildFrame) {
+					return false;
+				}
+
+				var ownerframe = this.getOwnerFrame();
+				if (!ownerframe || !ownerframe._canDragMove()) {
+					return false;
+				}
+			}
+
 			nexacro._setTrackInfo(win, this, win._curWindowX, win._curWindowY);
 			return false;
 		}
@@ -886,12 +843,9 @@ if (nexacro.Component) {
 				}
 
 				var ownerframe = this.getOwnerFrame();
-				if (ownerframe && ownerframe.form) {
-					var frameform = ownerframe.form;
-					if (frameform && frameform._is_track) {
-						nexacro._setTrackInfo(win, this, win._curWindowX, win._curWindowY);
-						return false;
-					}
+				if (ownerframe && ownerframe.form && ownerframe._canDragMove()) {
+					nexacro._setTrackInfo(win, this, win._curWindowX, win._curWindowY);
+					return false;
 				}
 			}
 		}
@@ -904,7 +858,7 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_lbuttondown_default_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp) {
+	_pComponent.on_lbuttondown_default_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 		var win = this._getWindow();
 		if (this.visible && this._isEnable() && refer_comp) {
 			var last_modalframe = win._getLastModalFrame();
@@ -916,27 +870,53 @@ if (nexacro.Component) {
 			}
 			else {
 				refer_comp._on_focus(true, "lbuttondown");
+
+				if (button == "touch") {
+					while (refer_comp) {
+						refer_comp._changeStatus("mouseover", false);
+
+						if (!refer_comp._is_subcontrol) {
+							break;
+						}
+
+						refer_comp = refer_comp.parent;
+					}
+				}
 			}
 		}
 		else {
 			var comp = win._findComponentForEvent(elem, 0, 0);
 			if (comp && comp[0]) {
 				comp[0]._on_focus(true, "lbuttondown");
+				refer_comp = comp[0];
+
+				if (button == "touch") {
+					while (refer_comp) {
+						refer_comp._changeStatus("mouseover", false);
+
+						if (!refer_comp._is_subcontrol) {
+							break;
+						}
+
+						refer_comp = refer_comp.parent;
+					}
+				}
 			}
 		}
 	};
 
-	_pComponent._on_rbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
-		var ret = this._on_bubble_rbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true);
+	_pComponent._on_rbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_rbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true, meta_key);
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.onrbuttondown || (pThis.onrbuttondown && !pThis.onrbuttondown.defaultprevented))) {
-			this.on_rbuttondown_default_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
-			ret = this._on_bubble_rbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false);
+			this.on_rbuttondown_default_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, this._focus_refer_comp, meta_key);
+			ret = this._on_bubble_rbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false, meta_key);
 		}
 		return ret;
 	};
 
-	_pComponent._on_bubble_rbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+	_pComponent._on_bubble_rbuttondown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope, meta_key) {
 		var clientXY, canvas;
 		if (!this._is_alive) {
 			return;
@@ -944,17 +924,21 @@ if (nexacro.Component) {
 
 		if (event_bubbles === undefined) {
 			if (!refer_comp) {
-				refer_comp = this;
+				refer_comp = this._focus_refer_comp = this;
+
+				if (!this._is_focus_accept) {
+					this._focus_refer_comp = this._getFocusAcceptableComponent(this);
+				}
 			}
 
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onrbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+					event_bubbles = this.on_fire_user_onrbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onrbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+					event_bubbles = this.on_fire_sys_onrbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 				}
 				if (event_bubbles === false) {
 					event_bubbles = undefined;
@@ -967,10 +951,10 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_rbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope);
+					return this.parent._on_bubble_rbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_rbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope);
+					return this.parent._on_bubble_rbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope, meta_key);
 				}
 			}
 		}
@@ -979,10 +963,10 @@ if (nexacro.Component) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onrbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_user_onrbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onrbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_sys_onrbuttondown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 			}
 			if ((!this.onrbuttondown || (this.onrbuttondown && !this.onrbuttondown.stoppropagation)) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
@@ -991,12 +975,12 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_rbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope);
+				return this.parent._on_bubble_rbuttondown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_rbuttondown_default_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, parent) {
+	_pComponent.on_rbuttondown_default_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 		var win = this._getWindow();
 		if (this.visible && this._isEnable() && refer_comp) {
 			refer_comp._on_focus(true, "rbuttondown");
@@ -1009,19 +993,18 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent._on_lbuttonup = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem) {
-		var ret = this._on_bubble_lbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, true);
+	_pComponent._on_lbuttonup = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, from_elem, meta_key) {
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_lbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, true, meta_key);
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.onlbuttonup || (pThis.onlbuttonup && !pThis.onlbuttonup.defaultprevented))) {
-			this.on_lbuttonup_default_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
-			ret = this._on_bubble_lbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, false);
+			this.on_lbuttonup_default_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
+			ret = this._on_bubble_lbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, false, meta_key);
 		}
 		return ret;
 	};
 
-
-
-	_pComponent._on_bubble_lbuttonup = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, bubble_scope) {
+	_pComponent._on_bubble_lbuttonup = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -1033,17 +1016,17 @@ if (nexacro.Component) {
 			}
 
 			if (bubble_scope) {
-				this.on_lbuttonup_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+				this.on_lbuttonup_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 			}
 
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onlbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, from_elem);
+					event_bubbles = this.on_fire_user_onlbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, from_elem, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onlbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, from_elem);
+					event_bubbles = this.on_fire_sys_onlbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, from_elem, meta_key);
 				}
 				if (event_bubbles === false) {
 					event_bubbles = undefined;
@@ -1056,10 +1039,10 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_lbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, from_elem, bubble_scope);
+					return this.parent._on_bubble_lbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, from_elem, bubble_scope, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_lbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, from_elem, bubble_scope);
+					return this.parent._on_bubble_lbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, from_elem, bubble_scope, meta_key);
 				}
 			}
 		}
@@ -1068,10 +1051,10 @@ if (nexacro.Component) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onlbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, from_elem);
+					event_bubbles = this.on_fire_user_onlbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, from_elem, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onlbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, from_elem);
+					event_bubbles = this.on_fire_sys_onlbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, from_elem, meta_key);
 				}
 			}
 			if ((!this.onlbuttonup || (this.onlbuttonup && !this.onlbuttonup.stoppropagation)) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
@@ -1080,12 +1063,12 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_lbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, from_elem, bubble_scope);
+				return this.parent._on_bubble_lbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, from_elem, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_lbuttonup_basic_action = function () {
+	_pComponent.on_lbuttonup_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 		if (this._use_pushed_status) {
 			if (this._isPushed()) {
 				if (nexacro._isTouchInteraction) {
@@ -1093,26 +1076,29 @@ if (nexacro.Component) {
 				}
 				else {
 					this._changeUserStatus("pushed", false);
-					this._changeStatus("mouseover", true);
+					if (button != "touch") {
+						this._changeStatus("mouseover", true);
+					}
 				}
 			}
 		}
 	};
 
-	_pComponent.on_lbuttonup_default_action = function () {
+	_pComponent.on_lbuttonup_default_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 	};
 
-	_pComponent._on_rbuttonup = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem) {
-		var ret = this._on_bubble_rbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, true);
+	_pComponent._on_rbuttonup = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, from_elem, meta_key) {
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_rbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, true, meta_key);
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.onrbuttonup || (pThis.onrbuttonup && !pThis.onrbuttonup.defaultprevented))) {
-			this.on_rbuttonup_default_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
-			ret = this._on_bubble_rbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, false);
+			this.on_rbuttonup_default_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
+			ret = this._on_bubble_rbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, false, meta_key);
 		}
 		return ret;
 	};
 
-	_pComponent._on_bubble_rbuttonup = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, bubble_scope) {
+	_pComponent._on_bubble_rbuttonup = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -1122,16 +1108,16 @@ if (nexacro.Component) {
 				refer_comp = this;
 			}
 
-			this.on_rbuttonup_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+			this.on_rbuttonup_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onrbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, from_elem);
+					event_bubbles = this.on_fire_user_onrbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, from_elem, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onrbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, from_elem);
+					event_bubbles = this.on_fire_sys_onrbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, from_elem, meta_key);
 				}
 				if (event_bubbles === false) {
 					event_bubbles = undefined;
@@ -1145,10 +1131,10 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_rbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, from_elem, bubble_scope);
+					return this.parent._on_bubble_rbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, from_elem, bubble_scope, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_rbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, from_elem, bubble_scope);
+					return this.parent._on_bubble_rbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, from_elem, bubble_scope, meta_key);
 				}
 			}
 		}
@@ -1157,10 +1143,10 @@ if (nexacro.Component) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onrbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, from_elem);
+					event_bubbles = this.on_fire_user_onrbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, from_elem, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onrbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, from_elem);
+					event_bubbles = this.on_fire_sys_onrbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, from_elem, meta_key);
 				}
 			}
 			if ((!this.onrbuttonup || (this.onrbuttonup && !this.onrbuttonup.stoppropagation)) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
@@ -1169,12 +1155,12 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_rbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, from_elem, bubble_scope);
+				return this.parent._on_bubble_rbuttonup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, from_elem, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_rbuttonup_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp) {
+	_pComponent.on_rbuttonup_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 		if (this._use_pushed_status) {
 			if (this._isPushed()) {
 				if (nexacro._isTouchInteraction) {
@@ -1186,11 +1172,12 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_rbuttonup_default_action = function () {
+	_pComponent.on_rbuttonup_default_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 	};
 
-	_pComponent._on_mouseup = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem) {
-		var ret = this._on_bubble_mouseup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, true);
+	_pComponent._on_mouseup = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, from_elem, meta_key) {
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_mouseup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, true, meta_key);
 
 		if (!this._is_alive) {
 			return ret;
@@ -1199,12 +1186,12 @@ if (nexacro.Component) {
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.onmouseup || (pThis.onmouseup && !pThis.onmouseup.defaultprevented))) {
 			this.on_mouseup_default_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
-			ret = this._on_bubble_mouseup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, false);
+			ret = this._on_bubble_mouseup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, false, meta_key);
 		}
 		return ret;
 	};
 
-	_pComponent._on_bubble_mouseup = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, bubble_scope) {
+	_pComponent._on_bubble_mouseup = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, from_elem, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -1218,10 +1205,10 @@ if (nexacro.Component) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onmouseup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, from_elem);
+					event_bubbles = this.on_fire_user_onmouseup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onmouseup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, from_elem);
+					event_bubbles = this.on_fire_sys_onmouseup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 				}
 				if (event_bubbles === false) {
 					event_bubbles = undefined;
@@ -1234,10 +1221,10 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_mouseup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, from_elem, bubble_scope);
+					return this.parent._on_bubble_mouseup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, from_elem, bubble_scope, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_mouseup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, from_elem, bubble_scope);
+					return this.parent._on_bubble_mouseup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, from_elem, bubble_scope, meta_key);
 				}
 			}
 		}
@@ -1246,10 +1233,10 @@ if (nexacro.Component) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onmouseup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, from_elem);
+					event_bubbles = this.on_fire_user_onmouseup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onmouseup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, from_elem);
+					event_bubbles = this.on_fire_sys_onmouseup(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 			}
 			if ((!this.onmouseup || (this.onmouseup && !this.onmouseup.stoppropagation)) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
@@ -1258,16 +1245,17 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_mouseup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, from_elem, bubble_scope);
+				return this.parent._on_bubble_mouseup(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, from_elem, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_mouseup_default_action = function () {
+	_pComponent.on_mouseup_default_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 	};
 
-	_pComponent._on_mousedown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
-		var ret = this._on_bubble_mousedown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true);
+	_pComponent._on_mousedown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_mousedown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true, meta_key);
 
 		if (!this._is_alive) {
 			return ret;
@@ -1275,13 +1263,13 @@ if (nexacro.Component) {
 
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.onmousedown || (pThis.onmousedown && !pThis.onmousedown.defaultprevented))) {
-			this.on_mousedown_default_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
-			ret = this._on_bubble_mousedown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false);
+			this.on_mousedown_default_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
+			ret = this._on_bubble_mousedown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false, meta_key);
 		}
 		return ret;
 	};
 
-	_pComponent._on_bubble_mousedown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+	_pComponent._on_bubble_mousedown = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -1295,10 +1283,10 @@ if (nexacro.Component) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onmousedown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+					event_bubbles = this.on_fire_user_onmousedown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onmousedown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+					event_bubbles = this.on_fire_sys_onmousedown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 				}
 				if (event_bubbles === false) {
 					event_bubbles = undefined;
@@ -1311,10 +1299,10 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_mousedown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope);
+					return this.parent._on_bubble_mousedown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_mousedown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope);
+					return this.parent._on_bubble_mousedown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope, meta_key);
 				}
 			}
 		}
@@ -1323,10 +1311,10 @@ if (nexacro.Component) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onmousedown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_user_onmousedown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onmousedown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_sys_onmousedown(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 			}
 			if ((!this.onmousedown || (this.onmousedown && !this.onmousedown.stoppropagation)) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
@@ -1335,15 +1323,15 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_mousedown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope);
+				return this.parent._on_bubble_mousedown(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_mousedown_default_action = function () {
+	_pComponent.on_mousedown_default_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 	};
 
-	_pComponent._on_mousemove = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_mousemove = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
 		if (nexacro._current_popups.length > 0) {
 			var win = this._getWindow();
 			var elem_comp = win.findComponent(elem, 0, 0);
@@ -1367,7 +1355,8 @@ if (nexacro.Component) {
 			nexacro._mousewheel_obj = null;
 		}
 
-		var ret = this._on_bubble_mousemove(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true);
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_mousemove(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true, meta_key);
 
 		if (!this._is_alive) {
 			return ret;
@@ -1375,13 +1364,13 @@ if (nexacro.Component) {
 
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.onmousemove || (pThis.onmousemove && !pThis.onmousemove.defaultprevented))) {
-			this.on_mousemove_default_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
-			ret = this._on_bubble_mousemove(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false);
+			this.on_mousemove_default_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
+			ret = this._on_bubble_mousemove(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false, meta_key);
 		}
 		return ret;
 	};
 
-	_pComponent._on_bubble_mousemove = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+	_pComponent._on_bubble_mousemove = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -1394,15 +1383,15 @@ if (nexacro.Component) {
 
 			if (this.visible && this._isEnable()) {
 				if (bubble_scope) {
-					this.on_mousemove_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+					this.on_mousemove_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 				}
 
 				clientXY = this._getClientXY(canvasX, canvasY);
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onmousemove(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+					event_bubbles = this.on_fire_user_onmousemove(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onmousemove(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+					event_bubbles = this.on_fire_sys_onmousemove(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 				}
 				if (event_bubbles === false) {
 					event_bubbles = undefined;
@@ -1416,25 +1405,25 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_mousemove(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope);
+					return this.parent._on_bubble_mousemove(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_mousemove(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope);
+					return this.parent._on_bubble_mousemove(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope, meta_key);
 				}
 			}
 		}
 		else {
 			if (this.visible && this._isEnable()) {
 				if (bubble_scope) {
-					this.on_mousemove_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+					this.on_mousemove_basic_action(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 				}
 
 				clientXY = this._getClientXY(canvasX, canvasY);
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onmousemove(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_user_onmousemove(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onmousemove(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_sys_onmousemove(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 			}
 
@@ -1444,12 +1433,12 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_mousemove(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope);
+				return this.parent._on_bubble_mousemove(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_mousemove_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp) {
+	_pComponent.on_mousemove_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 		if (this._isPushed()) {
 			this._changeUserStatus("pushed", true);
 		}
@@ -1474,10 +1463,10 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_mousemove_default_action = function () {
+	_pComponent.on_mousemove_default_action = function (elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 	};
 
-	_pComponent._on_mouseenter = function (elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_mouseenter = function (elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
 		if (nexacro._current_popups.length > 0) {
 			var win = this._getWindow();
 			var elem_comp = win.findComponent(elem, 0, 0);
@@ -1493,7 +1482,8 @@ if (nexacro.Component) {
 			}
 		}
 
-		var ret = this._on_bubble_mouseenter(elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true);
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_mouseenter(elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true, meta_key);
 
 		if (!this._is_alive) {
 			return ret;
@@ -1501,13 +1491,13 @@ if (nexacro.Component) {
 
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.onmouseenter || (pThis.onmouseenter && !pThis.onmouseenter.defaultprevented))) {
-			this.on_mouseenter_default_action(elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
-			ret = this._on_bubble_mouseenter(elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false);
+			this.on_mouseenter_default_action(elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
+			ret = this._on_bubble_mouseenter(elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false, meta_key);
 		}
 		return ret;
 	};
 
-	_pComponent._on_bubble_mouseenter = function (elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+	_pComponent._on_bubble_mouseenter = function (elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -1531,10 +1521,10 @@ if (nexacro.Component) {
 					if (first_comp == this) {
 						clientXY = this._getClientXY(canvasX, canvasY);
 						if (bubble_scope) {
-							event_bubbles = this.on_fire_user_onmouseenter(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+							event_bubbles = this.on_fire_user_onmouseenter(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 						}
 						else {
-							event_bubbles = this.on_fire_sys_onmouseenter(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+							event_bubbles = this.on_fire_sys_onmouseenter(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 						}
 						if (event_bubbles === false) {
 							event_bubbles = undefined;
@@ -1550,10 +1540,10 @@ if (nexacro.Component) {
 					clientXY = this._getClientXY(canvasX, canvasY);
 
 					if (bubble_scope) {
-						event_bubbles = this.on_fire_user_onmouseenter(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+						event_bubbles = this.on_fire_user_onmouseenter(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 					}
 					else {
-						event_bubbles = this.on_fire_sys_onmouseenter(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+						event_bubbles = this.on_fire_sys_onmouseenter(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 					}
 				}
 			}
@@ -1564,10 +1554,10 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (is_subcontrol_bubble) {
-					return this.parent._on_bubble_mouseenter(elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope);
+					return this.parent._on_bubble_mouseenter(elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_mouseenter(elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope);
+					return this.parent._on_bubble_mouseenter(elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope, meta_key);
 				}
 			}
 		}
@@ -1576,10 +1566,10 @@ if (nexacro.Component) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onmouseenter(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_user_onmouseenter(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onmouseenter(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_sys_onmouseenter(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 			}
 
@@ -1589,15 +1579,15 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_mouseenter(elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope);
+				return this.parent._on_bubble_mouseenter(elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_mouseenter_default_action = function () {
+	_pComponent.on_mouseenter_default_action = function (elem, from_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 	};
 
-	_pComponent._on_mouseleave = function (elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_mouseleave = function (elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
 		if (nexacro._current_popups.length > 0) {
 			var win = this._getWindow();
 			var elem_comp = win.findComponent(elem, 0, 0);
@@ -1613,7 +1603,8 @@ if (nexacro.Component) {
 			}
 		}
 
-		var ret = this._on_bubble_mouseleave(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true);
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_mouseleave(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true, meta_key);
 
 		if (!this._is_alive) {
 			return ret;
@@ -1621,13 +1612,13 @@ if (nexacro.Component) {
 
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.onmouseleave || (pThis.onmouseleave && !pThis.onmouseleave.defaultprevented))) {
-			this.on_mouseleave_default_action(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
-			ret = this._on_bubble_mouseleave(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false);
+			this.on_mouseleave_default_action(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
+			ret = this._on_bubble_mouseleave(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false, meta_key);
 		}
 		return ret;
 	};
 
-	_pComponent._on_bubble_mouseleave = function (elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+	_pComponent._on_bubble_mouseleave = function (elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -1648,15 +1639,15 @@ if (nexacro.Component) {
 						return true;
 					}
 					if (first_comp == this) {
-						this.on_mouseleave_basic_action(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+						this.on_mouseleave_basic_action(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 
 						if (this._isEnable()) {
 							clientXY = this._getClientXY(canvasX, canvasY);
 							if (bubble_scope) {
-								event_bubbles = this.on_fire_user_onmouseleave(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+								event_bubbles = this.on_fire_user_onmouseleave(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 							}
 							else {
-								event_bubbles = this.on_fire_sys_onmouseleave(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+								event_bubbles = this.on_fire_sys_onmouseleave(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 							}
 							if (event_bubbles === false) {
 								event_bubbles = undefined;
@@ -1671,15 +1662,15 @@ if (nexacro.Component) {
 					}
 
 					if (first_comp == this) {
-						this.on_mouseleave_basic_action(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+						this.on_mouseleave_basic_action(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 					}
 					if (this._isEnable()) {
 						clientXY = this._getClientXY(canvasX, canvasY);
 						if (bubble_scope) {
-							event_bubbles = this.on_fire_user_onmouseleave(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+							event_bubbles = this.on_fire_user_onmouseleave(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 						}
 						else {
-							event_bubbles = this.on_fire_sys_onmouseleave(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+							event_bubbles = this.on_fire_sys_onmouseleave(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 						}
 					}
 				}
@@ -1691,10 +1682,10 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (is_subcontrol_bubble) {
-					return this.parent._on_bubble_mouseleave(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope);
+					return this.parent._on_bubble_mouseleave(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_mouseleave(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope);
+					return this.parent._on_bubble_mouseleave(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope, meta_key);
 				}
 			}
 		}
@@ -1702,10 +1693,10 @@ if (nexacro.Component) {
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onmouseleave(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_user_onmouseleave(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onmouseleave(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_sys_onmouseleave(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 			}
 			if ((!this.onmouseleave || (this.onmouseleave && !this.onmouseleave.stoppropagation)) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
@@ -1714,12 +1705,12 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_mouseleave(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope);
+				return this.parent._on_bubble_mouseleave(elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_mouseleave_basic_action = function () {
+	_pComponent.on_mouseleave_basic_action = function (elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 		if (nexacro._cur_track_info) {
 			if (nexacro._cur_track_info.target != this) {
 				return;
@@ -1762,15 +1753,16 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_mouseleave_default_action = function () {
+	_pComponent.on_mouseleave_default_action = function (elem, to_comp, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 	};
 
-	_pComponent._on_mousewheel = function (elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bScroll) {
+	_pComponent._on_mousewheel = function (elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
 		if (!nexacro._mousewheel_obj) {
 			nexacro._mousewheel_obj = this;
 		}
 
-		var ret = this._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bScroll);
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, meta_key);
 		if (ctrl_key) {
 			return;
 		}
@@ -1779,7 +1771,7 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent._on_bubble_mousewheel = function (elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bScroll) {
+	_pComponent._on_bubble_mousewheel = function (elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -1797,13 +1789,13 @@ if (nexacro.Component) {
 
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
-				event_bubbles = this.on_fire_user_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+				event_bubbles = this.on_fire_user_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 
 				pThis = this._getFromComponent(this);
 
 				if (event_bubbles !== true) {
 					if (pThis && (!pThis.onmousewheel || (pThis.onmousewheel && !pThis.onmousewheel.defaultprevented))) {
-						ret = this.on_fire_sys_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+						ret = this.on_fire_sys_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 
 						if (ret) {
 							return false;
@@ -1865,10 +1857,10 @@ if (nexacro.Component) {
 							canvasY = canvas[1];
 
 							if (this._is_subcontrol) {
-								return this.parent._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bScroll);
+								return this.parent._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, meta_key);
 							}
 							else {
-								return this.parent._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bScroll);
+								return this.parent._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, meta_key);
 							}
 						}
 					}
@@ -1879,13 +1871,13 @@ if (nexacro.Component) {
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
-				event_bubbles = this.on_fire_user_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[0], fire_comp, refer_comp);
+				event_bubbles = this.on_fire_user_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[0], fire_comp, refer_comp, meta_key);
 
 				pThis = this._getFromComponent(this);
 
 				if (event_bubbles !== true) {
 					if (pThis && (!pThis.onmousewheel || (pThis.onmousewheel && !pThis.onmousewheel.defaultprevented))) {
-						ret = this.on_fire_sys_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[0], fire_comp, refer_comp);
+						ret = this.on_fire_sys_onmousewheel(wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[0], fire_comp, refer_comp, meta_key);
 
 						if (ret) {
 							return false;
@@ -1929,7 +1921,7 @@ if (nexacro.Component) {
 							canvasX = canvas[0];
 							canvasY = canvas[1];
 
-							return this.parent._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bScroll);
+							return this.parent._on_bubble_mousewheel(elem, wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, meta_key);
 						}
 					}
 				}
@@ -1937,16 +1929,81 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_mousewheel_default_action = function () {
+	_pComponent._setVScrollDefaultAction = function (wheelDelta) {
+		var control_elem = this.getElement();
+
+		if (!control_elem) {
+			return false;
+		}
+
+		if (!this._is_scrollable) {
+			return false;
+		}
+
+		if (this.scrolltype == "none" || this.scrolltype == "horizontal") {
+			return false;
+		}
+
+		var old_value = this._vscroll_pos;
+		var value = old_value - wheelDelta;
+
+		var vscroll_limit = control_elem.vscroll_limit;
+		if (value > vscroll_limit) {
+			value = vscroll_limit;
+		}
+
+		this._scrollTo(this._hscroll_pos, value, true, true, undefined, "mousewheel_v");
+
+		var new_value = this._vscroll_pos;
+
+		if (old_value != new_value) {
+			return true;
+		}
+
+		return false;
 	};
 
-	_pComponent._on_drag = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._setHScrollDefaultAction = function (wheelDelta) {
+		var control_elem = this.getElement();
+
+		if (!control_elem) {
+			return false;
+		}
+
+		if (!this._is_scrollable) {
+			return false;
+		}
+
+		if (this.scrolltype == "none" || this.scrolltype == "vertical") {
+			return false;
+		}
+
+		var old_value = this._hscroll_pos;
+		var value = old_value - wheelDelta;
+
+		var hscroll_limit = control_elem.hscroll_limit;
+		if (value > hscroll_limit) {
+			value = hscroll_limit;
+		}
+
+		this._scrollTo(value, this._vscroll_pos, true, true, undefined, "mousewheel_h");
+		var new_value = this._hscroll_pos;
+
+		if (old_value != new_value) {
+			return true;
+		}
+
+		return false;
+	};
+
+	_pComponent._on_drag = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
 		if (nexacro._skipDragEventAfterMsgBox) {
 			nexacro._initDragInfo();
 			return false;
 		}
 
-		var ret = this._on_bubble_drag(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp);
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_drag(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, meta_key);
 		var pThis = this._getFromComponent(this);
 		if (pThis && (pThis.ondrag && pThis.ondrag.defaultprevented)) {
 			nexacro._initDragInfo();
@@ -1955,7 +2012,7 @@ if (nexacro.Component) {
 		return ret;
 	};
 
-	_pComponent._on_bubble_drag = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_bubble_drag = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -1978,10 +2035,10 @@ if (nexacro.Component) {
 					is_subcontrol_bubble = false;
 					clientXY = this._getClientXY(canvasX, canvasY);
 
-					event_bubbles = this.on_fire_user_ondrag(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, refer_comp);
+					event_bubbles = this.on_fire_user_ondrag(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, refer_comp, meta_key);
 					if (!event_bubbles || event_bubbles[0] !== true) {
 						if (!this.ondrag || (pThis && (pThis.ondrag && !pThis.ondrag.defaultprevented))) {
-							this.on_fire_sys_ondrag(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, refer_comp);
+							this.on_fire_sys_ondrag(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, refer_comp, meta_key);
 						}
 					}
 				}
@@ -1995,10 +2052,10 @@ if (nexacro.Component) {
 					canvasY = canvas[1];
 
 					if (is_subcontrol_bubble) {
-						return this.parent._on_bubble_drag(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, this, refer_comp);
+						return this.parent._on_bubble_drag(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, this, refer_comp, meta_key);
 					}
 					else {
-						return this.parent._on_bubble_drag(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp);
+						return this.parent._on_bubble_drag(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, meta_key);
 					}
 				}
 			}
@@ -2008,14 +2065,14 @@ if (nexacro.Component) {
 			if ((!event_bubbles || event_bubbles[0] !== true) && this.parent && !this.parent._is_application) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 				if (this.visible && this._isEnable()) {
-					event_bubbles = this.on_fire_user_ondrag(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, this);
+					event_bubbles = this.on_fire_user_ondrag(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, refer_comp, meta_key);
 				}
 				if (!event_bubbles || event_bubbles[0] !== true) {
 					pThis = this._getFromComponent(this);
 
 					if (this.visible && this._isEnable()) {
 						if (pThis && (!pThis.ondrag || (pThis.ondrag && !pThis.ondrag.defaultprevented))) {
-							this.on_fire_sys_ondrag(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, this);
+							this.on_fire_sys_ondrag(button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, refer_comp, meta_key);
 						}
 					}
 
@@ -2025,7 +2082,7 @@ if (nexacro.Component) {
 						canvasX = canvas[0];
 						canvasY = canvas[1];
 
-						return this.parent._on_bubble_drag(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp);
+						return this.parent._on_bubble_drag(elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, meta_key);
 					}
 				}
 			}
@@ -2033,20 +2090,21 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_drag_default_action = function () {
+	_pComponent.on_drag_default_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 	};
 
-	_pComponent._on_drop = function (elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
-		var ret = this._on_bubble_drop(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true);
+	_pComponent._on_drop = function (elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_drop(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true, meta_key);
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.ondrop || (pThis.ondrop && !pThis.ondrop.defaultprevented))) {
-			this.on_drop_default_action(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
-			ret = this._on_bubble_drop(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false);
+			this.on_drop_default_action(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key);
+			ret = this._on_bubble_drop(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false, meta_key);
 		}
 		return ret;
 	};
 
-	_pComponent._on_bubble_drop = function (elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+	_pComponent._on_bubble_drop = function (elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -2060,10 +2118,10 @@ if (nexacro.Component) {
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_ondrop(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+					event_bubbles = this.on_fire_user_ondrop(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_ondrop(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+					event_bubbles = this.on_fire_sys_ondrop(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 				}
 				if (event_bubbles === false) {
 					event_bubbles = undefined;
@@ -2077,10 +2135,10 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_drop(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope);
+					return this.parent._on_bubble_drop(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_drop(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope);
+					return this.parent._on_bubble_drop(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope, meta_key);
 				}
 			}
 		}
@@ -2088,10 +2146,10 @@ if (nexacro.Component) {
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_ondrop(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_user_ondrop(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_ondrop(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_sys_ondrop(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 			}
 			if ((!this.ondrop || (this.ondrop && !this.ondrop.stoppropagation)) && event_bubbles !== true && this.parent && !this.parent._is_application) {
@@ -2100,20 +2158,21 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_drop(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope);
+				return this.parent._on_bubble_drop(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_drop_default_action = function () {
+	_pComponent.on_drop_default_action = function (elem, src_comp, src_refer_comp, dragdata, userdata, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
 	};
 
-	_pComponent._on_dragmove = function (elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
-		var ret = this._on_bubble_dragmove(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true);
+	_pComponent._on_dragmove = function (elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, xdeltavalue, ydeltavalue, meta_key) {
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_dragmove(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true, meta_key);
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.ondragmove || (pThis.ondragmove && !pThis.ondragmove.defaultprevented))) {
-			this.on_dragmove_default_action(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
-			ret = this._on_bubble_dragmove(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false);
+			this.on_dragmove_default_action(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
+			ret = this._on_bubble_dragmove(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false, xdeltavalue, ydeltavalue, meta_key);
 		}
 		else if (pThis && (pThis.ondragmove && pThis.ondragmove.defaultprevented)) {
 			nexacro._initDragInfo();
@@ -2121,7 +2180,7 @@ if (nexacro.Component) {
 		return ret;
 	};
 
-	_pComponent._on_bubble_dragmove = function (elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+	_pComponent._on_bubble_dragmove = function (elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope, xdeltavalue, ydeltavalue, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -2142,10 +2201,10 @@ if (nexacro.Component) {
 				if (this.visible && this._isEnable()) {
 					clientXY = this._getClientXY(canvasX, canvasY);
 					if (bubble_scope) {
-						event_bubbles = this.on_fire_user_ondragmove(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+						event_bubbles = this.on_fire_user_ondragmove(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 					}
 					else {
-						event_bubbles = this.on_fire_sys_ondragmove(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+						event_bubbles = this.on_fire_sys_ondragmove(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, xdeltavalue, ydeltavalue, meta_key);
 					}
 				}
 			}
@@ -2157,10 +2216,10 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (is_subcontrol_bubble) {
-					return this.parent._on_bubble_dragmove(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope);
+					return this.parent._on_bubble_dragmove(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope, xdeltavalue, ydeltavalue, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_dragmove(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope);
+					return this.parent._on_bubble_dragmove(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope, xdeltavalue, ydeltavalue, meta_key);
 				}
 			}
 		}
@@ -2168,10 +2227,10 @@ if (nexacro.Component) {
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_ondragmove(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_user_ondragmove(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_ondragmove(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_sys_ondragmove(src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, xdeltavalue, ydeltavalue, meta_key);
 				}
 			}
 			if ((!this.ondragmove || (this.ondragmove && !this.ondragmove.stoppropagation)) && event_bubbles !== true && this.parent && !this.parent._is_application) {
@@ -2180,20 +2239,21 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_dragmove(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope);
+				return this.parent._on_bubble_dragmove(elem, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope, xdeltavalue, ydeltavalue, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_dragmove_default_action = function () {
+	_pComponent.on_dragmove_default_action = function (elem, src_comp, src_refer_comp, dragdata, userdata, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 	};
 
-	_pComponent._on_dragenter = function (elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
-		var ret = this._on_bubble_dragenter(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true);
+	_pComponent._on_dragenter = function (elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_dragenter(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true, meta_key);
 		var pThis = this._getFromComponent(this);
 		if (!pThis.ondragenter || (pThis.ondragenter && !pThis.ondragenter.defaultprevented)) {
-			this.on_dragenter_default_action(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
-			ret = this._on_bubble_dragenter(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false);
+			this.on_dragenter_default_action(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
+			ret = this._on_bubble_dragenter(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false, meta_key);
 		}
 		else if (pThis && (pThis.ondragenter && pThis.ondragenter.defaultprevented)) {
 			nexacro._initDragInfo();
@@ -2201,7 +2261,7 @@ if (nexacro.Component) {
 		return ret;
 	};
 
-	_pComponent._on_bubble_dragenter = function (elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+	_pComponent._on_bubble_dragenter = function (elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -2223,7 +2283,7 @@ if (nexacro.Component) {
 					return;
 				}
 				if (first_comp == this) {
-					this.on_dragenter_basic_action(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+					this.on_dragenter_basic_action(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 				}
 			}
 			else {
@@ -2234,14 +2294,14 @@ if (nexacro.Component) {
 				}
 
 				if (this.visible && this._isEnable()) {
-					this.on_dragenter_basic_action(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+					this.on_dragenter_basic_action(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 
 					clientXY = this._getClientXY(canvasX, canvasY);
 					if (bubble_scope) {
-						event_bubbles = this.on_fire_user_ondragenter(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+						event_bubbles = this.on_fire_user_ondragenter(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 					}
 					else {
-						event_bubbles = this.on_fire_sys_ondragenter(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+						event_bubbles = this.on_fire_sys_ondragenter(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 					}
 				}
 			}
@@ -2252,10 +2312,10 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (is_subcontrol_bubble) {
-					return this.parent._on_bubble_dragenter(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope);
+					return this.parent._on_bubble_dragenter(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_dragenter(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope);
+					return this.parent._on_bubble_dragenter(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope, meta_key);
 				}
 			}
 		}
@@ -2264,10 +2324,10 @@ if (nexacro.Component) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_ondragenter(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_user_ondragenter(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_ondragenter(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_sys_ondragenter(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 
 				this._changeStatus("mouseover", true);
@@ -2278,12 +2338,12 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_dragenter(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope);
+				return this.parent._on_bubble_dragenter(elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_dragenter_basic_action = function () {
+	_pComponent.on_dragenter_basic_action = function (elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 		if (this._isPushed()) {
 			this._changeUserStatus("pushed", true);
 		}
@@ -2292,20 +2352,21 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_dragenter_default_action = function () {
+	_pComponent.on_dragenter_default_action = function (elem, from_comp, src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 	};
 
-	_pComponent._on_dragleave = function (elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
-		var ret = this._on_bubble_dragleave(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true);
+	_pComponent._on_dragleave = function (elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_dragleave(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true, meta_key);
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.ondragleave || (pThis.ondragleave && !pThis.ondragleave.defaultprevented))) {
-			this.on_dragleave_default_action(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
-			ret = this._on_bubble_dragleave(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false);
+			this.on_dragleave_default_action(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
+			ret = this._on_bubble_dragleave(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, false, meta_key);
 		}
 		return ret;
 	};
 
-	_pComponent._on_bubble_dragleave = function (elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+	_pComponent._on_bubble_dragleave = function (elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -2326,7 +2387,7 @@ if (nexacro.Component) {
 					return;
 				}
 				if (first_comp == this) {
-					this.on_dragleave_basic_action(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+					this.on_dragleave_basic_action(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 				}
 			}
 			else {
@@ -2337,14 +2398,14 @@ if (nexacro.Component) {
 				}
 
 				if (this.visible && this._isEnable()) {
-					this.on_dragleave_basic_action(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp);
+					this.on_dragleave_basic_action(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key);
 
 					clientXY = this._getClientXY(canvasX, canvasY);
 					if (bubble_scope) {
-						event_bubbles = this.on_fire_user_ondragleave(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+						event_bubbles = this.on_fire_user_ondragleave(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 					}
 					else {
-						event_bubbles = this.on_fire_sys_ondragleave(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
+						event_bubbles = this.on_fire_sys_ondragleave(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp, meta_key);
 					}
 				}
 			}
@@ -2356,10 +2417,10 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (is_subcontrol_bubble) {
-					return this.parent._on_bubble_dragleave(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope);
+					return this.parent._on_bubble_dragleave(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_dragleave(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope);
+					return this.parent._on_bubble_dragleave(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope, meta_key);
 				}
 			}
 		}
@@ -2367,10 +2428,10 @@ if (nexacro.Component) {
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_ondragleave(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_user_ondragleave(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_ondragleave(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
+					event_bubbles = this.on_fire_sys_ondragleave(src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp, meta_key);
 				}
 				if (!to_comp || !this._contains(to_comp)) {
 					this._changeStatus("mouseover", false);
@@ -2382,12 +2443,12 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_dragleave(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope);
+				return this.parent._on_bubble_dragleave(elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, dayatype, filelist, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_dragleave_basic_action = function () {
+	_pComponent.on_dragleave_basic_action = function (elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 		if (this._isPushed()) {
 			this._changeUserStatus("pushed", false);
 		}
@@ -2396,26 +2457,26 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_dragleave_default_action = function () {
+	_pComponent.on_dragleave_default_action = function (elem, to_comp, src_comp, src_refer_comp, dragdata, userdata, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 	};
 
-	_pComponent._on_keydown = function (elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp) {
-		var ret = this._on_bubble_keydown(elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp, true);
+	_pComponent._on_keydown = function (elem, keycode, alt_key, ctrl_key, shift_key, meta_key) {
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_keydown(elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp, true, meta_key);
 
 		if (!this._is_alive) {
 			return ret;
 		}
 
 		var pThis = this._getFromComponent(this);
-
 		if (pThis && (!pThis.onkeydown || (pThis.onkeydown && !pThis.onkeydown.defaultprevented))) {
-			this.on_keydown_default_action(keycode, alt_key, ctrl_key, shift_key, refer_comp);
-			ret = this._on_bubble_keydown(elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp, false);
+			this.on_keydown_default_action(keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key);
+			ret = this._on_bubble_keydown(elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp, false, meta_key);
 		}
 		return ret;
 	};
 
-	_pComponent._on_bubble_keydown = function (elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+	_pComponent._on_bubble_keydown = function (elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -2427,14 +2488,14 @@ if (nexacro.Component) {
 
 			if (this.visible && this._isEnable()) {
 				if (bubble_scope) {
-					this.on_keydown_basic_action(keycode, alt_key, ctrl_key, shift_key, refer_comp);
+					this.on_keydown_basic_action(keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key);
 				}
 
 				if (bubble_scope && !this._is_hotkey) {
-					event_bubbles = this.on_fire_user_onkeydown(keycode, alt_key, ctrl_key, shift_key, this, refer_comp);
+					event_bubbles = this.on_fire_user_onkeydown(keycode, alt_key, ctrl_key, shift_key, this, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onkeydown(keycode, alt_key, ctrl_key, shift_key, this, refer_comp);
+					event_bubbles = this.on_fire_sys_onkeydown(keycode, alt_key, ctrl_key, shift_key, this, refer_comp, meta_key);
 					this._is_hotkey = false;
 				}
 				if (event_bubbles === false) {
@@ -2443,51 +2504,53 @@ if (nexacro.Component) {
 			}
 			if ((!this.onkeydown || (this.onkeydown && !this.onkeydown.stoppropagation)) && event_bubbles !== true && this.parent && !this.parent._is_application) {
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_keydown(elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, null, refer_comp, bubble_scope);
+					return this.parent._on_bubble_keydown(elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, null, refer_comp, bubble_scope, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_keydown(elem, keycode, alt_key, ctrl_key, shift_key, false, this, refer_comp, bubble_scope);
+					return this.parent._on_bubble_keydown(elem, keycode, alt_key, ctrl_key, shift_key, false, this, refer_comp, bubble_scope, meta_key);
 				}
 			}
 		}
 		else {
 			if (this.visible && this._isEnable()) {
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onkeydown(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+					event_bubbles = this.on_fire_user_onkeydown(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onkeydown(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+					event_bubbles = this.on_fire_sys_onkeydown(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
 				}
 			}
 			if ((!this.onkeydown || (this.onkeydown && !this.onkeydown.stoppropagation)) && event_bubbles !== true && this.parent && !this.parent._is_application) {
-				return this.parent._on_bubble_keydown(elem, keycode, alt_key, ctrl_key, shift_key, false, fire_comp, refer_comp, bubble_scope);
+				return this.parent._on_bubble_keydown(elem, keycode, alt_key, ctrl_key, shift_key, false, fire_comp, refer_comp, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_keydown_basic_action = function () {
+	_pComponent.on_keydown_basic_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
 	};
 
-	_pComponent.on_keydown_default_action = function () {
+	_pComponent.on_keydown_default_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
 	};
 
-	_pComponent._on_keyup = function (elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_keyup = function (elem, keycode, alt_key, ctrl_key, shift_key, meta_key) {
 		if (keycode == nexacro.Event.KEY_TAB) {
 			if (!this._getDlgCode().want_tab) {
 				return;
 			}
 		}
 
-		var ret = this._on_bubble_keyup(elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp, true);
+		var event_bubbles, fire_comp, refer_comp;
+		var ret = this._on_bubble_keyup(elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp, true, meta_key);
+
 		var pThis = this._getFromComponent(this);
 		if (pThis && (!pThis.onkeyup || (pThis.onkeyup && !pThis.onkeyup.defaultprevented))) {
-			this.on_keyup_default_action(keycode, alt_key, ctrl_key, shift_key, refer_comp);
-			ret = this._on_bubble_keyup(elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp, false);
+			this.on_keyup_default_action(keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key);
+			ret = this._on_bubble_keyup(elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp, false, meta_key);
 		}
 		return ret;
 	};
 
-	_pComponent._on_bubble_keyup = function (elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+	_pComponent._on_bubble_keyup = function (elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, fire_comp, refer_comp, bubble_scope, meta_key) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -2499,13 +2562,13 @@ if (nexacro.Component) {
 
 			if (this.visible && this._isEnable()) {
 				if (bubble_scope) {
-					this.on_keyup_basic_action(keycode, alt_key, ctrl_key, shift_key, refer_comp);
+					this.on_keyup_basic_action(keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key);
 				}
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onkeyup(keycode, alt_key, ctrl_key, shift_key, this, refer_comp);
+					event_bubbles = this.on_fire_user_onkeyup(keycode, alt_key, ctrl_key, shift_key, this, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onkeyup(keycode, alt_key, ctrl_key, shift_key, this, refer_comp);
+					event_bubbles = this.on_fire_sys_onkeyup(keycode, alt_key, ctrl_key, shift_key, this, refer_comp, meta_key);
 				}
 
 				if (event_bubbles === false) {
@@ -2514,36 +2577,74 @@ if (nexacro.Component) {
 			}
 			if ((!this.onkeyup || (this.onkeyup && !this.onkeyup.stoppropagation)) && event_bubbles !== true && this.parent && !this.parent._is_application) {
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_keyup(elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, null, refer_comp, bubble_scope);
+					return this.parent._on_bubble_keyup(elem, keycode, alt_key, ctrl_key, shift_key, event_bubbles, null, refer_comp, bubble_scope, meta_key);
 				}
 				else {
-					return this.parent._on_bubble_keyup(elem, keycode, alt_key, ctrl_key, shift_key, false, this, refer_comp, bubble_scope);
+					return this.parent._on_bubble_keyup(elem, keycode, alt_key, ctrl_key, shift_key, false, this, refer_comp, bubble_scope, meta_key);
 				}
 			}
 		}
 		else {
 			if (this.visible && this._isEnable()) {
 				if (bubble_scope) {
-					event_bubbles = this.on_fire_user_onkeyup(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+					event_bubbles = this.on_fire_user_onkeyup(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
 				}
 				else {
-					event_bubbles = this.on_fire_sys_onkeyup(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp);
+					event_bubbles = this.on_fire_sys_onkeyup(keycode, alt_key, ctrl_key, shift_key, fire_comp, refer_comp, meta_key);
 				}
 			}
 			if ((!this.onkeyup || (this.onkeyup && !this.onkeyup.stoppropagation)) && event_bubbles !== true && this.parent && !this.parent._is_application) {
-				return this.parent._on_bubble_keyup(elem, keycode, alt_key, ctrl_key, shift_key, false, fire_comp, refer_comp, bubble_scope);
+				return this.parent._on_bubble_keyup(elem, keycode, alt_key, ctrl_key, shift_key, false, fire_comp, refer_comp, bubble_scope, meta_key);
 			}
 		}
 	};
 
-	_pComponent.on_keyup_basic_action = function () {
+	_pComponent.on_keyup_basic_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
 	};
 
-	_pComponent.on_keyup_default_action = function () {
+	_pComponent.on_keyup_default_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
 	};
 
-	_pComponent._on_touchstart = function (touch_manager, touchinfos, changedtouchinfos, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_imeaction = function (elem, keycode, alt_key, ctrl_key, shift_key, meta_key) {
+		if (!this._is_alive) {
+			return;
+		}
+
+		if (this.visible && this._isEnable() && this.enableevent) {
+			this.on_fire_onimeaction(keycode, alt_key, ctrl_key, shift_key, this, this, meta_key);
+			var pThis = this._getFromComponent(this);
+			if (pThis && (!pThis.onimeaction || (pThis.onimeaction && !pThis.onimeaction.defaultprevented))) {
+				this.on_imeaction_default_action(keycode, alt_key, ctrl_key, shift_key, meta_key);
+			}
+		}
+	};
+
+	_pComponent.on_imeaction_default_action = function (keycode, alt_key, ctrl_key, shift_key, meta_key) {
+		var form = this._getForm();
+		var root_comp = this._getRootComponent(this);
+
+		if (this.imeaction == "next") {
+			var next_comp = form.getNextComponent(root_comp, true);
+			if (next_comp) {
+				next_comp.setFocus();
+			}
+		}
+		else if (this.imeaction == "previous") {
+			var prev_comp = form.getPrevComponent(root_comp, true);
+			if (prev_comp) {
+				if (prev_comp instanceof Array) {
+					prev_comp = prev_comp[0];
+				}
+
+				prev_comp.setFocus();
+			}
+		}
+	};
+
+	_pComponent._on_touchstart = function (touch_manager, touchinfos, changedtouchinfos) {
 		nexacro._skipDragEventAfterMsgBox = false;
+
+		var event_bubbles, fire_comp, refer_comp;
 
 		this._on_bubble_touchstart(touch_manager, touchinfos, changedtouchinfos, event_bubbles, fire_comp, refer_comp, true);
 
@@ -2554,7 +2655,7 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent._on_bubble_touchstart = function (touch_manager, touchinfos, changedtouchinfos, event_bubbles, fire_comp, refer_comp, is_userbubble) {
+	_pComponent._on_bubble_touchstart = function (touch_manager, touchinfos, changedtouchinfos, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -2565,15 +2666,15 @@ if (nexacro.Component) {
 				refer_comp = this;
 			}
 			if (this.visible && this._isEnable()) {
-				if (is_userbubble) {
+				if (bubble_scope) {
 					this.on_touchstart_basic_action(touch_manager, touchinfos, changedtouchinfos, refer_comp);
 				}
 				else {
 					this.on_touchstart_default_action(touch_manager, touchinfos, changedtouchinfos, refer_comp);
 				}
 
-				if ((is_userbubble && this.enableevent) || !is_userbubble) {
-					fire_event_func = is_userbubble ? this.on_fire_user_ontouchstart : this.on_fire_sys_ontouchstart;
+				if ((bubble_scope && this.enableevent) || !bubble_scope) {
+					fire_event_func = bubble_scope ? this.on_fire_user_ontouchstart : this.on_fire_sys_ontouchstart;
 					event_bubbles = fire_event_func.call(this, touchinfos, changedtouchinfos, this, refer_comp);
 
 					if (event_bubbles === false) {
@@ -2588,7 +2689,7 @@ if (nexacro.Component) {
 				touch_manager.updateTouchInputInfosCanvasXY(touchinfos, (this._adjust_left - this._scroll_left || 0), (this._adjust_top - this._scroll_top || 0));
 
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_touchstart(touch_manager, touchinfos, changedtouchinfos, event_bubbles, null, refer_comp, is_userbubble);
+					return this.parent._on_bubble_touchstart(touch_manager, touchinfos, changedtouchinfos, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
 					var select_mode = "select";
@@ -2608,22 +2709,22 @@ if (nexacro.Component) {
 
 						nexacro._setDragInfo(win, elem, win._curWindowX, win._curWindowY, win._curWindowX, win._curWindowY, null, null, null, "text");
 					}
-					return this.parent._on_bubble_touchstart(touch_manager, touchinfos, changedtouchinfos, false, this, refer_comp, is_userbubble);
+					return this.parent._on_bubble_touchstart(touch_manager, touchinfos, changedtouchinfos, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
 		else {
-			if (this.visible && this._isEnable() && ((is_userbubble && this.enableevent) || !is_userbubble)) {
+			if (this.visible && this._isEnable() && ((bubble_scope && this.enableevent) || !bubble_scope)) {
 				touch_manager.updateTouchInputInfosClientXY(touchinfos, this);
 
-				fire_event_func = is_userbubble ? this.on_fire_user_ontouchstart : this.on_fire_sys_ontouchstart;
+				fire_event_func = bubble_scope ? this.on_fire_user_ontouchstart : this.on_fire_sys_ontouchstart;
 				event_bubbles = fire_event_func.call(this, touchinfos, changedtouchinfos, fire_comp, refer_comp);
 			}
 
 			listener = this.ontouchstart;
 			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
 				touch_manager.updateTouchInputInfosCanvasXY(touchinfos, (this._adjust_left - this._scroll_left || 0), (this._adjust_top - this._scroll_top || 0));
-				return this.parent._on_bubble_touchstart(touch_manager, touchinfos, changedtouchinfos, false, fire_comp, refer_comp, is_userbubble);
+				return this.parent._on_bubble_touchstart(touch_manager, touchinfos, changedtouchinfos, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
@@ -2652,10 +2753,12 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_touchstart_default_action = function () {
+	_pComponent.on_touchstart_default_action = function (touch_manager, touchinfos, changedtouchinfos, refer_comp) {
 	};
 
-	_pComponent._on_touchmove = function (touch_manager, touchinfos, changedtouchinfos, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_touchmove = function (touch_manager, touchinfos, changedtouchinfos) {
+		var event_bubbles, fire_comp, refer_comp;
+
 		this._on_bubble_touchmove(touch_manager, touchinfos, changedtouchinfos, event_bubbles, fire_comp, refer_comp, true);
 
 		var root_comp = this._getFromComponent(this);
@@ -2665,7 +2768,7 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent._on_bubble_touchmove = function (touch_manager, touchinfos, changedtouchinfos, event_bubbles, fire_comp, refer_comp, is_userbubble) {
+	_pComponent._on_bubble_touchmove = function (touch_manager, touchinfos, changedtouchinfos, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -2676,15 +2779,15 @@ if (nexacro.Component) {
 				refer_comp = this;
 			}
 			if (this.visible && this._isEnable()) {
-				if (is_userbubble) {
+				if (bubble_scope) {
 					this.on_touchmove_basic_action(touch_manager, touchinfos, changedtouchinfos, refer_comp);
 				}
 				else {
 					this.on_touchmove_default_action(touch_manager, touchinfos, changedtouchinfos, refer_comp);
 				}
 
-				if (((is_userbubble && this.enableevent) || !is_userbubble)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_ontouchmove : this.on_fire_sys_ontouchmove;
+				if (((bubble_scope && this.enableevent) || !bubble_scope)) {
+					fire_event_func = bubble_scope ? this.on_fire_user_ontouchmove : this.on_fire_sys_ontouchmove;
 					event_bubbles = fire_event_func.call(this, touchinfos, changedtouchinfos, this, refer_comp);
 
 					if (event_bubbles === false) {
@@ -2697,25 +2800,25 @@ if (nexacro.Component) {
 			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
 				touch_manager.updateTouchInputInfosCanvasXY(touchinfos, (this._adjust_left - this._scroll_left || 0), (this._adjust_top - this._scroll_top || 0));
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_touchmove(touch_manager, touchinfos, changedtouchinfos, event_bubbles, null, refer_comp, is_userbubble);
+					return this.parent._on_bubble_touchmove(touch_manager, touchinfos, changedtouchinfos, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
-					return this.parent._on_bubble_touchmove(touch_manager, touchinfos, changedtouchinfos, false, this, refer_comp, is_userbubble);
+					return this.parent._on_bubble_touchmove(touch_manager, touchinfos, changedtouchinfos, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
 		else {
-			if (this.visible && this._isEnable() && ((is_userbubble && this.enableevent) || !is_userbubble)) {
+			if (this.visible && this._isEnable() && ((bubble_scope && this.enableevent) || !bubble_scope)) {
 				touch_manager.updateTouchInputInfosClientXY(touchinfos, this);
 
-				fire_event_func = is_userbubble ? this.on_fire_user_ontouchmove : this.on_fire_sys_ontouchmove;
+				fire_event_func = bubble_scope ? this.on_fire_user_ontouchmove : this.on_fire_sys_ontouchmove;
 				event_bubbles = fire_event_func.call(this, touchinfos, changedtouchinfos, this, refer_comp);
 			}
 
 			listener = this.ontouchmove;
 			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
 				touch_manager.updateTouchInputInfosCanvasXY(touchinfos, (this._adjust_left - this._scroll_left || 0), (this._adjust_top - this._scroll_top || 0));
-				return this.parent._on_bubble_touchmove(touch_manager, touchinfos, changedtouchinfos, false, fire_comp, refer_comp, is_userbubble);
+				return this.parent._on_bubble_touchmove(touch_manager, touchinfos, changedtouchinfos, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
@@ -2736,10 +2839,12 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_touchmove_default_action = function () {
+	_pComponent.on_touchmove_default_action = function (touch_manager, touchinfos, changedtouchinfos, refer_comp) {
 	};
 
-	_pComponent._on_touchend = function (touch_manager, touchinfos, changedtouchinfos, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_touchend = function (touch_manager, touchinfos, changedtouchinfos) {
+		var event_bubbles, fire_comp, refer_comp;
+
 		this._on_bubble_touchend(touch_manager, touchinfos, changedtouchinfos, event_bubbles, fire_comp, refer_comp, true);
 
 		var root_comp = this._getFromComponent(this);
@@ -2754,7 +2859,7 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent._on_bubble_touchend = function (touch_manager, touchinfos, changedtouchinfos, event_bubbles, fire_comp, refer_comp, is_userbubble) {
+	_pComponent._on_bubble_touchend = function (touch_manager, touchinfos, changedtouchinfos, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -2766,15 +2871,15 @@ if (nexacro.Component) {
 			}
 
 			if (this.visible && this._isEnable()) {
-				if (is_userbubble) {
+				if (bubble_scope) {
 					this.on_touchend_basic_action(touch_manager, touchinfos, changedtouchinfos, refer_comp);
 				}
 				else {
 					this.on_touchend_default_action(touch_manager, touchinfos, changedtouchinfos, refer_comp);
 				}
 
-				if (((is_userbubble && this.enableevent) || !is_userbubble)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_ontouchend : this.on_fire_sys_ontouchend;
+				if (((bubble_scope && this.enableevent) || !bubble_scope)) {
+					fire_event_func = bubble_scope ? this.on_fire_user_ontouchend : this.on_fire_sys_ontouchend;
 					event_bubbles = fire_event_func.call(this, touchinfos, changedtouchinfos, this, refer_comp);
 
 					if (event_bubbles === false) {
@@ -2787,30 +2892,30 @@ if (nexacro.Component) {
 			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
 				touch_manager.updateTouchInputInfosCanvasXY(touchinfos, (this._adjust_left - this._scroll_left || 0), (this._adjust_top - this._scroll_top || 0));
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_touchend(touch_manager, touchinfos, changedtouchinfos, event_bubbles, null, refer_comp, is_userbubble);
+					return this.parent._on_bubble_touchend(touch_manager, touchinfos, changedtouchinfos, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
-					return this.parent._on_bubble_touchend(touch_manager, touchinfos, changedtouchinfos, false, this, refer_comp, is_userbubble);
+					return this.parent._on_bubble_touchend(touch_manager, touchinfos, changedtouchinfos, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
 		else {
-			if (this.visible && this._isEnable() && ((is_userbubble && this.enableevent) || !is_userbubble)) {
+			if (this.visible && this._isEnable() && ((bubble_scope && this.enableevent) || !bubble_scope)) {
 				touch_manager.updateTouchInputInfosClientXY(touchinfos, this);
 
-				fire_event_func = is_userbubble ? this.on_fire_user_ontouchend : this.on_fire_sys_ontouchend;
+				fire_event_func = bubble_scope ? this.on_fire_user_ontouchend : this.on_fire_sys_ontouchend;
 				event_bubbles = fire_event_func.call(this, touchinfos, changedtouchinfos, this, refer_comp);
 			}
 
 			listener = this.ontouchend;
 			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
 				touch_manager.updateTouchInputInfosCanvasXY(touchinfos, (this._adjust_left - this._scroll_left || 0), (this._adjust_top - this._scroll_top || 0));
-				return this.parent._on_bubble_touchend(touch_manager, touchinfos, changedtouchinfos, false, fire_comp, refer_comp, is_userbubble);
+				return this.parent._on_bubble_touchend(touch_manager, touchinfos, changedtouchinfos, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
 
-	_pComponent.on_touchend_basic_action = function (touch_manager, touchinfos, changedtouchinfos) {
+	_pComponent.on_touchend_basic_action = function (touch_manager, touchinfos, changedtouchinfos, refer_comp) {
 		var firsttouchinput = touch_manager.getFirstTouchInputInfo(changedtouchinfos);
 		if (firsttouchinput) {
 			if (this._use_pushed_status) {
@@ -2825,10 +2930,12 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_touchend_default_action = function () {
+	_pComponent.on_touchend_default_action = function (touch_manager, touchinfos, changedtouchinfos, refer_comp) {
 	};
 
-	_pComponent._on_tap = function (elem, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_tap = function (elem, canvasX, canvasY, screenX, screenY) {
+		var event_bubbles, fire_comp, refer_comp;
+
 		this._on_bubble_tap(elem, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true);
 
 		if (!this._is_alive) {
@@ -2841,7 +2948,7 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent._on_bubble_tap = function (elem, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, is_userbubble) {
+	_pComponent._on_bubble_tap = function (elem, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -2861,7 +2968,7 @@ if (nexacro.Component) {
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
-				if (is_userbubble) {
+				if (bubble_scope) {
 					this.on_tap_basic_action_before(elem, canvasX, canvasY, screenX, screenY, refer_comp);
 					if (is_first) {
 						this.on_tap_basic_action(elem, canvasX, canvasY, screenX, screenY, refer_comp);
@@ -2871,8 +2978,8 @@ if (nexacro.Component) {
 					this.on_tap_default_action(elem, canvasX, canvasY, screenX, screenY, refer_comp);
 				}
 
-				if (!is_userbubble || (nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_ontap : this.on_fire_sys_ontap;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
+					fire_event_func = bubble_scope ? this.on_fire_user_ontap : this.on_fire_sys_ontap;
 					event_bubbles = fire_event_func.call(this, elem, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
 
 					if (event_bubbles === false) {
@@ -2889,10 +2996,10 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_tap(elem, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, is_userbubble);
+					return this.parent._on_bubble_tap(elem, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
-					return this.parent._on_bubble_tap(elem, canvasX, canvasY, screenX, screenY, false, this, refer_comp, is_userbubble);
+					return this.parent._on_bubble_tap(elem, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
@@ -2900,7 +3007,7 @@ if (nexacro.Component) {
 			if (this.visible && this._isEnable() && nexacro._enabletouchevent && this.enableevent) {
 				clientXY = this._getClientXY(canvasX, canvasY);
 
-				fire_event_func = is_userbubble ? this.on_fire_user_ontap : this.on_fire_sys_ontap;
+				fire_event_func = bubble_scope ? this.on_fire_user_ontap : this.on_fire_sys_ontap;
 				event_bubbles = fire_event_func.call(this, elem, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
 			}
 
@@ -2911,7 +3018,7 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_tap(elem, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, is_userbubble);
+				return this.parent._on_bubble_tap(elem, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
@@ -2946,10 +3053,12 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_tap_default_action = function () {
+	_pComponent.on_tap_default_action = function (elem, canvasX, canvasY, screenX, screenY, refer_comp) {
 	};
 
-	_pComponent._on_dbltap = function (elem, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_dbltap = function (elem, canvasX, canvasY, screenX, screenY) {
+		var event_bubbles, fire_comp, refer_comp;
+
 		this._on_bubble_dbltap(elem, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, true);
 
 		var root_comp = this._getFromComponent(this);
@@ -2959,7 +3068,7 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent._on_bubble_dbltap = function (elem, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, is_userbubble) {
+	_pComponent._on_bubble_dbltap = function (elem, canvasX, canvasY, screenX, screenY, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -2973,15 +3082,15 @@ if (nexacro.Component) {
 
 			if (this.visible && this._isEnable()) {
 				clientXY = this._getClientXY(canvasX, canvasY);
-				if (is_userbubble) {
+				if (bubble_scope) {
 					this.on_dbltap_basic_action(elem, canvasX, canvasY, screenX, screenY, refer_comp);
 				}
 				else {
 					this.on_dbltap_default_action(elem, canvasX, canvasY, screenX, screenY, refer_comp);
 				}
 
-				if (!is_userbubble || (nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_ondbltap : this.on_fire_sys_ondbltap;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
+					fire_event_func = bubble_scope ? this.on_fire_user_ondbltap : this.on_fire_sys_ondbltap;
 					event_bubbles = fire_event_func.call(this, elem, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], this, refer_comp);
 
 					if (event_bubbles === false) {
@@ -2998,17 +3107,17 @@ if (nexacro.Component) {
 				canvasY = canvas[1];
 
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_dbltap(elem, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, is_userbubble);
+					return this.parent._on_bubble_dbltap(elem, canvasX, canvasY, screenX, screenY, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
-					return this.parent._on_bubble_dbltap(elem, canvasX, canvasY, screenX, screenY, false, this, refer_comp, is_userbubble);
+					return this.parent._on_bubble_dbltap(elem, canvasX, canvasY, screenX, screenY, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
 		else {
 			if (this.visible && this._isEnable() && nexacro._enabletouchevent && this.enableevent) {
 				clientXY = this._getClientXY(canvasX, canvasY);
-				fire_event_func = is_userbubble ? this.on_fire_user_ondbltap : this.on_fire_sys_ondbltap;
+				fire_event_func = bubble_scope ? this.on_fire_user_ondbltap : this.on_fire_sys_ondbltap;
 				event_bubbles = fire_event_func.call(this, elem, screenX, screenY, canvasX, canvasY, clientXY[0], clientXY[1], fire_comp, refer_comp);
 			}
 
@@ -3019,19 +3128,21 @@ if (nexacro.Component) {
 				canvasX = canvas[0];
 				canvasY = canvas[1];
 
-				return this.parent._on_bubble_dbltap(elem, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, is_userbubble);
+				return this.parent._on_bubble_dbltap(elem, canvasX, canvasY, screenX, screenY, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
 
-	_pComponent.on_dbltap_basic_action = function () {
+	_pComponent.on_dbltap_basic_action = function (elem, canvasX, canvasY, screenX, screenY, refer_comp) {
 	};
 
-	_pComponent.on_dbltap_default_action = function () {
+	_pComponent.on_dbltap_default_action = function (elem, canvasX, canvasY, screenX, screenY, refer_comp) {
 	};
 
-	_pComponent._on_pinchstart = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bZoom) {
-		this._on_bubble_pinchstart(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bZoom, true);
+	_pComponent._on_pinchstart = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange) {
+		var event_bubbles, fire_comp, refer_comp;
+
+		this._on_bubble_pinchstart(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, true);
 
 		var root_comp = this._getFromComponent(this);
 		var listener = root_comp.onpinchstart;
@@ -3039,14 +3150,14 @@ if (nexacro.Component) {
 			if (this._isParentdefaultprevented(root_comp, "pinchstart")) {
 				return true;
 			}
-			this._on_bubble_pinchstart(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bZoom, false);
+			this._on_bubble_pinchstart(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, false);
 		}
 		if (listener && listener.defaultprevented) {
 			return true;
 		}
 	};
 
-	_pComponent._on_bubble_pinchstart = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bZoom, is_userbubble) {
+	_pComponent._on_bubble_pinchstart = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -3057,16 +3168,16 @@ if (nexacro.Component) {
 				refer_comp = this;
 			}
 
-			if (is_userbubble) {
-				this.on_pinchstart_basic_action(elem, touchinfos, accvalue, deltavalue, firstrange, currange, bZoom, refer_comp);
+			if (bubble_scope) {
+				this.on_pinchstart_basic_action(elem, touchinfos, accvalue, deltavalue, firstrange, currange, refer_comp);
 			}
 			else {
-				this.on_pinchstart_default_action(elem, touchinfos, accvalue, deltavalue, firstrange, currange, bZoom, refer_comp);
+				this.on_pinchstart_default_action(elem, touchinfos, accvalue, deltavalue, firstrange, currange, refer_comp);
 			}
 
 			if (this.visible && this._isEnable()) {
-				if (nexacro._enabletouchevent && (!is_userbubble || this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onpinchstart : this.on_fire_sys_onpinchstart;
+				if (nexacro._enabletouchevent && (!bubble_scope || this.enableevent)) {
+					fire_event_func = bubble_scope ? this.on_fire_user_onpinchstart : this.on_fire_sys_onpinchstart;
 					event_bubbles = fire_event_func.call(this, elem, touchinfos, accvalue, deltavalue, this, refer_comp);
 
 					if (event_bubbles === false) {
@@ -3078,36 +3189,38 @@ if (nexacro.Component) {
 			listener = this.onpinchstart;
 			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_pinchstart(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, null, refer_comp, bZoom, is_userbubble);
+					return this.parent._on_bubble_pinchstart(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
-					return this.parent._on_bubble_pinchstart(elem, touchinfos, accvalue, deltavalue, firstrange, currange, false, this, refer_comp, bZoom, is_userbubble);
+					return this.parent._on_bubble_pinchstart(elem, touchinfos, accvalue, deltavalue, firstrange, currange, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
 		else {
 			if (this.visible && this._isEnable()) {
-				if (nexacro._enabletouchevent && (!is_userbubble || this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onpinchstart : this.on_fire_sys_onpinchstart;
+				if (nexacro._enabletouchevent && (!bubble_scope || this.enableevent)) {
+					fire_event_func = bubble_scope ? this.on_fire_user_onpinchstart : this.on_fire_sys_onpinchstart;
 					event_bubbles = fire_event_func.call(this, elem, touchinfos, accvalue, deltavalue, fire_comp, refer_comp);
 				}
 			}
 
 			listener = this.onpinchstart;
 			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
-				return this.parent._on_bubble_pinchstart(elem, touchinfos, accvalue, deltavalue, firstrange, currange, false, fire_comp, refer_comp, bZoom, is_userbubble);
+				return this.parent._on_bubble_pinchstart(elem, touchinfos, accvalue, deltavalue, firstrange, currange, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
 
-	_pComponent.on_pinchstart_basic_action = function () {
+	_pComponent.on_pinchstart_basic_action = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, refer_comp) {
 	};
 
-	_pComponent.on_pinchstart_default_action = function () {
+	_pComponent.on_pinchstart_default_action = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, refer_comp) {
 	};
 
-	_pComponent._on_pinch = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bZoom) {
-		this._on_bubble_pinch(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bZoom, true);
+	_pComponent._on_pinch = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange) {
+		var event_bubbles, fire_comp, refer_comp;
+
+		this._on_bubble_pinch(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, true);
 
 		var root_comp = this._getFromComponent(this);
 		var listener = root_comp.onpinch;
@@ -3115,14 +3228,14 @@ if (nexacro.Component) {
 			if (this._isParentdefaultprevented(root_comp, "pinch")) {
 				return true;
 			}
-			this._on_bubble_pinch(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bZoom, false);
+			this._on_bubble_pinch(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, false);
 		}
 		if (listener && listener.defaultprevented) {
 			return true;
 		}
 	};
 
-	_pComponent._on_bubble_pinch = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bZoom, is_userbubble) {
+	_pComponent._on_bubble_pinch = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -3133,16 +3246,16 @@ if (nexacro.Component) {
 				refer_comp = this;
 			}
 
-			if (is_userbubble) {
-				this.on_pinch_basic_action(elem, touchinfos, accvalue, deltavalue, firstrange, currange, bZoom, refer_comp);
+			if (bubble_scope) {
+				this.on_pinch_basic_action(elem, touchinfos, accvalue, deltavalue, firstrange, currange, refer_comp);
 			}
 			else {
-				this.on_pinch_default_action(elem, touchinfos, accvalue, deltavalue, firstrange, currange, bZoom, refer_comp);
+				this.on_pinch_default_action(elem, touchinfos, accvalue, deltavalue, firstrange, currange, refer_comp);
 			}
 
 			if (this.visible && this._isEnable()) {
-				if (nexacro._enabletouchevent && (!is_userbubble || this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onpinch : this.on_fire_sys_onpinch;
+				if (nexacro._enabletouchevent && (!bubble_scope || this.enableevent)) {
+					fire_event_func = bubble_scope ? this.on_fire_user_onpinch : this.on_fire_sys_onpinch;
 					event_bubbles = fire_event_func.call(this, elem, touchinfos, accvalue, deltavalue, firstrange, currange, this, refer_comp);
 
 					if (event_bubbles === false) {
@@ -3154,45 +3267,47 @@ if (nexacro.Component) {
 			listener = this.onpinch;
 			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_pinch(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, null, refer_comp, bZoom, is_userbubble);
+					return this.parent._on_bubble_pinch(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
-					return this.parent._on_bubble_pinch(elem, touchinfos, accvalue, deltavalue, firstrange, currange, false, this, refer_comp, bZoom, is_userbubble);
+					return this.parent._on_bubble_pinch(elem, touchinfos, accvalue, deltavalue, firstrange, currange, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
 		else {
 			if (this.visible && this._isEnable()) {
-				if (nexacro._enabletouchevent && (!is_userbubble || this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onpinch : this.on_fire_sys_onpinch;
+				if (nexacro._enabletouchevent && (!bubble_scope || this.enableevent)) {
+					fire_event_func = bubble_scope ? this.on_fire_user_onpinch : this.on_fire_sys_onpinch;
 					event_bubbles = fire_event_func.call(this, elem, touchinfos, accvalue, deltavalue, firstrange, currange, fire_comp, refer_comp);
 				}
 			}
 
 			listener = this.onpinch;
 			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
-				return this.parent._on_bubble_pinch(elem, touchinfos, accvalue, deltavalue, firstrange, currange, false, fire_comp, refer_comp, bZoom, is_userbubble);
+				return this.parent._on_bubble_pinch(elem, touchinfos, accvalue, deltavalue, firstrange, currange, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
 
-	_pComponent.on_pinch_basic_action = function () {
+	_pComponent.on_pinch_basic_action = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, refer_comp) {
 	};
 
-	_pComponent.on_pinch_default_action = function () {
+	_pComponent.on_pinch_default_action = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, refer_comp) {
 	};
 
-	_pComponent._on_pinchend = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bZoom) {
-		this._on_bubble_pinchend(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bZoom, true);
+	_pComponent._on_pinchend = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange) {
+		var event_bubbles, fire_comp, refer_comp;
+
+		this._on_bubble_pinchend(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, true);
 
 		var root_comp = this._getFromComponent(this);
 		var listener = root_comp.onpinchend;
 		if (!listener || !listener.defaultprevented) {
-			this._on_bubble_pinchend(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bZoom, false);
+			this._on_bubble_pinchend(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, false);
 		}
 	};
 
-	_pComponent._on_bubble_pinchend = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bZoom, is_userbubble) {
+	_pComponent._on_bubble_pinchend = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -3203,16 +3318,16 @@ if (nexacro.Component) {
 				refer_comp = this;
 			}
 
-			if (is_userbubble) {
-				this.on_pinchend_basic_action(elem, touchinfos, accvalue, deltavalue, firstrange, currange, bZoom, refer_comp);
+			if (bubble_scope) {
+				this.on_pinchend_basic_action(elem, touchinfos, accvalue, deltavalue, firstrange, currange, refer_comp);
 			}
 			else {
-				this.on_pinchend_default_action(elem, touchinfos, accvalue, deltavalue, firstrange, currange, bZoom, refer_comp);
+				this.on_pinchend_default_action(elem, touchinfos, accvalue, deltavalue, firstrange, currange, refer_comp);
 			}
 
 			if (this.visible && this._isEnable()) {
-				if (nexacro._enabletouchevent && (!is_userbubble || this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onpinchend : this.on_fire_sys_onpinchend;
+				if (nexacro._enabletouchevent && (!bubble_scope || this.enableevent)) {
+					fire_event_func = bubble_scope ? this.on_fire_user_onpinchend : this.on_fire_sys_onpinchend;
 					event_bubbles = fire_event_func.call(this, elem, touchinfos, accvalue, deltavalue, this, refer_comp);
 
 					if (event_bubbles === false) {
@@ -3224,62 +3339,55 @@ if (nexacro.Component) {
 			listener = this.onpinchend;
 			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_pinchend(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, null, refer_comp, bZoom, is_userbubble);
+					return this.parent._on_bubble_pinchend(elem, touchinfos, accvalue, deltavalue, firstrange, currange, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
-					return this.parent._on_bubble_pinchend(elem, touchinfos, accvalue, deltavalue, firstrange, currange, false, this, refer_comp, bZoom, is_userbubble);
+					return this.parent._on_bubble_pinchend(elem, touchinfos, accvalue, deltavalue, firstrange, currange, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
 		else {
 			if (this.visible && this._isEnable()) {
-				if (nexacro._enabletouchevent && (!is_userbubble || this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onpinchend : this.on_fire_sys_onpinchend;
+				if (nexacro._enabletouchevent && (!bubble_scope || this.enableevent)) {
+					fire_event_func = bubble_scope ? this.on_fire_user_onpinchend : this.on_fire_sys_onpinchend;
 					event_bubbles = fire_event_func.call(this, elem, touchinfos, accvalue, deltavalue, fire_comp, refer_comp);
 				}
 			}
 
 			listener = this.onpinchend;
 			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
-				return this.parent._on_bubble_pinchend(elem, touchinfos, accvalue, deltavalue, firstrange, currange, false, fire_comp, refer_comp, bZoom, is_userbubble);
+				return this.parent._on_bubble_pinchend(elem, touchinfos, accvalue, deltavalue, firstrange, currange, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
 
-	_pComponent.on_pinchend_basic_action = function () {
+	_pComponent.on_pinchend_basic_action = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, refer_comp) {
 	};
 
-	_pComponent.on_pinchend_default_action = function () {
+	_pComponent.on_pinchend_default_action = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, refer_comp) {
 	};
 
-	_pComponent._on_flingstart = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_flingstart = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen) {
+		var event_bubbles, fire_comp, refer_comp;
+
 		this._on_bubble_flingstart(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, true);
 
-		var root_comp = this._getFromComponent(this);
-		var listener = root_comp.onflingstart;
-		if (!listener || !listener.defaultprevented) {
-			if (this._isParentdefaultprevented(root_comp, "flingstart")) {
-				return true;
-			}
-			this._on_bubble_flingstart(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, false);
-		}
-		if (listener && listener.defaultprevented) {
-			return true;
-		}
+		this._on_bubble_flingstart(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, false);
 	};
 
-	_pComponent._on_bubble_flingstart = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, is_userbubble) {
+	_pComponent._on_bubble_flingstart = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
 
-		var listener, fire_event_func;
+		var fire_event_func = bubble_scope ? this.on_fire_user_onflingstart : this.on_fire_sys_onflingstart;
+
 		if (event_bubbles === undefined) {
 			if (!refer_comp) {
 				refer_comp = this;
 			}
 
-			if (is_userbubble) {
+			if (bubble_scope) {
 				this.on_flingstart_basic_action(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, refer_comp);
 			}
 			else {
@@ -3287,76 +3395,63 @@ if (nexacro.Component) {
 			}
 
 			if (this.visible && this._isEnable()) {
-				if (!is_userbubble || (nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onflingstart : this.on_fire_sys_onflingstart;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
 					event_bubbles = fire_event_func.call(this, elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, this, refer_comp);
-
 					if (event_bubbles === false) {
 						event_bubbles = undefined;
 					}
 				}
 			}
 
-			listener = this.onflingstart;
-			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application && !this._is_track) {
+			if (event_bubbles !== true && this.parent && !this.parent._is_application && !this._is_track) {
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_flingstart(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, null, refer_comp, is_userbubble);
+					return this.parent._on_bubble_flingstart(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
-					return this.parent._on_bubble_flingstart(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, false, this, refer_comp, is_userbubble);
+					return this.parent._on_bubble_flingstart(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
 		else {
 			if (this.visible && this._isEnable()) {
-				if (!is_userbubble || (nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onflingstart : this.on_fire_sys_onflingstart;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
 					event_bubbles = fire_event_func.call(this, elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, fire_comp, refer_comp);
 				}
 			}
 
-			listener = this.onflingstart;
-			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application && !this._is_track) {
-				return this.parent._on_bubble_flingstart(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, false, fire_comp, refer_comp, is_userbubble);
+			if (event_bubbles !== true && this.parent && !this.parent._is_application && !this._is_track) {
+				return this.parent._on_bubble_flingstart(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
 
-	_pComponent.on_flingstart_basic_action = function () {
+	_pComponent.on_flingstart_basic_action = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, refer_comp) {
 	};
 
-	_pComponent.on_flingstart_default_action = function () {
+	_pComponent.on_flingstart_default_action = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, refer_comp) {
 	};
 
-	_pComponent._on_fling = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_fling = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen) {
+		var event_bubbles, fire_comp, refer_comp;
+
 		this._on_bubble_fling(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, true);
 
-		var root_comp = this._getFromComponent(this);
-		var listener = root_comp.onfling;
-		if (!listener || !listener.defaultprevented) {
-			if (this._isParentdefaultprevented(root_comp, "fling")) {
-				return true;
-			}
-			this._on_bubble_fling(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, false);
-		}
-		if (listener && listener.defaultprevented) {
-			return true;
-		}
+		this._on_bubble_fling(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, false);
 	};
 
-	_pComponent._on_bubble_fling = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, is_userbubble) {
+	_pComponent._on_bubble_fling = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
 
-		var pThis = this._getFromComponent(this);
-		var listener, fire_event_func;
+		var fire_event_func = bubble_scope ? this.on_fire_user_onfling : this.on_fire_sys_onfling;
+
 		if (event_bubbles === undefined) {
 			if (!refer_comp) {
 				refer_comp = this;
 			}
 
-			if (is_userbubble) {
+			if (bubble_scope) {
 				this.on_fling_basic_action(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, refer_comp);
 			}
 			else {
@@ -3364,87 +3459,66 @@ if (nexacro.Component) {
 			}
 
 			if (this.visible && this._isEnable()) {
-				if ((!is_userbubble && (!pThis.onfling || (pThis.onfling && !pThis.onfling.defaultprevented)))
-					 || (is_userbubble && nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onfling : this.on_fire_sys_onfling;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
 					event_bubbles = fire_event_func.call(this, elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, this, refer_comp);
-
 					if (event_bubbles === false) {
 						event_bubbles = undefined;
 					}
 				}
 			}
 
-			listener = this.onfling;
-			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application && !this._is_track) {
+			if (event_bubbles !== true && this.parent && !this.parent._is_application && !this._is_track) {
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_fling(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, null, refer_comp, is_userbubble);
+					return this.parent._on_bubble_fling(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
-					return this.parent._on_bubble_fling(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, false, this, refer_comp, is_userbubble);
+					return this.parent._on_bubble_fling(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
 		else {
 			if (this.visible && this._isEnable()) {
-				if ((!is_userbubble && (!pThis.onfling || (pThis.onfling && !pThis.onfling.defaultprevented)))
-					 || (is_userbubble && nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onfling : this.on_fire_sys_onfling;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
 					event_bubbles = fire_event_func.call(this, elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, fire_comp, refer_comp);
 				}
 			}
 
-			listener = this.onfling;
-			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application && !this._is_track) {
-				return this.parent._on_bubble_fling(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, false, fire_comp, refer_comp, is_userbubble);
+			if (event_bubbles !== true && this.parent && !this.parent._is_application && !this._is_track) {
+				return this.parent._on_bubble_fling(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
 
-	_pComponent.on_fling_basic_action = function () {
+	_pComponent.on_fling_basic_action = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, refer_comp) {
 	};
 
-	_pComponent.on_fling_default_action = function () {
+	_pComponent.on_fling_default_action = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, refer_comp) {
 	};
 
-	_pComponent._on_flingend = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_flingend = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen) {
+		var event_bubbles, fire_comp, refer_comp;
+
 		this._on_bubble_flingend(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, true);
 
-		var root_comp = this._getFromComponent(this);
-		var listener = root_comp.onflingend;
-		if (!listener || !listener.defaultprevented) {
-			this._on_bubble_flingend(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, false);
-		}
+		this._on_bubble_flingend(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, false);
 
-		if (this instanceof nexacro.Form) {
-			if (nexacro._OS == "iOS") {
-				var _win = this._getWindow();
-				var cur_focus_paths = _win.getCurrentFocusPaths();
-				var focused_comp = cur_focus_paths[cur_focus_paths.length - 1];
-				var input_elem = focused_comp._input_element;
-
-				if (input_elem) {
-					nexacro._deleteRefreshNode();
-					nexacro._refreshCaret();
-				}
-			}
-		}
 		this._is_bubble_fling_v = undefined;
 		this._is_bubble_fling_h = undefined;
 	};
 
-	_pComponent._on_bubble_flingend = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, is_userbubble) {
+	_pComponent._on_bubble_flingend = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
 
-		var listener, fire_event_func;
+		var fire_event_func = bubble_scope ? this.on_fire_user_onflingend : this.on_fire_sys_onflingend;
+
 		if (event_bubbles === undefined) {
 			if (!refer_comp) {
 				refer_comp = this;
 			}
 
-			if (is_userbubble) {
+			if (bubble_scope) {
 				this.on_flingend_basic_action(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, refer_comp);
 			}
 			else {
@@ -3452,43 +3526,44 @@ if (nexacro.Component) {
 			}
 
 			if (this.visible && this._isEnable()) {
-				if (!is_userbubble || (nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onflingend : this.on_fire_sys_onflingend;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
 					event_bubbles = fire_event_func.call(this, elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, this, refer_comp);
-
 					if (event_bubbles === false) {
 						event_bubbles = undefined;
 					}
 				}
 			}
 
-			listener = this.onflingend;
-			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application && !this._is_track) {
+			if (event_bubbles !== true && this.parent && !this.parent._is_application && !this._is_track) {
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_flingend(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, null, refer_comp, is_userbubble);
+					return this.parent._on_bubble_flingend(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
-					return this.parent._on_bubble_flingend(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, false, this, refer_comp, is_userbubble);
+					return this.parent._on_bubble_flingend(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
 		else {
 			if (this.visible && this._isEnable()) {
-				if (!is_userbubble || (nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onflingend : this.on_fire_sys_onflingend;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
 					event_bubbles = fire_event_func.call(this, elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, fire_comp, refer_comp);
 				}
 			}
 
-			listener = this.onflingend;
-			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application && !this._is_track) {
-				return this.parent._on_bubble_flingend(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, false, fire_comp, refer_comp, is_userbubble);
+			if (event_bubbles !== true && this.parent && !this.parent._is_application && !this._is_track) {
+				return this.parent._on_bubble_flingend(elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
 
 	_pComponent.on_flingend_basic_action = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, refer_comp) {
 		var pThis = this;
+		var scroll_comp = fling_handler._scroll_comp;
+
+		if (scroll_comp && pThis != scroll_comp) {
+			pThis = scroll_comp;
+		}
+
 		while ((!pThis._is_frame && !pThis._getScrollable()) || !pThis._isEnable()) {
 			pThis = pThis.parent;
 		}
@@ -3507,10 +3582,12 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_flingend_default_action = function () {
+	_pComponent.on_flingend_default_action = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, refer_comp) {
 	};
 
-	_pComponent._on_longpress = function (elem, touchinfos, event_bubbles, fire_comp, refer_comp) {
+	_pComponent._on_longpress = function (elem, touchinfos) {
+		var event_bubbles, fire_comp, refer_comp;
+
 		this._on_bubble_longpress(elem, touchinfos, event_bubbles, fire_comp, refer_comp, true);
 
 		var root_comp = this._getFromComponent(this);
@@ -3520,7 +3597,7 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent._on_bubble_longpress = function (elem, touchinfos, event_bubbles, fire_comp, refer_comp, is_userbubble) {
+	_pComponent._on_bubble_longpress = function (elem, touchinfos, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
@@ -3531,15 +3608,15 @@ if (nexacro.Component) {
 				refer_comp = this;
 			}
 
-			if (is_userbubble) {
+			if (bubble_scope) {
 				this.on_longpress_basic_action(elem, touchinfos, refer_comp);
 			}
 			else {
 				this.on_longpress_default_action(elem, touchinfos, refer_comp);
 			}
 
-			if (this.visible && this._isEnable() && (!is_userbubble || this.enableevent)) {
-				fire_event_func = is_userbubble ? this.on_fire_user_onlongpress : this.on_fire_sys_onlongpress;
+			if (this.visible && this._isEnable() && (!bubble_scope || this.enableevent)) {
+				fire_event_func = bubble_scope ? this.on_fire_user_onlongpress : this.on_fire_sys_onlongpress;
 				event_bubbles = fire_event_func.call(this, elem, touchinfos, this, refer_comp);
 
 				if (event_bubbles === false) {
@@ -3550,27 +3627,27 @@ if (nexacro.Component) {
 			listener = this.onlongpress;
 			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_longpress(elem, touchinfos, event_bubbles, null, refer_comp, is_userbubble);
+					return this.parent._on_bubble_longpress(elem, touchinfos, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
-					return this.parent._on_bubble_longpress(elem, touchinfos, false, this, refer_comp, is_userbubble);
+					return this.parent._on_bubble_longpress(elem, touchinfos, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
 		else {
-			if (this.visible && this._isEnable() && (!is_userbubble || this.enableevent)) {
-				fire_event_func = is_userbubble ? this.on_fire_user_onlongpress : this.on_fire_sys_onlongpress;
+			if (this.visible && this._isEnable() && (!bubble_scope || this.enableevent)) {
+				fire_event_func = bubble_scope ? this.on_fire_user_onlongpress : this.on_fire_sys_onlongpress;
 				event_bubbles = fire_event_func.call(this, elem, touchinfos, fire_comp, refer_comp);
 			}
 
 			listener = this.onlongpress;
 			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
-				return this.parent._on_bubble_longpress(elem, touchinfos, false, fire_comp, refer_comp, is_userbubble);
+				return this.parent._on_bubble_longpress(elem, touchinfos, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
 
-	_pComponent.on_longpress_basic_action = function () {
+	_pComponent.on_longpress_basic_action = function (elem, touchinfos, refer_comp) {
 	};
 
 	_pComponent.on_longpress_default_action = function (elem, touchinfos, refer_comp) {
@@ -3586,134 +3663,117 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent._on_slidestart = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bScroll) {
-		this._on_bubble_slidestart(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bScroll, true);
+	_pComponent._on_slidestart = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue) {
+		var event_bubbles, fire_comp, refer_comp;
 
-		var root_comp = this._getFromComponent(this);
-		var listener = root_comp.onslidestart;
-		if (!listener || !listener.defaultprevented) {
-			if (this._isParentdefaultprevented(root_comp, "slidestart")) {
-				return true;
-			}
+		this._on_bubble_slidestart(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, true);
 
-			this._on_bubble_slidestart(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bScroll, false);
-		}
-		if (listener && listener.defaultprevented) {
-			return true;
-		}
+		this._on_bubble_slidestart(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, false);
 	};
 
-	_pComponent._on_bubble_slidestart = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bScroll, is_userbubble) {
+	_pComponent._on_bubble_slidestart = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
 
-		var listener, fire_event_func;
+		var fire_event_func = bubble_scope ? this.on_fire_user_onslidestart : this.on_fire_sys_onslidestart;
+
 		if (event_bubbles === undefined) {
 			if (!refer_comp) {
 				refer_comp = this;
 			}
 
-			if (is_userbubble) {
-				this.on_slidestart_basic_action(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, bScroll, refer_comp);
+			if (bubble_scope) {
+				this.on_slidestart_basic_action(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp);
 			}
 			else {
-				this.on_slidestart_default_action(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, bScroll, refer_comp);
+				this.on_slidestart_default_action(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp);
 			}
 
 			if (this.visible && this._isEnable()) {
-				if (!is_userbubble || (nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onslidestart : this.on_fire_sys_onslidestart;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
 					event_bubbles = fire_event_func.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, this, refer_comp);
-
 					if (event_bubbles === false) {
 						event_bubbles = undefined;
 					}
 				}
 			}
 
-			listener = this.onslidestart;
-			if ((!listener || (!listener.stoppropagation)) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
+			if (event_bubbles !== true && this.parent && !this.parent._is_application) {
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_slidestart(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, null, refer_comp, bScroll, is_userbubble);
+					return this.parent._on_bubble_slidestart(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
-					return this.parent._on_bubble_slidestart(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, false, this, refer_comp, bScroll, is_userbubble);
+					return this.parent._on_bubble_slidestart(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
 		else {
 			if (this.visible && this._isEnable()) {
-				if (!is_userbubble || (nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onslidestart : this.on_fire_sys_onslidestart;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
 					event_bubbles = fire_event_func.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, fire_comp, refer_comp);
 				}
 			}
 
-			listener = this.onslidestart;
-			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
-				return this.parent._on_bubble_slidestart(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, false, fire_comp, refer_comp, bScroll, is_userbubble);
+			if (event_bubbles !== true && this.parent && !this.parent._is_application) {
+				return this.parent._on_bubble_slidestart(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
 
-	_pComponent.on_slidestart_basic_action = function () {
+	_pComponent.on_slidestart_basic_action = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp) {
 	};
 
-	_pComponent.on_slidestart_default_action = function () {
+	_pComponent.on_slidestart_default_action = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp) {
 	};
 
-	_pComponent._on_slide = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bScroll) {
-		this._on_bubble_slide(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bScroll, true);
+	_pComponent._on_slide = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue) {
+		var event_bubbles, fire_comp, refer_comp;
 
-		var root_comp = this._getFromComponent(this);
-		var listener = root_comp.onslide;
-		if (!listener || !listener.defaultprevented) {
-			if (this._isParentdefaultprevented(root_comp, "slide")) {
-				return true;
-			}
-			this._on_bubble_slide(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bScroll, false);
-		}
-		if (listener && listener.defaultprevented) {
-			return true;
-		}
+		this._on_bubble_slide(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, true);
+
+		this._on_bubble_slide(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, false);
 	};
 
-	_pComponent._on_bubble_slide = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bScroll, is_userbubble) {
+	_pComponent._on_bubble_slide = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
 
-		var pThis = this._getFromComponent(this);
-		var listener, fire_event_func;
+		var fire_event_func = bubble_scope ? this.on_fire_user_onslide : this.on_fire_sys_onslide;
+
 		if (event_bubbles === undefined) {
 			if (!refer_comp) {
 				refer_comp = this;
 			}
 
-			if (is_userbubble) {
-				this.on_slide_basic_action(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, bScroll, refer_comp);
+			if (bubble_scope) {
+				this.on_slide_basic_action(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp);
 			}
 			else {
-				this.on_slide_default_action(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, bScroll, refer_comp);
+				this.on_slide_default_action(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp);
 			}
 
 			if (this.visible && this._isEnable()) {
-				if ((!is_userbubble && (!pThis.onslide || (pThis.onslide && !pThis.onslide.defaultprevented)))
-					 || (is_userbubble && nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onslide : this.on_fire_sys_onslide;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
 					event_bubbles = fire_event_func.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, this, refer_comp);
-
 					if (event_bubbles === false) {
 						event_bubbles = undefined;
 					}
 				}
 			}
 
-			listener = this.onslide;
-			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent) {
-				if (this.parent._is_application) {
-					if (!is_userbubble && touch_manager._scroll_comp == null && !nexacro._cur_track_info) {
+			if (event_bubbles !== true && this.parent) {
+				if (!this.parent._is_application) {
+					if (this._is_subcontrol) {
+						return this.parent._on_bubble_slide(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, null, refer_comp, bubble_scope);
+					}
+					else {
+						return this.parent._on_bubble_slide(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, false, this, refer_comp, bubble_scope);
+					}
+				}
+				else {
+					if (!bubble_scope && touch_manager._scroll_comp == null && !nexacro._cur_track_info) {
 						if (nexacro._allow_default_pinchzoom && xdeltavalue != 0 && Math.abs(xdeltavalue) > Math.abs(ydeltavalue)) {
 							touch_manager._scroll_end = true;
 							touch_manager._scroll_direction = (xdeltavalue > 0) ? -10 : 10;
@@ -3723,30 +3783,22 @@ if (nexacro.Component) {
 							touch_manager._scroll_direction = (ydeltavalue > 0) ? -1 : 1;
 						}
 					}
-					return;
-				}
-
-				if (this._is_subcontrol) {
-					return this.parent._on_bubble_slide(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, null, refer_comp, bScroll, is_userbubble);
-				}
-				else {
-					return this.parent._on_bubble_slide(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, false, this, refer_comp, bScroll, is_userbubble);
 				}
 			}
 		}
 		else {
 			if (this.visible && this._isEnable()) {
-				if ((!is_userbubble && (!pThis.onslide || (pThis.onslide && !pThis.onslide.defaultprevented)))
-					 || (is_userbubble && nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onslide : this.on_fire_sys_onslide;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
 					event_bubbles = fire_event_func.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, fire_comp, refer_comp);
 				}
 			}
 
-			listener = this.onslide;
-			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent) {
-				if (this.parent._is_application) {
-					if (!is_userbubble && touch_manager._scroll_comp == null && !nexacro._cur_track_info) {
+			if (event_bubbles !== true && this.parent) {
+				if (!this.parent._is_application) {
+					return this.parent._on_bubble_slide(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, false, fire_comp, refer_comp, bubble_scope);
+				}
+				else {
+					if (!bubble_scope && touch_manager._scroll_comp == null && !nexacro._cur_track_info) {
 						if (nexacro._allow_default_pinchzoom && xdeltavalue != 0 && Math.abs(xdeltavalue) > Math.abs(ydeltavalue)) {
 							touch_manager._scroll_end = true;
 							touch_manager._scroll_direction = (xdeltavalue > 0) ? -10 : 10;
@@ -3756,86 +3808,83 @@ if (nexacro.Component) {
 							touch_manager._scroll_direction = (ydeltavalue > 0) ? -1 : 1;
 						}
 					}
-					return;
 				}
-
-				return this.parent._on_bubble_slide(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, false, fire_comp, refer_comp, bScroll, is_userbubble);
 			}
 		}
 	};
 
-	_pComponent.on_slide_basic_action = function () {
+	_pComponent.on_slide_basic_action = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp) {
 	};
 
-	_pComponent.on_slide_default_action = function () {
+	_pComponent.on_slide_default_action = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp) {
 	};
 
-	_pComponent._on_slideend = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bScroll) {
-		this._on_bubble_slideend(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bScroll, true);
+	_pComponent._on_slideend = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue) {
+		var event_bubbles, fire_comp, refer_comp;
 
-		var root_comp = this._getFromComponent(this);
-		var listener = root_comp.onslideend;
-		if (!listener || !listener.defaultprevented) {
-			this._on_bubble_slideend(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bScroll, false);
-		}
+		this._on_bubble_slideend(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, true);
+
+		this._on_bubble_slideend(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, false);
 	};
 
-	_pComponent._on_bubble_slideend = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bScroll, is_userbubble) {
+	_pComponent._on_bubble_slideend = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, fire_comp, refer_comp, bubble_scope) {
 		if (!this._is_alive) {
 			return;
 		}
 
-		var listener, fire_event_func;
+		var fire_event_func = bubble_scope ? this.on_fire_user_onslideend : this.on_fire_sys_onslideend;
+
 		if (event_bubbles === undefined) {
 			if (!refer_comp) {
 				refer_comp = this;
 			}
 
-			if (is_userbubble) {
-				this.on_slideend_basic_action(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, bScroll, refer_comp);
+			if (bubble_scope) {
+				this.on_slideend_basic_action(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp);
 			}
 			else {
-				this.on_slideend_default_action(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, bScroll, refer_comp);
+				this.on_slideend_default_action(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp);
 			}
 
 			if (this.visible && this._isEnable()) {
-				if (!is_userbubble || (nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onslideend : this.on_fire_sys_onslideend;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
 					event_bubbles = fire_event_func.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, this, refer_comp);
-
 					if (event_bubbles === false) {
 						event_bubbles = undefined;
 					}
 				}
 			}
 
-			listener = this.onslideend;
-			if ((!listener || (!listener.stoppropagation)) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
+			if (event_bubbles !== true && this.parent && !this.parent._is_application) {
 				if (this._is_subcontrol) {
-					return this.parent._on_bubble_slideend(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, null, refer_comp, bScroll, is_userbubble);
+					return this.parent._on_bubble_slideend(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, event_bubbles, null, refer_comp, bubble_scope);
 				}
 				else {
-					return this.parent._on_bubble_slideend(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, false, this, refer_comp, bScroll, is_userbubble);
+					return this.parent._on_bubble_slideend(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, false, this, refer_comp, bubble_scope);
 				}
 			}
 		}
 		else {
 			if (this.visible && this._isEnable()) {
-				if (!is_userbubble || (nexacro._enabletouchevent && this.enableevent)) {
-					fire_event_func = is_userbubble ? this.on_fire_user_onslideend : this.on_fire_sys_onslideend;
+				if (!bubble_scope || (nexacro._enabletouchevent && this.enableevent)) {
 					event_bubbles = fire_event_func.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, fire_comp, refer_comp);
 				}
 			}
 
-			listener = this.onslideend;
-			if ((!listener || !listener.stoppropagation) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
-				return this.parent._on_bubble_slideend(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, false, fire_comp, refer_comp, bScroll, is_userbubble);
+			if (event_bubbles !== true && this.parent && !this.parent._is_application) {
+				return this.parent._on_bubble_slideend(elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, false, fire_comp, refer_comp, bubble_scope);
 			}
 		}
 	};
 
-	_pComponent.on_slideend_basic_action = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, bScroll, refer_comp) {
+	_pComponent.on_slideend_basic_action = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp) {
 		var pThis = this;
+		var scroll_comp = touch_manager._scroll_comp;
+
+		if (scroll_comp && pThis != scroll_comp) {
+			pThis = scroll_comp;
+		}
+
 		while ((!pThis._is_frame && !pThis._getScrollable()) || !pThis._isEnable()) {
 			pThis = pThis.parent;
 		}
@@ -3863,11 +3912,12 @@ if (nexacro.Component) {
 		}
 	};
 
-	_pComponent.on_slideend_default_action = function () {
+	_pComponent.on_slideend_default_action = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp) {
 	};
 
+	_pComponent._on_accessibilitygesture = function (direction) {
+		var event_bubbles, fire_comp, refer_comp;
 
-	_pComponent._on_accessibilitygesture = function (direction, event_bubbles, fire_comp, refer_comp) {
 		var pThis = this;
 		var ret = this._on_bubble_accessibilitygesture(direction, event_bubbles, fire_comp, refer_comp, true);
 
@@ -3932,17 +3982,94 @@ if (nexacro.Component) {
 	_pComponent.on_accessibilitygesture_default_action = function () {
 	};
 
-	_pComponent._on_starttrack = nexacro._emptyFn;
-	_pComponent._on_movetrack = nexacro._emptyFn;
-	_pComponent._on_endtrack = nexacro._emptyFn;
+	_pComponent._on_devicebuttonup = function (button) {
+		var event_bubbles, fire_comp, refer_comp;
 
-	_pComponent._on_startrepeat = nexacro._emptyFn;
-	_pComponent._on_repeat = nexacro._emptyFn;
-	_pComponent._on_endrepeat = nexacro._emptyFn;
+		var ret = this._on_bubble_devicebuttonup(button, event_bubbles, fire_comp, refer_comp, true);
+		var pThis = this._getFromComponent(this);
+		if (pThis && (!pThis.ondevicebuttonup || !pThis.ondevicebuttonup.defaultprevented)) {
+			this.on_ondevicebuttonup_default_action(button);
+			ret = this._on_bubble_devicebuttonup(button, event_bubbles, fire_comp, refer_comp, false);
+		}
+		return ret;
+	};
 
-	_pComponent.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent._on_bubble_devicebuttonup = function (button, event_bubbles, fire_comp, refer_comp, bubble_scope) {
+		if (!this._is_alive) {
+			return;
+		}
+
+		if (event_bubbles === undefined) {
+			if (!refer_comp) {
+				refer_comp = this;
+			}
+
+			if (this.visible && this._isEnable()) {
+				if (bubble_scope) {
+					event_bubbles = this.on_fire_user_ondevicebuttonup(button, this, refer_comp);
+				}
+				else {
+					event_bubbles = this.on_fire_sys_ondevicebuttonup(button, this, refer_comp);
+				}
+				if (event_bubbles === false) {
+					event_bubbles = undefined;
+				}
+			}
+			if ((!this.ondevicebuttonup || (this.ondevicebuttonup && !this.ondevicebuttonup.stoppropagation)) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
+				if (this._is_subcontrol) {
+					return this.parent._on_bubble_devicebuttonup(button, event_bubbles, null, refer_comp, bubble_scope);
+				}
+				else {
+					return this.parent._on_bubble_devicebuttonup(button, false, this, refer_comp, bubble_scope);
+				}
+			}
+		}
+		else {
+			if (this.visible && this._isEnable()) {
+				if (bubble_scope) {
+					event_bubbles = this.on_fire_user_ondevicebuttonup(button, fire_comp, refer_comp);
+				}
+				else {
+					event_bubbles = this.on_fire_sys_ondevicebuttonup(button, fire_comp, refer_comp);
+				}
+			}
+			if ((!this.ondevicebuttonup || (this.ondevicebuttonup && !this.ondevicebuttonup.stoppropagation)) && (event_bubbles !== true) && this.parent && !this.parent._is_application) {
+				return this.parent._on_bubble_devicebuttonup(button, false, fire_comp, refer_comp, bubble_scope);
+			}
+		}
+	};
+
+	_pComponent.on_fire_user_ondevicebuttonup = function (button, fire_comp, refer_comp) {
+		if (this.ondevicebuttonup && this.ondevicebuttonup._has_handlers) {
+			var evt = new nexacro.DeviceButtonEventInfo(this, "ondevicebuttonup", button, fire_comp, refer_comp);
+			return this.ondevicebuttonup._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pComponent.on_fire_sys_ondevicebuttonup = function (button, from_comp, from_refer_comp) {
+		if (this.ondevicebuttonup && this.ondevicebuttonup._has_handlers) {
+			var evt = new nexacro.DeviceButtonEventInfo(this, "ondevicebuttonup", button, from_comp, from_refer_comp);
+			return this.ondevicebuttonup._fireSysEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pComponent.on_fire_ondevicebuttonup = function (button, from_comp, from_refer_comp) {
+		if (this.ondevicebuttonup && this.ondevicebuttonup._has_handlers) {
+			var evt = new nexacro.DeviceButtonEventInfo(this, "ondevicebuttonup", button, from_comp, from_refer_comp);
+			return this.ondevicebuttonup._fireEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pComponent.on_ondevicebuttonup_default_action = function (button) {
+	};
+
+
+	_pComponent.on_fire_onclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onclick && this.onclick._has_handlers) {
-			var evt = new nexacro.ClickEventInfo(this, "onclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.ClickEventInfo(this, "onclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			var ret = this.onclick._fireEvent(this, evt);
 			evt.destroy();
 			return ret;
@@ -3950,19 +4077,19 @@ if (nexacro.Component) {
 		return false;
 	};
 
-	_pComponent.on_fire_ondblclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		nexacro._fireBeforeDblclick(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+	_pComponent.on_fire_ondblclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		nexacro._fireBeforeDblclick(this, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 
 		if (this.ondblclick && this.ondblclick._has_handlers) {
-			var evt = new nexacro.ClickEventInfo(this, "ondblclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.ClickEventInfo(this, "ondblclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.ondblclick._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_onkillfocus = function (newobj, newreferobj, from_comp, from_refer_comp) {
+	_pComponent.on_fire_onkillfocus = function (newobj, newreferobj) {
 		if (this.onkillfocus && this.onkillfocus._has_handlers) {
-			var evt = new nexacro.KillFocusEventInfo(this, "onkillfocus", newobj, newreferobj, from_comp, from_refer_comp);
+			var evt = new nexacro.KillFocusEventInfo(this, "onkillfocus", newobj, newreferobj);
 			return this.onkillfocus._fireEvent(this, evt);
 		}
 		return false;
@@ -3976,50 +4103,74 @@ if (nexacro.Component) {
 		return false;
 	};
 
-	_pComponent.on_fire_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+	_pComponent.on_fire_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
 		if (this.onkeydown && this.onkeydown._has_handlers) {
-			var evt = new nexacro.KeyEventInfo(this, "onkeydown", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp);
+			var evt = new nexacro.KeyEventInfo(this, "onkeydown", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp, meta_key);
 			return this.onkeydown._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+	_pComponent.on_fire_sys_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
 		if (this.onkeydown && this.onkeydown._has_handlers) {
-			var evt = new nexacro.KeyEventInfo(this, "onkeydown", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp);
+			var evt = new nexacro.KeyEventInfo(this, "onkeydown", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp, meta_key);
 			return this.onkeydown._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+	_pComponent.on_fire_user_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
 		if (this.onkeydown && this.onkeydown._has_handlers) {
-			var evt = new nexacro.KeyEventInfo(this, "onkeydown", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp);
+			var evt = new nexacro.KeyEventInfo(this, "onkeydown", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp, meta_key);
 			return this.onkeydown._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+	_pComponent.on_fire_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
 		if (this.onkeyup && this.onkeyup._has_handlers) {
-			var evt = new nexacro.KeyEventInfo(this, "onkeyup", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp);
+			var evt = new nexacro.KeyEventInfo(this, "onkeyup", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp, meta_key);
 			return this.onkeyup._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+	_pComponent.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
 		if (this.onkeyup && this.onkeyup._has_handlers) {
-			var evt = new nexacro.KeyEventInfo(this, "onkeyup", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp);
+			var evt = new nexacro.KeyEventInfo(this, "onkeyup", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp, meta_key);
 			return this.onkeyup._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
+	_pComponent.on_fire_user_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
 		if (this.onkeyup && this.onkeyup._has_handlers) {
-			var evt = new nexacro.KeyEventInfo(this, "onkeyup", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp);
+			var evt = new nexacro.KeyEventInfo(this, "onkeyup", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp, meta_key);
 			return this.onkeyup._fireUserEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pComponent.on_fire_onimeaction = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
+		if (this.onimeaction && this.onimeaction._has_handlers) {
+			var evt = new nexacro.KeyEventInfo(this, "onimeaction", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp, meta_key);
+			return this.onimeaction._fireEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pComponent.on_fire_sys_onimeaction = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
+		if (this.onimeaction && this.onimeaction._has_handlers) {
+			var evt = new nexacro.KeyEventInfo(this, "onimeaction", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp, meta_key);
+			return this.onimeaction._fireSysEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pComponent.on_fire_user_onimeaction = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
+		if (this.onimeaction && this.onimeaction._has_handlers) {
+			var evt = new nexacro.KeyEventInfo(this, "onimeaction", alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp, meta_key);
+			return this.onimeaction._fireUserEvent(this, evt);
 		}
 		return false;
 	};
@@ -4032,365 +4183,454 @@ if (nexacro.Component) {
 		return false;
 	};
 
-	_pComponent.on_fire_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onlbuttondown && this.onlbuttondown._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onlbuttondown._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_sys_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onlbuttondown && this.onlbuttondown._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onlbuttondown._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onlbuttondown && this.onlbuttondown._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onlbuttondown._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onlbuttonup && this.onlbuttonup._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onlbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onlbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onlbuttonup._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem) {
+	_pComponent.on_fire_sys_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
 		if (this.onlbuttonup && this.onlbuttonup._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onlbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onlbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onlbuttonup._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem) {
+	_pComponent.on_fire_user_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
 		if (this.onlbuttonup && this.onlbuttonup._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onlbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onlbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onlbuttonup._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onrbuttondown && this.onrbuttondown._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onrbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onrbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onrbuttondown._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_sys_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onrbuttondown && this.onrbuttondown._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onrbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onrbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onrbuttondown._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_user_onrbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onrbuttondown && this.onrbuttondown._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onrbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onrbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onrbuttondown._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onrbuttonup && this.onrbuttonup._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onrbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onrbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onrbuttonup._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem) {
+	_pComponent.on_fire_sys_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
 		if (this.onrbuttonup && this.onrbuttonup._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onrbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onrbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onrbuttonup._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem) {
+	_pComponent.on_fire_user_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem, meta_key) {
 		if (this.onrbuttonup && this.onrbuttonup._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onrbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onrbuttonup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onrbuttonup._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmouseup && this.onmouseup._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmouseup._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem) {
+	_pComponent.on_fire_sys_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmouseup && this.onmouseup._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmouseup._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, from_elem) {
+	_pComponent.on_fire_user_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmouseup && this.onmouseup._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmouseup._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmousedown && this.onmousedown._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmousedown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmousedown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmousedown._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_sys_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmousedown && this.onmousedown._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmousedown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmousedown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmousedown._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_user_onmousedown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmousedown && this.onmousedown._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmousedown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmousedown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmousedown._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmouseenter && this.onmouseenter._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmouseenter", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmouseenter", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmouseenter._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_sys_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmouseenter && this.onmouseenter._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmouseenter", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmouseenter", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmouseenter._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_user_onmouseenter = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmouseenter && this.onmouseenter._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmouseenter", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmouseenter", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmouseenter._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmouseleave && this.onmouseleave._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmouseleave", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmouseleave", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmouseleave._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_sys_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmouseleave && this.onmouseleave._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmouseleave", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmouseleave", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmouseleave._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_user_onmouseleave = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmouseleave && this.onmouseleave._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmouseleave", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmouseleave", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmouseleave._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmousemove && this.onmousemove._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmousemove", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmousemove", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmousemove._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_sys_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmousemove && this.onmousemove._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmousemove", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmousemove", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmousemove._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_user_onmousemove = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmousemove && this.onmousemove._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onmousemove", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onmousemove", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onmousemove._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_onmousewheel = function (wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_onmousewheel = function (wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmousewheel && this.onmousewheel._has_handlers) {
-			var evt = new nexacro.MouseWheelEventInfo(this, "onmousewheel", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, wheelDeltaY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseWheelEventInfo(this, "onmousewheel", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, wheelDeltaY, from_comp, from_refer_comp, meta_key);
 			return this.onmousewheel._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onmousewheel = function (wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_sys_onmousewheel = function (wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmousewheel && this.onmousewheel._has_handlers) {
-			var evt = new nexacro.MouseWheelEventInfo(this, "onmousewheel", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, wheelDeltaY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseWheelEventInfo(this, "onmousewheel", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, wheelDeltaY, from_comp, from_refer_comp, meta_key);
 			return this.onmousewheel._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_onmousewheel = function (wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_user_onmousewheel = function (wheelDeltaX, wheelDeltaY, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmousewheel && this.onmousewheel._has_handlers) {
-			var evt = new nexacro.MouseWheelEventInfo(this, "onmousewheel", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, wheelDeltaY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseWheelEventInfo(this, "onmousewheel", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, wheelDeltaY, from_comp, from_refer_comp, meta_key);
 			return this.onmousewheel._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_ondrag = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, refer_comp, self_refer_comp) {
+	_pComponent.on_fire_ondrag = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, refer_comp, self_refer_comp, meta_key) {
 		if (this.ondrag && this.ondrag._has_handlers) {
 			var dragData = this._getDragData();
-			var evt = new nexacro.DragEventInfo(this, "ondrag", dragData, null, "text", null, this, self_refer_comp, from_comp, refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
+			var evt = new nexacro.DragEventInfo(this, "ondrag", dragData, null, "text", null, this, self_refer_comp, from_comp, refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
 			return [this.ondrag._fireEvent(this, evt), this, self_refer_comp, dragData, evt.userdata];
 		}
 		return [false];
 	};
 
-	_pComponent.on_fire_sys_ondrag = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, refer_comp, self_refer_comp) {
+	_pComponent.on_fire_sys_ondrag = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, refer_comp, src_refer_comp, meta_key) {
 		if (this.ondrag && this.ondrag._has_handlers) {
 			var dragData = this._getDragData();
-			var evt = new nexacro.DragEventInfo(this, "ondrag", dragData, null, "text", null, this, self_refer_comp, from_comp, refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
-			return [this.ondrag._fireSysEvent(this, evt), this, self_refer_comp, dragData, evt.userdata];
+			var src_comp = this._getRootComponent(src_refer_comp);
+
+			var evt = new nexacro.DragEventInfo(this, "ondrag", dragData, null, "text", null, src_comp, src_refer_comp, from_comp, refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
+			return [this.ondrag._fireSysEvent(this, evt), this, src_refer_comp, dragData, evt.userdata];
 		}
 		return [false];
 	};
 
-	_pComponent.on_fire_user_ondrag = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, refer_comp, self_refer_comp) {
+	_pComponent.on_fire_user_ondrag = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, refer_comp, src_refer_comp, meta_key) {
+		if (this._selectscrollmode && (this._selectscrollmode == "scroll")) {
+			var dragdata = nexacro._cur_drag_info;
+			if (dragdata) {
+				dragdata.isSelfAction = true;
+			}
+			return [true, this, refer_comp, dragdata.data, dragdata.userdata];
+		}
+
 		if (this.ondrag && this.ondrag._has_handlers) {
 			var dragData = this._getDragData();
-			var evt = new nexacro.DragEventInfo(this, "ondrag", dragData, null, "text", null, this, self_refer_comp, from_comp, refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
-			return [this.ondrag._fireUserEvent(this, evt), this, self_refer_comp, dragData, evt.userdata];
+			var src_comp = this._getRootComponent(src_refer_comp);
+
+			var evt = new nexacro.DragEventInfo(this, "ondrag", dragData, null, "text", null, src_comp, src_refer_comp, from_comp, refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
+			return [this.ondrag._fireUserEvent(this, evt), this, src_refer_comp, dragData, evt.userdata];
 		}
 		return [false];
 	};
 
-	_pComponent.on_fire_ondrop = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_ondrop = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.ondrop && this.ondrop._has_handlers) {
-			var evt = new nexacro.DragEventInfo(this, "ondrop", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
+			var evt = new nexacro.DragEventInfo(this, "ondrop", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
 			return this.ondrop._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_ondrop = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_sys_ondrop = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.ondrop && this.ondrop._has_handlers) {
-			var evt = new nexacro.DragEventInfo(this, "ondrop", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
+			var evt = new nexacro.DragEventInfo(this, "ondrop", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
 			return this.ondrop._fireSysEvent(this, evt);
 		}
+
 		return false;
 	};
 
-	_pComponent.on_fire_user_ondrop = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		if (this.ondrop && this.ondrop._has_handlers) {
-			var evt = new nexacro.DragEventInfo(this, "ondrop", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
-			return this.ondrop._fireUserEvent(this, evt);
+	_pComponent.on_fire_user_ondrop = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		if (!this._selectscrollmode || (this._selectscrollmode !== "scroll")) {
+			if (this.ondrop && this.ondrop._has_handlers) {
+				var evt = new nexacro.DragEventInfo(this, "ondrop", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
+				return this.ondrop._fireUserEvent(this, evt);
+			}
+		}
+		else {
+			return true;
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_ondragenter = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_ondragenter = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.ondragenter && this.ondragenter._has_handlers) {
-			var evt = new nexacro.DragEventInfo(this, "ondragenter", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
+			var evt = new nexacro.DragEventInfo(this, "ondragenter", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
 			return this.ondragenter._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_ondragenter = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_sys_ondragenter = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.ondragenter && this.ondragenter._has_handlers) {
-			var evt = new nexacro.DragEventInfo(this, "ondragenter", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
+			var evt = new nexacro.DragEventInfo(this, "ondragenter", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
 			return this.ondragenter._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_ondragenter = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		if (this.ondragenter && this.ondragenter._has_handlers) {
-			var evt = new nexacro.DragEventInfo(this, "ondragenter", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
-			return this.ondragenter._fireUserEvent(this, evt);
+	_pComponent.on_fire_user_ondragenter = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		if (!this._selectscrollmode || (this._selectscrollmode !== "scroll")) {
+			if (this.ondragenter && this.ondragenter._has_handlers) {
+				var evt = new nexacro.DragEventInfo(this, "ondragenter", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
+				return this.ondragenter._fireUserEvent(this, evt);
+			}
+		}
+		else {
+			return true;
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_ondragleave = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_ondragleave = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.ondragleave && this.ondragleave._has_handlers) {
-			var evt = new nexacro.DragEventInfo(this, "ondragleave", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
+			var evt = new nexacro.DragEventInfo(this, "ondragleave", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
 			return this.ondragleave._fireEvent(this, evt);
 		}
+
 		return false;
 	};
 
-	_pComponent.on_fire_sys_ondragleave = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_sys_ondragleave = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.ondragleave && this.ondragleave._has_handlers) {
-			var evt = new nexacro.DragEventInfo(this, "ondragleave", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
+			var evt = new nexacro.DragEventInfo(this, "ondragleave", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
 			return this.ondragleave._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_ondragleave = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		if (this.ondragleave && this.ondragleave._has_handlers) {
-			var evt = new nexacro.DragEventInfo(this, "ondragleave", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
-			return this.ondragleave._fireUserEvent(this, evt);
+	_pComponent.on_fire_user_ondragleave = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		if (!this._selectscrollmode || (this._selectscrollmode !== "scroll")) {
+			if (this.ondragleave && this.ondragleave._has_handlers) {
+				var evt = new nexacro.DragEventInfo(this, "ondragleave", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
+				return this.ondragleave._fireUserEvent(this, evt);
+			}
+		}
+		else {
+			return true;
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.ondragmove && this.ondragmove._has_handlers) {
-			var evt = new nexacro.DragEventInfo(this, "ondragmove", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
+			var evt = new nexacro.DragEventInfo(this, "ondragmove", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
 			return this.ondragmove._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_sys_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComponent.on_fire_sys_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, xdeltavalue, ydeltavalue, meta_key) {
+		if (src_comp && src_comp._selectscrollmode && (src_comp._selectscrollmode == "scroll")) {
+			var scroll_mode = 0;
+			var can_hscroll = false;
+			var can_vscroll = false;
+			if (xdeltavalue != 0 && src_comp.hscrollbar && src_comp.hscrollbar.enable && (src_comp.dragscrolltype != "none" && src_comp.dragscrolltype != "vert")) {
+				if (xdeltavalue < 0) {
+					if (src_comp.hscrollbar.pos < src_comp.hscrollbar.max) {
+						can_hscroll = true;
+					}
+				}
+				else {
+					if (src_comp.hscrollbar.pos > 0) {
+						can_hscroll = true;
+					}
+				}
+			}
+			if (ydeltavalue != 0 && src_comp.vscrollbar && src_comp.vscrollbar.enable && (src_comp.dragscrolltype != "none" && src_comp.dragscrolltype != "horz")) {
+				if (ydeltavalue < 0) {
+					if (src_comp.vscrollbar.pos < src_comp.vscrollbar.max) {
+						can_vscroll = true;
+					}
+				}
+				else {
+					if (src_comp.vscrollbar.pos > 0) {
+						can_vscroll = true;
+					}
+				}
+			}
+
+			if (src_comp.dragscrolltype == "all" && (can_hscroll || can_vscroll)) {
+				scroll_mode = 3;
+			}
+			else if (can_hscroll && can_vscroll) {
+				if (Math.abs(ydeltavalue) < Math.abs(xdeltavalue)) {
+					scroll_mode = 2;
+				}
+				else {
+					scroll_mode = 1;
+				}
+			}
+			else if (can_hscroll) {
+				scroll_mode = 2;
+			}
+			else if (can_vscroll) {
+				scroll_mode = 1;
+			}
+
+			if ((scroll_mode == 3 || scroll_mode == 2) && xdeltavalue != 0 && src_comp.hscrollbar && src_comp.hscrollbar.enable) {
+				src_comp.hscrollbar._setPos(src_comp.hscrollbar.pos - xdeltavalue);
+			}
+
+			if ((scroll_mode == 3 || scroll_mode == 1) && ydeltavalue != 0 && src_comp.vscrollbar && src_comp.vscrollbar.enable) {
+				src_comp.vscrollbar._setPos(src_comp.vscrollbar.pos - ydeltavalue);
+			}
+		}
 		if (this.ondragmove && this.ondragmove._has_handlers) {
-			var evt = new nexacro.DragEventInfo(this, "ondragmove", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
+			var evt = new nexacro.DragEventInfo(this, "ondragmove", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
 			return this.ondragmove._fireSysEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComponent.on_fire_user_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
-		if (this.ondragmove && this.ondragmove._has_handlers) {
-			var evt = new nexacro.DragEventInfo(this, "ondragmove", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
-			return this.ondragmove._fireUserEvent(this, evt);
+	_pComponent.on_fire_user_ondragmove = function (src_comp, src_refer_comp, dragdata, userdata, datatype, filelist, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
+		if (!this._selectscrollmode || (this._selectscrollmode !== "scroll")) {
+			if (this.ondragmove && this.ondragmove._has_handlers) {
+				var evt = new nexacro.DragEventInfo(this, "ondragmove", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
+				return this.ondragmove._fireUserEvent(this, evt);
+			}
+		}
+		else {
+			return true;
 		}
 		return false;
 	};
@@ -4417,22 +4657,6 @@ if (nexacro.Component) {
 			return this.oncontextmenu._fireEvent(this, evt);
 		}
 		return false;
-	};
-
-	_pComponent.on_fire_user_oncontextmenu = function (from_comp, from_refer_comp) {
-		if (this.oncontextmenu && this.oncontextmenu._has_handlers) {
-			var evt = new nexacro.ContextMenuEventInfo(this, "oncontextmenu", from_comp, from_refer_comp);
-			return this.oncontextmenu._fireUserEvent(this, evt);
-		}
-		return false;
-	};
-
-	_pComponent.on_fire_sys_oncontextmenu = function (from_comp, from_refer_comp) {
-		if (this.oncontextmenu && this.oncontextmenu._has_handlers) {
-			var evt = new nexacro.ContextMenuEventInfo(this, "oncontextmenu", from_comp, from_refer_comp);
-			return this.oncontextmenu._fireSysEvent(this, evt);
-		}
-		return true;
 	};
 
 	_pComponent.on_fire_user_onextendedcommand = function (eventid, eventtype, deviceid, data, from_refer_comp) {
@@ -4527,9 +4751,11 @@ if (nexacro.Component) {
 		return false;
 	};
 
-	_pComponent.on_fire_user_ontap = _pComponent.on_fire_ontap;
+	_pComponent.on_fire_user_ontap = function () {
+		return false;
+	};
 
-	_pComponent.on_fire_sys_ontap = function () {
+	_pComponent.on_fire_sys_ontap = function (elem, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		return true;
 	};
 
@@ -4543,16 +4769,12 @@ if (nexacro.Component) {
 
 	_pComponent.on_fire_user_ondbltap = _pComponent.on_fire_ondbltap;
 
-	_pComponent.on_fire_sys_ondbltap = function (elem, screenX, screenY, canvasX, canvasY) {
+	_pComponent.on_fire_sys_ondbltap = function (elem, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
 		this._on_dblclick(elem, "touch", false, false, false, canvasX, canvasY, screenX, screenY);
 		return true;
 	};
 
-	_pComponent.on_fire_onpinchstart = function () {
-		return false;
-	};
-
-	_pComponent.on_fire_user_onpinchstart = function () {
+	_pComponent.on_fire_user_onpinchstart = function (elem, touchinfos, accvalue, deltavalue, from_comp, from_refer_comp) {
 		return false;
 	};
 
@@ -4568,7 +4790,7 @@ if (nexacro.Component) {
 		return false;
 	};
 
-	_pComponent.on_fire_user_onpinch = function () {
+	_pComponent.on_fire_user_onpinch = function (elem, touchinfos, accvalue, deltavalue, firstrange, currange, from_comp, from_refer_comp) {
 		return false;
 	};
 
@@ -4581,17 +4803,17 @@ if (nexacro.Component) {
 			if (this.parent && this.parent instanceof nexacro.ChildFrame) {
 				var zoom_amount = Math.abs(deltavalue) / (currange - firstrange);
 				var zoom_dir = deltavalue > 0 ? 1 : -1;
-				var zoom_delta = (1.0 + (zoom_dir * zoom_amount));
+				var zoom_delta = (1.0 + (zoom_dir *  zoom_amount));
 				var zoom_factor = this._getZoom() || 100;
 
-				zoom_factor = zoom_factor * zoom_delta;
+				zoom_factor = zoom_factor *  zoom_delta;
 
 				if (!nexacro._allow_default_pinchzoom) {
 					var current_screen = nexacro._getCurrentScreenID();
 					if (current_screen) {
 					}
 				}
-				this._on_zoom(zoom_factor, this, from_refer_comp);
+				this._on_zoom(zoom_factor);
 				return true;
 			}
 		}
@@ -4627,7 +4849,7 @@ if (nexacro.Component) {
 		return false;
 	};
 
-	_pComponent.on_fire_user_onflingstart = function () {
+	_pComponent.on_fire_user_onflingstart = function (elem, touch_manager, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, from_comp, from_refer_comp) {
 		return false;
 	};
 
@@ -4643,11 +4865,11 @@ if (nexacro.Component) {
 		return false;
 	};
 
-	_pComponent.on_fire_user_onfling = function () {
+	_pComponent.on_fire_user_onfling = function (elem, touch_manager, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, from_comp, from_refer_comp) {
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onfling = function (elem, touch_manager, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue) {
+	_pComponent.on_fire_sys_onfling = function (elem, touch_manager, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, from_comp, from_refer_comp) {
 		var hscrollbar = this.hscrollbar;
 		var vscrollbar = this.vscrollbar;
 		var dragscrolltype = this.dragscrolltype;
@@ -4782,7 +5004,7 @@ if (nexacro.Component) {
 		return false;
 	};
 
-	_pComponent.on_fire_user_onflingend = function () {
+	_pComponent.on_fire_user_onflingend = function (elem, fling_handler, xstartvalue, ystartvalue, xdeltavalue, ydeltavalue, touchlen, from_comp, from_refer_comp) {
 		return false;
 	};
 
@@ -4810,7 +5032,7 @@ if (nexacro.Component) {
 		return false;
 	};
 
-	_pComponent.on_fire_user_onslidestart = function () {
+	_pComponent.on_fire_user_onslidestart = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp) {
 		return false;
 	};
 
@@ -4822,11 +5044,11 @@ if (nexacro.Component) {
 		return false;
 	};
 
-	_pComponent.on_fire_user_onslide = function () {
+	_pComponent.on_fire_user_onslide = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp) {
 		return false;
 	};
 
-	_pComponent.on_fire_sys_onslide = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp, start) {
+	_pComponent.on_fire_sys_onslide = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp, scroll_start) {
 		if (nexacro._cur_track_info) {
 			if (nexacro._cur_track_info.target._no_slide_scroll == true) {
 				return true;
@@ -4845,8 +5067,8 @@ if (nexacro.Component) {
 			var hscrollbar = this.hscrollbar;
 			var vscrollbar = this.vscrollbar;
 			var dragscrolltype = this.dragscrolltype;
+			var selectscrollmode = this.selectscrollmode;
 
-			var select_mode;
 			var can_hscroll = false;
 			var can_vscroll = false;
 
@@ -4863,10 +5085,6 @@ if (nexacro.Component) {
 				}
 			}
 
-			if (this.stepselector) {
-				can_hscroll = true;
-			}
-
 			if (ydeltavalue != 0 && vscrollbar && vscrollbar.enable && (dragscrolltype != "none" && dragscrolltype != "horz")) {
 				if (ydeltavalue < 0) {
 					if (vscrollbar.pos < vscrollbar.max) {
@@ -4880,12 +5098,21 @@ if (nexacro.Component) {
 				}
 			}
 
+			if (this.stepselector) {
+				can_hscroll = true;
+			}
+
 			if (Math.abs(xaccvalue) < Math.abs(yaccvalue) && (Math.abs(xdeltavalue) <= 5)) {
 				can_hscroll = false;
 			}
 			else if (Math.abs(xaccvalue) > Math.abs(yaccvalue) && (Math.abs(ydeltavalue) <= 5)) {
 				can_vscroll = false;
 			}
+
+			if (this.scrolltype == "none") {
+				can_hscroll = can_vscroll = false;
+			}
+
 
 			if (dragscrolltype == "all" && (can_hscroll || can_vscroll)) {
 				scroll_mode = 3;
@@ -4908,17 +5135,11 @@ if (nexacro.Component) {
 				scroll_mode = -1;
 			}
 
-			if (this.selectscrollmode != undefined) {
-				if (this.selectscrollmode == "default") {
-					select_mode = (nexacro._isTouchInteraction || nexacro._SupportTouch) ? "scroll" : "select";
-				}
-				else {
-					select_mode = this.selectscrollmode;
-				}
-
-				if (select_mode == "select") {
-					scroll_mode = 0;
-				}
+			if (selectscrollmode == "default" && (!(nexacro._isTouchInteraction || nexacro._SupportTouch))) {
+				scroll_mode = 0;
+			}
+			else if (selectscrollmode == "select") {
+				scroll_mode = 0;
 			}
 
 			if (scroll_mode > 0) {
@@ -4954,10 +5175,11 @@ if (nexacro.Component) {
 		var old_hpos = this._hscroll_pos;
 
 		this._scrollTo(hscroll_pos, vscroll_pos, true, false, undefined, "slide");
+
 		var new_vpos = this._vscroll_pos;
 		var new_hpos = this._hscroll_pos;
 
-		if (start) {
+		if (scroll_start) {
 			this._is_bubble_fling_v = false;
 			this._is_bubble_fling_h = false;
 
@@ -4991,7 +5213,7 @@ if (nexacro.Component) {
 		return false;
 	};
 
-	_pComponent.on_fire_user_onslideend = function () {
+	_pComponent.on_fire_user_onslideend = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, from_comp, from_refer_comp) {
 		return false;
 	};
 
@@ -5003,14 +5225,6 @@ if (nexacro.Component) {
 		return false;
 	};
 
-	_pComponent.on_fire_user_onzoom = function () {
-		return false;
-	};
-
-	_pComponent.on_fire_sys_onzoom = function () {
-		return false;
-	};
-
 	_pComponent.on_fire_onorientationchange = function (orientation) {
 		if (this.onorientationchange && this.onorientationchange._has_handlers) {
 			var evt = new nexacro.OrientationChangeEventInfo(this, "onorientationchange", orientation);
@@ -5019,10 +5233,34 @@ if (nexacro.Component) {
 		return false;
 	};
 
-	_pComponent.on_fire_user_onaccessibilitygesture = function () {
+	_pComponent.on_fire_user_onaccessibilitygesture = function (direction, fire_comp, refer_comp) {
 	};
 
-	_pComponent.on_fire_sys_onaccessibilitygesture = function () {
+	_pComponent.on_fire_sys_onaccessibilitygesture = function (direction, fire_comp, refer_comp) {
+	};
+
+	_pComponent.on_fire_onhscroll = function (eventid, pos, strType, evtkind) {
+		if (this.onhscroll && this.onhscroll._has_handlers) {
+			pos = (pos + 0.5) | 0;
+			var evt = new nexacro.ScrollEventInfo(this, eventid, pos, strType, this, this.parent);
+
+			evt._evtkind = evtkind;
+			var ret = this.onhscroll._fireEvent(this, evt);
+			return ret;
+		}
+		return true;
+	};
+
+	_pComponent.on_fire_onvscroll = function (eventid, pos, strType, evtkind) {
+		if (this.onvscroll && this.onvscroll._has_handlers) {
+			pos = (pos + 0.5) | 0;
+			var evt = new nexacro.ScrollEventInfo(this, eventid, pos, strType, this, this.parent);
+
+			evt._evtkind = evtkind;
+			var ret = this.onvscroll._fireEvent(this, evt);
+			return ret;
+		}
+		return true;
 	};
 
 	_pComponent._on_extendedcommand = function (eventid, eventtype, deviceid, data, event_bubbles) {

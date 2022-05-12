@@ -251,6 +251,11 @@ textarea::-webkit-scrollbar { display: none; }
   background-position:center center;
 }
 
+.Sketch .nexacontentsbox
+{
+   text-align:center;
+}
+
 .MainFrame, .VScrollBarControl, .HScrollBarControl
 {
   cursor:default;
@@ -733,6 +738,14 @@ textarea::-webkit-scrollbar { display: none; }
 {
 	border : 1px solid #d5d5d5;
 }
+.WebView
+{
+	border : 1px solid #d5d5d5;
+}
+.WebViewControl
+{
+	border : 1px solid #d5d5d5;
+}
 .Tab .tabpageTab
 {
 	border-top : 1px solid #cfcfcf;
@@ -887,7 +900,7 @@ textarea::-webkit-scrollbar { display: none; }
 	background : #f9f9f9;
 	font : 12px "Gulim";
 }
-.ListViewBandControl.popupListViewdetail
+.ListViewDetailBandControl.popupListViewdetail
 {
 	border-top : 0px none;
 	border-right : 0px none;
@@ -904,7 +917,7 @@ textarea::-webkit-scrollbar { display: none; }
 {
 	border : 1px solid #dbdee2;
 }
-.ListViewBandControl.popupListViewdetail .cell
+.ListViewDetailBandControl.popupListViewdetail .cell
 {
 	border : 1px solid #dbdee2;
 }
@@ -1311,7 +1324,7 @@ textarea::-webkit-scrollbar { display: none; }
 	background : #ffffff;
 	font : 12px "Gulim";
 }
-#nexacontainer .ListViewBandControl.popupListViewdetail[status=readonly]
+#nexacontainer .ListViewDetailBandControl.popupListViewdetail[status=readonly]
 {
 	border-top : 0px none;
 	border-right : 0px none;
@@ -1338,7 +1351,7 @@ textarea::-webkit-scrollbar { display: none; }
 	background : #ffffff;
 	font : 12px "Gulim";
 }
-#nexacontainer .ListViewBandControl.popupListViewdetail[status=focused]
+#nexacontainer .ListViewDetailBandControl.popupListViewdetail[status=focused]
 {
 	border-top : 0px none;
 	border-right : 0px none;
@@ -1365,7 +1378,7 @@ textarea::-webkit-scrollbar { display: none; }
 	background : #ffffff;
 	font : 12px "Gulim";
 }
-#nexacontainer .ListViewBandControl.popupListViewdetail[status=mouseover]
+#nexacontainer .ListViewDetailBandControl.popupListViewdetail[status=mouseover]
 {
 	border-top : 0px none;
 	border-right : 0px none;
@@ -1382,7 +1395,7 @@ textarea::-webkit-scrollbar { display: none; }
 {
 	border : 1px solid #dbdee2;
 }
-#nexacontainer .ListViewBandControl.popupListViewdetail .cell[status=readonly]
+#nexacontainer .ListViewDetailBandControl.popupListViewdetail .cell[status=readonly]
 {
 	border : 1px solid #dbdee2;
 }
@@ -1394,7 +1407,7 @@ textarea::-webkit-scrollbar { display: none; }
 {
 	border : 1px solid #dbdee2;
 }
-#nexacontainer .ListViewBandControl.popupListViewdetail .cell[status=focused]
+#nexacontainer .ListViewDetailBandControl.popupListViewdetail .cell[status=focused]
 {
 	border : 1px solid #dbdee2;
 }
@@ -1406,7 +1419,7 @@ textarea::-webkit-scrollbar { display: none; }
 {
 	border : 1px solid #c4c9cf;
 }
-#nexacontainer .ListViewBandControl.popupListViewdetail .cell[status=mouseover]
+#nexacontainer .ListViewDetailBandControl.popupListViewdetail .cell[status=mouseover]
 {
 	border : 1px solid #c4c9cf;
 }
@@ -1660,7 +1673,7 @@ textarea::-webkit-scrollbar { display: none; }
 {
 	background : #ebf3f9;
 }
-#nexacontainer .ListViewBandControl.popupListViewdetail[userstatus=selected]
+#nexacontainer .ListViewDetailBandControl.popupListViewdetail[userstatus=selected]
 {
 	background : #ebf3f9;
 }
@@ -1955,7 +1968,7 @@ textarea::-webkit-scrollbar { display: none; }
 {
 	color : #999999;
 }
-#nexacontainer .ListViewBandControl.popupListViewdetail[status=disabled]
+#nexacontainer .ListViewDetailBandControl.popupListViewdetail[status=disabled]
 {
 	color : #999999;
 }
@@ -1967,7 +1980,7 @@ textarea::-webkit-scrollbar { display: none; }
 {
 	border : 1px solid #dbdee2;
 }
-#nexacontainer .ListViewBandControl.popupListViewdetail .cell[status=disabled]
+#nexacontainer .ListViewDetailBandControl.popupListViewdetail .cell[status=disabled]
 {
 	border : 1px solid #dbdee2;
 }

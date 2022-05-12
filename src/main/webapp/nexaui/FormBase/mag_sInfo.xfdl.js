@@ -18,42 +18,39 @@
             
             // Object(Dataset, ExcelExportObject) Initialize
             obj = new Dataset("ds_stdInfo", this);
-            obj._setContents("<ColumnInfo><Column id=\"colNo\" type=\"STRING\" size=\"256\"/><Column id=\"departmentName\" type=\"STRING\" size=\"256\"/><Column id=\"studentNo\" type=\"STRING\" size=\"256\"/><Column id=\"studentName\" type=\"STRING\" size=\"256\"/><Column id=\"studentGrade\" type=\"STRING\" size=\"256\"/><Column id=\"studentBirth\" type=\"STRING\" size=\"256\"/><Column id=\"studentAddress\" type=\"STRING\" size=\"256\"/><Column id=\"studentPhonenumber\" type=\"STRING\" size=\"256\"/><Column id=\"studentEmail\" type=\"STRING\" size=\"256\"/><Column id=\"studentState\" type=\"STRING\" size=\"256\"/><Column id=\"professorName\" type=\"STRING\" size=\"256\"/></ColumnInfo><Rows><Row><Col id=\"colNo\">0</Col></Row></Rows>");
+            obj._setContents("<ColumnInfo><Column id=\"chk\" type=\"STRING\" size=\"256\"/><Column id=\"departmentName\" type=\"STRING\" size=\"256\"/><Column id=\"studentNo\" type=\"STRING\" size=\"256\"/><Column id=\"studentName\" type=\"STRING\" size=\"256\"/><Column id=\"studentGrade\" type=\"STRING\" size=\"256\"/><Column id=\"studentBirth\" type=\"STRING\" size=\"256\"/><Column id=\"studentAddress\" type=\"STRING\" size=\"256\"/><Column id=\"studentPhonenumber\" type=\"STRING\" size=\"256\"/><Column id=\"studentEmail\" type=\"STRING\" size=\"256\"/><Column id=\"studentState\" type=\"STRING\" size=\"256\"/><Column id=\"professorName\" type=\"STRING\" size=\"256\"/><Column id=\"universityCode\" type=\"STRING\" size=\"256\"/></ColumnInfo><Rows><Row/></Rows>");
             this.addChild(obj.name, obj);
             
             // UI Components Initialize
-            obj = new Button("btn_pwd","279","3","95","35",null,null,null,null,null,null,this);
-            obj.set_taborder("0");
-            obj.set_text("비밀번호 변경");
-            this.addChild(obj.name, obj);
-
             obj = new Button("btn_save","600","3","95","35",null,null,null,null,null,null,this);
-            obj.set_taborder("1");
+            obj.set_taborder("0");
             obj.set_text("저장");
             this.addChild(obj.name, obj);
 
             obj = new Grid("Grid00","60","95","616","455",null,null,null,null,null,null,this);
-            obj.set_taborder("2");
+            obj.set_taborder("1");
             obj.set_binddataset("ds_stdInfo");
-            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"0\" displaytype=\"checkboxcontrol\" edittype=\"checkbox\"/><Cell col=\"1\" text=\"departmentName\"/><Cell col=\"2\" text=\"studentNo\"/><Cell col=\"3\" text=\"studentName\"/><Cell col=\"4\" text=\"studentGrade\"/><Cell col=\"5\" text=\"studentBirth\"/><Cell col=\"6\" text=\"studentAddress\"/><Cell col=\"7\" text=\"studentPhonenumber\"/><Cell col=\"8\" text=\"studentEmail\"/><Cell col=\"9\" text=\"studentState\"/><Cell col=\"10\" text=\"professorName\"/></Band><Band id=\"body\"><Cell displaytype=\"checkboxcontrol\" edittype=\"checkbox\" text=\"bind:colNo\" expr=\"colNo=='0'?'1':'0'\"/><Cell col=\"1\" text=\"bind:departmentName\" edittype=\"text\"/><Cell col=\"2\" text=\"bind:studentNo\" edittype=\"text\"/><Cell col=\"3\" text=\"bind:studentName\" edittype=\"text\"/><Cell col=\"4\" text=\"bind:studentGrade\" edittype=\"text\"/><Cell col=\"5\" text=\"bind:studentBirth\" edittype=\"text\"/><Cell col=\"6\" text=\"bind:studentAddress\" edittype=\"text\"/><Cell col=\"7\" text=\"bind:studentPhonenumber\" edittype=\"text\"/><Cell col=\"8\" text=\"bind:studentEmail\" edittype=\"text\"/><Cell col=\"9\" text=\"bind:studentState\" edittype=\"text\"/><Cell col=\"10\" text=\"bind:professorName\" edittype=\"text\"/></Band></Format></Formats>");
+            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"71\"/><Column size=\"80\"/><Column size=\"114\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"0\" displaytype=\"checkboxcontrol\" edittype=\"checkbox\"/><Cell col=\"1\" text=\"학과\"/><Cell col=\"2\" text=\"학번\"/><Cell col=\"3\" text=\"학과코드\"/><Cell col=\"4\" text=\"이름\"/><Cell col=\"5\" text=\"학년\"/><Cell col=\"6\" text=\"생년월일\"/><Cell col=\"7\" text=\"주소\"/><Cell col=\"8\" text=\"연락처\"/><Cell col=\"9\" text=\"이메일\"/><Cell col=\"10\" text=\"재학여부\"/><Cell col=\"11\" text=\"담당교수\"/></Band><Band id=\"body\"><Cell displaytype=\"checkboxcontrol\" edittype=\"checkbox\" text=\"bind:chk\"/><Cell col=\"1\" text=\"bind:departmentName\" edittype=\"text\" textAlign=\"center\"/><Cell col=\"2\" text=\"bind:studentNo\" edittype=\"text\" textAlign=\"center\"/><Cell col=\"3\" text=\"bind:universityCode\" edittype=\"text\"/><Cell col=\"4\" text=\"bind:studentName\" edittype=\"text\" textAlign=\"center\"/><Cell col=\"5\" text=\"bind:studentGrade\" edittype=\"text\" textAlign=\"center\"/><Cell col=\"6\" text=\"bind:studentBirth\" edittype=\"text\" textAlign=\"center\"/><Cell col=\"7\" text=\"bind:studentAddress\" edittype=\"text\" textAlign=\"center\"/><Cell col=\"8\" text=\"bind:studentPhonenumber\" edittype=\"text\" textAlign=\"center\"/><Cell col=\"9\" text=\"bind:studentEmail\" edittype=\"text\" textAlign=\"center\"/><Cell col=\"10\" text=\"bind:studentState\" edittype=\"text\" textAlign=\"center\"/><Cell col=\"11\" text=\"bind:professorName\" edittype=\"text\" textAlign=\"center\"/></Band></Format></Formats>");
             this.addChild(obj.name, obj);
 
             obj = new Button("btn_add","386","3","95","35",null,null,null,null,null,null,this);
-            obj.set_taborder("3");
+            obj.set_taborder("2");
             obj.set_text("추가");
             this.addChild(obj.name, obj);
 
             obj = new Button("btn_delete","500","3","95","35",null,null,null,null,null,null,this);
-            obj.set_taborder("4");
+            obj.set_taborder("3");
             obj.set_text("삭제");
             this.addChild(obj.name, obj);
-
             // Layout Functions
             //-- Default Layout : this
             obj = new Layout("default","",700,600,this,function(p){});
             this.addLayout(obj.name, obj);
             
             // BindItem Information
+
+            
+            // TriggerItem Information
 
         };
         
@@ -110,7 +107,7 @@
         		// Body
         		var objDs = obj.getBindDataset();
         		for(var i=0; i<objDs.rowcount; i++) {
-        			objDs.setColumn(i, "colNo", nVal);
+        			objDs.setColumn(i, "chk", nVal);
         		}
         	}
         }
@@ -151,7 +148,7 @@
         {
         	// 삭제
         	// extractRows 조건표현식을 만족하는 Row 의 인덱스 배열을 반환하는 메소드입니다.
-        	var arrDel = this.ds_stdInfo.extractRows("colNo == '1'");
+        	var arrDel = this.ds_stdInfo.extractRows("chk == '1'");
         	this.ds_stdInfo.deleteMultiRows(arrDel);
         };
 
@@ -159,7 +156,6 @@
         {
         	this.ds_stdInfo.addRow();
         };
-
         });
         
         // Regist UI Components Event
@@ -171,7 +167,6 @@
             this.btn_add.addEventHandler("onclick",this.btn_add_onclick,this);
             this.btn_delete.addEventHandler("onclick",this.btn_delete_onclick,this);
         };
-
         this.loadIncludeScript("mag_sInfo.xfdl");
         this.loadPreloadList();
         

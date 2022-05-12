@@ -143,14 +143,14 @@ if (!nexacro.Point) {
 
 	_pPoint.multiply = function (pt) {
 		if (pt instanceof nexacro.Point) {
-			return new nexacro.Point(this.x * pt.x, this.y * pt.y);
+			return new nexacro.Point(this.x *  pt.x, this.y *  pt.y);
 		}
 		else {
 			if (arguments.length == 1) {
-				return new nexacro.Point(this.x * arguments[0], this.y * arguments[0]);
+				return new nexacro.Point(this.x *  arguments[0], this.y *  arguments[0]);
 			}
 			else {
-				return new nexacro.Point(this.x * arguments[0], this.y * arguments[1]);
+				return new nexacro.Point(this.x *  arguments[0], this.y *  arguments[1]);
 			}
 		}
 	};
@@ -192,13 +192,13 @@ if (!nexacro.Point) {
 		if (pt instanceof nexacro.Point) {
 			x = pt.x - this.x;
 			y = pt.y - this.y;
-			d = x * x + y * y;
+			d = x *  x + y *  y;
 			return squared ? d : Math.sqrt(d);
 		}
 		else {
 			x = (arguments[0]) - this.x;
 			y = (arguments[1]) - this.y;
-			d = x * x + y * y;
+			d = x *  x + y *  y;
 			return arguments[2] ? d : Math.sqrt(d);
 		}
 	};
@@ -219,11 +219,11 @@ if (!nexacro.Point) {
 		if (!(pt instanceof nexacro.Point)) {
 			pt = new nexacro.Point(arguments[0], arguments[1]);
 		}
-		return Math.atan2(this.cross(pt), this.dot(pt)) * 180 / Math.PI;
+		return Math.atan2(this.cross(pt), this.dot(pt)) *  180 / Math.PI;
 	};
 
 	_pPoint.getLength = function () {
-		return Math.sqrt(this.x * this.x + this.y * this.y);
+		return Math.sqrt(this.x *  this.x + this.y *  this.y);
 	};
 
 
@@ -232,30 +232,30 @@ if (!nexacro.Point) {
 			return this.clone();
 		}
 
-		angle = angle * Math.PI / 180;
+		angle = angle *  Math.PI / 180;
 		var pt = center ? this.subtract(center) : this;
 		var s = Math.sin(angle);
 		var c = Math.cos(angle);
-		pt = new nexacro.Point(pt.x * c - pt.y * s, pt.y * c + pt.x * s);
+		pt = new nexacro.Point(pt.x *  c - pt.y *  s, pt.y *  c + pt.x *  s);
 		return center ? pt.add(center) : pt;
 	};
 
 
 	_pPoint.dot = function (pt) {
 		if (pt instanceof nexacro.Point) {
-			return this.x * pt.x + this.y * pt.y;
+			return this.x *  pt.x + this.y *  pt.y;
 		}
 		else {
-			return this.x * (arguments[0]) + this.y * (arguments[1]);
+			return this.x *  (arguments[0]) + this.y *  (arguments[1]);
 		}
 	};
 
 	_pPoint.cross = function (pt) {
 		if (pt instanceof nexacro.Point) {
-			return this.x * pt.y - this.y * pt.x;
+			return this.x *  pt.y - this.y *  pt.x;
 		}
 		else {
-			return this.x * (arguments[1]) - this.y * (arguments[0]);
+			return this.x *  (arguments[1]) - this.y *  (arguments[0]);
 		}
 	};
 
@@ -269,7 +269,7 @@ if (!nexacro.Point) {
 		}
 		else {
 			var scale = this.dot(pt) / pt.dot(pt);
-			return new nexacro.Point(pt.x * scale, pt.y * scale);
+			return new nexacro.Point(pt.x *  scale, pt.y *  scale);
 		}
 	};
 
@@ -291,11 +291,11 @@ if (!nexacro.Point) {
 
 	_pPoint.lerp = function (pt, t) {
 		if (pt instanceof nexacro.Point) {
-			return new nexacro.Point(this.x + (pt.x - this.x) * t, this.y + (pt.y - this.y) * t);
+			return new nexacro.Point(this.x + (pt.x - this.x) *  t, this.y + (pt.y - this.y) *  t);
 		}
 		else {
 			t = arguments[2];
-			return new nexacro.Point(this.x + (arguments[0] - this.x) * t, this.y + (arguments[1] - this.y) * t);
+			return new nexacro.Point(this.x + (arguments[0] - this.x) *  t, this.y + (arguments[1] - this.y) *  t);
 		}
 	};
 
@@ -329,14 +329,14 @@ if (!nexacro.Point) {
 
 	_pPoint.multiply = function (pt) {
 		if (pt instanceof nexacro.Point) {
-			return new nexacro.Point(this.x * pt.x, this.y * pt.y);
+			return new nexacro.Point(this.x *  pt.x, this.y *  pt.y);
 		}
 		else {
 			if (arguments.length == 1) {
-				return new nexacro.Point(this.x * arguments[0], this.y * arguments[0]);
+				return new nexacro.Point(this.x *  arguments[0], this.y *  arguments[0]);
 			}
 			else {
-				return new nexacro.Point(this.x * arguments[0], this.y * arguments[1]);
+				return new nexacro.Point(this.x *  arguments[0], this.y *  arguments[1]);
 			}
 		}
 	};
@@ -410,8 +410,8 @@ if (!nexacro.Offset) {
 		var v = +to;
 		if (!(v != v)) {
 			var factor = Math.pow(10, to);
-			this.x = Math.round(this.x * factor) / factor;
-			this.y = Math.round(this.y * factor) / factor;
+			this.x = Math.round(this.x *  factor) / factor;
+			this.y = Math.round(this.y *  factor) / factor;
 		}
 		else {
 			this.x = Math.round(this.x);
@@ -587,10 +587,10 @@ if (!nexacro.Region) {
 		}
 
 		if (p <= this.left) {
-			p -= (p - this.left) * factor;
+			p -= (p - this.left) *  factor;
 		}
 		else if (p >= this.right) {
-			p -= (p - this.right) * factor;
+			p -= (p - this.right) *  factor;
 		}
 		return p;
 	};
@@ -600,10 +600,10 @@ if (!nexacro.Region) {
 			factor = 1;
 		}
 		if (p <= this.top) {
-			p -= (p - this.top) * factor;
+			p -= (p - this.top) *  factor;
 		}
 		else if (p >= this.bottom) {
-			p -= (p - this.bottom) * factor;
+			p -= (p - this.bottom) *  factor;
 		}
 		return p;
 	};
@@ -745,11 +745,11 @@ if (!nexacro.Rect) {
 	};
 
 	_pRect.getCenterX = function () {
-		return this.left + this.width * 0.5;
+		return this.left + this.width *  0.5;
 	};
 
 	_pRect.setCenterX = function (v) {
-		var left = v - this.width * 0.5;
+		var left = v - this.width *  0.5;
 		this.left = Math.floor(left);
 		var x = left - this.left;
 
@@ -758,11 +758,11 @@ if (!nexacro.Rect) {
 	};
 
 	_pRect.getCenterY = function () {
-		return this.top + this.height * 0.5;
+		return this.top + this.height *  0.5;
 	};
 
 	_pRect.setCenterY = function (v) {
-		var top = v - this.height * 0.5;
+		var top = v - this.height *  0.5;
 		this.top = Math.floor(top);
 		var y = top - this.top;
 
@@ -903,11 +903,11 @@ if (!nexacro.Rect) {
 		if (ver === undefined) {
 			ver = hor;
 		}
-		return new nexacro.Rect(this.left - hor, this.top - ver, this.width + hor * 2, this.height + ver * 2);
+		return new nexacro.Rect(this.left - hor, this.top - ver, this.width + hor *  2, this.height + ver *  2);
 	};
 
 	_pRect.scale = function (hor, ver) {
-		return this.expand(this.width * hor - this.width, this.height * (ver === undefined ? hor : ver) - this.height);
+		return this.expand(this.width *  hor - this.width, this.height *  (ver === undefined ? hor : ver) - this.height);
 	};
 
 	_pRect = null;
@@ -949,7 +949,13 @@ if (!nexacro.Decimal) {
 				this.lo = v1.lo;
 			}
 			else if (v1 != null) {
-				this._parse(v1);
+				if (nexacro._getDatatypeRule() != "1.0" && isNaN(+v1)) {
+					this.hi = Number.NaN;
+					this.lo = 0;
+				}
+				else {
+					this._parse(v1);
+				}
 			}
 		}
 		else {
@@ -1362,15 +1368,15 @@ if (!nexacro.Decimal) {
 		hi = this.hi;
 		if (hi > nexacro.Decimal._QD_SPLIT_THRESH || hi < -nexacro.Decimal._QD_SPLIT_THRESH) {
 			hi *= 3.7252902984619140625e-09;
-			C = nexacro.Decimal._QD_SPLITTER * hi;
+			C = nexacro.Decimal._QD_SPLITTER *  hi;
 			hx = C - hi;
 			hx = C - hx;
 			tx = hi - hx;
-			hx = hx * 268435456.0;
-			tx = tx * 268435456.0;
+			hx = hx *  268435456.0;
+			tx = tx *  268435456.0;
 		}
 		else {
-			C = nexacro.Decimal._QD_SPLITTER * hi;
+			C = nexacro.Decimal._QD_SPLITTER *  hi;
 			hx = C - hi;
 			hx = C - hx;
 			tx = hi - hx;
@@ -1379,29 +1385,29 @@ if (!nexacro.Decimal) {
 		hi = dval;
 		if (hi > nexacro.Decimal._QD_SPLIT_THRESH || hi < -nexacro.Decimal._QD_SPLIT_THRESH) {
 			hi *= 3.7252902984619140625e-09;
-			c = nexacro.Decimal._QD_SPLITTER * hi;
+			c = nexacro.Decimal._QD_SPLITTER *  hi;
 			hy = c - hi;
 			hy = c - hy;
 			ty = hi - hy;
-			hy = hy * 268435456.0;
-			ty = ty * 268435456.0;
+			hy = hy *  268435456.0;
+			ty = ty *  268435456.0;
 		}
 		else {
-			c = nexacro.Decimal._QD_SPLITTER * hi;
+			c = nexacro.Decimal._QD_SPLITTER *  hi;
 			hy = c - hi;
 			hy = c - hy;
 			ty = hi - hy;
 		}
 
-		C = this.hi * dval;
-		c = hx * hy;
+		C = this.hi *  dval;
+		c = hx *  hy;
 		if ((c == Infinity || c == -Infinity) && C != Infinity && C != -Infinity) {
-			var tC = C * 3.7252902984619140625e-09;
-			var tc = hx * 3.7252902984619140625e-09 * hy;
-			c = ((((tc - tC) * 268435456.0 + hx * ty) + tx * hy) + tx * ty) + (this.lo * dval);
+			var tC = C *  3.7252902984619140625e-09;
+			var tc = hx *  3.7252902984619140625e-09 *  hy;
+			c = ((((tc - tC) *  268435456.0 + hx *  ty) + tx *  hy) + tx *  ty) + (this.lo *  dval);
 		}
 		else {
-			c = ((((c - C) + hx * ty) + tx * hy) + tx * ty) + (this.lo * dval);
+			c = ((((c - C) + hx *  ty) + tx *  hy) + tx *  ty) + (this.lo *  dval);
 		}
 
 		this.hi = C + c;
@@ -1425,15 +1431,15 @@ if (!nexacro.Decimal) {
 		hi = this.hi;
 		if (hi > nexacro.Decimal._QD_SPLIT_THRESH || hi < -nexacro.Decimal._QD_SPLIT_THRESH) {
 			hi *= 3.7252902984619140625e-09;
-			C = nexacro.Decimal._QD_SPLITTER * hi;
+			C = nexacro.Decimal._QD_SPLITTER *  hi;
 			hx = C - hi;
 			hx = C - hx;
 			tx = hi - hx;
-			hx = hx * 268435456.0;
-			tx = tx * 268435456.0;
+			hx = hx *  268435456.0;
+			tx = tx *  268435456.0;
 		}
 		else {
-			C = nexacro.Decimal._QD_SPLITTER * hi;
+			C = nexacro.Decimal._QD_SPLITTER *  hi;
 			hx = C - hi;
 			hx = C - hx;
 			tx = hi - hx;
@@ -1442,29 +1448,29 @@ if (!nexacro.Decimal) {
 		hi = dec.hi;
 		if (hi > nexacro.Decimal._QD_SPLIT_THRESH || hi < -nexacro.Decimal._QD_SPLIT_THRESH) {
 			hi *= 3.7252902984619140625e-09;
-			c = nexacro.Decimal._QD_SPLITTER * hi;
+			c = nexacro.Decimal._QD_SPLITTER *  hi;
 			hy = c - hi;
 			hy = c - hy;
 			ty = hi - hy;
-			hy = hy * 268435456.0;
-			ty = ty * 268435456.0;
+			hy = hy *  268435456.0;
+			ty = ty *  268435456.0;
 		}
 		else {
-			c = nexacro.Decimal._QD_SPLITTER * hi;
+			c = nexacro.Decimal._QD_SPLITTER *  hi;
 			hy = c - hi;
 			hy = c - hy;
 			ty = hi - hy;
 		}
 
-		C = this.hi * dec.hi;
-		c = hx * hy;
+		C = this.hi *  dec.hi;
+		c = hx *  hy;
 		if ((c == Infinity || c == -Infinity) && C != Infinity && C != -Infinity) {
-			var tC = C * 3.7252902984619140625e-09;
-			var tc = hx * 3.7252902984619140625e-09 * hy;
-			c = ((((tc - tC) * 268435456.0 + hx * ty) + tx * hy) + tx * ty) + (this.hi * dec.lo + this.lo * dec.hi);
+			var tC = C *  3.7252902984619140625e-09;
+			var tc = hx *  3.7252902984619140625e-09 *  hy;
+			c = ((((tc - tC) *  268435456.0 + hx *  ty) + tx *  hy) + tx *  ty) + (this.hi *  dec.lo + this.lo *  dec.hi);
 		}
 		else {
-			c = ((((c - C) + hx * ty) + tx * hy) + tx * ty) + (this.hi * dec.lo + this.lo * dec.hi);
+			c = ((((c - C) + hx *  ty) + tx *  hy) + tx *  ty) + (this.hi *  dec.lo + this.lo *  dec.hi);
 		}
 
 		this.hi = C + c;
@@ -1484,19 +1490,19 @@ if (!nexacro.Decimal) {
 			}
 		}
 		q1 = this.hi / dval;
-		p1 = q1 * dval;
+		p1 = q1 *  dval;
 
 		var temp, tempe;
 		if (q1 > nexacro.Decimal._QD_SPLIT_THRESH || q1 < -nexacro.Decimal._QD_SPLIT_THRESH) {
 			q1 *= 3.7252902984619140625e-09;
-			temp = nexacro.Decimal._QD_SPLITTER * q1;
+			temp = nexacro.Decimal._QD_SPLITTER *  q1;
 			h1 = temp - (temp - q1);
 			l1 = q1 - h1;
 			h1 *= 268435456.0;
 			l1 *= 268435456.0;
 		}
 		else {
-			temp = nexacro.Decimal._QD_SPLITTER * q1;
+			temp = nexacro.Decimal._QD_SPLITTER *  q1;
 			h1 = temp - (temp - q1);
 			l1 = q1 - h1;
 		}
@@ -1504,18 +1510,18 @@ if (!nexacro.Decimal) {
 		q2 = dval;
 		if (q2 > nexacro.Decimal._QD_SPLIT_THRESH || q2 < -nexacro.Decimal._QD_SPLIT_THRESH) {
 			q2 *= 3.7252902984619140625e-09;
-			temp = nexacro.Decimal._QD_SPLITTER * q2;
+			temp = nexacro.Decimal._QD_SPLITTER *  q2;
 			h2 = temp - (temp - q2);
 			l2 = q2 - h2;
 			h2 *= 268435456.0;
 			l2 *= 268435456.0;
 		}
 		else {
-			temp = nexacro.Decimal._QD_SPLITTER * q2;
+			temp = nexacro.Decimal._QD_SPLITTER *  q2;
 			h2 = temp - (temp - q2);
 			l2 = q2 - h2;
 		}
-		p2 = ((h1 * h2 - p1) + h1 * l2 + l1 * h2) + l1 * l2;
+		p2 = ((h1 *  h2 - p1) + h1 *  l2 + l1 *  h2) + l1 *  l2;
 
 		s = this.hi - p1;
 		tempe = s - this.hi;
@@ -1599,31 +1605,31 @@ if (!nexacro.Decimal) {
 
 		if (nexacro._getDatatypeRule() != "1.0") {
 			if (this.isInfinity()) {
-				this.hi = hi * hi;
+				this.hi = hi *  hi;
 				this.lo = 0.0;
 
 				return;
 			}
 		}
 
-		p1 = hi * hi;
+		p1 = hi *  hi;
 		if (hi > nexacro.Decimal._QD_SPLIT_THRESH || hi < -nexacro.Decimal._QD_SPLIT_THRESH) {
 			hi *= 3.7252902984619140625e-09;
-			temp = nexacro.Decimal._QD_SPLITTER * hi;
+			temp = nexacro.Decimal._QD_SPLITTER *  hi;
 			ht = temp - (temp - hi);
 			lt = hi - ht;
-			hi = ht * 268435456.0;
-			lo = lt * 268435456.0;
+			hi = ht *  268435456.0;
+			lo = lt *  268435456.0;
 		}
 		else {
-			temp = nexacro.Decimal._QD_SPLITTER * hi;
+			temp = nexacro.Decimal._QD_SPLITTER *  hi;
 			hi = temp - (temp - hi);
 			lo = this.hi - hi;
 		}
 
-		p2 = ((hi * hi - p1) + 2.0 * hi * lo) + lo * lo;
-		p2 += 2.0 * this.hi * this.lo;
-		p2 += this.lo * this.lo;
+		p2 = ((hi *  hi - p1) + 2.0 *  hi *  lo) + lo *  lo;
+		p2 += 2.0 *  this.hi *  this.lo;
+		p2 += this.lo *  this.lo;
 
 		this.hi = p1 + p2;
 		this.lo = p2 - (this.hi - p1);
@@ -1689,7 +1695,7 @@ if (!nexacro.Decimal) {
 		}
 
 		var _cvt = this._getCVT();
-		if (_cvt.exp >= -5 && _cvt.exp <= 24) {
+		if (_cvt.dec >= -5 && _cvt.dec <= 24) {
 			return this._toStandardStr(_cvt);
 		}
 
@@ -1711,7 +1717,7 @@ if (!nexacro.Decimal) {
 
 
 		var dAbs = Math.abs(y.hi);
-		var exp = Math.floor(Math.log(dAbs) * Math.LOG10E) | 0;
+		var exp = Math.floor(Math.log(dAbs) *  Math.LOG10E) | 0;
 
 		var scale = new nexacro.Decimal();
 		if (exp < -300) {
@@ -3191,14 +3197,10 @@ if (!nexacro.Image) {
 		if (v === "") {
 			this._base64str = v;
 		}
-		else if (v.substring(0, 10).toLowerCase() != "data:image") {
-			this._base64str = "data:image;base64," + v;
-		}
-		else if (v.substring(0, 17).toLowerCase() != "data:image;base64") {
-			var comma_idx = v.indexOf(",");
-			if (comma_idx > -1) {
-				var tmp = v.slice(comma_idx + 1, v.length);
-				this._base64str = "data:image;base64," + tmp;
+		else {
+			var format = nexacro._transImageBase64StringFormat(v, true);
+			if (format) {
+				this._base64str = format.alldata;
 			}
 		}
 	};

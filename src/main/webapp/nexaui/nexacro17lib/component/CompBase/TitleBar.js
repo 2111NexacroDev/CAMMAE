@@ -301,16 +301,9 @@ if (!nexacro.TitleBarControl) {
 			return;
 		}
 		var ownerframe = this.getOwnerFrame();
-		var _window = this._getWindow();
-		var wheelZoom = 1.0;
-		if (_window && (_window._wheelZoom != undefined)) {
-			wheelZoom = _window._wheelZoom / 100;
-			if (ownerframe.getElement().zoom != 100) {
-				wheelZoom = 1.0;
-			}
-		}
+
 		if (ownerframe) {
-			ownerframe._on_titlebar_endtrack(x / wheelZoom, y / wheelZoom, dragdata);
+			ownerframe._on_titlebar_endtrack(x, y, dragdata);
 		}
 	};
 
@@ -319,18 +312,11 @@ if (!nexacro.TitleBarControl) {
 			return;
 		}
 		var ownerframe = this.getOwnerFrame();
-		var _window = this._getWindow();
-		var wheelZoom = 1.0;
-		if (_window && (_window._wheelZoom != undefined)) {
-			wheelZoom = _window._wheelZoom / 100;
-			if (ownerframe.getElement().zoom != 100) {
-				wheelZoom = 1.0;
-			}
-		}
+
 		if (ownerframe) {
 			if (nexacro._SupportAnimationFrame) {
 				var callbackfunc = function () {
-					ownerframe._on_titlebar_movetrack(x / wheelZoom, y / wheelZoom, dragdata, windowX, windowY);
+					ownerframe._on_titlebar_movetrack(x, y, dragdata, windowX, windowY);
 				};
 				if (!this._movetrack_animationframe) {
 					var pThis = this;
@@ -342,7 +328,7 @@ if (!nexacro.TitleBarControl) {
 				this._movetrack_animationframe.start();
 			}
 			else {
-				ownerframe._on_titlebar_movetrack(x / wheelZoom, y / wheelZoom, dragdata, windowX, windowY);
+				ownerframe._on_titlebar_movetrack(x, y, dragdata, windowX, windowY);
 			}
 		}
 	};
@@ -362,6 +348,10 @@ if (!nexacro.TitleBarControl) {
 		var buttonsize = this._buttonsize;
 		var buttonwidth = height;
 		var buttonheight = height;
+		if (this._is_verticalmin) {
+			buttonwidth = width;
+			buttonheight = width;
+		}
 
 		if (buttonsize && buttonsize.length > 0) {
 			buttonwidth = nexacro._toInt(buttonsize[0]);

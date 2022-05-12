@@ -33,8 +33,6 @@ if (!nexacro.Device) {
 	};
 	_pDeviceI.runCallback = function (sid, sfunc, params) {
 	};
-	_pDeviceI.on_created = function () {
-	};
 	_pDeviceI._isHybrid = function () {
 	};
 
@@ -213,9 +211,6 @@ if (!nexacro.Phone) {
 		return true;
 	};
 
-	_pPhone.on_created = function () {
-	};
-
 
 	_pPhone.makeCall = function (strPhoneNumber, bAutoDialing) {
 		if (bAutoDialing == "undefined" || bAutoDialing == null) {
@@ -316,9 +311,6 @@ if (!nexacro.Sms) {
 		nexacro.Device.exec(jsonstr);
 
 		return true;
-	};
-
-	_pSms.on_created = function () {
 	};
 
 	_pSms._getReferenceContext = function () {
@@ -988,9 +980,6 @@ if (!nexacro.AudioPlayer) {
 		return true;
 	};
 
-	_pAudioPlayer.on_created = function () {
-	};
-
 	_pAudioPlayer._getReferenceContext = function () {
 		return this._refform;
 	};
@@ -1563,7 +1552,7 @@ if (!nexacro.Geolocation) {
 			longitude : 0.0, 
 			altitude : 0.0, 
 			heading : 0.0, 
-			speed : 0.0, 
+			speed : undefined, 
 			accuracy : 0.0, 
 			altitudeaccuracy : 0.0, 
 			set_latitude : function () {
@@ -1614,9 +1603,6 @@ if (!nexacro.Geolocation) {
 		nexacro.Device.exec(jsonstr);
 
 		return true;
-	};
-
-	_pGeolocation.on_created = function () {
 	};
 
 
@@ -1715,7 +1701,7 @@ if (!nexacro.Geolocation) {
 				this.coords.longitude = jsonObjData.coords.longitude;
 				this.coords.altitude = jsonObjData.coords.altitude;
 				this.coords.heading = jsonObjData.coords.heading;
-				this.coords.speed = jsonObjData.coords.speed;
+				this.coords.speed = (Number(objData.coords.speed) > 0) ? objData.coords.speed : undefined;
 				this.coords.accuracy = jsonObjData.coords.accuracy;
 				this.coords.altitudeaccuracy = jsonObjData.coords.altitudeaccuracy;
 				this.timestamp = new Date(jsonObjData.timestamp);
@@ -1727,7 +1713,7 @@ if (!nexacro.Geolocation) {
 			this.coords.longitude = objData.coords.longitude;
 			this.coords.altitude = objData.coords.altitude;
 			this.coords.heading = objData.coords.heading;
-			this.coords.speed = objData.coords.speed;
+			this.coords.speed = (Number(objData.coords.speed) > 0) ? objData.coords.speed : undefined;
 			this.coords.accuracy = objData.coords.accuracy;
 			this.coords.altitudeaccuracy = objData.coords.altitudeaccuracy;
 			this.timestamp = new Date(objData.timestamp);
@@ -1825,7 +1811,7 @@ if (!nexacro.GeolocationEventInfo) {
 			longitude : Number(objCoords.longitude), 
 			altitude : Number(objCoords.altitude), 
 			heading : Number(objCoords.heading), 
-			speed : Number(objCoords.speed), 
+			speed : objCoords.speed, 
 			accuracy : Number(objCoords.accuracy), 
 			altitudeaccuracy : Number(objCoords.altitudeaccuracy)
 		};
@@ -1895,9 +1881,6 @@ if (!nexacro.Acceleration) {
 		nexacro.Device.exec(jsonstr);
 
 		return true;
-	};
-
-	_pAcceleration.on_created = function () {
 	};
 
 	_pAcceleration.set_xpos = function () {
@@ -2154,9 +2137,6 @@ if (!nexacro.Vibrator) {
 		return true;
 	};
 
-	_pVibrator.on_created = function () {
-	};
-
 	_pVibrator.set_repeatcount = function (v) {
 		if (this.paramck_vibrepeatcount(v)) {
 			this.repeatcount = v;
@@ -2392,9 +2372,6 @@ if (!nexacro.Network) {
 		return true;
 	};
 
-	_pNetwork.on_created = function () {
-	};
-
 
 	_pNetwork.set_availabletype = function () {
 	};
@@ -2593,8 +2570,6 @@ if (!nexacro.FileDialog) {
 	nexacro.FileDialog.SAVE = 2;
 	nexacro.FileDialog.MULTILOAD = 3;
 	nexacro.FileDialog.SELFOLDER = 4;
-
-	_pFileDialog.on_created = nexacro._emptyFn;
 
 	_pFileDialog.destroy = function () {
 		nexacro._destroyFileDialogHandle(this);
@@ -2795,9 +2770,6 @@ if (!nexacro.Camera) {
 		nexacro.Device.exec(jsonstr);
 
 		return true;
-	};
-
-	_pCamera.on_created = function () {
 	};
 
 	_pCamera.set_imagequality = function (v) {
@@ -3070,9 +3042,6 @@ if (!nexacro.ImagePicker) {
 		}
 		nexacro.Device.exec(jsonstr);
 		return true;
-	};
-
-	_pImagePicker.on_created = function () {
 	};
 
 	_pImagePicker.set_imagequality = function (v) {
@@ -3357,9 +3326,6 @@ if (!nexacro.AudioRecorder) {
 		nexacro.Device.exec(jsonstr);
 
 		return true;
-	};
-
-	_pAudioRecorder.on_created = function () {
 	};
 
 	_pAudioRecorder._getReferenceContext = function () {
@@ -3711,9 +3677,6 @@ if (!nexacro.ContactSet) {
 		nexacro.Device.exec(jsonstr);
 
 		return true;
-	};
-
-	_pContactSet.on_created = function () {
 	};
 
 
@@ -4157,7 +4120,7 @@ if (!nexacro.ContactSet) {
 		if (typeof (obj.phonenumbers) != "undefined") {
 			if ((obj.phonenumbers.length) > 0) {
 				for (i = 0; i < obj.phonenumbers.length; i++) {
-					num = obj.phonenumbers[i].type * 1;
+					num = obj.phonenumbers[i].type *  1;
 					if (num < 0 && num > 12) {
 						return false;
 					}
@@ -4180,7 +4143,7 @@ if (!nexacro.ContactSet) {
 		if (typeof (obj.emails) != "undefined") {
 			if ((obj.emails.length) > 0) {
 				for (i = 0; i < obj.emails.length; i++) {
-					num = obj.emails[i].type * 1;
+					num = obj.emails[i].type *  1;
 					if (num < 0 && num > 12) {
 						return false;
 					}
@@ -4203,7 +4166,7 @@ if (!nexacro.ContactSet) {
 		if (typeof (obj.categories) != "undefined") {
 			if ((obj.categories.length) > 0) {
 				for (i = 0; i < obj.categories.length; i++) {
-					num = obj.categories[i].type * 1;
+					num = obj.categories[i].type *  1;
 					if (num < 0 && num > 12) {
 						return false;
 					}
@@ -4218,7 +4181,7 @@ if (!nexacro.ContactSet) {
 		if (typeof (obj.urls) != "undefined") {
 			if ((obj.urls.length) > 0) {
 				for (i = 0; i < obj.urls.length; i++) {
-					num = obj.urls[i].type * 1;
+					num = obj.urls[i].type *  1;
 					if (num < 0 && num > 12) {
 						return false;
 					}
@@ -4241,7 +4204,7 @@ if (!nexacro.ContactSet) {
 		if (typeof (obj.ims) != "undefined") {
 			if ((obj.ims.length) > 0) {
 				for (i = 0; i < obj.ims.length; i++) {
-					num = obj.ims[i].type * 1;
+					num = obj.ims[i].type *  1;
 					if (num < 0 && num > 12) {
 						return false;
 					}
@@ -4268,7 +4231,7 @@ if (!nexacro.ContactSet) {
 		if (typeof (obj.addresses) != "undefined") {
 			if ((obj.addresses.length) > 0) {
 				for (i = 0; i < obj.addresses.length; i++) {
-					num = obj.addresses[i].type * 1;
+					num = obj.addresses[i].type *  1;
 					if (num < 0 && num > 12) {
 						return false;
 					}
@@ -4290,7 +4253,7 @@ if (!nexacro.ContactSet) {
 		if (typeof (obj.organizations) != "undefined") {
 			if ((obj.organizations.length) > 0) {
 				for (i = 0; i < obj.organizations.length; i++) {
-					num = obj.organizations[i].type * 1;
+					num = obj.organizations[i].type *  1;
 					if (num < 0 && num > 12) {
 						return false;
 					}
@@ -4466,9 +4429,6 @@ if (!nexacro.Contact) {
 
 	var _pContact = nexacro.Contact.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.Contact);
 	_pContact._type_name = "Contact";
-
-	_pContact.on_created = function () {
-	};
 
 	_pContact.set_uniqueid = function (v) {
 		if (nexacro.Device.pramck_contactString(v) == true) {
@@ -4985,9 +4945,6 @@ if (!nexacro.ContactField) {
 	var _pContactField = nexacro.ContactField.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.ContactField);
 	_pContactField._type_name = "ContactField";
 
-	_pContactField.on_created = function () {
-	};
-
 	_pContactField.set_type = function (v) {
 		if (nexacro.Device.pramck_contactString(v) == true) {
 			this.type = v;
@@ -5065,9 +5022,6 @@ if (!nexacro.ContactIM) {
 	};
 	var _pContactIM = nexacro.ContactIM.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.ContactIM);
 	_pContactIM._type_name = "ContactIM";
-
-	_pContactIM.on_created = function () {
-	};
 
 	_pContactIM.set_type = function (v) {
 		if (nexacro.Device.pramck_contactString(v) == true) {
@@ -5176,9 +5130,6 @@ if (!nexacro.ContactAddress) {
 
 	var _pContactAddress = nexacro.ContactAddress.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.ContactAddress);
 	_pContactAddress._type_name = "ContactAddress";
-
-	_pContactAddress.on_created = function () {
-	};
 
 	_pContactAddress.set_type = function (v) {
 		if (nexacro.Device.pramck_contactString(v) == true) {
@@ -5340,9 +5291,6 @@ if (!nexacro.ContactOrganization) {
 	var _pContactOrganization = nexacro.ContactOrganization.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.ContactOrganization);
 	_pContactOrganization._type_name = "ContactOrganization";
 
-	_pContactOrganization.on_created = function () {
-	};
-
 	_pContactOrganization.set_type = function (v) {
 		if (nexacro.Device.pramck_contactString(v) == true) {
 			this.type = v;
@@ -5437,9 +5385,6 @@ if (!nexacro.ContactPhoto) {
 	var _pContactPhoto = nexacro.ContactPhoto.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.ContactPhoto);
 	_pContactPhoto._type_name = "ContactPhoto";
 
-	_pContactPhoto.on_created = function () {
-	};
-
 	_pContactPhoto.set_imagedata = function (v) {
 		if (nexacro.Device.pramck_contactString(v) == true) {
 			this.imagedata = v;
@@ -5508,9 +5453,6 @@ if (!nexacro.ExternalAPI) {
 		nexacro.Device.exec(jsonstr);
 
 		return true;
-	};
-
-	_pExternalAPI.on_created = function () {
 	};
 
 	_pExternalAPI.isAccessible = function (strApplicationID) {
@@ -5687,9 +5629,6 @@ if (nexacro._OS == "iOS" && !nexacro.LiteDBConnection) {
 		nexacro.Device.exec(jsonstr);
 
 		return true;
-	};
-
-	_pLiteDBConnection.on_created = function () {
 	};
 
 	_pLiteDBConnection.set_busytimeout = function (v) {
@@ -6038,9 +5977,6 @@ if (nexacro._OS == "iOS" && !nexacro.LiteDBStatement) {
 		return true;
 	};
 
-	_pLiteDBStatement.on_created = function () {
-	};
-
 
 	_pLiteDBStatement.set_query = function (v) {
 		if (this.paramck_query(v)) {
@@ -6240,16 +6176,16 @@ if (nexacro._OS == "iOS" && !nexacro.LiteDBStatement) {
 		var qry = strQuery.toLowerCase();
 		var arr = qry.split(" ");
 		for (var i = 0; i < arr.length; i++) {
-			if (strQuery.match(/select/) != null) {
+			if (strQuery.match(/select/i) != null) {
 				return 1;
 			}
-			else if (strQuery.match(/insert/) != null) {
+			else if (strQuery.match(/insert/i) != null) {
 				return 2;
 			}
-			else if (strQuery.match(/update/) != null) {
+			else if (strQuery.match(/update/i) != null) {
 				return 3;
 			}
-			else if (strQuery.match(/delete/) != null) {
+			else if (strQuery.match(/delete/i) != null) {
 				return 4;
 			}
 		}
@@ -6345,9 +6281,6 @@ if (!nexacro.FakeXMLHttpRequest) {
 		return true;
 	};
 
-	_pFakeXMLHttpRequest.on_created = function () {
-	};
-
 	_pFakeXMLHttpRequest.open = function (method, path, async) {
 		this.method = method;
 		this.strURL = path;
@@ -6373,7 +6306,7 @@ if (!nexacro.FakeXMLHttpRequest) {
 
 		var encodedData = "";
 		if (data) {
-			encodedData = nexacro.base64Encode(data);
+			encodedData = btoa(unescape(encodeURIComponent(data)));
 		}
 
 		var params = '{"attrs":' + attrs + 
@@ -6406,7 +6339,7 @@ if (!nexacro.FakeXMLHttpRequest) {
 					this.statusText = jsonData.statusText;
 				}
 				if (jsonData.responseText) {
-					this.responseText = nexacro.base64Decode(jsonData.responseText);
+					this.responseText = decodeURIComponent(escape(atob(jsonData.responseText)));
 				}
 				if (jsonData.responseAllHeaders) {
 					responseHeaders = JSON.parse(jsonData.responseAllHeaders);
@@ -6447,6 +6380,7 @@ if (!nexacro.FakeXMLHttpRequest) {
 			',"strDataType":"' + this.strDataType + '"' + 
 			',"postdata":"' + postdatastr + '"' + 
 			',"filelist":"' + fileliststr + '"' + 
+			',"filelistkeys":"' + filelistkeys + '"' + 
 			'}';
 		var jsonstr = '{"id":"' + this._id + 
 			'", "div":"FakeXMLHttpRequest", "method":"' + 'fileUpload' + 
@@ -6458,7 +6392,7 @@ if (!nexacro.FakeXMLHttpRequest) {
 
 	_pFakeXMLHttpRequest.getSendData = function () {
 		if (this.SendData) {
-			return nexacro.base64Encode(this.SendData);
+			return btoa(unescape(encodeURIComponent(this.SendData)));
 		}
 
 		return null;
@@ -6493,7 +6427,7 @@ if (!nexacro.FakeXMLHttpRequest) {
 			e = JSON.parse(nexacro.Device.decodeString(retData.e));
 		}
 		if (retData.responseText) {
-			this.responseText = nexacro.base64Decode(retData.responseText);
+			this.responseText = decodeURIComponent(escape(atob(retData.responseText)));
 		}
 		if (retData.responseAllHeaders) {
 			this.responseHeaders = JSON.parse(nexacro.Device.decodeString(retData.responseAllHeaders));
@@ -6526,7 +6460,7 @@ if (!nexacro.FakeXMLHttpRequest) {
 		var status, data, url, errcode, httpcode, loaded, total;
 		status = retData.status;
 		if (retData.data) {
-			data = nexacro.base64Decode(retData.data);
+			data = decodeURIComponent(escape(atob(retData.data)));
 		}
 		url = retData.url;
 		httpcode = retData.httpcode;

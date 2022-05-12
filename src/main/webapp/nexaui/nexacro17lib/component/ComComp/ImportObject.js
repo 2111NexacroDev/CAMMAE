@@ -46,7 +46,8 @@ if (!nexacro.ExcelImportObject) {
 		EXCEL97 : 0x0110, 
 		EXCEL2007 : 0x0120, 
 		HANCELL2014 : 0x0410, 
-		CSV : 0x0500
+		CSV : 0x0500, 
+		TXT : 0x0510
 	};
 
 
@@ -92,6 +93,9 @@ if (!nexacro.ExcelImportObject) {
 	_pExcelImport._importurl = "";
 	_pExcelImport._uploadurl = "";
 	_pExcelImport._uploadservlet = "";
+	_pExcelImport.separator = "";
+	_pExcelImport.quotechar = "default";
+	_pExcelImport._defaultseparator = "0x2c";
 
 	_pExcelImport._fileurl = "";
 	_pExcelImport._range = "";
@@ -128,8 +132,6 @@ if (!nexacro.ExcelImportObject) {
 		"onsuccess" : 1
 	};
 
-	_pExcelImport.on_created = nexacro._emptyFn;
-
 
 
 	_pExcelImport.set_importtype = function (v) {
@@ -152,9 +154,48 @@ if (!nexacro.ExcelImportObject) {
 			case "CSV":
 				v = 0x0500;
 				break;
+			case "TXT":
+				v = 0x0510;
+				break;
 		}
 		if (v != this.importtype) {
 			this.importtype = v;
+		}
+		return v;
+	};
+
+	_pExcelImport.set_separator = function (v) {
+		var checkinvalid = false;
+		if (v.length == 4) {
+			if ((v.substr(0, 2) == "0x") || (v.substr(0, 2) == "0X")) {
+				v = parseInt(v, 16);
+			}
+			else {
+				checkinvalid = true;
+			}
+		}
+
+		v = parseInt(v);
+		var pattern16 = /^(0|3|10|13|29|34|39|40|41|58|61)$/g;
+		if (checkinvalid || pattern16.test(v) || v >= 0x80 || v <= 0x00) {
+			this.separator = v = this._defaultseparator;
+		}
+
+		if (v != this.separator && nexacro._isInt(v)) {
+			this.separator = v.toString(16);
+		}
+
+		return v;
+	};
+
+	_pExcelImport.set_quotechar = function (v) {
+		var quotechar_enum = ['"', "'", "none", "default"];
+		if (quotechar_enum.indexOf(v) == -1) {
+			this.quotechar = v = "default";
+		}
+
+		if (v != this.quotechar) {
+			this.quotechar = v;
 		}
 		return v;
 	};
@@ -503,7 +544,7 @@ if (!nexacro.ExcelImportObject) {
 		for (var i = 0; i < s_len; i++) {
 			str += "<Sheet ";
 
-			properties = sheets[i].match(/[_A-Za-z0-9]+=[\(\)_!:A-Za-z0-9가-힣 \.\-]+/g);
+			properties = sheets[i].match(/[_A-Za-z0-9]+=[\(\)_!:A-Za-z0-9가-힣 \.\-\,]+/g);
 			if (properties == null) {
 				var range = sheets[i];
 				if (range.indexOf("!") >= 0) {
@@ -530,7 +571,7 @@ if (!nexacro.ExcelImportObject) {
 			else {
 				var flag = false;
 				for (var j = 0, p_len = properties.length; j < p_len; j++) {
-					property = properties[j].match(/[\(\)_!:A-Za-z0-9가-힣 \.\-]+/g);
+					property = properties[j].match(/[\(\)_!:A-Za-z0-9가-힣 \.\-\,]+/g);
 
 					var property_name = property[0].toLowerCase();
 					if (property_name != "command") {
@@ -576,6 +617,8 @@ if (!nexacro.ExcelImportObject) {
 		ds_command.addColumn("rawnumbervalue", "String", 256);
 		ds_command.addColumn("importid", "String", 256);
 		ds_command.addColumn("usehtmltag", "String", 256);
+		ds_command.addColumn("separator", "String", 256);
+		ds_command.addColumn("quotechar", "String", 256);
 
 		ds_command.addRow();
 
@@ -589,6 +632,8 @@ if (!nexacro.ExcelImportObject) {
 		ds_command.setColumn(0, "rawnumbervalue", this._userawnumbervalue);
 		ds_command.setColumn(0, "importid", this._importid);
 		ds_command.setColumn(0, "usehtmltag", this._usehtmltag);
+		ds_command.setColumn(0, "separator", this.separator ? this.separator : this._defaultseparator);
+		ds_command.setColumn(0, "quotechar", this.quotechar);
 
 		if (this._iscors) {
 			ds_command.addColumn("responsetype", "String", 256);
@@ -633,12 +678,12 @@ if (!nexacro.ExcelImportObject) {
 				application._endCommProgress();
 			}
 
-			var evt, error_info, fileUrl, unique_id = this._unique_id, code = -1, msg = "", result = null, importid;
+			var evt, error_info, fileUrl, unique_id = this._unique_id, code = -1, msg = "", result = null, importid, statuscode = 9901;
 			if (status < 0) {
 				nexacro._onHttpSystemError(this, true, this, errcode, url, httpcode, url, null, extramsg);
 
 				var commerrorobj = nexacro.MakeCommunicationError(this, errcode, url, httpcode, url, null, extramsg);
-				evt = new nexacro.ExcelImportErrorEventInfo(this, "onerror", "ObjectError", commerrorobj.message, this, 9901);
+				evt = new nexacro.ExcelImportErrorEventInfo(this, "onerror", "ObjectError", commerrorobj.message, this, statuscode);
 				this.on_fire_onerror(this, evt);
 			}
 			else {
@@ -667,8 +712,11 @@ if (!nexacro.ExcelImportObject) {
 				}
 
 				if (code < 0) {
+					if (code <= -2001 && code >= -2020) {
+						statuscode = code;
+					}
 					if (status != 4) {
-						evt = new nexacro.ExcelImportErrorEventInfo(this, "onerror", "ObjectError", msg, this, 9901);
+						evt = new nexacro.ExcelImportErrorEventInfo(this, "onerror", "ObjectError", msg, this, statuscode);
 						this.on_fire_onerror(this, evt);
 					}
 				}
@@ -692,7 +740,7 @@ if (!nexacro.ExcelImportObject) {
 			var code = -1;
 			var msg = "";
 			var unique_id = this._unique_id;
-			var evt, result, importid;
+			var evt, result, importid, statuscode = 9901;
 			try {
 				if (this._iscors) {
 					nexacro._setPostMessage(this._unique_id, this);
@@ -746,7 +794,10 @@ if (!nexacro.ExcelImportObject) {
 					}
 
 					if (code < 0) {
-						evt = new nexacro.ExcelImportErrorEventInfo(this, "onerror", "ObjectError", msg, this, 9901);
+						if (code <= -2001 && code >= -2020) {
+							statuscode = code;
+						}
+						evt = new nexacro.ExcelImportErrorEventInfo(this, "onerror", "ObjectError", msg, this, statuscode);
 						this.on_fire_onerror(this, evt);
 					}
 					else {
@@ -762,7 +813,7 @@ if (!nexacro.ExcelImportObject) {
 				}
 			}
 			catch (e) {
-				evt = new nexacro.ExcelImportErrorEventInfo(this, "onerror", "ObjectError", "failed to get", this, 9901);
+				evt = new nexacro.ExcelImportErrorEventInfo(this, "onerror", "ObjectError", "failed to get", this, statuscode);
 				this.on_fire_onerror(this, evt);
 			}
 			nexacro._remove_hidden_item(unique_id, "upfile", this._hidden_frame_handle);
@@ -774,7 +825,7 @@ if (!nexacro.ExcelImportObject) {
 	_pExcelImport.on_after_load = function (messageObj) {
 		var str = messageObj.message;
 		var result, evt, fstr, url, code = -1, msg = "", data = "";
-		var fileUrl, importid;
+		var fileUrl, importid, statuscode = 9901;
 		try {
 			var type = str.slice(0, 10).toUpperCase();
 			if (type.indexOf("SSV" >= 0)) {
@@ -816,7 +867,10 @@ if (!nexacro.ExcelImportObject) {
 			}
 
 			if (code < 0) {
-				evt = new nexacro.ExcelImportErrorEventInfo(this, "onerror", "ObjectError", msg, this, 9901);
+				if (code <= -2001 && code >= -2020) {
+					statuscode = code;
+				}
+				evt = new nexacro.ExcelImportErrorEventInfo(this, "onerror", "ObjectError", msg, this, statuscode);
 				this.on_fire_onerror(this, evt);
 			}
 			else {
@@ -831,7 +885,7 @@ if (!nexacro.ExcelImportObject) {
 			}
 		}
 		catch (e) {
-			evt = new nexacro.ExcelImportErrorEventInfo(this, "onerror", "ObjectError", "failed to get", this, 9901);
+			evt = new nexacro.ExcelImportErrorEventInfo(this, "onerror", "ObjectError", "failed to get", this, statuscode);
 			this.on_fire_onerror(this, evt);
 		}
 	};
@@ -866,6 +920,10 @@ if (!nexacro.ExcelImportObject) {
 				case "csv":
 					checkExcel = true;
 					this._importType = nexacro.ImportTypes.CSV;
+					break;
+				case "txt":
+					checkExcel = true;
+					this._importType = nexacro.ImportTypes.TXT;
 					break;
 			}
 		}

@@ -378,7 +378,7 @@ if (!nexacro.ProgressBar) {
 	};
 
 	_pProgressBar.on_notify_progressbar_onclick = function (obj, e) {
-		this.on_fire_onclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, this, this);
+		this.on_fire_onclick(e.button, e.altkey, e.ctrlkey, e.shiftkey, e.screenx, e.screeny, e.canvasx, e.canvasy, e.clientx, e.clienty, this, this, e.metakey);
 	};
 
 	_pProgressBar._createProgressStartCap = function (iscreateonly) {
@@ -572,11 +572,11 @@ if (!nexacro.ProgressBar) {
 					for (i = 0; i < barcurpos; i++) {
 						baritem = itemlist[i];
 
-						l = client_width - this._endcap_width - (i * blocksize) - barwidth;
+						l = client_width - this._endcap_width - (i *  blocksize) - barwidth;
 						w = barwidth;
 
 						if (i == (barcurpos - 1) && (l - barwidth) <= 0) {
-							w = client_width - this._startcap_width - this._endcap_width - (i * blocksize);
+							w = client_width - this._startcap_width - this._endcap_width - (i *  blocksize);
 							l = this._startcap_width;
 						}
 
@@ -602,7 +602,7 @@ if (!nexacro.ProgressBar) {
 					for (i = 0; i < barcurpos; i++) {
 						baritem = itemlist[i];
 						w = barwidth;
-						l = (i * blocksize) + this._startcap_width;
+						l = (i *  blocksize) + this._startcap_width;
 
 						if (i == (barcurpos - 1) && (l + barwidth) >= (progressitem_totalwidth)) {
 							w = client_width - this._endcap_width - l;
@@ -705,13 +705,13 @@ if (!nexacro.ProgressBar) {
 
 		if (smooth) {
 			barcount = 1;
-			barwidth = parseInt(client_width * per) | 0;
+			barwidth = parseInt(client_width *  per) | 0;
 			barcurpos = 0;
 		}
 		else {
 			barwidth = blocksize;
 			barcount = Math.ceil(client_width / (barwidth + blockgap)) | 0;
-			barcurpos = Math.floor(barcount * per);
+			barcurpos = Math.floor(barcount *  per);
 		}
 
 		rtn = [barcount, barcurpos, barwidth];
