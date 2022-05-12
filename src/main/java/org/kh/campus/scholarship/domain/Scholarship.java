@@ -1,11 +1,10 @@
 package org.kh.campus.scholarship.domain;
-
 public class Scholarship {
 	private int scholarship_inno;
-	private int scholarship_avg_grade; 
+	private int scholarship_avg_grade;
 	private String scholarship_year;
-	private String scholarship_term; 
-	private String scholarship_status; 
+	private String scholarship_term;
+	private String scholarship_status;
 	private int scholarship_amount;
 	private String scholarship_name;
 	private String scholarship_phonenumber;
@@ -13,33 +12,14 @@ public class Scholarship {
 	private int scholarship_student_no;
 	private String chk;
 	private int scholarship_manager_no;
-	
-	public Scholarship() {}
 
-	
-	
-	public Scholarship(String scholarship_year, String scholarship_term, String scholarship_college) {
-		super();
-		this.scholarship_year = scholarship_year;
-		this.scholarship_term = scholarship_term;
-		this.scholarship_college = scholarship_college;
+	public Scholarship() {
 	}
-
-
-	public Scholarship(String scholarship_name, int scholarship_student_no, String scholarship_phonenumber) {
-		super();
-		this.scholarship_name = scholarship_name;
-		this.scholarship_student_no = scholarship_student_no;
-		this.scholarship_phonenumber = scholarship_phonenumber;
-	}
-
-
 
 	public Scholarship(int scholarship_student_no) {
+		super();
 		this.scholarship_student_no = scholarship_student_no;
 	}
-
-
 
 	public Scholarship(String scholarship_year, String scholarship_term, String scholarship_college,
 			int scholarship_manager_no) {
@@ -50,9 +30,14 @@ public class Scholarship {
 		this.scholarship_manager_no = scholarship_manager_no;
 	}
 
+	public Scholarship(String scholarship_name, int scholarship_student_no, String scholarship_phonenumber) {
+		super();
+		this.scholarship_name = scholarship_name;
+		this.scholarship_student_no = scholarship_student_no;
+		this.scholarship_phonenumber = scholarship_phonenumber;
+	}
 
-
-
+	
 
 	public Scholarship(int scholarship_inno, int scholarship_avg_grade, String scholarship_year,
 			String scholarship_term, String scholarship_status, int scholarship_amount, String scholarship_name,
@@ -73,7 +58,10 @@ public class Scholarship {
 		this.scholarship_manager_no = scholarship_manager_no;
 	}
 
-
+	public Scholarship(int scholarship_student_no, String scholarship_status) {
+		this.scholarship_student_no = scholarship_student_no;
+		this.scholarship_status = scholarship_status;
+	}
 
 	public int getScholarship_inno() {
 		return scholarship_inno;
@@ -163,19 +151,13 @@ public class Scholarship {
 		this.chk = chk;
 	}
 
-
-
 	public int getScholarship_manager_no() {
 		return scholarship_manager_no;
 	}
 
-
-
 	public void setScholarship_manager_no(int scholarship_manager_no) {
 		this.scholarship_manager_no = scholarship_manager_no;
 	}
-
-
 
 	@Override
 	public String toString() {
@@ -187,8 +169,6 @@ public class Scholarship {
 				+ ", chk=" + chk + ", scholarship_manager_no=" + scholarship_manager_no + "]";
 	}
 
-
-	
 
 
 }

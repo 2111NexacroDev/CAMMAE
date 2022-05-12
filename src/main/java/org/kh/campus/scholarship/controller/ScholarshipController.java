@@ -5,16 +5,19 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.kh.campus.manager.domain.Manager;
+import org.kh.campus.manager.service.ManagerService;
 import org.kh.campus.scholarship.domain.Scholarship;
 import org.kh.campus.scholarship.service.ScholarshipService;
 import org.kh.campus.student.domain.Student;
 import org.kh.campus.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.nexacro.uiadapter17.spring.core.annotation.ParamDataSet;
+import com.nexacro.uiadapter17.spring.core.annotation.ParamVariable;
 import com.nexacro.uiadapter17.spring.core.data.NexacroResult;
 import com.nexacro17.xapi.data.DataSet;
 
@@ -146,14 +149,16 @@ public class ScholarshipController {
 		return result;
 	}
 
-	public String dsGet(DataSet ds, int rowno, String colid) throws Exception
-	{
-	    String value;
-	    value = ds.getString(rowno, colid);
-	    if( value == null )
-	        return "";
-	    else
-	        return value;
-	} 
+	public String dsGet(DataSet ds, int rowno, String colid) throws Exception {
+		String value;
+		value = ds.getString(rowno, colid);
+		if (value == null)
+			return "";
+		else
+			
+			
+			
+			return value;
+	}
 
 }

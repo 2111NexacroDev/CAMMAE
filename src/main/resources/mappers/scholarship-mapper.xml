@@ -13,16 +13,18 @@
   	<result property="scholarship_name" column="SCHOLARSHIP_NAME"/>
   	<result property="scholarship_phonenumber" column="SCHOLARSHIP_PHONENUMBER"/>
   	<result property="scholarship_college" column="SCHOLARSHIP_COLLEGE"/>
-  	<result property="scholarship_student_no" column="SCHOLARSHIP_STU_NO"/>		
+  	<result property="scholarship_student_no" column="SCHOLARSHIP_STU_NO"/>	
   	<result property="chk" column="CHK"/>
-  	<result property="scholarship_manager_no" column="SCHOLARSHIP_MANG_NO"/>	
+  	<result property="scholarship_manager_no" column="SCHOLARSHIP_MANG_NO"/>
   	</resultMap>
+  	
   	<insert id="registerScholar" parameterType="Scholarship">
   	 INSERT INTO SCHOLARSHIP_TBL VALUES(SEQ_SCHOLARSHIP_NO.NEXTVAL, #{scholarship_avg_grade},  #{scholarship_year},  #{scholarship_term},  DEFAULT,  '2500000',  #{scholarship_name}, #{scholarship_phonenumber}, #{scholarship_college}, #{scholarship_student_no}, DEFAULT, '1111')
   	</insert>
+  	
   	<select id="selectAllScholar" resultMap="scholarshipResultMap">
   	 SELECT * FROM SCHOLARSHIP_TBL 
-  	 WHERE SCHOLARSHIP_YEAR = #{scholarship_year} AND SCHOLARSHIP_TEAM= #{scholarship_term} AND SCHOLARSHIP_COLLEGE = #{scholarship_college}
+  	 WHERE SCHOLARSHIP_YEAR = #{scholarship_year} AND SCHOLARSHIP_TEAM= #{scholarship_term} AND SCHOLARSHIP_COLLEGE = #{scholarship_college} AND SCHOLARSHIP_MANG_NO = #{scholarship_manager_no}
   	</select>
   	
   	<select id="selectResult" resultMap="scholarshipResultMap">
@@ -30,7 +32,8 @@
   	FROM SCHOLARSHIP_TBL WHERE SCHOLARSHIP_STU_NO = #{studentNo}
   	</select>
   	
-  	<update id="updateScholarAccept">
+  	<update id="updateScholarAccept" >
+  
   	UPDATE SCHOLARSHIP_TBL SET SCHOLARSHIP_STATUS = 'Y' 
   	WHERE SCHOLARSHIP_STU_NO = #{scholarship_student_no}
   	</update>
