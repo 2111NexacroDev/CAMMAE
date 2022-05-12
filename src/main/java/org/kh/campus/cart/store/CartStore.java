@@ -27,5 +27,23 @@ public interface CartStore {
 
 	List<Lecture> selectAllEnroll2(SqlSession sqlSession, String lectureDepartment);
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	long selectEnrollCount(SqlSession sqlSession, Lecture lecture);
+
 
 }

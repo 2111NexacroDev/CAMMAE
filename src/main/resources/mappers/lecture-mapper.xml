@@ -27,7 +27,7 @@
 	
 	<insert id="insertLecture"  parameterType="Lecture">
 	INSERT INTO LECTURE_TBL VALUES(SEQ_LEC_NO.NEXTVAL
-	, NULL
+	, #{professorNo}
 	, NULL
 	, #{lectureDepartment}
 	, #{lectureName}
