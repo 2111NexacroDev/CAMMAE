@@ -95,19 +95,25 @@ if (nexacro._Browser == "Runtime") {
 				}
 			}
 		};
-
+		nexacro._cleanupPopupFrame = nexacro._emptyFn;
 
 		nexacro._syshandler_onmessage_forward = function (_window, id) {
 			return _window._on_sys_message(id);
 		};
-		nexacro._syshandler_onlbuttondown_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY) {
+		nexacro._syshandler_onlbuttondown_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, metaKey) {
 			var last_focused = _window._last_focused_elem;
 			var isComposing = false;
 			if (last_focused && last_focused.isInputElement()) {
 				isComposing = last_focused.isComposing();
 			}
-
-			var ret = _window._on_sys_lbuttondown(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY);
+			if (_window._touch_list && _window._touch_list.length > 0) {
+				return;
+			}
+			else if (_window._touch_end) {
+				_window._cancelEvent();
+				return;
+			}
+			var ret = _window._on_sys_lbuttondown(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, undefined, undefined, metaKey);
 
 			if (isComposing && !(elem.isInputElement() && elem.enable)) {
 				last_focused.on_complete_composition_value();
@@ -115,8 +121,16 @@ if (nexacro._Browser == "Runtime") {
 
 			return ret;
 		};
-		nexacro._syshandler_onlbuttonup_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY) {
-			var ret = _window._on_sys_lbuttonup(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY);
+		nexacro._syshandler_onlbuttonup_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, metaKey) {
+			if (_window._touch_list && _window._touch_list.length > 0) {
+				return;
+			}
+			else if (_window._touch_end) {
+				_window._touch_end = false;
+				_window._cancelEvent();
+				return;
+			}
+			var ret = _window._on_sys_lbuttonup(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, undefined, undefined, metaKey);
 
 			if (elem && elem._use_decoration) {
 				var firecur_comp = _window._findComponentForEvent(elem);
@@ -138,14 +152,20 @@ if (nexacro._Browser == "Runtime") {
 
 			return ret;
 		};
-		nexacro._syshandler_onrbuttondown_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY) {
+		nexacro._syshandler_onrbuttondown_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, metaKey) {
 			var last_focused = _window._last_focused_elem;
 			var isComposing = false;
 			if (last_focused && last_focused.isInputElement()) {
 				isComposing = last_focused.isComposing();
 			}
-
-			var ret = _window._on_sys_rbuttondown(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY);
+			if (_window._touch_list && _window._touch_list.length > 0) {
+				return;
+			}
+			else if (_window._touch_end) {
+				_window._cancelEvent();
+				return;
+			}
+			var ret = _window._on_sys_rbuttondown(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, undefined, undefined, metaKey);
 
 			if (isComposing && !(elem.isInputElement() && elem.enable)) {
 				last_focused.on_complete_composition_value();
@@ -153,17 +173,28 @@ if (nexacro._Browser == "Runtime") {
 
 			return ret;
 		};
-		nexacro._syshandler_onrbuttonup_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY) {
-			return _window._on_sys_rbuttonup(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY);
+		nexacro._syshandler_onrbuttonup_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, metaKey) {
+			if (_window._touch_list && _window._touch_list.length > 0) {
+				return;
+			}
+			else if (_window._touch_end) {
+				_window._touch_end = false;
+				_window._cancelEvent();
+				return;
+			}
+			return _window._on_sys_rbuttonup(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, undefined, undefined, metaKey);
 		};
-		nexacro._syshandler_onmousedown_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY) {
+		nexacro._syshandler_onmousedown_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, metaKey) {
 			var last_focused = _window._last_focused_elem;
 			var isComposing = false;
 			if (last_focused && last_focused.isInputElement()) {
 				isComposing = last_focused.isComposing();
 			}
+			if (_window._touch_list && _window._touch_list.length > 0 || _window._touch_end) {
+				return;
+			}
 
-			var ret = _window._on_sys_mousedown(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY);
+			var ret = _window._on_sys_mousedown(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, undefined, undefined, metaKey);
 
 			if (isComposing && !(elem.isInputElement() && elem.enable)) {
 				last_focused.on_complete_composition_value();
@@ -171,26 +202,33 @@ if (nexacro._Browser == "Runtime") {
 
 			return ret;
 		};
-		nexacro._syshandler_onmouseup_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY) {
-			return _window._on_sys_mouseup(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY);
+		nexacro._syshandler_onmouseup_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, metaKey) {
+			if (_window._touch_list && _window._touch_list.length > 0 || _window._touch_end) {
+				return;
+			}
+			return _window._on_sys_mouseup(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, undefined, undefined, metaKey);
 		};
-		nexacro._syshandler_onmousemove_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY) {
-			return _window._on_sys_mousemove(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY);
+		nexacro._syshandler_onmousemove_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, metaKey) {
+			if (_window._touch_list && _window._touch_list.length > 0 || _window._touch_end) {
+				return;
+			}
+
+			return _window._on_sys_mousemove(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, undefined, undefined, metaKey);
 		};
-		nexacro._syshandler_onmouseenter_forward = function (_window, elem, from_elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY) {
+		nexacro._syshandler_onmouseenter_forward = function (_window, elem, from_elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, metaKey) {
 			if (!from_elem) {
 				nexacro._initDragInfo();
 			}
 
-			return _window._on_sys_mouseenter(elem, from_elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY);
+			return _window._on_sys_mouseenter(elem, from_elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, undefined, undefined, metaKey);
 		};
-		nexacro._syshandler_onmouseleave_forward = function (_window, elem, to_elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY) {
-			return _window._on_sys_mouseleave(elem, to_elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY);
+		nexacro._syshandler_onmouseleave_forward = function (_window, elem, to_elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, metaKey) {
+			return _window._on_sys_mouseleave(elem, to_elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, undefined, undefined, metaKey);
 		};
-		nexacro._syshandler_onmousewheel_forward = function (_window, elem, wheelDelta, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY) {
+		nexacro._syshandler_onmousewheel_forward = function (_window, elem, wheelDelta, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, metaKey) {
 			var ret;
 			if (nexacro._nCountAlertConfirm <= 0) {
-				ret = _window._on_sys_mousewheel(elem, 0, wheelDelta, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY);
+				ret = _window._on_sys_mousewheel(elem, 0, wheelDelta, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, undefined, undefined, metaKey);
 				if (ret != false && ctrlKey && wheelDelta != 0) {
 					nexacro._checkClosePopupComponent(null);
 					var zoomframeElement = _window.frame._is_popup_frame != true ? _window.frame.frame.getElement() : _window.frame.getElement();
@@ -204,27 +242,41 @@ if (nexacro._Browser == "Runtime") {
 			}
 			return ret;
 		};
-		nexacro._syshandler_ondragenter_forward = function (_window, elem, fromElem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist) {
-			_window._on_sys_dragenter(elem, fromElem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist);
+		nexacro._syshandler_ondragenter_forward = function (_window, elem, fromElem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist, metaKey) {
+			_window._on_sys_dragenter(elem, fromElem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist, metaKey);
 		};
-		nexacro._syshandler_ondragleave_forward = function (_window, elem, toElem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
-			_window._on_sys_dragleave(elem, toElem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY);
+		nexacro._syshandler_ondragleave_forward = function (_window, elem, toElem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
+			_window._on_sys_dragleave(elem, toElem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, undefined, metaKey);
 		};
-		nexacro._syshandler_ondragover_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
-			_window._on_sys_dragover(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY);
+		nexacro._syshandler_ondragover_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
+			_window._on_sys_dragover(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, undefined, metaKey);
 		};
-		nexacro._syshandler_ondrop_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist) {
-			_window._on_sys_drop(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist);
+		nexacro._syshandler_ondrop_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist, metaKey) {
+			_window._on_sys_drop(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist, metaKey);
 		};
 		nexacro._syshandler_ontouchstart_forward = function (_window, elem, touchid, time) {
 			var touches = arguments[2], changedTouches = arguments[3];
 			time = arguments[4];
 
+			if (!_window._touch_list) {
+				_window._touch_list = new nexacro.Collection();
+			}
+			_window._touch_end = false;
 			var last_focused = _window._last_focused_elem;
 			var isComposing = false;
 			if (last_focused && last_focused.isInputElement()) {
 				isComposing = last_focused.isComposing();
 			}
+			if (touches.length > 0) {
+				_window._touch_list.add(touches[0].id.toString(), touches);
+			}
+			else if (changedTouches.length > 0) {
+				_window._touch_list.add(changedTouches[0].id.toString(), changedTouches);
+			}
+
+
+
+
 
 			var ret = nexacro._syshandler_ongesture_touchstart_forward(_window, elem, touches, changedTouches, time);
 
@@ -237,11 +289,34 @@ if (nexacro._Browser == "Runtime") {
 		nexacro._syshandler_ontouchmove_forward = function (_window, elem, touchid, time) {
 			var touches = arguments[2], changedTouches = arguments[3];
 			time = arguments[4];
+
+
+
+			if (touches.length > 0) {
+				_window._touch_list.add(touches[0].id.toString(), touches);
+			}
+			else if (changedTouches.length > 0) {
+				_window._touch_list.add(changedTouches[0].id.toString(), changedTouches);
+			}
+
+
+
 			return nexacro._syshandler_ongesture_touchmove_forward(_window, elem, touches, changedTouches, time);
 		};
 		nexacro._syshandler_ontouchend_forward = function (_window, elem, touchid, time) {
 			var touches = arguments[2], changedTouches = arguments[3];
 			time = arguments[4];
+
+
+			if (touches.length > 0) {
+				_window._touch_list.remove(touches[0].id.toString());
+			}
+			else if (changedTouches.length > 0) {
+				_window._touch_list.remove(changedTouches[0].id.toString());
+			}
+
+			_window._touch_end = true;
+
 			var ret = nexacro._syshandler_ongesture_touchend_forward(_window, elem, touches, changedTouches, time);
 
 			if (elem && elem._use_decoration) {
@@ -351,22 +426,22 @@ if (nexacro._Browser == "Runtime") {
 
 			return _window._on_gesture_sys_touchend(elem, touch_infos, changed_touch_infos, curTime);
 		};
-		nexacro._syshandler_onmousehover_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY) {
+		nexacro._syshandler_onmousehover_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, metaKey) {
 			if (elem && elem.handle) {
 				nexacro.__showElementHandleTooltip(elem.handle, windowX, windowY);
 			}
 		};
-		nexacro._syshandler_ondblclick_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY) {
-			return _window._on_sys_dblclick(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY);
+		nexacro._syshandler_ondblclick_forward = function (_window, elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, metaKey) {
+			return _window._on_sys_dblclick(elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, undefined, undefined, metaKey);
 		};
-		nexacro._syshandler_onkeydown_forward = function (_window, elem, keycode, altKey, ctrlKey, shiftKey) {
-			return _window._on_sys_keydown(elem, keycode, altKey, ctrlKey, shiftKey);
+		nexacro._syshandler_onkeydown_forward = function (_window, elem, keycode, altKey, ctrlKey, shiftKey, metaKey) {
+			return _window._on_sys_keydown(elem, keycode, altKey, ctrlKey, shiftKey, metaKey);
 		};
-		nexacro._syshandler_onkeypress_forward = function (_window, elem, keycode, altKey, ctrlKey, shiftKey) {
-			return _window._on_sys_keypress(elem, keycode, altKey, ctrlKey, shiftKey);
+		nexacro._syshandler_onkeypress_forward = function (_window, elem, keycode, charcode, altKey, ctrlKey, shiftKey, metaKey) {
+			return _window._on_sys_keypress(elem, keycode, charcode, altKey, ctrlKey, shiftKey, metaKey);
 		};
-		nexacro._syshandler_onkeyup_forward = function (_window, elem, keycode, altKey, ctrlKey, shiftKey) {
-			return _window._on_sys_keyup(elem, keycode, altKey, ctrlKey, shiftKey);
+		nexacro._syshandler_onkeyup_forward = function (_window, elem, keycode, altKey, ctrlKey, shiftKey, metaKey) {
+			return _window._on_sys_keyup(elem, keycode, altKey, ctrlKey, shiftKey, metaKey);
 		};
 		nexacro._syshandler_oncontextmenu_forward = function (_window, elem) {
 			return _window._on_sys_contextmenu(elem);
@@ -387,8 +462,11 @@ if (nexacro._Browser == "Runtime") {
 			return _window._on_sys_deactivate();
 		};
 		nexacro._syshandler_onclose_forward = function (_window) {
-			nexacro._stopWindowEventHandler(_window);
-			return _window._on_sys_close();
+			var bRet = _window._on_sys_close();
+			if (bRet) {
+				nexacro._stopWindowEventHandler(_window);
+			}
+			return bRet;
 		};
 		nexacro._syshandler_onbeforeclose_forward = function (_window) {
 			var confirm_message = _window._on_sys_beforeclose();
@@ -431,6 +509,7 @@ if (nexacro._Browser == "Runtime") {
 						else {
 							if (ref_form._url) {
 								formurl = ref_form._url.replace("xfdl.js", "xfdl");
+								formurl = formurl.substring(0, formurl.indexOf(".xfdl")) + ".xfdl";
 								formurl = "./" + formurl.substr(nexacro._project_url.length);
 							}
 						}
@@ -884,7 +963,7 @@ if (nexacro._Browser == "Runtime") {
 				parent_win.addChild(_window);
 			}
 
-			_window._parentwindowforopen = _application._parentwindow;
+			_window._parentwindowforopen = nexacro._findWindow(nexacro._getMainWindowHandle());
 
 			var callback = nexacro.__bindEventPopupWindowLoadHandler(_window, parent_win);
 
@@ -917,8 +996,13 @@ if (nexacro._Browser == "Runtime") {
 			return handle;
 		};
 
-		nexacro._refreshWindow = function (handle) {
-			nexacro.__refreshDirtyWindow(handle);
+		nexacro._refreshWindow = function (handle, drawBitmap) {
+			if (drawBitmap == true) {
+				nexacro.__refreshDirtyRect(handle, drawBitmap);
+			}
+			else {
+				nexacro.__refreshDirtyWindow(handle);
+			}
 		};
 
 		nexacro._isWindowHandlePrepared = function (handle) {
@@ -946,6 +1030,13 @@ if (nexacro._Browser == "Runtime") {
 		};
 		nexacro._getWindowDestinationHandle = function (handle) {
 			return handle;
+		};
+
+		nexacro._getWindowHwndHandle = function (_handle) {
+			if (_handle) {
+				return nexacro.__getWindowHwndHandle(_handle);
+			}
+			return _handle;
 		};
 
 		nexacro._getWindowHandlePosX = function (handle) {
@@ -1006,7 +1097,7 @@ if (nexacro._Browser == "Runtime") {
 		nexacro._getMainWindowWidth = function (_win) {
 			var win_width = _win.clientWidth;
 			if (_win._zoom_factor) {
-				win_width = win_width * _win._zoom_factor / 100.0;
+				win_width = win_width *  _win._zoom_factor / 100.0;
 			}
 			return win_width;
 		};
@@ -1014,7 +1105,7 @@ if (nexacro._Browser == "Runtime") {
 		nexacro._getMainWindowHeight = function (_win) {
 			var win_height = _win.clientHeight;
 			if (_win._zoom_factor) {
-				win_height = win_height * _win._zoom_factor / 100.0;
+				win_height = win_height *  _win._zoom_factor / 100.0;
 			}
 			return win_height;
 		};
@@ -1303,6 +1394,19 @@ if (nexacro._Browser == "Runtime") {
 			nexacro.__deleteTraceLogFile();
 		};
 
+		nexacro._setLogLevel = function (v) {
+			nexacro.__setLogLevel(v);
+		};
+		nexacro._setTraceMode = function (v) {
+			nexacro.__setTraceMode(v);
+		};
+		nexacro._setTraceDuration = function (v) {
+			nexacro.__setTraceDuration(v);
+		};
+		nexacro._getLogFilePath = function () {
+			return nexacro.__getLogFilePath();
+		};
+
 		nexacro._writeTraceLog = function (msglevel, message, bsystemlog, loglevel) {
 			var data;
 			data = (bsystemlog === true) ? "S" : "U";
@@ -1338,6 +1442,9 @@ if (nexacro._Browser == "Runtime") {
 			var tracemode = nexacro._tracemode || "none";
 
 			nexacro.__writeTraceLog(data, loglevel, tracemode, traceduration, msglevel);
+			if (console && console.log) {
+				console.log(data);
+			}
 		};
 
 		nexacro._loadImageBase64 = function (source, target, handler) {
@@ -1436,7 +1543,7 @@ if (nexacro._Browser == "Runtime") {
 				}
 			}
 
-			nexacro.__setWindowHandleViewportScale(handle, is_scalable, ratio, (minimum_scale !== undefined) ? (ratio * minimum_scale) : ratio, (maximum_scale !== undefined) ? (ratio * maximum_scale) : ratio, null);
+			nexacro.__setWindowHandleViewportScale(handle, is_scalable, ratio, (minimum_scale !== undefined) ? (ratio *  minimum_scale) : ratio, (maximum_scale !== undefined) ? (ratio *  maximum_scale) : ratio, null);
 
 			_window._zoom_factor = nexacro._zoom_factor;
 			if (nexacro._zoom_factor !== 0 && isNaN(nexacro._zoom_factor) == false) {
@@ -1470,6 +1577,11 @@ if (nexacro._Browser == "Runtime") {
 			return nexacro.__showTrayBalloonTipHandle(main_handle, tray_handle, titleicon, title, text, timeout, nosound);
 		};
 
+		nexacro._hideTrayBalloonTipHandle = function (tray_handle) {
+			var main_handle = nexacro._getMainWindowHandle();
+			return nexacro.__hideTrayBalloonTipHandle(main_handle, tray_handle);
+		};
+
 		nexacro._createTrayPopupMenuHandle = function (tray_handle) {
 			var main_handle = nexacro._getMainWindowHandle();
 			return nexacro.__createTrayPopupMenuHandle(main_handle, tray_handle);
@@ -1490,34 +1602,69 @@ if (nexacro._Browser == "Runtime") {
 			return nexacro.__displayTrayPopupMenuHandle(main_handle, tray_handle, menu_handle);
 		};
 
-		nexacro._syshandler_ontray_forward = function (_window, type, id, button, alt_key, ctrl_key, shift_key, screenX, screenY) {
+		nexacro._syshandler_ontray_forward = function (_window, type, id, button, alt_key, ctrl_key, shift_key, screenX, screenY, meta_key, hidereason) {
 			var is_runbase = nexacro._isRunBaseWindow(this);
 			var application, tray;
 			if (type == "lbuttonup") {
 				application = nexacro.getApplication();
 				if (application) {
 					tray = application.trays[id];
-					tray.on_fire_onlbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY);
+					if (tray) {
+						tray.on_fire_onlbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, meta_key);
+					}
 				}
 			}
 			else if (type == "rbuttonup") {
 				application = nexacro.getApplication();
 				if (application) {
 					tray = application.trays[id];
-					tray.on_fire_onrbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY);
+					if (tray) {
+						tray.on_fire_onrbuttonup(button, alt_key, ctrl_key, shift_key, screenX, screenY, meta_key);
+					}
 				}
 			}
 			else if (type == "dblclick") {
 				application = nexacro.getApplication();
 				if (application) {
 					tray = application.trays[id];
-					tray.on_fire_ondblclick(button, alt_key, ctrl_key, shift_key, screenX, screenY);
+					if (tray) {
+						tray.on_fire_ondblclick(button, alt_key, ctrl_key, shift_key, screenX, screenY, meta_key);
+					}
 				}
 			}
 			else if (type == "menuclick") {
 				if (nexacro._current_tray_popup) {
 					var traypopup = nexacro._current_tray_popup;
-					traypopup.on_fire_onmenuclick(id);
+					if (traypopup) {
+						traypopup.on_fire_onmenuclick(id);
+					}
+				}
+			}
+			else if (type == "balloontipshow") {
+				application = nexacro.getApplication();
+				if (application) {
+					tray = application.trays[id];
+					if (tray) {
+						tray.on_fire_onballoontipshow();
+					}
+				}
+			}
+			else if (type == "balloontiphide") {
+				application = nexacro.getApplication();
+				if (application) {
+					tray = application.trays[id];
+					if (tray) {
+						tray.on_fire_onballoontiphide(hidereason);
+					}
+				}
+			}
+			else if (type == "balloontipclick") {
+				application = nexacro.getApplication();
+				if (application) {
+					tray = application.trays[id];
+					if (tray) {
+						tray.on_fire_onballoontipclick(button, alt_key, ctrl_key, shift_key, screenX, screenY, meta_key);
+					}
 				}
 			}
 			if (is_runbase) {

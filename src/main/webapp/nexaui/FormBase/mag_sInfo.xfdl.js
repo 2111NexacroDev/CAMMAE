@@ -35,7 +35,7 @@
             obj = new Grid("Grid00","60","95","616","455",null,null,null,null,null,null,this);
             obj.set_taborder("2");
             obj.set_binddataset("ds_stdInfo");
-            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"0\" displaytype=\"checkboxcontrol\" edittype=\"checkbox\"/><Cell col=\"1\" text=\"departmentName\"/><Cell col=\"2\" text=\"studentNo\"/><Cell col=\"3\" text=\"studentName\"/><Cell col=\"4\" text=\"studentGrade\"/><Cell col=\"5\" text=\"studentBirth\"/><Cell col=\"6\" text=\"studentAddress\"/><Cell col=\"7\" text=\"studentPhonenumber\"/><Cell col=\"8\" text=\"studentEmail\"/><Cell col=\"9\" text=\"studentState\"/><Cell col=\"10\" text=\"professorName\"/></Band><Band id=\"body\"><Cell displaytype=\"checkboxcontrol\" edittype=\"checkbox\" text=\"bind:colNo\" expr=\"colNo=='0'?'1':'0'\"/><Cell col=\"1\" text=\"bind:departmentName\" edittype=\"text\"/><Cell col=\"2\" text=\"bind:studentNo\" edittype=\"text\"/><Cell col=\"3\" text=\"bind:studentName\" edittype=\"text\"/><Cell col=\"4\" text=\"bind:studentGrade\" edittype=\"text\"/><Cell col=\"5\" text=\"bind:studentBirth\" edittype=\"text\"/><Cell col=\"6\" text=\"bind:studentAddress\" edittype=\"text\"/><Cell col=\"7\" text=\"bind:studentPhonenumber\" edittype=\"text\"/><Cell col=\"8\" text=\"bind:studentEmail\" edittype=\"text\"/><Cell col=\"9\" text=\"bind:studentState\" edittype=\"text\"/><Cell col=\"10\" text=\"bind:professorName\" edittype=\"text\"/></Band></Format></Formats>");
+            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"0\" displaytype=\"checkboxcontrol\" edittype=\"checkbox\"/><Cell col=\"1\" text=\"departmentName\"/><Cell col=\"2\" text=\"studentNo\"/><Cell col=\"3\" text=\"studentName\"/><Cell col=\"4\" text=\"studentGrade\"/><Cell col=\"5\" text=\"studentBirth\"/><Cell col=\"6\" text=\"studentAddress\"/><Cell col=\"7\" text=\"studentPhonenumber\"/><Cell col=\"8\" text=\"studentEmail\"/><Cell col=\"9\" text=\"studentState\"/><Cell col=\"10\" text=\"professorName\"/></Band><Band id=\"body\"><Cell displaytype=\"checkboxcontrol\" edittype=\"checkbox\" text=\"bind:colNo\" expr=\"colNo==&apos;0&apos;?&apos;1&apos;:&apos;0&apos;\"/><Cell col=\"1\" text=\"bind:departmentName\" edittype=\"text\"/><Cell col=\"2\" text=\"bind:studentNo\" edittype=\"text\"/><Cell col=\"3\" text=\"bind:studentName\" edittype=\"text\"/><Cell col=\"4\" text=\"bind:studentGrade\" edittype=\"text\"/><Cell col=\"5\" text=\"bind:studentBirth\" edittype=\"text\"/><Cell col=\"6\" text=\"bind:studentAddress\" edittype=\"text\"/><Cell col=\"7\" text=\"bind:studentPhonenumber\" edittype=\"text\"/><Cell col=\"8\" text=\"bind:studentEmail\" edittype=\"text\"/><Cell col=\"9\" text=\"bind:studentState\" edittype=\"text\"/><Cell col=\"10\" text=\"bind:professorName\" edittype=\"text\"/></Band></Format></Formats>");
             this.addChild(obj.name, obj);
 
             obj = new Button("btn_add","386","3","95","35",null,null,null,null,null,null,this);
@@ -47,13 +47,15 @@
             obj.set_taborder("4");
             obj.set_text("삭제");
             this.addChild(obj.name, obj);
-
             // Layout Functions
             //-- Default Layout : this
             obj = new Layout("default","",700,600,this,function(p){});
             this.addLayout(obj.name, obj);
             
             // BindItem Information
+
+            
+            // TriggerItem Information
 
         };
         
@@ -171,7 +173,6 @@
             this.btn_add.addEventHandler("onclick",this.btn_add_onclick,this);
             this.btn_delete.addEventHandler("onclick",this.btn_delete_onclick,this);
         };
-
         this.loadIncludeScript("mag_sInfo.xfdl");
         this.loadPreloadList();
         

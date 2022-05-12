@@ -178,7 +178,23 @@ if (!nexacro._bInitCssObjects) {
 		return this.value;
 	};
 	_pFontObject._parseInfo = function (val) {
-		var parts = val.split(/\s+/);
+		var tempval = val;
+		var _index = tempval.indexOf('"');
+		if (_index >= 0) {
+			var parse_val = "";
+			for (var i = 0; i < tempval.length; i++) {
+				var c = tempval.charAt(i);
+				if (i > _index && c == " ") {
+					c = "#";
+				}
+
+				parse_val += c;
+			}
+
+			tempval = parse_val;
+		}
+
+		var parts = tempval.split(/\s+/);
 		var part;
 		var faces = [], size = 0;
 		var webfont_style = true;
@@ -221,6 +237,7 @@ if (!nexacro._bInitCssObjects) {
 								webfont_style = false;
 							}
 							else {
+								part = part.replace(/#/gi, " ");
 								faces.push(part);
 							}
 						}
@@ -958,7 +975,7 @@ if (!nexacro._bInitCssObjects) {
 					ePercents = obj.percents;
 					midPercents = (ePercents - sPercents) / cnt;
 					for (var j = 1; j < cnt; j++) {
-						this.color_stops[i - j].percents = (ePercents - (midPercents * j));
+						this.color_stops[i - j].percents = (ePercents - (midPercents *  j));
 					}
 
 					sPercents = ePercents;
@@ -1011,6 +1028,7 @@ if (!nexacro._bInitCssObjects) {
 				var bLoadPos = true;
 				var bLoadOrigin = true;
 				var bLoadClip = true;
+				var bLoadSize = true;
 				for (var i = 0; i < cnt; i++) {
 					var part = props[i];
 					if (bLoadImage && part.substring(0, 3).toLowerCase() == "url") {
@@ -1060,8 +1078,30 @@ if (!nexacro._bInitCssObjects) {
 						}
 						continue;
 					}
+					else if (bLoadSize && part.search(/\//g) > -1) {
+						if (part.length == 1) {
+							i++;
+							part = props[i];
+						}
+						else {
+							part = part.substr(1);
+						}
+
+						if (bLoadSize && this._load_size(part)) {
+							bLoadSize = false;
+							if (i < (cnt - 1)) {
+								var temp = i + 1;
+								part = props[temp];
+								if (this._load_size(part, true)) {
+									i++;
+								}
+							}
+						}
+						continue;
+					}
 					var grstr, lcnt, rcnt;
 					if (bLoadGradient && (part.substring(0, 15).toLowerCase() == "linear-gradient")) {
+						bLoadPos = false;
 						bLoadColor = false;
 						bLoadImage = false;
 						bLoadGradient = false;
@@ -1079,13 +1119,13 @@ if (!nexacro._bInitCssObjects) {
 									bLoadClip = false;
 									continue;
 								}
-								else if (bLoadRepeat && this._load_repeat(part)) {
+								else if (bLoadRepeat && this._load_repeat(gpart)) {
 									bLoadRepeat = false;
 									continue;
 								}
 								grstr += " " + gpart;
-								lcnt += nexacro.getMatchedCount(grstr, '(');
-								rcnt += nexacro.getMatchedCount(grstr, ')');
+								lcnt = nexacro.getMatchedCount(grstr, '(');
+								rcnt = nexacro.getMatchedCount(grstr, ')');
 								if ((lcnt > 0) && (lcnt == rcnt)) {
 									break;
 								}
@@ -1113,8 +1153,8 @@ if (!nexacro._bInitCssObjects) {
 							if (lcnt != rcnt) {
 								for (i++; i < cnt; i++) {
 									grstr += " " + props[i];
-									lcnt += nexacro.getMatchedCount(grstr, '(');
-									rcnt += nexacro.getMatchedCount(grstr, ')');
+									lcnt = nexacro.getMatchedCount(grstr, '(');
+									rcnt = nexacro.getMatchedCount(grstr, ')');
 									if (lcnt == rcnt) {
 										break;
 									}
@@ -1160,6 +1200,7 @@ if (!nexacro._bInitCssObjects) {
 	_pBackgroundObject.pos_y = "top";
 	_pBackgroundObject.origin = "";
 	_pBackgroundObject.clip = "";
+	_pBackgroundObject.size = "";
 	_pBackgroundObject._sysurl = "";
 	_pBackgroundObject._sysrtlurl = "";
 	_pBackgroundObject._sysbaseurl = "";
@@ -1200,6 +1241,17 @@ if (!nexacro._bInitCssObjects) {
 			return false;
 		}
 		else if (str.search(/px|pt|cm|em|%/i) > 0) {
+			var except_list = ["lemonchiffon"
+			];
+
+			var except_cnt = except_list.length;
+
+			for (var i = 0; i < except_cnt; i++) {
+				if (str == except_list[0]) {
+					return false;
+				}
+			}
+
 			this.pos_x = str;
 			return true;
 		}
@@ -1243,6 +1295,17 @@ if (!nexacro._bInitCssObjects) {
 		return false;
 	};
 
+	_pBackgroundObject._load_size = function (str, is_subval) {
+		if (is_subval && str.search(/px|%/i) > 0) {
+			this.size += " " + str;
+			return true;
+		}
+		else if (str == "auto" || str == "cover" || str == "contain" || str.search(/px|%/i) > 0) {
+			this.size = str;
+			return true;
+		}
+		return false;
+	};
 
 	nexacro._BackgroundObject_caches = {
 	};
@@ -1615,7 +1678,7 @@ if (!nexacro._bInitCssObjects) {
 			if (val) {
 				this.value = val;
 				var arr = val.split(' ');
-				arr[0] = parseInt(arr[0]) * -1 + "px";
+				arr[0] = parseInt(arr[0]) *  -1 + "px";
 				this.rtlvalue = arr.join(' ');
 			}
 		}

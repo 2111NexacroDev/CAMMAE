@@ -38,13 +38,15 @@
             obj.set_autofittype("col");
             obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"professorNo\"/><Cell col=\"1\" text=\"departmentName\"/><Cell col=\"2\" text=\"professorName\"/><Cell col=\"3\" text=\"professorBirth\"/><Cell col=\"4\" text=\"professorAddress\"/><Cell col=\"5\" text=\"professorPhonenumber\"/><Cell col=\"6\" text=\"professorEmail\"/><Cell col=\"7\" text=\"professorPassword\"/></Band><Band id=\"body\"><Cell text=\"bind:professorNo\"/><Cell col=\"1\" text=\"bind:departmentName\"/><Cell col=\"2\" text=\"bind:professorName\"/><Cell col=\"3\" text=\"bind:professorBirth\"/><Cell col=\"4\" text=\"bind:professorAddress\" edittype=\"text\"/><Cell col=\"5\" text=\"bind:professorPhonenumber\" edittype=\"text\"/><Cell col=\"6\" text=\"bind:professorEmail\" edittype=\"text\"/><Cell col=\"7\" text=\"bind:professorPassword\"/></Band></Format></Formats>");
             this.addChild(obj.name, obj);
-
             // Layout Functions
             //-- Default Layout : this
             obj = new Layout("default","",700,600,this,function(p){});
             this.addLayout(obj.name, obj);
             
             // BindItem Information
+
+            
+            // TriggerItem Information
 
         };
         
@@ -166,7 +168,6 @@
             this.btn_delete.addEventHandler("onclick",this.btn_delete_onclick,this);
             this.btn_save.addEventHandler("onclick",this.btn_save_onclick,this);
         };
-
         this.loadIncludeScript("prf_info.xfdl");
         this.loadPreloadList();
         

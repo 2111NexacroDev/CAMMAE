@@ -181,6 +181,12 @@ if (!nexacro.DatePickerControl) {
 	};
 
 	_pDatePickerControl._on_head_onheadclick = function (obj, e) {
+		var calendar = this.parent;
+		if (calendar && calendar._onlydisplay == true) {
+			calendar.on_fire_onclick(e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, calendar, obj, e.meta_key);
+			return false;
+		}
+
 		if (!this.enable || this.readonly) {
 			return false;
 		}
@@ -192,6 +198,11 @@ if (!nexacro.DatePickerControl) {
 	};
 
 	_pDatePickerControl._on_head_onheadspin = function (obj, e) {
+		var calendar = this.parent;
+		if (calendar && calendar._onlydisplay == true) {
+			return false;
+		}
+
 		if (!this.enable || this.readonly == true) {
 			return false;
 		}
@@ -213,13 +224,13 @@ if (!nexacro.DatePickerControl) {
 		this._changeDate(obj, e);
 
 		if (!enableaccessibility) {
-			if (!(obj instanceof nexacro._CalendarEditControl) && (keycode == 37 || keycode == 38 || keycode == 39 || keycode == 40)) {
+			if (!(obj instanceof nexacro._CalendarEditControl || obj instanceof nexacro._CalendarDropButtonControl) && (keycode == 37 || keycode == 38 || keycode == 39 || keycode == 40)) {
 				this.on_fire_ondayclick(obj);
 			}
 		}
 	};
 
-	_pDatePickerControl.on_lbuttondown_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp) {
+	_pDatePickerControl.on_lbuttondown_basic_action = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, refer_comp, meta_key) {
 		var control_name = refer_comp.name;
 		if (control_name == "head" || control_name == "prevbutton" || control_name == "nextbutton" || 
 			control_name == "body" || control_name == "weekband" || control_name.indexOf("weekitem") > -1 || control_name.indexOf("dayitem") > -1) {
@@ -254,6 +265,11 @@ if (!nexacro.DatePickerControl) {
 	};
 
 	_pDatePickerControl._on_button_onnextlbuttondown = function () {
+		var calendar = this.parent;
+		if (calendar && calendar._onlydisplay == true) {
+			return false;
+		}
+
 		var head = this.head;
 		if (!head.enable || head.readonly) {
 			return false;
@@ -275,6 +291,11 @@ if (!nexacro.DatePickerControl) {
 	};
 
 	_pDatePickerControl._on_button_onprevlbuttondown = function () {
+		var calendar = this.parent;
+		if (calendar && calendar._onlydisplay == true) {
+			return false;
+		}
+
 		var head = this.head;
 		if (!head.enable || head.readonly) {
 			return false;
@@ -622,7 +643,9 @@ if (!nexacro.DatePickerControl) {
 				var calendar = this.parent;
 				if (calendar) {
 					var calendaredit = calendar.calendaredit;
-					calendaredit._setAccessibilityLabel(is_full_changed ? year + " " + month + " " + day : day);
+					if (calendaredit) {
+						calendaredit._setAccessibilityLabel(is_full_changed ? year + " " + month + " " + day : day);
+					}
 				}
 			}
 		}
@@ -944,6 +967,11 @@ if (!nexacro.DatePickerControl) {
 	};
 
 	_pDatePickerHeadControl._on_static_mobile_onclick = function (obj, e) {
+		var calendar = this.parent.parent;
+		if (calendar && calendar._onlydisplay == true) {
+			calendar.on_fire_onclick(e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, calendar, obj, e.meta_key);
+			return false;
+		}
 		var yearstatic = this.yearstatic;
 		var monthstatic = this.monthstatic;
 		var yearspin = this.yearspin;
@@ -961,6 +989,11 @@ if (!nexacro.DatePickerControl) {
 	};
 
 	_pDatePickerHeadControl._on_static_onlbuttondown = function (obj, e) {
+		var calendar = this.parent.parent;
+		if (calendar && calendar._onlydisplay == true) {
+			return false;
+		}
+
 		var yearstatic = this.yearstatic;
 		var monthstatic = this.monthstatic;
 		var yearspin = this.yearspin;
@@ -978,6 +1011,11 @@ if (!nexacro.DatePickerControl) {
 	};
 
 	_pDatePickerHeadControl._on_button_onprevclick = function (obj, e) {
+		var calendar = this.parent.parent;
+		if (calendar && calendar._onlydisplay == true) {
+			calendar.on_fire_onclick(e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, calendar, obj, e.meta_key);
+		}
+
 		if (!this.enable || this.readonly) {
 			return false;
 		}
@@ -994,10 +1032,16 @@ if (!nexacro.DatePickerControl) {
 		this._setDate(year, month);
 		this._refreshSpindate();
 
-		this.on_fire_onclick(e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, this, obj);
+		this.on_fire_onclick(e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, this, obj, e.meta_key);
 	};
 
 	_pDatePickerHeadControl._on_button_onnextclick = function (obj, e) {
+		var calendar = this.parent.parent;
+		if (calendar && calendar._onlydisplay == true) {
+			calendar.on_fire_onclick(e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, calendar, obj, e.meta_key);
+			return false;
+		}
+
 		if (!this.enable || this.readonly) {
 			return false;
 		}
@@ -1014,7 +1058,7 @@ if (!nexacro.DatePickerControl) {
 		this._setDate(year, month);
 		this._refreshSpindate();
 
-		this.on_fire_onclick(e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, this, obj);
+		this.on_fire_onclick(e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, this, obj, e.meta_key);
 	};
 
 	_pDatePickerHeadControl._on_spin_onspin = function (obj, e) {
@@ -1281,8 +1325,11 @@ if (!nexacro.DatePickerControl) {
 			var spinedit = control.spinedit;
 			if (spinedit) {
 				var tmp = spinedit.text;
-				if (tmp.length == 1) {
+				if (tmp.length == 1 && type == "month") {
 					spinedit.text += ".0";
+				}
+				else if (tmp.length < 4 && type == "year") {
+					spinedit.text = "0000.";
 				}
 				else {
 					spinedit.text += ".";
@@ -1499,6 +1546,12 @@ if (!nexacro.DatePickerControl) {
 	};
 
 	_pDatePickerBodyControl._on_dayitem_ondayclick = function (obj, e) {
+		var calendar = this.parent.parent;
+		if (calendar && calendar._onlydisplay == true) {
+			calendar.on_fire_onclick(e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, calendar, obj, e.meta_key);
+			return false;
+		}
+
 		this.on_fire_ondayclick(obj, e);
 	};
 
@@ -1526,8 +1579,8 @@ if (!nexacro.DatePickerControl) {
 			var item_w = daysize.width;
 			var item_h = daysize.height;
 
-			var drawWidth_daysize = item_w * 7;
-			var drawHeight_daysize = item_h * 7;
+			var drawWidth_daysize = item_w *  7;
+			var drawHeight_daysize = item_h *  7;
 
 			var blankWidth = 0;
 			var blankHeight = 0;
@@ -1545,14 +1598,14 @@ if (!nexacro.DatePickerControl) {
 			var i;
 			for (i = 0; i < maxWeek; i++) {
 				weeks[i].move(week_l, week_t, item_w, item_h, null, null);
-				week_l = week_l + item_w + (blankWidth * 2);
+				week_l = week_l + item_w + (blankWidth *  2);
 			}
 
 			var day_l = client_l + blankWidth;
 			var day_t = week_t + item_h + blankHeight;
 			for (i = 0; i < maxDay; i++) {
 				days[i].move(day_l, day_t, item_w, item_h, null, null);
-				day_l = day_l + item_w + (blankWidth * 2);
+				day_l = day_l + item_w + (blankWidth *  2);
 				if (((i + 1) % 7) == 0) {
 					day_l = client_l + blankWidth;
 					day_t = day_t + item_h + blankHeight;
@@ -2090,6 +2143,18 @@ if (!nexacro.DatePickerControl) {
 			else if (this._daysofweek == 0) {
 				this._changeUserStatus("sunday", true);
 			}
+		}
+	};
+
+	_pDatePickerDayItemControl.on_changeStatus = function (changestatus, value, applystatus, currentstatus, currentuserstatus) {
+		var calendar = this.parent.parent.parent;
+		if (calendar && calendar._onlydisplay == true) {
+			if (applystatus != "disabled") {
+				return "enabled";
+			}
+		}
+		else {
+			return applystatus;
 		}
 	};
 

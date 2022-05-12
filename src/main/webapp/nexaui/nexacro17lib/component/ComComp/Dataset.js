@@ -24,6 +24,7 @@ if (!nexacro.NormalDataset) {
 		this.preload = false;
 
 		this._is_preloaded = false;
+		this._is_created = false;
 	};
 
 	var _pNormalDataset = nexacro._createPrototype(nexacro.Dataset, nexacro.NormalDataset);
@@ -63,7 +64,14 @@ if (!nexacro.NormalDataset) {
 
 	nexacro.NormalDataset.REASON_BINDSOURCE = 90;
 
+	nexacro.NormalDataset.REASON_BINDDATAOBJECT_UPDATE = 70;
+
 	_pNormalDataset.on_created = function () {
+		if (this.binddataobject && !this._binddataobject) {
+			this._binddataobject = this._findDataObject(this.binddataobject);
+			this._loadDataObject(false);
+		}
+
 		if (this.url == "" || this.preload == false) {
 			if (this.colcount > 0) {
 				this._endLoad(0, "SUCCESS", 3);
@@ -99,8 +107,11 @@ if (!nexacro.NormalDataset) {
 			}
 		}
 
-		this._defaultKeyStr = this.keystring;
-		this._defaultFilterStr = this.filterstr;
+		if (!this._is_created) {
+			this._defaultKeyStr = this.keystring;
+			this._defaultFilterStr = this.filterstr;
+		}
+		this._is_created = true;
 	};
 
 	_pNormalDataset.destroy = function () {
@@ -140,6 +151,54 @@ if (!nexacro.NormalDataset) {
 	};
 	_pNormalDataset.set_serverdatasetid = function (v) {
 		this.serverdatasetid = v;
+	};
+
+	_pNormalDataset._getRowcount = function () {
+		return this.rowcount;
+	};
+
+	_pNormalDataset.on_notify_onload_dataobject = function () {
+		this._loadDataObject(true, 0);
+	};
+
+	_pNormalDataset.set_binddataobject = function (str) {
+		if (str != this.binddataobject) {
+			var binddataobject = this._binddataobject;
+			if (binddataobject) {
+				binddataobject._removeEventHandler("onload", this.on_notify_onload_dataobject, this);
+			}
+			if (!str) {
+				this._binddataobject = null;
+				this.binddataobject = "";
+			}
+			else {
+				binddataobject = this._binddataobject = this._findDataObject(str);
+				if (binddataobject) {
+					binddataobject._setEventHandler("onload", this.on_notify_onload_dataobject, this);
+				}
+				this.binddataobject = str;
+			}
+			this.on_apply_binddataobject();
+		}
+		return this.binddataobject;
+	};
+
+	_pNormalDataset.on_apply_binddataobject = function () {
+		if (this._is_created) {
+			this._loadDataObject(true, 3);
+		}
+	};
+
+	_pNormalDataset.set_dataobjectpath = function (v) {
+		this.dataobjectpath = v;
+		this.on_apply_dataobjectpath();
+	};
+
+	_pNormalDataset.on_apply_dataobjectpath = function (v) {
+		var dataobject = this._binddataobject;
+		if (this._is_created && dataobject) {
+			this._loadDataObject(true, 3);
+		}
 	};
 
 	_pNormalDataset.load = function (async, datatype) {
@@ -226,6 +285,57 @@ if (!nexacro.NormalDataset) {
 			tritem._usewaitcursor = false;
 			tritem._loadFromData(data);
 			this._is_preloaded = true;
+		}
+	};
+
+	_pNormalDataset._findDataObject = function (id) {
+		if (id && id.length > 0) {
+			var dataobj;
+			var parent = this.parent;
+			if (parent) {
+				dataobj = parent[id];
+				if (dataobj && (dataobj._type_name == "DataObject")) {
+					return dataobj;
+				}
+			}
+
+			if (this._refform) {
+				dataobj = this._refform.lookup(id);
+				if (dataobj && (dataobj._type_name == "DataObject")) {
+					return dataobj;
+				}
+			}
+		}
+		return undefined;
+	};
+
+	_pNormalDataset._loadDataObject = function (fireevent, reason) {
+		var data = null;
+		var binddataobject = this.binddataobject;
+		var _binddataobject = this._binddataobject;
+		if (binddataobject && !_binddataobject) {
+			_binddataobject = this._binddataobject = this._findDataObject(binddataobject);
+		}
+		if (_binddataobject) {
+			data = _binddataobject.data;
+		}
+		this._loadFromJSONObj(data);
+		if (fireevent !== false && this._is_created) {
+			this._endLoad(0, "SUCCESS", reason ? reason : 0);
+		}
+		if (reason == 0 || reason == 3) {
+			var view = nexacro.Component.prototype._getRootComponent.call(this, this.parent);
+			if (view && view._is_view && view._ismodeltrigger) {
+				if (this.name == view.viewdataset) {
+					var form = view.parent;
+					var manager = form._trigger_manager;
+					var triggertype = "";
+					var triggerview = view;
+					var triggerobj = view.getViewDataset();
+					triggertype = "Model Load Success";
+					manager._notifyTrigger(triggertype, triggerobj, triggerview);
+				}
+			}
 		}
 	};
 

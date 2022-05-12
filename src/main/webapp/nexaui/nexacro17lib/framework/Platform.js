@@ -75,8 +75,11 @@ if (!nexacro._bInitPlatform) {
 		_jsContext.ProgressBar = nexacro.ProgressBar;
 		_jsContext.PopupDiv = nexacro.PopupDiv;
 		_jsContext.WebBrowser = nexacro.WebBrowser;
+		_jsContext.WebView = nexacro.WebView;
 		_jsContext.FileDialog = nexacro.FileDialog;
 		_jsContext.VirtualFile = nexacro.VirtualFile;
+		_jsContext.View = nexacro.View;
+		_jsContext.Action = nexacro.Action;
 
 		_jsContext.DomParser = nexacro.DomParser;
 		_jsContext.Sketch = nexacro.Sketch;
@@ -90,6 +93,8 @@ if (!nexacro._bInitPlatform) {
 		if (nexacro._Browser == "Runtime") {
 			_jsContext.XMLHttpRequest = nexacro.XMLHttpRequest;
 		}
+
+		_jsContext.DataObject = nexacro.DataObject;
 	};
 
 	nexacro._finalizeGlobalObjects = function (_jsContext) {
@@ -143,6 +148,7 @@ if (!nexacro._bInitPlatform) {
 		_jsContext.ProgressBar = null;
 		_jsContext.PopupDiv = null;
 		_jsContext.WebBrowser = null;
+		_jsContext.WebView = null;
 		_jsContext.FileDialog = null;
 		_jsContext.VirtualFile = null;
 		_jsContext.DomParser = null;
@@ -150,6 +156,12 @@ if (!nexacro._bInitPlatform) {
 		_jsContext.ColumnInfo = null;
 		_jsContext.Plugin = null;
 		_jsContext.TCPClientSocket = null;
+		_jsContext.DragDataFormats = null;
+		_jsContext.DragDataObject = null;
+		if (nexacro._Browser == "Runtime") {
+			_jsContext.XMLHttpRequest = null;
+		}
+		_jsContext.DataObject = null;
 	};
 
 	nexacro.System = {
@@ -158,28 +170,30 @@ if (!nexacro._bInitPlatform) {
 	nexacro.System.screenToClientX = function (comp, posX) {
 		if (comp._control_element) {
 			var p = nexacro._getElementScreenPosition(comp._control_element);
-			return posX - p.x;
+			return Math.round((posX - p.x) / nexacro._getDevicePixelRatio(comp._control_element));
 		}
 	};
 
 	nexacro.System.screenToClientY = function (comp, posY) {
 		if (comp._control_element) {
 			var p = nexacro._getElementScreenPosition(comp._control_element);
-			return posY - p.y;
+			return Math.round((posY - p.y) / nexacro._getDevicePixelRatio(comp._control_element));
 		}
 	};
 
 	nexacro.System.clientToScreenX = function (comp, posX) {
 		if (comp._control_element) {
 			var p = nexacro._getElementScreenPosition(comp._control_element);
-			return posX + p.x;
+
+			return Math.round(posX *  nexacro._getDevicePixelRatio(comp._control_element)) + p.x;
 		}
 	};
 
 	nexacro.System.clientToScreenY = function (comp, posY) {
 		if (comp._control_element) {
 			var p = nexacro._getElementScreenPosition(comp._control_element);
-			return posY + p.y;
+
+			return Math.round(posY *  nexacro._getDevicePixelRatio(comp._control_element)) + p.y;
 		}
 	};
 
@@ -189,6 +203,10 @@ if (!nexacro._bInitPlatform) {
 
 	nexacro.System.execBrowser = function (url) {
 		nexacro._execBrowser(url);
+	};
+
+	nexacro.System.execDefaultBrowser = function (url) {
+		nexacro._execDefaultBrowser(url);
 	};
 
 	nexacro.System.execShell = function (exeUrl) {
@@ -297,6 +315,14 @@ if (!nexacro._bInitPlatform) {
 		}
 	};
 
+	nexacro.System.checkDevicePermission = function (permission_types) {
+		nexacro._checkDevicePermission(permission_types);
+	};
+
+	nexacro.System.requestDevicePermission = function (permission_types, description) {
+		nexacro._requestDevicePermission(permission_types, description);
+	};
+
 	nexacro.System._os = nexacro._OS;
 	nexacro.System.computername = nexacro._getComputerName();
 	nexacro.System.cpuarchitecture = nexacro._getCPUArchitecture();
@@ -335,7 +361,7 @@ if (!nexacro._bInitPlatform) {
 
 	nexacro.System.saveToImageFile = function (comp, fileName, fileType, compressOption, bIsOverflowClip) {
 		if (comp) {
-			return nexacro._saveToImageFile(comp, fileName, fileType, compressOption, bIsOverflowClip);
+			return nexacro._saveToImageFile(comp, fileName, fileType, compressOption, bIsOverflowClip, false);
 		}
 		return false;
 	};
@@ -349,9 +375,9 @@ if (!nexacro._bInitPlatform) {
 		}
 	};
 
-	nexacro.System.saveToImageBase64String = function (comp, bIsOverflowClip) {
+	nexacro.System.saveToImageBase64String = function (comp, bIsOverflowClip, imgType, compressOption) {
 		if (comp) {
-			return nexacro._saveToImageBase64String2(comp, bIsOverflowClip);
+			return nexacro._saveToImageBase64StringM2(comp, bIsOverflowClip, imgType, compressOption);
 		}
 		return "";
 	};
@@ -604,7 +630,7 @@ if (!nexacro._bInitPlatform) {
 				if (target && target._is_alive) {
 					pthis.callback.call(target, pthis.id);
 				}
-				if (pthis.context && !pthis.context._timerManager.deleteTimerItem(pthis)) {
+				if (pthis.context && pthis.context._timerManager && !pthis.context._timerManager.deleteTimerItem(pthis)) {
 					pthis.destroy();
 				}
 				pthis = null;
@@ -956,9 +982,14 @@ if (!nexacro._bInitPlatform) {
 	};
 
 	__pLoadManager.addPreloadItem = function (type, url, target, args, service) {
+		var svcid = "";
 		if (type == "data") {
-			var svcid = "__preload_" + ((typeof target) == "string" ? target : target.id);
+			svcid = "__preload_" + ((typeof target) == "string" ? target : target.id);
 			this.loadPreloadDataModule(url, target, false, false, svcid, args, service);
+		}
+		else if (type == "dataobject") {
+			svcid = "__preload_" + ((typeof target) == "string" ? target : target.id);
+			this.loadPreloadDataObjectModule(url, target, false, false, svcid, args, service);
 		}
 		else {
 			this.loadPreloadJSModule(url, target, true, null, service);
@@ -1205,6 +1236,37 @@ if (!nexacro._bInitPlatform) {
 		}
 	};
 
+	__pLoadManager.loadPreloadDataObjectModule = function (url, target, cache, async, svcid, args, service) {
+		if (nexacro.isDesignMode || nexacro._isDesignMode()) {
+			return;
+		}
+
+		if (this.status < 6) {
+			var load_item = this.getPreloadItem("dataobject", svcid);
+			if (load_item && target) {
+				if (load_item.addTarget(target)) {
+					this.preloadCnt++;
+				}
+			}
+			else {
+				var referer = "";
+				if (this.context) {
+					referer = this.context._url;
+				}
+
+				load_item = new nexacro._LoadItem(svcid, "dataobject");
+				load_item._requrl = url;
+
+				if (target && load_item.addTarget(target)) {
+					this.preloadCnt++;
+
+					this.preloadList.push(load_item);
+					load_item.handle = nexacro._preloadDataObject(url, this, this.on_load_preloaddataobjectmodule, service, svcid, referer, args, async, 0, false);
+				}
+			}
+		}
+	};
+
 	__pLoadManager.loadDataModule = function (url, svcid, indatasets, outdatasets, parameters, callback, async, datatype, compress, service) {
 		if (async == null) {
 			async = true;
@@ -1221,6 +1283,24 @@ if (!nexacro._bInitPlatform) {
 		}
 		else {
 			this.context._onHttpTransactionError(this.context, true, this.context, "comm_fail_duplication_svcid", url, 10405, url, null, undefined, svcid);
+		}
+	};
+
+	__pLoadManager.loadDataObjectModule = function (url, svcid, method, outdataobj, parameters, async, datatype, compress, service) {
+		if (async == null) {
+			async = true;
+		}
+		var load_item = this.getDataItem(svcid);
+		if (!load_item) {
+			load_item = new nexacro._LoadItem(svcid, "dataobject", this.context);
+			load_item._requrl = url;
+
+			this.dataList.push(load_item);
+			this.dataCnt++;
+			load_item.handle = nexacro._loadDataObject(url, this, this.on_load_dataobjectmodule, service, this.context, svcid, method, outdataobj, parameters, async, datatype, compress);
+		}
+		else if (outdataobj) {
+			outdataobj._onHttpTransactionError(outdataobj, true, this.context, "comm_fail_duplication_svcid", url, 10405, url, null, undefined, "");
 		}
 	};
 
@@ -1520,6 +1600,37 @@ if (!nexacro._bInitPlatform) {
 		}
 	};
 
+	__pLoadManager.on_load_preloaddataobjectmodule = function (url, errstatus, data, fireerrorcode, returncode, requesturi, locationuri, extramsg) {
+		var load_Item = this.getPreloadItem("dataobject", url);
+		if (load_Item) {
+			load_Item.errcode = errstatus;
+			load_Item.data = data;
+			load_Item.handle = null;
+			load_Item._bLoaded = true;
+			var targets = load_Item.targets;
+			var target_len = targets.length;
+
+			if (target_len > 0) {
+				for (var i = 0; i < target_len; i++) {
+					if (this.context.all) {
+						var target = targets[i];
+						if ((typeof target) == "string") {
+							target = this.context.all[target];
+						}
+						if (target && target.on_preload_dataobject) {
+							target.on_preload_dataobject(load_Item._requrl, errstatus, data, fireerrorcode, returncode, load_Item._requrl, locationuri, extramsg);
+						}
+					}
+				}
+
+				targets.splice(0, target_len);
+				this.preloadCnt -= target_len;
+			}
+			this._check_fire_onload();
+		}
+	};
+
+
 	__pLoadManager.on_load_datamodule = function (svcid, errstatus, message, fireerrorcode, returncode, requesturi, locationuri, extramsg) {
 		var load_Item = this.getDataItem(svcid);
 		if (load_Item) {
@@ -1562,6 +1673,50 @@ if (!nexacro._bInitPlatform) {
 			return ret;
 		}
 	};
+
+	__pLoadManager.on_load_dataobjectmodule = function (svcid, errstatus, message, fireerrorcode, returncode, requesturi, locationuri, extramsg, dataobj, response, responseheaders) {
+		var load_Item = this.getDataItem(svcid);
+		if (load_Item) {
+			var callback_id = load_Item._context_callback;
+			var callback_func = this.context[callback_id];
+
+			var ret = false;
+			if (errstatus < 0 && fireerrorcode) {
+				load_Item.errcode = errstatus;
+				if (dataobj && (fireerrorcode != "comm_cancel_byuser" || fireerrorcode != "comm_stop_transaction_byesc" || 
+					load_Item._is_cancel || !load_Item.handle || (load_Item.handle && !load_Item.handle._user_aborted && load_Item.handle._user_aborted !== undefined))) {
+					ret = dataobj._onDataObjectRequestError(dataobj, true, dataobj, fireerrorcode, requesturi, returncode, requesturi, locationuri, extramsg, svcid, response, responseheaders);
+
+					if (fireerrorcode != "comm_cancel_byuser" && fireerrorcode != "comm_stop_transaction_byesc") {
+						ret = false;
+					}
+					if (ret) {
+						return true;
+					}
+				}
+			}
+
+			if (fireerrorcode == "comm_cancel_byuser" || fireerrorcode == "comm_stop_transaction_byesc") {
+				if (load_Item._is_cancel !== undefined && !load_Item._is_cancel) {
+					return ret;
+				}
+			}
+
+			this.removeDataItem(svcid);
+			this.removeTransactionItem(svcid);
+			this.dataCnt--;
+
+			if (callback_func && typeof (callback_func) == "function") {
+				callback_func.call(this.context, svcid, errstatus, message);
+				if (errstatus === 0) {
+					load_Item.handle = null;
+				}
+			}
+
+			return ret;
+		}
+	};
+
 
 	__pLoadManager.on_reload_css = function (url, errstatus, module, fireerrorcode, returncode, requesturi, locationuri, extramsg) {
 		var load_Item = this.getLocalItem(url);
@@ -1612,6 +1767,14 @@ if (!nexacro._bInitPlatform) {
 	__pLoadManager.getPreloadDataModule = function (id) {
 		var svcid = "__preload_" + id;
 		var load_Item = this.getPreloadItem("data", svcid);
+		if (load_Item && load_Item._bLoaded) {
+			return load_Item.data;
+		}
+	};
+
+	__pLoadManager.getPreloadDataObjectModule = function (id) {
+		var svcid = "__preload_" + id;
+		var load_Item = this.getPreloadItem("dataobject", svcid);
 		if (load_Item && load_Item._bLoaded) {
 			return load_Item.data;
 		}
@@ -1844,9 +2007,14 @@ if (!nexacro._bInitPlatform) {
 		datas.splice(0, dcnt);
 
 		var trs = this.transactionList;
-		if (trs) {
-			trs.splice(0, trs.length);
+		var tcnt = trs.length;
+		for (i = 0; i < tcnt; i++) {
+			var titem = trs[i];
+			if (titem) {
+				titem._hideWaitCursor(this.context);
+			}
 		}
+		trs.splice(0, tcnt);
 	};
 
 	__pLoadManager.clearPreload = function (type) {
@@ -2521,6 +2689,9 @@ if (!nexacro._bInitPlatform) {
 
 		this._destroyVisiblePart();
 		this._destroyInternalPart();
+		if (this.handle) {
+			nexacro._closeWindowHandle(this.handle);
+		}
 	};
 
 	__pWindow._destroyVisiblePart = function () {
@@ -2550,7 +2721,6 @@ if (!nexacro._bInitPlatform) {
 					nexacro._clearSystemTimer(this.handle, repeatInfo._timer);
 				}
 			}
-			nexacro._closeWindowHandle(this.handle);
 		}
 	};
 
@@ -2573,6 +2743,7 @@ if (!nexacro._bInitPlatform) {
 		}
 
 		if (this.frame) {
+			nexacro._unregisterPopupFrame(this.frame.id);
 			if (!this.frame._is_main) {
 				this.frame._on_close();
 			}
@@ -2584,6 +2755,7 @@ if (!nexacro._bInitPlatform) {
 
 		nexacro._destroyPopupFrameInfo(this);
 		nexacro._destroyManagerFrame(this.handle);
+		nexacro._destroyManagerShadow(this.handle);
 		this._doc = this._dest_doc = null;
 		this.dest_handle = null;
 		this.parent = null;
@@ -3100,6 +3272,20 @@ if (!nexacro._bInitPlatform) {
 		return null;
 	};
 
+	__pWindow._isContainsComp = function (capture_mouse, capture_key, event_target_comp) {
+		var ar = this._capture_complist;
+		var len = ar.length;
+
+		for (var i = len - 1; i >= 0; i--) {
+			var info = ar[i];
+			if ((capture_mouse === info[1]) && (capture_key === info[2]) && (event_target_comp == info[0])) {
+				return true;
+			}
+		}
+
+		return false;
+	};
+
 	__pWindow._getLastModalFrame = function () {
 		if (this._modal_frame_stack.length > 0) {
 			var modal_info = this._modal_frame_stack[this._modal_frame_stack.length - 1];
@@ -3181,9 +3367,14 @@ if (!nexacro._bInitPlatform) {
 	__pWindow._lbuttondown_wy = 0;
 	__pWindow._click_cancel = false;
 	__pWindow._keydown_element = null;
+	__pWindow._keydown_element_list = new nexacro.Collection();
 	__pWindow._is_hotkey = false;
 
 	__pWindow._on_default_sys_message = function (id) {
+		if (typeof (id) != "string") {
+			return;
+		}
+
 		var e, data;
 		var id_arr = id.split("--boundary--");
 		if (id_arr.length > 1) {
@@ -3211,9 +3402,10 @@ if (!nexacro._bInitPlatform) {
 		}
 	};
 
-	__pWindow._on_default_sys_lbuttondown = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
-		nexacro._gap_client_height = screenY - windowY;
-		nexacro._gap_client_width = screenX - windowX;
+	__pWindow._on_default_sys_lbuttondown = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
+		nexacro._gap_client_height = screenY - (windowY *  nexacro._getDevicePixelRatio(elem));
+		nexacro._gap_client_width = screenX - (windowX *  nexacro._getDevicePixelRatio(elem));
+
 
 		var is_runbase = nexacro._isRunBaseWindow(this);
 
@@ -3269,6 +3461,8 @@ if (!nexacro._bInitPlatform) {
 				var _win = comp._getWindow();
 				_win._curWindowX = windowX;
 				_win._curWindowY = windowY;
+				_win._testX = screenX;
+				_win._testY = screenY;
 
 				var elem_pos, canvasX, canvasY;
 				if (comp._control_element == elem && nexacro._use_offset && offsetX != undefined && offsetY != undefined) {
@@ -3284,7 +3478,7 @@ if (!nexacro._bInitPlatform) {
 				var capture_comp = this._getCaptureComp(true, false, comp);
 				var firecur_comp = capture_comp ? capture_comp : comp;
 
-				ret = firecur_comp._on_lbuttondown(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+				ret = firecur_comp._on_lbuttondown(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 			}
 		}
 		if (is_runbase) {
@@ -3294,9 +3488,10 @@ if (!nexacro._bInitPlatform) {
 		return ret;
 	};
 
-	__pWindow._on_touch_to_lbuttondown = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
-		nexacro._gap_client_height = screenY - windowY;
-		nexacro._gap_client_width = screenX - windowX;
+	__pWindow._on_touch_to_lbuttondown = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
+		nexacro._gap_client_height = screenY - (windowY *  nexacro._getDevicePixelRatio(elem));
+		nexacro._gap_client_width = screenX - (windowX *  nexacro._getDevicePixelRatio(elem));
+
 
 		var is_runbase = nexacro._isRunBaseWindow(this);
 
@@ -3367,7 +3562,7 @@ if (!nexacro._bInitPlatform) {
 				var capture_comp = this._getCaptureComp(true, false, comp);
 				var firecur_comp = capture_comp ? capture_comp : comp;
 
-				firecur_comp._on_touch_lbuttondown(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+				firecur_comp._on_touch_lbuttondown(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 
 				return {
 					cp : comp, 
@@ -3385,9 +3580,10 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_rbuttondown = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
-		nexacro._gap_client_height = screenY - windowY;
-		nexacro._gap_client_width = screenX - windowX;
+	__pWindow._on_default_sys_rbuttondown = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
+		nexacro._gap_client_height = screenY - (windowY *  nexacro._getDevicePixelRatio(elem));
+		nexacro._gap_client_width = screenX - (windowX *  nexacro._getDevicePixelRatio(elem));
+
 
 		var is_runbase = nexacro._isRunBaseWindow(this);
 
@@ -3429,7 +3625,7 @@ if (!nexacro._bInitPlatform) {
 			var capture_comp = this._getCaptureComp(true, false, comp);
 			var firecur_comp = capture_comp ? capture_comp : comp;
 
-			ret = firecur_comp._on_rbuttondown(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+			ret = firecur_comp._on_rbuttondown(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 		}
 		if (is_runbase) {
 			nexacro._setRunBaseWindow(null);
@@ -3442,7 +3638,7 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_lbuttonup = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
+	__pWindow._on_default_sys_lbuttonup = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
 		if (this._click_cancel) {
 			this._click_cancel = false;
 			return;
@@ -3459,7 +3655,11 @@ if (!nexacro._bInitPlatform) {
 
 		if (elem && dragInfo && dragInfo.isDragging && dragInfo.targetwin == this) {
 			comp = this.findComponent(elem);
-			if (comp) {
+			var ischild = false;
+			if (dragInfo.target && dragInfo.target._contains) {
+				ischild = dragInfo.target._contains(comp);
+			}
+			if ((comp && !dragInfo.isSelfAction) || comp && (ischild && dragInfo.isSelfAction)) {
 				if (nexacro._use_offset && offsetX != undefined && offsetY != undefined) {
 					canvasX = offsetX;
 					canvasY = offsetY;
@@ -3470,7 +3670,7 @@ if (!nexacro._bInitPlatform) {
 					canvasY = windowY - elem_pos[1];
 				}
 
-				comp._on_drop(elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+				comp._on_drop(elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 				_is_drag = true;
 			}
 		}
@@ -3491,13 +3691,26 @@ if (!nexacro._bInitPlatform) {
 			trackInfo.distY = windowY - trackInfo.startY;
 			trackInfo.target._on_endtrack(trackInfo.distX, trackInfo.distY, trackInfo.data);
 			nexacro._cur_track_info = null;
-			_is_track = true;
+
+			if (!this._is_track) {
+				var moving_threshold = 6;
+				if (Math.abs(trackInfo.distX) >= moving_threshold || Math.abs(trackInfo.distY) >= moving_threshold) {
+					_is_track = true;
+				}
+			}
+			else {
+				_is_track = true;
+			}
 		}
 
 		if (extratrackInfo) {
 			extratrackInfo.distX = windowX - extratrackInfo.startX;
 			extratrackInfo.distY = windowY - extratrackInfo.startY;
-			extratrackInfo.target._on_end_extratrack(extratrackInfo.distX, extratrackInfo.distY, extratrackInfo.data);
+
+			if (extratrackInfo.target._is_alive) {
+				extratrackInfo.target._on_end_extratrack(extratrackInfo.distX, extratrackInfo.distY, extratrackInfo.data);
+			}
+
 			nexacro._cur_extra_track_info = null;
 		}
 
@@ -3524,7 +3737,7 @@ if (!nexacro._bInitPlatform) {
 				checkup_comp = checkup_comp._getFromComponent(checkup_comp);
 			}
 
-			ret = firecur_comp._on_lbuttonup(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, undefined, undefined, undefined, upelem);
+			ret = firecur_comp._on_lbuttonup(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, upelem, metaKey);
 
 			if (!checkup_comp.onlbuttonup || (checkup_comp.onlbuttonup && !checkup_comp.onlbuttonup.defaultprevented)) {
 				var downcomp = firecur_comp;
@@ -3553,7 +3766,7 @@ if (!nexacro._bInitPlatform) {
 						_is_click = (diff_x < 0 ? -diff_x : diff_x) < moving_threshold && (diff_y < 0 ? -diff_y : diff_y) < moving_threshold;
 						_is_input = elem.isInputElement();
 						if (!_is_input || _is_click || _is_drag || _is_text) {
-							upcomp._on_click(upelem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+							upcomp._on_click(upelem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 						}
 					}
 				}
@@ -3586,7 +3799,7 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_rbuttonup = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
+	__pWindow._on_default_sys_rbuttonup = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
 		if (this._click_cancel) {
 			this._click_cancel = false;
 			return;
@@ -3609,7 +3822,7 @@ if (!nexacro._bInitPlatform) {
 			var capture_comp = this._getCaptureComp(true, false, comp);
 			var firecur_comp = capture_comp ? capture_comp : comp;
 
-			firecur_comp._on_rbuttonup(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, undefined, undefined, undefined, elem);
+			firecur_comp._on_rbuttonup(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, elem, metaKey);
 		}
 
 		this._cur_rdown_elem = null;
@@ -3623,7 +3836,7 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_mouseup = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
+	__pWindow._on_default_sys_mouseup = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
 		var ret;
 		var is_runbase = nexacro._isRunBaseWindow(this);
 		var comp = this.findComponent(elem);
@@ -3642,7 +3855,7 @@ if (!nexacro._bInitPlatform) {
 			var capture_comp = this._getCaptureComp(true, false, comp);
 			var firecur_comp = capture_comp ? capture_comp : comp;
 
-			ret = firecur_comp._on_mouseup(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, undefined, undefined, undefined, elem);
+			ret = firecur_comp._on_mouseup(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, elem, metaKey);
 		}
 		this._cur_mdown_elem = null;
 
@@ -3653,7 +3866,7 @@ if (!nexacro._bInitPlatform) {
 		return ret;
 	};
 
-	__pWindow._on_default_sys_mousedown = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
+	__pWindow._on_default_sys_mousedown = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
 		var ret;
 		var is_runbase = nexacro._isRunBaseWindow(this);
 		this._cur_mdown_elem = elem;
@@ -3674,7 +3887,7 @@ if (!nexacro._bInitPlatform) {
 			var capture_comp = this._getCaptureComp(true, false, comp);
 			var firecur_comp = capture_comp ? capture_comp : comp;
 
-			ret = firecur_comp._on_mousedown(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+			ret = firecur_comp._on_mousedown(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 		}
 		if (is_runbase) {
 			nexacro._setRunBaseWindow(null);
@@ -3683,7 +3896,11 @@ if (!nexacro._bInitPlatform) {
 		return ret;
 	};
 
-	__pWindow._on_default_sys_mousemove = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
+	__pWindow._on_default_sys_mousemove = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
+		nexacro._gap_client_height = screenY - (windowY *  nexacro._getDevicePixelRatio(elem));
+		nexacro._gap_client_width = screenX - (windowX *  nexacro._getDevicePixelRatio(elem));
+
+
 		var ret;
 		var dragInfo = nexacro._cur_drag_info;
 		var repeatInfo = nexacro._cur_repeat_info;
@@ -3691,7 +3908,11 @@ if (!nexacro._bInitPlatform) {
 		var extratrackInfo = nexacro._cur_extra_track_info;
 		var comp, evt_elem = elem;
 		var elem_pos, canvasX, canvasY;
+		var useelemhandle = true;
+
 		if (dragInfo && dragInfo.targetwin == this) {
+			var xdeltavalue = windowX - dragInfo.startX;
+			var ydeltavalue = windowY - dragInfo.startY;
 			if (!dragInfo.isDragging) {
 				if (windowX != dragInfo.startX || windowY != dragInfo.startY) {
 					elem = dragInfo.target_elem;
@@ -3700,26 +3921,40 @@ if (!nexacro._bInitPlatform) {
 					if (!elem.handle) {
 						canvasX = windowX;
 						canvasY = windowY;
-					}
-					else if (comp._control_element == evt_elem && nexacro._use_offset && offsetX != undefined && offsetY != undefined) {
-						canvasX = offsetX;
-						canvasY = offsetY;
-					}
-					else {
-						elem_pos = nexacro._getElementXYInWindow(comp._control_element.handle);
-						canvasX = windowX - elem_pos[0];
-						canvasY = windowY - elem_pos[1];
+						useelemhandle = false;
 					}
 
+
 					if (comp) {
-						ret = comp._on_drag(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+						if (useelemhandle) {
+							if (comp._control_element == evt_elem && nexacro._use_offset && offsetX != undefined && offsetY != undefined) {
+								canvasX = offsetX;
+								canvasY = offsetY;
+							}
+							else {
+								elem_pos = nexacro._getElementXYInWindow(comp._control_element.handle);
+								canvasX = windowX - elem_pos[0];
+								canvasY = windowY - elem_pos[1];
+							}
+						}
+						ret = comp._on_drag(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 						if (ret && ret[0] === true && nexacro._cur_drag_info) {
 							dragInfo.isDragging = ret[0];
 							dragInfo.target = ret[1];
 							dragInfo.referTarget = ret[2];
 							dragInfo.data = ret[3];
 							dragInfo.userdata = ret[4];
-							comp._on_dragmove(elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+							if (trackInfo && trackInfo.targetwin == this && trackInfo.target && trackInfo.target._is_tracking == true) {
+								if (comp._isRtl()) {
+									trackInfo.distX = trackInfo.startX - windowX;
+									trackInfo.distY = windowY - trackInfo.startY;
+								}
+								else {
+									trackInfo.distX = windowX - trackInfo.startX;
+									trackInfo.distY = windowY - trackInfo.startY;
+								}
+							}
+							comp._on_dragmove(elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, xdeltavalue, ydeltavalue, metaKey);
 							var c = comp;
 							var is_scroll = false;
 
@@ -3741,7 +3976,11 @@ if (!nexacro._bInitPlatform) {
 			}
 			else {
 				comp = this.findComponent(elem);
-				if (comp) {
+				var ischild = false;
+				if (dragInfo.target && dragInfo.target._contains) {
+					ischild = dragInfo.target._contains(comp);
+				}
+				if ((comp && !dragInfo.isSelfAction) || comp && (ischild && dragInfo.isSelfAction)) {
 					if (comp._control_element == evt_elem && nexacro._use_offset && offsetX != undefined && offsetY != undefined) {
 						canvasX = offsetX;
 						canvasY = offsetY;
@@ -3751,8 +3990,17 @@ if (!nexacro._bInitPlatform) {
 						canvasX = windowX - elem_pos[0];
 						canvasY = windowY - elem_pos[1];
 					}
-
-					comp._on_dragmove(elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+					if (trackInfo && trackInfo.targetwin == this && trackInfo.target && trackInfo.target._is_tracking == true) {
+						if (comp._isRtl()) {
+							trackInfo.distX = trackInfo.startX - windowX;
+							trackInfo.distY = windowY - trackInfo.startY;
+						}
+						else {
+							trackInfo.distX = windowX - trackInfo.startX;
+							trackInfo.distY = windowY - trackInfo.startY;
+						}
+					}
+					comp._on_dragmove(elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, xdeltavalue, ydeltavalue, metaKey);
 				}
 			}
 			return;
@@ -3790,7 +4038,9 @@ if (!nexacro._bInitPlatform) {
 				extratrackInfo.distY = windowY - extratrackInfo.startY;
 			}
 
-			extratrackInfo.target._on_move_extratrack(comp, windowX, windowY, extratrackInfo.distX, extratrackInfo.distY, screenX, screenY);
+			if (extratrackInfo.target._is_alive) {
+				extratrackInfo.target._on_move_extratrack(comp, windowX, windowY, extratrackInfo.distX, extratrackInfo.distY, screenX, screenY);
+			}
 		}
 
 		if (comp && comp._is_alive) {
@@ -3819,7 +4069,7 @@ if (!nexacro._bInitPlatform) {
 				form._obj_mousemove = firecur_comp;
 			}
 
-			ret = firecur_comp._on_mousemove(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+			ret = firecur_comp._on_mousemove(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 
 			if (form) {
 				form._obj_mousemove = null;
@@ -3859,7 +4109,7 @@ if (!nexacro._bInitPlatform) {
 		}
 	};
 
-	__pWindow._on_default_sys_dblclick = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
+	__pWindow._on_default_sys_dblclick = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
 		var ret;
 		var is_runbase = nexacro._isRunBaseWindow(this);
 		var firecur_comp = this._findComponentForEvent(elem);
@@ -3878,10 +4128,10 @@ if (!nexacro._bInitPlatform) {
 			}
 
 			if (capture_comp) {
-				ret = capture_comp._on_dblclick(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+				ret = capture_comp._on_dblclick(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 			}
 			else {
-				ret = firecur_comp._on_dblclick(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+				ret = firecur_comp._on_dblclick(elem, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 			}
 		}
 		if (is_runbase) {
@@ -3894,7 +4144,7 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_mouseenter = function (elem, from_elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
+	__pWindow._on_default_sys_mouseenter = function (elem, from_elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
 		var ret;
 		var dragInfo = nexacro._cur_drag_info;
 		var comp, from_comp;
@@ -3903,8 +4153,7 @@ if (!nexacro._bInitPlatform) {
 		from_comp = this.findComponent(from_elem);
 
 		if (comp && comp != from_comp) {
-			var capture_comp = this._getCaptureComp(true, false, comp);
-			var firecur_comp = capture_comp ? capture_comp : comp;
+			var firecur_comp = comp;
 			var canvasX = 0;
 			var canvasY = 0;
 			var elem_pos;
@@ -3920,12 +4169,20 @@ if (!nexacro._bInitPlatform) {
 					canvasX = windowX - elem_pos[0];
 					canvasY = windowY - elem_pos[1];
 				}
+				var isdragaction = true;
+				var ischild = false;
+				if (dragInfo && dragInfo.isDragging) {
+					if (dragInfo.target && dragInfo.target._contains) {
+						ischild = dragInfo.target._contains(firecur_comp);
+					}
+					isdragaction = ((!dragInfo.isSelfAction) || (ischild && dragInfo.isSelfAction));
+				}
 
-				if (dragInfo && dragInfo.isDragging && dragInfo.targetwin == this) {
-					ret = firecur_comp._on_dragenter(elem, from_comp, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+				if (dragInfo && dragInfo.isDragging && dragInfo.targetwin == this && isdragaction) {
+					ret = firecur_comp._on_dragenter(elem, from_comp, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 				}
 				else {
-					ret = firecur_comp._on_mouseenter(elem, from_comp, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+					ret = firecur_comp._on_mouseenter(elem, from_comp, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 				}
 			}
 		}
@@ -3936,7 +4193,7 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_mouseleave = function (elem, to_elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
+	__pWindow._on_default_sys_mouseleave = function (elem, to_elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
 		var ret;
 		var dragInfo = nexacro._cur_drag_info;
 		var comp, to_comp;
@@ -3961,12 +4218,19 @@ if (!nexacro._bInitPlatform) {
 					canvasX = windowX - elem_pos[0];
 					canvasY = windowY - elem_pos[1];
 				}
-
-				if (dragInfo && dragInfo.isDragging && dragInfo.targetwin == this) {
-					ret = firecur_comp._on_dragleave(elem, to_comp, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+				var isdragaction = true;
+				var ischild = false;
+				if (dragInfo && dragInfo.isDragging) {
+					if (dragInfo.target && dragInfo.target._contains) {
+						ischild = dragInfo.target._contains(firecur_comp);
+					}
+					isdragaction = ((!dragInfo.isSelfAction) || (ischild && dragInfo.isSelfAction));
+				}
+				if (dragInfo && dragInfo.isDragging && dragInfo.targetwin == this && isdragaction) {
+					ret = firecur_comp._on_dragleave(elem, to_comp, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 				}
 				else {
-					ret = firecur_comp._on_mouseleave(elem, to_comp, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+					ret = firecur_comp._on_mouseleave(elem, to_comp, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 				}
 			}
 		}
@@ -3977,7 +4241,7 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_mousewheel = function (elem, wheelDeltaX, wheelDeltaY, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY) {
+	__pWindow._on_default_sys_mousewheel = function (elem, wheelDeltaX, wheelDeltaY, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, metaKey) {
 		var ret;
 		var is_runbase = nexacro._isRunBaseWindow(this);
 		var firecur_comp = this._findComponentForEvent(elem);
@@ -3996,10 +4260,10 @@ if (!nexacro._bInitPlatform) {
 			}
 
 			if (capture_comp) {
-				ret = capture_comp._on_mousewheel(elem, wheelDeltaX, wheelDeltaY, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+				ret = capture_comp._on_mousewheel(elem, wheelDeltaX, wheelDeltaY, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 			}
 			else {
-				ret = firecur_comp._on_mousewheel(elem, wheelDeltaX, wheelDeltaY, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+				ret = firecur_comp._on_mousewheel(elem, wheelDeltaX, wheelDeltaY, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 			}
 		}
 		if (is_runbase) {
@@ -4013,7 +4277,7 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_dragenter = function (elem, fromElem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist) {
+	__pWindow._on_default_sys_dragenter = function (elem, fromElem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist, metaKey) {
 		var ret;
 		var is_runbase = nexacro._isRunBaseWindow(this);
 
@@ -4040,11 +4304,13 @@ if (!nexacro._bInitPlatform) {
 
 				var dragInfo = nexacro._cur_drag_info;
 				if (dragInfo && dragInfo.isDragging && dragInfo.targetwin == this) {
+					dragInfo.isDragover = false;
+
 					if (!dragInfo.filelist) {
 						dragInfo.filelist = nexacro._convertVirtualFileList(filelist);
 					}
 
-					ret = comp._on_dragenter(elem, from_comp, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+					ret = comp._on_dragenter(elem, from_comp, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 				}
 				else {
 					nexacro._setDragInfo(_win, elem, windowX, windowY, windowX, windowY, null, null, nexacro._convertVirtualFileList(filelist), "file");
@@ -4058,7 +4324,7 @@ if (!nexacro._bInitPlatform) {
 						dragInfo.data = dragdata;
 					}
 
-					ret = comp._on_dragenter(elem, from_comp, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+					ret = comp._on_dragenter(elem, from_comp, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 				}
 			}
 		}
@@ -4073,7 +4339,7 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_dragleave = function (elem, toElem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist) {
+	__pWindow._on_default_sys_dragleave = function (elem, toElem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist, metaKey) {
 		var ret;
 		var is_runbase = nexacro._isRunBaseWindow(this);
 
@@ -4083,6 +4349,8 @@ if (!nexacro._bInitPlatform) {
 			var dragInfo = nexacro._cur_drag_info;
 
 			if (comp && comp != to_comp && (dragInfo && dragInfo.targetwin == this)) {
+				dragInfo.isDragover = false;
+
 				var cur_elem = comp._control_element;
 				if (cur_elem && cur_elem.handle) {
 					var elem_pos, canvasX, canvasY;
@@ -4104,7 +4372,7 @@ if (!nexacro._bInitPlatform) {
 						dragInfo.filelist = null;
 					}
 
-					ret = comp._on_dragleave(elem, to_comp, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+					ret = comp._on_dragleave(elem, to_comp, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 				}
 			}
 		}
@@ -4119,7 +4387,7 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_dragover = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist) {
+	__pWindow._on_default_sys_dragover = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist, metaKey) {
 		var is_runbase = nexacro._isRunBaseWindow(this);
 
 		if (elem) {
@@ -4127,6 +4395,8 @@ if (!nexacro._bInitPlatform) {
 			if (comp) {
 				var dragInfo = nexacro._cur_drag_info;
 				if (dragInfo && dragInfo.targetwin == this) {
+					dragInfo.isDragover = true;
+
 					var elem_pos, canvasX, canvasY;
 					if (comp._control_element == elem && nexacro._use_offset && offsetX != undefined && offsetY != undefined) {
 						canvasX = offsetX;
@@ -4150,7 +4420,7 @@ if (!nexacro._bInitPlatform) {
 							dragInfo.filelist = nexacro._convertVirtualFileList(filelist);
 						}
 
-						comp._on_dragmove(elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+						comp._on_dragmove(elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 					}
 				}
 			}
@@ -4166,7 +4436,7 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_drop = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist) {
+	__pWindow._on_default_sys_drop = function (elem, strButton, altKey, ctrlKey, shiftKey, windowX, windowY, screenX, screenY, offsetX, offsetY, filelist, metaKey) {
 		var ret;
 		var is_runbase = nexacro._isRunBaseWindow(this);
 
@@ -4190,7 +4460,7 @@ if (!nexacro._bInitPlatform) {
 						dragInfo.filelist = nexacro._convertVirtualFileList(filelist);
 					}
 
-					ret = comp._on_drop(elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY);
+					ret = comp._on_drop(elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, strButton, altKey, ctrlKey, shiftKey, canvasX, canvasY, screenX, screenY, metaKey);
 
 					nexacro._initDragInfo();
 				}
@@ -4207,7 +4477,7 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_keydown = function (elem, keycode, altKey, ctrlKey, shiftKey) {
+	__pWindow._on_default_sys_keydown = function (elem, keycode, altKey, ctrlKey, shiftKey, metaKey) {
 		var ret;
 		var is_runbase = nexacro._isRunBaseWindow(this);
 
@@ -4251,6 +4521,7 @@ if (!nexacro._bInitPlatform) {
 					}
 				}
 				keyinput_elem._event_stop = true;
+				comp._processing_autoskip = true;
 				comp._is_hotkey = true;
 			}
 
@@ -4272,7 +4543,9 @@ if (!nexacro._bInitPlatform) {
 			}
 
 			this._keydown_element = elem;
-			ret = comp._on_keydown(elem, keycode, altKey, ctrlKey, shiftKey);
+			this._keydown_element_list.setItem(keycode, this._keydown_element);
+
+			ret = comp._on_keydown(elem, keycode, altKey, ctrlKey, shiftKey, metaKey);
 		}
 		if (is_runbase) {
 			nexacro._setRunBaseWindow(null);
@@ -4284,7 +4557,7 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_keypress = function (elem, keycode, charcode, altKey, ctrlKey, shiftKey) {
+	__pWindow._on_default_sys_keypress = function (elem, keycode, charcode, altKey, ctrlKey, shiftKey, metaKey) {
 		var ret;
 		var is_runbase = nexacro._isRunBaseWindow(this);
 		var comp = this.findComponent(elem);
@@ -4295,7 +4568,7 @@ if (!nexacro._bInitPlatform) {
 		}
 
 		if (comp) {
-			ret = comp._on_keypress(elem, keycode, charcode, altKey, ctrlKey, shiftKey);
+			ret = comp._on_keypress(elem, keycode, charcode, altKey, ctrlKey, shiftKey, metaKey);
 		}
 		if (is_runbase) {
 			nexacro._setRunBaseWindow(null);
@@ -4307,48 +4580,84 @@ if (!nexacro._bInitPlatform) {
 		return true;
 	};
 
-	__pWindow._on_default_sys_keyup = function (elem, keycode, altKey, ctrlKey, shiftKey) {
-		var ret, comp;
+	__pWindow._on_default_sys_keyup = function (elem, keycode, altKey, ctrlKey, shiftKey, metaKey) {
+		var ret;
+		var comp = this.findComponent(elem);
+		var keydown_elem = this._keydown_element;
+
+		var use_system_key = altKey || ctrlKey || shiftKey || metaKey;
+
+		var is_accept_imeaction = false;
 		var is_runbase = nexacro._isRunBaseWindow(this);
-		if (this._keydown_element) {
-			comp = this.findComponent(elem);
-			if (comp) {
+
+		if (comp) {
+			var root_comp = comp._getFromComponent(comp);
+
+			if (keydown_elem) {
+				var keydown_elem_comp = null;
+				if (keydown_elem.owner_elem) {
+					keydown_elem_comp = keydown_elem.owner_elem.parent;
+				}
 				var capture_comp = this._getCaptureComp(false, true, comp);
 				if (capture_comp && capture_comp != comp) {
 					comp = capture_comp;
 				}
 
-				ret = comp._on_keyup(elem, keycode, altKey, ctrlKey, shiftKey);
+				ret = comp._on_keyup(elem, keycode, altKey, ctrlKey, shiftKey, metaKey);
 
-				if (!altKey && !ctrlKey && !shiftKey) {
-					if (keycode == 229) {
-						if (nexacro._Browser == "Chrome" && nexacro._BrowserVersion >= 75) {
-							var _win = this.handle;
-							var evt = _win.event;
-							var trigger_code = evt ? evt.code : "";
-							var exception_codes = ["NumpadEnter", "Enter", "Escape", "Delete", "ShiftLeft", "ShiftRight", "ControlLeft", "ControlRight", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "End", "PageUp", "PageDown", "NumpadAdd", "NumpadSubtract", "NumpadMultiply", "NumpadDivide", "NumpadDecimal", "Backquote"];
-							if (exception_codes.indexOf(trigger_code) < 0) {
+				if (!use_system_key) {
+					if (keycode) {
+						if (keycode == 229) {
+							if ((nexacro._Browser == "Chrome" && nexacro._BrowserVersion >= 75) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) {
+								var _win = this.handle;
+								var evt = _win.event;
+								var trigger_code = evt ? evt.code : "";
+								var exception_codes = ["NumpadEnter", "Enter", "Escape", "Delete", "ShiftLeft", "ShiftRight", "ControlLeft", "ControlRight", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "End", "PageUp", "PageDown", "NumpadAdd", "NumpadSubtract", "NumpadMultiply", "NumpadDivide", "NumpadDecimal", "Backquote"];
+
+								if (exception_codes.indexOf(trigger_code) < 0) {
+									this._keydown_element = null;
+								}
+							}
+							else {
 								this._keydown_element = null;
 							}
 						}
 						else {
-							this._keydown_element = null;
+							this._keydown_element_list.delete_item(keycode.toString());
+
+							if (this._keydown_element_list.length == 0) {
+								this._keydown_element = null;
+							}
 						}
 					}
-					else {
-						this._keydown_element = null;
-					}
 				}
-
 
 				if (comp._is_alive) {
 					comp._on_last_keyup();
 				}
+
+				if (nexacro._OS == "Android") {
+					if (!use_system_key && keydown_elem instanceof nexacro.InputElement) {
+						if (comp._is_subcontrol) {
+							if (root_comp instanceof nexacro.Grid || root_comp instanceof nexacro.ListView) {
+								if (keydown_elem_comp instanceof nexacro._CellEditControl || keydown_elem_comp instanceof nexacro._CellMaskEditControl) {
+									is_accept_imeaction = true;
+								}
+							}
+						}
+						else {
+							is_accept_imeaction = true;
+						}
+					}
+
+					if (is_accept_imeaction) {
+						if (keycode == nexacro.Event.KEY_RETURN) {
+							comp._on_imeaction(elem, keycode, altKey, ctrlKey, shiftKey, metaKey);
+						}
+					}
+				}
 			}
-		}
-		else {
-			comp = this.findComponent(elem);
-			if (comp) {
+			else {
 				if (comp._is_alive) {
 					comp._on_last_keyup();
 				}
@@ -4358,6 +4667,7 @@ if (!nexacro._bInitPlatform) {
 		if (is_runbase) {
 			nexacro._setRunBaseWindow(null);
 		}
+
 		return ret;
 	};
 
@@ -4368,7 +4678,7 @@ if (!nexacro._bInitPlatform) {
 	__pWindow._on_default_sys_contextmenu = function (elem) {
 		var comp = this.findComponent(elem);
 		if (comp) {
-			return comp._on_contextmenu(elem);
+			return comp._on_contextmenu();
 		}
 	};
 
@@ -4465,6 +4775,8 @@ if (!nexacro._bInitPlatform) {
 					var frame_height = pThis.clientHeight;
 
 					if (pThis.frame) {
+						nexacro._setDeactivate(wparam);
+
 						pThis.frame._setSize(frame_width, frame_height);
 
 						if (nexacro._resize_popup_inbound === true) {
@@ -4645,12 +4957,15 @@ if (!nexacro._bInitPlatform) {
 				application.beforeExit();
 			}
 
+			if (application && application._is_loaded && nexacro._Browser == "Runtime") {
+				var bRet = application.exit();
+				if (bRet === false) {
+					return false;
+				}
+			}
+
 			nexacro._clearLocalStorage();
 			this._closeChildWindows(true);
-
-			if (application && nexacro._Browser == "Runtime") {
-				application.exit();
-			}
 		}
 		else if (this._is_alive) {
 			this.destroy();
@@ -4660,6 +4975,8 @@ if (!nexacro._bInitPlatform) {
 		if (!this._is_main && this.frame) {
 			nexacro._createModalAsyncCallbackHandler(this.handle, this.frame);
 		}
+
+		return true;
 	};
 
 	__pWindow._on_default_sys_load = function (win_handle) {
@@ -4736,6 +5053,7 @@ if (!nexacro._bInitPlatform) {
 			this._click_cancel = false;
 		}
 
+
 		var ret = manager.ontouchstart(this, elem, touchid, clientX, clientY, screenX, screenY, curtime, orgtime, is_last_changedtouch, first_touchid);
 
 		if (nexacro._allow_default_pinchzoom) {
@@ -4778,6 +5096,9 @@ if (!nexacro._bInitPlatform) {
 	};
 
 	__pWindow._on_default_sys_touchmove = function (elem, touchid, clientX, clientY, screenX, screenY, curtime, orgtime, is_last_changedtouch) {
+		nexacro._gap_client_height = screenY - (clientY *  nexacro._getDevicePixelRatio(elem));
+		nexacro._gap_client_width = screenX - (clientX *  nexacro._getDevicePixelRatio(elem));
+
 		var manager = this._getTouchGestureManager();
 		if (!manager) {
 			return;
@@ -4804,6 +5125,9 @@ if (!nexacro._bInitPlatform) {
 	};
 
 	__pWindow._on_default_sys_touchend = function (elem, touchid, clientX, clientY, screenX, screenY, curtime, orgtime, is_last_changedtouch) {
+		nexacro._gap_client_height = screenY - (clientY *  nexacro._getDevicePixelRatio(elem));
+		nexacro._gap_client_width = screenX - (clientX *  nexacro._getDevicePixelRatio(elem));
+
 		if (this._click_cancel) {
 			this._click_cancel = false;
 			return;
@@ -5004,6 +5328,7 @@ if (!nexacro._bInitPlatform) {
 		this._curWindowX = null;
 		this._curWindowY = null;
 		this._keydown_element = null;
+		this._keydown_element_list.clear();
 	};
 	__pWindow._cancelEvent = function () {
 		var repeatInfo = nexacro._cur_repeat_info;
@@ -5309,6 +5634,7 @@ if (!nexacro._bInitPlatform) {
 		_pApplication._variables = [];
 		_pApplication._header_variables = [];
 		_pApplication._datasets = [];
+		_pApplication._dataobjects = [];
 
 		_pApplication._active_window = null;
 		_pApplication._global_context = this;
@@ -5660,9 +5986,8 @@ if (!nexacro._bInitPlatform) {
 			return false;
 		};
 
-		_pApplication._getClientWidth = _pApplication._getClientHeight = nexacro._emptyFn;
-
-
+		_pApplication._getClientWidth = nexacro._emptyFn;
+		_pApplication._getClientHeight = nexacro._emptyFn;
 
 		_pApplication._onHttpTransactionError = function (obj, bfireevent, errorobj, errortype, url, returncode, requesturi, locationuri, extramsg, svcid) {
 			var ret = false;
@@ -6058,7 +6383,7 @@ if (!nexacro._bInitPlatform) {
 			}
 
 			var service = nexacro._getServiceObject(url);
-			if (type == "data") {
+			if (type == "data" || type == "dataobject") {
 				var fullurl = nexacro._getServiceLocation(url);
 				this._load_manager.addPreloadItem(type, fullurl, id, args, service);
 			}
@@ -6113,6 +6438,11 @@ if (!nexacro._bInitPlatform) {
 			this._datasets.push(obj);
 		};
 
+		_pApplication._addDataObject = function (id, obj) {
+			this._addObject(id, obj);
+			this._dataobjects.push(obj);
+		};
+
 		_pApplication._addObject = function (id, obj) {
 			this[id] = obj;
 			this.all.add_item(id, obj);
@@ -6120,6 +6450,10 @@ if (!nexacro._bInitPlatform) {
 
 		_pApplication._getDatasetObject = function (datasetid) {
 			return this[datasetid];
+		};
+
+		_pApplication._getDataObject = function (dataobjid) {
+			return this[dataobjid];
 		};
 
 		_pApplication._waitCursor = function (wait_flag, context) {
@@ -6556,8 +6890,6 @@ if (!nexacro._bInitPlatform) {
 
 
 		_pApplication._exit = function () {
-			this.removeTray();
-
 			var mainframe = this.mainframe;
 			var msg = "";
 			if (nexacro._Browser == "Runtime") {
@@ -6571,6 +6903,8 @@ if (!nexacro._bInitPlatform) {
 			if (mainframe._checkAndConfirmClose(msg) === false) {
 				return false;
 			}
+
+			this.removeTray();
 
 			var i;
 			var popupframes = nexacro.getPopupFrames();
@@ -6614,7 +6948,7 @@ if (!nexacro._bInitPlatform) {
 
 		_pApplication.exit = function () {
 			if (this._exit() === false) {
-				return;
+				return false;
 			}
 			nexacro._applicationExit(true);
 		};
@@ -6775,6 +7109,11 @@ if (!nexacro._bInitPlatform) {
 				var cnt = this._datasets.length, i;
 				for (i = 0; i < cnt; i++) {
 					this._datasets[i].on_created();
+				}
+
+				cnt = this._dataobjects.length;
+				for (i = 0; i < cnt; i++) {
+					this._dataobjects[i].on_created();
 				}
 
 				if (this.mainframe) {
@@ -6953,7 +7292,10 @@ if (!nexacro._bInitPlatform) {
 		if (!session) {
 			return;
 		}
-
+		var trackInfo;
+		if (nexacro._enabletouchevent) {
+			trackInfo = nexacro._cur_track_info;
+		}
 		var ret = true;
 		var touch_len = touches.length;
 
@@ -7005,7 +7347,8 @@ if (!nexacro._bInitPlatform) {
 				touch = touches[0];
 				var windowX = touch.windowx, windowY = touch.windowy;
 				var screenX = touch.screenx, screenY = touch.screeny;
-
+				var xdeltavalue = windowX - dragInfo.startX;
+				var ydeltavalue = windowY - dragInfo.startY;
 				if (!dragInfo.isDragging) {
 					if (windowX != dragInfo.startX || windowY != dragInfo.startY) {
 						var drag_elem = dragInfo.target_elem;
@@ -7020,7 +7363,13 @@ if (!nexacro._bInitPlatform) {
 							dragInfo.referTarget = retDrag[2];
 							dragInfo.data = retDrag[3];
 							dragInfo.userdata = retDrag[4];
-							comp._on_dragmove(drag_elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, "touch", false, false, false, canvasX, canvasY, screenX, screenY);
+							if (nexacro._enabletouchevent) {
+								if (trackInfo && trackInfo.target && trackInfo.target._is_tracking == true) {
+									trackInfo.distX = windowX - trackInfo.startX;
+									trackInfo.distY = windowY - trackInfo.startY;
+								}
+							}
+							comp._on_dragmove(drag_elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, "touch", false, false, false, canvasX, canvasY, screenX, screenY, xdeltavalue, ydeltavalue);
 
 
 							session.stop();
@@ -7032,12 +7381,22 @@ if (!nexacro._bInitPlatform) {
 				else {
 					elem = (touch.target || elem);
 					comp = win.findComponent(elem);
-					if (comp) {
+					var ischild = false;
+					if (dragInfo.target && dragInfo.target._contains) {
+						ischild = dragInfo.target._contains(comp);
+					}
+					if ((comp && !dragInfo.isSelfAction) || comp && (ischild && dragInfo.isSelfAction)) {
 						if (prev_elem == elem) {
 							elem_pos = comp.getElement()._getPositionInWindow();
 							canvasX = windowX - elem_pos[0];
 							canvasY = windowY - elem_pos[1];
-							comp._on_dragmove(elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, "touch", false, false, false, canvasX, canvasY, screenX, screenY);
+							if (nexacro._enabletouchevent) {
+								if (trackInfo && trackInfo.target && trackInfo.target._is_tracking == true) {
+									trackInfo.distX = windowX - trackInfo.startX;
+									trackInfo.distY = windowY - trackInfo.startY;
+								}
+							}
+							comp._on_dragmove(elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, "touch", false, false, false, canvasX, canvasY, screenX, screenY, xdeltavalue, ydeltavalue);
 						}
 						else {
 							var from_comp;
@@ -7059,12 +7418,12 @@ if (!nexacro._bInitPlatform) {
 					}
 
 					session.update(target_elem, touch_input);
+
 					return true;
 				}
 			}
 
 			if (nexacro._enabletouchevent) {
-				var trackInfo = nexacro._cur_track_info;
 				var repeatInfo = nexacro._cur_repeat_info;
 				touch = touches[0];
 				var windowx = touch.windowx;
@@ -7183,7 +7542,11 @@ if (!nexacro._bInitPlatform) {
 			var dragInfo = nexacro._cur_drag_info;
 			if (up_elem && dragInfo && dragInfo.isDragging) {
 				comp = win.findComponent(up_elem);
-				if (comp) {
+				var ischild = false;
+				if (dragInfo.target && dragInfo.target._contains) {
+					ischild = dragInfo.target._contains(comp);
+				}
+				if ((comp && !dragInfo.isSelfAction) || comp && (ischild && dragInfo.isSelfAction)) {
 					comp._on_drop(up_elem, dragInfo.target, dragInfo.referTarget, dragInfo.data, dragInfo.userdata, dragInfo.datatype, dragInfo.filelist, "touch", false, false, false, up_touch.canvasx, up_touch.canvasy, up_touch.screenx, up_touch.screeny);
 
 					session.stop();
@@ -7217,9 +7580,11 @@ if (!nexacro._bInitPlatform) {
 
 		var target_comp = target_compinfo[0];
 		this.on_fire_ontouch(win, target_comp, target_elem, touch_input);
-
-		if (target_comp && target_comp._is_alive) {
-			target_comp._on_last_lbuttonup();
+		this._is_ondrag = false;
+		if (nexacro._enabletouchevent) {
+			if (target_comp && target_comp._is_alive) {
+				target_comp._on_last_lbuttonup();
+			}
 		}
 
 		session.ontouch(target_elem, touch_input);
@@ -7617,9 +7982,11 @@ if (!nexacro._bInitPlatform) {
 				case nexacro.Touch._TOUCH_END:
 					ret = comp._on_touchend(this, touches, changedTouches);
 					if (this._is_ondrag && this._scroll_mode == -1) {
-						var touch = this.getFirstTouchInputInfo(touches);
-						if (touch && elem == touch.target) {
-							comp._on_tap(elem, touch._canvasx, touch._canvasy, touch.screenx, touch.screeny);
+						if (win._cur_ldown_elem == null) {
+							var touch = this.getFirstTouchInputInfo(touches);
+							if (touch && elem == touch.target) {
+								comp._on_tap(elem, touch._canvasx, touch._canvasy, touch.screenx, touch.screeny);
+							}
 						}
 					}
 					if (ret == true) {
@@ -7643,9 +8010,12 @@ if (!nexacro._bInitPlatform) {
 					break;
 				case nexacro.Touch._TOUCH_END:
 					if (this._is_ondrag == true && this._scroll_mode == -1) {
-						win._on_sys_lbuttondown(this._start_elem, "touch", false, false, false, firstTouch.windowx, firstTouch.windowy, firstTouch.screenx, firstTouch.screeny);
-						win._on_sys_lbuttonup(target, "touch", false, false, false, firstTouch.windowx, firstTouch.windowy, firstTouch.screenx, firstTouch.screeny, undefined, undefined, undefined, elem);
+						if (win._cur_ldown_elem == null) {
+							win._on_sys_lbuttondown(this._start_elem, "touch", false, false, false, firstTouch.windowx, firstTouch.windowy, firstTouch.screenx, firstTouch.screeny);
+							win._on_sys_lbuttonup(target, "touch", false, false, false, firstTouch.windowx, firstTouch.windowy, firstTouch.screenx, firstTouch.screeny, undefined, undefined, undefined, elem);
+						}
 					}
+
 					break;
 			}
 		}
@@ -7687,7 +8057,7 @@ if (!nexacro._bInitPlatform) {
 					}
 					break;
 				case 2:
-					if (focused_comp == linkedcontrol) {
+					if (focused_comp == linkedcontrol && nexacro._BrowserVersion < 13) {
 						return true;
 					}
 
@@ -7709,14 +8079,14 @@ if (!nexacro._bInitPlatform) {
 						return true;
 					}
 
-					is_webbrowser = focused_comp instanceof nexacro.WebBrowser;
+					is_webbrowser = nexacro._isWebTypeComponent(focused_comp);
 					if (is_webbrowser) {
 						return true;
 					}
 					break;
 			}
 		}
-		else if (nexacro._OS == "Android") {
+		else if (nexacro._OS == "Android" || nexacro._AndroidDesktopMode) {
 			switch (type) {
 				case 0:
 					return true;
@@ -7760,7 +8130,7 @@ if (!nexacro._bInitPlatform) {
 						return true;
 					}
 
-					is_webbrowser = focused_comp instanceof nexacro.WebBrowser;
+					is_webbrowser = nexacro._isWebTypeComponent(focused_comp);
 					if (is_webbrowser) {
 						return true;
 					}
@@ -7887,21 +8257,21 @@ if (!nexacro._bInitPlatform) {
 		}
 
 		var fling_bezier = this._fling_bezier;
-		var epsilon = 1.0 / (200.0 * this.duration);
+		var epsilon = 1.0 / (200.0 *  this.duration);
 		var solvedX = fling_bezier._getTForCoordinate(t / this.duration, fling_bezier._p1.x, fling_bezier._p2.x, epsilon);
 		var c = fling_bezier._getCoordinateForT(solvedX, fling_bezier._p1.y, fling_bezier._p2.y);
 
 		var offset_c = c - this._oldcurvevalue;
-		var xdelta = (offset_c * this.speedx);
-		var ydelta = (offset_c * this.speedy);
+		var xdelta = (offset_c *  this.speedx);
+		var ydelta = (offset_c *  this.speedy);
 
 		this._proc_scroll = false;
 		this._touch_manager.on_fire_onfling(this._target_elem, this._compinfo, this, this.speedx, this.speedy, xdelta, ydelta, this.touchlen);
 
 		var scroll_comp = this._scroll_comp;
 		if (scroll_comp && this._proc_scroll) {
-			var scrolldeltax = (offset_c * this.totalx);
-			var scrolldeltay = (offset_c * this.totaly);
+			var scrolldeltax = (offset_c *  this.totalx);
+			var scrolldeltay = (offset_c *  this.totaly);
 
 			var scroll_mode = this._scroll_mode;
 			var hscroll_pos = scroll_comp._hscroll_pos;
@@ -8029,13 +8399,13 @@ if (!nexacro._bInitPlatform) {
 
 	var __pCubicBezier = nexacro._CubicBezier.prototype;
 	__pCubicBezier._getCoordinateForT = function (t, p1, p2) {
-		var c = 3 * p1, b = 3 * (p2 - p1) - c, a = 1 - c - b;
-		return ((a * t + b) * t + c) * t;
+		var c = 3 *  p1, b = 3 *  (p2 - p1) - c, a = 1 - c - b;
+		return ((a *  t + b) *  t + c) *  t;
 	};
 
 	__pCubicBezier._getCoordinateDerivateForT = function (t, p1, p2) {
-		var c = 3 * p1, b = 3 * (p2 - p1) - c, a = 1 - c - b;
-		return (3 * a * t + 2 * b) * t + c;
+		var c = 3 *  p1, b = 3 *  (p2 - p1) - c, a = 1 - c - b;
+		return (3 *  a *  t + 2 *  b) *  t + c;
 	};
 
 	__pCubicBezier._getTForCoordinate = function (c, p1, p2, epsilon) {
@@ -8076,7 +8446,7 @@ if (!nexacro._bInitPlatform) {
 			else {
 				t1 = t2;
 			}
-			t2 = (t1 - t0) * 0.5 + t0;
+			t2 = (t1 - t0) *  0.5 + t0;
 		}
 
 		return t2;
@@ -8114,27 +8484,27 @@ if (!nexacro._bInitPlatform) {
 		}
 
 		var i0 = {
-			x : t * this._p1.x, 
-			y : t * this._p1.y
+			x : t *  this._p1.x, 
+			y : t *  this._p1.y
 		}, i1 = {
-			x : this._p1.x + t * (this._p2.x - this._p1.x), 
-			y : this._p1.y + t * (this._p2.y - this._p1.y)
+			x : this._p1.x + t *  (this._p2.x - this._p1.x), 
+			y : this._p1.y + t *  (this._p2.y - this._p1.y)
 		}, i2 = {
-			x : this._p2.x + t * (1 - this._p2.x), 
-			y : this._p2.y + t * (1 - this._p2.y)
+			x : this._p2.x + t *  (1 - this._p2.x), 
+			y : this._p2.y + t *  (1 - this._p2.y)
 		};
 
 		var j0 = {
-			x : i0.x + t * (i1.x - i0.x), 
-			y : i0.y + t * (i1.y - i0.y)
+			x : i0.x + t *  (i1.x - i0.x), 
+			y : i0.y + t *  (i1.y - i0.y)
 		}, j1 = {
-			x : i1.x + t * (i2.x - i1.x), 
-			y : i1.y + t * (i2.y - i1.y)
+			x : i1.x + t *  (i2.x - i1.x), 
+			y : i1.y + t *  (i2.y - i1.y)
 		};
 
 		var k = {
-			x : j0.x + t * (j1.x - j0.x), 
-			y : j0.y + t * (j1.y - j0.y)
+			x : j0.x + t *  (j1.x - j0.x), 
+			y : j0.y + t *  (j1.y - j0.y)
 		};
 
 		return {
@@ -8270,10 +8640,11 @@ if (!nexacro._bInitPlatform) {
 
 
 	_pEnvironment.enabletouchevent = false;
+	_pEnvironment.enableinspector = false;
 	_pEnvironment.filesecurelevel = "private";
 	_pEnvironment.highcontrastthemeid = "";
 	_pEnvironment.httpretry = 0;
-	_pEnvironment.httptimeout = 30;
+	_pEnvironment.httptimeout = 60;
 	_pEnvironment.imepastemode = 0;
 	_pEnvironment.initvaluefileid = "";
 	_pEnvironment.key = "";
@@ -8327,7 +8698,7 @@ if (!nexacro._bInitPlatform) {
 	nexacro._usewaitcursor = true;
 	nexacro._rtl = undefined;
 	nexacro._httpretry = 0;
-	nexacro._httptimeout = 30;
+	nexacro._httptimeout = 60;
 	nexacro._traceduration = -1;
 	nexacro._tracemode = "none";
 	nexacro._loadingimage = "";
@@ -8352,7 +8723,8 @@ if (!nexacro._bInitPlatform) {
 		"onerror" : 1, 
 		"onaccessibilitykey" : 1, 
 		"onload" : 1, 
-		"onextendedcommand" : 1
+		"onextendedcommand" : 1, 
+		"ondevicepermission" : 1
 	};
 
 
@@ -8361,13 +8733,23 @@ if (!nexacro._bInitPlatform) {
 
 	_pEnvironment.set_tabkeycirculation = function (v) {
 		if (this.tabkeycirculation != v) {
-			if (v == "form,nocycle") {
-				nexacro._tabkeycirculation = 1;
-				this.tabkeycirculation = v;
-			}
-			else {
-				nexacro._tabkeycirculation = 0;
-				this.tabkeycirculation = "form,cycle";
+			switch (v) {
+				case "form,nocycle":
+					nexacro._tabkeycirculation = 1;
+					this.tabkeycirculation = v;
+					break;
+				case "frame,cycle":
+					nexacro._tabkeycirculation = 2;
+					this.tabkeycirculation = v;
+					break;
+				case "frame,nocycle":
+					nexacro._tabkeycirculation = 3;
+					this.tabkeycirculation = v;
+					break;
+				default:
+					nexacro._tabkeycirculation = 0;
+					this.tabkeycirculation = "form,cycle";
+					break;
 			}
 		}
 	};
@@ -8375,6 +8757,11 @@ if (!nexacro._bInitPlatform) {
 	_pEnvironment.set_rtl = function (v) {
 		this.rtl = v;
 		nexacro._rtl = nexacro._toBoolean(v);
+	};
+
+	_pEnvironment.set_enableinspector = function (v) {
+		this.enableinspector = nexacro._toBoolean(v);
+		nexacro._setEnableInspector(v);
 	};
 
 	_pEnvironment.set_enablescreencapture = function (v) {
@@ -8432,7 +8819,7 @@ if (!nexacro._bInitPlatform) {
 
 	_pEnvironment.set_httptimeout = function (v) {
 		var timeout = nexacro._parseInt(v);
-		this.httptimeout = (timeout > 0) ? timeout : 0;
+		this.httptimeout = (timeout >= 0) ? timeout : 60;
 		nexacro._httptimeout = this.httptimeout;
 		nexacro._setHttpTimeout(this.httptimeout);
 	};
@@ -8501,6 +8888,8 @@ if (!nexacro._bInitPlatform) {
 		}
 
 		this.loglevel = v;
+
+		nexacro._setLogLevel(nexacro._loglevel);
 	};
 
 	_pEnvironment.set_mousewheeltype = function (v) {
@@ -8542,6 +8931,7 @@ if (!nexacro._bInitPlatform) {
 				nexacro._deleteTraceLogFile();
 			}
 		}
+		nexacro._setTraceDuration(val);
 	};
 
 	_pEnvironment.set_tracemode = function (v) {
@@ -8551,9 +8941,9 @@ if (!nexacro._bInitPlatform) {
 			this.tracemode = v;
 			nexacro._tracemode = v;
 			if (this.tracemode != "append") {
-				nexacro._deleteTraceLogFile();
 			}
 		}
+		nexacro._setTraceMode(v);
 	};
 
 	_pEnvironment.set_updates = function () {
@@ -8692,7 +9082,7 @@ if (!nexacro._bInitPlatform) {
 
 		var ar = v.split(",");
 		var arlen = ar.length;
-		var pattern1 = /^(0|3|29|72|72|90|93)$/g;
+		var pattern1 = /^(0|3|29|40|41|58|61)$/g;
 		var n, j;
 
 		if (nexacro._isArray(ar)) {
@@ -9660,6 +10050,17 @@ if (!nexacro._bInitPlatform) {
 		}
 	};
 
+	_pEnvironment.on_fire_ondevicepermission = function (v) {
+		var parameters = JSON.parse(v);
+
+		if (this.ondevicepermission && this.ondevicepermission._has_handlers) {
+			var evt = new nexacro.DevicePermissionEventInfo(this, "ondevicepermission", parameters.reason, parameters.status);
+			return this.ondevicepermission._fireEvent(this, evt);
+		}
+
+		return false;
+	};
+
 
 	_pEnvironment.userNotify = function (notifyid, message) {
 		nexacro._userNotify(notifyid, message);
@@ -9669,7 +10070,7 @@ if (!nexacro._bInitPlatform) {
 		if (nexacro._loadingimage) {
 			return nexacro._loadingimage;
 		}
-		return nexacro._transfullurl(nexacro._resource_path, nexacro._default_loadingimage);
+		return nexacro._transfullurl(nexacro._resource_path, nexacro._default_loadingimage, true, undefined);
 	};
 
 	nexacro._getCookieVariables = function (type) {
@@ -9703,7 +10104,7 @@ if (!nexacro._bInitPlatform) {
 	};
 
 	nexacro.setHTTPHeaderVariable = function (name, value) {
-		if (name) {
+		if (name && value) {
 			nexacro._setLocalStorage(name, value, 5);
 		}
 	};
@@ -9805,6 +10206,9 @@ if (!nexacro._bInitPlatform) {
 		return nexacro._project_absolutepath;
 	};
 
+	nexacro.getLogFilePath = function () {
+		return nexacro._getLogFilePath();
+	};
 
 	nexacro.loadStyle = function (url) {
 		var styleurl = url;
@@ -9816,7 +10220,9 @@ if (!nexacro._bInitPlatform) {
 
 		var cssurl, base_url;
 		url = url.replace("::", "_");
-		cssurl = nexacro._getServiceLocation("theme://" + url, nexacro._project_absolutepath);
+		cssurl = nexacro._getServiceLocation("theme://" + url, nexacro._project_absolutepath, null, false);
+		var env = nexacro.getEnvironment();
+		var checkversion = env.checkversion;
 
 		if (nexacro._localcache_path) {
 			base_url = cssurl.substring(nexacro._project_absolutepath.length, cssurl.length);
@@ -9831,6 +10237,11 @@ if (!nexacro._bInitPlatform) {
 		pos = cssmapurl.lastIndexOf('.');
 		cssmapurl = cssmapurl.substring(0, pos + 1) + "map.js";
 
+
+		if (checkversion) {
+			cssmapurl += nexacro._getVersionQueryString(cssmapurl, "theme");
+			cssurl += nexacro._getVersionQueryString(cssurl, "theme");
+		}
 		var app = nexacro.getApplication();
 		if (app) {
 			app._load_manager.reloadCssModule(cssmapurl, null, false, service);
@@ -9853,29 +10264,6 @@ if (!nexacro._bInitPlatform) {
 	};
 
 	nexacro._loadFDL = function () {
-	};
-
-	nexacro._getMsg = function (errorcode) {
-		if (nexacro._errortable) {
-			var lang = "en";
-			if (nexacro._errortable[system._language]) {
-				lang = system._language;
-			}
-
-			var errmsg = nexacro._errortable[lang][errorcode];
-
-			if (!errmsg) {
-				return "";
-			}
-			var arg = Array.prototype.slice.call(arguments, 1);
-			var n = arg.length;
-
-			for (var i = 0; i < n; i++) {
-				var a = "%[" + i + "]";
-				errmsg = errmsg.replace(a, arg[i]);
-			}
-			return errmsg;
-		}
 	};
 
 	nexacro._getErrorMessge = function (errorcode) {
@@ -10037,6 +10425,9 @@ if (!nexacro._bInitPlatform) {
 		}
 
 		var parentframe = parent_frame;
+
+		nexacro._cleanupPopupFrame(id, parentframe);
+
 		if (parentframe && parentframe[id]) {
 			throw nexacro.MakeNativeError(this, "native_exist_id", id);
 		}
@@ -10175,7 +10566,7 @@ if (!nexacro._bInitPlatform) {
 				nexacro._registerPopupFrame(id, this, parent_window);
 			}
 			else {
-				nexacro._registerPopupFrame(id, this);
+				nexacro._registerPopupFrame(id, this, nexacro._findWindow(nexacro._getMainWindowHandle()));
 			}
 		}
 
@@ -10200,7 +10591,7 @@ if (!nexacro._bInitPlatform) {
 
 		this.codepage = codepage;
 		this.language = language;
-		this.version = version | "0.0";
+		this.version = version;
 		this.communicationversion = communicationversion;
 	};
 	var __pServiceItem = nexacro._createPrototype(nexacro.Object, nexacro._ServiceItem);

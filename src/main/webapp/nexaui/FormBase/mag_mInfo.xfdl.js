@@ -47,13 +47,15 @@
             obj.set_taborder("4");
             obj.set_text("저장");
             this.addChild(obj.name, obj);
-
             // Layout Functions
             //-- Default Layout : this
             obj = new Layout("default","",700,600,this,function(p){});
             this.addLayout(obj.name, obj);
             
             // BindItem Information
+
+            
+            // TriggerItem Information
 
         };
         
@@ -181,7 +183,6 @@
             this.btn_delete.addEventHandler("onclick",this.btn_delete_onclick,this);
             this.btn_save.addEventHandler("onclick",this.btn_save_onclick,this);
         };
-
         this.loadIncludeScript("mag_mInfo.xfdl");
         this.loadPreloadList();
         

@@ -23,12 +23,17 @@ if (nexacro.Edit) {
 				}
 				return true;
 			}, 
-			on_keydown_basic_specialkey_process : function (keycode, alt_key, ctrl_key, shift_key) {
+			on_keydown_basic_specialkey_process : function (keycode, alt_key, ctrl_key, shift_key, meta_key) {
 				var input_elem = this._input_element;
+
+				if (nexacro._OS == "Mac OS" || nexacro._OS == "OSX" || nexacro._OS == "iOS") {
+					ctrl_key = meta_key;
+				}
+
 				if (keycode == nexacro.KeyCode_ImeInput && this._imedisable) {
 					this._killfocus_fix_composition();
 					var input_handle = input_elem.handle;
-					if (nexacro._Browser == "Chrome") {
+					if (nexacro._Browser == "Chrome" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) {
 						input_handle.blur();
 						input_handle.focus();
 					}
@@ -62,7 +67,7 @@ if (nexacro.Edit) {
 				}
 				return true;
 			}, 
-			on_keydown_basic_process : function (keycode, alt_key, ctrl_key, shift_key) {
+			on_keydown_basic_process : function (keycode, alt_key, ctrl_key, shift_key, meta_key) {
 				var input_elem = this._input_element;
 				if (this._undostack && !input_elem.isComposing()) {
 					var pos = input_elem.getElementCaretPos();
@@ -70,9 +75,11 @@ if (nexacro.Edit) {
 						this._undostack.update(pos.begin, pos.end);
 					}
 				}
-				if (nexacro._Browser == "IE" && input_elem.isComposing() && (keycode == 37 || keycode == 39)) {
-					input_elem.stopSysEvent();
-					return false;
+				if ((nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge"))) {
+					if (input_elem.isComposing() && (keycode == 37 || keycode == 39)) {
+						input_elem.stopSysEvent();
+						return false;
+					}
 				}
 				return true;
 			}, 
@@ -266,7 +273,9 @@ if (nexacro.Edit) {
 							var cur_text_len = cur_text ? cur_text.length : 0;
 							var pre_text_len = pre_text ? pre_text.length : 0;
 							if (pos != -1) {
-								pos.begin = pos.end = pos.begin - (cur_text_len - pre_text_len);
+								if (cur_text_len - pre_text_len >= 0) {
+									pos.begin = pos.end = pos.begin - (cur_text_len - pre_text_len);
+								}
 								if (pos.begin < 0) {
 									pos.begin = pos.end = 0;
 								}
@@ -355,12 +364,17 @@ if (nexacro.Edit) {
 				}
 				return true;
 			}, 
-			on_keydown_basic_specialkey_process : function (keycode, alt_key, ctrl_key, shift_key) {
+			on_keydown_basic_specialkey_process : function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
 				var input_elem = this._input_element;
+
+				if (nexacro._OS == "Mac OS" || nexacro._OS == "OSX" || nexacro._OS == "iOS") {
+					ctrl_key = meta_key;
+				}
+
 				if (keycode == nexacro.KeyCode_ImeInput && this._imedisable) {
 					this._killfocus_fix_composition();
 					var input_handle = input_elem.handle;
-					if (nexacro._Browser == "Chrome") {
+					if (nexacro._Browser == "Chrome" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) {
 						input_handle.blur();
 						input_handle.focus();
 					}
@@ -412,7 +426,7 @@ if (nexacro.Edit) {
 
 				return true;
 			}, 
-			on_keydown_basic_process : function (keycode, alt_key, ctrl_key, shift_key) {
+			on_keydown_basic_process : function (keycode, alt_key, ctrl_key, shift_key, meta_key) {
 				var input_elem = this._input_element;
 				if (this._undostack && !input_elem.isComposing()) {
 					var pos = input_elem.getElementCaretPos();
@@ -420,14 +434,16 @@ if (nexacro.Edit) {
 						this._undostack.update(pos.begin, pos.end);
 					}
 				}
-				if (nexacro._Browser == "IE" && input_elem.isComposing() && (keycode == 37 || keycode == 39)) {
-					input_elem.stopSysEvent();
-					return false;
+				if ((nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge"))) {
+					if (input_elem.isComposing() && (keycode == 37 || keycode == 39)) {
+						input_elem.stopSysEvent();
+						return false;
+					}
 				}
 
 				return true;
 			}, 
-			on_keydown_default_specialkey_process : function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
+			on_keydown_default_specialkey_process : function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
 				var input_elem = this._input_element;
 
 				if (keycode == nexacro.Event.KEY_RETURN) {
@@ -470,7 +486,7 @@ if (nexacro.Edit) {
 
 						input_elem._updateElementValue(value);
 
-						if ((nexacro._Browser == "IE" && nexacro._BrowserType != "Edge") || nexacro._Browser == "Runtime") {
+						if (nexacro._Browser == "IE" || nexacro._Browser == "Runtime") {
 							input_elem._updateInputValue(value);
 						}
 						else {
@@ -508,7 +524,7 @@ if (nexacro.Edit) {
 					}
 				}
 
-				return nexacro.TextArea.prototype.on_keydown_default_specialkey_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp);
+				return nexacro.TextArea.prototype.on_keydown_default_specialkey_process.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key);
 			}, 
 			on_keyinput_basic_before_process : function (input_text) {
 				var input_elem = this._input_element;
@@ -756,7 +772,7 @@ if (nexacro.Edit) {
 
 				input_elem._updateElementValue(value);
 
-				if ((nexacro._Browser == "IE" && nexacro._BrowserType != "Edge") || nexacro._Browser == "Runtime") {
+				if (nexacro._Browser == "IE" || nexacro._Browser == "Runtime") {
 					input_elem._updateInputValue(value);
 				}
 				else {
@@ -877,8 +893,10 @@ if (nexacro._Browser != "Runtime") {
 						var ctrlkey = evt.ctrlKey;
 						var keycode = nexacro._getSysEventKey(evt);
 						var value = pThis._getInputValue();
+						var pos;
+
 						if (keycode == nexacro.Event.KEY_RETURN || (ctrlkey && keycode == 77) || (ctrlkey && keycode == 90)) {
-							var pos = pThis.getElementCaretPos();
+							pos = pThis.getElementCaretPos();
 
 							var beginOffset = pThis._composer.startOffset;
 							pThis._composer.setStatus(nexacro._CompositionState.END, pos.end);
@@ -944,6 +962,12 @@ if (nexacro._Browser != "Runtime") {
 							}
 
 							pThis._setElementLastSelectionRange();
+						}
+						else if (keycode >= nexacro.Event.KEY_F6 && keycode <= nexacro.Event.KEY_F10) {
+							if ((nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
+								pos = pThis.getElementCaretPos();
+								pThis._composer.setStatus(nexacro._CompositionState.COMPOSING, pos.end);
+							}
 						}
 					}
 
@@ -1089,6 +1113,15 @@ if (nexacro._Browser != "Runtime") {
 
 					value = pThis._getInputValue();
 					pos = pThis.getElementCaretPos();
+
+					if (comp._is_undo && this.maxlength > 0) {
+						var check = pThis._checkMaxLength(value, pos.end);
+						if (check && check.ismax) {
+							value = value.substring(0, check.pos);
+							pThis._updateInputValue(value, false, "", check.end);
+						}
+						comp._is_undo = false;
+					}
 
 
 					if (pThis._composer.isComposing()) {
@@ -1267,7 +1300,7 @@ if (nexacro._Browser != "Runtime") {
 
 				on_sys_compositionupdate_process : function (evt) {
 					var _skip_caret = false;
-					if (nexacro._Browser == "Chrome" || nexacro._Browser == "Gecko" || nexacro._OS == "iOS" || (nexacro._Browser == "IE" && nexacro._BrowserVersion == 9)) {
+					if (nexacro._Browser == "Chrome" || nexacro._Browser == "Gecko" || nexacro._OS == "iOS" || (nexacro._Browser == "IE" && nexacro._BrowserVersion == 9) || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) {
 						_skip_caret = true;
 					}
 
@@ -1281,6 +1314,12 @@ if (nexacro._Browser != "Runtime") {
 				on_sys_compositionend_process : function (evt) {
 					var input_handle = (evt.target || evt.srcElement);
 					var pThis = input_handle._linked_element;
+
+					var composing_status = pThis.getCompositionStatus();
+					if (composing_status != nexacro._CompositionState.COMPOSING) {
+						return;
+					}
+
 
 					if (pThis._is_focused) {
 						var value = pThis._getInputValue();
@@ -1374,7 +1413,7 @@ if (nexacro._Browser != "Runtime") {
 							value = new_value;
 							var old_value = pThis.value;
 
-							if (nexacro._Browser == "IE") {
+							if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
 								pThis._updateElementValue(value);
 							}
 
@@ -1406,7 +1445,7 @@ if (nexacro._Browser != "Runtime") {
 
 						if (pThis.autoskip && pThis._is_focused) {
 							if (ismax) {
-								if (nexacro._Browser == "Chrome" || (nexacro._Browser == "IE" && (nexacro._BrowserType == "Edge" || nexacro._BrowserVersion == 11))) {
+								if (nexacro._Browser == "Chrome" || nexacro._Browser == "Edge" || (nexacro._Browser == "IE" && nexacro._BrowserVersion == 11)) {
 									pThis._go_next_focus();
 								}
 								else {
@@ -1438,14 +1477,19 @@ if (nexacro._Browser != "Runtime") {
 					return true;
 				}, 
 				on_complete_composition_value_process : function () {
-					if (nexacro._Browser === "Gecko" || nexacro._Browser === "IE") {
+					if ((nexacro._OS === "iOS" && nexacro._Browser === "MobileSafari") || nexacro._Browser === "Gecko" || nexacro._Browser === "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
 						if (this.handle) {
 							this.handle.blur();
 							this.handle.focus();
-							if (nexacro._Browser === "IE" && nexacro._BrowserVersion <= 8) {
+							if ((nexacro._Browser === "IE" && nexacro._BrowserVersion <= 8) || (nexacro._OS === "iOS" && nexacro._Browser === "MobileSafari")) {
 								var comp = this.parent_elem.linkedcontrol;
 								var beginOffset = this._composer.startOffset;
 								var endOffset = this._composer.endOffset;
+								if (nexacro._OS === "iOS" && nexacro._Browser === "MobileSafari") {
+									var pos = this.getElementCaretPos();
+									endOffset = pos.end;
+								}
+
 								var newpos = -1;
 								var value = this._getInputValue();
 								var new_value = comp._fix_composition(value, beginOffset, endOffset);

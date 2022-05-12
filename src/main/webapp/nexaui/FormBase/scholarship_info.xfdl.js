@@ -33,7 +33,7 @@
 
 
             obj = new Dataset("dsCollege", this);
-            obj._setContents("<ColumnInfo><Column id=\"scholarship_college\" type=\"STRING\" size=\"256\"/><Column id=\"scholarship_collegename\" type=\"STRING\" size=\"256\"/></ColumnInfo><Rows><Row><Col id=\"scholarship_college\">컴퓨터공학과</Col><Col id=\"scholarship_collegename\">컴퓨터공학과</Col></Row><Row><Col id=\"scholarship_college\">전자전기공학과</Col><Col id=\"scholarship_collegename\">전자전기공학과</Col></Row><Row><Col id=\"scholarship_college\">산업디자인학과</Col><Col id=\"scholarship_collegename\">산업디자인학과</Col></Row><Row><Col id=\"scholarship_college\">중국어학과</Col><Col id=\"scholarship_collegename\">중국어학과</Col></Row><Row><Col id=\"scholarship_college\">유비쿼터스학과</Col><Col id=\"scholarship_collegename\">유비쿼터스학과</Col></Row><Row><Col id=\"scholarship_college\">국어국문학과</Col><Col id=\"scholarship_collegename\">국어국문학과</Col></Row></Rows>");
+            obj._setContents("<ColumnInfo><Column id=\"scholarship_college\" type=\"STRING\" size=\"256\"/><Column id=\"scholarship_collegename\" type=\"STRING\" size=\"256\"/></ColumnInfo><Rows><Row><Col id=\"scholarship_college\">1</Col><Col id=\"scholarship_collegename\">컴퓨터공학과</Col></Row><Row><Col id=\"scholarship_college\">2</Col><Col id=\"scholarship_collegename\">전자전기공학과</Col></Row><Row><Col id=\"scholarship_college\">3</Col><Col id=\"scholarship_collegename\">산업디자인학과</Col></Row><Row><Col id=\"scholarship_college\">4</Col><Col id=\"scholarship_collegename\">중국어학</Col></Row><Row><Col id=\"scholarship_college\">5</Col><Col id=\"scholarship_collegename\">유비쿼터스학과</Col></Row><Row><Col id=\"scholarship_college\">6</Col><Col id=\"scholarship_collegename\">국어국문학과</Col></Row></Rows>");
             this.addChild(obj.name, obj);
             
             // UI Components Initialize
@@ -55,14 +55,19 @@
             obj.set_taborder("0");
             obj.set_autofittype("col");
             obj.set_binddataset("ds_scholarship");
-            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"48\"/><Column size=\"100\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"chk\" edittype=\"checkbox\" displaytype=\"checkboxcontrol\"/><Cell col=\"1\" text=\"번호\"/><Cell col=\"2\" text=\"평균\"/><Cell col=\"3\" text=\"년도\"/><Cell col=\"4\" text=\"학기\"/><Cell col=\"5\" text=\"상태\"/><Cell col=\"6\" text=\"신청금액\"/><Cell col=\"7\" text=\"이름\"/><Cell col=\"8\" text=\"전화번호\"/><Cell col=\"9\" text=\"학과\"/><Cell col=\"10\" text=\"학번\"/></Band><Band id=\"body\"><Cell text=\"bind:chk\" displaytype=\"checkboxcontrol\" edittype=\"checkbox\" expr=\"expr:chk=='Y'?'1':'0'\"/><Cell col=\"1\" text=\"bind:scholarship_inno\"/><Cell col=\"2\" text=\"bind:scholarship_avg_grade\"/><Cell col=\"3\" text=\"bind:scholarship_year\"/><Cell col=\"4\" text=\"bind:scholarship_term\"/><Cell col=\"5\" text=\"expr:scholarship_status == 'Y'? &quot;승인&quot; : scholarship_status== 'N'? &quot;미승인&quot; : scholarship_status == 'W'? &quot;대기&quot; : &quot;&quot;\"/><Cell col=\"6\" text=\"bind:scholarship_amount\"/><Cell col=\"7\" text=\"bind:scholarship_name\"/><Cell col=\"8\" text=\"bind:scholarship_phonenumber\"/><Cell col=\"9\" text=\"bind:scholarship_college\"/><Cell col=\"10\" text=\"bind:scholarship_student_no\"/></Band></Format></Formats>");
+            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"48\"/><Column size=\"100\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"chk\" edittype=\"checkbox\" displaytype=\"checkboxcontrol\"/><Cell col=\"1\" text=\"번호\"/><Cell col=\"2\" text=\"평균\"/><Cell col=\"3\" text=\"년도\"/><Cell col=\"4\" text=\"학기\"/><Cell col=\"5\" text=\"상태\"/><Cell col=\"6\" text=\"신청금액\"/><Cell col=\"7\" text=\"이름\"/><Cell col=\"8\" text=\"전화번호\"/><Cell col=\"9\" text=\"학과\"/><Cell col=\"10\" text=\"학번\"/></Band><Band id=\"body\"><Cell text=\"bind:chk\" displaytype=\"checkboxcontrol\" edittype=\"checkbox\" expr=\"expr:chk==&apos;Y&apos;?&apos;1&apos;:&apos;0&apos;\"/><Cell col=\"1\" text=\"bind:scholarship_inno\"/><Cell col=\"2\" text=\"bind:scholarship_avg_grade\"/><Cell col=\"3\" text=\"bind:scholarship_year\"/><Cell col=\"4\" text=\"bind:scholarship_term\"/><Cell col=\"5\" text=\"expr:scholarship_status == &apos;Y&apos;? &quot;승인&quot; : scholarship_status== &apos;N&apos;? &quot;미승인&quot; : scholarship_status == &apos;W&apos;? &quot;대기&quot; : &quot;&quot;\"/><Cell col=\"6\" text=\"bind:scholarship_amount\"/><Cell col=\"7\" text=\"bind:scholarship_name\"/><Cell col=\"8\" text=\"bind:scholarship_phonenumber\"/><Cell col=\"9\" text=\"bind:scholarship_college\"/><Cell col=\"10\" text=\"bind:scholarship_student_no\"/></Band></Format></Formats>");
             this.Tab00.Tabpage1.addChild(obj.name, obj);
+
+            obj = new Tabpage("Tabpage2",this.Tab00);
+            obj.set_text("Tabpage2");
+            obj.set_url("FormBase::scholarship_ins.xfdl");
+            this.Tab00.addChild(obj.name, obj);
 
             obj = new Combo("Combo00","94","107","113","30",null,null,null,null,null,null,this);
             obj.set_taborder("2");
             obj.set_innerdataset("dsYear");
-            obj.set_datacolumn("scholarship_year");
             obj.set_codecolumn("scholarship_term");
+            obj.set_datacolumn("scholarship_year");
             obj.set_text("Combo00");
             this.addChild(obj.name, obj);
 
@@ -74,8 +79,8 @@
             obj = new Combo("Combo01","295","107","130","34",null,null,null,null,null,null,this);
             obj.set_taborder("4");
             obj.set_innerdataset("dsTerm");
-            obj.set_datacolumn("scholarship_term");
             obj.set_codecolumn("scholarship_no");
+            obj.set_datacolumn("scholarship_term");
             obj.set_text("Combo01");
             this.addChild(obj.name, obj);
 
@@ -87,8 +92,8 @@
             obj = new Combo("Combo02","526","107","144","31",null,null,null,null,null,null,this);
             obj.set_taborder("6");
             obj.set_innerdataset("dsCollege");
-            obj.set_datacolumn("scholarship_college");
-            obj.set_codecolumn("scholarship_collegename");
+            obj.set_codecolumn("scholarship_college");
+            obj.set_datacolumn("scholarship_collegename");
             obj.set_text("Combo02");
             this.addChild(obj.name, obj);
 
@@ -106,65 +111,31 @@
             obj.set_taborder("9");
             obj.set_text("미승인");
             this.addChild(obj.name, obj);
-
             // Layout Functions
             //-- Default Layout : this
             obj = new Layout("default","",1280,720,this,function(p){});
             this.addLayout(obj.name, obj);
             
             // BindItem Information
-            obj = new BindItem("item0","Combo00","value","dsYear","");
+            obj = new BindItem("item0","Combo00","value","dsSend","scholarship_year");
             this.addChild(obj.name, obj);
             obj.bind();
 
-            obj = new BindItem("item1","Combo02","value","dsCollege","");
+            obj = new BindItem("item1","Combo02","value","dsSend","scholarship_college");
             this.addChild(obj.name, obj);
             obj.bind();
 
-            obj = new BindItem("item3","Combo01","value","dsTerm","");
+            obj = new BindItem("item2","Combo02","text","dsSend","scholarship_college");
             this.addChild(obj.name, obj);
             obj.bind();
+            
+            // TriggerItem Information
 
-            obj = new BindItem("item2","Combo00","innerdataset","dsYear","scholarship_year");
-            this.addChild(obj.name, obj);
-            obj.bind();
-
-            obj = new BindItem("item4","Combo00","datacolumn","dsYear","scholarship_year");
-            this.addChild(obj.name, obj);
-            obj.bind();
-
-            obj = new BindItem("item5","Combo00","codecolumn","dsYear","scholarship_term");
-            this.addChild(obj.name, obj);
-            obj.bind();
-
-            obj = new BindItem("item6","Combo01","innerdataset","dsTerm","scholarship_term");
-            this.addChild(obj.name, obj);
-            obj.bind();
-
-            obj = new BindItem("item7","Combo01","datacolumn","dsTerm","scholarship_term");
-            this.addChild(obj.name, obj);
-            obj.bind();
-
-            obj = new BindItem("item8","Combo01","codecolumn","dsTerm","scholarship_no");
-            this.addChild(obj.name, obj);
-            obj.bind();
-
-            obj = new BindItem("item9","Combo02","innerdataset","dsCollege","scholarship_college");
-            this.addChild(obj.name, obj);
-            obj.bind();
-
-            obj = new BindItem("item10","Combo02","datacolumn","dsCollege","scholarship_college");
-            this.addChild(obj.name, obj);
-            obj.bind();
-
-            obj = new BindItem("item11","Combo02","codecolumn","dsCollege","scholarship_collegename");
-            this.addChild(obj.name, obj);
-            obj.bind();
         };
         
         this.loadPreloadList = function()
         {
-
+            this._addPreloadList("fdl","FormBase::scholarship_ins.xfdl");
         };
         
         // User Script
@@ -326,7 +297,6 @@
             this.btn_denined.addEventHandler("onclick",this.btn_denined_onclick,this);
             this.ds_scholarship.addEventHandler("oncolumnchanged",this.ds_scholarship_oncolumnchanged,this);
         };
-
         this.loadIncludeScript("scholarship_info.xfdl");
         this.loadPreloadList();
         

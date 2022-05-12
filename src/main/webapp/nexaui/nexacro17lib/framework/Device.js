@@ -41,11 +41,15 @@ if (!nexacro.DeviceI) {
 			_keyKind = 2;
 		}
 
-		var application = nexacro.getApplication();
-		if (application) {
-			return application.getActiveForm()._on_devicebuttonup({
-				button : _keyKind
-			});
+		var app = nexacro.getApplication();
+		var active_form = app.getActiveForm();
+		if (!active_form) {
+			return;
+		}
+
+		var focusedComp = active_form.getFocus();
+		if (focusedComp) {
+			return focusedComp._on_devicebuttonup(_keyKind);
 		}
 	};
 
@@ -55,7 +59,7 @@ if (!nexacro.DeviceI) {
 		this.uniqueID++;
 
 		var strMakeID = this.uniqueID.toString()
-			 + Math.floor((Math.random() * (1000 - 100 + 1)) + 100).toString();
+			 + Math.floor((nexacro._random() *  (1000 - 100 + 1)) + 100).toString();
 		return parseInt(strMakeID);
 	};
 
@@ -74,9 +78,6 @@ if (!nexacro.DeviceI) {
 		if ((willrunfunc != undefined) && (typeof willrunfunc[sfunc] == "function")) {
 			return willrunfunc[sfunc](obj);
 		}
-	};
-
-	_pDeviceI.on_created = function () {
 	};
 
 	_pDeviceI.print = function (strPrint) {

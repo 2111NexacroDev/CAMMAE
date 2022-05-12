@@ -20,6 +20,7 @@ if (this.nexacro) {
 			"reference_fail_findcolumn" : ["Dataset에서 지정한 Column[", "%0", "] 을 찾지 못했습니다."], 
 			"syntax_fail_parse_xml" : ["파싱 중 에러가 발생되었습니다.[", "%0", "]"], 
 			"syntax_not_set_samepath" : ["form과 같은 경로로 설정할수 없습니다.[", "%0", "]"], 
+			"loading_error" : ["%0", " 로딩중 error가 발생하였습니다. "], 
 			"type_invalid" : ["추가할수 없는 타입입니다.[", "%0", "]"], 
 			"type_mismatch" : ["입력 파라미터의 데이터 형식이 일치하지 않습니다. [", "%0", "]"], 
 
@@ -40,6 +41,7 @@ if (this.nexacro) {
 			"native_expire_license" : ["라이센스 기간이 [", "%0", "]로 만료되었습니다.    "], 
 			"native_invalid_licensefile" : ["라이센스 정보가 유효하지 않습니다. 라이센스를 확인하시기 바랍니다."], 
 			"native_invalid_licensedate" : ["라이센스 기간이 유효하지 않습니다. 유효기간 [", "%0", "]", "-[", "%1", "]"], 
+			"native_invalid_licenseactivation" : ["라이센스 활성화(activation) 날짜가 유효하지 않습니다. 현재날짜(기준날짜)[", "%0", "]가 활성화 날짜[", "%1", "] 이전이면 안됩니다."], 
 			"native_license_invaliddomain" : ["라이센스 도메인 정보가 정확하지 않습니다. 도메인 확인이 필요합니다. "], 
 			"native_license_fail_parse" : ["라이센스 도메인 정보가 정확하지 않습니다. 라이센스 화일을 분석하는 도중 에러가 발생하였습니다.  [", "%0", "]"], 
 			"native_fail_openfile" : ["파일을 열지 못했습니다. [", "%0", "]"], 
@@ -47,6 +49,7 @@ if (this.nexacro) {
 			"native_notexist_screenwidth" : ["스크린에 screenwidth 값이 설정되어 있지 않습니다. "], 
 			"native_notsupport_include" : ["Environment는 include 문법을 지원하지 않습니다."], 
 			"native_require_add_module_accessibility" : ["enableaccessibility = true가 정상 동작하려면 accessibility.json 모듈 파일을 TypeDefinition에 추가하시기 바랍니다."], 
+			"native_check_loadmodule" : ["내부에 로딩되는 모듈은 인증서가 포함되어 있어야 하나 찾을 수 없습니다.\n그래도 로딩을 허용하시겠습니까?"], 
 
 			"comm_fail_loadinvalidurl" : ["로딩하는 중에 에러가 발생하였습니다. 주소가 정확한지 확인하고 다시 시도하십시오. [", "%0", "]"], 
 			"comm_fail_loadinvalidimage" : ["이미지 정보를 찾을 수 없습니다.[", "%0", "]"], 
@@ -65,6 +68,8 @@ if (this.nexacro) {
 			"msg_permit_folder" : ["이 폴더 및 하위 폴더는 항상 허용"], 
 			"msg_permit_domain" : ["이 도메인은 항상 허용"], 
 			"msg_permit_cert" : ["이 인증서는 항상 허용"], 
+			"msg_access_invalid_object" : ["해당 오브젝트는 임의 명령어 실행 취약점을 유발할 수 있습니다. \n계속 진행하시겠습니까?\n"], 
+			"msg_permit_object" : ["이 오브젝트는 항상 허용"], 
 
 			"msg_update_processing" : ["실행중인 Process[", "%0", "] 가 있어서 Update가 실패하였습니다. 실행중인 Process를 자동 종료하려면 Yes(예), 실행중인 Process를 직접 종료하고 난 후에 계속 진행하려면 No(아니오), Restart 후에 Update를 적용하려면 Cancel(취소)를 선택합니다. "], 
 			"msg_reset_sandboxdialog" : ["프로그램 개선에 따라 폴더/도메인 접근 경고창에서 기존에 설정 하였던 허용 여부를 재설정 하여야만 합니다. 고객님의 많은 양해 부탁드립니다."], 
@@ -102,7 +107,8 @@ if (this.nexacro) {
 			"object_push_fail_already_topic_exists" : ["X-PUSH 서버에 등록된 topic 정보가 존재합니다."], 
 
 			"msg_accessibility_emptyline" : ["빈줄"], 
-			"msg_accessibility_emptyframe" : ["내용없음"]
+			"msg_accessibility_emptyframe" : ["내용없음"], 
+			"module_not_installed" : ["[", "%0", "] Control이 설치되지 않았습니다.다음 url에서 컨트롤을 설치 하십시오: [", "%1", "]"]
 		}, 
 		"en" : 
 			{
@@ -110,6 +116,7 @@ if (this.nexacro) {
 			"reference_fail_findcolumn" : ["Cannot found the specified column [", "%0", "] in Dataset."], 
 			"syntax_fail_parse_xml" : ["error has occurred while parsing [", "%0", "]"], 
 			"syntax_not_set_samepath" : ["Cannot set same path with form.[", "%0", "]"], 
+			"loading_error" : ["%0", " error has occurred while loading. "], 
 			"type_invalid" : ["Type mismatch.[", "%0", "]"], 
 			"type_mismatch" : ["The input parameter type is mismatch. [", "%0", "]"], 
 
@@ -130,6 +137,7 @@ if (this.nexacro) {
 			"native_expire_license" : ["License period is expired for [", "%0", "]."], 
 			"native_invalid_licensefile" : ["invalid license format."], 
 			"native_invalid_licensedate" : ["invalid license period. valid period [", "%0", "]", " - [", "%1", "]"], 
+			"native_invalid_licenseactivation" : ["invalid license activation date. The current date[", "%0", "] must not be before the activation date[", "%1", "]."], 
 			"native_license_invaliddomain" : ["invalid license domain. "], 
 			"native_license_fail_parse" : ["An error has occurred while analyzing License file."], 
 			"native_fail_openfile" : ["fail open file. [", "%0", "]"], 
@@ -137,6 +145,7 @@ if (this.nexacro) {
 			"native_notexist_screenwidth" : ["screenwidth of screeninfo is undefined"], 
 			"native_notsupport_include" : ["Environment does not support the include syntax."], 
 			"native_require_add_module_accessibility" : ["For enableaccessibility = true to work properly, add the accessibility.json module file to the TypeDefinition"], 
+			"native_check_loadmodule" : ["No certificate has been found in the loaded module.\n Are you sure you continue with the loading?"], 
 
 			"comm_fail_loadinvalidurl" : ["fail to invalid url. check url. [", "%0", "]"], 
 			"comm_fail_loadinvalidimage" : ["Image Info [", "%0", "] is not found."], 
@@ -156,6 +165,8 @@ if (this.nexacro) {
 			"msg_permit_folder" : ["Always allow this folder and its subfolders."], 
 			"msg_permit_domain" : ["Always allow this domain."], 
 			"msg_permit_cert" : ["Always allow this certificate."], 
+			"msg_access_invalid_object" : ["The object may cause weaknesses in executing arbitrary commands. \nDo you want to proceed?\n"], 
+			"msg_permit_object" : ["Always allow this object."], 
 			"msg_update_processing" : ["Update has failed as there is a Process [", "%0", "] in execution. Select 'Yes' to quit the Process automatically, 'Retry' to quit the Process manually and preceed, or 'Cancel' to apply the Update after Restart. "], 
 			"msg_reset_sandboxdialog" : ["Improve the program based on the folder / domain in Approach Warning windows were previously set should satisfy themselves whether to allow the reset. Thank you for your patience."], 
 
@@ -192,7 +203,8 @@ if (this.nexacro) {
 			"object_push_fail_already_topic_exists" : ["Topic information registered in the X-PUSH server exists."], 
 
 			"msg_accessibility_emptyline" : ["empty line"], 
-			"msg_accessibility_emptyframe" : ["no contents"]
+			"msg_accessibility_emptyframe" : ["no contents"], 
+			"module_not_installed" : ["[", "%0", "] Control is not installed. Install the control from the following url: [", "%1", "]"]
 		}, 
 		"ja" : 
 			{
@@ -200,6 +212,7 @@ if (this.nexacro) {
 			"reference_fail_findcolumn" : ["Datasetで指定したColumn[", "%0", "]が見つかりません。"], 
 			"syntax_fail_parse_xml" : ["構文解析(Parsing)中にエラーが発生しました。[", "%0", "]"], 
 			"syntax_not_set_samepath" : ["formと同じパスでは設定できません。[", "%0", "]"], 
+			"loading_error" : ["%0", "ロード中errorが発生しました。"], 
 			"type_invalid" : ["追加できないタイプです。[", "%0", "]"], 
 			"type_mismatch" : ["入力パラメータのデータタイプが一致しません。[", "%0", "]"], 
 
@@ -220,6 +233,7 @@ if (this.nexacro) {
 			"native_expire_license" : ["ライセンスの有効期間が[", "%0", "]で切れました。"], 
 			"native_invalid_licensefile" : ["ライセンス情報が無効です。ライセンスを確認してください。"], 
 			"native_invalid_licensedate" : ["ライセンス期間が有効ではありません。 有効期間 [", "%0", "]", " - [", "%1", "]"], 
+			"native_invalid_licenseactivation" : ["ライセンス有効化（activation）日付が有効ではありません。 現在の日付（基準日付）[", "%0", "]が、活性化した日付 [", "%1", "]の以降でなければなりません。"], 
 			"native_license_invaliddomain" : ["ライセンスのドメイン情報が無効です。ドメインを確認してください。 "], 
 			"native_license_fail_parse" : ["ライセンスのドメイン情報が無効です。ライセンスファイルの分析中にエラーが発生しました。[", "%0", "]"], 
 			"native_fail_openfile" : ["ファイルが開けません。[", "%0", "]"], 
@@ -227,6 +241,7 @@ if (this.nexacro) {
 			"native_notexist_screenwidth" : ["screeninfoのscreenwidthは定義されていません。"], 
 			"native_notsupport_include" : ["Environmentはinclude 構文をサポートしていません。"], 
 			"native_require_add_module_accessibility" : ["enableaccessibility = trueが正しく機能するには、accessibility.jsonモジュールファイルをTypeDefinitionに追加します。"], 
+			"native_check_loadmodule" : ["内部にロードされるモジュールは、証明書が含まれている必要がありますが、見つかりません。\nそれでもロードを許可しますか？"], 
 
 			"comm_fail_loadinvalidurl" : ["ローディング中にエラーが発生しました。パスを確認してください。 [", "%0", "]"], 
 			"comm_fail_loadinvalidimage" : ["イメージ情報が見つかりません。[", "%0", "]"], 
@@ -247,6 +262,8 @@ if (this.nexacro) {
 			"msg_permit_folder" : ["このフォルダ配下のファイルは、常にアクセス許可"], 
 			"msg_permit_domain" : ["このドメインは常にアクセス許容"], 
 			"msg_permit_cert" : ["この証明書は常にアクセス許容"], 
+			"msg_access_invalid_object" : ["The object may cause weaknesses in executing arbitrary commands. \nDo you want to proceed?\n"], 
+			"msg_permit_object" : ["Always allow this object."], 
 			"msg_update_processing" : ["実行中のプロセス[", "%0", "]があるため、Updateに失敗しました。実行中のプロセスを自動終了する場合はYes(はい)、実行中のプロセスを直接終了させてから続ける場合はNo(いいえ), 再起動後にアップデートを適用する場合はCancel(キャンセル)を選択します。"], 
 			"msg_reset_sandboxdialog" : ["プログラム改善によりフォルダやドメインへのアクセス警告ウィンドウで設定したアクセス可否の設定値を再設定する必要があります。\nご了承ください。"], 
 
@@ -283,7 +300,9 @@ if (this.nexacro) {
 			"object_push_fail_already_topic_exists" : ["X-PUSHサーバに登録されたtopic情報が存在します。"], 
 
 			"msg_accessibility_emptyline" : ["空行"], 
-			"msg_accessibility_emptyframe" : ["空のフレーム"]
+			"msg_accessibility_emptyframe" : ["空のフレーム"], 
+			"module_not_installed" : ["[", "%0", "] Controlがインストールされていません。次のurlでコントロールをインストールしてください。:[", "%1", "]"]
+				
 		}
 	};
 }

@@ -5,7 +5,8 @@
         this.on_loadAppVariables = function()
         {		
             var obj = null;
-            
+			// global dataobject
+		
             // global dataset
 
             
@@ -31,7 +32,6 @@
             mainframe.set_showstatusbar("true");
             mainframe.set_titletext("FullFrame");
             mainframe.on_createBodyFrame = this.mainframe_createBodyFrame;        
-
             // tray
 
         };
@@ -43,9 +43,9 @@
         
         this.mainframe_createBodyFrame = function()
         {
-            var frame0 = new ChildFrame("ChildFrame00",null,null,null,null,null,null,"FormBase::scholarship_info.xfdl",this);
+            var frame0 = new ChildFrame("ChildFrame00",null,null,null,null,null,null,"FormBase::std_info.xfdl",this);
             this.addChild(frame0.name, frame0);
-            frame0.set_formurl("FormBase::scholarship_info.xfdl");
+            frame0.set_formurl("FormBase::std_info.xfdl");
 
             this.frame=frame0;
         };
@@ -56,7 +56,6 @@
         };
         
         // script Compiler
-
 
         this.checkLicense("");
         

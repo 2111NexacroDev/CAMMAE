@@ -159,10 +159,7 @@ if (!nexacro.TCPClientSocket) {
 	_pSocketErrorEventInfo = null;
 
 	nexacro.TCPClientSocket = function (id, parent) {
-		this.id = this.name = id;
-		if (parent) {
-			this.parent = parent;
-		}
+		nexacro._EventSinkObject.call(this, id, parent);
 
 		this.address = "";
 		this.port = 0;
@@ -186,9 +183,6 @@ if (!nexacro.TCPClientSocket) {
 
 	var _pTCPClientSocket = nexacro.TCPClientSocket.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.TCPClientSocket);
 	_pTCPClientSocket._type_name = "TCPClientSocket";
-
-	_pTCPClientSocket.on_created = function () {
-	};
 
 	_pTCPClientSocket.destroy = function () {
 		if (this._handle) {

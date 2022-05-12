@@ -58,6 +58,10 @@
 		<typeAlias
 			type="org.kh.campus.support.domain.Support"
 			alias="Support" />
+			
+		<typeAlias
+			type="org.kh.campus.graduation.domain.Graduation"
+			alias="Graduation" />
 
 	</typeAliases>
 	<mappers>
@@ -78,6 +82,6 @@
 		<mapper resource="mappers/cart-mapper.xml" />
 		<mapper resource="mappers/scholarship-mapper.xml" />
 		<mapper resource="mappers/support-mapper.xml" />
-		
+		<mapper resource="mappers/graduation-mapper.xml" />
 	</mappers>
 </configuration>
