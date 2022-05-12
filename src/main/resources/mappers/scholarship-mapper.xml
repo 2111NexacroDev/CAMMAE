@@ -15,9 +15,10 @@
   	<result property="scholarship_college" column="SCHOLARSHIP_COLLEGE"/>
   	<result property="scholarship_student_no" column="SCHOLARSHIP_STU_NO"/>		
   	<result property="chk" column="CHK"/>
+  	<result property="scholarship_manager_no" column="SCHOLARSHIP_MANG_NO"/>	
   	</resultMap>
   	<insert id="registerScholar" parameterType="Scholarship">
-  	 INSERT INTO SCHOLARSHIP_TBL VALUES(SEQ_SCHOLARSHIP_NO.NEXTVAL, #{scholarship_avg_grade},  #{scholarship_year},  #{scholarship_term},  DEFAULT,  '2500000',  #{scholarship_name}, #{scholarship_phonenumber}, #{scholarship_college}, #{scholarship_student_no}, DEFAULT)
+  	 INSERT INTO SCHOLARSHIP_TBL VALUES(SEQ_SCHOLARSHIP_NO.NEXTVAL, #{scholarship_avg_grade},  #{scholarship_year},  #{scholarship_term},  DEFAULT,  '2500000',  #{scholarship_name}, #{scholarship_phonenumber}, #{scholarship_college}, #{scholarship_student_no}, DEFAULT, '1111')
   	</insert>
   	<select id="selectAllScholar" resultMap="scholarshipResultMap">
   	 SELECT * FROM SCHOLARSHIP_TBL 
@@ -39,8 +40,4 @@
   	WHERE SCHOLARSHIP_STU_NO = #{scholarship_student_no}
   	</update>
   	
-  	<select id="selectStuInfo" resultMap="scholarshipResultMap">
-  	SELECT SCHOLARSHIP_NAME, SCHOLARSHIP_STU_NO, SCHOLARSHIP_PHONENUMBER FROM SCHOLARSHIP_TBL 
-  	WHERE SCHOLARSHIP_STU_NO = #{scholarship_student_no}
-  	</select>
   	</mapper>
