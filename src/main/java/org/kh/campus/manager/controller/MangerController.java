@@ -8,9 +8,11 @@ import org.kh.campus.professor.domain.Professor;
 import org.kh.campus.student.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.nexacro.uiadapter17.spring.core.annotation.ParamDataSet;
+import com.nexacro.uiadapter17.spring.core.annotation.ParamVariable;
 import com.nexacro.uiadapter17.spring.core.data.NexacroResult;
 import com.nexacro17.xapi.data.DataSet;
 
@@ -21,13 +23,13 @@ public class MangerController {
 	private ManagerService mService;
 	
 	// 학생 정보 조회
-	@RequestMapping(value="/manager/stdInfo.kh", method=RequestMethod.GET)
-	public NexacroResult printAllStudent() {
+	@PostMapping("/manager/stdInfo.kh")
+	public NexacroResult printAllStudent(@ParamVariable(name = "in_var") String uniCode) {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
-		List<Student> sList = mService.printAllStudent();
+		List<Student> sList = mService.printAllStudent(uniCode);
 		
 		result.addDataSet("out_stdAllInfo", sList);
 		result.addVariable("ErrorCode", nErrorCode);
@@ -89,7 +91,6 @@ public class MangerController {
 							,	professorName
 							, 	universityCode);
 					if( rowType == DataSet.ROW_TYPE_INSERTED) {
-						System.out.println(student.toString() +"test111");
 						iResult += mService.registerStudent(student);
 					}else if( rowType == DataSet.ROW_TYPE_UPDATED) {
 						String sStdNo = inStd.getSavedData(i, "studentNo").toString();

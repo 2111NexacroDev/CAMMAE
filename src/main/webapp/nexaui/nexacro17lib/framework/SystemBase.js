@@ -123,9 +123,15 @@ if (!nexacro._Init_systembase) {
 			}
 		}
 		else if (navigator.userAgent.match(/Edge/)) {
-			nexacro._Browser = "IE";
+			nexacro._Browser = "Edge";
 			nexacro._BrowserType = "Edge";
 			/Edge\/([\.\d]+)/.test(navigator.userAgent);
+			nexacro._BrowserVersion = parseInt(RegExp.$1) | 0;
+		}
+		else if (navigator.userAgent.match(/Edg/)) {
+			nexacro._Browser = "Edge";
+			nexacro._BrowserType = "WebKit";
+			/Edg\/([\.\d]+)/.test(navigator.userAgent);
 			nexacro._BrowserVersion = parseInt(RegExp.$1) | 0;
 		}
 		else if (navigator.userAgent.match(/Chrome/)) {
@@ -136,6 +142,12 @@ if (!nexacro._Init_systembase) {
 
 			if (navigator.userAgent.match(/Samsung/)) {
 				nexacro._BrowserExtra = "SamsungBrowser";
+			}
+			else if (navigator.userAgent.match(/NAVER/)) {
+				nexacro._BrowserExtra = "NaverBrowser";
+			}
+			if (navigator.userAgent.match(/XiaoMi/)) {
+				nexacro._BrowserExtra = "MiuiBrowser";
 			}
 		}
 		else if (navigator.userAgent.match(/CriOS/)) {
@@ -180,7 +192,6 @@ if (!nexacro._Init_systembase) {
 			nexacro._BrowserVersion = parseInt(RegExp.$1) | 0;
 		}
 	}
-
 	nexacro.Version = "17";
 	nexacro._framework_libpath = "./nexacro17lib";
 
@@ -208,6 +219,8 @@ if (!nexacro._Init_systembase) {
 	nexacro._use_firefirstcount = false;
 	nexacro._use_progress_data = true;
 	nexacro._interval_onprogress_timer = 10;
+	nexacro._touch_velocity_adjust_ratio = 3;
+
 
 	nexacro.ExportTypes = 
 		{
@@ -216,7 +229,8 @@ if (!nexacro._Init_systembase) {
 		EXCEL2007 : 0x0120, 
 		HANCELL2010 : 0x0400, 
 		HANCELL2014 : 0x0410, 
-		CSV : 0x0500
+		CSV : 0x0500, 
+		TXT : 0x0510
 	};
 
 	nexacro.ImportTypes = 
@@ -226,7 +240,8 @@ if (!nexacro._Init_systembase) {
 		EXCEL2007 : 0x0120, 
 		HANCELL : 0x0420, 
 		HANCELL2014 : 0x0410, 
-		CSV : 0x0500
+		CSV : 0x0500, 
+		TXT : 0x0510
 	};
 
 	nexacro.ExportItemTypes = 
@@ -240,6 +255,27 @@ if (!nexacro._Init_systembase) {
 		TEXT : "text", 
 		UNICODETEXT : "unicodetext", 
 		CSV : "csv"
+	};
+
+	nexacro.DevicePermissionStatus = 
+		{
+		DENIED : 0, 
+		GRANTED : 1
+	};
+
+	nexacro.DevicePermissionType = 
+		{
+		CALENDAR : "calendar", 
+		CAMERA : "camera", 
+		CONTACTS : "contacts", 
+		LOCATION : "location", 
+		MICROPHONE : "microphone", 
+		PHONE : "phone", 
+		SMS : "sms", 
+		STORAGE : "storage", 
+		PHOTO : "photo", 
+		REMINDERS : "reminders"
+			
 	};
 
 	nexacro.XPushAction = 
@@ -266,6 +302,19 @@ if (!nexacro._Init_systembase) {
 		}
 
 		return "1.0";
+	};
+
+	nexacro._trigger_type_table = 
+		{
+		"Click" : "onclick", 
+		"Row Change" : "onrowposchanged", 
+		"Value Change" : "oncolumnchanged", 
+		"External Input" : "onextendedcommand", 
+		"Action Success" : "onsuccess", 
+		"Action Fail" : "onerror", 
+		"Model Load Success" : "onmodelloadsuccess", 
+		"Model Load Fail" : "onmodelloadfail", 
+		"Form Init" : "onload"
 	};
 
 	nexacro._cache_edit_set = [];
@@ -305,6 +354,10 @@ if (!nexacro._Init_systembase) {
 			nexacro._locale_unicode[i]["range"].begin.sort();
 			nexacro._locale_unicode[i]["range"].end.sort();
 		}
+	};
+
+	nexacro._settracemsg = function (e) {
+		return;
 	};
 
 	nexacro.FuncBinder = function (pthis, fn) {
@@ -347,7 +400,7 @@ if (!nexacro._Init_systembase) {
 	};
 	_pSetterBinder.mulset = function (val) {
 		var pthis = this.pthis;
-		var retval = pthis[this.prop] * val;
+		var retval = pthis[this.prop] *  val;
 		this.fn.call(pthis, retval);
 		return retval;
 	};
@@ -448,7 +501,7 @@ if (!nexacro._Init_systembase) {
 	};
 	_pIntSetterBinder.mulset = function (val) {
 		var pthis = this.pthis;
-		var retval = (parseInt(pthis[this.prop]) | 0) * val;
+		var retval = (parseInt(pthis[this.prop]) | 0) *  val;
 		this.fn.call(pthis, retval);
 		return retval;
 	};
@@ -597,7 +650,7 @@ if (!nexacro._Init_systembase) {
 		return (this.pthis[this.prop] = parseFloat(this.pthis[this.prop]) - val);
 	};
 	_pNumPropBinder.mulset = function (val) {
-		return (this.pthis[this.prop] = parseFloat(this.pthis[this.prop]) * val);
+		return (this.pthis[this.prop] = parseFloat(this.pthis[this.prop]) *  val);
 	};
 	_pNumPropBinder.divset = function (val) {
 		return (this.pthis[this.prop] = parseFloat(this.pthis[this.prop]) / val);
@@ -659,6 +712,7 @@ if (!nexacro._Init_systembase) {
 			});
 		}
 		catch (e) {
+			nexacro._settracemsg(e);
 		}
 	}
 	Object.prototype.getNumSetter = function (name) {
@@ -674,6 +728,7 @@ if (!nexacro._Init_systembase) {
 			});
 		}
 		catch (e) {
+			nexacro._settracemsg(e);
 		}
 	}
 
@@ -840,7 +895,7 @@ if (!nexacro._Init_systembase) {
 		return str.split(orgStr).join(repStr);
 	};
 
-	if (nexacro._Browser == "Runtime" || nexacro._Browser == "Chrome") {
+	if (nexacro._Browser == "Runtime" || nexacro._Browser == "Chrome" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) {
 		nexacro._replaceAll = function (str, orgStr, repStr) {
 			return str.split(orgStr).join(repStr);
 		};
@@ -876,15 +931,15 @@ if (!nexacro._Init_systembase) {
 	nexacro.getMatchedCount = function (str, fstr) {
 		var cnt = 0;
 		var len = str.length;
-		var pos = -1;
-		while (pos < len) {
-			pos = str.indexOf(fstr, pos + 1);
-			if (pos < 0) {
-				break;
-			}
-			pos++;
-			cnt++;
+		if (len.length <= 0 || fstr.length <= 0) {
+			return cnt;
 		}
+
+		var ret = str.match(RegExp('[' + fstr + ']', 'g'));
+		if (ret) {
+			cnt = ret.length;
+		}
+
 		return cnt;
 	};
 
@@ -1041,7 +1096,7 @@ if (!nexacro._Init_systembase) {
 		return false;
 	};
 
-	if (nexacro._Browser == "Runtime" || nexacro._Browser == "Chrome") {
+	if (nexacro._Browser == "Runtime" || nexacro._Browser == "Chrome" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) {
 		nexacro.wrapQuote = function (str) {
 			if (arguments.length === 0) {
 				return "";
@@ -1116,9 +1171,9 @@ if (!nexacro._Init_systembase) {
 	nexacro.trimLeft = function (str, v) {
 		var len = str.length, s = -1;
 		if (v) {
-			while (++s < len && str.charAt(s) !== v) {
+			while (++s < len && str.charAt(s) == v) {
 			}
-			return str.substring(s + 1);
+			return str.substring(s, len);
 		}
 		else {
 			var c;
@@ -1135,9 +1190,9 @@ if (!nexacro._Init_systembase) {
 		var e = len;
 
 		if (v) {
-			while (--e >= 0 && str.charAt(e) !== v) {
+			while (e-- >= 0 && str.charAt(e) == v) {
 			}
-			return str.substring(0, e);
+			return str.substring(0, e + 1);
 		}
 		else {
 			var c;
@@ -1271,7 +1326,7 @@ if (!nexacro._Init_systembase) {
 				return Math.floor(v);
 			}
 			var p = nexacro._pow_factors[digit + 30];
-			return Math.floor(v * p) / p;
+			return Math.floor(v *  p) / p;
 		};
 	}
 
@@ -1281,7 +1336,7 @@ if (!nexacro._Init_systembase) {
 				return Math.ceil(v);
 			}
 			var p = nexacro._pow_factors[digit + 30];
-			return Math.ceil(v * p) / p;
+			return Math.ceil(v *  p) / p;
 		};
 	}
 
@@ -1293,10 +1348,10 @@ if (!nexacro._Init_systembase) {
 			var m, p = nexacro._pow_factors[digit + 30];
 
 			if (digit && digit > 0) {
-				m = (v * p).toFixed(digit + 1);
+				m = (v *  p).toFixed(digit + 1);
 			}
 			else {
-				m = (v * p);
+				m = (v *  p);
 			}
 
 			return Math.round(m) / p;
@@ -1304,7 +1359,7 @@ if (!nexacro._Init_systembase) {
 	}
 
 	if (!nexacro.parseDate) {
-		if (nexacro._Browser == "Runtime" || nexacro._Browser == "Chrome") {
+		if (nexacro._Browser == "Runtime" || nexacro._Browser == "Chrome" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) {
 			nexacro.parseDate = function (date) {
 				var ret;
 				if (date && date.length > 0) {
@@ -1312,7 +1367,6 @@ if (!nexacro._Init_systembase) {
 						ret = nexacro._parseDatetime(date);
 					}
 					else {
-						date = date.split("-").join("/");
 						ret = Date.parse(date);
 					}
 
@@ -1326,7 +1380,6 @@ if (!nexacro._Init_systembase) {
 		}
 		else {
 			(function () {
-				var re_minus = /-/g;
 				var ret;
 				nexacro.parseDate = function (date) {
 					if (date && date.length > 0) {
@@ -1334,7 +1387,6 @@ if (!nexacro._Init_systembase) {
 							ret = nexacro._parseDatetime(date);
 						}
 						else {
-							date = date.replace(re_minus, "/");
 							ret = Date.parse(date);
 						}
 
@@ -1351,11 +1403,11 @@ if (!nexacro._Init_systembase) {
 		nexacro._parseDatetime = function (datetime) {
 			if (datetime.length > 0) {
 				var parsedStr = "";
-				if (datetime.length > 10 && datetime[10] === "T") {
+				if (datetime.length > 10 && (datetime[10] === "T" && datetime[5] !== "W" && datetime[datetime.length - 1] == "Z")) {
 					datetime = datetime.replace("T", " ");
 				}
 				parsedStr = datetime.split(" ");
-				if (parsedStr.length > 2) {
+				if (parsedStr.length != 2) {
 					return Date.parse(datetime);
 				}
 				var date = parsedStr[0];
@@ -1386,7 +1438,7 @@ if (!nexacro._Init_systembase) {
 					strMillsec += "0";
 				}
 				var millsec = parseInt(strMillsec) | 0;
-				var newtime = (hour * 3600 * 1000) + (min * 60 * 1000) + (sec * 1000) + millsec;
+				var newtime = (hour *  3600 *  1000) + (min *  60 *  1000) + (sec *  1000) + millsec;
 				return newtime;
 			}
 			else {
@@ -1561,7 +1613,6 @@ if (!nexacro._Init_systembase) {
 		return v;
 	};
 
-
 	nexacro._isBoolean = function (v) {
 		return (v === true || v === false || v === "true" || v === "false");
 	};
@@ -1588,7 +1639,6 @@ if (!nexacro._Init_systembase) {
 	nexacro._isNull = function (v) {
 		return (v === undefined || v === null);
 	};
-
 
 	if (Array.isArray) {
 		nexacro._isArray = function (v) {
@@ -1660,7 +1710,7 @@ if (!nexacro._Init_systembase) {
 	nexacro._convertPtToPx = function (ptsize) {
 		ptsize = parseInt(ptsize) | 0;
 		if (!isNaN(ptsize)) {
-			return (ptsize * (0.35146 / 25.4) * 96);
+			return (ptsize *  (0.35146 / 25.4) *  96);
 		}
 		return null;
 	};
@@ -1668,7 +1718,7 @@ if (!nexacro._Init_systembase) {
 	nexacro._convertPxToPt = function (pxsize) {
 		pxsize = parseInt(pxsize) | 0;
 		if (!isNaN(pxsize)) {
-			return (pxsize / ((0.35146 / 25.4) * 96));
+			return (pxsize / ((0.35146 / 25.4) *  96));
 		}
 		return null;
 	};
@@ -1691,14 +1741,15 @@ if (!nexacro._Init_systembase) {
 			return true;
 		}
 
-		if (url.substring(0, 10).toLowerCase() == "data:image") {
+		var format = nexacro._transImageBase64StringFormat(url, false, true);
+		if (format) {
 			return true;
 		}
 
 		return false;
 	};
 
-	if (nexacro._Browser == "Runtime" || nexacro._Browser == "Chrome") {
+	if (nexacro._Browser == "Runtime" || nexacro._Browser == "Chrome" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "WebKit")) {
 		nexacro._getBaseUrl = function (url) {
 			if (!url) {
 				return url;
@@ -1755,7 +1806,10 @@ if (!nexacro._Init_systembase) {
 	nexacro.Object.prototype = _pObject;
 	_pObject._type_name = "Object";
 
+
 	_pObject._toString_str = "[object Object]";
+
+
 	_pObject._is_array = false;
 	_pObject._is_data = false;
 	_pObject._is_event = false;
@@ -1766,6 +1820,18 @@ if (!nexacro._Init_systembase) {
 	_pObject._is_frame = false;
 	_pObject._is_window = false;
 	_pObject._is_application = false;
+
+	_pObject.destroy = function () {
+		this.parent = null;
+	};
+
+	_pObject.set_id = function (id) {
+		this.id = id;
+	};
+
+	_pObject.set_name = function (name) {
+		this.name = name;
+	};
 
 	_pObject.toString = function () {
 		return "[object " + this._type_name + "]";
@@ -1791,6 +1857,7 @@ if (!nexacro._Init_systembase) {
 			});
 		}
 		catch (e) {
+			nexacro._settracemsg(e);
 		}
 	}
 
@@ -1814,22 +1881,9 @@ if (!nexacro._Init_systembase) {
 			});
 		}
 		catch (e) {
+			nexacro._settracemsg(e);
 		}
 	}
-
-
-	_pObject.set_id = function (id) {
-		this.id = id;
-	};
-
-	_pObject.set_name = function (name) {
-		this.name = name;
-	};
-
-	_pObject.destroy = function () {
-		this.parent = null;
-	};
-
 
 	nexacro.Collection = function () {
 		this._idArray = [];
@@ -2007,7 +2061,6 @@ if (!nexacro._Init_systembase) {
 	};
 	_pCollection.insert = _pCollection.insert_item;
 
-
 	_pCollection.destroy = function () {
 		var id_array = this._idArray;
 		var len = id_array.length;
@@ -2022,7 +2075,6 @@ if (!nexacro._Init_systembase) {
 
 	_pCollection.set_length = nexacro._emptyFn;
 
-
 	nexacro.Error = function (name, except) {
 		this.id = this.name = name;
 		this.except = except;
@@ -2036,8 +2088,6 @@ if (!nexacro._Init_systembase) {
 		return this.name + ": " + this.except;
 	};
 
-
-
 	nexacro._GetSystemErrorMsg = function () {
 		var args = [];
 		for (var i = 0; i < arguments.length; i++) {
@@ -2049,32 +2099,32 @@ if (!nexacro._Init_systembase) {
 
 		return errormsg;
 	};
-
-
-
 	nexacro._EventSinkObject = function (id, parent) {
-		this.id = this.name = id;
-		this.parent = parent || null;
+		nexacro.Object.call(this, id, parent);
 	};
 
-	var __pEventSinkObject = nexacro._createPrototype(nexacro.Object, nexacro._EventSinkObject);
-	nexacro._EventSinkObject.prototype = __pEventSinkObject;
-	__pEventSinkObject._type_name = "EventSinkObject";
+	var _pEventSinkObject = nexacro._createPrototype(nexacro.Object, nexacro._EventSinkObject);
+	nexacro._EventSinkObject.prototype = _pEventSinkObject;
+	_pEventSinkObject._type_name = "EventSinkObject";
 
-	__pEventSinkObject._event_list = {
+	_pEventSinkObject._event_list = {
 	};
-	__pEventSinkObject._loading_event_list = null;
-	__pEventSinkObject._created_event_list = null;
+	_pEventSinkObject._loading_event_list = null;
+	_pEventSinkObject._created_event_list = null;
 
-	__pEventSinkObject.destroy = function () {
+	_pEventSinkObject.on_created = nexacro._emptyFn;
+
+	_pEventSinkObject.destroy = function () {
+		nexacro.Object.prototype.destroy.call(this);
+
 		this._clearEventListeners();
+
 		this._event_list = null;
 		this._loading_event_list = null;
 		this._created_event_list = null;
-		nexacro.Object.prototype.destroy.call(this);
 	};
 
-	__pEventSinkObject.addEvent = function (eventid) {
+	_pEventSinkObject.addEvent = function (eventid) {
 		if (this._event_list && !this._event_list[eventid]) {
 			this._event_list[eventid] = 1;
 			return true;
@@ -2082,7 +2132,7 @@ if (!nexacro._Init_systembase) {
 		return false;
 	};
 
-	__pEventSinkObject.removeEvent = function (eventid) {
+	_pEventSinkObject.removeEvent = function (eventid) {
 		if (this._event_list && this._event_list[eventid]) {
 			delete this._event_list[eventid];
 			return true;
@@ -2090,14 +2140,281 @@ if (!nexacro._Init_systembase) {
 		return false;
 	};
 
-	__pEventSinkObject._clearEventListener = function (evt_id) {
+	_pEventSinkObject.setEventHandler = function (evt_id, func, target) {
+		if (!func) {
+			return -1;
+		}
+
+		if (this._is_loading) {
+			if (!this._loading_event_list) {
+				this._loading_event_list = [];
+			}
+
+			this._loading_event_list.push({
+				id : evt_id, 
+				func : func, 
+				target : target
+			});
+		}
+
+		var listener = this[evt_id];
+		var idx = -1;
+		if (listener) {
+			if (target) {
+				idx = listener._setHandler(target, func, true);
+			}
+			else {
+				idx = listener._setHandler(this, func, true);
+			}
+		}
+		else if (evt_id in this._event_list) {
+			listener = new nexacro.EventListener(evt_id);
+			this[evt_id] = listener;
+			if (this._created_event_list) {
+				this._created_event_list.push(evt_id);
+			}
+			else {
+				this._created_event_list = [];
+				this._created_event_list.push(evt_id);
+			}
+			if (target) {
+				idx = listener._setHandler(target, func, true);
+			}
+			else {
+				idx = listener._setHandler(this, func, true);
+			}
+		}
+		return idx;
+	};
+
+	_pEventSinkObject.addEventHandler = function (evt_id, func, target) {
+		if (this._is_loading) {
+			if (!this._loading_event_list) {
+				this._loading_event_list = [];
+			}
+			this._loading_event_list.push({
+				id : evt_id, 
+				func : func, 
+				target : target
+			});
+		}
+
+		var listener = this[evt_id];
+		var idx = -1;
+		if (listener) {
+			if (target) {
+				idx = listener._addHandler(target, func, true);
+			}
+			else {
+				idx = listener._addHandler(this, func, true);
+			}
+		}
+		else if (evt_id in this._event_list) {
+			listener = new nexacro.EventListener(evt_id);
+			this[evt_id] = listener;
+			if (this._created_event_list) {
+				this._created_event_list.push(evt_id);
+			}
+			else {
+				this._created_event_list = [];
+				this._created_event_list.push(evt_id);
+			}
+			if (target) {
+				idx = listener._addHandler(target, func, true);
+			}
+			else {
+				idx = listener._addHandler(this, func, true);
+			}
+		}
+		return idx;
+	};
+
+	_pEventSinkObject.insertEventHandler = function (evt_id, evt_idx, func, target) {
+		evt_idx = evt_idx | 0;
+		var listener = this[evt_id];
+		var idx = -1;
+
+		if (listener) {
+			if (target) {
+				idx = listener._insertHandler(target, evt_idx, func, true);
+			}
+			else {
+				idx = listener._insertHandler(this, evt_idx, func, true);
+			}
+		}
+		else if (evt_id in this._event_list) {
+			listener = new nexacro.EventListener(evt_id);
+			this[evt_id] = listener;
+			if (this._created_event_list) {
+				this._created_event_list.push(evt_id);
+			}
+			else {
+				this._created_event_list = [];
+				this._created_event_list.push(evt_id);
+			}
+			if (target) {
+				idx = listener._addHandler(target, func, true);
+			}
+			else {
+				idx = listener._addHandler(this, func, true);
+			}
+		}
+
+		return idx;
+	};
+
+	_pEventSinkObject.removeEventHandler = function (evt_id, func, target) {
+		if (!func) {
+			return 0;
+		}
+
+		var listener = this[evt_id];
+		var nRemovedEvt = 0;
+		if (listener) {
+			if (target) {
+				nRemovedEvt = listener._removeHandler(target, func, true);
+			}
+			else {
+				nRemovedEvt = listener._removeHandler(null, func, true);
+			}
+		}
+		return nRemovedEvt;
+	};
+
+	_pEventSinkObject.findEventHandler = function (evt_id, func, target) {
+		var listener = this[evt_id];
+		var idx = -2;
+		if (listener) {
+			var handlers = listener._user_handlers;
+			if (target) {
+				idx = listener._findHandler(handlers, target, func);
+			}
+			else {
+				idx = listener._findHandler(handlers, this, func);
+			}
+		}
+		return idx;
+	};
+
+	_pEventSinkObject.getEventHandler = function (evt_id, idx) {
+		var listener = this[evt_id];
+		var fn = null;
+		if (listener) {
+			var handlers = listener._user_handlers;
+			fn = listener._getHandler(handlers, idx);
+		}
+		return fn;
+	};
+
+	_pEventSinkObject.clearEventHandler = function (evt_id) {
+		var listener = this[evt_id];
+		if (listener) {
+			return listener._clearAll();
+		}
+		return 0;
+	};
+
+	_pEventSinkObject.setEventHandlerLookup = function (evt_id, funcstr, target) {
+		var listener = this[evt_id];
+		var idx = -1;
+		if (listener) {
+			if (target) {
+				idx = listener._setHandlerLookup(target, funcstr);
+			}
+			else {
+				idx = listener._setHandlerLookup(this, funcstr);
+			}
+		}
+		else if (evt_id in this._event_list) {
+			listener = new nexacro.EventListener(evt_id);
+			this[evt_id] = listener;
+			if (this._created_event_list) {
+				this._created_event_list.push(evt_id);
+			}
+			else {
+				this._created_event_list = [];
+				this._created_event_list.push(evt_id);
+			}
+
+			if (target) {
+				idx = listener._setHandlerLookup(target, funcstr);
+			}
+			else {
+				idx = listener._setHandlerLookup(this, funcstr);
+			}
+		}
+		return idx;
+	};
+
+	_pEventSinkObject.addEventHandlerLookup = function (evt_id, funcstr, target) {
+		var listener = this[evt_id];
+		var idx = -1;
+		if (listener) {
+			if (target) {
+				idx = listener._addHandlerLookup(target, funcstr);
+			}
+			else {
+				idx = listener._addHandlerLookup(this, funcstr);
+			}
+		}
+		else if (evt_id in this._event_list) {
+			listener = new nexacro.EventListener(evt_id);
+			this[evt_id] = listener;
+			if (this._created_event_list) {
+				this._created_event_list.push(evt_id);
+			}
+			else {
+				this._created_event_list = [];
+				this._created_event_list.push(evt_id);
+			}
+			if (target) {
+				idx = listener._addHandlerLookup(target, funcstr);
+			}
+			else {
+				idx = listener._addHandlerLookup(this, funcstr);
+			}
+		}
+		return idx;
+	};
+
+	_pEventSinkObject.removeEventHandlerLookup = function (evt_id, funcstr, target) {
+		var listener = this[evt_id];
+		var nRemovedEvt = 0;
+		if (listener) {
+			if (target) {
+				nRemovedEvt = listener._removeHandlerLookup(target, funcstr);
+			}
+			else {
+				nRemovedEvt = listener._removeHandlerLookup(this, funcstr);
+			}
+		}
+		return nRemovedEvt;
+	};
+
+	_pEventSinkObject.findEventHandlerLookup = function (evt_id, funcstr, target) {
+		var listener = this[evt_id];
+		var idx = -2;
+		if (listener) {
+			var handlers = listener._user_handlers;
+			if (target) {
+				idx = listener._findHandlerLookup(handlers, target, funcstr);
+			}
+			else {
+				idx = listener._findHandlerLookup(handlers, this, funcstr);
+			}
+		}
+		return idx;
+	};
+
+	_pEventSinkObject._clearEventListener = function (evt_id) {
 		var evt = this[evt_id];
 		if (evt && evt._has_handlers) {
 			evt._clearAll();
 			this[evt_id] = null;
 		}
 	};
-	__pEventSinkObject._clearEventListeners = function () {
+
+	_pEventSinkObject._clearEventListeners = function () {
 		var evt_list = this._created_event_list;
 		if (evt_list) {
 			var len = evt_list.length;
@@ -2149,7 +2466,7 @@ if (!nexacro._Init_systembase) {
 		}
 	};
 
-	__pEventSinkObject._setEventHandler = function (evt_id, func, target) {
+	_pEventSinkObject._setEventHandler = function (evt_id, func, target) {
 		var listener = this[evt_id];
 		var idx = -1;
 		if (listener) {
@@ -2180,7 +2497,7 @@ if (!nexacro._Init_systembase) {
 		return idx;
 	};
 
-	__pEventSinkObject._addEventHandler = function (evt_id, func, target) {
+	_pEventSinkObject._addEventHandler = function (evt_id, func, target) {
 		var listener = this[evt_id];
 		var idx = -1;
 		if (listener) {
@@ -2211,7 +2528,7 @@ if (!nexacro._Init_systembase) {
 		return idx;
 	};
 
-	__pEventSinkObject._removeEventHandler = function (evt_id, func, target) {
+	_pEventSinkObject._removeEventHandler = function (evt_id, func, target) {
 		var listener = this[evt_id];
 		var nRemovedEvt = 0;
 		if (listener) {
@@ -2225,7 +2542,7 @@ if (!nexacro._Init_systembase) {
 		return nRemovedEvt;
 	};
 
-	__pEventSinkObject._findEventHandler = function (evt_id, func, target) {
+	_pEventSinkObject._findEventHandler = function (evt_id, func, target) {
 		var listener = this[evt_id];
 		var idx = -2;
 		if (listener) {
@@ -2239,273 +2556,6 @@ if (!nexacro._Init_systembase) {
 		}
 		return idx;
 	};
-
-	__pEventSinkObject.setEventHandler = function (evt_id, func, target) {
-		if (!func) {
-			return -1;
-		}
-
-		if (this._is_loading) {
-			if (!this._loading_event_list) {
-				this._loading_event_list = [];
-			}
-
-			this._loading_event_list.push({
-				id : evt_id, 
-				func : func, 
-				target : target
-			});
-		}
-
-		var listener = this[evt_id];
-		var idx = -1;
-		if (listener) {
-			if (target) {
-				idx = listener._setHandler(target, func, true);
-			}
-			else {
-				idx = listener._setHandler(this, func, true);
-			}
-		}
-		else if (evt_id in this._event_list) {
-			listener = new nexacro.EventListener(evt_id);
-			this[evt_id] = listener;
-			if (this._created_event_list) {
-				this._created_event_list.push(evt_id);
-			}
-			else {
-				this._created_event_list = [];
-				this._created_event_list.push(evt_id);
-			}
-			if (target) {
-				idx = listener._setHandler(target, func, true);
-			}
-			else {
-				idx = listener._setHandler(this, func, true);
-			}
-		}
-		return idx;
-	};
-
-	__pEventSinkObject.addEventHandler = function (evt_id, func, target) {
-		if (this._is_loading) {
-			if (!this._loading_event_list) {
-				this._loading_event_list = [];
-			}
-			this._loading_event_list.push({
-				id : evt_id, 
-				func : func, 
-				target : target
-			});
-		}
-
-		var listener = this[evt_id];
-		var idx = -1;
-		if (listener) {
-			if (target) {
-				idx = listener._addHandler(target, func, true);
-			}
-			else {
-				idx = listener._addHandler(this, func, true);
-			}
-		}
-		else if (evt_id in this._event_list) {
-			listener = new nexacro.EventListener(evt_id);
-			this[evt_id] = listener;
-			if (this._created_event_list) {
-				this._created_event_list.push(evt_id);
-			}
-			else {
-				this._created_event_list = [];
-				this._created_event_list.push(evt_id);
-			}
-			if (target) {
-				idx = listener._addHandler(target, func, true);
-			}
-			else {
-				idx = listener._addHandler(this, func, true);
-			}
-		}
-		return idx;
-	};
-
-	__pEventSinkObject.insertEventHandler = function (evt_id, evt_idx, func, target) {
-		evt_idx = evt_idx | 0;
-		var listener = this[evt_id];
-		var idx = -1;
-
-		if (listener) {
-			if (target) {
-				idx = listener._insertHandler(target, evt_idx, func, true);
-			}
-			else {
-				idx = listener._insertHandler(this, evt_idx, func, true);
-			}
-		}
-		else if (evt_id in this._event_list) {
-			listener = new nexacro.EventListener(evt_id);
-			this[evt_id] = listener;
-			if (this._created_event_list) {
-				this._created_event_list.push(evt_id);
-			}
-			else {
-				this._created_event_list = [];
-				this._created_event_list.push(evt_id);
-			}
-			if (target) {
-				idx = listener._addHandler(target, func, true);
-			}
-			else {
-				idx = listener._addHandler(this, func, true);
-			}
-		}
-
-		return idx;
-	};
-
-	__pEventSinkObject.removeEventHandler = function (evt_id, func, target) {
-		if (!func) {
-			return 0;
-		}
-
-		var listener = this[evt_id];
-		var nRemovedEvt = 0;
-		if (listener) {
-			if (target) {
-				nRemovedEvt = listener._removeHandler(target, func, true);
-			}
-			else {
-				nRemovedEvt = listener._removeHandler(null, func, true);
-			}
-		}
-		return nRemovedEvt;
-	};
-
-	__pEventSinkObject.findEventHandler = function (evt_id, func, target) {
-		var listener = this[evt_id];
-		var idx = -2;
-		if (listener) {
-			var handlers = listener._user_handlers;
-			if (target) {
-				idx = listener._findHandler(handlers, target, func);
-			}
-			else {
-				idx = listener._findHandler(handlers, this, func);
-			}
-		}
-		return idx;
-	};
-
-	__pEventSinkObject.getEventHandler = function (evt_id, idx) {
-		var listener = this[evt_id];
-		var fn = null;
-		if (listener) {
-			var handlers = listener._user_handlers;
-			fn = listener._getHandler(handlers, idx);
-		}
-		return fn;
-	};
-
-	__pEventSinkObject.clearEventHandler = function (evt_id) {
-		var listener = this[evt_id];
-		if (listener) {
-			return listener._clearAll();
-		}
-		return 0;
-	};
-
-	__pEventSinkObject.setEventHandlerLookup = function (evt_id, funcstr, target) {
-		var listener = this[evt_id];
-		var idx = -1;
-		if (listener) {
-			if (target) {
-				idx = listener._setHandlerLookup(target, funcstr);
-			}
-			else {
-				idx = listener._setHandlerLookup(this, funcstr);
-			}
-		}
-		else if (evt_id in this._event_list) {
-			listener = new nexacro.EventListener(evt_id);
-			this[evt_id] = listener;
-			if (this._created_event_list) {
-				this._created_event_list.push(evt_id);
-			}
-			else {
-				this._created_event_list = [];
-				this._created_event_list.push(evt_id);
-			}
-
-			if (target) {
-				idx = listener._setHandlerLookup(target, funcstr);
-			}
-			else {
-				idx = listener._setHandlerLookup(this, funcstr);
-			}
-		}
-		return idx;
-	};
-
-	__pEventSinkObject.addEventHandlerLookup = function (evt_id, funcstr, target) {
-		var listener = this[evt_id];
-		var idx = -1;
-		if (listener) {
-			if (target) {
-				idx = listener._addHandlerLookup(target, funcstr);
-			}
-			else {
-				idx = listener._addHandlerLookup(this, funcstr);
-			}
-		}
-		else if (evt_id in this._event_list) {
-			listener = new nexacro.EventListener(evt_id);
-			this[evt_id] = listener;
-			if (this._created_event_list) {
-				this._created_event_list.push(evt_id);
-			}
-			else {
-				this._created_event_list = [];
-				this._created_event_list.push(evt_id);
-			}
-			if (target) {
-				idx = listener._addHandlerLookup(target, funcstr);
-			}
-			else {
-				idx = listener._addHandlerLookup(this, funcstr);
-			}
-		}
-		return idx;
-	};
-
-	__pEventSinkObject.removeEventHandlerLookup = function (evt_id, funcstr, target) {
-		var listener = this[evt_id];
-		var nRemovedEvt = 0;
-		if (listener) {
-			if (target) {
-				nRemovedEvt = listener._removeHandlerLookup(target, funcstr);
-			}
-			else {
-				nRemovedEvt = listener._removeHandlerLookup(this, funcstr);
-			}
-		}
-		return nRemovedEvt;
-	};
-
-	__pEventSinkObject.findEventHandlerLookup = function (evt_id, funcstr, target) {
-		var listener = this[evt_id];
-		var idx = -2;
-		if (listener) {
-			var handlers = listener._user_handlers;
-			if (target) {
-				idx = listener._findHandlerLookup(handlers, target, funcstr);
-			}
-			else {
-				idx = listener._findHandlerLookup(handlers, this, funcstr);
-			}
-		}
-		return idx;
-	};
-
 
 	nexacro.EventHandler = function (obj, fn) {
 		this.target = obj;
@@ -3014,7 +3064,6 @@ if (!nexacro._Init_systembase) {
 		return cnt;
 	};
 
-
 	nexacro.Event = function (obj, evt_id) {
 		this.id = this.eventid = evt_id || "";
 		this.fromobject = this.fromreferenceobject = obj;
@@ -3028,7 +3077,13 @@ if (!nexacro._Init_systembase) {
 	nexacro.Event.prototype = _pEvent;
 	_pEvent._type_name = "Event";
 
+
 	_pEvent._is_event = true;
+
+	_pEvent.destroy = function () {
+		this.fromobject = null;
+		this.fromreferenceobject = null;
+	};
 
 	_pEvent.preventDefault = function () {
 		this._prevented = this.cancelable;
@@ -3038,35 +3093,7 @@ if (!nexacro._Init_systembase) {
 		this._stoppropagation = this.bubbles;
 	};
 
-	_pEvent.destroy = function () {
-		this.fromobject = null;
-		this.fromreferenceobject = null;
-	};
-
-
-
-	nexacro.EventInfo = function (obj, evt_id) {
-		this.id = this.eventid = evt_id || "";
-		this.fromobject = this.fromreferenceobject = obj;
-		this._prevented = false;
-		this._stoppropagation = false;
-		this.cancelable = false;
-		this.bubbles = false;
-	};
-
-	var _pEventInfo = nexacro._createPrototype(nexacro.Object, nexacro.EventInfo);
-	nexacro.EventInfo.prototype = _pEventInfo;
-	_pEventInfo._type_name = "EventInfo";
-
-	_pEventInfo._is_event = true;
-
-	_pEventInfo.set_eventid = function (v) {
-		if (v && v != this.eventid) {
-			this.eventid = v;
-		}
-	};
-
-
+	nexacro.Event.KEY_META = 91;
 	nexacro.Event.KEY_RETURN = 13;
 	nexacro.Event.KEY_ENTER = 13;
 	nexacro.Event.KEY_TAB = 9;
@@ -3115,6 +3142,41 @@ if (!nexacro._Init_systembase) {
 	nexacro.Event.KEY_NUMPAD_MULTIPLY = 106;
 	nexacro.Event.KEY_NUMPAD_MINUS = 109;
 	nexacro.Event.KEY_NUMPAD_PLUS = 107;
+
+	nexacro.EventInfo = function (obj, evt_id) {
+		this.id = this.eventid = evt_id || "";
+		this.fromobject = this.fromreferenceobject = obj;
+		this._prevented = false;
+		this._stoppropagation = false;
+		this.cancelable = false;
+		this.bubbles = false;
+	};
+
+	var _pEventInfo = nexacro._createPrototype(nexacro.Object, nexacro.EventInfo);
+	nexacro.EventInfo.prototype = _pEventInfo;
+	_pEventInfo._type_name = "EventInfo";
+
+
+	_pEventInfo._is_event = true;
+
+	_pEventInfo.destroy = function () {
+		this.fromobject = null;
+		this.fromreferenceobject = null;
+	};
+
+	_pEventInfo.set_eventid = function (v) {
+		if (v && v != this.eventid) {
+			this.eventid = v;
+		}
+	};
+
+	_pEventInfo.preventDefault = function () {
+		this._prevented = this.cancelable;
+	};
+
+	_pEventInfo.stopPropagation = function () {
+		this._stoppropagation = this.bubbles;
+	};
 
 	nexacro.TimerEventInfo = function (obj, id, timerid) {
 		this.id = this.eventid = id || "ontimer";
@@ -3262,7 +3324,7 @@ if (!nexacro._Init_systembase) {
 		nexacro.Event.call(this, obj, id || "onload");
 		this.url = url;
 	};
-	var _pLoadEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.CloseEventInfo);
+	var _pLoadEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.LoadEventInfo);
 	nexacro.LoadEventInfo.prototype = _pLoadEventInfo;
 	_pLoadEventInfo._type_name = "LoadEventInfo";
 
@@ -3353,7 +3415,7 @@ if (!nexacro._Init_systembase) {
 	_pSizeEventInfo._type_name = "SizeEventInfo";
 
 
-	nexacro.KeyEventInfo = function (obj, id, alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp) {
+	nexacro.KeyEventInfo = function (obj, id, alt_key, ctrl_key, shift_key, key_code, from_comp, from_refer_comp, meta_key) {
 		this.id = this.eventid = id || "onkey";
 
 		this.cancelable = true;
@@ -3364,6 +3426,7 @@ if (!nexacro._Init_systembase) {
 		this.altkey = alt_key;
 		this.ctrlkey = ctrl_key;
 		this.shiftkey = shift_key;
+		this.metakey = meta_key || false;
 		this.keycode = key_code;
 	};
 	var _pKeyEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.KeyEventInfo);
@@ -3371,7 +3434,7 @@ if (!nexacro._Init_systembase) {
 	_pKeyEventInfo._type_name = "KeyEventInfo";
 
 
-	nexacro.MouseEventInfo = function (obj, id, strButton, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	nexacro.MouseEventInfo = function (obj, id, strButton, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, metaKey) {
 		this.id = this.eventid = id || "onmouse";
 
 		this.cancelable = true;
@@ -3383,6 +3446,7 @@ if (!nexacro._Init_systembase) {
 		this.ctrlkey = ctrlKey || false;
 		this.button = strButton || "";
 		this.shiftkey = shiftKey || false;
+		this.metakey = metaKey || false;
 		this.screenx = screenX || -1;
 		this.screeny = screenY || -1;
 		this.canvasx = canvasX || -1;
@@ -3417,7 +3481,7 @@ if (!nexacro._Init_systembase) {
 		}
 	};
 
-	nexacro.ClickEventInfo = function (obj, id, strButton, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	nexacro.ClickEventInfo = function (obj, id, strButton, altKey, ctrlKey, shiftKey, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, metaKey) {
 		this.id = this.eventid = id || "onclick";
 
 		this.fromobject = from_comp;
@@ -3426,6 +3490,7 @@ if (!nexacro._Init_systembase) {
 		this.ctrlkey = ctrlKey || false;
 		this.button = strButton || "";
 		this.shiftkey = shiftKey || false;
+		this.metakey = metaKey || false;
 		this.screenx = (screenX === undefined ? -1 : screenX);
 		this.screeny = (screenY === undefined ? -1 : screenY);
 		this.canvasx = (canvasX === undefined ? -1 : canvasX);
@@ -3459,7 +3524,7 @@ if (!nexacro._Init_systembase) {
 			delete this._orgclientx;
 		}
 	};
-	nexacro.MouseWheelEventInfo = function (obj, id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, delta, from_comp, from_refer_comp) {
+	nexacro.MouseWheelEventInfo = function (obj, id, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, delta, from_comp, from_refer_comp, meta_key) {
 		this.id = this.eventid = id || "onmousewheel";
 
 		this.bubbles = true;
@@ -3471,6 +3536,7 @@ if (!nexacro._Init_systembase) {
 		this.ctrlkey = ctrl_key || false;
 		this.button = button || "";
 		this.shiftkey = shift_key || false;
+		this.metakey = meta_key || false;
 		this.screenx = screenX || -1;
 		this.screeny = screenY || -1;
 		this.canvasx = canvasX || -1;
@@ -3517,7 +3583,7 @@ if (!nexacro._Init_systembase) {
 	_pScrollEventInfo._type_name = "ScrollEventInfo";
 
 
-	nexacro.DragEventInfo = function (obj, id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY) {
+	nexacro.DragEventInfo = function (obj, id, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key) {
 		this.id = this.eventid = id || "ondrag";
 		if (!from_refer_comp) {
 			from_refer_comp = from_comp;
@@ -3538,6 +3604,7 @@ if (!nexacro._Init_systembase) {
 		this.ctrlkey = ctrl_key || false;
 		this.button = button || "";
 		this.shiftkey = shift_key || false;
+		this.metakey = meta_key || false;
 		this.screenx = screenX || -1;
 		this.screeny = screenY || -1;
 		this.canvasx = canvasX || -1;
@@ -3617,8 +3684,6 @@ if (!nexacro._Init_systembase) {
 
 		return false;
 	};
-
-	delete _pDragDataObject;
 
 	nexacro.CharEventInfo = function (obj, id, chartext, pretext, posttext) {
 		this.id = this.eventid = id || "onchar";
@@ -3764,47 +3829,29 @@ if (!nexacro._Init_systembase) {
 	nexacro.ContextMenuEventInfo.prototype = _pContextMenuEventInfo;
 	_pContextMenuEventInfo._type_name = "ContextMenuEventInfo";
 
+	nexacro.ExtendedCommandEventInfo = function (obj, id, deviceid, eventtype, data) {
+		this.id = this.eventid = id || "onextendedcommand";
+		this.fromobject = this.fromreferenceobject = obj;
 
+		this.deviceid = deviceid;
+		this.eventtype = eventtype;
+		this.data = data;
+	};
+	var _pExtendedCommandEventInfo = nexacro._createPrototype(nexacro.EventInfo, nexacro.ExtendedCommandEventInfo);
+	nexacro.ExtendedCommandEventInfo.prototype = _pExtendedCommandEventInfo;
+	_pExtendedCommandEventInfo._type_name = "ExtendedCommandEventInfo";
 
-	if (!nexacro.ExtendedCommandEventInfo) {
-		nexacro.ExtendedCommandEventInfo = function (obj, id, deviceid, eventtype, data) {
-			this.id = this.eventid = id || "onextendedcommand";
-			this.fromobject = this.fromreferenceobject = obj;
+	nexacro.ExtendedCommandErrorEventInfo = function (obj, id, deviceid, eventtype, data) {
+		this.id = this.eventid = id || "onextendederrorcommand";
+		this.fromobject = this.fromreferenceobject = obj;
 
-			this.deviceid = deviceid;
-			this.eventtype = eventtype;
-			this.data = data;
-		};
-		var _pExtendedCommandEventInfo = nexacro._createPrototype(nexacro.EventInfo, nexacro.ExtendedCommandEventInfo);
-		nexacro.ExtendedCommandEventInfo.prototype = _pExtendedCommandEventInfo;
-
-		_pExtendedCommandEventInfo._type_name = "ExtendedCommandEventInfo";
-		_pExtendedCommandEventInfo.eventid = "";
-		_pExtendedCommandEventInfo.fromobj = undefined;
-		_pExtendedCommandEventInfo.eventtype = "";
-		_pExtendedCommandEventInfo.deviceid = "";
-		_pExtendedCommandEventInfo.data = "";
-	}
-
-	if (!nexacro.ExtendedCommandErrorEventInfo) {
-		nexacro.ExtendedCommandErrorEventInfo = function (obj, id, deviceid, eventtype, data) {
-			this.id = this.eventid = id || "onextendederrorcommand";
-			this.fromobject = this.fromreferenceobject = obj;
-
-			this.deviceid = deviceid;
-			this.eventtype = eventtype;
-			this.data = data;
-		};
-		var _pExtendedCommandErrorEventInfo = nexacro._createPrototype(nexacro.EventInfo, nexacro.ExtendedCommandErrorEventInfo);
-		nexacro.ExtendedCommandErrorEventInfo.prototype = _pExtendedCommandErrorEventInfo;
-
-		_pExtendedCommandErrorEventInfo._type_name = "ExtendedCommandErrorEventInfo";
-		_pExtendedCommandErrorEventInfo.eventid = "";
-		_pExtendedCommandErrorEventInfo.fromobj = undefined;
-		_pExtendedCommandErrorEventInfo.eventtype = "";
-		_pExtendedCommandErrorEventInfo.deviceid = "";
-		_pExtendedCommandErrorEventInfo.data = "";
-	}
+		this.deviceid = deviceid;
+		this.eventtype = eventtype;
+		this.data = data;
+	};
+	var _pExtendedCommandErrorEventInfo = nexacro._createPrototype(nexacro.EventInfo, nexacro.ExtendedCommandErrorEventInfo);
+	nexacro.ExtendedCommandErrorEventInfo.prototype = _pExtendedCommandErrorEventInfo;
+	_pExtendedCommandErrorEventInfo._type_name = "ExtendedCommandErrorEventInfo";
 
 	nexacro.TouchInputInfo = function (elem, type, touchid, time, is_first, screenX, screenY, windowX, windowY) {
 		this.touchid = touchid;
@@ -4018,6 +4065,7 @@ if (!nexacro._Init_systembase) {
 	_pTouchSession._first_touch_id = undefined;
 
 	_pTouchSession.opt_interval = 50;
+	_pTouchSession._velocity_adjust_ratio = 1;
 
 	nexacro.TouchSession._default_gesture_detectors = ['longpress', 'slide', 'tap'];
 
@@ -4059,6 +4107,7 @@ if (!nexacro._Init_systembase) {
 		this._first_pointer_spacing = -1;
 
 		this._first_touch_id = undefined;
+		this._velocity_adjust_ratio = 1;
 	};
 
 	_pTouchSession.getActionData = function () {
@@ -4120,6 +4169,8 @@ if (!nexacro._Init_systembase) {
 			this._offset_data = null;
 			this._prev_velocity_data = null;
 			this._first_pointer_spacing = -1;
+
+			this._velocity_adjust_ratio = nexacro._touch_velocity_adjust_ratio;
 		}
 
 		this._cur_elem = elem;
@@ -4471,11 +4522,11 @@ if (!nexacro._Init_systembase) {
 	};
 
 	_pTouchSession.getAngle = function (dX, dY) {
-		return Math.atan2(dY, dX) * 180 / Math.PI;
+		return Math.atan2(dY, dX) *  180 / Math.PI;
 	};
 
 	_pTouchSession.getDistance = function (dX, dY) {
-		return Math.sqrt((dX * dX) + (dY * dY));
+		return Math.sqrt((dX *  dX) + (dY *  dY));
 	};
 
 	_pTouchSession.getDirection = function (dX, dY) {
@@ -4491,8 +4542,8 @@ if (!nexacro._Init_systembase) {
 
 	_pTouchSession.getVelocity = function (dT, dX, dY) {
 		return {
-			x : dX / dT || 0, 
-			y : dY / dT || 0
+			x : (dX / dT) *  this._velocity_adjust_ratio || 0, 
+			y : (dY / dT) *  this._velocity_adjust_ratio || 0
 		};
 	};
 
@@ -4717,7 +4768,7 @@ if (!nexacro._Init_systembase) {
 	nexacro.TouchAction_Slide = function () {
 		nexacro.TouchAction.call(this);
 		this._target_comp = null;
-		this._fling_timing_function = new nexacro._CubicBezier(0.2, 0.15, 0.35, 1);
+		this._fling_timing_function = new nexacro._CubicBezier(0, 0, 0.5, 1);
 	};
 	var _pTouchActionSlide = nexacro._createPrototype(nexacro.TouchAction, nexacro.TouchAction_Slide);
 	nexacro.TouchAction_Slide.prototype = _pTouchActionSlide;
@@ -4734,6 +4785,7 @@ if (!nexacro._Init_systembase) {
 	_pTouchActionSlide.opt_friction = 0.997;
 	_pTouchActionSlide.opt_fling_threshold = 25;
 	_pTouchActionSlide.opt_direction = nexacro.Touch._DIRECTION_ALL;
+	_pTouchActionSlide.opt_distance_base = 350;
 
 	_pTouchActionSlide._is_fling = false;
 	_pTouchActionSlide._fling_timing_function = null;
@@ -4746,6 +4798,8 @@ if (!nexacro._Init_systembase) {
 	_pTouchActionSlide._on_applyCurrentZoomInfo = function (zoomfactor) {
 		this.opt_threshold /= zoomfactor;
 		this.opt_velocity /= zoomfactor;
+		this.opt_distance_base /= zoomfactor;
+		this.opt_fling_threshold /= zoomfactor;
 	};
 
 	_pTouchActionSlide._checkOption = function () {
@@ -4835,16 +4889,23 @@ if (!nexacro._Init_systembase) {
 			return;
 		}
 
+		var distance_adjust_ratio = data.distance / this.opt_distance_base;
+		if (distance_adjust_ratio > 1) {
+			distance_adjust_ratio = 1;
+		}
+
 		var durationX = 0, distanceX = 0, velocityX = data.deltaVelocityX;
 		if (Math.abs(velocityX) >= this.opt_velocity) {
 			durationX = Math.log(this.opt_velocity / Math.abs(velocityX)) / Math.log(this.opt_friction);
-			distanceX = velocityX * (1 - Math.pow(this.opt_friction, durationX + 1)) / (1 - this.opt_friction);
+			distanceX = velocityX *  (1 - Math.pow(this.opt_friction, durationX + 1)) / (1 - this.opt_friction);
+			distanceX *= distance_adjust_ratio;
 		}
 
 		var durationY = 0, distanceY = 0, velocityY = data.deltaVelocityY;
 		if (Math.abs(velocityY) >= this.opt_velocity) {
 			durationY = Math.log(this.opt_velocity / Math.abs(velocityY)) / Math.log(this.opt_friction);
-			distanceY = velocityY * (1 - Math.pow(this.opt_friction, durationY + 1)) / (1 - this.opt_friction);
+			distanceY = velocityY *  (1 - Math.pow(this.opt_friction, durationY + 1)) / (1 - this.opt_friction);
+			distanceY *= distance_adjust_ratio;
 		}
 
 		data.leadTime = 0;
@@ -4899,7 +4960,7 @@ if (!nexacro._Init_systembase) {
 		if (c < 1) {
 			this._fling_timer.start();
 		}
-		var epsilon = 1.0 / (200 * duration);
+		var epsilon = 1.0 / (200 *  duration);
 		var p1_x = timing_function._p1.x, p2_x = timing_function._p2.x;
 		var p1_y = timing_function._p1.y, p2_y = timing_function._p2.y;
 
@@ -4913,8 +4974,8 @@ if (!nexacro._Init_systembase) {
 		};
 
 		var offset_cy = cy - prev_point.y;
-		data.deltaDistanceX = (offset_cy * distanceX);
-		data.deltaDistanceY = (offset_cy * distanceY);
+		data.deltaDistanceX = (offset_cy *  distanceX);
+		data.deltaDistanceY = (offset_cy *  distanceY);
 
 		this.status = nexacro.TouchAction._STATUS_PENDING;
 		session.onaction("fling", this.status, data);
@@ -5154,7 +5215,7 @@ if (!nexacro._Init_systembase) {
 
 		var distanceX = data.centerX - prev_data.centerX;
 		var distanceY = data.centerY - prev_data.centerY;
-		var distance = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
+		var distance = Math.sqrt((distanceX *  distanceX) + (distanceY *  distanceY));
 		var intervalTime = data.time - prev_data.time;
 
 		return (intervalTime < this.opt_interval) && (distance < this.opt_threshold);
@@ -5217,8 +5278,8 @@ if (!nexacro._Init_systembase) {
 		session.onaction("dbltap", status, data);
 	};
 
-	nexacro.ItemClickEventInfo = function (obj, id, index, itemtext, itemvalue, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY) {
-		nexacro.ClickEventInfo.call(this, obj, id || "onitemclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
+	nexacro.ItemClickEventInfo = function (obj, id, index, itemtext, itemvalue, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key) {
+		nexacro.ClickEventInfo.call(this, obj, id || "onitemclick", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
 		this.fromobject = this.fromreferenceobject = obj;
 
 		this.index = index;
@@ -5352,6 +5413,19 @@ if (!nexacro._Init_systembase) {
 	var _pNotificationEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.NotificationEventInfo);
 	nexacro.NotificationEventInfo.prototype = _pNotificationEventInfo;
 	_pNotificationEventInfo._type_name = "NotificationEventInfo";
+
+	nexacro.DevicePermissionEventInfo = function (obj, id, reason, status) {
+		this.id = this.eventid = id || "ondevicepermission";
+		this.fromobject = this.fromreferenceobject = obj;
+
+		this.reason = reason;
+		this.status = status;
+	};
+	var _pDevicePermissionEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.DevicePermissionEventInfo);
+	nexacro.DevicePermissionEventInfo.prototype = _pDevicePermissionEventInfo;
+	_pDevicePermissionEventInfo._type_name = "DevicePermissionEventInfo";
+
+	delete _pDevicePermissionEventInfo;
 
 	nexacro._gen_arrmap = function (arr) {
 		var arr_map = {
@@ -5513,6 +5587,88 @@ if (!nexacro._Init_systembase) {
 
 		return false;
 	};
+	nexacro._transImageBase64StringFormat = function (str, isinvaildskip, isnodatacheck) {
+		var regExp = /[^A-Za-z0-9+\/=]/g;
+		var base64format = {
+		};
+		if (str === "" || str == null) {
+			return null;
+		}
+		var arrstr = str.split(',');
+		var length = arrstr.length;
+
+		var header, reg_exps0, reg_exps1, result, ext;
+		switch (length) {
+			case 1:
+				if (isnodatacheck) {
+					return null;
+				}
+				if (!isinvaildskip) {
+					if (str.match(regExp) == null) {
+						base64format.data = "data:image";
+						base64format.ext = "";
+						base64format.encode = ";base64,";
+						base64format.contents = arrstr[0];
+					}
+					else {
+						return null;
+					}
+				}
+				else {
+					base64format.data = "data:image";
+					base64format.ext = "";
+					base64format.encode = ";base64,";
+					base64format.contents = arrstr[0];
+				}
+				break;
+			case 2:
+				header = arrstr[0].toLowerCase();
+				reg_exps0 = /(data:image)+?(;base64)/ig;
+				reg_exps1 = /(data:image).+?(;base64)/ig;
+				result = reg_exps0.exec(header);
+				if (result == null) {
+					result = reg_exps1.exec(header);
+				}
+				if (result != null && result.length == 3) {
+					base64format.data = result[1];
+					ext = header.replace("data:image", "");
+					ext = ext.replace("\;base64", "");
+
+
+					if (ext) {
+						base64format.ext = ext;
+					}
+					else {
+						base64format.ext = "";
+					}
+					base64format.encode = result[2] + ",";
+					base64format.contents = arrstr[1];
+				}
+				else {
+					if (isnodatacheck) {
+						return null;
+					}
+					if (isinvaildskip) {
+						base64format.data = "data:image";
+						base64format.ext = "";
+						base64format.encode = ";base64,";
+						base64format.contents = arrstr[1];
+					}
+					else {
+						return null;
+					}
+				}
+				break;
+			default:
+				return null;
+				break;
+		}
+
+		base64format.alldata = base64format.data + base64format.ext + base64format.encode + base64format.contents;
+		return base64format;
+	};
+
+
 	nexacro._mergeUrl = function (left, right) {
 		if (left && right) {
 			if (left.charAt(left.length - 1) == '/') {
@@ -5638,6 +5794,8 @@ if (!nexacro._Init_systembase) {
 	};
 	nexacro._DataCacheList = {
 	};
+	nexacro._DataObjectCacheList = {
+	};
 
 	nexacro._ParametersCache = function (id, value) {
 		this.id = id;
@@ -5667,6 +5825,35 @@ if (!nexacro._Init_systembase) {
 				this.constVars.add(constVars[i].id, constVars[i]);
 			}
 		}
+	};
+
+	nexacro._DataObjectCache = function (dataobject, last_modified, version, data, response_headers) {
+		this.dataobject = dataobject;
+		this.last_modified = last_modified;
+		this.version = version;
+		this.data = data;
+		this.response_headers = response_headers;
+	};
+	var __pDataObjectCache = nexacro._createPrototype(nexacro.Object, nexacro._DataObjectCache);
+	nexacro._DataObjectCache.prototype = __pDataObjectCache;
+	__pDataObjectCache._type_name = "DataObjectCache";
+
+	__pDataObjectCache._loadDataObject = function (loadItem) {
+		var json;
+		var data = this.data;
+		var dataobject = this.dataobject;
+		var errorinfo = [0, "SUCCESS"];
+		try {
+			if (data) {
+				json = JSON.parse(data);
+			}
+			dataobject._addResponseInfo(data, this.response_headers);
+		}
+		catch (e) {
+			errorinfo = [-1, ""];
+		}
+
+		return [errorinfo, dataobject, data, json, this.response_headers];
 	};
 
 	nexacro._DataCache = function (parametersCaches, datasetCaches, last_modified, version) {
@@ -5828,6 +6015,7 @@ if (!nexacro._Init_systembase) {
 			nexacro._include_status_map = false;
 			if (extra) {
 				nexacro._include_status_map = extra.includeStatusMap;
+				nexacro._has_listview_expand_status = extra.hasListViewExpandStatus;
 			}
 		}
 		else {
@@ -6152,6 +6340,29 @@ if (!nexacro._Init_systembase) {
 		this.handle = null;
 	};
 
+	__pCommunicationItem.on_load_dataobject = function (data, cookie) {
+		delete nexacro._CommunicationManager[this.path];
+		if (this._protocol < 0) {
+			data = this.on_decrypt(data);
+		}
+
+		this._addCookieToCookieVariable(cookie);
+
+		var callbackList = this.callbackList;
+		var n = callbackList.length;
+		if (n > 0) {
+			for (var i = 0; i < n; i++) {
+				var item = callbackList[i];
+				var target = item.target;
+				if (target._is_alive !== false) {
+					item.callback.call(target, this.path, 0, data);
+				}
+			}
+			callbackList.splice(0, n);
+		}
+		this.handle = null;
+	};
+
 	__pCommunicationItem.on_progress = nexacro._emptyFn;
 	__pCommunicationItem.on_progress_data = function (status, data) {
 		if (this._protocol < 0) {
@@ -6231,7 +6442,7 @@ if (!nexacro._Init_systembase) {
 
 					loadItem.bcache = false;
 
-					loadItem.on_load_module(m_cache.data, null);
+					loadItem._handle = nexacro._startCommunication(loadItem, path, "default", async, service);
 					return loadItem.handle;
 				}
 			}
@@ -6361,6 +6572,45 @@ if (!nexacro._Init_systembase) {
 		return null;
 	};
 
+	nexacro._loadDataObject = function (path, target, handler, service, form, svcid, method, outdataobj, parameters, async, datatype, compress) {
+		var loadItem;
+		var last_modified = "";
+		var servicecachelevel = service.cachelevel;
+		var postdata;
+
+		var d_cache = nexacro._DataObjectCacheList[path];
+		if (service && d_cache) {
+			if (service.cachelevel == "session" || service.cachelevel == "static") {
+				if (!service.version || d_cache.version >= service.version) {
+					loadItem = new nexacro.RESTAPIItem(path, form, svcid, method, outdataobj, parameters, datatype, async);
+					loadItem.appendCallback(target, handler);
+
+					loadItem.bcache = false;
+					loadItem.on_load_dataobject(d_cache, "", "");
+					return loadItem.handle;
+				}
+			}
+
+			d_cache.version = service.version;
+			last_modified = d_cache.last_modified;
+		}
+
+		loadItem = new nexacro.RESTAPIItem(path, form, svcid, method, outdataobj, parameters, datatype, async, last_modified, service.version);
+
+		if (service && service.cachelevel != "none") {
+			loadItem.bcache = true;
+		}
+
+		loadItem.last_modified = last_modified;
+
+		loadItem.appendCallback(target, handler);
+		loadItem.on_start();
+		target.transactionList.push(loadItem);
+		postdata = loadItem.postdata ? loadItem.postdata : null;
+		service.cachelevel = servicecachelevel;
+		return nexacro._startRESTAPICommunication(loadItem, path, service.cachelevel, async, service, (form ? form._url : ""), postdata, datatype, compress);
+	};
+
 	nexacro._loadData = function (path, target, handler, service, form, svcid, indatasets, outdatasets, parameters, async, datatype, compress) {
 		var loadItem;
 		var last_modified = "";
@@ -6447,6 +6697,52 @@ if (!nexacro._Init_systembase) {
 		}
 	};
 
+	nexacro._preloadDataObject = function (path, target, handler, service, svcid, referer, args, async, datatype, compress) {
+		var bcache = false;
+		var last_modified = "";
+		var d_cache = nexacro._DataCacheList[path];
+		var loadItem;
+		if (service && d_cache) {
+			if (service.cachelevel == "session" || service.cachelevel == "static") {
+				if (!service.version || d_cache.version >= service.version) {
+					loadItem = new nexacro._CommunicationItem(svcid, "dataobject");
+					loadItem.bcache = bcache;
+					loadItem.appendCallback(target, handler);
+
+					loadItem.bcache = false;
+					loadItem.on_load_dataobject(d_cache, "", "");
+
+					return loadItem.handle;
+				}
+			}
+
+			d_cache.version = service.version;
+			last_modified = d_cache.last_modified;
+		}
+
+		if (service && service.cachelevel != "none") {
+			bcache = true;
+		}
+		var tritem = new nexacro.RESTAPIItem(path, target.context, svcid, "", "", args, 0, async);
+
+		if (async) {
+			loadItem = new nexacro._CommunicationItem(svcid, "dataobject");
+			loadItem.bcache = bcache;
+			loadItem.last_modified = last_modified;
+
+			loadItem.appendCallback(target, handler);
+			loadItem.handle = nexacro._startRESTAPICommunication(loadItem, path, "none", true, service, referer, tritem._sendData, datatype, compress);
+			return loadItem.handle;
+		}
+		else {
+			loadItem = new nexacro._CommunicationItem(svcid, "dataobject");
+			loadItem.bcache = bcache;
+			loadItem.last_modified = last_modified;
+
+			loadItem.appendCallback(target, handler);
+			nexacro._startRESTAPICommunication(loadItem, path, "none", false, service, referer, tritem._sendData, datatype, compress);
+		}
+	};
 
 	nexacro._startCommunication = function (loadItem, url, cachelevel, async, service, referer, data, ndatatype, compress, ver, failpass) {
 		var path = url;
@@ -6483,13 +6779,240 @@ if (!nexacro._Init_systembase) {
 
 				if (protocoladp.getCommunicationHeaders) {
 					var headers = protocoladp.getCommunicationHeaders(url);
-					if (headers) {
-						loadItem._addCookieFromVariables(headers);
+					if (nexacro._isArray(headers)) {
+						var len = headers.length;
+						for (var i = 0; i < len; i++) {
+							nexacro._setCookie(headers[i].id, headers[i].value);
+						}
 					}
 				}
 			}
 		}
 		return nexacro.__startCommunication(loadItem, path, cachelevel, async, referer, senddata, ndatatype, compress, ver, failpass, service);
+	};
+
+	nexacro._startRESTAPICommunication = function (loadItem, url, cachelevel, async, service, referer, data, ndatatype, compress, ver, failpass) {
+		var path = url;
+		var senddata = data;
+		if (loadItem._protocol < 0) {
+			var createadaptor = false;
+			var protocoladp = nexacro._getProtocol(loadItem.protocol);
+			if (!protocoladp) {
+				var isprotocol = nexacro._isProtocol(loadItem.protocol);
+				if (isprotocol) {
+					var adptorclass = nexacro._executeGlobalEvalStr(loadItem.protocol);
+					if (adptorclass) {
+						protocoladp = new adptorclass;
+						createadaptor = true;
+					}
+				}
+			}
+
+			if (protocoladp) {
+				if (createadaptor && protocoladp.initialize) {
+					protocoladp.initialize(url);
+					nexacro._addProtocol(loadItem.protocol, protocoladp);
+				}
+
+				var protocol = protocoladp.getUsingProtocol(url);
+				var sep = path.split("://");
+				if (sep) {
+					path = protocol + "://" + sep[1];
+				}
+
+				if (data && protocoladp.encrypt) {
+					senddata = loadItem.on_encrypt(data);
+				}
+
+				if (protocoladp.getCommunicationHeaders) {
+					var headers = protocoladp.getCommunicationHeaders(url);
+					if (nexacro._isArray(headers)) {
+						var len = headers.length;
+						for (var i = 0; i < len; i++) {
+							nexacro._setCookie(headers[i].id, headers[i].value);
+						}
+					}
+				}
+			}
+		}
+		return nexacro.__startRESTAPICommunication(loadItem, path, cachelevel, async, referer, senddata, ndatatype, compress, ver, failpass, service);
+	};
+
+	nexacro.__startRESTAPICommunication = function (loadItem, path, cachelevel, async, referer, senddata, ndatatype, compress, ver, failpass, service) {
+		function getRESTAPI () {
+			var xhrobj = {
+			};
+			xhrobj._destroy = nexacro._emptyFn;
+			var xhr = new XMLHttpRequest();
+			xhrobj.handle = xhr;
+			return xhrobj;
+		}
+		;
+		var rest = getRESTAPI();
+		var rest_handle = rest.handle;
+
+		var bindfn = null;
+		var method = "GET";
+
+
+
+		bindfn = nexacro.__bindLoadDataObjectHandler(rest, loadItem);
+		method = loadItem.method ? loadItem.method : "GET";
+
+		rest_handle.onreadystatechange = bindfn;
+
+		if (rest_handle.onerror !== undefined) {
+			rest_handle.onerror = bindfn;
+		}
+
+		if (method == "GET" || method == "HEAD") {
+			senddata = null;
+		}
+
+		if (path) {
+			var ar = path.split("://");
+			if (ar.length > 0) {
+				var protocol = ar[0];
+				if (protocol == "file") {
+					path = decodeURI(path);
+				}
+				else {
+					path = encodeURI(path);
+				}
+			}
+		}
+
+		var httpretry = (loadItem._httpretry !== undefined) ? loadItem._httpretry : nexacro._httpretry;
+		if (httpretry >= 1) {
+			rest._path = path;
+			rest._cachelevel = cachelevel;
+			rest._async = async;
+			rest._referer = referer;
+			rest._senddata = senddata;
+			rest._ndatatype = ndatatype;
+			rest._compress = compress;
+			rest._ver = ver;
+			rest._failpass = failpass;
+			rest._service = service;
+
+			rest._httpretry = httpretry;
+			rest._method = method;
+			rest._bindfn = bindfn;
+		}
+
+		try {
+			rest_handle.open(method, path, !!async);
+		}
+		catch (e) {
+			var extrmsg = e.number + " " + e.message;
+			loadItem.on_error(e.number, "comm_fail_loaddetail", nexacro._CommunicationStatusTable.failunknown, "", extrmsg);
+
+			rest = null;
+			return null;
+		}
+
+
+		if (async) {
+			var env = nexacro.getEnvironment();
+			if (env && env.networksecurelevel == "all") {
+				if ((nexacro._Browser == "IE" && nexacro._BrowserVersion > 9) || nexacro._Browser != "IE") {
+					rest_handle.withCredentials = true;
+				}
+			}
+		}
+
+		var protocoladp = nexacro._getProtocol(loadItem.protocol);
+		if (protocoladp && protocoladp.version) {
+			var protocolver = protocoladp.version();
+			if (protocolver > "1.0") {
+				var httpheaders = protocoladp.getHTTPHeader();
+				var httpheaderlen = httpheaders.length;
+				for (var i = 0; i < httpheaderlen; i++) {
+					rest_handle.setRequestHeader(httpheaders[i].id, httpheaders[i].value);
+				}
+			}
+		}
+
+		var httpvariables = nexacro._getLocalStorageAll(5);
+		if (httpvariables) {
+			for (var prop in httpvariables) {
+				if (httpvariables.hasOwnProperty(prop)) {
+					rest_handle.setRequestHeader(prop, httpvariables[prop].value);
+				}
+			}
+		}
+
+		if (service) {
+			if (service.cachelevel == "none") {
+				rest_handle.setRequestHeader("cache-control", "no-cache, no-store");
+				rest_handle.setRequestHeader("Pragma", "no-cache");
+				rest_handle.setRequestHeader("If-Modified-Since", "Sat, 01 Jan 2000 00:00:00 GMT");
+				rest_handle.setRequestHeader("Expires", -1);
+			}
+			else {
+				rest_handle.setRequestHeader("cache-control", "no-cache");
+				if (loadItem.last_modified) {
+					rest_handle.setRequestHeader("If-Modified-Since", loadItem.last_modified);
+				}
+			}
+		}
+		try {
+			var httptimeout = nexacro._httptimeout;
+
+			if (async) {
+				if (rest_handle.timeout != undefined && httptimeout >= 0 && httptimeout <= 2147483) {
+					rest_handle.timeout = httptimeout *  1000;
+
+					rest_handle.ontimeout = bindfn;
+					rest_handle.onload = bindfn;
+				}
+			}
+
+			var headers = loadItem.header;
+			if (headers) {
+				for (var prop in headers) {
+					rest_handle.setRequestHeader(prop, headers[prop]);
+				}
+			}
+
+
+			rest_handle.send(senddata ? senddata : null);
+
+			if (!async) {
+				bindfn(rest, loadItem);
+			}
+			else if (async && nexacro._Browser == "IE" && nexacro._BrowserVersion <= 8) {
+				if (rest_handle.timeout === undefined && httptimeout >= 0 && httptimeout <= 2147483) {
+					rest._timer_id = setInterval(function () {
+						if (rest._httpretry >= 1) {
+							var ret = nexacro.__retryCommunication(rest, loadItem);
+							if (ret !== false) {
+								return;
+							}
+						}
+						else {
+							clearInterval(rest._timer_id);
+							loadItem.on_error(-1, "comm_fail_loaddetail", nexacro._CommunicationStatusTable.client_timeout, "", "");
+
+							rest._destroy();
+							rest = null;
+							loadItem = null;
+						}
+					}, nexacro._httptimeout *  1000);
+				}
+			}
+		}
+		catch (e) {
+			if (rest._user_aborted) {
+				loadItem.on_error(e.number, "comm_stop_transaction_byesc", nexacro._CommunicationStatusTable.stop_transaction_byesc);
+			}
+			else {
+				loadItem.on_error(e.number, "comm_fail_loaddetail", nexacro._CommunicationStatusTable.failunknown, "", e.number);
+			}
+			return null;
+		}
+		rest_handle = null;
+		return rest;
 	};
 
 	nexacro._removedatalist = function (datalist, index) {
@@ -6665,37 +7188,39 @@ if (!nexacro._Init_systembase) {
 
 
 	nexacro.ProtocolAdp = function () {
+		nexacro.Object.call(this);
 	};
 	var _pProtocolAdp = nexacro._createPrototype(nexacro.Object, nexacro.ProtocolAdp);
 	nexacro.ProtocolAdp.prototype = _pProtocolAdp;
 	_pProtocolAdp._type_name = "ProtocolAdp";
 
-	_pProtocolAdp.encrypt = function (url, data) {
+	_pProtocolAdp.encrypt = function (strUrl, data) {
+		return data;
+	};
+	_pProtocolAdp.decrypt = function (strUrl, data) {
 		return data;
 	};
 
-	_pProtocolAdp.decrypt = function (url, data) {
-		return data;
+	_pProtocolAdp.initialize = function () {
+	};
+	_pProtocolAdp.finalize = function () {
 	};
 
-	_pProtocolAdp.initialize = nexacro._emptyFn;
-	_pProtocolAdp.finalize = nexacro._emptyFn;
-	_pProtocolAdp.getUsingProtocol = function () {
+	_pProtocolAdp.getUsingProtocol = function (strUrl) {
 		return "http";
 	};
-
-	_pProtocolAdp.getCommunicationHeaders = nexacro._emptyFn;
+	_pProtocolAdp.getCommunicationHeaders = function (strUrl) {
+		return [];
+	};
 
 	nexacro.DeviceAdaptor = function (id) {
-		this.id = this.name = id || null;
+		nexacro._EventSinkObject.call(this, id);
+
 		this._handle = null;
 	};
 
 	var _pDeviceAdaptor = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.DeviceAdaptor);
 	nexacro.DeviceAdaptor.prototype = _pDeviceAdaptor;
-
-	_pDeviceAdaptor._event_list = {
-	};
 
 	_pDeviceAdaptor.initialize = function (configs) {
 		if (!nexacro.__isDesignMode || !nexacro.__isDesignMode()) {
@@ -6706,7 +7231,6 @@ if (!nexacro._Init_systembase) {
 	_pDeviceAdaptor.finalize = function () {
 		this.destroy(this._handle);
 	};
-
 
 	_pDeviceAdaptor.getDeviceHandle = function () {
 		return this._handle;
@@ -6741,14 +7265,10 @@ if (!nexacro._Init_systembase) {
 		}
 	};
 
-
-
-
 	_pDeviceAdaptor.destroy = nexacro._emptyFn;
-	_pDeviceAdaptor.on_event = nexacro._emptyFn;
+	_pDeviceAdaptor.on_event = function (eventid, eventtype, data) {
+	};
 	_pDeviceAdaptor.on_event_default_action = nexacro._emptyFn;
-	_pDeviceAdaptor.on_fire_user_on_extendedcommand = nexacro._emptyFn;
-	_pDeviceAdaptor.on_fire_sys_on_extendedcommand = nexacro._emptyFn;
 
 	nexacro.MakeError = function (type) {
 		var _args = Array.prototype.slice.call(arguments, 1);
@@ -7298,7 +7818,7 @@ if (!nexacro._Init_systembase) {
 							shortdate_format : "\u0025\u0064\u002F\u0025\u006D\u002F\u0025\u0059", 
 							direction : "rtl"
 						};
-						return nexacro.Locale.ar_IQ;
+						return nexacro.Locale.ar_iq;
 						break;
 					case "ar_jo":
 						nexacro.Locale.ar_jo = {
@@ -7578,7 +8098,7 @@ if (!nexacro._Init_systembase) {
 							shortdate_format : "\u0025\u0064\u002F\u0025\u006D\u002F\u0025\u0059", 
 							direction : "rtl"
 						};
-						return nexacro.Locale.ar_QA;
+						return nexacro.Locale.ar_qa;
 						break;
 					case "ar":
 					case "ar_sa":
@@ -12150,6 +12670,47 @@ if (!nexacro._Init_systembase) {
 						};
 						return nexacro.Locale.mt_mt;
 						break;
+					case "my":
+					case "my_mm":
+						nexacro.Locale.my = nexacro.Locale.my_mm = {
+							name : "my_MM", 
+							decimal_point : "\u002E", 
+							thousands_sep : "\u002C", 
+							grouping : [3, 3], 
+							int_curr_symbol : "\u004D\u004D\u004B\u0020", 
+							currency_symbol : "\u004B", 
+							mon_decimal_point : "\u002E", 
+							mon_thousands_sep : "\u002C", 
+							mon_grouping : [3, 3], 
+							positive_sign : "", 
+							negative_sign : "\u002D", 
+							int_frac_digits : 2, 
+							frac_digits : 2, 
+							p_cs_precedes : 0, 
+							p_sep_by_space : 0, 
+							n_cs_precedes : 0, 
+							n_sep_by_space : 0, 
+							p_sign_posn : 1, 
+							n_sign_posn : 1, 
+							weekday_names_long : ["\u1010\u1014\u1004\u103A\u1039\u1002\u1014\u103D\u1031", "\u1010\u1014\u1004\u103A\u1039\u101C\u102C", "\u1021\u1004\u103A\u1039\u1002\u102B", "\u1017\u102F\u1012\u1039\u1013\u101F\u1030\u1038", "\u1000\u103C\u102C\u101E\u1015\u1010\u1031\u1038", "\u101E\u1031\u102C\u1000\u103C\u102C", "\u1005\u1014\u1031"], 
+							weekday_names_short : ["\u1014\u103D\u1031", "\u101C\u102C", "\u1002\u102B", "\u101F\u1030\u1038", "\u1010\u1031\u1038", "\u101E\u1031\u102C", "\u1014\u1031"], 
+							weekday_names_narrow : ["\u1014\u103D\u1031", "\u101C\u102C", "\u1002\u102B", "\u101F\u1030\u1038", "\u1010\u1031\u1038", "\u101E\u1031\u102C", "\u1014\u1031"], 
+							month_names_long : ["\u1007\u1014\u103A\u1014\u101D\u102B\u101B\u102E", "\u1016\u1031\u1016\u1031\u102C\u103A\u101D\u102B\u101B\u102E", "\u1019\u1010\u103A", "\u1027\u1015\u103C\u102E", "\u1019\u1031", "\u1007\u103D\u1014\u103A", "\u1007\u1030\u101C\u102D\u102F\u1004\u103A", "\u1029\u1002\u102F\u1010\u103A", "\u1005\u1000\u103A\u1010\u1004\u103A\u1018\u102C", "\u1021\u1031\u102C\u1000\u103A\u1010\u102D\u102F\u1018\u102C", "\u1014\u102D\u102F\u101D\u1004\u103A\u1018\u102C", "\u1012\u102E\u1007\u1004\u103A\u1018\u102C"], 
+							month_names_short : ["\u1007\u1014\u103A", "\u1016\u1031", "\u1019\u1010\u103A", "\u1027\u1015\u103C\u102E", "\u1019\u1031", "\u1007\u103D\u1014\u103A", "\u1007\u1030", "\u1029", "\u1005\u1000\u103A", "\u1021\u1031\u102C\u1000\u103A", "\u1014\u102D\u102F", "\u1012\u102E"], 
+							month_names_narrow : ["\u1007\u1014\u103A", "\u1016\u1031", "\u1019\u1010\u103A", "\u1027\u1015\u103C\u102E", "\u1019\u1031", "\u1007\u103D\u1014\u103A", "\u1007\u1030", "\u1029", "\u1005\u1000\u103A", "\u1021\u1031\u102C\u1000\u103A", "\u1014\u102D\u102F", "\u1012\u102E"], 
+							ampm : ["\u1014\u1036\u1014\u1000\u103A", "\u100A\u1014\u1031"], 
+							date_format : "\u0025\u004F\u0043\u0025\u004F\u0079\u0020\u0025\u0062\u0020\u0025\u004F\u0064\u0020\u0025\u0041", 
+							time_format : "\u0025\u004F\u0049\u003A\u0025\u004F\u004D\u003A\u0025\u004F\u0053\u0020\u0025\u0070", 
+							time_format_ampm : "\u0025\u004F\u0049\u003A\u0025\u004F\u004D\u003A\u0025\u004F\u0053\u0020\u0025\u0070", 
+							date_time_format : "\u0025\u004F\u0043\u0025\u004F\u0079\u0020\u0025\u0062\u0020\u0025\u004F\u0064\u0020\u0025\u0041\u0020\u0025\u004F\u0049\u003A\u0025\u004F\u004D\u003A\u0025\u004F\u0053\u0020\u0025\u0070", 
+							full_date_time_format : "\u0025\u004F\u0043\u0025\u004F\u0079\u0020\u0025\u0062\u0020\u0025\u004F\u0064\u0020\u0025\u0041\u0020\u0025\u004F\u0049\u003A\u0025\u004F\u004D\u003A\u0025\u004F\u0053\u0020\u0025\u0070\u0020\u0025\u005A", 
+							first_weekday : 1, 
+							longdate_format : "\u0025\u004F\u0043\u0025\u004F\u0079\u0020\u0025\u0062\u0020\u0025\u004F\u0064\u0020\u0025\u0041", 
+							shortdate_format : "\u0025\u0064\u002D\u0025\u006D\u002D\u0025\u0059", 
+							direction : "ltr"
+						};
+						return nexacro.Locale.my_mm;
+						break;
 					case "nb":
 					case "nb_no":
 						nexacro.Locale.nb = nexacro.Locale.nb_no = {
@@ -14702,10 +15263,12 @@ if (!nexacro._Init_systembase) {
 	nexacro._setDragInfo = function (targetwin, target_elem, startX, startY, currX, currY, dragimage, imagealign, filelist, datatype) {
 		nexacro._cur_drag_info = {
 			"targetwin" : targetwin, 
-			"isDragging" : false, 
 			"target_elem" : target_elem, 
 			"target" : null, 
 			"referTarget" : null, 
+			"isDragging" : false, 
+			"isSelfAction" : false, 
+			"isDragover" : false, 
 			"startX" : startX, 
 			"startY" : startY, 
 			"currX" : currX, 
@@ -14776,14 +15339,13 @@ if (!nexacro._Init_systembase) {
 		return nexacro._transurl(baseurl, typedefinition_url, url, true);
 	};
 
-
-
-
-	nexacro._transfullurl = function (baseurl, url) {
+	nexacro._transfullurl = function (baseurl, url, bCheckVersion, type) {
 		if (nexacro._isAbsolutePath(url) === true) {
 			return url;
 		}
 
+		var env = nexacro.getEnvironment();
+		var checkversion = env.checkversion & bCheckVersion;
 		baseurl = nexacro._getBaseUrl(baseurl);
 
 		var fullurl = null;
@@ -14793,6 +15355,10 @@ if (!nexacro._Init_systembase) {
 		}
 		else {
 			fullurl = nexacro._mergeUrl(baseurl, url);
+		}
+
+		if (checkversion) {
+			fullurl += nexacro._getVersionQueryString(fullurl, type, env.version);
 		}
 
 		var urlarr = fullurl.split("/");
@@ -14960,6 +15526,8 @@ if (!nexacro._Init_systembase) {
 						suburl = suburl.substring(1);
 					}
 
+					suburl = suburl.replace(/\\/g, "/");
+
 					if (nexacro._isAbsolutePath(serviceurl) === true) {
 						exturl = nexacro._transfullurl(serviceurl, suburl);
 					}
@@ -15099,7 +15667,12 @@ if (!nexacro._Init_systembase) {
 				cur_type = "mobile_small";
 				break;
 			case "ipad":
-				cur_type = "mobile_large";
+				if (nexacro._MobileDesktopMode) {
+					cur_type = "desktop";
+				}
+				else {
+					cur_type = "mobile_large";
+				}
 				break;
 			case "android":
 				if (nexacro._Browser == "Runtime") {
@@ -15524,9 +16097,11 @@ if (!nexacro._Init_systembase) {
 		}
 
 		var isScreenDesktop = curscreen.type == "desktop" ? true : false;
+
+		var isMobileWeb = ((!nexacro._isDesktop() || nexacro._AndroidDesktopMode) && nexacro._Browser != "Runtime");
 		if (isScreenDesktop && nexacro._isHybrid && !nexacro._isHybrid()) {
 			var isSupportPinchZoom = (curscreen.userzoom == "true") ? true : false;
-			if (isSupportPinchZoom) {
+			if (isSupportPinchZoom && isMobileWeb) {
 				this._allow_default_pinchzoom = true;
 			}
 		}
@@ -15602,13 +16177,13 @@ if (!nexacro._Init_systembase) {
 
 					var scale = nexacro.__getCurrentScreenScale();
 					if (scale) {
-						zoom_factor = scale * 100;
+						zoom_factor = scale *  100;
 					}
 				}
 
 				if (zoom_factor == 0) {
 					zoom_fitting_width = Math.abs(parseInt(curscreen._screen_width));
-					zoom_factor = zoom_fitting_width * 100 / curscreen._device_width;
+					zoom_factor = zoom_fitting_width *  100 / curscreen._device_width;
 				}
 				nexacro._zoom_factor = zoom_factor;
 			}
@@ -15660,7 +16235,7 @@ if (!nexacro._Init_systembase) {
 						break;
 				}
 
-				nexacro._zoom_factor = device_val * 100 / zoom_fitting_val;
+				nexacro._zoom_factor = device_val *  100 / zoom_fitting_val;
 			}
 			else {
 				nexacro._onSystemWarning(nexacro._environment, "native_exist_screenwdith");
@@ -15866,7 +16441,7 @@ if (!nexacro._Init_systembase) {
 
 
 	nexacro._unloadExtensionLibrary = function (handle) {
-		nexacro.__unloadLibraryExtensionAPI(handle);
+		return nexacro.__unloadLibraryExtensionAPI(handle);
 	};
 
 	nexacro._removeDeviceAdaptor = function (name) {
@@ -15894,9 +16469,6 @@ if (!nexacro._Init_systembase) {
 	nexacro._setExtensionObjectEvent = function (handle, target, fn) {
 		return nexacro.__setLocalEventExtensionAPI(handle, target, fn);
 	};
-
-	nexacro._div_property_list = ["_adjust_height", "_adjust_left", "_adjust_left_ltr", "_adjust_top", "_adjust_width", "_apply_client_border", "_apply_client_padding", "_attached_comp", "_base_url", "_bind_manager", "_bottom", "_callclasscnt", "_child_count", "_child_list", "_client_height", "_client_width", "_control_element", "_created_event_list", "_cur_real_layout", "_default_zindex", "displaytext", "_event_list", "_eventclear_flag", "_executescriptlist", "_hotkey_list", "_height", "_hittest_type", "_includescriptlist", "_index", "_init_height", "_init_width", "_is_async", "_is_completed", "_is_created", "_is_created_contents", "_is_form", "_is_loaded", "_isLoaded", "_is_loading", "_is_popup_control", "_is_scrollable", "_is_selfclose", "_is_trackpopup", "_is_window", "_last_focused", "_layout_list", "_left", "_load_callbacklist", "_load_manager", "_margin", "_real_enable", "_real_visible", "_refform", "_right", "_scrollbars", "_taborder", "_text_elem", "_timerManager", "_top", "_track_capture", "_type_name", "_unique_id", "_user_property_list", "_url", "_urlloading", "_variables", "_want_tab", "_want_arrow", "_wait_pop_position", "_width", "_zoomFactor", "accessibilityrole", "all", "applycsstype", "async", "binds", "bottom", "classname", "components", "cssclass", "dragscrolltype", "enable", "enableflag", "height", "hscrollbar", "id", "layout", "left", "name", "objects", "on_create", "on_initEvent", "parent", "position", "positionstep", "right", "returnvalue", "scrollbars", "tooltiptext", "tooltiptype", "taborder", "text", "top", "url", "version", "visible", "vscrollbar", "width", "_statusmap", "_status", "_oldstatus", "_userstatus", "_olduserstatus", "_border_info", "_padding_info", "_edge_info", "_textdecoration_info", "_original_property", "color", "font", "lineHeight", "wordSpacing", "letterSpacing", "textDecoration", "borderRadius", "border", "background", "edgeImage", "cursor", "opacity", "boxShadow", "margin", "padding", "textAlign", "verticalAlign", "_cssselector"
-	];
 
 	nexacro._device_infos = 
 		{
@@ -16078,6 +16650,14 @@ if (!nexacro._Init_systembase) {
 		nexacro.__closeSystemCalendar();
 	};
 
+	nexacro._isDeactivate = function () {
+		return nexacro.__isDeactivate();
+	};
+
+	nexacro._setDeactivate = function (deactivate) {
+		nexacro.__setDeactivate(deactivate);
+	};
+
 	nexacro._getDisplayTextfromDecorateText = function (text) {
 		var strtemp = text;
 
@@ -16254,7 +16834,20 @@ if (!nexacro._Init_systembase) {
 		};
 	};
 
-
+	nexacro._isWebTypeComponent = function (comp) {
+		if (comp && comp instanceof nexacro.WebBrowser
+			 || comp instanceof nexacro.WebView) {
+			return true;
+		}
+		return false;
+	};
+	nexacro._isWebTypeElement = function (elem) {
+		if (elem && elem instanceof nexacro._WebBrowserPluginElement
+			 || elem instanceof nexacro._WebViewPluginElement) {
+			return true;
+		}
+		return false;
+	};
 	nexacro._isSameOrigin = function (v1, v2) {
 		if (!v1 || !v2) {
 			return false;
@@ -16272,6 +16865,10 @@ if (!nexacro._Init_systembase) {
 		}
 
 		if (uri1.host != uri2.host) {
+			return false;
+		}
+
+		if (!nexacro._isSameDomain(uri1.host, uri2.host)) {
 			return false;
 		}
 
@@ -16552,7 +17149,347 @@ if (!nexacro._Init_systembase) {
 
 		return extend(obj);
 	};
+
+	if (!nexacro._ImageType) {
+		nexacro._ImageType = {
+		};
+		nexacro._ImageType._imagetable = {
+			"file" : 
+				{
+				"BMP" : 
+					{
+					"ntype" : 0, 
+					"datatype" : "image/bmp", 
+					"ext" : "bmp"
+				}, 
+				"BMP_MONO" : 
+					{
+					"ntype" : 5, 
+					"datatype" : "image/bmp", 
+					"ext" : "bmp"
+				}, 
+				"JPG" : 
+					{
+					"ntype" : 2, 
+					"datatype" : "image/jpeg", 
+					"ext" : "jpg"
+				}, 
+				"TIF" : 
+					{
+					"ntype" : 4, 
+					"datatype" : "image/tiff", 
+					"ext" : "tif"
+				}, 
+				"TIF_24" : 
+					{
+					"ntype" : 6, 
+					"datatype" : "image/tiff", 
+					"ext" : "tif"
+				}, 
+				"TIF_MONO" : 
+					{
+					"ntype" : 7, 
+					"datatype" : "image/tiff", 
+					"ext" : "tif"
+				}, 
+				"GIF" : 
+					{
+					"ntype" : 3, 
+					"datatype" : "image/gif", 
+					"ext" : "gif"
+				}, 
+				"PNG" : 
+					{
+					"ntype" : 1, 
+					"datatype" : "image/png", 
+					"ext" : "png"
+				}
+					
+			}, 
+			"base64" : 
+				{
+				"PNG" : 
+					{
+					"ntype" : 1, 
+					"datatype" : "image/png"
+				}, 
+				"JPEG" : 
+					{
+					"ntype" : 2, 
+					"datatype" : "image/jpeg"
+				}, 
+				"JPG" : 
+					{
+					"ntype" : 2, 
+					"datatype" : "image/jpeg"
+				}, 
+				"GIF" : 
+					{
+					"ntype" : 3, 
+					"datatype" : "image/gif"
+				}, 
+				"BMP" : 
+					{
+					"ntype" : 8, 
+					"datatype" : "image/bmp"
+				}, 
+				"TIFF" : 
+					{
+					"ntype" : 4, 
+					"datatype" : "image/tiff"
+				}, 
+				"TIF" : 
+					{
+					"ntype" : 4, 
+					"datatype" : "image/tiff"
+				}, 
+				"X_ICON" : 
+					{
+					"ntype" : 1, 
+					"datatype" : "image/x-icon"
+				}, 
+				"SVG_XML" : 
+					{
+					"ntype" : 1, 
+					"datatype" : "image/svg+xml"
+				}, 
+				"WEBP" : 
+					{
+					"ntype" : 1, 
+					"datatype" : "image/webp"
+				}, 
+				"TIF_24" : 
+					{
+					"ntype" : 6, 
+					"datatype" : "image/tiff_24"
+						
+				}, 
+				"TIF_MONO" : 
+					{
+					"ntype" : 7, 
+					"datatype" : "image/tiff_mono"
+						
+				}, 
+				"BMP_MONO" : 
+					{
+					"ntype" : 5, 
+					"datatype" : "image/bmp_mono"
+						
+				}
+			}
+		};
+		nexacro._ImageType.getImageType = function (format, type) {
+			var obj;
+			var result = null;
+			if (format && (format === "file" || format === "base64")) {
+				if (!type) {
+					switch (format) {
+						case "file":
+							type = "BMP";
+							break;
+						case "base64":
+							type = "PNG";
+							break;
+					}
+				}
+				obj = nexacro._ImageType._imagetable[format];
+				if (obj && obj.hasOwnProperty(type)) {
+					result = obj[type];
+					result.type = type;
+				}
+				else if (obj) {
+					switch (format) {
+						case "file":
+							result = obj["BMP"];
+							result.type = "PNG";
+							break;
+						case "base64":
+							result = obj["PNG"];
+							result.type = "PNG";
+							break;
+					}
+				}
+			}
+			return result;
+		};
+		nexacro._ImageType.calcImageQuality = function (datatype, option) {
+			if (nexacro._Browser != "Runtime" && (datatype == "image/jpg" || datatype == "image/jpeg" || datatype == "image/webp")) {
+				var result = 0.5;
+				var str = option;
+				var arrstr, length, item, filter, value, reg_exps0;
+				if (typeof str == "string") {
+					arrstr = str.split(';');
+					length = arrstr.length;
+					reg_exps0 = /\bcompress:\b/ig;
+					for (var i = 0; i < length; i++) {
+						item = arrstr[i].toLowerCase();
+						filter = reg_exps0.exec(item);
+
+						if (filter != null && filter.length == 1) {
+							option = item.replace("compress:", "");
+						}
+					}
+				}
+				var opt = +option;
+				if (!isNaN(opt)) {
+					if (opt < 1) {
+						result = ((opt) / 100).toFixed(2);
+					}
+					else {
+						result = opt;
+					}
+				}
+				return result;
+			}
+			else {
+				return option;
+			}
+		};
+	}
+	nexacro._getJSONPathObjectFromURL = function (url, path) {
+		var jsonobj, rootobj;
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", url, false);
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === XMLHttpRequest.DONE) {
+				var status = xhr.status;
+				if (status === 0 || (status >= 200 && status < 400)) {
+					var str = xhr.response;
+					if (str) {
+						jsonobj = JSON.parse(str);
+					}
+				}
+			}
+		};
+		xhr.send(null);
+		if (jsonobj) {
+			rootobj = nexacro._JSONPath(jsonobj, path);
+		}
+
+		trace(rootobj, XMLHttpRequest.DONE);
+		return rootobj;
+	};
+
+
+
+	nexacro._JSONPath = function (obj, expr, arg) {
+		var P = {
+			resultType : arg && arg.resultType || "VALUE", 
+			result : [], 
+			normalize : function (expr) {
+				var subx = [];
+				return expr.replace(/[\['](\??\(.*?\))[\]']/g, function ($0, $1) {
+					return "[#" + (subx.push($1) - 1) + "]";
+				}).replace(/'?\.'?|\['?/g, ";").replace(/;;;|;;/g, ";..;").replace(/;$|'?\]|'$/g, "").replace(/#([0-9]+)/g, function ($0, $1) {
+					return subx[$1];
+				});
+			}, 
+			asPath : function (path) {
+				var x = path.split(";"), p = "$";
+				for (var i = 1, n = x.length; i < n; i++) {
+					p += /^[0-9*]+$/.test(x[i]) ? ("[" + x[i] + "]") : ("['" + x[i] + "']");
+				}
+				return p;
+			}, 
+			store : function (p, v) {
+				if (p) {
+					P.result[P.result.length] = P.resultType == "PATH" ? P.asPath(p) : v;
+				}
+				return !!p;
+			}, 
+			trace : function (expr, val, path) {
+				if (expr) {
+					var x = expr.split(";"), loc = x.shift();
+					x = x.join(";");
+					if (val && val.hasOwnProperty(loc)) {
+						P.trace(x, val[loc], path + ";" + loc);
+					}
+					else if (loc === "*") {
+						P.walk(loc, x, val, path, function (m, l, x, v, p) {
+							P.trace(m + ";" + x, v, p);
+						});
+					}
+					else if (loc === "..") {
+						P.trace(x, val, path);
+						P.walk(loc, x, val, path, function (m, l, x, v, p) {
+							typeof v[m] === "object" && P.trace("..;" + x, v[m], p + ";" + m);
+						});
+					}
+					else if (/,/.test(loc)) {
+						for (var s = loc.split(/'?,'?/), i = 0, n = s.length; i < n; i++) {
+							P.trace(s[i] + ";" + x, val, path);
+						}
+					}
+					else if (/^\(.*?\)$/.test(loc)) {
+						P.trace(P.eval(loc, val, path.substr(path.lastIndexOf(";") + 1)) + ";" + x, val, path);
+					}
+					else if (/^\?\(.*?\)$/.test(loc)) {
+						P.walk(loc, x, val, path, function (m, l, x, v, p) {
+							if (P.eval(l.replace(/^\?\((.*?)\)$/, "$1"), v[m], m)) {
+								P.trace(m + ";" + x, v, p);
+							}
+						});
+					}
+					else if (/^(-?[0-9]*):(-?[0-9]*):?([0-9]*)$/.test(loc)) {
+						P.slice(loc, x, val, path);
+					}
+					else if (loc == "$") {
+						P.store(loc, val);
+					}
+				}
+				else {
+					P.store(path, val);
+				}
+			}, 
+			walk : function (loc, expr, val, path, f) {
+				if (val instanceof Array) {
+					for (var i = 0, n = val.length; i < n; i++) {
+						if (i in val) {
+							f(i, loc, expr, val, path);
+						}
+					}
+				}
+				else if (typeof val === "object") {
+					for (var m in val) {
+						if (val.hasOwnProperty(m)) {
+							f(m, loc, expr, val, path);
+						}
+					}
+				}
+			}, 
+			slice : function (loc, expr, val, path) {
+				if (val instanceof Array) {
+					var len = val.length, start = 0, end = len, step = 1;
+					loc.replace(/^(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)$/g, function ($0, $1, $2, $3) {
+						start = parseInt($1 || start);
+						end = parseInt($2 || end);
+						step = parseInt($3 || step);
+					});
+					start = (start < 0) ? Math.max(0, start + len) : Math.min(len, start);
+					end = (end < 0) ? Math.max(0, end + len) : Math.min(len, end);
+					for (var i = start; i < end; i += step) {
+						P.trace(i + ";" + expr, val, path);
+					}
+				}
+			}, 
+			eval : function (x, _v, _vname) {
+				try {
+					return $ && _v && eval(x.replace(/@/g, "_v"));
+				}
+				catch (e) {
+					throw new SyntaxError("jsonPath: " + e.message + ": " + x.replace(/@/g, "_v").replace(/\^/g, "_a"));
+				}
+			}
+		};
+
+		var $ = obj;
+		if (expr && obj && (P.resultType == "VALUE" || P.resultType == "PATH")) {
+			P.trace(P.normalize(expr).replace(/^\$;/, ""), obj, "$");
+			return P.result.length ? P.result : false;
+		}
+	};
 }
+
 
 
 if (_process) {
@@ -16566,7 +17503,7 @@ if (_process) {
 	delete _pObject;
 	delete _pCollection;
 	delete _pError;
-	delete __pEventSinkObject;
+	delete _pEventSinkObject;
 	delete _pEventListener;
 	delete _pEvent;
 	delete _pEventInfo;
@@ -16588,6 +17525,7 @@ if (_process) {
 	delete _pMouseWheelEventInfo;
 	delete _pScrollEventInfo;
 	delete _pDragEventInfo;
+	delete _pDragDataObject;
 	delete _pCharEventInfo;
 	delete _pGestureEventInfo;
 	delete _pTapEventInfo;
@@ -16611,9 +17549,12 @@ if (_process) {
 	delete _pEventAppUserNotify;
 	delete _pEventAddLog;
 	delete _pEventCommunication;
+	delete _pNotificationEventInfo;
+	delete _pDevicePermissionEventInfo;
 	delete __pDataCache;
 	delete __pCommunicationItem;
 	delete _pProtocolAdp;
+	delete _pDeviceAdaptor;
 	delete _pCommunicationError;
 	delete _pNativeError;
 }

@@ -11,68 +11,74 @@
 //
 //==============================================================================
 
-if (nexacro.Device && nexacro._OS == "Android") {
-	if (!nexacro.GoogleMap) {
-		nexacro.GoogleMapEventInfo = function (obj, id, centerlocation, coordinates, viewmode, zoomlevel, addresses) {
-			this.id = this.eventid = id;
-			this.fromobject = this.fromreferenceobject = obj;
-			this.centerlocation = centerlocation;
-			this.coordinates = coordinates;
-			this.viewmode = viewmode;
-			this.zoomlevel = zoomlevel;
-			this.addresses = addresses;
-		};
+if (!nexacro.GoogleMap) {
+	nexacro.GoogleMapEventInfo = function (obj, id, centerlocation, coordinates, viewmode, zoomlevel, addresses) {
+		this.id = this.eventid = id;
+		this.fromobject = this.fromreferenceobject = obj;
+		this.centerlatitude = centerlocation.latitude;
+		this.centerlongitude = centerlocation.longitude;
+		this.latitude = coordinates.latitude;
+		this.longitude = coordinates.longitude;
+		this.viewmode = viewmode;
+		this.zoomlevel = zoomlevel;
+		this.addresses = addresses;
+	};
 
-		var _pGoogleMapEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.GoogleMapEventInfo);
-		nexacro.GoogleMapEventInfo.prototype = _pGoogleMapEventInfo;
-		_pGoogleMapEventInfo._type_name = "GoogleMapEventInfo";
+	var _pGoogleMapEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.GoogleMapEventInfo);
+	nexacro.GoogleMapEventInfo.prototype = _pGoogleMapEventInfo;
+	_pGoogleMapEventInfo._type_name = "GoogleMapEventInfo";
 
-		delete _pGoogleMapEventInfo;
+	delete _pGoogleMapEventInfo;
 
-		nexacro.GoogleMapErrorEventInfo = function (obj, id, errorcode, errormsg) {
-			this.id = this.eventid = id;
-			this.fromobject = this.fromreferenceobject = obj;
-			this.errortype = "ObjectError";
-			this.statuscode = errorcode;
-			this.errormsg = errormsg;
-		};
+	nexacro.GoogleMapErrorEventInfo = function (obj, id, errorcode, errormsg) {
+		this.id = this.eventid = id;
+		this.fromobject = this.fromreferenceobject = obj;
+		this.errortype = "ObjectError";
+		this.statuscode = errorcode;
+		this.errormsg = errormsg;
+	};
 
-		var _pGoogleMapErrorEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.GoogleMapErrorEventInfo);
-		nexacro.GoogleMapErrorEventInfo.prototype = _pGoogleMapErrorEventInfo;
-		_pGoogleMapErrorEventInfo._type_name = "GoogleMapErrorEventInfo";
+	var _pGoogleMapErrorEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.GoogleMapErrorEventInfo);
+	nexacro.GoogleMapErrorEventInfo.prototype = _pGoogleMapErrorEventInfo;
+	_pGoogleMapErrorEventInfo._type_name = "GoogleMapErrorEventInfo";
 
-		delete _pGoogleMapErrorEventInfo;
+	delete _pGoogleMapErrorEventInfo;
 
-		nexacro.GoogleMapClickEventInfo = function (obj, id, location) {
-			this.id = this.eventid = id;
-			this.fromobject = this.fromreferenceobject = obj;
-			this.location = location;
-		};
+	nexacro.GoogleMapClickEventInfo = function (obj, id, location) {
+		this.id = this.eventid = id;
+		this.fromobject = this.fromreferenceobject = obj;
+		this.latitude = location.latitude;
+		this.longitude = location.longitude;
+	};
 
-		var _pGoogleMapClickEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.GoogleMapClickEventInfo);
-		nexacro.GoogleMapClickEventInfo.prototype = _pGoogleMapClickEventInfo;
-		_pGoogleMapClickEventInfo._type_name = "GoogleMapClickEventInfo";
+	var _pGoogleMapClickEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.GoogleMapClickEventInfo);
+	nexacro.GoogleMapClickEventInfo.prototype = _pGoogleMapClickEventInfo;
+	_pGoogleMapClickEventInfo._type_name = "GoogleMapClickEventInfo";
 
-		delete _pGoogleMapClickEventInfo;
+	delete _pGoogleMapClickEventInfo;
 
-		nexacro.GoogleMapDragEventInfo = function (obj, id, location) {
-			this.id = this.eventid = id;
-			this.fromobject = this.fromreferenceobject = obj;
-			this.location = location;
-		};
+	nexacro.GoogleMapDragEventInfo = function (obj, id, location) {
+		this.id = this.eventid = id;
+		this.fromobject = this.fromreferenceobject = obj;
+		this.latitude = location.latitude;
+		this.longitude = location.longitude;
+	};
 
-		var _pGoogleMapDragEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.GoogleMapDragEventInfo);
-		nexacro.GoogleMapDragEventInfo.prototype = _pGoogleMapDragEventInfo;
-		_pGoogleMapDragEventInfo._type_name = "GoogleMapDragEventInfo";
+	var _pGoogleMapDragEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.GoogleMapDragEventInfo);
+	nexacro.GoogleMapDragEventInfo.prototype = _pGoogleMapDragEventInfo;
+	_pGoogleMapDragEventInfo._type_name = "GoogleMapDragEventInfo";
 
-		delete _pGoogleMapDragEventInfo;
+	delete _pGoogleMapDragEventInfo;
 
+	if (nexacro.Device && nexacro._OS == "Android") {
 		nexacro.GoogleMap = function (id, left, top, width, height, right, bottom, parent) {
 			nexacro.Component.call(this, id, left, top, width, height, right, bottom, parent);
 
 			this._ifrm_elem = null;
 			this.window = null;
 			this.document = null;
+			this.latitude = 0;
+			this.longitude = 0;
 			this.centerlocation = {
 				latitude : 0, 
 				longitude : 0
@@ -127,7 +133,8 @@ if (nexacro.Device && nexacro._OS == "Android") {
 				"oncenterchanged" : 1, 
 				"onmapdragstart" : 1, 
 				"onmapdrag" : 1, 
-				"onmapdragend" : 1
+				"onmapdragend" : 1, 
+				"ondevicebuttonup" : 1
 			};
 
 			this._location = {
@@ -140,11 +147,8 @@ if (nexacro.Device && nexacro._OS == "Android") {
 			};
 		};
 
-
 		var _pGoogleMap = nexacro._createPrototype(nexacro.Component, nexacro.GoogleMap);
 		nexacro.GoogleMap.prototype = _pGoogleMap;
-
-		_pGoogleMap._type = "GoogleMap";
 		_pGoogleMap._type_name = "GoogleMap";
 
 		_pGoogleMap.on_create_contents = function () {
@@ -241,6 +245,8 @@ if (nexacro.Device && nexacro._OS == "Android") {
 
 		_pGoogleMap.on_fire_oncenterchanged = function (obj, id, centerlocation, coordinates, viewmode, zoomlevel, addresses) {
 			this.centerlocation = centerlocation;
+			this.latitude = this.centerlocation.latitude;
+			this.longitude = this.centerlocation.longitude;
 			this.zoomlevel = zoomlevel;
 
 			if (this.oncenterchanged && this.oncenterchanged._has_handlers) {
@@ -507,6 +513,8 @@ if (nexacro.Device && nexacro._OS == "Android") {
 				}
 				this.centerlocation.latitude = nlat;
 				this.centerlocation.longitude = nlon;
+				this.latitude = nlat;
+				this.longitude = nlon;
 
 				_pGoogleMap.centerlocation = {
 					latitude : nlat, 
@@ -829,431 +837,301 @@ if (nexacro.Device && nexacro._OS == "Android") {
 			}
 		};
 
-		delete _pGoogleMap;
-	}
+		if (!nexacro.GoogleMapMarker) {
+			nexacro.GoogleMapMarker = function (name) {
+				this._id = nexacro.Device.makeID();
+				nexacro.Device._userCreatedObj[this._id] = this;
 
-	if (!nexacro.GoogleMapMarker) {
-		nexacro.GoogleMapMarker = function (name) {
-			this._id = nexacro.Device.makeID();
-			nexacro.Device._userCreatedObj[this._id] = this;
+				this.name = name || "";
+				this._type = 0;
+				this.longitude = 0;
+				this.latitude = 0;
+				this.text = "";
+				this.imageurl = "";
+				this.visible = true;
+				this.draggable = false;
 
-			this.name = name || "";
-			this._type = 0;
-			this.longitude = 0;
-			this.latitude = 0;
-			this.text = "";
-			this.imageurl = "";
-			this.visible = true;
-			this.draggable = false;
-
-			this.style = {
-				_GoogleMapMarkerID : 0, 
-				set_parentID : function (_id) {
-					this._GoogleMapMarkerID = _id;
-				}, 
-				align : {
+				this.style = {
 					_GoogleMapMarkerID : 0, 
 					set_parentID : function (_id) {
 						this._GoogleMapMarkerID = _id;
 					}, 
-					halign : "center", 
-					valign : "middle", 
-					set_halign : function (v) {
-						var _v = v.toString().split(" ").join("").toLowerCase();
-						if (_v == "left" || _v == "center" || _v == "right") {
-							this.halign = _v;
+					align : {
+						_GoogleMapMarkerID : 0, 
+						set_parentID : function (_id) {
+							this._GoogleMapMarkerID = _id;
+						}, 
+						halign : "center", 
+						valign : "middle", 
+						set_halign : function (v) {
+							var _v = v.toString().split(" ").join("").toLowerCase();
+							if (_v == "left" || _v == "center" || _v == "right") {
+								this.halign = _v;
 
-							return true;
-						}
-						else {
-							return false;
+								return true;
+							}
+							else {
+								return false;
+							}
+						}, 
+						set_valign : function (v) {
+							var _v = v.toString().split(" ").join("").toLowerCase();
+							if (_v == "top" || _v == "middle" || _v == "bottom") {
+								this.valign = _v;
+
+								return true;
+							}
+							else {
+								return false;
+							}
+						}, 
+						$s : function (name, fnname, val) {
+							this[name] = val;
 						}
 					}, 
-					set_valign : function (v) {
-						var _v = v.toString().split(" ").join("").toLowerCase();
-						if (_v == "top" || _v == "middle" || _v == "bottom") {
-							this.valign = _v;
 
-							return true;
-						}
-						else {
+					set_align : function (v) {
+						var v_arr = v.split(" ");
+						var ret = true;
+						if (v_arr.length != 2) {
 							return false;
 						}
+						ret = this.align.set_halign(v_arr[0]);
+						if (!ret) {
+							return ret;
+						}
+						ret = this.align.set_valign(v_arr[1]);
+
+						return ret;
 					}, 
 					$s : function (name, fnname, val) {
 						this[name] = val;
 					}
-				}, 
+				};
 
-				set_align : function (v) {
-					var v_arr = v.split(" ");
-					var ret = true;
-					if (v_arr.length != 2) {
-						return false;
-					}
-					ret = this.align.set_halign(v_arr[0]);
-					if (!ret) {
-						return ret;
-					}
-					ret = this.align.set_valign(v_arr[1]);
+				this._name = null;
+			};
 
-					return ret;
-				}, 
-				$s : function (name, fnname, val) {
-					this[name] = val;
+			var _pGoogleMapMarker = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapMarker);
+			nexacro.GoogleMapMarker.prototype = _pGoogleMapMarker;
+			_pGoogleMapMarker._type_name = "GoogleMapMarker";
+
+			_pGoogleMapMarker.set_longitude = function (v) {
+				try {
+					this.longitude = Number(v.toString());
+				}
+				catch (e) {
+					return false;
+				}
+				return true;
+			};
+
+			_pGoogleMapMarker.set_latitude = function (v) {
+				try {
+					this.latitude = Number(v.toString());
+				}
+				catch (e) {
+					return false;
+				}
+				return true;
+			};
+
+			_pGoogleMapMarker.set_text = function (v) {
+				this.text = v;
+				return true;
+			};
+
+			_pGoogleMapMarker.set_imageurl = function (v) {
+				if (v) {
+					this._type = 1;
+				}
+				else {
+					this._type = 0;
+				}
+				this.imageurl = v;
+				return true;
+			};
+
+			_pGoogleMapMarker.set_draggable = function (v) {
+				if (v == null) {
+					return false;
+				}
+				else if (v) {
+					if (v == true || (typeof (v) == "string" && v == "true")) {
+						this.draggable = true;
+					}
+					else if (v == false || (typeof (v) == "string" && v == "false")) {
+						this.draggable = false;
+					}
+				}
+				else {
+					return false;
 				}
 			};
 
-			this._name = null;
-		};
+			_pGoogleMapMarker.set_visible = function (v) {
+				this.visible = nexacro._toBoolean(v);
+				return true;
+			};
+		}
 
-		var _pGoogleMapMarker = nexacro.GoogleMapMarker.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapMarker);
-		_pGoogleMapMarker._type_name = "GoogleMapMarker";
+		if (!nexacro.GoogleMapPolyline) {
+			nexacro.GoogleMapPolyline = function (name) {
+				this._id = nexacro.Device.makeID();
+				nexacro.Device._userCreatedObj[this._id] = this;
+				this.name = name || "";
 
-		_pGoogleMapMarker.set_longitude = function (v) {
-			try {
-				this.longitude = Number(v.toString());
-			}
-			catch (e) {
-				return false;
-			}
-			return true;
-		};
+				this._type = 2;
+				this.locationdata = "";
+				this.visible = true;
+				this.linewidth = "";
+				this.linecolor = "";
 
-		_pGoogleMapMarker.set_latitude = function (v) {
-			try {
-				this.latitude = Number(v.toString());
-			}
-			catch (e) {
-				return false;
-			}
-			return true;
-		};
+				this._name = null;
+			};
 
-		_pGoogleMapMarker.set_text = function (v) {
-			this.text = v;
-			return true;
-		};
+			var _pGoogleMapPolyline = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapPolyline);
+			nexacro.GoogleMapPolyline.prototype = _pGoogleMapPolyline;
+			_pGoogleMapPolyline._type_name = "GoogleMapPolyline";
 
-		_pGoogleMapMarker.set_imageurl = function (v) {
-			this._type = 1;
-			this.imageurl = v;
-			return true;
-		};
-
-		_pGoogleMapMarker.set_draggable = function (v) {
-			if (v == null) {
-				return false;
-			}
-			else if (v) {
-				if (v == true || (typeof (v) == "string" && v == "true")) {
-					this.draggable = true;
+			_pGoogleMapPolyline.set_locationdata = function (v) {
+				var _lat_lng_arr = v.toString().split("]");
+				if (_lat_lng_arr.length < 2) {
+					return false;
 				}
-				else if (v == false || (typeof (v) == "string" && v == "false")) {
-					this.draggable = false;
+
+				this.locationdata = v;
+				return true;
+			};
+
+			_pGoogleMapPolyline.set_linewidth = function (v) {
+				try {
+					this.linewidth = Number(v.toString());
 				}
-			}
-			else {
-				return false;
-			}
-		};
+				catch (e) {
+					return false;
+				}
+				return true;
+			};
 
-		_pGoogleMapMarker.set_visible = function (v) {
-			if (v == true || (typeof (v) == "string" && v == "true")) {
+			_pGoogleMapPolyline.set_linecolor = function (v) {
+				this.linecolor = v;
+				return true;
+			};
+
+			_pGoogleMapPolyline.set_visible = function (v) {
+				this.visible = nexacro._toBoolean(v);
+				return true;
+			};
+		}
+
+		if (!nexacro.GoogleMapPolygon) {
+			nexacro.GoogleMapPolygon = function (name) {
+				this._id = nexacro.Device.makeID();
+				nexacro.Device._userCreatedObj[this._id] = this;
+				this.name = name || "";
+
+				this._type = 3;
+
+				this.locationdata = "";
 				this.visible = true;
-			}
-			else if (v == false || (typeof (v) == "string" && v == "false")) {
-				this.visible = false;
-			}
-			else {
-				return false;
-			}
-			return true;
-		};
+				this.linewidth = "";
+				this.linecolor = "";
+				this.fillbrushcolor = "";
 
+				this._name = null;
+			};
 
-		delete _pGoogleMapMarker;
-	}
+			var _pGoogleMapPolygon = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapPolygon);
+			nexacro.GoogleMapPolygon.prototype = _pGoogleMapPolygon;
+			_pGoogleMapPolygon._type_name = "GoogleMapPolygon";
 
-	if (!nexacro.GoogleMapPolyline) {
-		nexacro.GoogleMapPolyline = function (name) {
-			this._id = nexacro.Device.makeID();
-			nexacro.Device._userCreatedObj[this._id] = this;
-			this.name = name || "";
+			_pGoogleMapPolygon.set_locationdata = function (v) {
+				var _lat_lng_arr = v.toString().split("]");
+				if (_lat_lng_arr.length < 2) {
+					return false;
+				}
 
-			this._type = 2;
-			this.locationdata = "";
-			this.visible = true;
-			this.linewidth = "";
-			this.linecolor = "";
+				this.locationdata = v;
+				return true;
+			};
 
-			this._name = null;
-		};
+			_pGoogleMapPolygon.set_linewidth = function (v) {
+				try {
+					this.linewidth = Number(v.toString());
+				}
+				catch (e) {
+					return false;
+				}
+				return true;
+			};
 
-		var _pGoogleMapPolyline = nexacro.GoogleMapPolyline.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapPolyline);
-		_pGoogleMapPolyline._type_name = "GoogleMapPolyline";
+			_pGoogleMapPolygon.set_linecolor = function (v) {
+				this.linecolor = v;
+				return true;
+			};
 
-		_pGoogleMapPolyline.set_locationdata = function (v) {
-			var _lat_lng_arr;
+			_pGoogleMapPolygon.set_fillbrushcolor = function (v) {
+				this.fillbrushcolor = v;
+				return true;
+			};
 
-			_lat_lng_arr = v.toString().split("]");
-			if (_lat_lng_arr.length < 2) {
-				return false;
-			}
+			_pGoogleMapPolygon.set_visible = function (v) {
+				this.visible = nexacro._toBoolean(v);
+				return true;
+			};
+		}
 
-			this.locationdata = v;
-			return true;
-		};
+		if (!nexacro.GoogleMapCircle) {
+			nexacro.GoogleMapCircle = function (name) {
+				this._id = nexacro.Device.makeID();
+				nexacro.Device._userCreatedObj[this._id] = this;
+				this.name = name || "";
 
-		_pGoogleMapPolyline.set_linewidth = function (v) {
-			var nWidth = 0;
-			try {
-				nWidth = Number(v.toString());
-			}
-			catch (e) {
-				return false;
-			}
+				this._type = 4;
+				this.longitude = 0;
+				this.latitude = 0;
 
-			if (nWidth != nWidth) {
-				return false;
-			}
-			this.linewidth = nWidth;
-			return true;
-		};
-
-		_pGoogleMapPolyline.set_linecolor = function (v) {
-			this.linecolor = v;
-			return true;
-		};
-
-		_pGoogleMapPolyline.set_visible = function (v) {
-			if (v == true || (typeof (v) == "string" && v == "true")) {
-				this.visible = true;
-			}
-			else if (v == false || (typeof (v) == "string" && v == "false")) {
-				this.visible = false;
-			}
-			else {
-				return false;
-			}
-
-			return true;
-		};
-
-		delete _pGoogleMapPolyline;
-	}
-
-	if (!nexacro.GoogleMapPolygon) {
-		nexacro.GoogleMapPolygon = function (name) {
-			this._id = nexacro.Device.makeID();
-			nexacro.Device._userCreatedObj[this._id] = this;
-			this.name = name || "";
-
-			this._type = 3;
-			this.locationdata = "";
-			this.visible = true;
-			this.linewidth = "";
-			this.linecolor = "";
-			this.fillbrushcolor = "";
-
-			this._name = null;
-		};
-
-		var _pGoogleMapPolygon = nexacro.GoogleMapPolygon.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapPolygon);
-		_pGoogleMapPolygon._type_name = "GoogleMapPolygon";
-
-		_pGoogleMapPolygon.set_locationdata = function (v) {
-			var _lat_lng_arr;
-
-			_lat_lng_arr = v.toString().split("]");
-			if (_lat_lng_arr.length < 2) {
-				return false;
-			}
-
-			this.locationdata = v;
-			return true;
-		};
-
-		_pGoogleMapPolygon.set_linewidth = function (v) {
-			var nWidth = 0;
-			try {
-				nWidth = Number(v.toString());
-			}
-			catch (e) {
-				return false;
-			}
-
-			if (nWidth != nWidth) {
-				return false;
-			}
-			this.linewidth = nWidth;
-			return true;
-		};
-
-		_pGoogleMapPolygon.set_linecolor = function (v) {
-			this.linecolor = v;
-			return true;
-		};
-
-		_pGoogleMapPolygon.set_fillbrushcolor = function (v) {
-			this.fillbrushcolor = v;
-			return true;
-		};
-
-		_pGoogleMapPolygon.set_visible = function (v) {
-			if (v == true || (typeof (v) == "string" && v == "true")) {
-				this.visible = true;
-			}
-			else if (v == false || (typeof (v) == "string" && v == "false")) {
-				this.visible = false;
-			}
-			else {
-				return false;
-			}
-			return true;
-		};
-
-		delete _pGoogleMapPolygon;
-	}
-
-	if (!nexacro.GoogleMapCircle) {
-		nexacro.GoogleMapCircle = function (name) {
-			this._id = nexacro.Device.makeID();
-			nexacro.Device._userCreatedObj[this._id] = this;
-			this.name = name || "";
-
-			this._type = 4;
-			this.longitude = 0;
-			this.latitude = 0;
-
-			this.radius = 100;
-			this.visible = true;
-			this._name = null;
-		};
-
-		var _pGoogleMapCircle = nexacro.GoogleMapCircle.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapCircle);
-		_pGoogleMapCircle._type_name = "GoogleMapCircle";
-
-		_pGoogleMapCircle.set_longitude = function (v) {
-			try {
-				this.longitude = Number(v.toString());
-			}
-			catch (e) {
-				return false;
-			}
-
-			if (this.longitude != this.longitude) {
-				return false;
-			}
-			return true;
-		};
-
-		_pGoogleMapCircle.set_latitude = function (v) {
-			try {
-				this.latitude = Number(v.toString());
-			}
-			catch (e) {
-				return false;
-			}
-
-			if (this.latitude != this.latitude) {
-				return false;
-			}
-
-			return true;
-		};
-
-		_pGoogleMapCircle.set_visible = function (v) {
-			if (v == true || (typeof (v) == "string" && v == "true")) {
-				this.visible = true;
-			}
-			else if (v == false || (typeof (v) == "string" && v == "false")) {
-				this.visible = false;
-			}
-			else {
-				return false;
-			}
-			return true;
-		};
-
-		_pGoogleMapCircle.set_radius = function (v) {
-			if (v == null) {
 				this.radius = 100;
-			}
-			else {
-				this.radius = Number(v.toString());
-			}
-		};
+				this.visible = true;
+				this._name = null;
+			};
 
-		delete _pGoogleMapCircle;
+			var _pGoogleMapCircle = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapCircle);
+			nexacro.GoogleMapCircle.prototype = _pGoogleMapCircle;
+			_pGoogleMapCircle._type_name = "GoogleMapCircle";
+
+			_pGoogleMapCircle.set_longitude = function (v) {
+				try {
+					this.longitude = Number(v.toString());
+				}
+				catch (e) {
+					return false;
+				}
+				return true;
+			};
+
+			_pGoogleMapCircle.set_latitude = function (v) {
+				try {
+					this.latitude = Number(v.toString());
+				}
+				catch (e) {
+					return false;
+				}
+				return true;
+			};
+
+			_pGoogleMapCircle.set_visible = function (v) {
+				this.visible = nexacro._toBoolean(v);
+				return true;
+			};
+
+			_pGoogleMapCircle.set_radius = function (v) {
+				this.radius = (v == null) ? 100 : Number(v.toString());
+			};
+		}
 	}
-}
-else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Runtime" && !(nexacro._Browser == "IE" && nexacro._BrowserVersion <= 8)) {
-	if (!nexacro.GoogleMap) {
-		nexacro.GoogleMapEventInfo = function (obj, id, centerlocation, viewmode, zoomlevel, addresses, coordinates) {
-			this.id = this.eventid = id;
-			this.fromobject = this.fromreferenceobject = obj;
-			this.centerlocation = centerlocation;
-			this.viewmode = viewmode;
-			this.zoomlevel = zoomlevel;
-			this.addresses = addresses;
-			this.coordinates = coordinates;
-		};
-
-		var _pGoogleMapEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.GoogleMapEventInfo);
-		nexacro.GoogleMapEventInfo.prototype = _pGoogleMapEventInfo;
-		_pGoogleMapEventInfo._type_name = "GoogleMapEventInfo";
-
-		delete _pGoogleMapEventInfo;
-
-		nexacro.GoogleMapErrorEventInfo = function (obj, id, errorcode, errormsg) {
-			this.id = this.eventid = id;
-			this.fromobject = this.fromreferenceobject = obj;
-			this.errortype = "ObjectError";
-			this.statuscode = errorcode;
-			this.errormsg = errormsg;
-		};
-
-		var _pGoogleMapErrorEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.GoogleMapErrorEventInfo);
-		nexacro.GoogleMapErrorEventInfo.prototype = _pGoogleMapErrorEventInfo;
-		_pGoogleMapErrorEventInfo._type_name = "GoogleMapErrorEventInfo";
-
-		delete _pGoogleMapErrorEventInfo;
-
-		nexacro.GoogleMapClickEventInfo = function (obj, id, location) {
-			this.id = this.eventid = id;
-			this.fromobject = this.fromreferenceobject = obj;
-			this.location = location;
-		};
-
-		nexacro.GoogleMapDragEventInfo = function (obj, id, location) {
-			this.id = this.eventid = id;
-			this.fromobject = this.fromreferenceobject = obj;
-			this.location = location;
-		};
-
-		var _pGoogleMapDragEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.GoogleMapDragEventInfo);
-		nexacro.GoogleMapDragEventInfo.prototype = _pGoogleMapDragEventInfo;
-		_pGoogleMapDragEventInfo._type_name = "GoogleMapDragEventInfo";
-
-		delete _pGoogleMapDragEventInfo;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Runtime" && !(nexacro._Browser == "IE" && nexacro._BrowserVersion <= 8)) {
 		nexacro.googlemaps_loaded = false;
 		nexacro.googlemaps_callback = function () {
 			nexacro.googlemaps_loaded = true;
@@ -1291,6 +1169,8 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 			nexacro.Device._userCreatedObj[this._id] = this;
 			this.name = id || "";
 
+			this.latitude = 0;
+			this.longitude = 0;
 			this.centerlocation = {
 				latitude : 0, 
 				longitude : 0
@@ -1372,7 +1252,8 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 				"onmapdragstart" : 1, 
 				"onmapdrag" : 1, 
 				"onmapdragend" : 1, 
-				"onerror" : 1
+				"onerror" : 1, 
+				"ondevicebuttonup" : 1
 			};
 		};
 
@@ -1380,13 +1261,147 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 		nexacro.GoogleMap.prototype = _pGoogleMap;
 		_pGoogleMap._type_name = "GoogleMap";
 
-		_pGoogleMap.centerlocation = {
-			latitude : 0, 
-			longitude : 0
+		_itemsname = [];
+		_items = [];
+		_infowindowname = [];
+		_infowindow = [];
+
+		_pGoogleMap.on_create_contents = function () {
+			var control_elem = this.getElement();
+			if (control_elem) {
+				this._map_elem = new nexacro.Element(control_elem);
+				this._map_elem.setElementSize(this._getClientWidth(), this._getClientHeight());
+			}
 		};
 
-		nexacro.GoogleMap._default_text_align = nexacro.Component._default_align;
-		nexacro.GoogleMap._default_image_align = nexacro.Component._default_buttonimg_align;
+		_pGoogleMap.on_create_contents_command = function () {
+			var control_elem = this.getElement();
+			if (control_elem) {
+				this._map_elem = new nexacro.Element(control_elem);
+				this._map_elem.setElementSize(this._getClientWidth(), this._getClientHeight());
+				this._map_elem.setElementTypeCSSSelector("nexamap");
+
+				return this._map_elem.createCommand();
+			}
+			return "";
+		};
+
+		_pGoogleMap.on_attach_contents_handle = function (win) {
+			if (this._map_elem) {
+				this._map_elem.attachHandle(win);
+			}
+		};
+
+		_pGoogleMap.on_created_contents = function (win) {
+			var map_elem = this._map_elem;
+			if (map_elem) {
+				map_elem.setElementTypeCSSSelector("nexamap");
+				map_elem.create(win);
+
+				this.document = map_elem._document;
+				this.window = map_elem._winodw;
+			}
+		};
+
+		_pGoogleMap.on_destroy_contents = function () {
+			var map_elem = this._map_elem;
+			if (map_elem) {
+				map_elem.destroy();
+				this._map_elem = null;
+			}
+		};
+
+		_pGoogleMap.on_change_containerRect = function (width, height) {
+			var map_elem = this._map_elem;
+			if (map_elem) {
+				map_elem.setElementSize(width, height);
+			}
+		};
+
+		_pGoogleMap.on_apply_text = function () {
+			var control_elem = this._control_element;
+			if (this._control_element) {
+				var text_elem = this._text_elem;
+				if (!text_elem) {
+					text_elem = new nexacro.TextBoxElement(control_elem);
+					this._text_elem = text_elem;
+					text_elem.setElementSize(this._getClientWidth(), this._getClientHeight());
+					text_elem.setElementColor(this.currentstyle.color);
+					text_elem.setElementFont(this.currentstyle.font);
+					text_elem.setElementAlign(this.currentstyle.align);
+
+					if (this._is_created) {
+						text_elem.create();
+					}
+				}
+
+				if (this.text != "") {
+					text_elem.setElementText(this.text);
+					this._text_width = -1;
+					this._text_height = -1;
+					if (this._img_elem) {
+						this._updateElementPositions(this.currentstyle.align, this.currentstyle.imagealign);
+					}
+				}
+				else {
+					text_elem.setElementText("");
+					this._text_width = 0;
+					this._text_height = 0;
+					if (this._img_elem) {
+						this._updateElementPositions(this.currentstyle.align, this.currentstyle.imagealign);
+					}
+				}
+			}
+		};
+
+		_pGoogleMap.on_apply_expr = function () {
+			var control = this.getElement();
+			var expr = this.expr;
+
+			if (control && expr.length > 0) {
+				expr = expr.trim().split(":");
+				var len = expr.length;
+				var parser = new nexacro.ExprParser();
+				var conv_expr, exprfn;
+				var str;
+
+				if (len == 1) {
+					str = expr[0];
+				}
+				else {
+					if (expr[0].trim().toUpperCase() != "EXPR") {
+						str = expr.join(":");
+					}
+					else {
+						str = expr.slice(1).join(":");
+					}
+				}
+
+				conv_expr = parser.makeExpr(this, str);
+				exprfn = nexacro._createInlineFunc(conv_expr, []);
+
+				if (exprfn) {
+					try {
+						this.set_text(exprfn.call(this));
+					}
+					catch (e) {
+						return;
+					}
+				}
+			}
+		};
+
+		_pGoogleMap.on_apply_prop_taborder = function () {
+			var textElem = this._text_elem;
+			if (textElem) {
+				if (this.tabstop) {
+					textElem.setElementTabIndex(this.taborder);
+				}
+				else {
+					textElem.setElementTabIndex(-1);
+				}
+			}
+		};
 
 		_pGoogleMap.set_draggable = function (v) {
 			if (v == null) {
@@ -1428,44 +1443,6 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 			return true;
 		};
 
-		_pGoogleMap._getalign = function (h, v) {
-			if (h == "left") {
-				if (v == "top") {
-					return google.maps.ControlPosition.TOP_LEFT;
-				}
-				else if (v == "middle") {
-					return google.maps.ControlPosition.LEFT;
-				}
-				else if (v == "bottom") {
-					return google.maps.ControlPosition.LEFT_BOTTOM;
-				}
-			}
-			else if (h == "center") {
-				if (v == "top") {
-					return google.maps.ControlPosition.TOP;
-				}
-				else if (v == "bottom") {
-					return google.maps.ControlPosition.BOTTOM;
-				}
-			}
-			else if (h == "right") {
-				if (v == "top") {
-					return google.maps.ControlPosition.TOP_LEFT;
-				}
-				else if (v == "middle") {
-					return google.maps.ControlPosition.RIGHT;
-				}
-				else if (v == "bottom") {
-					return google.maps.ControlPosition.RIGHT_BOTTOM;
-				}
-			}
-		};
-
-		_itemsname = [];
-		_items = [];
-		_infowindowname = [];
-		_infowindow = [];
-
 		_pGoogleMap.set_enableevent = function (v) {
 			this.enableevent = nexacro._toBoolean(v);
 			return v;
@@ -1485,12 +1462,6 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 			else {
 				return false;
 			}
-		};
-
-		_pGoogleMap.__map = function () {
-			var obj = document.getElementById(this._id);
-			var objDoc = obj.contentWindow || obj.contentDocument;
-			return objDoc;
 		};
 
 		_pGoogleMap.set_showmode = function (v) {
@@ -1605,62 +1576,6 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 			this.region = v;
 		};
 
-		_pGoogleMap._set_option = function () {
-			var _mapType = this._getMapType();
-
-
-			var myOptions = {
-				center : new google.maps.LatLng(this.centerlocation.latitude, this.centerlocation.longitude), 
-				mapTypeId : _mapType, 
-				zoom : this.zoomlevel, 
-				disableDefaultUI : true, 
-				mapTypeControl : this.showmode, 
-				mapTypeControlOptions : {
-					style : google.maps.MapTypeControlStyle.DEFAULT, 
-					position : this.modealign
-				}, 
-				scaleControl : this.showmapscale, 
-				scaleControlOptions : {
-					position : this.mapscalealign
-				}, 
-				panControl : this.shownavigator, 
-				panControlOptions : {
-					position : this.navigatoralign
-				}, 
-				zoomControl : this.showzoom, 
-				zoomControlOptions : {
-					position : this.zoomalign, 
-					style : google.maps.ZoomControlStyle.SMALL
-				}
-			};
-			return myOptions;
-		};
-
-		_pGoogleMap._getMapType = function (v) {
-			var __maptype;
-
-			switch (v) {
-				default:
-				case 0:
-					__maptype = google.maps.MapTypeId.ROADMAP;
-					break;
-				case 1:
-					__maptype = google.maps.MapTypeId.SATELLITE;
-					break;
-				case 2:
-					__maptype = google.maps.MapTypeId.HYBRID;
-					break;
-				case 3:
-					__maptype = google.maps.MapTypeId.TERRAIN;
-					break;
-			}
-			return __maptype;
-		};
-
-		_pGoogleMap.map_starter = function (v) {
-			this._google_map.setOptions(this.setOptions());
-		};
-
 		_pGoogleMap.set_zoomlevel = function (v) {
 			this.zoomlevel = Number(v.toString());
 		};
@@ -1714,140 +1629,6 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 				}
 				return true;
 			}
-		};
-
-
-
-		_pGoogleMap.on_apply_text = function () {
-			var control_elem = this._control_element;
-			if (this._control_element) {
-				var text_elem = this._text_elem;
-				if (!text_elem) {
-					text_elem = new nexacro.TextBoxElement(control_elem);
-					this._text_elem = text_elem;
-					text_elem.setElementSize(this._getClientWidth(), this._getClientHeight());
-					text_elem.setElementColor(this.currentstyle.color);
-					text_elem.setElementFont(this.currentstyle.font);
-					text_elem.setElementAlign(this.currentstyle.align);
-
-					if (this._is_created) {
-						text_elem.create();
-					}
-				}
-
-				if (this.text != "") {
-					text_elem.setElementText(this.text);
-					this._text_width = -1;
-					this._text_height = -1;
-					if (this._img_elem) {
-						this._updateElementPositions(this.currentstyle.align, this.currentstyle.imagealign);
-					}
-				}
-				else {
-					text_elem.setElementText("");
-					this._text_width = 0;
-					this._text_height = 0;
-					if (this._img_elem) {
-						this._updateElementPositions(this.currentstyle.align, this.currentstyle.imagealign);
-					}
-				}
-			}
-		};
-
-		_pGoogleMap.on_apply_expr = function () {
-			var control = this.getElement();
-			var expr = this.expr;
-
-			if (control && expr.length > 0) {
-				expr = expr.trim().split(":");
-				var len = expr.length;
-				var parser = new nexacro.ExprParser();
-				var conv_expr, exprfn;
-				var str;
-
-				if (len == 1) {
-					str = expr[0];
-				}
-				else {
-					if (expr[0].trim().toUpperCase() != "EXPR") {
-						str = expr.join(":");
-					}
-					else {
-						str = expr.slice(1).join(":");
-					}
-				}
-
-				conv_expr = parser.makeExpr(this, str);
-				exprfn = nexacro._createInlineFunc(conv_expr, []);
-
-				if (exprfn) {
-					try {
-						this.set_text(exprfn.call(this));
-					}
-					catch (e) {
-						return;
-					}
-				}
-			}
-		};
-
-		_pGoogleMap.on_apply_prop_taborder = function () {
-			var textElem = this._text_elem;
-			if (textElem) {
-				if (this.tabstop) {
-					textElem.setElementTabIndex(this.taborder);
-				}
-				else {
-					textElem.setElementTabIndex(-1);
-				}
-			}
-		};
-		_pGoogleMap.on_create_contents = function () {
-			var control_elem = this.getElement();
-			if (control_elem) {
-				this._map_elem = new nexacro.Element(control_elem);
-				this._map_elem.setElementSize(this._getClientWidth(), this._getClientHeight());
-			}
-		};
-
-		_pGoogleMap.on_create_contents_command = function () {
-			var control_elem = this.getElement();
-			if (control_elem) {
-				this._map_elem = new nexacro.Element(control_elem);
-				this._map_elem.setElementSize(this._getClientWidth(), this._getClientHeight());
-				this._map_elem.setElementTypeCSSSelector("nexamap");
-
-				return this._map_elem.createCommand();
-			}
-			return "";
-		};
-
-		_pGoogleMap.on_attach_contents_handle = function (win) {
-			if (this._map_elem) {
-				this._map_elem.attachHandle(win);
-			}
-		};
-
-		_pGoogleMap.on_created_contents = function (win) {
-			var map_elem = this._map_elem;
-			if (map_elem) {
-				map_elem.setElementTypeCSSSelector("nexamap");
-				map_elem.create(win);
-
-				this.document = map_elem._document;
-				this.window = map_elem._winodw;
-			}
-		};
-
-		_pGoogleMap.on_destroy_contents = function () {
-			var map_elem = this._map_elem;
-			if (map_elem) {
-				map_elem.destroy();
-				this._map_elem = null;
-			}
-		};
-
-		_pGoogleMap.__onTextchanged = function () {
 		};
 
 		_pGoogleMap.load = function (bUseSensor, nLatitude, nLongitude, constViewMode, nZoomLevel, retry) {
@@ -1965,6 +1746,8 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 				}
 				this.centerlocation.latitude = nlat;
 				this.centerlocation.longitude = nlon;
+				this.latitude = nlat;
+				this.longitude = nlon;
 
 				_pGoogleMap.centerlocation = {
 					latitude : nlat, 
@@ -2068,6 +1851,14 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 				return true;
 			});
 
+			google.maps.event.addListenerOnce(google_map, 'tilesloaded', function () {
+				parentMap.bLoaded = true;
+				parentMap._apply_onload();
+
+				google.maps.event.addListenerOnce(google_map, 'tilesloaded', function () {
+				});
+			});
+
 			google.maps.event.addListener(google_map, 'dragstart', function (e) {
 			});
 
@@ -2084,11 +1875,16 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 			});
 
 			google.maps.event.addListener(google_map, 'center_changed', function (e) {
-				if (parentMap.oncenterchanged && parentMap.oncenterchanged._has_handlers && parentMap.enableevent) {
-					parentMap.centerlocation.latitude = google_map.getCenter().lat();
-					parentMap.centerlocation.longitude = google_map.getCenter().lng();
+				var center_lat = google_map.getCenter().lat();
+				var center_lng = google_map.getCenter().lng();
 
-					var evt = new nexacro.GoogleMapEventInfo(parentMap, "oncenterchanged", parentMap.centerlocation, parentMap.viewmode, parentMap.zoomlevel, parentMap.addresses, parentMap.coordinates);
+				parentMap.centerlocation.latitude = center_lat;
+				parentMap.centerlocation.longitude = center_lng;
+				parentMap.latitude = center_lat;
+				parentMap.longitude = center_lng;
+
+				if (parentMap.oncenterchanged && parentMap.oncenterchanged._has_handlers && parentMap.enableevent) {
+					var evt = new nexacro.GoogleMapEventInfo(parentMap, "oncenterchanged", parentMap.centerlocation, parentMap.coordinates, parentMap.viewmode, parentMap.zoomlevel, parentMap.addresses);
 
 					parentMap.oncenterchanged._fireEvent(this, evt);
 				}
@@ -2097,7 +1893,7 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 
 			google.maps.event.addListener(google_map, 'maptypeid_changed', function (e) {
 				if (parentMap.onviewmodechanged && parentMap.onviewmodechanged._has_handlers && parentMap.enableevent) {
-					var evt = new nexacro.GoogleMapEventInfo(parentMap, "onviewmodechanged", parentMap.centerlocation, parentMap.viewmode, parentMap.zoomlevel, parentMap.addresses, parentMap.coordinates);
+					var evt = new nexacro.GoogleMapEventInfo(parentMap, "onviewmodechanged", parentMap.centerlocation, parentMap.coordinates, parentMap.viewmode, parentMap.zoomlevel, parentMap.addresses);
 
 					parentMap.onviewmodechanged._fireEvent(this, evt);
 				}
@@ -2108,16 +1904,13 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 				if (parentMap.onzoomchanged && parentMap.onzoomchanged._has_handlers && parentMap.enableevent) {
 					parentMap.zoomlevel = google_map.getZoom();
 
-					var evt = new nexacro.GoogleMapEventInfo(parentMap, "onzoomchanged", parentMap.centerlocation, parentMap.viewmode, parentMap.zoomlevel, parentMap.addresses, parentMap.coordinates);
+					var evt = new nexacro.GoogleMapEventInfo(parentMap, "onzoomchanged", parentMap.centerlocation, parentMap.coordinates, parentMap.viewmode, parentMap.zoomlevel, parentMap.addresses);
 
 					parentMap.onzoomchanged._fireEvent(this, evt);
 				}
 				return true;
 			});
 
-			this.bLoaded = true;
-
-			this._apply_onload();
 			return true;
 		};
 
@@ -2624,27 +2417,6 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 			}
 		};
 
-		_pGoogleMap._removeItem = function (itemname) {
-			_items[itemname].setMap(null);
-			var i;
-			if (typeof (_items[itemname].title) != "undefined") {
-				delete _infowindow[itemname];
-				for (i = 0; i < _infowindow.length; i++) {
-					if (_infowindowname[i] == itemname) {
-						_infowindowname.splice(i + 1, i + 1);
-					}
-				}
-			}
-			delete _items[itemname];
-
-			for (i = 0; i < _itemsname.length; i++) {
-				if (_itemsname[i] == itemname) {
-					_itemsname.splice(i + 1, i + 1);
-				}
-			}
-			return true;
-		};
-
 		_pGoogleMap.gmap_ondrag = function (lat, lng) {
 			this.on_fire_ondragstart(this, new nexacro.GoogleMapDragEventInfo("ondrag"));
 		};
@@ -2659,6 +2431,8 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 
 			this.centerlocation.latitude = this._location.latitude;
 			this.centerlocation.longitude = this._location.longitude;
+			this.latitude = this._location.latitude;
+			this.longitude = this._location.longitude;
 		};
 
 		_pGoogleMap.gmap_ondragleave = function (objData) {
@@ -2687,7 +2461,7 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 			this.kindClick = "overlayclick";
 		};
 
-		_pGoogleMap._on_click = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY) {
+		_pGoogleMap._on_click = function (elem, button, alt_key, ctrl_key, shift_key, canvasX, canvasY, screenX, screenY, meta_key) {
 		};
 
 		_pGoogleMap._on_sys_click = function (node, e, bubble) {
@@ -2726,6 +2500,7 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 				return this.onoverlayclick._fireEvent(this, evt);
 			}
 		};
+
 		_pGoogleMap._apply_onload = function () {
 			if (this.enable == false) {
 			}
@@ -2737,7 +2512,7 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 
 		_pGoogleMap.on_fire_onload = function (obj) {
 			if (this.onload && this.onload._has_handlers && this.enableevent) {
-				var evt = new nexacro.GoogleMapEventInfo(obj, "onload", this.centerlocation, this.viewmode, this.zoomlevel, this.addresses, this.coordinates);
+				var evt = new nexacro.GoogleMapEventInfo(obj, "onload", this.centerlocation, this.coordinates, this.viewmode, this.zoomlevel, this.addresses);
 				return this.onload._fireEvent(this, evt);
 			}
 		};
@@ -2758,7 +2533,7 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 
 		_pGoogleMap.on_fire_onrecvsuccess = function (obj, id, addresses, coordinates) {
 			if (this.enableevent) {
-				var evt = new nexacro.GoogleMapEventInfo(obj, id, this.centerlocation, this.viewmode, this.zoomlevel, addresses, this.coordinates);
+				var evt = new nexacro.GoogleMapEventInfo(obj, id, this.centerlocation, this.coordinates, this.viewmode, this.zoomlevel, addresses);
 				return this.onrecvsuccess._fireEvent(this, evt);
 			}
 		};
@@ -2777,80 +2552,216 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 			}
 		};
 
-		_pGoogleMap.on_change_containerRect = function (width, height) {
-			var map_elem = this._map_elem;
-			if (map_elem) {
-				map_elem.setElementSize(width, height);
-			}
-		};
-
 		_pGoogleMap.__onDragEnter = function (obj, e) {
 			console.debug("__ondragEnter");
 		};
 
-		delete _pGoogleMap;
-	}
 
-	if (!nexacro.GoogleMapMarker) {
-		nexacro.GoogleMapMarker = function (name, obj) {
-			this._id = nexacro.Device.makeID();
-			nexacro.Device._userCreatedObj[this._id] = this;
-			this.name = name || "";
-			this._type = 0;
-			this.enableevent = true;
-			this.longitude = 0;
-			this.latitude = 0;
+		_pGoogleMap._getalign = function (h, v) {
+			if (h == "left") {
+				if (v == "top") {
+					return google.maps.ControlPosition.TOP_LEFT;
+				}
+				else if (v == "middle") {
+					return google.maps.ControlPosition.LEFT;
+				}
+				else if (v == "bottom") {
+					return google.maps.ControlPosition.LEFT_BOTTOM;
+				}
+			}
+			else if (h == "center") {
+				if (v == "top") {
+					return google.maps.ControlPosition.TOP;
+				}
+				else if (v == "bottom") {
+					return google.maps.ControlPosition.BOTTOM;
+				}
+			}
+			else if (h == "right") {
+				if (v == "top") {
+					return google.maps.ControlPosition.TOP_LEFT;
+				}
+				else if (v == "middle") {
+					return google.maps.ControlPosition.RIGHT;
+				}
+				else if (v == "bottom") {
+					return google.maps.ControlPosition.RIGHT_BOTTOM;
+				}
+			}
+		};
 
-			this._location = {
-				latitude : 0, 
-				longitude : 0
-			};
+		_pGoogleMap._getMapType = function (v) {
+			var __maptype;
 
-			this.text = "";
-			this.visible = true;
-			this.draggable = false;
-			this.imageurl = "";
+			switch (v) {
+				default:
+				case 0:
+					__maptype = google.maps.MapTypeId.ROADMAP;
+					break;
+				case 1:
+					__maptype = google.maps.MapTypeId.SATELLITE;
+					break;
+				case 2:
+					__maptype = google.maps.MapTypeId.HYBRID;
+					break;
+				case 3:
+					__maptype = google.maps.MapTypeId.TERRAIN;
+					break;
+			}
+			return __maptype;
+		};
 
-			this.style = {
-				_GoogleMapMarkerID : 0, 
-				set_parentID : function (_id) {
-					this._GoogleMapMarkerID = _id;
+		_pGoogleMap.__map = function () {
+			var obj = document.getElementById(this._id);
+			var objDoc = obj.contentWindow || obj.contentDocument;
+			return objDoc;
+		};
+
+		_pGoogleMap._set_option = function () {
+			var _mapType = this._getMapType();
+
+			return {
+				center : new google.maps.LatLng(this.centerlocation.latitude, this.centerlocation.longitude), 
+				mapTypeId : _mapType, 
+				zoom : this.zoomlevel, 
+				disableDefaultUI : true, 
+				mapTypeControl : this.showmode, 
+				mapTypeControlOptions : {
+					style : google.maps.MapTypeControlStyle.DEFAULT, 
+					position : this.modealign
 				}, 
-				align : {
+				scaleControl : this.showmapscale, 
+				scaleControlOptions : {
+					position : this.mapscalealign
+				}, 
+				panControl : this.shownavigator, 
+				panControlOptions : {
+					position : this.navigatoralign
+				}, 
+				zoomControl : this.showzoom, 
+				zoomControlOptions : {
+					position : this.zoomalign, 
+					style : google.maps.ZoomControlStyle.SMALL
+				}
+			};
+		};
+
+		_pGoogleMap.map_starter = function (v) {
+			this._google_map.setOptions(this.setOptions());
+		};
+
+		_pGoogleMap.__onTextchanged = function () {
+		};
+
+		_pGoogleMap._removeItem = function (itemname) {
+			_items[itemname].setMap(null);
+			var i;
+			if (typeof (_items[itemname].title) != "undefined") {
+				delete _infowindow[itemname];
+				for (i = 0; i < _infowindow.length; i++) {
+					if (_infowindowname[i] == itemname) {
+						_infowindowname.splice(i + 1, i + 1);
+					}
+				}
+			}
+			delete _items[itemname];
+
+			for (i = 0; i < _itemsname.length; i++) {
+				if (_itemsname[i] == itemname) {
+					_itemsname.splice(i + 1, i + 1);
+				}
+			}
+			return true;
+		};
+
+		if (!nexacro.GoogleMapMarker) {
+			nexacro.GoogleMapMarker = function (name, obj) {
+				this._id = nexacro.Device.makeID();
+				nexacro.Device._userCreatedObj[this._id] = this;
+				this.name = name || "";
+				this._type = 0;
+				this.enableevent = true;
+				this.longitude = 0;
+				this.latitude = 0;
+
+				this._location = {
+					latitude : 0, 
+					longitude : 0
+				};
+
+				this.text = "";
+				this.visible = true;
+				this.draggable = false;
+				this.imageurl = "";
+
+				this.style = {
 					_GoogleMapMarkerID : 0, 
 					set_parentID : function (_id) {
 						this._GoogleMapMarkerID = _id;
 					}, 
-					halign : "center", 
-					valign : "middle", 
-					set_halign : function (v) {
-						var _v = v.toString().split(" ").join("").toLowerCase();
-						if (_v == "left" || _v == "center" || _v == "right") {
-							this.halign = _v;
-							var __parent = nexacro.Device._userCreatedObj[this._GoogleMapMarkerID];
+					align : {
+						_GoogleMapMarkerID : 0, 
+						set_parentID : function (_id) {
+							this._GoogleMapMarkerID = _id;
+						}, 
+						halign : "center", 
+						valign : "middle", 
+						set_halign : function (v) {
+							var _v = v.toString().split(" ").join("").toLowerCase();
+							if (_v == "left" || _v == "center" || _v == "right") {
+								this.halign = _v;
+								var __parent = nexacro.Device._userCreatedObj[this._GoogleMapMarkerID];
 
-							if (__parent._map != null) {
-								__parent._map.setMarkerOptions(__parent._name, __parent);
+								if (__parent._map != null) {
+									__parent._map.setMarkerOptions(__parent._name, __parent);
+								}
+								return true;
 							}
-							return true;
-						}
-						else {
-							return false;
+							else {
+								return false;
+							}
+						}, 
+						set_valign : function (v) {
+							var _v = v.toString().split(" ").join("").toLowerCase();
+							if (_v == "top" || _v == "middle" || _v == "bottom") {
+								this.valign = _v;
+								var __parent = nexacro.Device._userCreatedObj[this._GoogleMapMarkerID];
+								if (__parent._map != null) {
+									__parent._map.setMarkerOptions(__parent._name, __parent);
+								}
+								return true;
+							}
+							else {
+								return false;
+							}
+						}, 
+						$s : function (name, fnname, val) {
+							var fn = this[fnname];
+							if (fn) {
+								return fn.call(this, val);
+							}
+
+							return (this[name] = val);
 						}
 					}, 
-					set_valign : function (v) {
-						var _v = v.toString().split(" ").join("").toLowerCase();
-						if (_v == "top" || _v == "middle" || _v == "bottom") {
-							this.valign = _v;
-							var __parent = nexacro.Device._userCreatedObj[this._GoogleMapMarkerID];
-							if (__parent._map != null) {
-								__parent._map.setMarkerOptions(__parent._name, __parent);
-							}
-							return true;
-						}
-						else {
+					image : "", 
+
+					set_align : function (v) {
+						var v_arr = v.split(" ");
+						var ret = true;
+						if (v_arr.length != 2) {
 							return false;
 						}
+						ret = this.align.set_halign(v_arr[0]);
+						if (!ret) {
+							return ret;
+						}
+						ret = this.align.set_valign(v_arr[1]);
+						var __parent = nexacro.Device._userCreatedObj[this._GoogleMapMarkerID];
+						if (__parent._map != null) {
+							__parent._map.setMarkerOptions(__parent._name, __parent);
+						}
+						return ret;
 					}, 
 					$s : function (name, fnname, val) {
 						var fn = this[fnname];
@@ -2860,448 +2771,407 @@ else if ((nexacro.Device && nexacro._OS != "Windows") || nexacro._Browser != "Ru
 
 						return (this[name] = val);
 					}
-				}, 
-				image : "", 
+				};
 
-				set_align : function (v) {
-					var v_arr = v.split(" ");
-					var ret = true;
-					if (v_arr.length != 2) {
+				this._map = null;
+				this._name = null;
+
+				this.style.set_parentID(this._id);
+				this.style.align.set_parentID(this._id);
+			};
+			var _pGoogleMapMarker = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapMarker);
+			nexacro.GoogleMapMarker.prototype = _pGoogleMapMarker;
+			_pGoogleMapMarker._type_name = "GoogleMapMarker";
+
+			_pGoogleMapMarker.set_longitude = function (v) {
+				try {
+					this.longitude = Number(v.toString());
+				}
+				catch (e) {
+					return false;
+				}
+
+				if (this.longitude != this.longitude) {
+					return false;
+				}
+
+				this._location.longitude = this.longitude;
+
+				if (this._map != null) {
+					this._map.setMarkerOptions(this._name, this);
+				}
+
+				return true;
+			};
+
+			_pGoogleMapMarker.set_latitude = function (v) {
+				try {
+					this.latitude = Number(v.toString());
+				}
+				catch (e) {
+					return false;
+				}
+
+				if (this.latitude != this.latitude) {
+					return false;
+				}
+
+				this._location.latitude = this.latitude;
+
+				if (this._map != null) {
+					this._map.setMarkerOptions(this._name, this);
+				}
+
+				return true;
+			};
+
+			_pGoogleMapMarker.set_text = function (v) {
+				this.text = v;
+				if (this._map != null) {
+					this._map.setMarkerOptions(this._name, this);
+				}
+				return true;
+			};
+
+			_pGoogleMapMarker.set_draggable = function (v) {
+				if (v == null) {
+					return false;
+				}
+				else if (v) {
+					if (v == true || (typeof (v) == "string" && v == "true")) {
+						this.draggable = true;
+					}
+					else if (v == false || (typeof (v) == "string" && v == "false")) {
+						this.draggable = false;
+					}
+				}
+				else {
+					return false;
+				}
+			};
+
+			_pGoogleMapMarker.set_visible = function (v) {
+				if (v == true || (typeof (v) == "string" && v == "true")) {
+					this.visible = true;
+				}
+				else if (v == false || (typeof (v) == "string" && v == "false")) {
+					this.visible = false;
+				}
+				else {
+					return false;
+				}
+				if (this._map != null) {
+					this._map.setMarkerOptions(this._name, this);
+				}
+				return true;
+			};
+
+			_pGoogleMapMarker.set_imageurl = function (v) {
+				this._type = 1;
+				this.imageurl = v;
+
+				if (this._map != null) {
+					this._map.setMarkerOptions(this._name, this);
+				}
+
+				return true;
+			};
+
+			_pGoogleMapMarker.set_style = function (v) {
+				var v_arr = v.split(";");
+				var i;
+				var _v_arr;
+				var ret = true;
+				for (i = 0; i < v_arr.length; i++) {
+					_v_arr = v_arr[i].split(":");
+					if (_v_arr.length != 2) {
 						return false;
 					}
-					ret = this.align.set_halign(v_arr[0]);
+					else if (_v_arr[0].split(" ").join("").toLowerCase() == "align") {
+						ret = this.style.set_align(_v_arr[1]);
+					}
+					else {
+						ret = false;
+					}
+
 					if (!ret) {
 						return ret;
 					}
-					ret = this.align.set_valign(v_arr[1]);
-					var __parent = nexacro.Device._userCreatedObj[this._GoogleMapMarkerID];
-					if (__parent._map != null) {
-						__parent._map.setMarkerOptions(__parent._name, __parent);
-					}
-					return ret;
-				}, 
-				$s : function (name, fnname, val) {
-					var fn = this[fnname];
-					if (fn) {
-						return fn.call(this, val);
-					}
-
-					return (this[name] = val);
 				}
+				if (this._map != null) {
+					this._map.setMarkerOptions(this._name, this);
+				}
+				return ret;
 			};
 
-			this._map = null;
-			this._name = null;
+			nexacro._addRegisterClass("GoogleMapMarker", "nexacro.GoogleMapMarker");
+		}
 
-			this.style.set_parentID(this._id);
-			this.style.align.set_parentID(this._id);
-		};
-		var _pGoogleMapMarker = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapMarker);
-		nexacro.GoogleMapMarker.prototype = _pGoogleMapMarker;
-		_pGoogleMapMarker._type_name = "GoogleMapMarker";
+		if (!nexacro.GoogleMapPolyline) {
+			nexacro.GoogleMapPolyline = function (name, obj) {
+				this._id = nexacro.Device.makeID();
+				nexacro.Device._userCreatedObj[this._id] = this;
+				this.name = name || "";
 
-		_pGoogleMapMarker.set_longitude = function (v) {
-			try {
-				this.longitude = Number(v.toString());
-			}
-			catch (e) {
-				return false;
-			}
-
-			if (this.longitude != this.longitude) {
-				return false;
-			}
-
-			this._location.longitude = this.longitude;
-
-			if (this._map != null) {
-				this._map.setMarkerOptions(this._name, this);
-			}
-
-			return true;
-		};
-
-		_pGoogleMapMarker.set_latitude = function (v) {
-			try {
-				this.latitude = Number(v.toString());
-			}
-			catch (e) {
-				return false;
-			}
-
-			if (this.latitude != this.latitude) {
-				return false;
-			}
-
-			this._location.latitude = this.latitude;
-
-			if (this._map != null) {
-				this._map.setMarkerOptions(this._name, this);
-			}
-
-			return true;
-		};
-
-		_pGoogleMapMarker.set_text = function (v) {
-			this.text = v;
-			if (this._map != null) {
-				this._map.setMarkerOptions(this._name, this);
-			}
-			return true;
-		};
-
-		_pGoogleMapMarker.set_draggable = function (v) {
-			if (v == null) {
-				return false;
-			}
-			else if (v) {
-				if (v == true || (typeof (v) == "string" && v == "true")) {
-					this.draggable = true;
-				}
-				else if (v == false || (typeof (v) == "string" && v == "false")) {
-					this.draggable = false;
-				}
-			}
-			else {
-				return false;
-			}
-		};
-
-		_pGoogleMapMarker.set_visible = function (v) {
-			if (v == true || (typeof (v) == "string" && v == "true")) {
+				this._type = 2;
+				this.locationdata = "";
 				this.visible = true;
-			}
-			else if (v == false || (typeof (v) == "string" && v == "false")) {
-				this.visible = false;
-			}
-			else {
-				return false;
-			}
-			if (this._map != null) {
-				this._map.setMarkerOptions(this._name, this);
-			}
-			return true;
-		};
+				this.linewidth = "";
+				this.linecolor = "";
+				this.enableevent = true;
 
-		_pGoogleMapMarker.set_imageurl = function (v) {
-			this._type = 1;
-			this.imageurl = v;
+				this._map = null;
+				this._name = null;
+			};
 
-			if (this._map != null) {
-				this._map.setMarkerOptions(this._name, this);
-			}
+			var _pGoogleMapPolyline = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapPolyline);
+			nexacro.GoogleMapPolyline.prototype = _pGoogleMapPolyline;
+			_pGoogleMapPolyline._type_name = "GoogleMapPolyline";
 
-			return true;
-		};
+			_pGoogleMapPolyline.set_locationdata = function (v) {
+				var _lat_lng_arr;
 
-		_pGoogleMapMarker.set_style = function (v) {
-			var v_arr = v.split(";");
-			var i;
-			var _v_arr;
-			var ret = true;
-			for (i = 0; i < v_arr.length; i++) {
-				_v_arr = v_arr[i].split(":");
-				if (_v_arr.length != 2) {
+				_lat_lng_arr = v.toString().split("]");
+
+				if (_lat_lng_arr.length < 2) {
 					return false;
 				}
-				else if (_v_arr[0].split(" ").join("").toLowerCase() == "align") {
-					ret = this.style.set_align(_v_arr[1]);
+
+				this.locationdata = v;
+
+				if (this._map != null) {
+					this._map.setPolylineOptions(this._name, this);
+				}
+				return true;
+			};
+
+			_pGoogleMapPolyline.set_visible = function (v) {
+				if (v == true || (typeof (v) == "string" && v == "true")) {
+					this.visible = true;
+				}
+				else if (v == false || (typeof (v) == "string" && v == "false")) {
+					this.visible = false;
 				}
 				else {
-					ret = false;
+					return false;
 				}
 
-				if (!ret) {
-					return ret;
+				if (this._map != null) {
+					this._map.setPolylineOptions(this._name, this);
 				}
-			}
-			if (this._map != null) {
-				this._map.setMarkerOptions(this._name, this);
-			}
-			return ret;
-		};
+				return true;
+			};
 
-		delete _pGoogleMapMarker;
+			_pGoogleMapPolyline.set_linewidth = function (v) {
+				var nWidth = 0;
+				try {
+					nWidth = Number(v.toString());
+				}
+				catch (e) {
+					return false;
+				}
 
-		nexacro._addRegisterClass("GoogleMapMarker", "nexacro.GoogleMapMarker");
-	}
+				if (nWidth != nWidth) {
+					return false;
+				}
+				this.linewidth = nWidth;
 
+				if (this._map != null) {
+					this._map.setPolylineOptions(this._name, this);
+				}
 
-	if (!nexacro.GoogleMapPolyline) {
-		nexacro.GoogleMapPolyline = function (name, obj) {
-			this._id = nexacro.Device.makeID();
-			nexacro.Device._userCreatedObj[this._id] = this;
-			this.name = name || "";
+				return true;
+			};
 
-			this._type = 2;
-			this.locationdata = "";
-			this.visible = true;
-			this.linewidth = "";
-			this.linecolor = "";
-			this.enableevent = true;
+			_pGoogleMapPolyline.set_linecolor = function (v) {
+				this.linecolor = v;
+				return true;
+			};
+		}
 
-			this._map = null;
-			this._name = null;
-		};
+		if (!nexacro.GoogleMapPolygon) {
+			nexacro.GoogleMapPolygon = function (name, obj) {
+				this._id = nexacro.Device.makeID();
+				nexacro.Device._userCreatedObj[this._id] = this;
+				this.name = name || "";
 
-		var _pGoogleMapPolyline = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapPolyline);
-		nexacro.GoogleMapPolyline.prototype = _pGoogleMapPolyline;
-		_pGoogleMapPolyline._type_name = "GoogleMapPolyline";
-
-		_pGoogleMapPolyline.set_locationdata = function (v) {
-			var _lat_lng_arr;
-
-			_lat_lng_arr = v.toString().split("]");
-
-			if (_lat_lng_arr.length < 2) {
-				return false;
-			}
-
-			this.locationdata = v;
-
-			if (this._map != null) {
-				this._map.setPolylineOptions(this._name, this);
-			}
-			return true;
-		};
-
-		_pGoogleMapPolyline.set_visible = function (v) {
-			if (v == true || (typeof (v) == "string" && v == "true")) {
+				this._type = 3;
+				this.locationdata = "";
 				this.visible = true;
-			}
-			else if (v == false || (typeof (v) == "string" && v == "false")) {
-				this.visible = false;
-			}
-			else {
-				return false;
-			}
+				this.linewidth = "";
+				this.linecolor = "";
+				this.fillbrushcolor = "";
+				this.enableevent = true;
 
-			if (this._map != null) {
-				this._map.setPolylineOptions(this._name, this);
-			}
-			return true;
-		};
+				this._map = null;
+				this._name = null;
+			};
 
-		_pGoogleMapPolyline.set_linewidth = function (v) {
-			var nWidth = 0;
-			try {
-				nWidth = Number(v.toString());
-			}
-			catch (e) {
-				return false;
-			}
+			var _pGoogleMapPolygon = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapPolygon);
+			nexacro.GoogleMapPolygon.prototype = _pGoogleMapPolygon;
+			_pGoogleMapPolygon._type_name = "GoogleMapPolygon";
 
-			if (nWidth != nWidth) {
-				return false;
-			}
-			this.linewidth = nWidth;
+			_pGoogleMapPolygon.set_locationdata = function (v) {
+				var _lat_lng_arr;
 
-			if (this._map != null) {
-				this._map.setPolylineOptions(this._name, this);
-			}
+				_lat_lng_arr = v.toString().split("]");
 
-			return true;
-		};
+				if (_lat_lng_arr.length < 2) {
+					return false;
+				}
 
-		_pGoogleMapPolyline.set_linecolor = function (v) {
-			this.linecolor = v;
-			return true;
-		};
+				this.locationdata = v;
+				if (this._map != null) {
+					this._map.setPolygonOptions(this._name, this);
+				}
+				return true;
+			};
 
-		delete _pGoogleMapPolyline;
-	}
+			_pGoogleMapPolygon.set_visible = function (v) {
+				if (v == true || (typeof (v) == "string" && v == "true")) {
+					this.visible = true;
+				}
+				else if (v == false || (typeof (v) == "string" && v == "false")) {
+					this.visible = false;
+				}
+				else {
+					return false;
+				}
 
+				if (this._map != null) {
+					this._map.setPolygonOptions(this._name, this);
+				}
+				return true;
+			};
 
-	if (!nexacro.GoogleMapPolygon) {
-		nexacro.GoogleMapPolygon = function (name, obj) {
-			this._id = nexacro.Device.makeID();
-			nexacro.Device._userCreatedObj[this._id] = this;
-			this.name = name || "";
+			_pGoogleMapPolygon.set_linewidth = function (v) {
+				var nWidth = 0;
+				try {
+					nWidth = Number(v.toString());
+				}
+				catch (e) {
+					return false;
+				}
 
-			this._type = 3;
-			this.locationdata = "";
-			this.visible = true;
-			this.linewidth = "";
-			this.linecolor = "";
-			this.fillbrushcolor = "";
-			this.enableevent = true;
+				if (nWidth != nWidth) {
+					return false;
+				}
+				this.linewidth = nWidth;
 
-			this._map = null;
-			this._name = null;
-		};
+				if (this._map != null) {
+					this._map.setPolygonOptions(this._name, this);
+				}
 
-		var _pGoogleMapPolygon = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapPolygon);
-		nexacro.GoogleMapPolygon.prototype = _pGoogleMapPolygon;
-		_pGoogleMapPolygon._type_name = "GoogleMapPolygon";
+				return true;
+			};
 
-		_pGoogleMapPolygon.set_locationdata = function (v) {
-			var _lat_lng_arr;
+			_pGoogleMapPolygon.set_linecolor = function (v) {
+				this.linecolor = v;
+				return true;
+			};
 
-			_lat_lng_arr = v.toString().split("]");
+			_pGoogleMapPolygon.set_fillbrushcolor = function (v) {
+				this.fillbrushcolor = v;
+				return true;
+			};
+		}
 
-			if (_lat_lng_arr.length < 2) {
-				return false;
-			}
-
-			this.locationdata = v;
-			if (this._map != null) {
-				this._map.setPolygonOptions(this._name, this);
-			}
-			return true;
-		};
-
-		_pGoogleMapPolygon.set_visible = function (v) {
-			if (v == true || (typeof (v) == "string" && v == "true")) {
+		if (!nexacro.GoogleMapCircle) {
+			nexacro.GoogleMapCircle = function (name, obj) {
+				this._id = nexacro.Device.makeID();
+				nexacro.Device._userCreatedObj[this._id] = this;
+				this.name = name || "";
+				this._type = 4;
+				this.longitude = 0;
+				this.latitude = 0;
+				this.enableevent = true;
 				this.visible = true;
-			}
-			else if (v == false || (typeof (v) == "string" && v == "false")) {
-				this.visible = false;
-			}
-			else {
-				return false;
-			}
 
-			if (this._map != null) {
-				this._map.setPolygonOptions(this._name, this);
-			}
-			return true;
-		};
-
-		_pGoogleMapPolygon.set_linewidth = function (v) {
-			var nWidth = 0;
-			try {
-				nWidth = Number(v.toString());
-			}
-			catch (e) {
-				return false;
-			}
-
-			if (nWidth != nWidth) {
-				return false;
-			}
-			this.linewidth = nWidth;
-
-			if (this._map != null) {
-				this._map.setPolygonOptions(this._name, this);
-			}
-
-			return true;
-		};
-
-		_pGoogleMapPolygon.set_linecolor = function (v) {
-			this.linecolor = v;
-			return true;
-		};
-
-		_pGoogleMapPolygon.set_fillbrushcolor = function (v) {
-			this.fillbrushcolor = v;
-			return true;
-		};
-
-		delete _pGoogleMapPolygon;
-	}
-
-	if (!nexacro.GoogleMapCircle) {
-		nexacro.GoogleMapCircle = function (name, obj) {
-			this._id = nexacro.Device.makeID();
-			nexacro.Device._userCreatedObj[this._id] = this;
-			this.name = name || "";
-			this._type = 4;
-			this.longitude = 0;
-			this.latitude = 0;
-			this.enableevent = true;
-			this.visible = true;
-
-			this._map = null;
-			this._name = null;
-			this.radius = 100;
-		};
-		var _pGoogleMapCircle = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapCircle);
-		nexacro.GoogleMapCircle.prototype = _pGoogleMapCircle;
-		_pGoogleMapCircle._type_name = "GoogleCircle";
-
-		_pGoogleMapCircle.set_longitude = function (v) {
-			try {
-				this.longitude = Number(v.toString());
-			}
-			catch (e) {
-				return false;
-			}
-
-			if (this.longitude != this.longitude) {
-				return false;
-			}
-
-			if (this._map != null) {
-				this._map.setCircleOptions(this._name, this);
-			}
-			return true;
-		};
-
-		_pGoogleMapCircle.set_latitude = function (v) {
-			try {
-				this.latitude = Number(v.toString());
-			}
-			catch (e) {
-				return false;
-			}
-
-			if (this.latitude != this.latitude) {
-				return false;
-			}
-
-			if (this._map != null) {
-				this._map.setCircleOptions(this._name, this);
-			}
-			return true;
-		};
-
-		_pGoogleMapCircle.set_visible = function (v) {
-			if (v == true || (typeof (v) == "string" && v == "true")) {
-				this.visible = true;
-			}
-			else if (v == false || (typeof (v) == "string" && v == "false")) {
-				this.visible = false;
-			}
-			else {
-				return false;
-			}
-
-			if (this._map != null) {
-				this._map.setCircleOptions(this._name, this);
-			}
-			return true;
-		};
-
-		_pGoogleMapCircle.set_radius = function (v) {
-			if (v == null) {
+				this._map = null;
+				this._name = null;
 				this.radius = 100;
-			}
-			else {
-				this.radius = Number(v.toString());
-			}
-		};
+			};
+			var _pGoogleMapCircle = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapCircle);
+			nexacro.GoogleMapCircle.prototype = _pGoogleMapCircle;
+			_pGoogleMapCircle._type_name = "GoogleCircle";
 
-		delete _pGoogleMapCircle;
+			_pGoogleMapCircle.set_longitude = function (v) {
+				try {
+					this.longitude = Number(v.toString());
+				}
+				catch (e) {
+					return false;
+				}
+
+				if (this.longitude != this.longitude) {
+					return false;
+				}
+
+				if (this._map != null) {
+					this._map.setCircleOptions(this._name, this);
+				}
+				return true;
+			};
+
+			_pGoogleMapCircle.set_latitude = function (v) {
+				try {
+					this.latitude = Number(v.toString());
+				}
+				catch (e) {
+					return false;
+				}
+
+				if (this.latitude != this.latitude) {
+					return false;
+				}
+
+				if (this._map != null) {
+					this._map.setCircleOptions(this._name, this);
+				}
+				return true;
+			};
+
+			_pGoogleMapCircle.set_visible = function (v) {
+				if (v == true || (typeof (v) == "string" && v == "true")) {
+					this.visible = true;
+				}
+				else if (v == false || (typeof (v) == "string" && v == "false")) {
+					this.visible = false;
+				}
+				else {
+					return false;
+				}
+
+				if (this._map != null) {
+					this._map.setCircleOptions(this._name, this);
+				}
+				return true;
+			};
+
+			_pGoogleMapCircle.set_radius = function (v) {
+				if (v == null) {
+					this.radius = 100;
+				}
+				else {
+					this.radius = Number(v.toString());
+				}
+			};
+		}
 	}
-}
-else {
-	if (!nexacro.GoogleMap) {
+	else {
 		nexacro.GoogleMap = function (id, left, top, width, height, right, bottom, parent) {
 			nexacro.Component.call(this, id, left, top, width, height, right, bottom, parent);
-
-			this.on_fire_onclick = function () {
-			};
 		};
+
 		var _pGoogleMap = nexacro._createPrototype(nexacro.Component, nexacro.GoogleMap);
 		nexacro.GoogleMap.prototype = _pGoogleMap;
-
-		_pGoogleMap._type = "GoogleMap";
 		_pGoogleMap._type_name = "GoogleMap";
+
 
 		_pGoogleMap.showzoom = false;
 		_pGoogleMap.language = undefined;
 		_pGoogleMap.region = undefined;
+
 
 		_pGoogleMap.set_viewmode = function (v) {
 		};
@@ -3355,94 +3225,92 @@ else {
 		};
 		_pGoogleMap.removeItem = function (strItemID) {
 		};
+
+		_pGoogleMap.on_fire_onclick = function () {
+		};
+
+
 		_pGoogleMap._removeItem = function (elem, itemname) {
 		};
 
-		delete _pGoogleMap;
+		if (!nexacro.GoogleMapMarker) {
+			nexacro.GoogleMapMarker = function (name, obj) {
+			};
+
+			var _pGoogleMapMarker = nexacro.GoogleMapMarker.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapMarker);
+			_pGoogleMapMarker._type_name = "GoogleMapMarker";
+
+			_pGoogleMapMarker.set_latitude = function (v) {
+			};
+			_pGoogleMapMarker.set_longitude = function (v) {
+			};
+			_pGoogleMapMarker.set_text = function (v) {
+			};
+			_pGoogleMapMarker.set_draggable = function (v) {
+			};
+			_pGoogleMapMarker.set_visible = function (v) {
+			};
+			_pGoogleMapMarker.set_style = function (v) {
+			};
+		}
+
+		if (!nexacro.GoogleMapPolyline) {
+			nexacro.GoogleMapPolyline = function (name, obj) {
+			};
+
+			var _pGoogleMapPolyline = nexacro.GoogleMapPolyline.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapPolyline);
+			_pGoogleMapPolyline._type_name = "GoogleMapPolyline";
+
+			_pGoogleMapPolyline.set_locationdata = function (v) {
+			};
+			_pGoogleMapPolyline.set_linewidth = function (v) {
+			};
+			_pGoogleMapPolyline.set_linecolor = function (v) {
+			};
+			_pGoogleMapPolyline.set_visible = function (v) {
+			};
+		}
+
+		if (!nexacro.GoogleMapPolygon) {
+			nexacro.GoogleMapPolygon = function (name, obj) {
+			};
+
+			var _pGoogleMapPolygon = nexacro.GoogleMapPolygon.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapPolygon);
+			_pGoogleMapPolygon._type_name = "GoogleMapPolygon";
+
+			_pGoogleMapPolygon.set_locationdata = function (v) {
+			};
+			_pGoogleMapPolygon.set_linewidth = function (v) {
+			};
+			_pGoogleMapPolygon.set_linecolor = function (v) {
+			};
+			_pGoogleMapPolygon.set_fillbrushcolor = function (v) {
+			};
+			_pGoogleMapPolygon.set_visible = function (v) {
+			};
+		}
+
+		if (!nexacro.GoogleMapCircle) {
+			nexacro.GoogleMapCircle = function (name, obj) {
+			};
+
+			var _pGoogleMapCircle = nexacro.GoogleMapCircle.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapCircle);
+			_pGoogleMapCircle._type_name = "GoogleMapCircle";
+
+			_pGoogleMapCircle.set_latitude = function (v) {
+			};
+			_pGoogleMapCircle.set_longitude = function (v) {
+			};
+			_pGoogleMapCircle.set_radius = function (v) {
+			};
+			_pGoogleMapCircle.set_visible = function (v) {
+			};
+		}
 	}
 
-
-	if (!nexacro.GoogleMapMarker) {
-		nexacro.GoogleMapMarker = function (name, obj) {
-		};
-
-		var _pGoogleMapMarker = nexacro.GoogleMapMarker.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapMarker);
-		_pGoogleMapMarker._type_name = "GoogleMapMarker";
-
-		_pGoogleMapMarker.set_latitude = function (v) {
-		};
-		_pGoogleMapMarker.set_longitude = function (v) {
-		};
-		_pGoogleMapMarker.set_text = function (v) {
-		};
-		_pGoogleMapMarker.set_draggable = function (v) {
-		};
-		_pGoogleMapMarker.set_visible = function (v) {
-		};
-		_pGoogleMapMarker.set_style = function (v) {
-		};
-
-		delete _pGoogleMapMarker;
-	}
-
-
-	if (!nexacro.GoogleMapPolyline) {
-		nexacro.GoogleMapPolyline = function (name, obj) {
-		};
-
-		var _pGoogleMapPolyline = nexacro.GoogleMapPolyline.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapPolyline);
-		_pGoogleMapPolyline._type_name = "GoogleMapPolyline";
-
-		_pGoogleMapPolyline.set_locationdata = function (v) {
-		};
-		_pGoogleMapPolyline.set_linewidth = function (v) {
-		};
-		_pGoogleMapPolyline.set_linecolor = function (v) {
-		};
-		_pGoogleMapPolyline.set_visible = function (v) {
-		};
-
-		delete _pGoogleMapPolyline;
-	}
-
-	if (!nexacro.GoogleMapPolygon) {
-		nexacro.GoogleMapPolygon = function (name, obj) {
-		};
-
-		var _pGoogleMapPolygon = nexacro.GoogleMapPolygon.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapPolygon);
-		_pGoogleMapPolygon._type_name = "GoogleMapPolygon";
-
-		_pGoogleMapPolygon.set_locationdata = function (v) {
-		};
-		_pGoogleMapPolygon.set_linewidth = function (v) {
-		};
-		_pGoogleMapPolygon.set_linecolor = function (v) {
-		};
-		_pGoogleMapPolygon.set_fillbrushcolor = function (v) {
-		};
-		_pGoogleMapPolygon.set_visible = function (v) {
-		};
-
-		delete _pGoogleMapPolygon;
-	}
-
-
-	if (!nexacro.GoogleMapCircle) {
-		nexacro.GoogleMapCircle = function (name, obj) {
-		};
-
-		var _pGoogleMapCircle = nexacro.GoogleMapCircle.prototype = nexacro._createPrototype(nexacro._EventSinkObject, nexacro.GoogleMapCircle);
-		_pGoogleMapCircle._type_name = "GoogleMapCircle";
-
-		_pGoogleMapCircle.set_latitude = function (v) {
-		};
-		_pGoogleMapCircle.set_longitude = function (v) {
-		};
-		_pGoogleMapCircle.set_radius = function (v) {
-		};
-		_pGoogleMapCircle.set_visible = function (v) {
-		};
-
-		delete _pGoogleMapCircle;
-	}
+	delete _pGoogleMap;
+	delete _pGoogleMapMarker;
+	delete _pGoogleMapPolyline;
+	delete _pGoogleMapPolygon;
+	delete _pGoogleMapCircle;
 }

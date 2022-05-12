@@ -1268,9 +1268,12 @@ if (!nexacro._BindData) {
 					for (i = 0; i < infos_len; i++) {
 						info = infos[i];
 						if (info) {
-							{
-
+							if (info.bindid) {
 								info.values = this._fetchBindDataSet(info.colidx, rowindex);
+								continue;
+							}
+							if (info.exprcx) {
+								info.values = this._fetchExprDataSet(info.exprix, rowindex);
 								continue;
 							}
 						}
@@ -1536,7 +1539,7 @@ if (!nexacro._Formats) {
 
 				if (!nexacro._isNull(text)) {
 					if (nexacro._isString(text)) {
-						switch (text.substr(0, 5)) {
+						switch (text.substr(0, 5).toLowerCase()) {
 							case "bind:":
 								this._addBind(bandsq, bandid, basename, name, text.substr(5));
 								this._arrBind(item);
@@ -2316,39 +2319,6 @@ if (!nexacro._Formats) {
 
 
 	_pFormatItemPos._addSett = function (item, name, value) {
-		switch (name) {
-			case "left":
-				if (item["right"] !== undefined && item["width"] !== undefined) {
-					item["right"] = undefined;
-				}
-				break;
-			case "right":
-				if (item["left"] !== undefined && item["width"] !== undefined) {
-					item["width"] = undefined;
-				}
-				break;
-			case "width":
-				if (item["left"] !== undefined && item["right"] !== undefined) {
-					item["right"] = undefined;
-				}
-				break;
-			case "top":
-				if (item["bottom"] !== undefined && item["height"] !== undefined) {
-					item["bottom"] = undefined;
-				}
-				break;
-			case "bottom":
-				if (item["top"] !== undefined && item["height"] !== undefined) {
-					item["height"] = undefined;
-				}
-				break;
-			case "height":
-				if (item["top"] !== undefined && item["bottom"] !== undefined) {
-					item["bottom"] = undefined;
-				}
-				break;
-		}
-
 		item[name] = value;
 		item._setts[name] = item._construc.prototype["set_" + name];
 	};
@@ -2363,36 +2333,36 @@ if (!nexacro._Formats) {
 			var _height = item["height"];
 
 			if (_left === "" && (_right !== "" && _width !== "")) {
-				_left = undefined;
+				_left = item["left"] = undefined;
 			}
 			if (_right === "" && (_left !== "" && _width !== "")) {
-				_right = undefined;
+				_right = item["right"] = undefined;
 			}
 			if (_width === "" && (_left !== "" && _right !== "")) {
-				_width = undefined;
+				_width = item["width"] = undefined;
 			}
 			if (_top === "" && (_bottom !== "" && _height !== "")) {
-				_top = undefined;
+				_top = item["top"] = undefined;
 			}
 			if (_bottom === "" && (_top !== "" && _height !== "")) {
-				_bottom = undefined;
+				_bottom = item["bottom"] == undefined;
 			}
 			if (_height === "" && (_top !== "" && _bottom !== "")) {
-				_height = undefined;
+				_height = item["height"] = undefined;
 			}
 
 			if (_left === undefined && !(_right !== undefined && _width !== undefined)) {
-				_left = 0;
+				_left = item["left"] = 0;
 			}
 			if (_top === undefined && !(_bottom !== undefined && _height !== undefined)) {
-				_top = 0;
+				_top = item["top"] = 0;
 			}
 
 			if (_left !== undefined && (_right !== undefined && _width !== undefined)) {
-				_right = undefined;
+				_right = item["right"] = undefined;
 			}
 			if (_top !== undefined && (_bottom !== undefined && _height !== undefined)) {
-				_bottom = undefined;
+				_bottom = item["bottom"] = undefined;
 			}
 
 			item._pos = [_left, _top, _width, _height, _right, _bottom];
@@ -2748,7 +2718,7 @@ if (!nexacro._Formats) {
 
 							item._addBand(bandsq, bandid, bandElem, this);
 
-							childs = bandElem.childNodes;
+							childs = bandElem.getElementsByTagName("Cell");
 							if (childs) {
 								for (j = 0, m = childs.length; j < m; j++) {
 									childElem = childs[j];
@@ -2774,7 +2744,7 @@ if (!nexacro._Formats) {
 
 							item._addBand(bandsq, bandid, bandElem, this);
 
-							childs = bandElem.childNodes;
+							childs = bandElem.getElementsByTagName("Cell");
 							if (childs) {
 								for (j = 0, m = childs.length; j < m; j++) {
 									childElem = childs[j];
@@ -4698,7 +4668,7 @@ if (!nexacro._PanelSlot) {
 					var p = pos[c];
 
 					if (p != 0 && -1 < p && p < 1) {
-						arr[c] = Math.floor(p * 100 * (c % 2 ? parentheight : parentwidth));
+						arr[c] = Math.floor(p *  100 *  (c % 2 ? parentheight : parentwidth));
 					}
 					else {
 						arr[c] = p;
@@ -5362,10 +5332,10 @@ if (!nexacro._Panel) {
 		this._setPanelFixedSlotCountTail(tail);
 	};
 	_pPanel._setPanelFixedSlotCountLead = function (lead) {
-		return this._panel_fixslead = Math.min(lead, lead * this._panel_fixsband[0], this._panel_fixsband[1] ? lead : this._panel_fixsband[0]);
+		return this._panel_fixslead = Math.min(lead, lead *  this._panel_fixsband[0], this._panel_fixsband[1] ? lead : this._panel_fixsband[0]);
 	};
 	_pPanel._setPanelFixedSlotCountTail = function (tail) {
-		return this._panel_fixstail = Math.min(tail, tail * this._panel_fixsband[2], this._panel_fixsband[1] ? tail : this._panel_fixsband[2]);
+		return this._panel_fixstail = Math.min(tail, tail *  this._panel_fixsband[2], this._panel_fixsband[1] ? tail : this._panel_fixsband[2]);
 	};
 	_pPanel._getPanelFixedSlotCountLead = function () {
 		return this._panel_fixslead;
@@ -5507,7 +5477,7 @@ if (!nexacro._Panel) {
 	};
 	_pPanel._setPanelEachSize = function (index, slots, count, width, height) {
 		var size = this._panel_eachsize;
-		var curr = index * 4;
+		var curr = index *  4;
 
 		if (curr < (size.length - 4)) {
 			size[curr++] = slots;
@@ -5517,7 +5487,7 @@ if (!nexacro._Panel) {
 		}
 	};
 	_pPanel._getPanelEachSize = function (index) {
-		var curr = index * 4;
+		var curr = index *  4;
 
 		return [this._panel_eachsize[curr], this._panel_eachsize[curr + 1], this._panel_eachsize[curr + 2], this._panel_eachsize[curr + 3]];
 	};
@@ -5525,40 +5495,40 @@ if (!nexacro._Panel) {
 		return this._panel_eachsize.length / 4;
 	};
 	_pPanel._getPanelEachSizeSlots = function (index) {
-		return index >= 0 ? this._panel_eachsize[index * 4] : undefined;
+		return index >= 0 ? this._panel_eachsize[index *  4] : undefined;
 	};
 	_pPanel._getPanelEachSizeCount = function (index) {
-		return index >= 0 ? this._panel_eachsize[index * 4 + 1] : undefined;
+		return index >= 0 ? this._panel_eachsize[index *  4 + 1] : undefined;
 	};
 	_pPanel._getPanelEachSizeWidth = function (index) {
-		return index >= 0 ? this._panel_eachsize[index * 4 + 2] : undefined;
+		return index >= 0 ? this._panel_eachsize[index *  4 + 2] : undefined;
 	};
 	_pPanel._getPanelEachSizeHeight = function (index) {
-		return index >= 0 ? this._panel_eachsize[index * 4 + 3] : undefined;
+		return index >= 0 ? this._panel_eachsize[index *  4 + 3] : undefined;
 	};
 	_pPanel._setPanelEachSizeSlots = function (index, slots) {
-		return index >= 0 ? this._panel_eachsize[index * 4] = slots : undefined;
+		return index >= 0 ? this._panel_eachsize[index *  4] = slots : undefined;
 	};
 	_pPanel._setPanelEachSizeCount = function (index, count) {
-		return index >= 0 ? this._panel_eachsize[index * 4 + 1] = count : undefined;
+		return index >= 0 ? this._panel_eachsize[index *  4 + 1] = count : undefined;
 	};
 	_pPanel._setPanelEachSizeWidth = function (index, width) {
-		return index >= 0 ? this._panel_eachsize[index * 4 + 2] = width : undefined;
+		return index >= 0 ? this._panel_eachsize[index *  4 + 2] = width : undefined;
 	};
 	_pPanel._setPanelEachSizeHeight = function (index, height) {
-		return index >= 0 ? this._panel_eachsize[index * 4 + 3] = height : undefined;
+		return index >= 0 ? this._panel_eachsize[index *  4 + 3] = height : undefined;
 	};
 	_pPanel._accPanelEachSizeSlots = function (index, acc) {
-		return (index >= 0 && this._panel_eachsize[index * 4] !== undefined) ? this._panel_eachsize[index * 4] += acc : undefined;
+		return (index >= 0 && this._panel_eachsize[index *  4] !== undefined) ? this._panel_eachsize[index *  4] += acc : undefined;
 	};
 	_pPanel._accPanelEachSizeCount = function (index, acc) {
-		return (index >= 0 && this._panel_eachsize[index * 4 + 1] !== undefined) ? this._panel_eachsize[index * 4 + 1] += acc : undefined;
+		return (index >= 0 && this._panel_eachsize[index *  4 + 1] !== undefined) ? this._panel_eachsize[index *  4 + 1] += acc : undefined;
 	};
 	_pPanel._accPanelEachSizeWidth = function (index, acc) {
-		return (index >= 0 && this._panel_eachsize[index * 4 + 2] !== undefined) ? this._panel_eachsize[index * 4 + 2] += acc : undefined;
+		return (index >= 0 && this._panel_eachsize[index *  4 + 2] !== undefined) ? this._panel_eachsize[index *  4 + 2] += acc : undefined;
 	};
 	_pPanel._accPanelEachSizeHeight = function (index, acc) {
-		return (index >= 0 && this._panel_eachsize[index * 4 + 3] !== undefined) ? this._panel_eachsize[index * 4 + 3] += acc : undefined;
+		return (index >= 0 && this._panel_eachsize[index *  4 + 3] !== undefined) ? this._panel_eachsize[index *  4 + 3] += acc : undefined;
 	};
 	_pPanel._clearPanelEachSize = function () {
 		this._panel_eachsize = [];
@@ -5657,7 +5627,7 @@ if (!nexacro._Panel) {
 						case 0x0010:
 							{
 
-								ew += (ew / nn) * (cn - nn);
+								ew += (ew / nn) *  (cn - nn);
 								sw = cw - ew;
 								nn = cn;
 							}
@@ -5671,7 +5641,7 @@ if (!nexacro._Panel) {
 						case 0x0020:
 							{
 
-								ew += (ew / nn) * (cn - nn);
+								ew += (ew / nn) *  (cn - nn);
 								sw = cw - ew;
 								sl = 0;
 								dl = nn > 1 ? sw / (cn - 1) : 0;
@@ -5788,7 +5758,7 @@ if (!nexacro._Panel) {
 						case 0x1000:
 							{
 
-								eh += (eh / nn) * (cn - nn);
+								eh += (eh / nn) *  (cn - nn);
 								sh = ch - eh;
 								nn = cn;
 							}
@@ -5802,7 +5772,7 @@ if (!nexacro._Panel) {
 						case 0x2000:
 							{
 
-								eh += (eh / nn) * (cn - nn);
+								eh += (eh / nn) *  (cn - nn);
 								sh = ch - eh;
 								nn = cn;
 							}
@@ -6345,17 +6315,17 @@ if (!nexacro._Panel) {
 	};
 
 	_pPanel._getPanelRowSizeCount = function () {
-		return this._panel_rowcount < 0 ? this._panel_rowcount * (-1) : this._panel_rowcount;
+		return this._panel_rowcount < 0 ? this._panel_rowcount *  (-1) : this._panel_rowcount;
 	};
 	_pPanel._getPanelColSizeCount = function () {
-		return this._panel_colcount < 0 ? this._panel_colcount * (-1) : this._panel_colcount;
+		return this._panel_colcount < 0 ? this._panel_colcount *  (-1) : this._panel_colcount;
 	};
 
 	_pPanel._resetPanelRowSize = function (count, size, defsize, leadfix, tailfix) {
 		this._panel_rowsizes = [];
 		this._panel_rowcount = count;
 
-		var cnt = count < 0 ? count * (-1) : count;
+		var cnt = count < 0 ? count *  (-1) : count;
 
 		this._panel_fixrlead = nexacro._isNull(leadfix) ? 0 : leadfix;
 		this._panel_fixrtail = nexacro._isNull(tailfix) ? 0 : tailfix;
@@ -6370,7 +6340,7 @@ if (!nexacro._Panel) {
 		this._panel_colsizes = [];
 		this._panel_colcount = count;
 
-		var cnt = count < 0 ? count * (-1) : count;
+		var cnt = count < 0 ? count *  (-1) : count;
 
 		this._panel_fixclead = nexacro._isNull(leadfix) ? 0 : leadfix;
 		this._panel_fixctail = nexacro._isNull(tailfix) ? 0 : tailfix;
@@ -6387,7 +6357,7 @@ if (!nexacro._Panel) {
 			this._panel_rowsizes = [];
 			this._panel_rowcount = count;
 
-			var cnt = count < 0 ? count * (-1) : count;
+			var cnt = count < 0 ? count *  (-1) : count;
 			var lmt = sizearray.length;
 
 			this._panel_fixrlead = nexacro._isNull(leadfix) ? 0 : leadfix;
@@ -6411,7 +6381,7 @@ if (!nexacro._Panel) {
 			this._panel_colsizes = [];
 			this._panel_colcount = count;
 
-			var cnt = count < 0 ? count * (-1) : count;
+			var cnt = count < 0 ? count *  (-1) : count;
 			var lmt = sizearray.length;
 
 			this._panel_fixclead = nexacro._isNull(leadfix) ? 0 : leadfix;
@@ -6516,7 +6486,7 @@ if (!nexacro._Panel) {
 		if (bound == 1) {
 			size = this._panel_rowsizes[start];
 
-			return nexacro._isNull(size) ? this._panel_defrsize * count : size * count;
+			return nexacro._isNull(size) ? this._panel_defrsize *  count : size *  count;
 		}
 
 		for (var i = index, l = index + count; i < l; i++) {
@@ -6560,7 +6530,7 @@ if (!nexacro._Panel) {
 		if (bound == 1) {
 			size = this._panel_colsizes[start];
 
-			return nexacro._isNull(size) ? this._panel_defcsize * count : size * count;
+			return nexacro._isNull(size) ? this._panel_defcsize *  count : size *  count;
 		}
 
 		for (var i = index, l = index + count; i < l; i++) {
@@ -6577,7 +6547,7 @@ if (!nexacro._Panel) {
 		var ret = 0;
 		var size;
 
-		count = count < 0 ? count * (-1) : count;
+		count = count < 0 ? count *  (-1) : count;
 
 		if (bound <= 0) {
 			return 0;
@@ -6586,7 +6556,7 @@ if (!nexacro._Panel) {
 		if (bound == 1) {
 			size = this._panel_rowsizes[0];
 
-			return nexacro._isNull(size) ? defsize * count : size * count;
+			return nexacro._isNull(size) ? defsize *  count : size *  count;
 		}
 
 		for (var i = 0, l = count; i < l; i++) {
@@ -6603,7 +6573,7 @@ if (!nexacro._Panel) {
 		var ret = 0;
 		var size;
 
-		count = count < 0 ? count * (-1) : count;
+		count = count < 0 ? count *  (-1) : count;
 
 		if (bound <= 0) {
 			return 0;
@@ -6612,7 +6582,7 @@ if (!nexacro._Panel) {
 		if (bound == 1) {
 			size = this._panel_colsizes[0];
 
-			return nexacro._isNull(size) ? defsize * count : size * count;
+			return nexacro._isNull(size) ? defsize *  count : size *  count;
 		}
 
 		for (var i = 0, l = count; i < l; i++) {
@@ -7151,7 +7121,7 @@ if (!nexacro._Panel) {
 			}
 		}
 		else {
-			this._setPanelSlotStatus(index, stat * (-1), false);
+			this._setPanelSlotStatus(index, stat *  (-1), false);
 		}
 	};
 
@@ -7234,7 +7204,7 @@ if (!nexacro._Panel) {
 			}
 		}
 		else {
-			this._setPanelSlotStatusBand(index, stat * (-1), all);
+			this._setPanelSlotStatusBand(index, stat *  (-1), all);
 		}
 	};
 
@@ -9121,19 +9091,21 @@ if (!nexacro._ExpandManager) {
 		EXPANDACTTYPE_CONVERT : 
 			{
 			"none" : 0x0000, 
-			"popup" : 0x0010, 
-			"click" : 0x0020, 
-			"hover" : 0x0030
+			"click" : 0x0010, 
+			"hover" : 0x0020, 
+			"popup" : 0x0040
 		}, 
 
 		EXPANDCTRLSET_NONE : 0, 
 		EXPANDCTRLSET_BUTTON : 1, 
 		EXPANDCTRLSET_CHECK : 2, 
+		EXPANDCTRLSET_CUSTOM : 3, 
 		EXPANDCTRLSET_CONVERT : 
 			{
 			"none" : 0x0000, 
 			"button" : 0x0001, 
-			"check" : 0x0002
+			"check" : 0x0002, 
+			"custom" : 0x0003
 		}, 
 
 		EXPANDVISIBLE_NONE : 0x0000, 
@@ -9502,6 +9474,7 @@ if (!nexacro.ComplexComponent) {
 		this._setUseScrollTimer(300, 300, 600, 300, 0);
 
 		this._setUseExpand(false, false);
+		this._setUseExpandStatus(false);
 
 		this._setUseBind(false, false, false, false, false);
 		this._setUseExpr(false, false);
@@ -9576,6 +9549,10 @@ if (!nexacro.ComplexComponent) {
 		this._use_expandmanager = usemanager;
 	};
 
+	_pComplexComponent._setUseExpandStatus = function (useexpandstatus) {
+		this._use_expand_status = useexpandstatus;
+	};
+
 	_pComplexComponent._setUseBind = function (usedatabind, uselevelbind, usexmlbind, usejsonbind, usefullbind, usedataexpr, usefullexpr) {
 		this._is_databind = usedatabind;
 		this._is_levelbind = uselevelbind;
@@ -9636,7 +9613,6 @@ if (!nexacro.ComplexComponent) {
 
 			if (this._createdControlElement(window)) {
 				this._initHotKey();
-				this._resetStatus();
 
 				if (!this._is_created) {
 					this._createdContents(window);
@@ -9647,6 +9623,8 @@ if (!nexacro.ComplexComponent) {
 
 				this._initSubLayouts();
 				this._recalcLayout(true);
+
+				this._resetStatus();
 			}
 		}
 	};
@@ -10690,11 +10668,10 @@ if (!nexacro.ComplexComponent) {
 		return null;
 	};
 	_pComplexComponent._getPanelLimitHeight = function () {
-		var browser = nexacro._Browser;
-		if (browser == "IE") {
+		if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
 			return nexacro._PanelConst.PANEL_MAXHEIGHT_IE;
 		}
-		if (browser == "Gecko") {
+		if (nexacro._Browser == "Gecko") {
 			return nexacro._PanelConst.PANEL_MAXHEIGHT_GECKO;
 		}
 
@@ -10848,7 +10825,7 @@ if (!nexacro.ComplexComponent) {
 
 					if (slotindex >= 0) {
 						ctrlindex = this._use_headitem ? this._getPanelSlotTargetCount(-1) : 0;
-						ctrlindex += bindindex > 0 ? bindindex * this._getPanelSlotTargetCount(0) : 0;
+						ctrlindex += bindindex > 0 ? bindindex *  this._getPanelSlotTargetCount(0) : 0;
 					}
 				}
 				else {
@@ -10862,8 +10839,8 @@ if (!nexacro.ComplexComponent) {
 					ctrlindex = 0;
 
 					if (!headslot && !tailslot) {
-						ctrlindex = headcount * this._getPanelSlotTargetCount(-1);
-						ctrlindex += bindindex > 0 ? bindindex * this._getPanelSlotTargetCount(0) : 0;
+						ctrlindex = headcount *  this._getPanelSlotTargetCount(-1);
+						ctrlindex += bindindex > 0 ? bindindex *  this._getPanelSlotTargetCount(0) : 0;
 					}
 				}
 			}
@@ -11107,7 +11084,7 @@ if (!nexacro.ComplexComponent) {
 			slotcount = (!count || count < 0) ? bindcount : Math.min(slotindex + count + prevc + nextc, bindcount);
 
 			bindindex = slotindex;
-			ctrlindex = headcount * this._getPanelSlotTargetCount(-1) + bindindex * this._getPanelSlotTargetCount(0);
+			ctrlindex = headcount *  this._getPanelSlotTargetCount(-1) + bindindex *  this._getPanelSlotTargetCount(0);
 
 
 
@@ -11234,7 +11211,7 @@ if (!nexacro.ComplexComponent) {
 			var bindcnt = this._getBindCount();
 
 			if (!band) {
-				var mkcnt = count * this._add_partitem * this._acc_partitem;
+				var mkcnt = count *  this._add_partitem *  this._acc_partitem;
 				var views = start;
 				var viewf = start + count;
 				var dscnt = bindcnt;
@@ -12644,7 +12621,7 @@ if (!nexacro.ComplexComponent) {
 					lead_size = client_width / 2;
 					ctrl_calc = children_len - 1;
 					ctrl_size = client_height;
-					ctrl_full = client_height * ctrl_calc;
+					ctrl_full = client_height *  ctrl_calc;
 					ctrl_left = client_left;
 
 					if (lead_size < ctrl_full) {
@@ -12672,7 +12649,7 @@ if (!nexacro.ComplexComponent) {
 					lead_size = client_height / 2;
 					ctrl_calc = children_len - 1;
 					ctrl_size = client_width;
-					ctrl_full = client_width * ctrl_calc;
+					ctrl_full = client_width *  ctrl_calc;
 					ctrl_top = client_top;
 
 					if (lead_size < ctrl_full) {
@@ -12965,6 +12942,17 @@ if (!nexacro.ComplexComponent) {
 
 		return null;
 	};
+	_pComplexComponent.createNCChild = function (child) {
+		if (child) {
+			child._is_nc_control = true;
+
+			if (child.createComponent(true)) {
+				return child;
+			}
+		}
+
+		return null;
+	};
 	_pComplexComponent.createNCChildControl = function (child) {
 		if (child) {
 			child._is_nc_control = true;
@@ -13063,11 +13051,11 @@ if (!nexacro.ComplexComponent) {
 
 
 	_pComplexComponent.on_notify_child_onclick = function (obj, e) {
-		this.on_fire_onclick(e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, this, e.fromobject);
+		this.on_fire_onclick(e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, this, e.fromobject, e.meta_key);
 	};
 
 	_pComplexComponent.on_notify_child_ondblclick = function (obj, e) {
-		this.on_fire_ondblclick(e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, this, e.fromobject);
+		this.on_fire_ondblclick(e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, this, e.fromobject, e.meta_key);
 	};
 
 	_pComplexComponent.on_notify_child_onsetfocus = function (obj, e) {
@@ -13097,7 +13085,7 @@ if (!nexacro.ComplexComponent) {
 			var tailcount = this._tail_count && this._use_tailitem ? this._tail_count : 0;
 			var bodycount = this._body_count ? this._body_count : 1;
 
-			var c = index * bodycount + headcount;
+			var c = index *  bodycount + headcount;
 
 			if (index >= 0 && index < count) {
 				if (this._use_partitem) {
@@ -13257,7 +13245,7 @@ if (!nexacro.ComplexComponent) {
 			var tailcount = this._tail_count && this._use_tailitem ? this._tail_count : 0;
 			var bodycount = this._body_count ? this._body_count : 1;
 
-			var c = index * bodycount + headcount;
+			var c = index *  bodycount + headcount;
 
 			if (index >= 0 && index < count) {
 				if (bodycount > 1) {
@@ -13374,7 +13362,7 @@ if (!nexacro.ComplexComponent) {
 	};
 	_pComplexComponent._createPartItemList = function (count) {
 		if (this._is_items && this._items) {
-			this._items.length = count > 0 ? count * (this._body_count ? this._body_count : 1) : 0;
+			this._items.length = count > 0 ? count *  (this._body_count ? this._body_count : 1) : 0;
 		}
 	};
 	_pComplexComponent._createPartItem = function (index) {
@@ -13642,7 +13630,9 @@ if (!nexacro.ComplexComponent) {
 	};
 	_pComplexComponent.createItemControl = function (item, rowindex, subindex) {
 		if (item) {
-			item._setControl(item._type_name);
+			var typename = item._getItemTypeName();
+
+			item._setControl(typename);
 
 			if (item.createComponent(true)) {
 				if (this._use_partitem && rowindex >= -2) {
@@ -13662,7 +13652,7 @@ if (!nexacro.ComplexComponent) {
 							pos = (this._use_tailitem ? (len - tailcount + sub) : -1);
 							break;
 						default:
-							pos = (this._use_headitem ? headcount : 0) + (pos * bodycount) + sub;
+							pos = (this._use_headitem ? headcount : 0) + (pos *  bodycount) + sub;
 							break;
 					}
 
@@ -13725,6 +13715,9 @@ if (!nexacro.ComplexComponent) {
 		}
 	};
 
+	_pComplexComponent._getItemTypeName = function () {
+		return this._type_name;
+	};
 	_pComplexComponent._setItemIndex = function (item, index) {
 		if (nexacro._isArray(item)) {
 			for (var i = 0, l = item.length; i < l; i++) {
@@ -13842,7 +13835,7 @@ if (!nexacro.ComplexComponent) {
 			return rc > 0 ? rc : 1;
 		}
 		else {
-			rc = Math.ceil(ch / (ih * this._getItemViewCountCol(false)));
+			rc = Math.ceil(ch / (ih *  this._getItemViewCountCol(false)));
 
 			return rc > 0 ? rc : 0;
 		}
@@ -13860,7 +13853,7 @@ if (!nexacro.ComplexComponent) {
 		}
 
 		if (rowfirst) {
-			cc = Math.round(cw / (iw * this._getItemViewCountRow(true)));
+			cc = Math.round(cw / (iw *  this._getItemViewCountRow(true)));
 
 			return cc > 0 ? cc : 0;
 		}
@@ -13875,7 +13868,7 @@ if (!nexacro.ComplexComponent) {
 
 		var ih = this._getItemHeight(0, rowfirst);
 		if (ih > 0) {
-			rc = Math.floor(pos / ih) * this._getItemViewCountCol(false);
+			rc = Math.floor(pos / ih) *  this._getItemViewCountCol(false);
 
 			return rc > 0 ? rc : 0;
 		}
@@ -13888,7 +13881,7 @@ if (!nexacro.ComplexComponent) {
 
 		var iw = this._getItemWidth(0);
 		if (iw > 0) {
-			cc = Math.floor(pos / iw) * this._getItemViewCountRow(true);
+			cc = Math.floor(pos / iw) *  this._getItemViewCountRow(true);
 
 			return cc > 0 ? cc : 0;
 		}
@@ -14670,7 +14663,7 @@ if (!nexacro.ComplexComponent) {
 			var itemtext = this._getItemId(e.fromobject);
 			var itemvalue = this._getItemValue(e.fromobject);
 
-			return this.onitemclick._fireEvent(this, new nexacro.ItemClickEventInfo(this, "onitemclick", itemindex, itemtext, itemvalue, e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, this, e.from_refer_comp));
+			return this.onitemclick._fireEvent(this, new nexacro.ItemClickEventInfo(this, "onitemclick", itemindex, itemtext, itemvalue, e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, this, e.from_refer_comp, e.meta_key));
 		}
 		return true;
 	};
@@ -15206,15 +15199,15 @@ if (!nexacro.ComplexComponent) {
 
 			var l = a[0];
 			if (l != 0 && -1 < l && l < 1) {
-				l = Math.floor(l * 100 * c);
+				l = Math.floor(l *  100 *  c);
 			}
 			var w = a[2];
 			if (w != 0 && -1 < w && w < 1) {
-				w = Math.floor(w * 100 * c);
+				w = Math.floor(w *  100 *  c);
 			}
 			var r = a[4];
 			if (r != 0 && -1 < r && r < 1) {
-				r = Math.floor(r * 100 * c);
+				r = Math.floor(r *  100 *  c);
 			}
 
 			if (w === undefined) {
@@ -15235,15 +15228,15 @@ if (!nexacro.ComplexComponent) {
 
 			var t = a[1];
 			if (t != 0 && -1 < t && t < 1) {
-				t = Math.floor(t * 100 * c);
+				t = Math.floor(t *  100 *  c);
 			}
 			var h = a[3];
 			if (h != 0 && -1 < h && h < 1) {
-				h = Math.floor(h * 100 * c);
+				h = Math.floor(h *  100 *  c);
 			}
 			var b = a[5];
 			if (b != 0 && -1 < b && b < 1) {
-				b = Math.floor(b * 100 * c);
+				b = Math.floor(b *  100 *  c);
 			}
 
 			if (h === undefined) {
@@ -15809,7 +15802,7 @@ if (!nexacro.ComplexComponent) {
 		nexacro.SimpleComponent.prototype._onInitBindSource.call(this);
 	};
 
-	_pComplexComponent._onChangeBindSource = function (propid, ds, row, col, index) {
+	_pComplexComponent._onChangeBindSource = function (propid, ds, row, col) {
 		if (this._is_created) {
 			if (this._is_databind) {
 				this._resetBindInfo();
@@ -15817,7 +15810,7 @@ if (!nexacro.ComplexComponent) {
 			}
 		}
 
-		nexacro.SimpleComponent.prototype._onChangeBindSource.call(this, propid, ds, row, col, index);
+		nexacro.SimpleComponent.prototype._onChangeBindSource.call(this, propid, ds, row, col);
 	};
 
 	_pComplexComponent._callback_onload = function (obj, e) {
@@ -16133,7 +16126,7 @@ if (!nexacro.ComplexComponent) {
 		}
 		var viewc = panel._isColFirst() ? this._getItemViewCountCol(false) : 1;
 		var viewr = panel._isRowFirst() ? this._getItemViewCountRow(true) : 1;
-		var viewp = viewc * viewr;
+		var viewp = viewc *  viewr;
 
 		var select = this.getSelectIndex();
 		if (select === undefined || select === null) {
@@ -16424,6 +16417,7 @@ if (!nexacro.ComplexComponent) {
 
 
 
+	_pComplexComponent.readonly = false;
 
 
 
@@ -16431,7 +16425,7 @@ if (!nexacro.ComplexComponent) {
 
 	_pComplexComponent._initOverflow = function () {
 		if (this._is_scrollable) {
-			if (nexacro._Browser == "IE") {
+			if (nexacro._Browser == "IE" || (nexacro._Browser == "Edge" && nexacro._BrowserType == "Edge")) {
 				this._use_native_scroll = true;
 				this._use_translate_scroll = false;
 				this._use_translate_move = false;
@@ -16789,8 +16783,8 @@ if (!nexacro.ComplexComponent) {
 			sz = this._getItemWidth(0);
 			pc = (start - prevc) / rowvc;
 			nc = (fullc - (start + viewc + nextc)) / rowvc;
-			pw = sz * pc;
-			nw = sz * nc;
+			pw = sz *  pc;
+			nw = sz *  nc;
 
 			this._setPanelPrevOverWidth(pw > 0 ? pw : 0);
 			this._setPanelNextOverWidth(nw > 0 ? nw : 0);
@@ -16801,8 +16795,8 @@ if (!nexacro.ComplexComponent) {
 			sz = this._getItemHeight(0);
 			pc = (start - prevc) / colvc;
 			nc = (fullc - (start + viewc + nextc)) / colvc;
-			ph = sz * pc;
-			nh = sz * nc;
+			ph = sz *  pc;
+			nh = sz *  nc;
 
 			this._setPanelPrevOverHeight(ph > 0 ? ph : 0);
 			this._setPanelNextOverHeight(nh > 0 ? nh : 0);
@@ -16820,7 +16814,7 @@ if (!nexacro.ComplexComponent) {
 					return 0;
 				}
 				else {
-					return Math.floor(pos / iw) * (row ? row : 1);
+					return Math.floor(pos / iw) *  (row ? row : 1);
 				}
 			}
 			else {
@@ -16830,7 +16824,7 @@ if (!nexacro.ComplexComponent) {
 					return 0;
 				}
 				else {
-					return Math.floor(pos / ih) * (col ? col : 1);
+					return Math.floor(pos / ih) *  (col ? col : 1);
 				}
 			}
 		}
@@ -16845,7 +16839,7 @@ if (!nexacro.ComplexComponent) {
 					return 0;
 				}
 				else {
-					return Math.ceil(cw / iw) * (row ? row : 1);
+					return Math.ceil(cw / iw) *  (row ? row : 1);
 				}
 			}
 			else {
@@ -16856,7 +16850,7 @@ if (!nexacro.ComplexComponent) {
 					return 0;
 				}
 				else {
-					return Math.ceil(ch / ih) * (col ? col : 1);
+					return Math.ceil(ch / ih) *  (col ? col : 1);
 				}
 			}
 		}
@@ -16941,12 +16935,12 @@ if (!nexacro.ComplexComponent) {
 						}
 
 						viewc = this._calcItemScrollViewCount(-1, cn, co, rowfirst);
-						nextc = viewc * this._add_partitem;
+						nextc = viewc *  this._add_partitem;
 						prevc = 0;
 					}
 					else {
-						viewc = cn * co;
-						prevc = nextc = viewc * this._add_partitem;
+						viewc = cn *  co;
+						prevc = nextc = viewc *  this._add_partitem;
 					}
 
 					index = start - prevc;
@@ -17528,10 +17522,8 @@ if (!nexacro.ComplexComponent) {
 		if (this._use_expandmanager) {
 			this._expandmanager = new nexacro._ExpandManager();
 
-			this._expandmanager._setExpandLayout(this._onGetExpandDirType(), this._onGetExpandActType(), this._onGetExpandCtrlSet(), this._onGetExpandVisible(), this._onGetExpandArrange()
-			);
-			this._expandmanager._setExpandEvent(this
-			);
+			this._expandmanager._setExpandLayout(this._onGetExpandDirType(), this._onGetExpandActType(), this._onGetExpandCtrlSet(), this._onGetExpandVisible(), this._onGetExpandArrange());
+			this._expandmanager._setExpandEvent(this);
 		}
 	};
 	_pComplexComponent._createExpandControl = function () {
@@ -17540,10 +17532,12 @@ if (!nexacro.ComplexComponent) {
 	_pComplexComponent._createExpandBar = function (expandbartype, expandbarsize) {
 		var ctrlsettype;
 		var ctrlvisible;
+		var ctrlacttype;
 
 		if (this._use_expandmanager && this._expandmanager) {
 			ctrlsettype = this._expandmanager.ctrlsettype;
 			ctrlvisible = this._expandmanager.ctrlvisible;
+			ctrlacttype = this._expandmanager.expandmode;
 		}
 		else {
 			ctrlsettype = nexacro._ExpandConst.EXPANDCTRLSET_CONVERT[expandbartype];
@@ -17569,8 +17563,6 @@ if (!nexacro.ComplexComponent) {
 					}
 					if (this.expandbar == null) {
 						this.expandbar = this.createNCChildControl(new nexacro.CheckBox("expandbar", clientwidth, 0, expandbarsize[0], expandbarsize[1], null, null, null, null, null, null, this));
-
-						this.expandbar._setEventHandler("onclick", this.on_notify_expand_onclick, this);
 					}
 					break;
 				}
@@ -17583,9 +17575,35 @@ if (!nexacro.ComplexComponent) {
 					}
 					if (this.expandbar == null) {
 						this.expandbar = this.createNCChildControl(new nexacro.Button("expandbar", clientwidth, 0, expandbarsize[0], expandbarsize[1], null, null, null, null, null, null, this));
-
-						this.expandbar._setEventHandler("onclick", this.on_notify_expand_onclick, this);
 					}
+					break;
+				}
+			case nexacro._ExpandConst.EXPANDCTRLSET_CUSTOM:
+				{
+
+					var control = this._createExpandBarCustom("expandbar", clientwidth, 0, expandbarsize[0], expandbarsize[1]);
+					if (control._is_subcontrol) {
+						this.expandbar = this.createNCChild(control);
+					}
+					else {
+						this.expandbar = this.createNCChildControl(control);
+					}
+					break;
+				}
+		}
+
+
+		switch (ctrlacttype) {
+			case nexacro._ExpandConst.EXPANDACTTYPE_CLICK:
+				{
+
+					this.expandbar._setEventHandler("onclick", this.on_notify_expand_onclick, this);
+					break;
+				}
+			case nexacro._ExpandConst.EXPANDACTTYPE_NONE:
+			default:
+				{
+
 					break;
 				}
 		}
@@ -17616,7 +17634,10 @@ if (!nexacro.ComplexComponent) {
 				}
 		}
 
-		var el = clientwidth, et = 0, ew = +expandbarsize[0], eh = +expandbarsize[1];
+		var el = clientwidth;
+		var et = 0;
+		var ew = +expandbarsize[0];
+		var eh = +expandbarsize[1];
 
 		if (ew > clientwidth) {
 			ew = clientwidth;
@@ -17637,6 +17658,8 @@ if (!nexacro.ComplexComponent) {
 		if (!this.expandbar._is_created) {
 			this.expandbar.on_created(this._getWindow());
 		}
+	};
+	_pComplexComponent._createExpandBarCustom = function () {
 	};
 
 	_pComplexComponent._createdExpand = function (win) {
@@ -17695,8 +17718,19 @@ if (!nexacro.ComplexComponent) {
 	_pComplexComponent._resetExpandControl = function (before) {
 		this._onResetExpandBar(before);
 	};
-	_pComplexComponent._checkExpandControl = function (before) {
-		return this.expandbar && this.expandbar.visible;
+
+	_pComplexComponent._resetExpandManager = function (before) {
+		if (this._use_expandmanager && !before) {
+			if (!this._expandmanager) {
+				this._createExpandManager();
+			}
+
+			this._expandmanager.setExpand(0);
+
+			this._expandmanager._setExpandControl(this.expandbar);
+			this._expandmanager._setExpandContext(this._control_element);
+			this._expandmanager._setExpandInfo(null);
+		}
 	};
 
 	_pComplexComponent._getExpandType = function () {
@@ -17759,6 +17793,7 @@ if (!nexacro.ComplexComponent) {
 			return "const";
 		}
 	};
+
 	_pComplexComponent._getExpandBarSize = function () {
 		var expandbarsize = this.expandbarsize;
 
@@ -17772,18 +17807,9 @@ if (!nexacro.ComplexComponent) {
 		return this._default_expandbarsize;
 	};
 
-	_pComplexComponent._resetExpandManager = function (before) {
-		if (this._use_expandmanager && !before) {
-			if (!this._expandmanager) {
-				this._createExpandManager();
-			}
 
-			this._expandmanager.setExpand(0);
-
-			this._expandmanager._setExpandControl(this.expandbar);
-			this._expandmanager._setExpandContext(this._control_element);
-			this._expandmanager._setExpandInfo(null);
-		}
+	_pComplexComponent._checkExpandControl = function (before) {
+		return this.expandbar && this.expandbar.visible;
 	};
 
 	_pComplexComponent._setNCExpandBarSize = function (expandbarsize, expandbartype, before) {
@@ -17845,7 +17871,6 @@ if (!nexacro.ComplexComponent) {
 
 		return true;
 	};
-
 
 
 	_pComplexComponent._onGetExpandDirType = function () {
@@ -17928,6 +17953,13 @@ if (!nexacro.ComplexComponent) {
 		}
 		return true;
 	};
+	_pComplexComponent._on_fire_onexpandclick = function (obj, e) {
+		if (this.onexpandclick && this.onexpandclick._has_handlers) {
+			e.fromobject = this;
+			this.onexpandclick._fireEvent(this, e);
+		}
+		return true;
+	};
 	_pComplexComponent._on_basic_onexpand = function (obj, e) {
 	};
 	_pComplexComponent._on_default_onexpand = function (obj, e) {
@@ -17937,14 +17969,6 @@ if (!nexacro.ComplexComponent) {
 	_pComplexComponent._on_finish_onexpand = function (obj, e) {
 	};
 	_pComplexComponent._on_update_onexpand = function (obj, e) {
-	};
-
-	_pComplexComponent._on_fire_onexpandclick = function (obj, e) {
-		if (this.onexpandclick && this.onexpandclick._has_handlers) {
-			e.fromobject = this;
-			this.onexpandclick._fireEvent(this, e);
-		}
-		return true;
 	};
 
 
@@ -18140,30 +18164,30 @@ if (!nexacro.ComplexComponent) {
 
 
 
-	_pComplexComponent.on_fire_sys_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComplexComponent.on_fire_sys_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onlbuttondown && this.onlbuttondown._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onlbuttondown._fireSysEvent(this, evt);
 		}
 		return false;
 	};
-	_pComplexComponent.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComplexComponent.on_fire_user_onlbuttondown = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onlbuttondown && this.onlbuttondown._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp);
+			var evt = new nexacro.MouseEventInfo(this, "onlbuttondown", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key);
 			return this.onlbuttondown._fireUserEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pComplexComponent.on_fire_sys_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComplexComponent.on_fire_sys_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmouseup && this.onmouseup._has_handlers) {
-			return this.onmouseup._fireSysEvent(this, new nexacro.MouseEventInfo(this._getRootComponent(from_comp), "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp));
+			return this.onmouseup._fireSysEvent(this, new nexacro.MouseEventInfo(this._getRootComponent(from_comp), "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key));
 		}
 		return false;
 	};
-	_pComplexComponent.on_fire_user_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp) {
+	_pComplexComponent.on_fire_user_onmouseup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key) {
 		if (this.onmouseup && this.onmouseup._has_handlers) {
-			return this.onmouseup._fireUserEvent(this, new nexacro.MouseEventInfo(this._getRootComponent(from_comp), "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp));
+			return this.onmouseup._fireUserEvent(this, new nexacro.MouseEventInfo(this._getRootComponent(from_comp), "onmouseup", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, from_comp, from_refer_comp, meta_key));
 		}
 		return false;
 	};
@@ -18192,24 +18216,24 @@ if (!nexacro.ComplexComponent) {
 
 
 
-	_pComplexComponent.on_slidestart_basic_action = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, bScroll, refer_comp) {
-		var ret = nexacro.SimpleComponent.prototype.on_slidestart_basic_action.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, bScroll, refer_comp);
+	_pComplexComponent.on_slidestart_basic_action = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp) {
+		var ret = nexacro.SimpleComponent.prototype.on_slidestart_basic_action.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp);
 
 		this._updateItemScrollInfo("slidestart", true);
 
 		return ret;
 	};
 
-	_pComplexComponent.on_slide_basic_action = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, bScroll, refer_comp) {
-		var ret = nexacro.SimpleComponent.prototype.on_slide_basic_action.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, bScroll, refer_comp);
+	_pComplexComponent.on_slide_basic_action = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp) {
+		var ret = nexacro.SimpleComponent.prototype.on_slide_basic_action.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp);
 
 		this._updateItemScrollInfo("slidemove", false);
 
 		return ret;
 	};
 
-	_pComplexComponent.on_slideend_basic_action = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, bScroll, refer_comp) {
-		var ret = nexacro.SimpleComponent.prototype.on_slideend_basic_action.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, bScroll, refer_comp);
+	_pComplexComponent.on_slideend_basic_action = function (elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp) {
+		var ret = nexacro.SimpleComponent.prototype.on_slideend_basic_action.call(this, elem, touch_manager, touchinfos, xaccvalue, yaccvalue, xdeltavalue, ydeltavalue, refer_comp);
 
 		this._updateItemScrollInfo("slideend", true);
 
@@ -18244,17 +18268,17 @@ if (!nexacro.ComplexComponent) {
 
 
 
-	_pComplexComponent.on_keydown_basic_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
-		return nexacro.SimpleComponent.prototype.on_keydown_basic_action.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp);
+	_pComplexComponent.on_keydown_basic_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+		return nexacro.SimpleComponent.prototype.on_keydown_basic_action.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key);
 	};
-	_pComplexComponent.on_keydown_default_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
-		return nexacro.SimpleComponent.prototype.on_keydown_default_action.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp);
+	_pComplexComponent.on_keydown_default_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+		return nexacro.SimpleComponent.prototype.on_keydown_default_action.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key);
 	};
-	_pComplexComponent.on_fire_user_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
-		return nexacro.SimpleComponent.prototype.on_fire_user_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
+	_pComplexComponent.on_fire_user_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
+		return nexacro.SimpleComponent.prototype.on_fire_user_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
 	};
-	_pComplexComponent.on_fire_sys_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
-		switch (this._checkActionKeyInfo(key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp)) {
+	_pComplexComponent.on_fire_sys_onkeydown = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
+		switch (this._checkActionKeyInfo(key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key)) {
 			case "select":
 				this._selectItemKeyInfo(key_code, alt_key, ctrl_key, shift_key);
 				break;
@@ -18269,20 +18293,20 @@ if (!nexacro.ComplexComponent) {
 				break;
 		}
 
-		return nexacro.SimpleComponent.prototype.on_fire_sys_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
+		return nexacro.SimpleComponent.prototype.on_fire_sys_onkeydown.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
 	};
 
-	_pComplexComponent.on_keyup_basic_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
-		return nexacro.SimpleComponent.prototype.on_keyup_basic_action.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp);
+	_pComplexComponent.on_keyup_basic_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+		return nexacro.SimpleComponent.prototype.on_keyup_basic_action.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key);
 	};
-	_pComplexComponent.on_keyup_default_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp) {
-		return nexacro.SimpleComponent.prototype.on_keyup_default_action.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp);
+	_pComplexComponent.on_keyup_default_action = function (keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key) {
+		return nexacro.SimpleComponent.prototype.on_keyup_default_action.call(this, keycode, alt_key, ctrl_key, shift_key, refer_comp, meta_key);
 	};
-	_pComplexComponent.on_fire_user_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
-		return nexacro.SimpleComponent.prototype.on_fire_user_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
+	_pComplexComponent.on_fire_user_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
+		return nexacro.SimpleComponent.prototype.on_fire_user_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
 	};
-	_pComplexComponent.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp) {
-		return nexacro.SimpleComponent.prototype.on_fire_sys_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp);
+	_pComplexComponent.on_fire_sys_onkeyup = function (key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key) {
+		return nexacro.SimpleComponent.prototype.on_fire_sys_onkeyup.call(this, key_code, alt_key, ctrl_key, shift_key, from_comp, from_refer_comp, meta_key);
 	};
 
 

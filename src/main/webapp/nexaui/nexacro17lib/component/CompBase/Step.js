@@ -27,8 +27,8 @@ if (!nexacro.StepControl) {
 
 	delete _pEventStepChangeEventInfo;
 
-	nexacro.StepMouseEventInfo = function (obj, id, index, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY) {
-		nexacro.ClickEventInfo.call(this, obj, id || "onstepmouse", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
+	nexacro.StepMouseEventInfo = function (obj, id, index, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key) {
+		nexacro.ClickEventInfo.call(this, obj, id || "onstepmouse", button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
 
 		this.index = index < 0 ? -1 : index;
 	};
@@ -39,8 +39,8 @@ if (!nexacro.StepControl) {
 
 	delete _pEventStepMouseEventInfo;
 
-	nexacro.StepDragEventInfo = function (obj, id, index, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY) {
-		nexacro.DragEventInfo.call(this, obj, id || "onstepdrag", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY);
+	nexacro.StepDragEventInfo = function (obj, id, index, dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key) {
+		nexacro.DragEventInfo.call(this, obj, id || "onstepdrag", dragdata, userdata, datatype, filelist, src_comp, src_refer_comp, from_comp, from_refer_comp, button, alt_key, ctrl_key, shift_key, screenX, screenY, canvasX, canvasY, clientX, clientY, meta_key);
 		this.index = index ? -1 : index;
 	};
 
@@ -149,8 +149,8 @@ if (!nexacro.StepControl) {
 			}
 		}
 
-		this._updateStepLayout();
 		this._redrawStepButton();
+		this._updateStepLayout();
 	};
 
 	_pStepControl.on_destroy_contents = function () {
@@ -196,8 +196,8 @@ if (!nexacro.StepControl) {
 	_pStepControl.on_apply_stepitemsize = function () {
 		var control_elem = this.getElement();
 		if (control_elem) {
-			this._updateStepLayout();
 			this._redrawStepButton();
+			this._updateStepLayout();
 		}
 	};
 
@@ -217,8 +217,8 @@ if (!nexacro.StepControl) {
 	_pStepControl.on_apply_stepitemgap = function () {
 		var control_elem = this.getElement();
 		if (control_elem) {
-			this._updateStepLayout();
 			this._redrawStepButton();
+			this._updateStepLayout();
 		}
 	};
 
@@ -246,8 +246,8 @@ if (!nexacro.StepControl) {
 	_pStepControl.on_apply_stepcount = function () {
 		var control_elem = this.getElement();
 		if (control_elem) {
-			this._updateStepLayout();
 			this._redrawStepButton();
+			this._updateStepLayout();
 		}
 	};
 
@@ -303,6 +303,13 @@ if (!nexacro.StepControl) {
 				if (pre_button) {
 					pre_button._changeUserStatus("selected", false);
 				}
+				else {
+					for (var i = 0; i < this._items.length; i++) {
+						if (this._items[i]._userstatus == "selected") {
+							this._items[i]._changeUserStatus("selected", false);
+						}
+					}
+				}
 
 				var cur_button = this._items[stepindex];
 				if (cur_button) {
@@ -314,7 +321,7 @@ if (!nexacro.StepControl) {
 					var form_control_elem = form.getElement();
 					if (form_control_elem) {
 						form_control_elem.setElementStepIndex(stepindex);
-						form._setHscrollPos(form_control_elem.client_width * stepindex);
+						form._setHscrollPos(form_control_elem.client_width *  stepindex);
 
 						var comp;
 						var comps = form.components;
@@ -381,8 +388,9 @@ if (!nexacro.StepControl) {
 			info.isloaded = true;
 
 			this._setStepIconSize(width, height);
-			this._updateStepLayout();
+
 			this._redrawStepButton();
+			this._updateStepLayout();
 		}
 	};
 
@@ -495,7 +503,7 @@ if (!nexacro.StepControl) {
 
 		var maxsize = 0;
 		var items = this._items;
-		if (items.length) {
+		if (items.length && stepitemsize != 0) {
 			var item = items[0];
 			var total_w = 0;
 			var total_h = 0;
@@ -548,7 +556,7 @@ if (!nexacro.StepControl) {
 		var stepitemsize = this._getStepItemSize();
 		var stepitemgap = this._getStepItemGap();
 
-		total_w += stepitemsize * stepcount + stepitemgap * (stepcount - 1);
+		total_w += stepitemsize *  stepcount + stepitemgap *  (stepcount - 1);
 		total_h += stepitemsize;
 
 		return {

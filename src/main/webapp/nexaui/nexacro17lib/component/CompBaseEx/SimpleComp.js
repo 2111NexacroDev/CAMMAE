@@ -514,13 +514,16 @@ if (!nexacro.SimpleComponent) {
 	};
 
 	_pSimpleComponent._initComponent = function (id, left, top, width, height, right, bottom, minwidth, maxwidth, minheight, maxheight) {
-		this._initUniqueID();
-		this._initOverflow();
-		this._initBind();
-		this._initExpr();
-		this._initSelect();
-		this._initStatus();
-		this._initAccessibility();
+		var control_elem = this._control_element;
+		if (!control_elem) {
+			this._initUniqueID();
+			this._initOverflow();
+			this._initBind();
+			this._initExpr();
+			this._initSelect();
+			this._initStatus();
+			this._initAccessibility();
+		}
 	};
 	_pSimpleComponent._initComponentClone = function (source) {
 		this._initUniqueID();
@@ -548,7 +551,6 @@ if (!nexacro.SimpleComponent) {
 		this._clearInitValue();
 		this._clearEventListeners();
 		this._clearCaptureLock();
-		this._clearBasedList();
 		this._clearParentsList();
 		this._clearInnerVars();
 		this._clearStyleVars();
@@ -568,9 +570,6 @@ if (!nexacro.SimpleComponent) {
 			_window._releaseCaptureLock(this._attached_comp);
 			this._track_capture = false;
 		}
-	};
-
-	_pSimpleComponent._clearBasedList = function () {
 	};
 
 	_pSimpleComponent._clearParentsList = function () {
@@ -606,9 +605,6 @@ if (!nexacro.SimpleComponent) {
 		}
 		if (this._cssselector) {
 			this._cssselector = null;
-		}
-		if (this._based_list) {
-			this._based_list = null;
 		}
 	};
 
@@ -712,9 +708,6 @@ if (!nexacro.SimpleComponent) {
 		}
 	};
 
-	_pSimpleComponent._setControlElementCssSelector = function () {
-		this.on_apply_cssselector();
-	};
 	_pSimpleComponent._setControlElementCssMapInfo = function () {
 		var enabledselector = this._cssselector.enabled;
 		if (enabledselector) {
@@ -1098,10 +1091,10 @@ if (!nexacro.SimpleComponent) {
 		}
 	};
 
-	_pSimpleComponent.on_change_bindSource = function (propid, ds, row, col, index) {
-		return this._onChangeBindSource(propid, ds, row, col, index);
+	_pSimpleComponent.on_change_bindSource = function (propid, ds, row, col) {
+		return this._onChangeBindSource(propid, ds, row, col);
 	};
-	_pSimpleComponent._onChangeBindSource = function (propid, ds, row, col, index) {
+	_pSimpleComponent._onChangeBindSource = function (propid, ds, row, col) {
 		if (this._is_created) {
 			if (this._is_valuebind && propid == this._onGetBindableProperties()) {
 				this._setValue(ds.getColumn(row, col));
@@ -1578,13 +1571,13 @@ if (!nexacro.SimpleComponent) {
 
 
 	_pSimpleComponent._on_basic_onclick = function (obj, e) {
-		return this.on_click_basic_action(null, e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY);
+		return this.on_click_basic_action(null, e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.meta_key);
 	};
 	_pSimpleComponent._on_default_onclick = function (obj, e) {
 	};
 	_pSimpleComponent._on_fire_onclick = function (obj, e) {
 		if (this.onclick && this.onclick._has_handlers) {
-			return this.onclick._fireEvent(this, new nexacro.ClickEventInfo(this, "onclick", e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, this, e.from_refer_comp));
+			return this.onclick._fireEvent(this, new nexacro.ClickEventInfo(this, "onclick", e.button, e.alt_key, e.ctrl_key, e.shift_key, e.screenX, e.screenY, e.canvasX, e.canvasY, e.clientX, e.clientY, this, e.from_refer_comp, e.meta_key));
 		}
 		return true;
 	};
@@ -2195,7 +2188,7 @@ if (!nexacro._CompUtil) {
 							if (drawBox) {
 								var n = elem.text.length;
 								var c = 6, r = 8, s = 1;
-								x = Math.max(w - (c + s) * n - s, 0);
+								x = Math.max(w - (c + s) *  n - s, 0);
 
 								switch (halign) {
 									case "right":
@@ -2381,6 +2374,7 @@ if (!nexacro._CompUtil) {
 				}
 			}
 			catch (e) {
+				nexacro._settracemsg(e);
 			}
 		}
 	};

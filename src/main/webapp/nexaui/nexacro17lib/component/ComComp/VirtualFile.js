@@ -70,8 +70,7 @@ if (!nexacro.VirtualFile) {
 	delete _pFileAttribute;
 
 	nexacro.VirtualFile = function (id, parent) {
-		this.id = this.name = id;
-		this.parent = parent;
+		nexacro._EventSinkObject.call(this, id, parent);
 
 		if (arguments.length == 3) {
 			this._handle = nexacro._createVirtualFileHandle(this, arguments[2]);
@@ -116,8 +115,6 @@ if (!nexacro.VirtualFile) {
 	nexacro.VirtualFile.findDirectoryOnly = 0x0004;
 	nexacro.VirtualFile.findRecursive = 0x0008;
 	nexacro.VirtualFile.findCaseless = 0x0010;
-
-	_pVirtualFile.on_created = nexacro._emptyFn;
 
 	_pVirtualFile.destroy = function () {
 		nexacro._destroyVirtualFileHandle(this);
@@ -274,6 +271,12 @@ if (!nexacro.VirtualFile) {
 			nConstOptions = nexacro.VirtualFile.findAll;
 		}
 
+		if (!(nConstOptions & nexacro.VirtualFile.findAll) && !(nConstOptions & nexacro.VirtualFile.findFileOnly) && 
+			!(nConstOptions & nexacro.VirtualFile.findDirectoryOnly) && !(nConstOptions & nexacro.VirtualFile.findRecursive) && 
+			!(nConstOptions & nexacro.VirtualFile.findCaseless)) {
+			return false;
+		}
+
 		return nexacro._getFileListVirtualFileHandle(this, strPath, strSearchExpr, nConstOptions);
 	};
 
@@ -369,7 +372,7 @@ if (!nexacro.VirtualFile) {
 
 	_pVirtualFile._onsuccess = function (objData) {
 		var textdata = nexacro.base64Decode(objData.textdata);
-		var bindata = nexacro.base64Decode(objData.binarydata);
+		var bindata = this._replaceEntity(objData.binarydata, ["&amp;", "&lt;", "&gt;", "&quot;", "&apos;", "&#32;", "&#13;", "&#10;", "&#9;"]) || "";
 
 		this.on_fire_onsuccess(objData.reason, textdata, bindata, objData.fileattributelist, objData.filesize, objData.fileisexist);
 	};

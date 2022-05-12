@@ -85,7 +85,8 @@ if (!nexacro.Div) {
 		"onmousedown" : 1, 
 		"ontouchstart" : 1, 
 		"ontouchmove" : 1, 
-		"ontouchend" : 1
+		"ontouchend" : 1, 
+		"ondevicebuttonup" : 1
 	};
 
 	_pDiv.on_create_contents = function () {
@@ -96,20 +97,7 @@ if (!nexacro.Div) {
 
 	_pDiv._applyElementVisible = function (v) {
 		this._control_element.setElementDisplay(v ? "" : "none");
-
-		var len = 0;
-		var form = this.form;
-		var compname;
-		if (v == true && form) {
-			len = form.components.length;
-
-			for (var i = 0; i < len; i++) {
-				compname = form.components.get_id(i);
-				if (form[compname]._notifyParentDisplayOn) {
-					form[compname]._notifyParentDisplayOn();
-				}
-			}
-		}
+		this._applyScrollPos();
 	};
 
 	_pDiv.on_created_contents = function (win) {
@@ -180,10 +168,6 @@ if (!nexacro.Div) {
 		if (this.form) {
 			this.form._setEnable(v);
 		}
-	};
-
-	_pDiv.on_get_css_assumedtypename = function () {
-		return this._type_name;
 	};
 
 	_pDiv.on_apply_text = function (text) {
@@ -377,6 +361,28 @@ if (!nexacro.Div) {
 		return new nexacro.PropBinder(this, name);
 	};
 
+	_pDiv.addEventHandler = function (evt_id, func, target) {
+		var retn = nexacro.Component.prototype.addEventHandler.call(this, evt_id, func, target);
+
+		var form = this.form;
+
+		switch (evt_id) {
+			case "oncontextmenu":
+				this._context_func = func;
+				form._addEventHandler(evt_id, this.on_fire_innerFormContextmenu, target);
+				break;
+		}
+		return retn;
+	};
+
+	_pDiv.on_fire_innerFormContextmenu = function (obj, e) {
+		var target = this;
+
+		if (obj instanceof nexacro._InnerForm) {
+			obj.parent._context_func.call(target, obj.parent, e);
+		}
+	};
+
 	_pDiv.getOwnerFrame = function () {
 		return this._getOwnerFrame();
 	};
@@ -443,10 +449,12 @@ if (!nexacro.Div) {
 		return ret;
 	};
 
+	_pDiv.getCurrentLayoutID = nexacro._emptyFn;
+
 	_pDiv.set_formscrollbarbarminsize = function (formscrollbarbarminsize) {
 		if (formscrollbarbarminsize !== undefined) {
 			formscrollbarbarminsize = parseInt(formscrollbarbarminsize);
-			if (isNaN(formscrollbarbarminsize)) {
+			if (isNaN(formscrollbarbarminsize) || formscrollbarbarminsize < 0) {
 				return;
 			}
 		}
@@ -460,7 +468,7 @@ if (!nexacro.Div) {
 	_pDiv.set_formscrollbarbaroutsize = function (formscrollbarbaroutsize) {
 		if (formscrollbarbaroutsize !== undefined) {
 			formscrollbarbaroutsize = parseInt(formscrollbarbaroutsize);
-			if (isNaN(formscrollbarbaroutsize)) {
+			if (isNaN(formscrollbarbaroutsize) || formscrollbarbaroutsize < 0) {
 				return;
 			}
 		}
@@ -516,7 +524,7 @@ if (!nexacro.Div) {
 	_pDiv.set_formscrollbartrackbarsize = function (formscrollbartrackbarsize) {
 		if (formscrollbartrackbarsize !== undefined) {
 			formscrollbartrackbarsize = parseInt(formscrollbartrackbarsize);
-			if (isNaN(formscrollbartrackbarsize)) {
+			if (isNaN(formscrollbartrackbarsize) || formscrollbartrackbarsize < -1) {
 				return;
 			}
 		}
@@ -590,6 +598,9 @@ if (!nexacro.Div) {
 	_pDiv._clearUserFunctions = nexacro._emptyFn;
 
 	_pDiv._loadedForm = function () {
+		if (this._getLastFocused()) {
+			this._last_focused = this.form;
+		}
 		this._on_apply_formscroll();
 		this._is_loadedform = true;
 	};
@@ -755,12 +766,7 @@ if (!nexacro.Div) {
 		width = this._getClientWidth();
 		height = this._getClientHeight();
 
-		if (!this._is_initcssselector) {
-			this._initCSSSelector();
-		}
-
-
-
+		this._initCSSSelector();
 
 		return {
 			left : left, 

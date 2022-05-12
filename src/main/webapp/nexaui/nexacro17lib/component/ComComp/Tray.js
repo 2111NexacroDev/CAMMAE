@@ -13,6 +13,21 @@
 
 
 if (!nexacro.Tray) {
+	nexacro.TrayBalloonTipHideEventInfo = function (obj, id, reason) {
+		this.id = this.eventid = id || "onballoontiphide";
+		this.fromobject = this.fromreferenceobject = obj;
+		this.reason = reason;
+	};
+
+	var _pTrayBalloonTipHideEventInfo = nexacro._createPrototype(nexacro.Event, nexacro.TrayBalloonTipHideEventInfo);
+	nexacro.TrayBalloonTipHideEventInfo.prototype = _pTrayBalloonTipHideEventInfo;
+	_pTrayBalloonTipHideEventInfo._type_name = "TrayBalloonTipHideEventInfo";
+
+	delete _pTrayBalloonTipHideEventInfo;
+
+
+
+
 	nexacro.Tray = function (id, parent) {
 		this.id = id;
 		this.icon = "default";
@@ -27,7 +42,10 @@ if (!nexacro.Tray) {
 			"onlbuttonup" : 1, 
 			"onrbuttonup" : 1, 
 			"ondblclick" : 1, 
-			"oninnerdatachanged" : 1
+			"oninnerdatachanged" : 1, 
+			"onballoontipshow" : 1, 
+			"onballoontiphide" : 1, 
+			"onballoontipclick" : 1
 		};
 	};
 
@@ -112,6 +130,9 @@ if (!nexacro.Tray) {
 		nexacro._showTrayBalloonTipHandle(this._handle, titleicon, title, text, timeout, nosound);
 	};
 
+	_pTray.hideBalloonTip = function () {
+		nexacro._hideTrayBalloonTipHandle(this._handle);
+	};
 
 	_pTray.addItem = function (id, obj) {
 		if (obj._type_name == "TrayPopupMenu") {
@@ -149,26 +170,50 @@ if (!nexacro.Tray) {
 		return count;
 	};
 
-	_pTray.on_fire_ondblclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY) {
+	_pTray.on_fire_ondblclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, meta_key) {
 		if (this.ondblclick && this.ondblclick._has_handlers) {
-			var evt = new nexacro.ClickEventInfo(this, "ondblclick", "lbutton", alt_key, ctrl_key, shift_key, screenX, screenY, -1, -1, -1, -1, this, this);
+			var evt = new nexacro.ClickEventInfo(this, "ondblclick", "lbutton", alt_key, ctrl_key, shift_key, screenX, screenY, -1, -1, -1, -1, this, this, meta_key);
 			return this.ondblclick._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pTray.on_fire_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY) {
+	_pTray.on_fire_onlbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, meta_key) {
 		if (this.onlbuttonup && this.onlbuttonup._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onlbuttonup", "lbutton", alt_key, ctrl_key, shift_key, screenX, screenY, -1, -1, -1, -1, this, this);
+			var evt = new nexacro.MouseEventInfo(this, "onlbuttonup", "lbutton", alt_key, ctrl_key, shift_key, screenX, screenY, -1, -1, -1, -1, this, this, meta_key);
 			return this.onlbuttonup._fireEvent(this, evt);
 		}
 		return false;
 	};
 
-	_pTray.on_fire_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY) {
+	_pTray.on_fire_onrbuttonup = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, meta_key) {
 		if (this.onrbuttonup && this.onrbuttonup._has_handlers) {
-			var evt = new nexacro.MouseEventInfo(this, "onrbuttonup", "rbutton", alt_key, ctrl_key, shift_key, screenX, screenY, -1, -1, -1, -1, this, this);
+			var evt = new nexacro.MouseEventInfo(this, "onrbuttonup", "rbutton", alt_key, ctrl_key, shift_key, screenX, screenY, -1, -1, -1, -1, this, this, meta_key);
 			return this.onrbuttonup._fireEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pTray.on_fire_onballoontipshow = function () {
+		if (this.onballoontipshow && this.onballoontipshow._has_handlers) {
+			var evt = new nexacro.EventInfo(this, "onballoontipshow");
+			return this.onballoontipshow._fireEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pTray.on_fire_onballoontiphide = function (reason) {
+		if (this.onballoontiphide && this.onballoontiphide._has_handlers) {
+			var evt = new nexacro.TrayBalloonTipHideEventInfo(this, "onballoontiphide", reason);
+			return this.onballoontiphide._fireEvent(this, evt);
+		}
+		return false;
+	};
+
+	_pTray.on_fire_onballoontipclick = function (button, alt_key, ctrl_key, shift_key, screenX, screenY, meta_key) {
+		if (this.onballoontipclick && this.onballoontipclick._has_handlers) {
+			var evt = new nexacro.ClickEventInfo(this, "onballoontipclick", "lbutton", alt_key, ctrl_key, shift_key, screenX, screenY, -1, -1, -1, -1, this, this, meta_key);
+			return this.onballoontipclick._fireEvent(this, evt);
 		}
 		return false;
 	};
@@ -259,6 +304,7 @@ if (!nexacro.TrayPopupMenu) {
 					var icon = ds.getColumn(rowindex, this.iconcolumn);
 					if (icon) {
 						flags = "bitmap";
+						icon = this._getSysURL(icon);
 					}
 
 					var enable = ds.getColumn(rowindex, this.enablecolumn);
@@ -279,8 +325,6 @@ if (!nexacro.TrayPopupMenu) {
 							flags = "checked";
 						}
 					}
-
-					icon = ds.getColumn(rowindex, this.iconcolumn);
 
 					var nextlevel = ds.getColumn(rowindex + 1, this.levelcolumn);
 
@@ -556,6 +600,35 @@ if (!nexacro.TrayPopupMenu) {
 			}
 		}
 	};
+
+
+	_pTrayPopupMenu._getSysURL = function (v, target) {
+		var sysurl = v;
+		if (v && (typeof (v) == "string")) {
+			var sysbaseurl;
+			var val = v.trim();
+			if (val) {
+				if (val.substring(0, 3).toLowerCase() == "url") {
+					var url;
+					var ch = val.charAt(4);
+					if (ch == '\'' || ch == '\"') {
+						url = val.substring(5, val.lastIndexOf(ch));
+					}
+					else {
+						url = val.substring(4, val.length - 1);
+					}
+					sysbaseurl = target ? target._getRefFormBaseUrl() : nexacro._project_absolutepath;
+					sysurl = nexacro._getSupportedImageUrl(url, sysbaseurl);
+				}
+				else {
+					sysbaseurl = target ? target._getRefFormBaseUrl() : nexacro._project_absolutepath;
+					sysurl = nexacro._getSupportedImageUrl(val, sysbaseurl);
+				}
+			}
+		}
+		return sysurl;
+	};
+
 
 	delete _pTrayPopupMenu;
 }
