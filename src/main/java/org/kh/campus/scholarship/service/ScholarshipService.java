@@ -11,7 +11,7 @@ public interface ScholarshipService {
 	public int modifyScholarAccept(Scholarship scholarship);
 	public int modifyScholarDenine(Scholarship scholarship);
 	
-	public List<Scholarship> printStuInfo(Scholarship scholarship);
+	
 	
 
 

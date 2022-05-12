@@ -35,6 +35,13 @@ public class ScholarshipServiceImpl implements ScholarshipService {
 		return result;
 	}
 
+	/*
+	 * @Override public List<Scholarship> printAllScholar(Scholarship scholarship,
+	 * int managerNo) { List<Scholarship> sList =
+	 * sStore.selectAllScholar(sqlSession, scholarship, managerNo); return sList;
+	 * 
+	 * }
+	 */
 	@Override
 	public List<Scholarship> printAllScholar(Scholarship scholarship) {
 		List<Scholarship> sList = sStore.selectAllScholar(sqlSession, scholarship);
@@ -50,11 +57,7 @@ public class ScholarshipServiceImpl implements ScholarshipService {
 		
 	}
 
-	@Override
-	public List<Scholarship> printStuInfo(Scholarship scholarship) {
-		List<Scholarship>sList = sStore.selectStuInfo(sqlSession, scholarship);
-		return sList;
-	}
+
 
 	
 
