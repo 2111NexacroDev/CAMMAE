@@ -14,8 +14,8 @@ public class ManagerStoreLogic implements ManagerStore {
 
 	// 학생
 	@Override
-	public List<Student> selectAllStudent(SqlSession sqlSession) {
-		List<Student> sList = sqlSession.selectList("ManagerMapper.selectStudentList");
+	public List<Student> selectAllStudent(SqlSession sqlSession, String uniCode) {
+		List<Student> sList = sqlSession.selectList("ManagerMapper.selectStudentList", uniCode);
 		return sList;
 	}
 

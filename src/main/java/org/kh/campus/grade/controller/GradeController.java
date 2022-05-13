@@ -21,7 +21,7 @@ public class GradeController {
 	@Autowired
 	private GradeService gService;
 	
-	// 학생 성적 조회
+	// 학생 성적 조회 git테스트
 	@RequestMapping(value="/grade/stdGrade.kh", method=RequestMethod.GET)
 	public NexacroResult printGradeStudent() {
 		int 	nErrorCode = 0;

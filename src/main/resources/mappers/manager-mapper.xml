@@ -23,7 +23,7 @@
 	</resultMap>
 	
 	<select id="selectStudentList" resultMap="studentResultMap">
-		SELECT * FROM STUDENT_TBL
+		SELECT * FROM STUDENT_TBL WHERE UNIVERSITY_CODE = #{uniCode}
 	</select>
 	
 	<insert id="insertStudent">
