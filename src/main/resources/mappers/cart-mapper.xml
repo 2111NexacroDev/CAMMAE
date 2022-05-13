@@ -58,9 +58,9 @@
 		SELECT * FROM LECTURE_TBL  
 	</select>
 	
-	<insert id="insertCart" parameterType="Lecture" >
+	<insert id="insertCart" parameterType="hashmap" >
 		INSERT INTO CART_TBL VALUES(SEQ_CART_NO.NEXTVAL
-		, '0'
+		, #{studentNo}
 		, #{lectureNo}
 		, DEFAULT
 		, '1학기'
@@ -68,19 +68,10 @@
 	</insert>
 	
 	<select id="selectMyCart" resultMap="cartResultMap">
-	SELECT 
-    C.CART_NO
-    ,C.LECTURE_NO
- 	 , L.LECTURE_DIVISION
- 	 , G.LECTURE_GRADE 
- 	 , L.PROFESSOR_NAME
- 	 , L.LECTURE_NAME
-     , L.LECTURE_DEPARTMENT
-     , L.LECTURE_TIME
-     FROM CART_TBL C INNER JOIN LECTURE_TBL L
-     ON C.LECTURE_NO = L.LECTURE_NO
-     INNER JOIN GRADE_TBL G
-     ON G.LECTURE_NO = C.LECTURE_NO
+	SELECT *
+    FROM CART_TBL C JOIN LECTURE_TBL L
+    ON C.LECTURE_NO = L.LECTURE_NO
+    WHERE C.STUDENT_NO = #{studentNo}
 	<!-- SELECT *
 FROM CART_TBL  JOIN  LECTURE_TBL
      ON CART_TBL.LECTURE_NO = LECTURE_TBL.LECTURE_NO; -->
@@ -103,16 +94,18 @@ FROM CART_TBL  JOIN  LECTURE_TBL
  	</select> 
  	
  	<insert id="insertEnroll" parameterType="Lecture">
- 	 INSERT INTO GRADE_TBL
+ 	 INSERT INTO GRADE_TBL(LECTURE_NO
+, STUDENT_NO, PROFESSOR_NO, 
+GRADE_YEAR, GRADE_SESSION
+,GRADE_SUBJECT , LECTURE_DIVISION, LECTURE_GRADE)
  	 VALUES(#{lectureNo}
- 	 , 0
- 	 , 0
- 	 , 0, 0, 0
+ 	 , #{studentNo}
+ 	 , #{professorNo}
+ 	 , #{gradeYear}
+ 	 , #{gradeSession}
+ 	 , #{lectureName}
  	 , #{lectureDivision}
- 	 , #{lectureGrade}
- 	 ,0,0,0
- 	 ,default
- 	 ,0,0,0) 
+ 	 , #{lectureGrade}) 
  	</insert>
  	
  	<select id="selectMyEnroll" resultMap="lectureResultMap">
@@ -143,5 +136,8 @@ SELECT G.LECTURE_NO
  	 DELETE FROM GRADE_TBL WHERE LECTURE_NO=#{lectureNo} AND STUDENT_NO=#{studentNo}
  	</delete>
  	
+<!--  	<select id="selectEnrollCount">
+ 	SELECT COUNT(*) FROM CART_TBL
+ 	</select> -->
 
  </mapper>

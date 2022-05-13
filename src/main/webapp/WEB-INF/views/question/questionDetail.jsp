@@ -19,30 +19,48 @@
 	margin-bottom: 20px;
 	margin-left: 0px;
 }
+
 hr {
 	width: 740px;
 	text-align: center;
-	margin-top:10px;
-	margin-bottom:10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
-.title{
-	font-size:18.5px;
+
+.title {
+	font-weight: bold;
+	font-size: 18.5px;
 }
+
 #writer {
+	font-size: 14px;
 	width: 70%;
 	float: left;
-	margin-top:10px;
+	margin-top: 10px;
 	margin-bottom: 10px;
 }
 
 #date {
+	font-size: 14px;
 	width: 30%;
-	text-align:right;
+	text-align: right;
 	float: left;
-	margin-top:10px;
+	margin-top: 10px;
 	margin-bottom: 10px;
 }
 /* 댓글 */
+#rWriter {
+	font-weight: bold;
+}
+
+#rDate {
+	font-size: 14px;
+}
+
+#btnArea {
+	font-size: 14px;
+}
+
 #rContents {
 	float: left;
 }
@@ -51,8 +69,9 @@ hr {
 	float: left;
 	margin-left: 15px;
 	margin-top: 38px;
-	margin-bottom:10px
+	margin-bottom: 10px
 }
+
 #rQuestionWriter {
 	width: 80%;
 	float: left;
@@ -85,14 +104,17 @@ hr {
 					<h2>질의응답게시판</h2>
 				</div>
 				<div class="btn_1">
-					<c:url var="qModify" value="/question/modifyView">
-						<c:param name="questionNo" value="${question.questionNo }"></c:param>
-					</c:url>
-					<button class="btn" onclick="location.href='${qModify }'">수정</button>
-					<c:url var="qDelete" value="/question/delete">
-						<c:param name="questionNo" value="${question.questionNo }"></c:param>
-					</c:url>
-					<button class="btn" onclick="location.href='${qDelete }'">삭제</button>
+					<c:if
+						test="${sessionScope.loginUser.studentNo eq question.questionId || sessionScope.loginManager ne null}">
+						<c:url var="qModify" value="/question/modifyView">
+							<c:param name="questionNo" value="${question.questionNo }"></c:param>
+						</c:url>
+						<button class="btn" onclick="location.href='${qModify }'">수정</button>
+						<c:url var="qDelete" value="/question/delete">
+							<c:param name="questionNo" value="${question.questionNo }"></c:param>
+						</c:url>
+						<button class="btn" onclick="location.href='${qDelete }'">삭제</button>
+					</c:if>
 					<button class="btn" onclick="location.href='/question/list'">목록</button>
 				</div>
 			</div>
@@ -122,10 +144,12 @@ hr {
 				<div>
 					<input type="hidden" id="questionNo"
 						value="${question.questionNo }">
+
 					<textarea rows="4" cols="91" id="rContents"></textarea>
 					<button class="btn" id="rbtn">등록</button>
+					<hr>
+
 				</div>
-				<hr>
 				<!-- 댓글 조회 -->
 				<div id="replyArea">
 					<table align="center" width="700px" id="rtb">
@@ -151,6 +175,7 @@ hr {
 			var questionNo = $("#questionNo").val(); /* 어떤 게시글에 대한 댓글인지 알기 위함 */
 			var rContents = $("#rContents").val();
 			var rWriter = "${loginProfessor.professorName}";
+			var rWriterId = "${loginProfessor.professorNo}";
 			<c:if test="${empty sessionScope.loginProfessor }">
 			alert("교수 로그인을 해주세요.");
 			</c:if>
@@ -161,7 +186,8 @@ hr {
 				data : {
 					"questionNo" : questionNo,
 					"questionReplyContent" : rContents,
-					"questionReplyWriter": rWriter
+					"questionReplyWriter" : rWriter,
+					"questionReplyId" : rWriterId
 				}, //json형태
 				success : function(data) {
 					getQuestionReplyList();
@@ -178,45 +204,60 @@ hr {
 		//댓글 불러오는 함수
 		function getQuestionReplyList() {
 			var questionNo = $("#questionNo").val();
-			$.ajax({
-				url : "/question/replyList",
-				type : "get",
-				data : {
-					"questionNo" : questionNo
-				},
-				success : function(data) {
-					var $tableBody = $("#rtb tbody");
-					$tableBody.html("");
-					for (var i = 0; i < data.length; i++) {
-						var $tr = $("<tr>");
-						var $rWriter = $("<td width='100'>").text(
-								data[i].questionReplyWriter);
-						var $rContent = $("<td>").text(
-								data[i].questionReplyContent);
-						var $rDate = $("<td width='100'>").text(
-								data[i].questionReplyDate);
-						var $btnArea = $("<td width='80'>").append(
-								"<a href='javascript:void(0)' onclick='modifyReplyView(this,"
-										+ data[i].questionNo + ", "
-										+ data[i].questionReplyNo + ", \""
-										+ data[i].questionReplyContent
-										+ "\");'>수정</a> ").append(
-								"<a href='javascript:void(0)' onclick='removeReply("
-										+ data[i].questionNo + ","
-										+ data[i].questionReplyNo
-										+ ");'>삭제</a>");
-						$tr.append($rWriter);
-						$tr.append($rContent);
-						$tr.append($rDate);
-						$tr.append($btnArea);
-						$tableBody.append($tr);
-					}
-				},
-				error : function() {
-					var $tableBody = $("#rtb tbody");
-					$tableBody.html(""); //기존댓글 내용 비우기
-				}
-			});
+			var rWriter = "${loginProfessor.professorName}";
+			var rWriterId = "${loginProfessor.professorNo}";
+
+			$
+					.ajax({
+						url : "/question/replyList",
+						type : "get",
+						data : {
+							"questionNo" : questionNo
+						},
+						success : function(data) {
+							var $tableBody = $("#rtb tbody");
+							$tableBody.html("");
+							for (var i = 0; i < data.length; i++) {
+								var $tr = $("<tr>");
+								var $tr2 = $("<tr>");
+								var $rWriter = $(
+										"<td id='rWriter' width='100%'>").text(
+										data[i].questionReplyWriter);
+								var $rContent = $(
+										"<td width='100%' align='left'>").text(
+										data[i].questionReplyContent);
+								var $rDate = $("<td id='rDate' width='10%' align='right'>")
+										.text(data[i].questionReplyDate);
+								var $btnArea = $("<td id='btnArea' align='right'>").append(
+										"<a href='javascript:void(0)' onclick='modifyReplyView(this,"
+												+ data[i].questionNo + ", "
+												+ data[i].questionReplyNo
+												+ ", \""
+												+ data[i].questionReplyContent
+												+ "\");'>수정</a> ").append(
+										"<a href='javascript:void(0)' onclick='removeReply("
+												+ data[i].questionNo + ","
+												+ data[i].questionReplyNo
+												+ ");'>삭제</a>");
+								var $rLine = $("<tr><td colspan='4'><hr style='width:740px;'>");
+
+								$tr.append($rWriter);
+								$tr.append($rDate);
+								$tr2.append($rContent);
+								if (data[i].questionReplyId == rWriterId && data[i].questionReplyWriter == rWriter) {
+									$tr2.append($btnArea);
+								}
+
+								$tableBody.append($tr);
+								$tableBody.append($tr2);
+								$tableBody.append($rLine);
+							}
+						},
+						error : function() {
+							var $tableBody = $("#rtb tbody");
+							$tableBody.html(""); //기존댓글 내용 비우기
+						}
+					});
 		}
 
 		/* 댓글 삭제 */

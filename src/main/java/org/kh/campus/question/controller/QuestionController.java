@@ -118,6 +118,7 @@ public class QuestionController {
 		}
 		
 		if(!lList.isEmpty()) {
+			model.addAttribute("questionId", student.getStudentNo());
 			model.addAttribute("questionWriter", student.getStudentName());
 			model.addAttribute("lList", lList);
 			model.addAttribute("menu", "question");

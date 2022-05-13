@@ -3,9 +3,11 @@ package org.kh.campus.lecture.service.logic;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.kh.campus.board.domain.University;
 import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.lecture.service.LectureService;
 import org.kh.campus.lecture.store.LectureStore;
+import org.kh.campus.professor.domain.Professor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,8 +50,14 @@ public class LectureServiceImpl implements LectureService{
 	}
 
 	@Override
-	public List<Lecture> printAllProName(String professorName) {
-		List<Lecture> lList = lStore.selectAllProName(sqlSession, professorName);
+	public List<Professor> printAllProName() {
+		List<Professor> lList = lStore.selectAllProName(sqlSession);
+		return lList;
+	}
+
+	@Override
+	public List<University> printAllDep() {
+		List<University> lList = lStore.selectAllDept(sqlSession);
 		return lList;
 	}
 

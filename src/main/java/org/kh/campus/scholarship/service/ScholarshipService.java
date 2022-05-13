@@ -10,11 +10,4 @@ public interface ScholarshipService {
 	public int registerScholar(Scholarship scholarship);
 	public int modifyScholarAccept(Scholarship scholarship);
 	public int modifyScholarDenine(Scholarship scholarship);
-	
-	public List<Scholarship> printStuInfo(Scholarship scholarship);
-	
-
-
-	
-
 }

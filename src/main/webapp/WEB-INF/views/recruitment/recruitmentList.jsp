@@ -5,7 +5,12 @@
 <html>
 <head>
 <style>
-
+#r1{
+	width:10%;
+}
+#r2{
+	width:15%;
+}
 </style>
 <link rel="stylesheet" href="/resources/menuBar.css">
 <meta charset="UTF-8">
@@ -32,12 +37,12 @@
 			<table class="type01">
 				<thead>
 					<tr>
-						<th>번호</th>
+						<th id="r1">번호</th>
 						<th>제목</th>
-						<th>작성자</th>
-						<th>작성일</th>
-						<th>조회수</th>
-						<th>마감일</th>
+						<th id="r2">작성자</th>
+						<th id="r2">작성일</th>
+						<th id="r1">조회수</th>
+						<th id="r2">마감일</th>
 					</tr>
 				</thead>
 				<tbody>

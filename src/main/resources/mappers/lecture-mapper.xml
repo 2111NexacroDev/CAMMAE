@@ -27,7 +27,7 @@
 	
 	<insert id="insertLecture"  parameterType="Lecture">
 	INSERT INTO LECTURE_TBL VALUES(SEQ_LEC_NO.NEXTVAL
-	, NULL
+	, #{professorNo}
 	, NULL
 	, #{lectureDepartment}
 	, #{lectureName}
@@ -57,8 +57,37 @@
 		DELETE FROM LECTURE_TBL WHERE LECTURE_NO = #{lectureNo}
 	</delete>
 	
-	<select id="selectAllProName" resultMap="lectureResultMap">
+	<!-- <select id="selectAllProName" resultMap="lectureResultMap">
 		SELECT DISTINCT
 		PROFESSOR_NAME FROM LECTURE_TBL ORDER BY PROFESSOR_NAME ASC
+	</select> -->
+	
+	
+	<resultMap type="Professor" id="professorResultMap">
+		<id property="professorNo" column="PROFESSOR_NO"/>
+		<result property="departmentName" column="DEPARTMENT_NAME"/>
+		<result property="professorName" column="PROFESSOR_NAME"/>
+		<result property="professorBirth" column="PROFESSOR_BIRTH"/>
+		<result property="professorAddress" column="PROFESSOR_ADDRESS"/>
+		<result property="professorPhonenumber" column="PROFESSOR_PHONENUMBER"/>
+		<result property="professorEmail" column="PROFESSOR_EMAIL"/>
+		<result property="professorPassword" column="PROFESSOR_PASSWORD"/>
+		<result property="universityCode" column="UNIVERSITY_CODE"/>
+		<result property="chk" column="CHK"/>
+	</resultMap>
+	
+	<select id="selectAllProName" resultMap="professorResultMap">
+		SELECT * FROM PROFESSOR_TBL
 	</select>
+
+	<resultMap type="university" id="universityResultMap">
+		<id property="universityCode"        column="UNIVERSITY_CODE" />
+		<result property="universityName"    column="UNIVERSITY_NAME" />
+		<result property="universityCollege" column="UNIVERSITY_COLLEGE" />
+	</resultMap>
+	
+	<select id="selectAllDept" resultMap="universityResultMap">
+		SELECT * FROM UNIVERSITY_TBL
+	</select>
+	
 </mapper>

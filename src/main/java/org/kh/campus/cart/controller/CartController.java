@@ -30,7 +30,10 @@ public class CartController {
 	@Autowired
 	private LectureService lService;
 
-	// 예비수강신청 목록, 등록페이지
+	
+	// 되돌리다가 원본 훼손 방지 라인
+	
+	// 예비수강신청 목록, 등록페이지 
 	@RequestMapping(value = "/cart/preCartListView.kh", method = RequestMethod.GET)
 	public ModelAndView cartListView(ModelAndView mv) {
 		List<Lecture> lList = cService.printAllCart();
@@ -53,7 +56,11 @@ public class CartController {
 	@RequestMapping(value = "/cart/cartPick.kh", method = RequestMethod.GET)
 	public ModelAndView cartRegister(ModelAndView mv, @RequestParam("lectureNo") int lectureNo) {
 		try {
-			int result = cService.registerCart(lectureNo);
+			int studentNo = 0;
+			HashMap<String, Integer> map = new HashMap<String, Integer>();
+			map.put("lectureNo", lectureNo);
+			map.put("studentNo", studentNo);
+			int result = cService.registerCart(map);
 			if (result > 0) {
 				mv.setViewName("redirect:/cart/preCartListView.kh");
 			} else {
@@ -70,7 +77,8 @@ public class CartController {
 //	 예비수강신청 내역 목록
 	@RequestMapping(value = "/cart/myCartList.kh", method = RequestMethod.GET)
 	public ModelAndView myCartList(ModelAndView mv) {
-		List<Cart> cList = cService.printMyCart();
+		int studentNo = 0;
+		List<Cart> cList = cService.printMyCart(studentNo);
 		try {
 			if (!cList.isEmpty()) {
 				mv.addObject("cList", cList);
@@ -115,6 +123,7 @@ public class CartController {
 		return mv;
 	}
 	
+	// 수강신청 신청목록 페이지 리스트 출력기능
 	@ResponseBody
 	@RequestMapping(value = "/cart/enrollRegister2.kh", method = RequestMethod.GET , produces="application/json;charset=utf-8" )
 	public String enrollListView2(@RequestParam(value = "lecturedep", required = false) String lectureDepartment) {
@@ -147,6 +156,8 @@ public class CartController {
 		return null;
 	}
 	
+	
+	//  예비수강신청 목록에서 수강신청 목록으로 넣어주는 기능
 	@RequestMapping(value = "/cart/cartEnroll.kh", method = RequestMethod.GET)
 	public ModelAndView cartListInsert(ModelAndView mv, @RequestParam("lectureNo") int lectureNo) {
 		try {
@@ -185,7 +196,7 @@ public class CartController {
 	
 	
 	
-	
+	// 수강 내역 목록 출력
 	@RequestMapping(value = "/cart/enrollList.kh", method = RequestMethod.GET)
 	public ModelAndView enrollMyListView(ModelAndView mv) {
 		List<Lecture> lList = cService.printMyEnroll();
@@ -194,6 +205,15 @@ public class CartController {
 				mv.addObject("lList", lList);
 				mv.setViewName("cart/enrollList");
 				System.out.println(lList.toString());
+				
+				
+				
+				
+//				long count = cService.countByEnrollPeole(lecture);
+//				System.out.println(count);
+				
+				
+				
 			} else {
 				System.out.println("실패했습니다.");
 			}
@@ -203,6 +223,8 @@ public class CartController {
 		return mv;
 	}
 	
+	
+	// 수강신청 내역 내 삭제(신청취소)
 	@RequestMapping(value = "/cart/enrollRemove.kh", method = RequestMethod.GET)
 	public String lectureRemove(Model model, @RequestParam("lectureNo") int lectureNo) {
 	try {

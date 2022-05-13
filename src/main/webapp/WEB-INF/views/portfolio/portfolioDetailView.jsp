@@ -80,12 +80,15 @@ tr {
 		</div>
 		<!-- contents-main -->
 		<div id="center">
-			<br>
+			<div class="c-title">
+					<h2 class="b-title">포트폴리오</h2>
+					</div>
+					<br><br>
 		<div class="bbs">
-			<h2 align="left" style="color: rgb(0, 74, 38)">포트폴리오</h2>
+			
 			<input type="hidden" name="port_no" value="${portfolio.port_no}" />
 
-	<div class="tb1">
+		<div class="tb1">
 					<table>
 						<colgroup>
 							<col style="width:180px;">

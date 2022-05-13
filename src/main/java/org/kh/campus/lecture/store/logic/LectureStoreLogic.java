@@ -3,8 +3,10 @@ package org.kh.campus.lecture.store.logic;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.kh.campus.board.domain.University;
 import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.lecture.store.LectureStore;
+import org.kh.campus.professor.domain.Professor;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -17,8 +19,14 @@ public class LectureStoreLogic implements LectureStore{
 	}
 	
 	@Override
-	public List<Lecture> selectAllProName(SqlSession sqlSession, String professorName) {
-		List<Lecture> lList = sqlSession.selectList("LectureMapper.selectAllProName", professorName);
+	public List<Professor> selectAllProName(SqlSession sqlSession) {
+		List<Professor> lList = sqlSession.selectList("LectureMapper.selectAllProName");
+		return lList;
+	}
+	
+	@Override
+	public List<University> selectAllDept(SqlSession sqlSession) {
+		List<University> lList = sqlSession.selectList("LectureMapper.selectAllDept");
 		return lList;
 	}
 
@@ -45,5 +53,4 @@ public class LectureStoreLogic implements LectureStore{
 		Lecture lecture = sqlSession.selectOne("LectureMapper.selectOneLecture", lectureNo);
 		return lecture;
 	}
-
 }

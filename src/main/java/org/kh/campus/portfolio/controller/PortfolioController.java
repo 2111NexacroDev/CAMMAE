@@ -150,6 +150,7 @@ public class PortfolioController {
 		Portfolio portfolio = pService.printDetailPort(port_no);
 		if (portfolio != null) {
 			model.addAttribute("portfolio", portfolio);
+			model.addAttribute("menu", "portfolio");
 			return "portfolio/portfolioDetailView";
 		} else {
 			model.addAttribute("msg", "관리자 포트폴리오 디테일 조회 실패");
@@ -165,6 +166,7 @@ public class PortfolioController {
 		Portfolio portfolio = pService.printOneByNo(port_no);
 		if (portfolio != null) {
 			model.addAttribute("portfolio", portfolio);
+			model.addAttribute("menu", "portfolio");
 			return "portfolio/portfolioUpdateForm";
 		} else {
 			model.addAttribute("msg", "게시글 조회 실패");
@@ -270,6 +272,7 @@ public class PortfolioController {
 		Portfolio portfolio = pService.printAdminDetailPort(port_no);
 		if (portfolio != null) {
 			model.addAttribute("portfolio", portfolio);
+			model.addAttribute("menu", "portfolio");
 			return "portfolio/portfolioAdminDetailView";
 		} else {
 			model.addAttribute("msg", "관리자 포트폴리오 디테일 조회 실패");

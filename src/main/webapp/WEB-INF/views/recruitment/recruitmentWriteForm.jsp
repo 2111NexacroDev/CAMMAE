@@ -9,9 +9,9 @@ input::placeholder {
    font-weight: bold;
 }
 
-input {
-   color: rgb(52, 152, 219);
-   font-weight: bold;
+#input_1 {
+	color: rgb(52, 152, 219);
+	font-weight: bold;
 }
 
 span {
@@ -50,8 +50,11 @@ table.type02 td {
    margin-left: 280px;
    width: 250px;
    padding: 10px;
+   font-weight: bold;  
 }
-
+.companyName::placeholder{
+	color: black;
+}
 .main_content {
    width: 800px;
    /*    height: 360px; */
@@ -132,23 +135,23 @@ table.type02 td {
             <div class="main_content">
                <div class="main_content1">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>지원자격</span> <br> <br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">경력</span>&nbsp;&nbsp;&nbsp;<input
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">경력</span>&nbsp;&nbsp;&nbsp;<input id="input_1"
                      type="text" name="recruitmentCareer" placeholder="내용을 입력하세요.">
                   <br> <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
-                     id="span_1">학력</span>&nbsp;&nbsp;&nbsp;<input type="text"
+                     id="span_1">학력</span>&nbsp;&nbsp;&nbsp;<input type="text" id="input_1"
                      name="recruitmentEducation" placeholder="내용을 입력하세요."> <br>
-                  <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">우대</span>&nbsp;&nbsp;&nbsp;<input
+                  <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">우대</span>&nbsp;&nbsp;&nbsp;<input id="input_1"
                      type="text" name="recruitmentPrefer" placeholder="내용을 입력하세요.">
                </div>
                <div class="main_content2">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>지원자격</span> <br> <br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">고용형태</span>&nbsp;&nbsp;&nbsp;<input
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">고용형태</span>&nbsp;&nbsp;&nbsp;<input id="input_1"
                      type="text" name="recruitmentType" placeholder="내용을 입력하세요.">
                   <br> <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
-                     id="span_1">급여</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+                     id="span_1">급여</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="input_1"
                      type="text" name="recruitmentSalary" placeholder="내용을 입력하세요.">
                   <br> <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
-                     id="span_1">지역</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+                     id="span_1">지역</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input 
                      type="text" id="sample5_address" placeholder="주소"
                      name="recruitmentRegion"> <input type="button"
                      onclick="sample5_execDaumPostcode()" value="주소 검색"><br>
@@ -170,14 +173,13 @@ table.type02 td {
    <!-- footer -->
    <jsp:include page="../common/footer.jsp"></jsp:include>
 
-   <script>
+  <script>
       var mapContainer = document.getElementById('map'), // 지도를 표시할 div
       mapOption = {
          center : new daum.maps.LatLng(37.537187, 127.005476), // 지도의 중심좌표
          level : 5
       // 지도의 확대 레벨
       };
-
       //지도를 미리 생성
       var map = new daum.maps.Map(mapContainer, mapOption);
       //주소-좌표 변환 객체를 생성
@@ -187,32 +189,28 @@ table.type02 td {
          position : new daum.maps.LatLng(37.537187, 127.005476),
          map : map
       });
-
       function sample5_execDaumPostcode() {
          new daum.Postcode({
             oncomplete : function(data) {
                var addr = data.address; // 최종 주소 변수
-
                // 주소 정보를 해당 필드에 넣는다.
                document.getElementById("sample5_address").value = addr;
                // 주소로 상세 정보를 검색
-               geocoder.addressSearch(data.address, function(results,
-                     status) {
-                  // 정상적으로 검색이 완료됐으면
-                  if (status === daum.maps.services.Status.OK) {
+               geocoder.addressSearch(data.address, function(results, status) {
+                   // 정상적으로 검색이 완료됐으면
+                   if (status === daum.maps.services.Status.OK) {
 
-                     var result = results[0]; //첫번째 결과의 값을 활용
+                       var result = results[0]; //첫번째 결과의 값을 활용
 
-                     // 해당 주소에 대한 좌표를 받아서
-                     var coords = new daum.maps.LatLng(result.y,
-                           result.x);
-                     // 지도를 보여준다.
-                     mapContainer.style.display = "block";
-                     map.relayout();
-                     // 지도 중심을 변경한다.
-                     map.setCenter(coords);
-                     // 마커를 결과값으로 받은 위치로 옮긴다.
-                     marker.setPosition(coords)
+                       // 해당 주소에 대한 좌표를 받아서
+                       var coords = new daum.maps.LatLng(result.y, result.x);
+                       // 지도를 보여준다.
+                       mapContainer.style.display = "block";
+                       map.relayout();
+                       // 지도 중심을 변경한다.
+                       map.setCenter(coords);
+                       // 마커를 결과값으로 받은 위치로 옮긴다.
+                       marker.setPosition(coords)
                   }
                });
             }

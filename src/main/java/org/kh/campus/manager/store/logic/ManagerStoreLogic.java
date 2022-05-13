@@ -93,5 +93,4 @@ public class ManagerStoreLogic implements ManagerStore {
 		return ma;
 	}
 
-
 }

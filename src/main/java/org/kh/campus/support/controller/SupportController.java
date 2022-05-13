@@ -15,6 +15,7 @@ import org.kh.campus.support.domain.Support;
 import org.kh.campus.support.service.SupportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,8 +47,9 @@ public class SupportController {
 			if(!sList.isEmpty()) {
 				mv.addObject("sList",sList);
 				mv.addObject("pageInfo", pageInfo);
-				mv.setViewName("support/supportList");
+				mv.addObject("currentPage", currentPage);
 				mv.addObject("menu", "support");
+				mv.setViewName("support/supportList");
 			}else {
 				mv.setViewName("support/supportList");
 			}
@@ -134,7 +136,7 @@ public class SupportController {
 	//선택삭제
 	   @ResponseBody
 	   @RequestMapping(value="/deleteSupport", method=RequestMethod.POST)
-	   public String ajaxDelete(HttpServletRequest request) {
+	   public String ajaxDelete(Model model,HttpServletRequest request) {
 		   
 		   String[] ajaxMsg = request.getParameterValues("valueArr");
 		   int size = ajaxMsg.length;
@@ -142,7 +144,7 @@ public class SupportController {
 			   sService.checkDelete (Integer.parseInt(ajaxMsg[i]));
 			   System.out.println(ajaxMsg[i]);
 		   }
-		   
+		   model.addAttribute("menu", "support");
 		   return "redirect:support/list.kh";
 	   }
 	

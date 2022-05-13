@@ -81,6 +81,7 @@ public class ConsultantController {
 		Consultant studentOne = cService.printOneByStNo(studentNo);
 			if(studentOne != null) {
 			model.addAttribute("consultant", studentOne);
+			model.addAttribute("menu", "consultant");
 			return "redirect:/consultant/list.kh";	
 			}else {
 				model.addAttribute("msg", "등록실패");
@@ -103,6 +104,7 @@ public class ConsultantController {
 		Consultant consultant = cService.printDetailCons(map);
 		if(consultant != null) {
 			model.addAttribute("consultant", consultant);
+			model.addAttribute("menu", "consultant");
 			return "consultant/consultantDetailView";		
 		}else {
 			model.addAttribute("msg", "관리자 상담 전체 조회 실패");
@@ -145,6 +147,8 @@ public class ConsultantController {
 		if(!cList.isEmpty()) {
 			model.addAttribute("cList", cList);
 			model.addAttribute("pi", pi);
+			model.addAttribute("menu", "consultant");
+			model.addAttribute("currentPage", currentPage);
 			return "consultant/consultantAdminListView";
 		}else {
 			model.addAttribute("msg", "상담 전체 조회 실패");
@@ -158,6 +162,7 @@ public class ConsultantController {
 		Consultant consultant = cService.printAdminDetailCons(consultant_no);
 		if(consultant != null) {
 			model.addAttribute("consultant", consultant);
+			model.addAttribute("menu", "consultant");
 			return "consultant/consultantAdminDetailView";		
 		}else {
 			model.addAttribute("msg", "관리자 상담 디테일 조회 실패");

@@ -7,6 +7,62 @@
 <meta charset="UTF-8">
 <title>관리자 상담신청 전체조회 페이지</title>
 <link rel="stylesheet" href="/resources/contents.css">
+<style>
+
+
+.bbs {
+	position: relative;
+	margin-bottom: 40px;
+}
+
+.bbs table {
+	width: 1000px;
+	border-top: 1px solid #343434;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+thead {
+	background: rgb(237, 237, 237);
+	height: 50px;
+	border-bottom: 2px solid #c2c2c2;
+}
+
+tr {
+	display: table-row;
+	border-color: inherit;
+}
+
+tbody {
+	display: table-row-group;
+	vertical-align: middle;
+	border-color: inherit;
+}
+
+.bbs_ table th, .bbs table td {
+	padding: 12px 10px;
+	border-bottom: 1px solid #c2c2c2;
+	font-size: 16px;
+}
+
+.bbs table .space {
+	background: #fdfdfd;
+}
+
+.ta {
+	text-align: center;
+}
+
+td a{
+	text-decoration: none;
+	color: black;
+}
+
+</style>
+
 <body>
 	<c:if test="${empty sessionScope}">
 		<jsp:forward page="/login/loginPage.kh" />
@@ -17,13 +73,15 @@
 		<!-- contents -->
 		<div id="content">
 			<div id="left">
-				<jsp:include page="../common/sideBMenu.jsp"></jsp:include>
+				<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
 			</div>
 			<!-- contents-main -->
 			<div id="center">
-				<h3 id="b-title">상담관리</h3>
-				<br>
-				<div>
+				<div class="c-title">
+					<h2 id="b-title">상담관리</h2>
+				</div>
+				<br><br><br>
+				<div class="bbs">
 					<table>
 
 						<thead>
@@ -67,12 +125,14 @@
 							</c:forEach>
 						</tbody>
 					</table>
+					<br>
+					<div class="paging" align="center">
 
-					<div class="paging">
+						<c:if test="${pi.startNavi !=1}">
 
-						<c:if test="${pi.prev}">
-
-							<a href="/consultant/adlist.kh?page=${pi.startNavi-1}"> </a>
+							<a href="/consultant/adlist.kh?page=${pi.startNavi-1}"> 
+								<button class="pbtn">＜</button>
+							</a>
 
 						</c:if>
 
@@ -81,14 +141,16 @@
 								<c:param name="page" value="${p }"></c:param>
 							</c:url>
 
-							<a href="${pagination }">${p }</a>&nbsp;
+							<a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
 																		
-									</c:forEach>
+						</c:forEach>
 
 
 						<c:if test="${pi.next && pi.endNavi > 0}">
 
-							<a href="/consultant/adlist.kh?page=${pi.endNavi+1}"> </a>
+							<a href="/consultant/adlist.kh?page=${pi.endNavi+1}"> 
+								<button class="pbtn">＞</button>
+							</a>
 						</c:if>
 
 					</div>

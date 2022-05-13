@@ -4,9 +4,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.kh.campus.board.domain.University;
 import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.lecture.service.LectureService;
 import org.kh.campus.notice.domain.Notice;
+import org.kh.campus.professor.domain.Professor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -122,10 +124,11 @@ public class LectureController {
 	}
 	}
 	
+	// 수강개설 할때 교수명 db에서 불러오는 기능
 	@ResponseBody
-	@RequestMapping(value = "/lecture/selectLecture", method =RequestMethod.GET, produces = "application/json;charset=utf-8") 
-	public String lectureProList(@RequestParam("professorName") String professorName) {
-		List<Lecture> lList = lService.printAllProName(professorName);
+	@RequestMapping(value = "/lecture/selectLecture.kh", method =RequestMethod.GET, produces = "application/json;charset=utf-8") 
+	public String lectureProList(Model model) {
+		List<Professor> lList = lService.printAllProName();
 	  
 	  if (!lList.isEmpty()) { 
 		 Gson gson = new Gson();
@@ -134,6 +137,21 @@ public class LectureController {
 	  
 	  return null;
 	  }
+	
+	
+	// 수강개설할때 학과명 db에서 불러오는 기능
+	@ResponseBody
+	@RequestMapping(value = "/lecture/selectDepartment.kh", method=RequestMethod.GET, produces = "application/json;charset=utf-8")
+	public String lecturedepList(Model model) {
+		List<University> lList = lService.printAllDep();
+		
+		if (!lList.isEmpty()) { 
+			 Gson gson = new Gson();
+			 return gson.toJson(lList);
+		  }
+		
+		return null;
+	}
 	
 	
 

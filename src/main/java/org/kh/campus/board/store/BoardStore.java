@@ -32,5 +32,8 @@ public interface BoardStore {
 	public int selectListCount(SqlSession sqlSession, PageInfo pageInfo);
 
 	public List<University> selectAllUniversity(SqlSession sqlSession);
+	
+	public int updateCount(int boardNo, SqlSession sqlSession);
+
 
 }

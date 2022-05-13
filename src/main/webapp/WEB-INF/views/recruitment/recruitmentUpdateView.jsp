@@ -4,12 +4,12 @@
 <html>
 <head>
 <style>
-input::placeholder {
+/* input::placeholder {
 	color: rgb(52, 152, 219);
 	font-weight: bold;
-}
+} */
 
-input {
+#input_1 {
 	color: rgb(52, 152, 219);
 	font-weight: bold;
 }
@@ -50,6 +50,7 @@ table.type02 td {
 	margin-left: 280px;
 	width: 250px;
 	padding: 10px;
+	 font-weight: bold; 
 }
 
 .main_content {
@@ -103,9 +104,7 @@ table.type02 td {
 					<div class="b-title">
 						<h2>채용공고</h2>
 					</div>
-					<div class="btn_1">
-						<input class="btn" type="submit" value="수정하기">
-					</div>
+
 				</div>
 				<input type="hidden" name="recruitmentNo"
 					value="${recruitment.recruitmentNo }"> <br> <br>
@@ -117,7 +116,7 @@ table.type02 td {
 					</tr>
 					<tr>
 						<th scope="row">마감일</th>
-						<td><input type="date" name="recruitmentEndDate"
+						<td><input id="input_2" type="date" name="recruitmentEndDate"
 							value="${recruitment.recruitmentEndDate }"></td>
 					</tr>
 				</table>
@@ -128,33 +127,32 @@ table.type02 td {
 				<div class="main_content">
 					<div class="main_content1">
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>지원자격</span> <br> <br>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">경력</span>&nbsp;&nbsp;&nbsp;<input
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">경력</span>&nbsp;&nbsp;&nbsp;<input id="input_1"
 							type="text" name="recruitmentCareer"
 							value="${recruitment.recruitmentCareer }"> <br> <br>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">학력</span>&nbsp;&nbsp;&nbsp;<input
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">학력</span>&nbsp;&nbsp;&nbsp;<input id="input_1"
 							type="text" name="recruitmentEducation"
 							value="${recruitment.recruitmentEducation }"> <br> <br>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">우대</span>&nbsp;&nbsp;&nbsp;<input
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">우대</span>&nbsp;&nbsp;&nbsp;<input id="input_1"
 							type="text" name="recruitmentPrefer"
 							value="${recruitment.recruitmentPrefer }">
 					</div>
 					<div class="main_content2">
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>지원자격</span> <br> <br>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">고용형태</span>&nbsp;&nbsp;&nbsp;<input
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">고용형태</span>&nbsp;&nbsp;&nbsp;<input id="input_1"
 							type="text" name="recruitmentType"
 							value="${recruitment.recruitmentType }"> <br> <br>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">급여</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">급여</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="input_1"
 							type="text" name="recruitmentSalary"
 							value="${recruitment.recruitmentSalary }"> <br> <br>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">지역</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">지역</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input 
 							type="text" id="sample5_address" placeholder="주소"
 							name="recruitmentRegion"
-							value="${recruitment.recruitmentRegion }"><input
+							value="${recruitment.recruitmentRegion }"> <input
 							type="button" onclick="sample5_execDaumPostcode()" value="주소 검색"><br>
 					</div>
 					<br> <br>
 				</div>
-			</form>
 			<!-- c27b638af6c98ea42aa55b7709a8c29c -->
 			<div>
 				<div id="map"
@@ -164,7 +162,10 @@ table.type02 td {
 			</div>
 
 
-
+			<div align="center">
+				<input class="btn" type="submit" value="수정하기">
+			</div>
+			</form>
 		</div>
 	</div>
 

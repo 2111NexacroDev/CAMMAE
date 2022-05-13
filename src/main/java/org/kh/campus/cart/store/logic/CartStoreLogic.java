@@ -19,8 +19,8 @@ public class CartStoreLogic implements CartStore {
 	}
 
 	@Override
-	public int insertCart(SqlSession sqlSession, int lectureNo) {
-		int result = sqlSession.insert("CartMapper.insertCart", lectureNo);
+	public int insertCart(SqlSession sqlSession, HashMap<String, Integer> map) {
+		int result = sqlSession.insert("CartMapper.insertCart", map);
 		return result;
 	}
 
@@ -31,8 +31,8 @@ public class CartStoreLogic implements CartStore {
 	}
 
 	@Override
-	public List<Cart> selectMyCart(SqlSession sqlSession) {
-		List<Cart> cList = sqlSession.selectList("CartMapper.selectMyCart");
+	public List<Cart> selectMyCart(SqlSession sqlSession, int studentNo) {
+		List<Cart> cList = sqlSession.selectList("CartMapper.selectMyCart", studentNo);
 		return cList;
 	}
 
@@ -65,9 +65,23 @@ public class CartStoreLogic implements CartStore {
 		List<Lecture> lList = sqlSession.selectList("CartMapper.selectAllEnroll2", lectureDepartment);
 		return lList;
 	}
-
-
-
-
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+//	@Override
+//	public long selectEnrollCount(SqlSession sqlSession, Lecture lecture) {
+//		long totalCount = sqlSession.selectOne("CartMapper.selectEnrollCount", lecture);
+//		return totalCount;
+//	}
 }

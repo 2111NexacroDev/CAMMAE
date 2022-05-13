@@ -83,5 +83,4 @@ public class ManagerServiceImpl implements ManagerService {
 	   Manager ma = mStore.selectAllManagerInfo(manager, sqlSession);
 	   return ma;
 	}
-	
 }
