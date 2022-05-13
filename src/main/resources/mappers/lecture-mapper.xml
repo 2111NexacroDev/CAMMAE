@@ -14,7 +14,9 @@
 		<result property="lectureGrade" column="LECTURE_GRADE" />
 		<result property="lectureRoom" column="LECTURE_ROOM" />
 		<result property="lecturePeople" column="LECTURE_PEOPLE" />
-		<result property="lectureTime" column="LECTURE_TIME" />
+		<result property="lectureStartTime" column="LECTURE_START_TIME" />
+		<result property="lectureEndTime" column="LECTURE_ENDTIME" />
+		
 	</resultMap>
 	
 	<select id="selectAllLecture" resultMap="lectureResultMap">
@@ -28,7 +30,7 @@
 	<insert id="insertLecture"  parameterType="Lecture">
 	INSERT INTO LECTURE_TBL VALUES(SEQ_LEC_NO.NEXTVAL
 	, #{professorNo}
-	, NULL
+	, #{universityCollege}
 	, #{lectureDepartment}
 	, #{lectureName}
 	, #{professorName}
@@ -36,7 +38,8 @@
 	, #{lectureGrade}
 	, #{lectureRoom}
 	, #{lecturePeople}
-	, #{lectureTime}
+	, #{lectureStartTime}
+	, #{lectureEndTime}
 	)
 	</insert>
 			
@@ -50,7 +53,8 @@
 		, LECTURE_GRADE = #{lectureGrade}
 		, LECTURE_ROOM = #{lectureRoom}
 		, LECTURE_PEOPLE =  #{lecturePeople}
-		, LECTURE_TIME  = #{lectureTime} 
+		, LECTURE_START_TIME  = #{lectureStartTime} 
+		, LECTURE_ENDTIME  = #{lectureEndTime} 
 		WHERE LECTURE_NO = #{lectureNo} 
 	</update>
 	<delete id="deleteLecture">

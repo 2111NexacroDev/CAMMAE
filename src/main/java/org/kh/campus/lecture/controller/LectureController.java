@@ -149,7 +149,6 @@ public class LectureController {
 			 Gson gson = new Gson();
 			 return gson.toJson(lList);
 		  }
-		
 		return null;
 	}
 	

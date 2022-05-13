@@ -22,7 +22,8 @@
 			<th>학점</th>
 			<th>강의실</th>
 			<th>강의인원</th>
-			<th>강의시간</th>
+			<th>강의시작시간</th>
+			<th>강의종료시간</th>
 			<th></th>
 		</tr>
 		<c:forEach items="${lList }" var="lecture">
@@ -41,7 +42,8 @@
 				<td>${lecture.lectureGrade }</td>
 				<td>${lecture.lectureRoom }</td>
 				<td>${lecture.lecturePeople }</td>
-				<td>${lecture.lectureTime }</td>
+				<td>${lecture.lectureStartTime }</td>
+				<td>${lecture.lectureEndTime }</td>
 				<td><c:url var="lRemove" value="/lecture/remove.kh">
 					<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
 				</c:url>

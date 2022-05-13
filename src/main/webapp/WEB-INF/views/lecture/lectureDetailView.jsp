@@ -19,7 +19,9 @@
 학점<span>${lecture.lectureGrade }</span><br>
 강의실<span>${lecture.lectureRoom }</span><br>
 강의인원<span>${lecture.lecturePeople }</span><br>
-강의시간<span>${lecture.lectureTime }</span>
+강의시간<span>${lecture.lectureStartTime}
+			${lecture.lectureEndTime}
+		</span>
 <c:url var="lModify" value="/lecture/modifyView.kh">
 					<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
 				</c:url>

@@ -11,7 +11,8 @@ public class Lecture {
 	private int lectureGrade;
 	private String lectureRoom;
 	private int lecturePeople;
-	private String lectureTime;
+	private String lectureStartTime;
+	private String lectureEndTime;
 	private int studentNo;
 	private String gradeYear;
 	private String gradeSession; 
@@ -20,7 +21,8 @@ public class Lecture {
 
 	public Lecture(int lectureNo, int professorNo, String universityCollege, String lectureDepartment,
 			String lectureName, String professorName, String lectureDivision, int lectureGrade, String lectureRoom,
-			int lecturePeople, String lectureTime, int studentNo, String gradeYear, String gradeSession) {
+			int lecturePeople, String lectureStartTime, String lectureEndTime, int studentNo, String gradeYear,
+			String gradeSession) {
 		super();
 		this.lectureNo = lectureNo;
 		this.professorNo = professorNo;
@@ -32,7 +34,8 @@ public class Lecture {
 		this.lectureGrade = lectureGrade;
 		this.lectureRoom = lectureRoom;
 		this.lecturePeople = lecturePeople;
-		this.lectureTime = lectureTime;
+		this.lectureStartTime = lectureStartTime;
+		this.lectureEndTime = lectureEndTime;
 		this.studentNo = studentNo;
 		this.gradeYear = gradeYear;
 		this.gradeSession = gradeSession;
@@ -118,12 +121,20 @@ public class Lecture {
 		this.lecturePeople = lecturePeople;
 	}
 
-	public String getLectureTime() {
-		return lectureTime;
+	public String getLectureStartTime() {
+		return lectureStartTime;
 	}
 
-	public void setLectureTime(String lectureTime) {
-		this.lectureTime = lectureTime;
+	public void setLectureStartTime(String lectureStartTime) {
+		this.lectureStartTime = lectureStartTime;
+	}
+
+	public String getLectureEndTime() {
+		return lectureEndTime;
+	}
+
+	public void setLectureEndTime(String lectureEndTime) {
+		this.lectureEndTime = lectureEndTime;
 	}
 
 	public int getStudentNo() {
@@ -155,9 +166,9 @@ public class Lecture {
 		return "Lecture [lectureNo=" + lectureNo + ", professorNo=" + professorNo + ", universityCollege="
 				+ universityCollege + ", lectureDepartment=" + lectureDepartment + ", lectureName=" + lectureName
 				+ ", professorName=" + professorName + ", lectureDivision=" + lectureDivision + ", lectureGrade="
-				+ lectureGrade + ", lectureRoom=" + lectureRoom + ", lecturePeople=" + lecturePeople + ", lectureTime="
-				+ lectureTime + ", studentNo=" + studentNo + ", gradeYear=" + gradeYear + ", gradeSession="
-				+ gradeSession + "]";
+				+ lectureGrade + ", lectureRoom=" + lectureRoom + ", lecturePeople=" + lecturePeople
+				+ ", lectureStartTime=" + lectureStartTime + ", lectureEndTime=" + lectureEndTime + ", studentNo="
+				+ studentNo + ", gradeYear=" + gradeYear + ", gradeSession=" + gradeSession + "]";
 	}
 
 	

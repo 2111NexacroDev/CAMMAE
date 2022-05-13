@@ -73,7 +73,8 @@
 			</tr>
 			<tr>
 				<td>강의시간</td>
-				<td><input type="time" name="lectureTime" value="${lecture.lectureTime }"></td>
+				<td><input type="time" name="lectureStartTime" value="${lecture.lectureStartTime }"></td>
+				<td><input type="time" name="lectureEndTime" value="${lecture.lectureEndTime }"></td>
 			</tr>
 			<tr>
 				<td colspan="2" align="center"><input type="submit"
