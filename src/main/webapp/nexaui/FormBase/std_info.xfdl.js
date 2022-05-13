@@ -22,7 +22,11 @@
             this.addChild(obj.name, obj);
             
             // UI Components Initialize
+<<<<<<< HEAD
+            obj = new Button("btn_delete","495","3","95","35",null,null,null,null,null,null,this);
+=======
             obj = new Button("btn_pwUpdate","495","3","95","35",null,null,null,null,null,null,this);
+>>>>>>> refs/remotes/origin/master
             obj.set_taborder("0");
             obj.set_text("비밀번호 변경");
             this.addChild(obj.name, obj);
@@ -32,6 +36,13 @@
             obj.set_text("저장");
             this.addChild(obj.name, obj);
 
+<<<<<<< HEAD
+            obj = new Grid("Grid00","60","95","616","455",null,null,null,null,null,null,this);
+            obj.set_taborder("2");
+            obj.set_binddataset("ds_stdInfo");
+            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"departmentName\"/><Cell col=\"1\" text=\"studentNo\"/><Cell col=\"2\" text=\"studentName\"/><Cell col=\"3\" text=\"studentGrade\"/><Cell col=\"4\" text=\"studentBirth\"/><Cell col=\"5\" text=\"studentAddress\"/><Cell col=\"6\" text=\"studentPhonenumber\"/><Cell col=\"7\" text=\"studentEmail\"/><Cell col=\"8\" text=\"studentState\"/><Cell col=\"9\" text=\"professorName\"/></Band><Band id=\"body\"><Cell text=\"bind:departmentName\"/><Cell col=\"1\" text=\"bind:studentNo\"/><Cell col=\"2\" text=\"bind:studentName\"/><Cell col=\"3\" text=\"bind:studentGrade\"/><Cell col=\"4\" text=\"bind:studentBirth\"/><Cell col=\"5\" text=\"bind:studentAddress\" displaytype=\"normal\" edittype=\"text\"/><Cell col=\"6\" text=\"bind:studentPhonenumber\" edittype=\"text\"/><Cell col=\"7\" text=\"bind:studentEmail\" edittype=\"text\"/><Cell col=\"8\" text=\"bind:studentState\"/><Cell col=\"9\" text=\"bind:professorName\"/></Band></Format></Formats>");
+            this.addChild(obj.name, obj);
+=======
             obj = new Edit("Edit00","200","95","116","35",null,null,null,null,null,null,this);
             obj.set_taborder("2");
             obj.set_textAlign("center");
@@ -192,6 +203,7 @@
             obj.set_text("변경할 비밀번호가 서로 일치 하지 않습니다");
             obj.set_color("white");
             this.PopupDiv01.addChild(obj.name, obj);
+>>>>>>> refs/remotes/origin/master
             // Layout Functions
             //-- Default Layout : this
             obj = new Layout("default","",700,600,this,function(p){});
@@ -229,6 +241,9 @@
             obj = new BindItem("item7","Edit00_00_00_00_00_00_00_00","value","ds_stdInfo","studentEmail");
             this.addChild(obj.name, obj);
             obj.bind();
+            
+            // TriggerItem Information
+
             
             // TriggerItem Information
 
@@ -270,6 +285,79 @@
         		}
         	}
 
+<<<<<<< HEAD
+
+        }
+
+        this.frm_emp_onload = function(obj,e)
+        {
+        //학생정보
+        	this.transaction(
+        		"std_info"// 1.ID
+        		,"CmURL::student/stdInfo.kh"// 2.URL
+        		,"" // 3.InDs : F->S jsp(I,U,D)
+        		,"ds_stdInfo=out_stdInfo" // 4.OutDs : S->F jsp(SELECT)
+        		,"" // 5.InVar : F->S(var)
+        		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        	);
+        // 교수 정보
+        // 	this.transaction(
+        // 		"prf_info"// 1.ID
+        // 		,"CmURL::professor/prfInfo.kh"// 2.URL
+        // 		,"" // 3.InDs : F->S jsp(I,U,D)
+        // 		,"ds_stdInfo=out_prfInfo" // 4.OutDs : S->F jsp(SELECT)
+        // 		,"" // 5.InVar : F->S(var)
+        // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        // 	);
+        // 관리자 학생 정보
+        // this.transaction(
+        // 		"mag_info"// 1.ID
+        // 		,"CmURL::manager/stdInfo.kh"// 2.URL
+        // 		,"" // 3.InDs : F->S jsp(I,U,D)
+        // 		,"ds_stdInfo=out_stdAllInfo" // 4.OutDs : S->F jsp(SELECT)
+        // 		,"" // 5.InVar : F->S(var)
+        // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        // 	);
+
+        // 관리자 교수 정보
+        // this.transaction(
+        // 		"mag_info"// 1.ID
+        // 		,"CmURL::manager/prfInfo.kh"// 2.URL
+        // 		,"" // 3.InDs : F->S jsp(I,U,D)
+        // 		,"ds_stdInfo=out_prfAllInfo" // 4.OutDs : S->F jsp(SELECT)
+        // 		,"" // 5.InVar : F->S(var)
+        // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        // 	);
+        // 관리자 관리자 정보
+        // this.transaction(
+        // 		"mag_info"// 1.ID
+        // 		,"CmURL::manager/magInfo.kh"// 2.URL
+        // 		,"" // 3.InDs : F->S jsp(I,U,D)
+        // 		,"ds_stdInfo=out_magAllInfo" // 4.OutDs : S->F jsp(SELECT)
+        // 		,"" // 5.InVar : F->S(var)
+        // 		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        // 	);
+        };
+
+
+
+        this.btn_delete_onclick = function(obj,e)
+        {
+        	this.ds_emp.deleteRow(this.ds_emp.rowposition);
+        };
+
+        this.btn_save_onclick = function(obj,e)
+        {
+        	this.transaction(
+        		"std_update"// 1.ID
+        		,"CmURL::student/stdUpdate.kh"// 2.URL
+        		,"in_std=ds_stdInfo:U" // 3.InDs : F->S jsp(I,U,D)
+        		,"" // 4.OutDs : S->F jsp(SELECT)
+        		,""// 5.InVar : F->S(var)
+        		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        	);
+
+=======
         	if(id == "pwd_same")
         	{
         		if(nErrorCode > 0) {
@@ -399,6 +487,7 @@
         			,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
         		);
         	}
+>>>>>>> refs/remotes/origin/master
         };
 
         });
@@ -407,7 +496,11 @@
         this.on_initEvent = function()
         {
             this.addEventHandler("onload",this.frm_emp_onload,this);
+<<<<<<< HEAD
+            this.btn_delete.addEventHandler("onclick",this.btn_delete_onclick,this);
+=======
             this.btn_pwUpdate.addEventHandler("onclick",this.btn_pwUpdate_onclick,this);
+>>>>>>> refs/remotes/origin/master
             this.btn_save.addEventHandler("onclick",this.btn_save_onclick,this);
             this.PopupDiv00.form.btn_OK.addEventHandler("onclick",this.PopupDiv00_btn_OK_onclick,this);
             this.PopupDiv01.form.btn_OK2.addEventHandler("onclick",this.PopupDiv01_btn_OK2_onclick,this);
