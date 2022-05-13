@@ -43,7 +43,8 @@
 				<td>${lecture.universityCollege }</td>
 				<td>${lecture.lectureRoom }</td>
 				<td>${lecture.lecturePeople }</td>
-				<td>${lecture.lectureTime }</td>
+				<td>${lecture.lectureStartTime}</td>
+				<td>${lecture.lectureEndTime}</td>
 				<td><c:url var="gRemove" value="/cart/enrollRemove.kh">
 						<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
 					</c:url> <a href="${gRemove }">삭제</a></td>

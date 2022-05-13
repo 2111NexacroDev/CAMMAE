@@ -52,7 +52,8 @@
 				<td>${lList.lectureGrade }</td>
 				<td>${lList.lectureRoom }</td>
 				<td>${lList.lecturePeople }</td>
-				<td>${lList.lectureTime }</td>
+				<td>${lecture.lectureStartTime}</td>
+				<td>${lecture.lectureEndTime}</td>
 			</tr>	
 		
 		</c:forEach>
