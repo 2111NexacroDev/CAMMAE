@@ -187,7 +187,7 @@ hr {
 
 	<script>
 		function chatOpen() {
-			window.open("#", "marketChat",
+			window.open("/chat.kh", "marketChat",
 					"width=400, height=600, left=100, top=50");
 
 		}
