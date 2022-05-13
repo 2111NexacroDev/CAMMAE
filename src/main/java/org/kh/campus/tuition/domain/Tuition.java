@@ -5,26 +5,25 @@ public class Tuition {
 	private int studentNo;
 	private String tutionYear;
 	private String tuitionTerm;
-	private int studentGrade;
 	private String studentName;
 	private int tuitionFee;
-	private int tuitionScholarship;
+	private String tuitionScholarship;
 	private int tuitionTotal;
 	private String tuitionStatus;
 	private String chk;
 	private String departmentName;
+	private String studentGrade;
 	
 	public Tuition() {}
 
-	public Tuition(int tuitionNo, int studentNo, String tutionYear, String tuitionTerm, int studentGrade,
-			String studentName, int tuitionFee, int tuitionScholarship, int tuitionTotal, String tuitionStatus,
-			String chk, String departmentName) {
+	public Tuition(int tuitionNo, int studentNo, String tutionYear, String tuitionTerm, String studentName,
+			int tuitionFee, String tuitionScholarship, int tuitionTotal, String tuitionStatus, String chk,
+			String departmentName, String studentGrade) {
 		super();
 		this.tuitionNo = tuitionNo;
 		this.studentNo = studentNo;
 		this.tutionYear = tutionYear;
 		this.tuitionTerm = tuitionTerm;
-		this.studentGrade = studentGrade;
 		this.studentName = studentName;
 		this.tuitionFee = tuitionFee;
 		this.tuitionScholarship = tuitionScholarship;
@@ -32,6 +31,7 @@ public class Tuition {
 		this.tuitionStatus = tuitionStatus;
 		this.chk = chk;
 		this.departmentName = departmentName;
+		this.studentGrade = studentGrade;
 	}
 
 	public int getTuitionNo() {
@@ -66,14 +66,6 @@ public class Tuition {
 		this.tuitionTerm = tuitionTerm;
 	}
 
-	public int getStudentGrade() {
-		return studentGrade;
-	}
-
-	public void setStudentGrade(int studentGrade) {
-		this.studentGrade = studentGrade;
-	}
-
 	public String getStudentName() {
 		return studentName;
 	}
@@ -90,11 +82,11 @@ public class Tuition {
 		this.tuitionFee = tuitionFee;
 	}
 
-	public int getTuitionScholarship() {
+	public String getTuitionScholarship() {
 		return tuitionScholarship;
 	}
 
-	public void setTuitionScholarship(int tuitionScholarship) {
+	public void setTuitionScholarship(String tuitionScholarship) {
 		this.tuitionScholarship = tuitionScholarship;
 	}
 
@@ -130,15 +122,26 @@ public class Tuition {
 		this.departmentName = departmentName;
 	}
 
+	public String getStudentGrade() {
+		return studentGrade;
+	}
+
+	public void setStudentGrade(String studentGrade) {
+		this.studentGrade = studentGrade;
+	}
+
 	@Override
 	public String toString() {
 		return "Tuition [tuitionNo=" + tuitionNo + ", studentNo=" + studentNo + ", tutionYear=" + tutionYear
-				+ ", tuitionTerm=" + tuitionTerm + ", studentGrade=" + studentGrade + ", studentName=" + studentName
-				+ ", tuitionFee=" + tuitionFee + ", tuitionScholarship=" + tuitionScholarship + ", tuitionTotal="
-				+ tuitionTotal + ", tuitionStatus=" + tuitionStatus + ", chk=" + chk + ", departmentName="
-				+ departmentName + "]";
+				+ ", tuitionTerm=" + tuitionTerm + ", studentName=" + studentName + ", tuitionFee=" + tuitionFee
+				+ ", tuitionScholarship=" + tuitionScholarship + ", tuitionTotal=" + tuitionTotal + ", tuitionStatus="
+				+ tuitionStatus + ", chk=" + chk + ", departmentName=" + departmentName + ", studentGrade="
+				+ studentGrade + "]";
 	}
 
+	
+
+	
 	
 	
 	

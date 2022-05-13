@@ -67,11 +67,33 @@
             obj.set_background("rgb(0, 74, 38)");
             this.addChild(obj.name, obj);
 
-            obj = new Grid("Grid00","10","170","680","410",null,null,null,null,null,null,this);
+            obj = new Grid("Grid00","10","170","680","340",null,null,null,null,null,null,this);
             obj.set_taborder("4");
             obj.set_binddataset("tuition01");
             obj.set_autofittype("col");
-            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"학과\"/><Cell col=\"1\" text=\"학년\"/><Cell col=\"2\" text=\"학번\"/><Cell col=\"3\" text=\"이름\"/><Cell col=\"4\" text=\"학기\"/><Cell col=\"5\" text=\"등록금\"/><Cell col=\"6\" text=\"장학금\"/><Cell col=\"7\" text=\"합계\"/></Band><Band id=\"body\"><Cell text=\"bind:departmentName\"/><Cell col=\"1\" text=\"bind:studentGrade\"/><Cell col=\"2\" text=\"bind:studentNo\"/><Cell col=\"3\" text=\"bind:studentName\"/><Cell col=\"4\" text=\"bind:tuitionTerm\"/><Cell col=\"5\" text=\"bind:tuitionFee\"/><Cell col=\"6\" text=\"bind:tuitionScholarship\"/><Cell col=\"7\" text=\"bind:tuitionTotal\"/></Band></Format></Formats>");
+            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"학과\"/><Cell col=\"1\" text=\"학년\"/><Cell col=\"2\" text=\"학번\"/><Cell col=\"3\" text=\"이름\"/><Cell col=\"4\" text=\"학기\"/><Cell col=\"5\" text=\"등록금\"/><Cell col=\"6\" text=\"장학금\"/><Cell col=\"7\" text=\"합계\"/></Band><Band id=\"body\"><Cell text=\"bind:departmentName\" textAlign=\"center\"/><Cell col=\"1\" text=\"bind:studentGrade\" textAlign=\"center\"/><Cell col=\"2\" text=\"bind:studentNo\" textAlign=\"center\"/><Cell col=\"3\" text=\"bind:studentName\" textAlign=\"center\"/><Cell col=\"4\" textAlign=\"center\" edittype=\"text\" text=\"bind:tuitionTerm\"/><Cell col=\"5\" text=\"bind:tuitionFee\" textAlign=\"center\" edittype=\"text\" displaytype=\"number\"/><Cell col=\"6\" text=\"bind:tuitionScholarship\" expr=\"tuitionScholarship==&apos;Y&apos;?2500000:0\" textAlign=\"center\" displaytype=\"number\"/><Cell col=\"7\" textAlign=\"center\" displaytype=\"number\" text=\"expr:tuitionFee!=0?tuitionFee-(tuitionScholarship==&apos;Y&apos;?2500000:0):0\"/></Band></Format></Formats>");
+            this.addChild(obj.name, obj);
+
+            obj = new Static("Static01","100","525","50","60",null,null,null,null,null,null,this);
+            obj.set_taborder("5");
+            obj.set_text("장학금");
+            this.addChild(obj.name, obj);
+
+            obj = new Static("Static01_00","255","525","50","60",null,null,null,null,null,null,this);
+            obj.set_taborder("6");
+            obj.set_text("대기");
+            this.addChild(obj.name, obj);
+
+            obj = new Div("Div02","35","533","40","44",null,null,null,null,null,null,this);
+            obj.set_taborder("7");
+            obj.set_text("");
+            obj.set_background("bisque");
+            this.addChild(obj.name, obj);
+
+            obj = new Div("Div03","190","533","40","44",null,null,null,null,null,null,this);
+            obj.set_taborder("8");
+            obj.set_text("");
+            obj.set_background("blue");
             this.addChild(obj.name, obj);
             // Layout Functions
             //-- Default Layout : this

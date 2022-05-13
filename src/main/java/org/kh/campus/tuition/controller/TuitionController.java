@@ -14,9 +14,11 @@ import com.nexacro.uiadapter17.spring.core.data.NexacroResult;
 
 @Controller
 public class TuitionController {
+	
 	@Autowired
 	private TuitionService tService;
-
+	
+	//학과별 학생 조회
 	@RequestMapping(value = "/tuition/list.kh", method = RequestMethod.POST)
 	public NexacroResult tuitionPrint(@ParamVariable(name = "uniCode1") String uniCode) {
 		int nErrorCode = 0;
