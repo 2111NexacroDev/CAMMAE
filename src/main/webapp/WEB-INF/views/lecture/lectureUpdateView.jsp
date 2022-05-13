@@ -21,6 +21,7 @@
 				<td>개설학과</td>
 				<td><select name="lectureDepartment">
 						<option>선택하세요.</option>
+						<option>중국어학과</option>
 						<option>에ㅔ베베</option>
 						<option>컴퓨터 공학과</option>
 						<option>전자공학과</option>

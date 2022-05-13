@@ -88,6 +88,8 @@ public class GradeController {
 		
 		List<Grade> gList = gService.printGradeProfessor(prfNo);
 		
+		System.out.println(gList.toString() +"test1122");
+		
 		result.addDataSet("out_stdGrade", gList);
 		result.addVariable("ErrorCode", nErrorCode);
 		result.addVariable("ErrorMsg", strErrorMsg);
@@ -108,7 +110,7 @@ public class GradeController {
 			int lectureNo = Integer.parseInt(dsGet(inGrd, i, "lectureNo"));
 			int studentNo = Integer.parseInt(dsGet(inGrd, i, "studentNo"));
 			String gradeScore = dsGet(inGrd, i, "gradeScore");
-			int gradeAvg = Integer.parseInt(dsGet(inGrd, i, "gradeAvg"));
+			String gradeAvg = dsGet(inGrd, i, "gradeAvg");
 			Grade grade = new Grade(lectureNo,
 					studentNo, gradeScore, gradeAvg);
 				
@@ -127,7 +129,7 @@ public class GradeController {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
-		int prfNo = 1;
+		int prfNo = 0;
 		
 		List<Grade> gList = gService.printFeedbackProfessor(prfNo);
 		

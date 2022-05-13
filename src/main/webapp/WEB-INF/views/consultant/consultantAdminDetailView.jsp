@@ -69,22 +69,39 @@ tr {
 }
 
 #rtb{
-	border-bottom: 1px solid #ccc;
-}
-.r1 table tbody th{
-	text-align: left;
-	width: 900px;
-	border-bottom: 1px solid #ccc;
+	border-bottom: 2px solid #ccc;
 }
 
-#rCount{
+#rCo{
+	border-bottom: 2px solid #ccc;
+}
+
+#rSubmit{
+	cursor: pointer;
+	margin-left: 15px;
+}
+
+/* 댓글 */
+#rWriter {
 	font-weight: bold;
-	width: 900px;
-	border-bottom: 1px solid #ccc;
+	width: 80%;
+	float: left;
 }
-#rtb tbody{
-	height: auto; min-height: 150px; 
+
+#rDate {
+	font-size: 14px;
+	width: 20%;
+	float: right;
+	margin-top: -45px;
 }
+
+#rContents {
+	float: left;
+	width: 80%;
+	
+}
+
+
 </style>
 </head>
 <body>
@@ -158,29 +175,27 @@ tr {
 				</div>
 				<br>
 				<!-- 댓글 등록 -->
-				<table>
-					<tr>
-						<td><textarea rows="3" cols="55" id="cons_reply_content"></textarea>
-
-						</td>
-						<td><input type="hidden" name="" value="" id=""></td>
-
-						<td>
-							<button id="rSubmit">등록하기</button>
-						</td>
-					</tr>
-				</table>
-				<!-- 댓글 목록 -->
-				<table width="500" border="1" id="rtb">
-					<thead>
-						<tr>
-							<!-- 댓글 갯수 -->
-							<td colspan="4"><b id="rCount"></b></td>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
+				<div>
+					<textarea rows="3" cols="96" id="cons_reply_content"></textarea>
+					<button type="submit" class="btn" id="rSubmit" >등록</button>
+					
+				</div>
+				
+				<div id="replyArea">
+					<!-- 댓글 목록 -->
+					<table align="center"  width="700px"  id="rtb">
+						<thead>
+							<tr>
+								<!-- 댓글 갯수 -->
+								<td id="rCo" colspan="4"><b id="rCount"></b></td>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				
+				</div>
+		
 			</div>
 		</div>
 	</div>
@@ -233,15 +248,16 @@ tr {
 					var $cons_reply_date;
 					var $tr;
 					$("#rCount").text("댓글 (" + data.length + ")"); //댓글 갯수 표시
-					// document.querySelector("#rCount").value = "댓글 (" + data.length + ")";
 					if (data.length > 0) {
 						for ( var i in data) {
 							$tr = $("<tr>");
-							$cons_reply_writer = $("<td width='100'>").text(
+							$cons_reply_writer = $("<td id='rWriter' width='85%'>").text(
 									data[i].cons_reply_writer);
-							$cons_reply_content = $("<td>").text(
+						
+							$cons_reply_content = $("<td id='rContents'  width='100%' align='left'>").text(
 									data[i].cons_reply_content);
-							$cons_reply_date = $("<td width='100'>").text(
+							
+							$cons_reply_date = $("<td id='rDate' width='10%' align='right'>").text(
 									data[i].cons_reply_date);
 							$tr.append($cons_reply_writer);
 							$tr.append($cons_reply_content);

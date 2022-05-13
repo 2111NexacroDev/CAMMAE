@@ -14,10 +14,10 @@ public interface CartService {
 	public List<Lecture>printAllCart();  
 	
 	// 예비수강신청 내역 출력
-	public List<Cart>printMyCart();
+	public List<Cart>printMyCart(int studentNo);
 	
 	// 예비수강신청 등록(찜하기)
-	public int registerCart(int lectureNo);
+	public int registerCart(HashMap<String, Integer> map);
 	
 	// 예비수강신청 찜하기취소
 	public int removeCart(int cartNo);

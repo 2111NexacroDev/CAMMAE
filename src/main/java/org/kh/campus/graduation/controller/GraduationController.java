@@ -69,5 +69,7 @@ public class GraduationController {
 			return "";
 		else
 			return value;
+		
+		//커밋용
 	}
 }

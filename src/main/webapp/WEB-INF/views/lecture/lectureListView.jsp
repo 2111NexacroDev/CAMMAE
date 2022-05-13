@@ -10,7 +10,7 @@
 <body>
 	<h1 align="center">수강개설목록</h1>
 	<br><br>
-	<table align="center" width="600" border="2">
+	<table align="center" width="1000" border="2">
 		<tr>
 			<th>과목코드</th>
 			<th>교수코드</th>

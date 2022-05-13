@@ -42,10 +42,11 @@
         };
         
         this.mainframe_createBodyFrame = function()
-        {
-            var frame0 = new ChildFrame("ChildFrame00",null,null,null,null,null,null,"FormBase::std_info.xfdl",this);
+		{
+
+            var frame0 = new ChildFrame("ChildFrame00",null,null,null,null,null,null,"FormBase::tuitioninsert.xfdl",this);
             this.addChild(frame0.name, frame0);
-            frame0.set_formurl("FormBase::std_info.xfdl");
+            frame0.set_formurl("FormBase::tuitioninsert.xfdl");
 
             this.frame=frame0;
         };

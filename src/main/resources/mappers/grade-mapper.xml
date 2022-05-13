@@ -51,9 +51,10 @@
 	
 	<select id="selectFeedbackProfessor" resultMap="gradeResultMap">
 		SELECT * FROM GRADE_OBJECTION O
-		LEFT JOIN GRADE_TBL G ON
+		JOIN GRADE_TBL G ON
 		(G.STUDENT_NO = O.STUDENT_NO AND G.LECTURE_NO = O.LECTURE_NO AND G.PROFESSOR_NO = #{professorNo})
 		LEFT JOIN FEEDBACK_TBL F ON (F.STUDENT_NO = O.STUDENT_NO AND F.LECTURE_NO = O.LECTURE_NO)
+        LEFT JOIN STUDENT_TBL S ON (S.STUDENT_NO = O.STUDENT_NO)
 	</select>
 	
 	<update id="updateGrade">

@@ -3,7 +3,9 @@ package org.kh.campus.lecture.store;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.kh.campus.board.domain.University;
 import org.kh.campus.lecture.domain.Lecture;
+import org.kh.campus.professor.domain.Professor;
 
 public interface LectureStore {
 
@@ -17,7 +19,9 @@ public interface LectureStore {
 
 	Lecture selectOneLecture(SqlSession sqlSession, int lectureNo);
 
-	List<Lecture> selectAllProName(SqlSession sqlSession, String professorName);
+	List<Professor> selectAllProName(SqlSession sqlSession);
+
+	List<University> selectAllDept(SqlSession sqlSession);
 
 
 

@@ -87,7 +87,7 @@
 					// document.querySelector("#rCount").value = "댓글 (" + data.length + ")";
 					if(data.length > 0) {
 						for(var i in data) {
-							$tr = $("<tr>");
+							$tr = $("<tr class='lecTr'>");
 							
 							$lecNo = $("<td width='100'>").text(data[i].lectureNo);
 							$lecDep = $("<td width='100'>").text(data[i].lectureDepartment);
@@ -100,7 +100,7 @@
 							$lecPeople = $("<td width='100'>").text(data[i].lecturePeople);
 							$lecTime = $("<td width='100'>").text(data[i].lectureTime);
 							$btnArea = $("<td width='80'>")
-							.append("<a href='javascript:void(0);' onclick='/cart/lectureEnroll.kh?lectureNo="+data[i].lectureNo+"'>신청</a>");
+							.append("<a href='/cart/lectureEnroll.kh?lectureNo="+data[i].lectureNo+"'>신청</a>");
 							$tr.append($btnArea);
 							$tr.append($lecNo);
 							$tr.append($lecDep);

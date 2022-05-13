@@ -145,7 +145,7 @@ table.type02 td {
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">급여</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="input_1"
 							type="text" name="recruitmentSalary"
 							value="${recruitment.recruitmentSalary }"> <br> <br>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">지역</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="input_1"
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="span_1">지역</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input 
 							type="text" id="sample5_address" placeholder="주소"
 							name="recruitmentRegion"
 							value="${recruitment.recruitmentRegion }"> <input
