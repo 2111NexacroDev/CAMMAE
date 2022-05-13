@@ -13,6 +13,7 @@ if (nexacro.Environment)
     };
     env.loadTypeDefinition = function ()
     {
+<<<<<<< HEAD
         nexacro._setTypeDefinitionURL("typedefinition.xml");
         nexacro._addService("theme", "file", "./_resource_/_theme_/", "session", null, "", "0", "");
         nexacro._addService("initvalue", "file", "./_resource_/_initvalue_/", "session", null, "", "0", "");
@@ -23,6 +24,19 @@ if (nexacro.Environment)
         nexacro._addService("FrameBase", "form", "./FrameBase/", "session", null, "", "0", "0");
         nexacro._addService("FormBase", "form", "./FormBase/", "session", null, "", "0", "0");
         nexacro._addService("CmURL", "JSP", "http://127.0.0.1:8888/", "none", null, "", "0", "0");
+=======
+        nexacro._setTypeDefinitionURL("typedefinition.xml");
+        nexacro._addService("theme", "file", "./_resource_/_theme_/", "session", null, "", "0", "");
+        nexacro._addService("initvalue", "file", "./_resource_/_initvalue_/", "session", null, "", "0", "");
+        nexacro._addService("xcssrc", "file", "./_resource_/_xcss_/", "session", null, "", "0", "");
+        nexacro._addService("imagerc", "file", "./_resource_/_images_/", "session", null, "", "0", "");
+        nexacro._addService("font", "file", "./_resource_/_font_/", "session", null, "", "0", "");
+        nexacro._addService("Base", "form", "./Base/", "session", null, "", "0", "0");
+        nexacro._addService("FrameBase", "form", "./FrameBase/", "session", null, "", "0", "0");
+        nexacro._addService("FormBase", "form", "./FormBase/", "session", null, "", "0", "0");
+        nexacro._addService("CmURL", "JSP", "http://127.0.0.1:8888", "none", null, "", "0", "0");
+
+>>>>>>> branch 'jjj' of https://github.com/1129khNexapring/CAMMAE.git
     	nexacro._component_uri = (nexacro._arg_compurl ? nexacro._arg_compurl : "./nexacro17lib/component/");
     	nexacro._theme_uri = "./_resource_/_theme_/";
     	// load components

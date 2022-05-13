@@ -37,4 +37,18 @@ public interface CartService {
 	public int removeEnroll(HashMap<String, Integer> map);
 
 	public List<Lecture> printAllenroll2(String lectureDepartment);
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	public long countByEnrollPeole(Lecture lecture);
 }

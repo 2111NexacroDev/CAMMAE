@@ -35,6 +35,4 @@ public interface ManagerStore {
 
 	public Manager selectAllManagerInfo(Manager manager, SqlSession sqlSession);
 
-
-
 }

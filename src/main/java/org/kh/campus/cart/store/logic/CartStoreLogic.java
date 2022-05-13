@@ -65,9 +65,23 @@ public class CartStoreLogic implements CartStore {
 		List<Lecture> lList = sqlSession.selectList("CartMapper.selectAllEnroll2", lectureDepartment);
 		return lList;
 	}
-
-
-
-
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+//	@Override
+//	public long selectEnrollCount(SqlSession sqlSession, Lecture lecture) {
+//		long totalCount = sqlSession.selectOne("CartMapper.selectEnrollCount", lecture);
+//		return totalCount;
+//	}
 }
