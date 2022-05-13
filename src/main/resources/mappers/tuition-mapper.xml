@@ -4,23 +4,43 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tuitionMapper">
 	<resultMap type="Student" id="studentResultMap">
-		<id property="studentNo" column="STUDENT_NO"/>
-		<result property="universityCollege" column="UNIVERSITY_COLLEGE"/>
-		<result property="departmentName" column="DEPARTMENT_NAME"/>
-		<result property="studentName" column="STUDENT_NAME"/>
-		<result property="studentGrade" column="STUDENT_GRADE"/>
-		<result property="studentBirth" column="STUDENT_BIRTH"/>
-		<result property="studentAddress" column="STUDENT_ADDRESS"/>
-		<result property="studentPhonenumber" column="STUDENT_PHONENUMBER"/>
-		<result property="studentEmail" column="STUDENT_EMAIL"/>
-		<result property="studentPassword" column="STUDENT_PASSWORD"/>
-		<result property="professorNo" column="PROFESSOR_NO"/>
-		<result property="studentState" column="STUDENT_STATE"/>
-		<result property="professorName" column="PROFESSOR_NAME"/>
-		<result property="universityCode" column="UNIVERSITY_CODE"/>
+		<id property="studentNo" column="STUDENT_NO" />
+		<result property="universityCollege"
+			column="UNIVERSITY_COLLEGE" />
+		<result property="departmentName" column="DEPARTMENT_NAME" />
+		<result property="studentName" column="STUDENT_NAME" />
+		<result property="studentGrade" column="STUDENT_GRADE" />
+		<result property="studentBirth" column="STUDENT_BIRTH" />
+		<result property="studentAddress" column="STUDENT_ADDRESS" />
+		<result property="studentPhonenumber"
+			column="STUDENT_PHONENUMBER" />
+		<result property="studentEmail" column="STUDENT_EMAIL" />
+		<result property="studentPassword" column="STUDENT_PASSWORD" />
+		<result property="professorNo" column="PROFESSOR_NO" />
+		<result property="studentState" column="STUDENT_STATE" />
+		<result property="professorName" column="PROFESSOR_NAME" />
+		<result property="universityCode" column="UNIVERSITY_CODE" />
 	</resultMap>
 	
-	<select id="selectTuition" resultMap="studentResultMap">
-		SELECT * FROM STUDENT_TBL WHERE UNIVERSITY_CODE = #{uniCode}
+	<resultMap type="Tuition" id="tuitionResultMap">
+	  	<id property="tuitionNo" column="TUITION_NO"></id>
+	  	<result property="studentNo" column="STUDENT_NO"/>
+	  	<result property="tutionYear" column="TUITION_YEYAR"/>
+	  	<result property="tuitionTerm" column="TUITION_TERM"/>
+	  	<result property="studentName" column="STUDENT_NAME"/>
+	  	<result property="tuitionFee" column="TUITION_FEE"/>
+	  	<result property="tuitionScholarship" column="SCHOLARSHIP_STATUS"/>
+	  	<result property="tuitionTotal" column="TUITION_TOTAL"/>
+	  	<result property="tuitionStatus" column="TUITION_STATUS"/>
+	  	<result property="chk" column="CHK"/>
+	  	<result property="departmentName" column="DEPARTMENT_NAME"/>
+	  	<result property="studentGrade" column="STUDENT_GRADE"/>		
+  	</resultMap>
+  	
+	<select id="selectTuition" resultMap="tuitionResultMap">
+		SELECT * FROM STUDENT_TBL S
+		LEFT JOIN SCHOLARSHIP_TBL A ON
+		(S.STUDENT_NO=A.SCHOLARSHIP_STU_NO)
+		WHERE S.UNIVERSITY_CODE = #{uniCode}
 	</select>
 </mapper>
