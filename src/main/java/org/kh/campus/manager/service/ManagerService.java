@@ -8,7 +8,7 @@ import org.kh.campus.student.domain.Student;
 
 public interface ManagerService {
 	// 학생
-	public List<Student> printAllStudent();
+	public List<Student> printAllStudent(String uniCode);
 	public int registerStudent(Student student);
 	public int modifyrStudent(Student student);
 	public int deleteStudent(int studentNo);
