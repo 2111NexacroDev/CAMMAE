@@ -23,7 +23,7 @@
 	</resultMap>
 	
 	<select id="selectStudentList" resultMap="studentResultMap">
-		SELECT * FROM STUDENT_TBL
+		SELECT * FROM STUDENT_TBL WHERE UNIVERSITY_CODE = #{uniCode}
 	</select>
 	
 	<insert id="insertStudent">
@@ -133,7 +133,7 @@
 	<select id="selectAllManagerInfo" resultMap="managerResultMap">
 		SELECT * FROM MANAGER_TBL WHERE MANAGER_NO = #{managerNo} AND MANAGER_PASSWORD = #{managerPassword}
 	</select>
-	
+
 	
 	
 </mapper>

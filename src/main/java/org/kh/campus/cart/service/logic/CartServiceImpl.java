@@ -80,6 +80,29 @@ public class CartServiceImpl implements CartService {
 		return lList;
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	@Override
+//	public long countByEnrollPeole(Lecture lecture) {
+//		long totalCount = cStore.selectEnrollCount(sqlSession, lecture);
+//		return totalCount;
+//	}
+
 
 
 

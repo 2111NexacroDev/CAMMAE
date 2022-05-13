@@ -19,8 +19,8 @@ public class ManagerServiceImpl implements ManagerService {
 	private SqlSession sqlSession;
 	
 	@Override
-	public List<Student> printAllStudent() {
-		List<Student> sList = mStore.selectAllStudent(sqlSession);
+	public List<Student> printAllStudent(String uniCode) {
+		List<Student> sList = mStore.selectAllStudent(sqlSession, uniCode);
 		return sList;
 	}
 	@Override
@@ -83,5 +83,4 @@ public class ManagerServiceImpl implements ManagerService {
 	   Manager ma = mStore.selectAllManagerInfo(manager, sqlSession);
 	   return ma;
 	}
-	
 }

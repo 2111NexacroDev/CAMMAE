@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="GraduationMapper">
+  	<resultMap type="Graduation" id="graduationResultMap">
+  	<id property="studentNo" column="STUDENT_NO"></id>
+  	<result property="graduationStatus" column="GRADUATION_STATUS"/>
+  	<result property="graduationFilename" column="GRADUATION_FILENAME"/>
+  	<result property=" graduationFilerename" column="GRADUATION_FILERENAME"/>
+  	<result property="graduationFilepath" column="GRADUATION_FILEPATH"/>
+  	<result property="graduationStuName" column="GRADUATION_STU_NAME"/>
+  	<result property="graduationStuDep" column="GRADUATION_STU_DEP"/>
+  	<result property="graduationStuAvg" column="GRADUATION_STU_AVG"/>
+  
+  	</resultMap>
+  	
+  	<select id="selectPrintStu" resultMap="graduationResultMap">
+  		SELECT GRADUATION_STU_NAME, GRADUATION_STU_DEP, GRADUATION_STU_AVG
+  		FROM GRADUATION_TBL
+  		WHERE STUDENT_NO = #{studentNo}
+  	</select>
+  	</mapper>

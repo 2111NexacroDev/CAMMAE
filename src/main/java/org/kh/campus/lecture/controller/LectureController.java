@@ -124,6 +124,7 @@ public class LectureController {
 	}
 	}
 	
+	// 수강개설 할때 교수명 db에서 불러오는 기능
 	@ResponseBody
 	@RequestMapping(value = "/lecture/selectLecture.kh", method =RequestMethod.GET, produces = "application/json;charset=utf-8") 
 	public String lectureProList(Model model) {
@@ -137,6 +138,8 @@ public class LectureController {
 	  return null;
 	  }
 	
+	
+	// 수강개설할때 학과명 db에서 불러오는 기능
 	@ResponseBody
 	@RequestMapping(value = "/lecture/selectDepartment.kh", method=RequestMethod.GET, produces = "application/json;charset=utf-8")
 	public String lecturedepList(Model model) {

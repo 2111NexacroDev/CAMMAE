@@ -9,7 +9,7 @@ import org.kh.campus.student.domain.Student;
 
 public interface ManagerStore {
 
-	public List<Student> selectAllStudent(SqlSession sqlSession);
+	public List<Student> selectAllStudent(SqlSession sqlSession, String uniCode);
 
 	public int insertStudent(SqlSession sqlSession, Student student);
 
@@ -34,7 +34,5 @@ public interface ManagerStore {
 	public int deleteManager(SqlSession sqlSession, int managerNo);
 
 	public Manager selectAllManagerInfo(Manager manager, SqlSession sqlSession);
-
-
 
 }

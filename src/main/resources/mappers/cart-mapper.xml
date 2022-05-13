@@ -94,16 +94,18 @@ FROM CART_TBL  JOIN  LECTURE_TBL
  	</select> 
  	
  	<insert id="insertEnroll" parameterType="Lecture">
- 	 INSERT INTO GRADE_TBL
+ 	 INSERT INTO GRADE_TBL(LECTURE_NO
+, STUDENT_NO, PROFESSOR_NO, 
+GRADE_YEAR, GRADE_SESSION
+,GRADE_SUBJECT , LECTURE_DIVISION, LECTURE_GRADE)
  	 VALUES(#{lectureNo}
- 	 , 0
- 	 , 0
- 	 , 0, 0, 0
+ 	 , #{studentNo}
+ 	 , #{professorNo}
+ 	 , #{gradeYear}
+ 	 , #{gradeSession}
+ 	 , #{lectureName}
  	 , #{lectureDivision}
- 	 , #{lectureGrade}
- 	 ,0,0,0
- 	 ,default
- 	 ,0,0,0) 
+ 	 , #{lectureGrade}) 
  	</insert>
  	
  	<select id="selectMyEnroll" resultMap="lectureResultMap">
@@ -134,5 +136,8 @@ SELECT G.LECTURE_NO
  	 DELETE FROM GRADE_TBL WHERE LECTURE_NO=#{lectureNo} AND STUDENT_NO=#{studentNo}
  	</delete>
  	
+<!--  	<select id="selectEnrollCount">
+ 	SELECT COUNT(*) FROM CART_TBL
+ 	</select> -->
 
  </mapper>
