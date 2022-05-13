@@ -110,10 +110,10 @@ function inputMsgBox_onkeypress() {
 
 <span><b>채팅방이름</b></span> <button id="disconnectButton" value="Disconnect" type="button" onclick="disconnectButton_onclick()">나가기</button>
 <br><br>
-<textarea id="chatBoxArea" style="width:424px;" rows="30" cols="50" readonly="readonly"></textarea>
+<textarea id="chatBoxArea" style="width:100%;" rows="25" cols="50" readonly="readonly"></textarea>
 <br>
 <br>
-<input id="inputMsgBox" type="text" style="width:355px; height:100px" onkeypress="inputMsgBox_onkeypress()">
+<input id="inputMsgBox" type="text" style="width:80%; height:100px;" onkeypress="inputMsgBox_onkeypress()">
 <button id="sendButton" value="Send" type="button" onclick="sendButton_onclick()" >전송</button>
 
 
