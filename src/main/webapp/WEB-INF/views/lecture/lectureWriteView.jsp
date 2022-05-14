@@ -120,13 +120,15 @@ button { cursor:pointer; }
 					<table class="type05" align="center">
 						<tr>
 							<td id="n1">개설학과</td>
-							<td class="td_right"><select id="universityName"
-								name="lectureDepartment" onclick="selUniversityName()">
+							<td class="td_right">
+							<!-- <select id="universityName" name="lectureDepartment" onclick="selUniversityName()"> -->
+							<select id="universityName" name="lectureDepartment" onchange="getProName()">
 									<option value="">선택하세요.</option>
-									<c:forEach var="lList" items="${lList}">
-										<option value="${lList.universityName }">${lList.universityName }</option>
+									<c:forEach var="pList" items="${pList}">
+										<option value="${pList.departmentName }">${pList.departmentName }</option>
 									</c:forEach>
-							</select></td>
+							</select>
+							</td>
 						</tr>
 						<tr>
 							<td id="n1">과목명</td>
@@ -135,11 +137,11 @@ button { cursor:pointer; }
 						<tr>
 							<td id="n1">교수명</td>
 							<td class="td_right"><select id="professorName"
-								name="professorName" onclick="selProfessorName()">
+								name="professorName">
 									<option value="">선택하세요.</option>
-									<c:forEach var="lList" items="${lList}">
+									<%-- <c:forEach var="lList" items="${lList}">
 										<option value="${lList.professorName }">${lList.professorName }</option>
-									</c:forEach>
+									</c:forEach> --%>
 							</select></td>
 						</tr>
 
@@ -210,67 +212,34 @@ button { cursor:pointer; }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	<script type="text/javascript">
-		var mIndex = 0;
+		function getProName(){
+			var universityName = $("#universityName").val();
+			var target = $("#professorName");
+			$.ajax({
+				url : "/lecture/selectProfessor",
+				type : "get",
+				data : {"universityName" : universityName},
+				success : function(data){
+					$("#professorName option").remove();
+					for(var i= 0; i<data.length; i++){
+						$("#professorName").append(
+								"<option value="+data[i].professorName+">" + data[i].professorName + "</option>");
+					}
+				},
+				error : function(){
+					alert("ajax 실패");
+				}
+				
+			})
+			
+		}
+	
+	
+	
+	
+		
+		/* var mIndex = 0;
 		var uIndex = 0;
 		function selProfessorName() {
 			if (mIndex == 0) {
@@ -322,7 +291,7 @@ button { cursor:pointer; }
 				})
 				uIndex++;
 			}
-		}
+		} */
 	</script>
 </body>
 </html>
