@@ -12,12 +12,58 @@
 
 <title>강의 개설 페이지</title>
 <style>
-body {
-	margin: 0;
-	padding: 0;
+table.type05 {
+	border-bottom: 1.5px solid rgb(30, 57, 50);
+	border-top: 1.5px solid rgb(30, 57, 50);
+	border-collapse: collapse;
+	text-align: left;
+	line-height: 1.5;
+	margin-top: 10px;
+	width: 800px;
 }
 
-.lecwritediv {
+table.type05 thead {
+	background: rgb(231, 232, 226);
+}
+
+table.type05 thead th {
+	padding: 10px;
+	vertical-align: top;
+	color: black;
+}
+
+#n1 {
+	width: 15%;
+	background: rgb(231, 232, 226);
+	text-align : center;
+	font-weight : bold;
+}
+
+input{
+	margin-left : 5px;
+}
+
+select{
+	margin-left : 5px;
+}
+
+td{
+	padding : 7px;
+	border-bottom : 1px solid #CCC;
+}
+#content1 {
+	width: 790px;
+	height: 300px;
+}
+table{
+margin-bottom : 10px;
+}
+
+
+
+
+
+/* .lecwritediv {
 	border: 3px solid #c8c8c8;
 	border-radius: 5px;
 	width: 740px;
@@ -53,7 +99,7 @@ table td {
 
 button { cursor:pointer; }
 	
-}
+} */
 </style>
 </head>
 <body>
@@ -72,10 +118,10 @@ button { cursor:pointer; }
 						<h2>수강개설</h2>
 					</div>
 				</div>
-				<div class="lecwritediv">
-					<table>
+				<div>
+					<table class="type05" align="center">
 						<tr>
-							<td class="td_left">개설학과</td>
+							<td id="n1">개설학과</td>
 							<td class="td_right"><select id="universityName"
 								name="lectureDepartment" onclick="selUniversityName()">
 									<option value="">선택하세요.</option>
@@ -85,11 +131,11 @@ button { cursor:pointer; }
 							</select></td>
 						</tr>
 						<tr>
-							<td class="td_left">과목명</td>
+							<td  id="n1">과목명</td>
 							<td class="td_right"> <input type="text" name="lectureName"></td>
 						</tr>
 						<tr>
-							<td class="td_left">교수명</td>
+							<td  id="n1">교수명</td>
 							<td class="td_right">
 								<select id="professorName" name="professorName" onclick="selProfessorName()">
 									<option value="">선택하세요.</option>
@@ -101,7 +147,7 @@ button { cursor:pointer; }
 						</tr>
 						
 						<tr>
-							<td class="td_left">이수구분</td>
+							<td  id="n1">이수구분</td>
 							<td class="td_right">
 								 <select name="lectureDivision">
 									<option>선택하세요</option>
@@ -114,23 +160,23 @@ button { cursor:pointer; }
 					  </tr>
 					  
 					  <tr>
-						<td class="td_left">학점</td>
+						<td  id="n1">학점</td>
 						<td class="td_right"><input type="number" name="lectureGrade"></td>
 					 </tr>
 						
 					  <tr>
-						<td class="td_left">강의실</td>
+						<td  id="n1">강의실</td>
 						<td class="td_right"> <input type="text" name="lectureRoom"></td>
 					 </tr>
 							
 					
 					  <tr>
-						<td class="td_left">인원</td>
-						<td class="td_right"> <input type="number" name="lecturePeople">></td>
+						<td  id="n1">인원</td>
+						<td class="td_right"> <input type="number" name="lecturePeople"></td>
 					 </tr>
 					 
 					  <tr>
-						<td class="td_left">강의시간</td>
+						<td  id="n1">강의시간</td>
 						<td class="td_right">
 							<select>
 								<option>월요일</option>
@@ -143,20 +189,24 @@ button { cursor:pointer; }
 					 </tr>
 						
 					  <tr>
-						<td class="td_left">수업 시작시간</td>
+						<td  id="n1">수업 시작시간</td>
 						<td class="td_right"><input type="time" name="lectureStartTime"></td>
 					 </tr>
 					
 					  <tr>
-						<td class="td_left">수업 종료시간</td>
+						<td  id="n1">수업 종료시간</td>
 						<td class="td_right"><input type="time" name="lectureEndTime"></td>
 					 </tr>
 								
-					<tr>
-						<td colspan="2" align="center" class="td_sub"><button class="btn" type="submit"  >등록하기</button></td>
-					</tr>	
-							
 					</table>
+					
+					
+					
+					<div align="center">
+					<br>
+					
+						<button class="btn" type="submit"  >등록하기</button>
+					</div>
 				</div>
 			</form>
 		</div>
