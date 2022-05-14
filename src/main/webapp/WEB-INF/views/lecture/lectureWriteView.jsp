@@ -35,33 +35,31 @@ table.type05 thead th {
 #n1 {
 	width: 15%;
 	background: rgb(231, 232, 226);
-	text-align : center;
-	font-weight : bold;
+	text-align: center;
+	font-weight: bold;
 }
 
-input{
-	margin-left : 5px;
+input {
+	margin-left: 5px;
 }
 
-select{
-	margin-left : 5px;
+select {
+	margin-left: 5px;
 }
 
-td{
-	padding : 7px;
-	border-bottom : 1px solid #CCC;
+td {
+	padding: 7px;
+	border-bottom: 1px solid #CCC;
 }
+
 #content1 {
 	width: 790px;
 	height: 300px;
 }
-table{
-margin-bottom : 10px;
+
+table {
+	margin-bottom: 10px;
 }
-
-
-
-
 
 /* .lecwritediv {
 	border: 3px solid #c8c8c8;
@@ -108,7 +106,7 @@ button { cursor:pointer; }
 	<!-- contents -->
 	<div id="content">
 		<div id="left">
-			<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
+			<jsp:include page="../common/sideLMenu.jsp"></jsp:include>
 		</div>
 		<!-- contents-main -->
 		<div id="center">
@@ -131,81 +129,79 @@ button { cursor:pointer; }
 							</select></td>
 						</tr>
 						<tr>
-							<td  id="n1">과목명</td>
-							<td class="td_right"> <input type="text" name="lectureName"></td>
+							<td id="n1">과목명</td>
+							<td class="td_right"><input type="text" name="lectureName"></td>
 						</tr>
 						<tr>
-							<td  id="n1">교수명</td>
-							<td class="td_right">
-								<select id="professorName" name="professorName" onclick="selProfessorName()">
+							<td id="n1">교수명</td>
+							<td class="td_right"><select id="professorName"
+								name="professorName" onclick="selProfessorName()">
 									<option value="">선택하세요.</option>
 									<c:forEach var="lList" items="${lList}">
 										<option value="${lList.professorName }">${lList.professorName }</option>
 									</c:forEach>
-								</select>
-							</td>
+							</select></td>
 						</tr>
-						
+
 						<tr>
-							<td  id="n1">이수구분</td>
-							<td class="td_right">
-								 <select name="lectureDivision">
+							<td id="n1">이수구분</td>
+							<td class="td_right"><select name="lectureDivision">
 									<option>선택하세요</option>
 									<option>전공필수</option>
 									<option>전공선택</option>
 									<option>교양필수</option>
 									<option>교양선택</option>
-								</select>
-							</td>
-					  </tr>
-					  
-					  <tr>
-						<td  id="n1">학점</td>
-						<td class="td_right"><input type="number" name="lectureGrade"></td>
-					 </tr>
-						
-					  <tr>
-						<td  id="n1">강의실</td>
-						<td class="td_right"> <input type="text" name="lectureRoom"></td>
-					 </tr>
-							
-					
-					  <tr>
-						<td  id="n1">인원</td>
-						<td class="td_right"> <input type="number" name="lecturePeople"></td>
-					 </tr>
-					 
-					  <tr>
-						<td  id="n1">강의시간</td>
-						<td class="td_right">
-							<select>
-								<option>월요일</option>
-								<option>화요일</option>
-								<option>수요일</option>
-								<option>목요일</option>
-								<option>금요일</option>
-						   </select>
-						</td>
-					 </tr>
-						
-					  <tr>
-						<td  id="n1">수업 시작시간</td>
-						<td class="td_right"><input type="time" name="lectureStartTime"></td>
-					 </tr>
-					
-					  <tr>
-						<td  id="n1">수업 종료시간</td>
-						<td class="td_right"><input type="time" name="lectureEndTime"></td>
-					 </tr>
-								
+							</select></td>
+						</tr>
+
+						<tr>
+							<td id="n1">학점</td>
+							<td class="td_right"><input type="number"
+								name="lectureGrade"></td>
+						</tr>
+
+						<tr>
+							<td id="n1">강의실</td>
+							<td class="td_right"><input type="text" name="lectureRoom"></td>
+						</tr>
+
+						<tr>
+							<td id="n1">인원</td>
+							<td class="td_right"><input type="number"
+								name="lecturePeople"></td>
+						</tr>
+
+						<tr>
+							<td id="n1">강의시간</td>
+							<td class="td_right"><select>
+									<option>월요일</option>
+									<option>화요일</option>
+									<option>수요일</option>
+									<option>목요일</option>
+									<option>금요일</option>
+							</select></td>
+						</tr>
+
+						<tr>
+							<td id="n1">수업 시작시간</td>
+							<td class="td_right"><input type="time"
+								name="lectureStartTime"></td>
+						</tr>
+
+						<tr>
+							<td id="n1">수업 종료시간</td>
+							<td class="td_right"><input type="time"
+								name="lectureEndTime"></td>
+						</tr>
+
 					</table>
-					
-					
-					
+
+
+
 					<div align="center">
-					<br>
-					
-						<button class="btn" type="submit"  >등록하기</button>
+						<br>
+
+						<button class="btn" type="submit">등록하기</button>
 					</div>
 				</div>
 			</form>

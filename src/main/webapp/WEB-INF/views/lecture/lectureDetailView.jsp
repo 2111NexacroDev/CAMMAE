@@ -26,5 +26,8 @@
 					<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
 				</c:url>
 <a href="${lModify }">수정</a>
+<c:url var="lRemove" value="/lecture/remove.kh">
+									<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
+								</c:url> <a href="${lRemove }">삭제</a>
 </body>
 </html>

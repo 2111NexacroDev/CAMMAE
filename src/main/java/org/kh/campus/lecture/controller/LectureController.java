@@ -32,6 +32,7 @@ public class LectureController {
 		List<Lecture> lList = lService.printAllLecture();
 		if(!lList.isEmpty()) {
 			model.addAttribute("lList", lList);
+			model.addAttribute("menu", "lecture");
 			return "lecture/lectureListView";
 		}else {
 			model.addAttribute("msg", "과목개설 실패");
@@ -42,7 +43,8 @@ public class LectureController {
 	}
 	// 수강개설 페이지
 	@RequestMapping(value = "/lecture/writeView.kh", method = RequestMethod.GET)
-	public String lectureWriteView() {
+	public String lectureWriteView(Model model) {
+		model.addAttribute("menu", "lecture");
 		return  "lecture/lectureWriteView";
 	}
 	
@@ -51,6 +53,7 @@ public class LectureController {
 	public String lectureRegister(Model model, @ModelAttribute Lecture lecture) {
 		int result = lService.registerLecture(lecture);
 		if(result >0 ) {
+			
 			return "redirect:/lecture/list.kh";
 		}else {
 			model.addAttribute("msg", "과목개설 실패");
