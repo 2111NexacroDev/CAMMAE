@@ -34,7 +34,8 @@
 			<th>학점</th>
 			<th>강의실</th>
 			<th>강의인원</th>
-			<th>강의시간</th>
+			<th>강의시작시간</th>
+			<th>강의종료시간</th>
 		</tr>
 		<c:forEach items="${lList }" var="lList">
 			<tr class="lecTr">
@@ -52,7 +53,8 @@
 				<td>${lList.lectureGrade }</td>
 				<td>${lList.lectureRoom }</td>
 				<td>${lList.lecturePeople }</td>
-				<td>${lList.lectureTime }</td>
+				<td>${lList.lectureStartTime}</td>
+				<td>${lList.lectureEndTime}</td>
 			</tr>	
 		
 		</c:forEach>

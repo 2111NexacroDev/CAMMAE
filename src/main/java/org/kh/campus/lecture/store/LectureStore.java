@@ -23,6 +23,10 @@ public interface LectureStore {
 
 	List<University> selectAllDept(SqlSession sqlSession);
 
+	List<Professor> selectAllUniName(SqlSession sqlSession);
+
+	List<Professor> selectProName(SqlSession sqlSession, String universityName);
+
 
 
 

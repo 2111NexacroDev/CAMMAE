@@ -32,6 +32,7 @@ public class LectureController {
 		List<Lecture> lList = lService.printAllLecture();
 		if(!lList.isEmpty()) {
 			model.addAttribute("lList", lList);
+			model.addAttribute("menu", "lecture");
 			return "lecture/lectureListView";
 		}else {
 			model.addAttribute("msg", "과목개설 실패");
@@ -42,15 +43,37 @@ public class LectureController {
 	}
 	// 수강개설 페이지
 	@RequestMapping(value = "/lecture/writeView.kh", method = RequestMethod.GET)
-	public String lectureWriteView() {
+	public String lectureWriteView(Model model) {
+		List<Professor> pList = lService.PrintAllUni();
+		
+		if(! pList.isEmpty()) {
+			model.addAttribute("menu", "lecture");
+			model.addAttribute("pList", pList);
+		}
 		return  "lecture/lectureWriteView";
 	}
 	
+	// 셀렉트박스
+	@ResponseBody
+	@RequestMapping(value="/lecture/selectProfessor", method =RequestMethod.GET, produces = "application/json;charset=utf-8")
+	public String lectureProList(@RequestParam("universityName") String universityName) {
+		List<Professor> pList = lService.printAllProName(universityName);
+		  
+		  if (!pList.isEmpty()) { 
+			 Gson gson = new Gson();
+			 return gson.toJson(pList);
+		  }
+		  
+		  return null;
+	}
+		
+
 	//수강 개설 등록 실행
 	@RequestMapping(value="/lecture/register.kh", method=RequestMethod.POST)
 	public String lectureRegister(Model model, @ModelAttribute Lecture lecture) {
 		int result = lService.registerLecture(lecture);
 		if(result >0 ) {
+			
 			return "redirect:/lecture/list.kh";
 		}else {
 			model.addAttribute("msg", "과목개설 실패");
@@ -64,6 +87,7 @@ public class LectureController {
 		Lecture lecture = lService.printOneLecture(lectureNo);
 		if(lecture != null ) {
 			model.addAttribute("lecture", lecture );
+			model.addAttribute("menu", "lecture");
 			return "lecture/lectureUpdateView";
 		}else {
 			model.addAttribute("msg", "과목 수정 실패");
@@ -99,6 +123,7 @@ public class LectureController {
 		Lecture lecture = lService.printOneLecture(lectureNo);
 		if(lecture != null) {
 			model.addAttribute("lecture", lecture);
+			model.addAttribute("menu", "lecture");
 			return "lecture/lectureDetailView";
 		}else {
 			model.addAttribute("msg", "디테일 조회 실패");
@@ -124,34 +149,33 @@ public class LectureController {
 	}
 	}
 	
-	// 수강개설 할때 교수명 db에서 불러오는 기능
-	@ResponseBody
-	@RequestMapping(value = "/lecture/selectLecture.kh", method =RequestMethod.GET, produces = "application/json;charset=utf-8") 
-	public String lectureProList(Model model) {
-		List<Professor> lList = lService.printAllProName();
-	  
-	  if (!lList.isEmpty()) { 
-		 Gson gson = new Gson();
-		 return gson.toJson(lList);
-	  }
-	  
-	  return null;
-	  }
-	
-	
-	// 수강개설할때 학과명 db에서 불러오는 기능
-	@ResponseBody
-	@RequestMapping(value = "/lecture/selectDepartment.kh", method=RequestMethod.GET, produces = "application/json;charset=utf-8")
-	public String lecturedepList(Model model) {
-		List<University> lList = lService.printAllDep();
-		
-		if (!lList.isEmpty()) { 
-			 Gson gson = new Gson();
-			 return gson.toJson(lList);
-		  }
-		
-		return null;
-	}
+	/*
+	 * // 수강개설 할때 교수명 db에서 불러오는 기능
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping(value = "/lecture/selectLecture.kh", method
+	 * =RequestMethod.GET, produces = "application/json;charset=utf-8") public
+	 * String lectureProList(Model model) { List<Professor> lList =
+	 * lService.printAllProName();
+	 * 
+	 * if (!lList.isEmpty()) { Gson gson = new Gson(); return gson.toJson(lList); }
+	 * 
+	 * return null; }
+	 * 
+	 * 
+	 * // 수강개설할때 학과명 db에서 불러오는 기능
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping(value = "/lecture/selectDepartment.kh",
+	 * method=RequestMethod.GET, produces = "application/json;charset=utf-8") public
+	 * String lecturedepList(Model model) { List<University> lList =
+	 * lService.printAllDep();
+	 * 
+	 * if (!lList.isEmpty()) { Gson gson = new Gson(); return gson.toJson(lList); }
+	 * return null; }
+	 */
 	
 	
 

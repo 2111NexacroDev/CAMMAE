@@ -1,5 +1,8 @@
 package org.kh.campus.cart.service.logic;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,6 +61,23 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public int registerEnroll(Lecture lecture) {
+		
+		// 현재 날짜 구하기
+		LocalDate now = LocalDate.now();
+		// 포맷 정의
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+		// 포맷 적용
+		String formatedNow = now.format(formatter);
+		
+		formatter = DateTimeFormatter.ofPattern("MM");
+		int formatedNow2 = Integer.parseInt(now.format(formatter));
+		if( formatedNow2 <7) {
+			lecture.setGradeSession("1학기");
+		}else {
+			lecture.setGradeSession("2학기");
+		}
+		lecture.setGradeYear(formatedNow);
+		
 		int result = cStore.insertEnroll(sqlSession, lecture);
 		return result;
 	}

@@ -44,7 +44,8 @@
 				<td>${cart.professorName }</td>
 				<td>${cart.lectureName }</td>
 				<td>${cart.lectureDepartment }</td>
-				<td>${cart.lectureTime }</td>
+				<td>${lecture.lectureStartTime}</td>
+				<td>${lecture.lectureEndTime}</td>
 				
 				<td><c:url var="cRemove" value="/cart/remove.kh">
 						<c:param name="cartNo" value="${cart.cartNo }"></c:param>

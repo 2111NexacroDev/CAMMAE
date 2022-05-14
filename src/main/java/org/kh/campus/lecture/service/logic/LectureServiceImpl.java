@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LectureServiceImpl implements LectureService{
+public class LectureServiceImpl implements LectureService {
 
 	@Autowired
 	private LectureStore lStore;
 	@Autowired
 	private SqlSession sqlSession;
-	
+
 	@Override
 	public List<Lecture> printAllLecture() {
 		List<Lecture> lList = lStore.selectAllLecture(sqlSession);
@@ -45,7 +45,7 @@ public class LectureServiceImpl implements LectureService{
 
 	@Override
 	public Lecture printOneLecture(int lectureNo) {
-		Lecture lecture =  lStore.selectOneLecture(sqlSession,lectureNo);
+		Lecture lecture = lStore.selectOneLecture(sqlSession, lectureNo);
 		return lecture;
 	}
 
@@ -61,5 +61,17 @@ public class LectureServiceImpl implements LectureService{
 		return lList;
 	}
 
+	// 교수테이블->학과명 출력
+	@Override
+	public List<Professor> PrintAllUni() {
+		List<Professor> pList = lStore.selectAllUniName(sqlSession);
+		return pList;
+	}
+
+	@Override
+	public List<Professor> printAllProName(String universityName) {
+		List<Professor> pList = lStore.selectProName(sqlSession,universityName);
+		return pList;
+	}
 
 }

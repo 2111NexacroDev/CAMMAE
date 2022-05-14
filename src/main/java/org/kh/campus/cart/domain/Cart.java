@@ -12,12 +12,16 @@ public class Cart {
 	private String professorName; 
 	private String lectureName; 
 	private String lectureDepartment; 
-	private String lectureTime;
+	private String lectureStartTime;
+	private String lectureEndTime;
 	
 	public Cart() {}
 
+	
+	
 	public Cart(int cartNo, int studentNo, String lectureNo, String cartYear, String cartTerm, String lectureDivision,
-			int lectureGrade, String professorName, String lectureName, String lectureDepartment, String lectureTime) {
+			int lectureGrade, String professorName, String lectureName, String lectureDepartment,
+			String lectureStartTime, String lectureEndTime) {
 		super();
 		this.cartNo = cartNo;
 		this.studentNo = studentNo;
@@ -29,8 +33,11 @@ public class Cart {
 		this.professorName = professorName;
 		this.lectureName = lectureName;
 		this.lectureDepartment = lectureDepartment;
-		this.lectureTime = lectureTime;
+		this.lectureStartTime = lectureStartTime;
+		this.lectureEndTime = lectureEndTime;
 	}
+
+
 
 	public int getCartNo() {
 		return cartNo;
@@ -112,21 +119,35 @@ public class Cart {
 		this.lectureDepartment = lectureDepartment;
 	}
 
-	public String getLectureTime() {
-		return lectureTime;
+	public String getLectureStartTime() {
+		return lectureStartTime;
 	}
 
-	public void setLectureTime(String lectureTime) {
-		this.lectureTime = lectureTime;
+	public void setLectureStartTime(String lectureStartTime) {
+		this.lectureStartTime = lectureStartTime;
 	}
+
+	public String getLectureEndTime() {
+		return lectureEndTime;
+	}
+
+	public void setLectureEndTime(String lectureEndTime) {
+		this.lectureEndTime = lectureEndTime;
+	}
+
+
 
 	@Override
 	public String toString() {
 		return "Cart [cartNo=" + cartNo + ", studentNo=" + studentNo + ", lectureNo=" + lectureNo + ", cartYear="
 				+ cartYear + ", cartTerm=" + cartTerm + ", lectureDivision=" + lectureDivision + ", lectureGrade="
 				+ lectureGrade + ", professorName=" + professorName + ", lectureName=" + lectureName
-				+ ", lectureDepartment=" + lectureDepartment + ", lectureTime=" + lectureTime + "]";
+				+ ", lectureDepartment=" + lectureDepartment + ", lectureStartTime=" + lectureStartTime
+				+ ", lectureEndTime=" + lectureEndTime + "]";
 	}
+
+	
+	
 	
 	
 }
