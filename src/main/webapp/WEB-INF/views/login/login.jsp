@@ -108,7 +108,8 @@ input[type="radio"] {
 }
 
 h1 {
-	margin-top: 0px; font-size : 2em;
+	margin-top: 0px; 
+	font-size : 2em;
 	font-weight: bold;
 	margin-left: 720px;
 	font-size: 2em;
@@ -156,12 +157,11 @@ h1 a {
     background-size: 100% 100%;
 }
 form{
-	
     background-color: rgba(169, 191, 159, 0.72);
 }
 html, body, div {
-	margin: 0;
-	padding: 0;
+	margin: -1;
+	padding: -1;
 }
 
 .login_form {
@@ -206,6 +206,11 @@ table input {
 	width: 300px;
 	height: 30px;
 	text-align: center;
+}
+
+.logoTitle {
+	top: 50px;
+	position: relative;
 }
 </style>
 <script>
@@ -294,13 +299,15 @@ window.onload = function(){
 <body>
 	<div class="lnb" id="main_1">
 		<div id="main_2">
-			<h1>
-				<img src="../resources/img/logo.png"
-					style="width: 80px; height: 80px;"> <a href="../main.kh">
-					<span id="lnb_title"> 대일대학교</span>
-				</a> <span id="lnb_subtitle">DAILE UNIVERSITY</span>
-
-			</h1>
+			<div class="logoTitle">
+				<h1>
+					<img src="../resources/img/logo.png" style="width: 80px; height: 80px;">
+					<a href="../main.kh">
+						<span id="lnb_title">대일대학교</span>
+					</a>
+						<span id="lnb_subtitle">DAILE UNIVERSITY</span>
+				</h1>
+			</div>
 		</div>
 		<div class="form_1">
 		<form action="/login/login.kh" method="post" >
