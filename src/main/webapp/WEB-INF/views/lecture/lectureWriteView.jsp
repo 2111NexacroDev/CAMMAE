@@ -195,12 +195,8 @@ button { cursor:pointer; }
 						</tr>
 
 					</table>
-
-
-
 					<div align="center">
 						<br>
-
 						<button class="btn" type="submit">등록하기</button>
 					</div>
 				</div>

@@ -67,6 +67,7 @@ public class LectureController {
 		Lecture lecture = lService.printOneLecture(lectureNo);
 		if(lecture != null ) {
 			model.addAttribute("lecture", lecture );
+			model.addAttribute("menu", "lecture");
 			return "lecture/lectureUpdateView";
 		}else {
 			model.addAttribute("msg", "과목 수정 실패");
@@ -102,6 +103,7 @@ public class LectureController {
 		Lecture lecture = lService.printOneLecture(lectureNo);
 		if(lecture != null) {
 			model.addAttribute("lecture", lecture);
+			model.addAttribute("menu", "lecture");
 			return "lecture/lectureDetailView";
 		}else {
 			model.addAttribute("msg", "디테일 조회 실패");

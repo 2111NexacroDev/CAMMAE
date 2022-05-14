@@ -75,7 +75,7 @@
 					<div class="contents_1bar_1_1"><a href="#" style="color:white">&nbsp;&nbsp;수강신청</a></div>
 					<div class="contents_1bar_1_2"><img src="../../../resources/img/logo2.png" style="width:90px; height:85px;  opacity: 0.4; filter: alpha(opacity=40);"></div>
 				</div>
-				<div class="contents_1bar_2 ${menu eq 'lecture' ? 'active' : '' }"> <a href="/lecture/List.kh">&nbsp;&nbsp;&nbsp;수강개설</a></div>
+				<div class="contents_1bar_2 ${menu eq 'lecture' ? 'active' : '' }"> <a href="/lecture/list.kh">&nbsp;&nbsp;&nbsp;수강개설</a></div>
 			
 			</div>
 		</div>
