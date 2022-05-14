@@ -22,8 +22,13 @@
 		<result property="universityCode" column="UNIVERSITY_CODE"/>
 	</resultMap>
 	
-	<select id="selectStudentList" resultMap="studentResultMap">
-		SELECT * FROM STUDENT_TBL WHERE UNIVERSITY_CODE = #{uniCode}
+	<select id="selectStudentList" resultMap="studentResultMap" parameterType="String">
+		SELECT * FROM STUDENT_TBL
+		WHERE UNIVERSITY_CODE = #{uniCode}
+	</select>
+	
+	<select id="selectStudentAllList" resultMap="studentResultMap" parameterType="String">
+		SELECT * FROM STUDENT_TBL
 	</select>
 	
 	<insert id="insertStudent">
