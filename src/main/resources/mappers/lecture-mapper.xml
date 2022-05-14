@@ -94,4 +94,12 @@
 		SELECT * FROM UNIVERSITY_TBL
 	</select>
 	
+	
+	<select id="selectAllUniName" resultMap="professorResultMap">
+		SELECT DISTINCT DEPARTMENT_NAME FROM PROFESSOR_TBL ORDER BY DEPARTMENT_NAME ASC
+	</select>
+	
+	<select id="selectProName" resultMap="professorResultMap">
+		SELECT DISTINCT PROFESSOR_NAME FROM PROFESSOR_TBL WHERE DEPARTMENT_NAME=#{departmentName} ORDER BY PROFESSOR_NAME ASC
+	</select>
 </mapper>
