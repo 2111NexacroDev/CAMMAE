@@ -110,13 +110,13 @@ public class MangerController {
 				return result;
 	}
 	// 교수 정보 조회
-	@RequestMapping(value="/manager/prfInfo.kh", method=RequestMethod.GET)
-	public NexacroResult printAllProfessor() {
+	@PostMapping("/manager/prfInfo.kh")
+	public NexacroResult printAllProfessor(@ParamVariable(name = "in_var") String uniCode) {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
-		List<Professor> pList = mService.printAllProfessor();
+		List<Professor> pList = mService.printAllProfessor(uniCode);
 		
 		result.addDataSet("out_prfAllInfo", pList);
 		result.addVariable("ErrorCode", nErrorCode);
@@ -189,13 +189,13 @@ public class MangerController {
 	}
 	
 	// 관리자 정보 조회
-	@RequestMapping(value="/manager/magInfo.kh", method=RequestMethod.GET)
-	public NexacroResult printAllManager() {
+	@PostMapping("/manager/magInfo.kh")
+	public NexacroResult printAllManager(@ParamVariable(name = "in_var") String teamCode) {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
-		List<Manager> mList = mService.printAllManager();
+		List<Manager> mList = mService.printAllManager(teamCode);
 		
 		result.addDataSet("out_magAllInfo", mList);
 		result.addVariable("ErrorCode", nErrorCode);
