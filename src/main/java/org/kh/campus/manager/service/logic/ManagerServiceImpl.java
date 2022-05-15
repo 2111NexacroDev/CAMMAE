@@ -39,8 +39,8 @@ public class ManagerServiceImpl implements ManagerService {
 		return result;
 	}
 	@Override
-	public List<Professor> printAllProfessor() {
-		List<Professor> pList = mStore.selectAllProfessor(sqlSession);
+	public List<Professor> printAllProfessor(String uniCode) {
+		List<Professor> pList = mStore.selectAllProfessor(sqlSession, uniCode);
 		return pList;
 	}
 	@Override
@@ -59,8 +59,8 @@ public class ManagerServiceImpl implements ManagerService {
 		return result;
 	}
 	@Override
-	public List<Manager> printAllManager() {
-		List<Manager> sList = mStore.selectAllManager(sqlSession);
+	public List<Manager> printAllManager(String teamCode) {
+		List<Manager> sList = mStore.selectAllManager(sqlSession, teamCode);
 		return sList;
 	}
 	@Override

@@ -22,14 +22,27 @@
 	</resultMap>
 	
 	<!-- 학생 -->
-	<select id="selectGradeStudent" resultMap="gradeResultMap">
+	<select id="selectGradeStudent" resultMap="gradeResultMap" parameterType="hashMap">
 		SELECT * FROM GRADE_TBL WHERE STUDENT_NO = #{studentNo}
+		<if test='!year.equals("전체")'>
+			AND GRADE_YEAR = #{year}
+		</if>
+		<if test='!season.equals("전체")'>
+			AND GRADE_SESSION = #{season}
+		</if>
 	</select>
 	
 	<select id="selectFeedbackStudent" resultMap="gradeResultMap">
 		SELECT * FROM GRADE_OBJECTION O
-		LEFT JOIN GRADE_TBL G ON
-		(G.STUDENT_NO = O.STUDENT_NO AND G.LECTURE_NO = O.LECTURE_NO AND O.STUDENT_NO = #{studentNo})
+		INNER JOIN GRADE_TBL G ON
+		(G.STUDENT_NO = O.STUDENT_NO AND G.LECTURE_NO = O.LECTURE_NO AND O.STUDENT_NO = #{studentNo}
+		<if test='!year.equals("전체")'>
+			AND G.GRADE_YEAR = #{year}
+		</if>
+		<if test='!season.equals("전체")'>
+			AND G.GRADE_SESSION = #{season}
+		</if>
+		)
 		LEFT JOIN FEEDBACK_TBL F ON (F.STUDENT_NO = O.STUDENT_NO AND F.LECTURE_NO = O.LECTURE_NO)
 	</select>
 	
@@ -43,16 +56,50 @@
 	</insert>
 	
 	<!-- 교수 -->
-	<select id="selectGradeProfessor" resultMap="gradeResultMap">
-		SELECT * FROM GRADE_TBL G
-		LEFT JOIN STUDENT_TBL S ON
-		(G.STUDENT_NO = S.STUDENT_NO AND G.PROFESSOR_NO = #{professorNo})
+	<!-- 교과목 불러오기 -->
+	<select id="selectSubject" resultMap="gradeResultMap" parameterType="hashMap">
+		SELECT DISTINCT GRADE_SUBJECT FROM GRADE_TBL
+		WHERE PROFESSOR_NO = #{professorNo}
+		<if test='!year.equals("전체")'>
+			AND GRADE_YEAR = #{year}
+		</if>
+		<if test='!season.equals("전체")'>
+			AND GRADE_SESSION = #{season}
+		</if>
 	</select>
 	
+	<!-- 교수의 성적조회 -->
+	<select id="selectGradeProfessor" resultMap="gradeResultMap" parameterType="hashMap">
+		SELECT * FROM GRADE_TBL G
+		INNER JOIN STUDENT_TBL S ON
+		(G.STUDENT_NO = S.STUDENT_NO AND G.PROFESSOR_NO = #{professorNo}
+		<if test='!year.equals("전체")'>
+			AND G.GRADE_YEAR = #{year}
+		</if>
+		<if test='!season.equals("전체")'>
+			AND G.GRADE_SESSION = #{season}
+		</if>
+		<if test='!subject.equals("전체")'>
+			AND G.GRADE_SUBJECT = #{subject}
+		</if>
+		)
+	</select>
+	
+	<!-- 교수의 이의신청 조회 -->
 	<select id="selectFeedbackProfessor" resultMap="gradeResultMap">
 		SELECT * FROM GRADE_OBJECTION O
 		JOIN GRADE_TBL G ON
-		(G.STUDENT_NO = O.STUDENT_NO AND G.LECTURE_NO = O.LECTURE_NO AND G.PROFESSOR_NO = #{professorNo})
+		(G.STUDENT_NO = O.STUDENT_NO AND G.LECTURE_NO = O.LECTURE_NO AND G.PROFESSOR_NO = #{professorNo}
+		<if test='!year.equals("전체")'>
+			AND G.GRADE_YEAR = #{year}
+		</if>
+		<if test='!season.equals("전체")'>
+			AND G.GRADE_SESSION = #{season}
+		</if>
+		<if test='!subject.equals("전체")'>
+			AND G.GRADE_SUBJECT = #{subject}
+		</if>
+		)
 		LEFT JOIN FEEDBACK_TBL F ON (F.STUDENT_NO = O.STUDENT_NO AND F.LECTURE_NO = O.LECTURE_NO)
         LEFT JOIN STUDENT_TBL S ON (S.STUDENT_NO = O.STUDENT_NO)
 	</select>

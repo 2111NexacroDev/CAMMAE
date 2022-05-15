@@ -1,5 +1,6 @@
 package org.kh.campus.grade.store.logic;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -11,14 +12,14 @@ import org.springframework.stereotype.Repository;
 public class GradeStoreLogic implements GradeStore {
 
 	@Override
-	public List<Grade> selectGradeStudent(int studentNo, SqlSession sqlSession) {
-		List<Grade> gList = sqlSession.selectList("GradeMapper.selectGradeStudent", studentNo);
+	public List<Grade> selectGradeStudent(HashMap<String, String> searchInfo, SqlSession sqlSession) {
+		List<Grade> gList = sqlSession.selectList("GradeMapper.selectGradeStudent", searchInfo);
 		return gList;
 	}
 
 	@Override
-	public List<Grade> selectFeedbackStudent(int studentNo, SqlSession sqlSession) {
-		List<Grade> gList = sqlSession.selectList("GradeMapper.selectFeedbackStudent", studentNo);
+	public List<Grade> selectFeedbackStudent(HashMap<String, String> searchInfo, SqlSession sqlSession) {
+		List<Grade> gList = sqlSession.selectList("GradeMapper.selectFeedbackStudent", searchInfo);
 		return gList;
 	}
 
@@ -29,8 +30,14 @@ public class GradeStoreLogic implements GradeStore {
 	}
 
 	@Override
-	public List<Grade> selectGradeProfessor(int prfNo, SqlSession sqlSession) {
-		List<Grade> gList = sqlSession.selectList("GradeMapper.selectGradeProfessor", prfNo);
+	public List<Grade> selectSubject(HashMap<String, String> searchInfo, SqlSession sqlSession) {
+		List<Grade> sList = sqlSession.selectList("GradeMapper.selectSubject", searchInfo);
+		return sList;
+	}
+	
+	@Override
+	public List<Grade> selectGradeProfessor(HashMap<String, String> searchInfo, SqlSession sqlSession) {
+		List<Grade> gList = sqlSession.selectList("GradeMapper.selectGradeProfessor", searchInfo);
 		return gList;
 	}
 	
@@ -48,8 +55,8 @@ public class GradeStoreLogic implements GradeStore {
 
 
 	@Override
-	public List<Grade> selectFeedbackProfessor(int prfNo, SqlSession sqlSession) {
-		List<Grade> gList = sqlSession.selectList("GradeMapper.selectFeedbackProfessor", prfNo);
+	public List<Grade> selectFeedbackProfessor(HashMap<String, String> searchInfo, SqlSession sqlSession) {
+		List<Grade> gList = sqlSession.selectList("GradeMapper.selectFeedbackProfessor", searchInfo);
 		return gList;
 	}
 
