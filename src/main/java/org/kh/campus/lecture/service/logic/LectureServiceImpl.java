@@ -74,4 +74,10 @@ public class LectureServiceImpl implements LectureService {
 		return pList;
 	}
 
+	@Override
+	public List<Lecture> printAlllecture2(String lectureDepartment) {
+		List<Lecture> lList = lStore.selectAllLecture2(sqlSession, lectureDepartment);
+		return lList;
+	}
+
 }

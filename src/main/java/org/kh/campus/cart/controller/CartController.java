@@ -42,6 +42,7 @@ public class CartController {
 			if (!lList.isEmpty()) {
 				mv.addObject("lList", lList);
 				mv.setViewName("cart/preCartListView");
+				mv.addObject("menu", "cart");
 
 			} else {
 				System.out.println("실패했습니다.");
@@ -62,6 +63,7 @@ public class CartController {
 			map.put("studentNo", studentNo);
 			int result = cService.registerCart(map);
 			if (result > 0) {
+				
 				mv.setViewName("redirect:/cart/preCartListView.kh");
 			} else {
 				mv.addObject("msg", "실패했습니다");
@@ -81,6 +83,7 @@ public class CartController {
 		List<Cart> cList = cService.printMyCart(studentNo);
 		try {
 			if (!cList.isEmpty()) {
+				mv.addObject("menu", "cartlist");
 				mv.addObject("cList", cList);
 				mv.setViewName("cart/myCartList");
 			} else {
@@ -111,6 +114,7 @@ public class CartController {
 		try {
 			List<Lecture> lList = cService.printAllenroll(lectureDepartment);
 			if (!lList.isEmpty()) {
+				mv.addObject("menu", "enroll");
 				mv.addObject("lList", lList);
 				mv.setViewName("cart/enrollRegister");
 				
@@ -202,6 +206,7 @@ public class CartController {
 		List<Lecture> lList = cService.printMyEnroll();
 		try {
 			if (!lList.isEmpty()) {
+				mv.addObject("menu", "enrolllist");
 				mv.addObject("lList", lList);
 				mv.setViewName("cart/enrollList");
 				System.out.println(lList.toString());
