@@ -67,13 +67,31 @@
 		#{managerPassword}
 	</select>
 
-	<select id="selectPwdStd" resultType="string">
+	<select id="selectPwdStd" resultType="string" parameterType="hashmap">
 		SELECT STUDENT_EMAIL FROM
 		STUDENT_TBL
-		WHERE STUDENT_NO = #{studentNo}
+		WHERE STUDENT_NO = #{id}
 		AND STUDENT_NAME =
-		#{studentName}
-		AND STUDENT_PHONENUMBER = #{studentPhonenumber}
+		#{name}
+		AND STUDENT_PHONENUMBER = #{phone}
+	</select>
+	
+	<select id="selectPwdPrf" resultType="string" parameterType="hashmap">
+		SELECT PROFESSOR_EMAIL FROM
+		PROFESSOR_TBL
+		WHERE PROFESSOR_NO = #{id}
+		AND PROFESSOR_NAME =
+		#{name}
+		AND PROFESSOR_PHONENUMBER = #{phone}
+	</select>
+	
+	<select id="selectPwdMag" resultType="string" parameterType="hashmap">
+		SELECT MANAGER_EMAIL FROM
+		MANAGER_TBL
+		WHERE MANAGER_NO = #{id}
+		AND MANAGER_NAME =
+		#{name}
+		AND MANAGER_PHONENUMBER = #{phone}
 	</select>
 
 	<select id="stdPwdSame" resultType="_int">

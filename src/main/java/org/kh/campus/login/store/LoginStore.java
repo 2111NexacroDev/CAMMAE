@@ -15,7 +15,11 @@ public interface LoginStore {
 
 	public Manager selectManager(SqlSession sqlSession, Manager manager);
 
-	public String selectPwdStd(SqlSession sqlSession, Student std);
+	// 이메일 가져오기
+	public String selectPwdStd(SqlSession sqlSession, HashMap<String, String> userInfo);
+	public String selectPwdPrf(SqlSession sqlSession, HashMap<String, String> userInfo);
+	public String selectPwdMag(SqlSession sqlSession, HashMap<String, String> userInfo);
+
 
 	public int stdPwdSame(SqlSession sqlSession, HashMap<String, String> map);
 
@@ -28,5 +32,4 @@ public interface LoginStore {
 	public int prfPwdChange(SqlSession sqlSession, HashMap<String, String> map);
 
 	public int magPwdChange(SqlSession sqlSession, HashMap<String, String> map);
-
 }
