@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 public class LectureController {
@@ -41,6 +42,39 @@ public class LectureController {
 	
 		
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/lecture/list2.kh", method = RequestMethod.GET , produces="application/json;charset=utf-8" )
+	public String enrollListView2(@RequestParam(value = "lecturedep", required = false) String lectureDepartment) {
+		try {
+			if(lectureDepartment.contentEquals("1")) {
+				lectureDepartment = "컴퓨터공학과";
+			} else if(lectureDepartment.contentEquals("2")) {
+				lectureDepartment = "전자전기공학과";
+			} else if(lectureDepartment.contentEquals("3")) {
+				lectureDepartment = "산업디자인학과";
+			} else if(lectureDepartment.contentEquals("4")) {
+				lectureDepartment = "중국어학과";
+			} else if(lectureDepartment.contentEquals("5")) {
+				lectureDepartment = "유비쿼터스학과";
+			} else {
+				lectureDepartment = "국어국문학과";
+			}
+			List<Lecture> lList = lService.printAlllecture2(lectureDepartment);
+			if (!lList.isEmpty()) {
+				Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+				System.out.println(lList.toString() +"involve");
+				return gson.toJson(lList);
+				
+			} else {
+				System.out.println("실패했습니다.");
+			}
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return null;
+	}
+	
 	// 수강개설 페이지
 	@RequestMapping(value = "/lecture/writeView.kh", method = RequestMethod.GET)
 	public String lectureWriteView(Model model) {

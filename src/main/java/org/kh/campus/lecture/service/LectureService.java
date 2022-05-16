@@ -21,4 +21,5 @@ public interface LectureService {
 	
 	public List<Professor> PrintAllUni();
 	public List<Professor> printAllProName(String universityName);
+	public List<Lecture> printAlllecture2(String lectureDepartment);
 }
