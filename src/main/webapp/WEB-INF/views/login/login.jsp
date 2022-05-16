@@ -102,7 +102,7 @@ label {
 	color: white;
 	background-color: rgb(58, 66, 74);
 }
-input[type="radio"] {
+input[name="login_type"] {
 	display: none;
 	
 }
@@ -262,6 +262,7 @@ window.onload = function(){
 					data : {"userNo" : userNo, "userName" : userName, "userPhone" : userPhone, "type" : type},
 					success : function(data) {
 						if(data!="") {
+							alert(data +"로 임시 비밀번호가 전송 되었습니다.");
 							modalOff();
 						} else {
 							check.style.display = "block";
