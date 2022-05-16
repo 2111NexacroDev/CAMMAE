@@ -73,6 +73,7 @@ public class MarketController {
 				mv.addObject("currentPage", currentPage);
 				mv.setViewName("market/marketList");
 			} else {
+				mv.addObject("menu", "market");
 				mv.setViewName("market/marketList");
 			}
 		} catch (Exception e) {
