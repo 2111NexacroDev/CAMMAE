@@ -16,10 +16,26 @@ public class GraduationServiceImpl implements GraduationService {
 	@Autowired
 	private GraduationStore gStore;
 	
+
 	@Override
-	public List<Graduation> printStuInfo(Graduation graduation) {
-		List<Graduation>gList = gStore.selectPrintStu(sqlSession, graduation);
+	public int registerGraduation(Graduation graduation) {
+		int result = gStore.insertGraduation(sqlSession,graduation );
+		return result;
+	}
+
+
+	@Override
+	public List<Graduation> printGraduationResult(Graduation graduation) {
+		List<Graduation>gList = gStore.selectGraduResult(sqlSession, graduation);
 		return gList;
+	}
+
+
+	@Override
+	public int modifyGraduationAccept(Graduation graduation) {
+		int result = gStore.updateGraduationAccept(sqlSession, graduation);
+		return result;
+		
 	}
 
 }
