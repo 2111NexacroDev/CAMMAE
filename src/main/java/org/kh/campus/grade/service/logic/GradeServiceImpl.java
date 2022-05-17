@@ -1,5 +1,6 @@
 package org.kh.campus.grade.service.logic;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -17,13 +18,13 @@ public class GradeServiceImpl implements GradeService {
 	private SqlSession sqlSession;
 	
 	@Override
-	public List<Grade> printGradeStudent(int studentNo) {
-		List<Grade> gList = gStore.selectGradeStudent(studentNo, sqlSession);
+	public List<Grade> printGradeStudent(HashMap<String, String> searchInfo) {
+		List<Grade> gList = gStore.selectGradeStudent(searchInfo, sqlSession);
 		return gList;
 	}
 	@Override
-	public List<Grade> printFeedbackStudent(int studentNo) {
-		List<Grade> gList = gStore.selectFeedbackStudent(studentNo, sqlSession);
+	public List<Grade> printFeedbackStudent(HashMap<String, String> searchInfo) {
+		List<Grade> gList = gStore.selectFeedbackStudent(searchInfo, sqlSession);
 		return gList;
 	}
 	@Override
@@ -32,8 +33,14 @@ public class GradeServiceImpl implements GradeService {
 		return result;
 	}
 	@Override
-	public List<Grade> printGradeProfessor(int prfNo) {
-		List<Grade> gList = gStore.selectGradeProfessor(prfNo, sqlSession);
+	public List<Grade> printSubject(HashMap<String, String> searchInfo) {
+		List<Grade> gList = gStore.selectSubject(searchInfo, sqlSession);
+		return gList;
+	}
+	
+	@Override
+	public List<Grade> printGradeProfessor(HashMap<String, String> searchInfo) {
+		List<Grade> gList = gStore.selectGradeProfessor(searchInfo, sqlSession);
 		return gList;
 	}
 	
@@ -49,8 +56,8 @@ public class GradeServiceImpl implements GradeService {
 	}
 	
 	@Override
-	public List<Grade> printFeedbackProfessor(int prfNo) {
-		List<Grade> gList = gStore.selectFeedbackProfessor(prfNo, sqlSession);
+	public List<Grade> printFeedbackProfessor(HashMap<String, String> searchInfo) {
+		List<Grade> gList = gStore.selectFeedbackProfessor(searchInfo, sqlSession);
 		return gList;
 	}
 	@Override
@@ -68,5 +75,4 @@ public class GradeServiceImpl implements GradeService {
 		int result = gStore.deleteFeedBack(pNo, sqlSession);
 		return result;
 	}
-	
 }

@@ -38,10 +38,8 @@ public class QuestionController {
 
 	// 게시글 리스트조회
 	@RequestMapping(value = "/question/list", method = RequestMethod.GET)
-	public ModelAndView questionListView(ModelAndView mv,
-			@RequestParam(value = "page", required = false) Integer page
-			, @ModelAttribute PageInfo pageInfo
-			) {
+	public ModelAndView questionListView(ModelAndView mv, @RequestParam(value = "page", required = false) Integer page,
+			@ModelAttribute PageInfo pageInfo) {
 
 		int currentPage = (page != null) ? page : 1;
 
@@ -61,11 +59,10 @@ public class QuestionController {
 				mv.addObject("menu", "question");
 				mv.addObject("currentPage", currentPage);
 				mv.setViewName("question/questionList");
-			} /*
-				 * else { System.out.println("조회 실패"); }
-				 */
-			mv.setViewName("question/questionList");
-			
+			} else {
+				mv.addObject("menu", "question");
+				mv.setViewName("question/questionList");
+			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
@@ -109,15 +106,15 @@ public class QuestionController {
 	// 게시글 등록페이지
 	@RequestMapping(value = "/question/registerView")
 	public String questionWriteView(Model model, HttpSession session) {
-		
+
 		List<Lecture> lList = qService.printAllPro();
-		Student student = (Student)session.getAttribute("loginUser");
-		
-		if(session.getAttribute("loginUser")==null) {
+		Student student = (Student) session.getAttribute("loginUser");
+
+		if (session.getAttribute("loginUser") == null) {
 			return "/login/login";
 		}
-		
-		if(!lList.isEmpty()) {
+
+		if (!lList.isEmpty()) {
 			model.addAttribute("questionId", student.getStudentNo());
 			model.addAttribute("questionWriter", student.getStudentName());
 			model.addAttribute("lList", lList);
@@ -126,22 +123,20 @@ public class QuestionController {
 		return "question/questionWriteForm";
 	}
 
-	//게시판 셀렉트박스
+	// 게시판 셀렉트박스
 	@ResponseBody
-	@RequestMapping(value = "/question/selectLeture", method =RequestMethod.GET, produces = "application/json;charset=utf-8") 
+	@RequestMapping(value = "/question/selectLeture", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
 	public String questionProList(@RequestParam("professorName") String professorName) {
 		List<Lecture> lList = qService.printAllLec(professorName);
-	  
-	  if (!lList.isEmpty()) { 
-		 Gson gson = new Gson();
-		 return gson.toJson(lList);
-	  }
-	  
-	  return null;
-	  }
-	 
-	
-	
+
+		if (!lList.isEmpty()) {
+			Gson gson = new Gson();
+			return gson.toJson(lList);
+		}
+
+		return null;
+	}
+
 	// 게시글 등록
 	@RequestMapping(value = "/question/register", method = RequestMethod.POST)
 	public ModelAndView questionRegister(ModelAndView mv, @ModelAttribute Question question,
@@ -165,11 +160,10 @@ public class QuestionController {
 				mv.setViewName("redirect:/question/list");
 			} else {
 				System.out.println("등록 실패");
-				
+
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
-			
 
 		}
 		return mv;
@@ -297,8 +291,8 @@ public class QuestionController {
 	@RequestMapping(value = "/question/replyAdd", method = RequestMethod.POST)
 	public String questionReplyAdd(@ModelAttribute QuestionReply questionReply) {
 		// 로그인 완성 후 변경 예정
-		//String questionReplyWriter = "교수";
-		//questionReply.setQuestionReplyWriter(questionReplyWriter);
+		// String questionReplyWriter = "교수";
+		// questionReply.setQuestionReplyWriter(questionReplyWriter);
 
 		int result = qService.registerReply(questionReply);
 		if (result > 0) {

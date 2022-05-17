@@ -17,7 +17,7 @@ public interface ManagerStore {
 
 	public int deleteStudent(SqlSession sqlSession, int studentNo);
 
-	public List<Professor> selectAllProfessor(SqlSession sqlSession);
+	public List<Professor> selectAllProfessor(SqlSession sqlSession, String uniCode);
 
 	public int insertProfessor(SqlSession sqlSession, Professor professor);
 
@@ -25,7 +25,7 @@ public interface ManagerStore {
 
 	public int deleteProfessor(SqlSession sqlSession, int professorNo);
 
-	public List<Manager> selectAllManager(SqlSession sqlSession);
+	public List<Manager> selectAllManager(SqlSession sqlSession, String teamCode);
 
 	public int insertManager(SqlSession sqlSession, Manager manager);
 

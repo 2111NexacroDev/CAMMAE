@@ -16,7 +16,7 @@ public class ManagerStoreLogic implements ManagerStore {
 	@Override
 	public List<Student> selectAllStudent(SqlSession sqlSession, String uniCode) {
 		if(uniCode.contentEquals("all")) {
-			List<Student> sList = sqlSession.selectList("ManagerMapper.selectStudentAllList", uniCode);
+			List<Student> sList = sqlSession.selectList("ManagerMapper.selectStudentAllList");
 			return sList;
 		} else {
 			List<Student> sList = sqlSession.selectList("ManagerMapper.selectStudentList", uniCode);
@@ -44,9 +44,14 @@ public class ManagerStoreLogic implements ManagerStore {
 
 	// 교수
 	@Override
-	public List<Professor> selectAllProfessor(SqlSession sqlSession) {
-		List<Professor> pList = sqlSession.selectList("ManagerMapper.selectProfessorList");
-		return pList;
+	public List<Professor> selectAllProfessor(SqlSession sqlSession, String uniCode) {
+		if(uniCode.contentEquals("all")) {
+			List<Professor> pList = sqlSession.selectList("ManagerMapper.selectProfessorAllList");
+			return pList;
+		} else {
+			List<Professor> pList = sqlSession.selectList("ManagerMapper.selectProfessorList" ,uniCode);
+			return pList;
+		}
 	}
 
 	@Override
@@ -69,9 +74,14 @@ public class ManagerStoreLogic implements ManagerStore {
 
 	// 관리자
 	@Override
-	public List<Manager> selectAllManager(SqlSession sqlSession) {
-		List<Manager> mList = sqlSession.selectList("ManagerMapper.selectManagerList");
-		return mList;
+	public List<Manager> selectAllManager(SqlSession sqlSession, String teamCode) {
+		if(teamCode.contentEquals("전체")) {
+			List<Manager> mList = sqlSession.selectList("ManagerMapper.selectManagerAllList");
+			return mList;
+		}else {
+			List<Manager> mList = sqlSession.selectList("ManagerMapper.selectManagerList", teamCode);
+			return mList;
+		}
 	}
 
 	@Override
