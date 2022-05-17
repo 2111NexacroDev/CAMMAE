@@ -10,10 +10,24 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class GraduationStoreLogic implements GraduationStore{
 
+	
+
 	@Override
-	public List<Graduation> selectPrintStu(SqlSession sqlSession, Graduation graduation) {
-		List<Graduation> gList = sqlSession.selectList("GraduationMapper", graduation);
+	public int insertGraduation(SqlSession sqlSession, Graduation graduation) {
+		int result = sqlSession.insert("GraduationMapper.insertGraduation", graduation);
+		return result;
+	}
+
+	@Override
+	public List<Graduation> selectGraduResult(SqlSession sqlSession, Graduation graduation) {
+		List<Graduation>gList = sqlSession.selectList("GraduationMapper.selectGraduResult", graduation);
 		return gList;
+	}
+
+	@Override
+	public int updateGraduationAccept(SqlSession sqlSession, Graduation graduation) {
+		int result = sqlSession.update("GraduationMapper.updateGraduationAccept", graduation);
+		return result;
 	}
 
 }

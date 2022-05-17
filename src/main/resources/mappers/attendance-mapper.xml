@@ -9,6 +9,19 @@
   	<result property="attDate" column="ATT_DATE"/>
   	<result property="attStatus" column="ATT_STATUS"/>
   	<result property="attObjection" column="ATT_OBJECTION"/>
+  	<result property="lectureName" column="LECTURE_NAME"/>
   	</resultMap>
   	 
+  	 
+  	 <select id="selectAttStudent" resultMap="AttendanceResultMap">
+  	  SELECT * FROM GRADE_TBL G
+  	  JOIN ATTENDANCE_TBL A ON
+  	  (G.LECTURE_NO= A.LECTURE_NO AND A.STUDENT_NO = #{studentNo}
+  	 <if test='!null'>
+  	 	AND A.LECTURE_NAME = #{lectureName}
+  	 </if>
+  	 )
+  	 </select>
     </mapper>
+    
+    

@@ -63,6 +63,8 @@
 
 		<typeAlias type="org.kh.campus.graduation.domain.Graduation"
 			alias="Graduation" />
+		<typeAlias type="org.kh.campus.attendance.domain.Attendance"
+			alias="Attendance" />		
 
 	</typeAliases>
 	<mappers>
@@ -85,6 +87,7 @@
 		<mapper resource="mappers/support-mapper.xml" />
 		<mapper resource="mappers/tuition-mapper.xml" />
 		<mapper resource="mappers/graduation-mapper.xml" />
+		<mapper resource="mappers/attendance-mapper.xml" />
 
 	</mappers>
 </configuration>

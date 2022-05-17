@@ -11,13 +11,29 @@
   	<result property="graduationFilepath" column="GRADUATION_FILEPATH"/>
   	<result property="graduationStuName" column="GRADUATION_STU_NAME"/>
   	<result property="graduationStuDep" column="GRADUATION_STU_DEP"/>
-  	<result property="graduationStuAvg" column="GRADUATION_STU_AVG"/>
+  	<result property="graduationStuGrade" column="GRADUATION_STU_Grade"/>
+  	<result property="graduationYear" column="GRADUATION_YEAR"/>
+  	<result property="chk" column="CHK"/>
+  	
   
   	</resultMap>
   	
-  	<select id="selectPrintStu" resultMap="graduationResultMap">
-  		SELECT GRADUATION_STU_NAME, GRADUATION_STU_DEP, GRADUATION_STU_AVG
+  	<select id="selectGraduResult" resultMap="graduationResultMap">
+  		SELECT *
   		FROM GRADUATION_TBL
-  		WHERE STUDENT_NO = #{studentNo}
+  		WHERE  GRADUATION_YEAR = #{graduationYear} AND GRADUATION_STU_DEP = #{graduationStuDep}
   	</select>
+  	
+  	<insert id="insertGraduation">
+  		INSERT INTO GRADUATION_TBL VALUES(#{studentNo}, DEFAULT, NULL, NULL, NULL,#{graduationStuName}, #{graduationStuDep}, #{graduationStuGrade}, DEFAULT, DEFAULT)
+  		
+  	</insert>
+  	
+  	<update id="updateGraduationAccept">
+  		UPDATE GRADUATION_TBL SET GRADUATION_STATUS = 'Y'
+  		WHERE STUDENT_NO = #{studentNo}
+  	
+  	</update>
+  	
+  		
   	</mapper>
