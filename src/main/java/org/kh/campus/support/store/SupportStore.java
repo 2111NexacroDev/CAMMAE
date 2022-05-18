@@ -1,5 +1,6 @@
 package org.kh.campus.support.store;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -12,6 +13,7 @@ public interface SupportStore {
 	public int insertSupport(SqlSession sqlSession, Support support);
 	public int selectListCount(SqlSession sqlSession, PageInfo pageInfo);
 	public int deletCheck(int supportNo, SqlSession sqlSession);
+	public int selectOneSupport(SqlSession sqlSession, HashMap<String, Integer> countInfo);
 	
 
 

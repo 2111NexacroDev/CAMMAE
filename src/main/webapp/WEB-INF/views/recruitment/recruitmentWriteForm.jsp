@@ -122,7 +122,7 @@ table.type02 td {
                </tr>
                <tr>
                   <th scope="row">작성자</th>
-                  <td><input type="text" name="recruitmentWriter"></td>
+                  <td><input type="text" name="recruitmentWriter" value="${loginManager.managerName}" readonly></td>
                </tr>
                <tr>
                   <th scope="row">마감일</th>

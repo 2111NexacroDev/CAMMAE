@@ -15,6 +15,7 @@
 		<result property="supPortFileName" column="SUP_PORT_FILE_NAME"/>
 		<result property="supPortFileRename" column="SUP_PORT_FILE_RENAME"/>
 		<result property="supPortFilePath" column="SUP_PORT_FILE_PATH"/>
+		<result property="studentName" column="STUDENT_NAME"/>
 	</resultMap>
 	
 	<select id="selectListCount" resultType="_int">
@@ -30,8 +31,6 @@
 		ORDER BY SUPPORT_NO DESC
 	</select>
 	
-	
-	
 	<select id="selectAllSupport" resultMap="supportResultMap">
 		SELECT * FROM SUPPORT_TBL
 		<if test="searchValue!=null">
@@ -45,6 +44,12 @@
 		ORDER BY SUPPORT_NO DESC
 	</select>
 	
+	
+	
+	 <select id="selectCount" resultType="_int">
+		SELECT COUNT(*) FROM SUPPORT_TBL WHERE 
+		RECRUITMENT_NO = #{recruitmentNo} AND STUDENT_NO = #{studentNo}
+	</select>
 	
 	
 	<!-- <select id="selectSearchSupport" resultMap="supportResultMap">
@@ -68,7 +73,9 @@
 		,#{supFilePath} 
 		,#{supPortFileName} 
 		,#{supPortFileRename} 
-		,#{supPortFilePath})
+		,#{supPortFilePath}
+		,#{studentName}
+		)
 	</insert>
 	<delete id="deleteSupport">
 		DELETE FROM SUPPORT_TBL WHERE SUPPORT_NO = #{supportNo}

@@ -1,5 +1,6 @@
 package org.kh.campus.support.store.logic;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -37,6 +38,12 @@ public class SupportSotreLogic implements SupportStore{
 	@Override
 	public int deletCheck(int supportNo, SqlSession sqlSession) {
 		int result = sqlSession.delete("SupportMapper.deleteSupport", supportNo);
+		return result;
+	}
+
+	@Override
+	public int selectOneSupport(SqlSession sqlSession, HashMap<String, Integer> countInfo) {
+		int result = sqlSession.selectOne("SupportMapper.selectCount", countInfo);
 		return result;
 	}
 

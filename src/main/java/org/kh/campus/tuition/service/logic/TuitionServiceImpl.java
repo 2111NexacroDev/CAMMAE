@@ -26,11 +26,7 @@ public class TuitionServiceImpl implements TuitionService{
 	}
 
 	@Override
-	public int registerTuition(Tuition tuition) {
-		int stdNo = tuition.getStudentNo();
-		String tuiTerm = tuition.getTuitionTerm();
-		String tuiYear = tuition.getTutionYear();
-		
+	public int registerTuition(Tuition tuition) {	
 		int count = tStore.selectTuition(sqlSession, tuition);
 		if(count == 0) {
 			int result = tStore.insertTuition(sqlSession, tuition);			
