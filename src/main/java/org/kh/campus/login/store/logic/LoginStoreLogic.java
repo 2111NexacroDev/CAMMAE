@@ -31,8 +31,20 @@ public class LoginStoreLogic implements LoginStore {
 	}
 
 	@Override
-	public String selectPwdStd(SqlSession sqlSession, Student std) {
-		String result = sqlSession.selectOne("LoginMapper.selectPwdStd", std);
+	public String selectPwdStd(SqlSession sqlSession, HashMap<String, String> userInfo) {
+		String result = sqlSession.selectOne("LoginMapper.selectPwdStd", userInfo);
+		return result;
+	}
+	
+	@Override
+	public String selectPwdPrf(SqlSession sqlSession, HashMap<String, String> userInfo) {
+		String result = sqlSession.selectOne("LoginMapper.selectPwdPrf", userInfo);
+		return result;
+	}
+	
+	@Override
+	public String selectPwdMag(SqlSession sqlSession, HashMap<String, String> userInfo) {
+		String result = sqlSession.selectOne("LoginMapper.selectPwdMag", userInfo);
 		return result;
 	}
 	

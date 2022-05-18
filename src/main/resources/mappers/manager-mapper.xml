@@ -27,7 +27,7 @@
 		WHERE UNIVERSITY_CODE = #{uniCode}
 	</select>
 	
-	<select id="selectStudentAllList" resultMap="studentResultMap" parameterType="String">
+	<select id="selectStudentAllList" resultMap="studentResultMap">
 		SELECT * FROM STUDENT_TBL
 	</select>
 	
@@ -72,8 +72,13 @@
 		<result property="universityCode" column="UNIVERSITY_CODE"/>
 	</resultMap>
 	
-	<select id="selectProfessorList" resultMap="professorResultMap">
+	<select id="selectProfessorAllList" resultMap="professorResultMap">
 		SELECT * FROM Professor_TBL
+	</select>
+	
+	<select id="selectProfessorList" resultMap="professorResultMap" parameterType="String">
+		SELECT * FROM Professor_TBL
+		WHERE UNIVERSITY_CODE = #{uniCode}
 	</select>
 	
 	<insert id="insertProfessor">
@@ -110,6 +115,15 @@
 		<result property="chk" column="CHK"/>
 	</resultMap>
 	
+	<select id="selectManagerAllList" resultMap="managerResultMap">
+		SELECT * FROM MANAGER_TBL
+	</select>
+	
+	<select id="selectManagerList" resultMap="managerResultMap" parameterType="String">
+		SELECT * FROM MANAGER_TBL
+		WHERE MANAGER_TEAM = #{teamCode}
+	</select>
+	
 	<insert id="insertManager">
 		INSERT INTO MANAGER_TBL VALUES(#{managerNo}, #{managerName}, #{managerBirth}, #{managerAddress}
 		, #{managerPhonenumber}, #{managerEmail}, #{managerPassword}, #{managerTeam}, DEFAULT)
@@ -131,10 +145,7 @@
 		WHERE MANAGER_NO = #{managerNo}
 	</delete>
 	
-	<select id="selectManagerList" resultMap="managerResultMap">
-		SELECT * FROM MANAGER_TBL
-	</select>
-	
+	<!-- 비밀번호 -->
 	<select id="selectAllManagerInfo" resultMap="managerResultMap">
 		SELECT * FROM MANAGER_TBL WHERE MANAGER_NO = #{managerNo} AND MANAGER_PASSWORD = #{managerPassword}
 	</select>

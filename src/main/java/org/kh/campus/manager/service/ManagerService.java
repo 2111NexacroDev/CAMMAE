@@ -14,13 +14,13 @@ public interface ManagerService {
 	public int deleteStudent(int studentNo);
 	
 	// 교수
-	public List<Professor> printAllProfessor();
+	public List<Professor> printAllProfessor(String uniCode);
 	public int registerProfessor(Professor professor);
 	public int modifyrProfessor(Professor professor);
 	public int deleteProfessor(int professorNo);
 	
 	// 관리자
-	public List<Manager> printAllManager();
+	public List<Manager> printAllManager(String teamCode);
 	public int registerManager(Manager manager);
 	public int modifyrManager(Manager manager);
 	public int deleteManager(int managerNo);

@@ -6,6 +6,12 @@ import org.kh.campus.graduation.domain.Graduation;
 
 public interface GraduationService {
 
-	List<Graduation> printStuInfo(Graduation graduation);
+
+
+	public int registerGraduation(Graduation graduation);
+
+	List<Graduation> printGraduationResult(Graduation graduation);
+
+	public int modifyGraduationAccept(Graduation graduation);
 
 }

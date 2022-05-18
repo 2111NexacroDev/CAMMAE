@@ -1,24 +1,21 @@
 package org.kh.campus.login.controller;
 
-import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.kh.campus.login.service.LoginService;
 import org.kh.campus.manager.domain.Manager;
-import org.kh.campus.manager.service.ManagerService;
 import org.kh.campus.professor.domain.Professor;
 import org.kh.campus.student.domain.Student;
-import org.kh.campus.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.google.gson.Gson;
 import com.nexacro.uiadapter17.spring.core.annotation.ParamVariable;
 import com.nexacro.uiadapter17.spring.core.data.NexacroResult;
 
@@ -39,6 +36,7 @@ public class LoginController {
 	// 타입에 따라 로그인
 	@RequestMapping(value="/login/login.kh", method=RequestMethod.POST)
 	public ModelAndView login(ModelAndView mv
+			, HttpServletRequest request
 			, HttpSession session
 			, @RequestParam("user-id") int id
 			, @RequestParam("user-pwd") String pw
@@ -98,25 +96,33 @@ public class LoginController {
 	
 	// 비밀번호 찾기
 	@ResponseBody
-	@RequestMapping(value="/login/findPwd.kh", method=RequestMethod.POST)
+	@PostMapping("/login/findPwd.kh")
 	public String findPwd(@RequestParam("type") String type
-			, @RequestParam("userNo") String userNo
-			, @RequestParam("userName") String userName
-			, @RequestParam("userPhone") String userPhone) {
+			, @RequestParam("userNo") String id
+			, @RequestParam("userName") String name
+			, @RequestParam("userPhone") String phone) throws Exception {
 		String email = "";
-		if(type.contentEquals("student")) {
-			Student std = new Student();
-			std.setStudentNo(Integer.parseInt(userNo));
-			std.setStudentName(userName);
-			std.setStudentPhonenumber(userPhone);
-			
-			email = lService.findPwdStd(std);
-			
-			
-		} else if(type.contentEquals("professor")) {
-			System.out.println("교수 입니다.");
-		} else {
-			System.out.println("관리자 입니다.");
+		
+		// 비밀번호 찾기를 위한 정보 map
+		HashMap<String, String> userInfo = new HashMap<String, String>();
+		userInfo.put("type", type);
+		userInfo.put("id", id);
+		userInfo.put("name", name);
+		userInfo.put("phone", phone);
+		
+		email = lService.findPwd(userInfo);
+	
+		String pw = "";
+		for (int i = 0; i < 12; i++) {
+			pw += (char) ((Math.random() * 26) + 97);
+		}
+		
+		userInfo.put("pw", pw);
+		userInfo.put("email", email);
+		
+		if(email != null) {
+			lService.sendEmail(userInfo);
+			lService.pwdChange(type, Integer.parseInt(id), pw);
 		}
 		
 		return email;
