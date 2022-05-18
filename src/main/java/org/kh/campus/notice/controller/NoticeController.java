@@ -7,12 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-
+import org.kh.campus.manager.domain.Manager;
 import org.kh.campus.notice.domain.Notice;
 import org.kh.campus.notice.domain.PageInfo;
 import org.kh.campus.notice.domain.Pagination;
 import org.kh.campus.notice.service.NoticeService;
+import org.kh.campus.student.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -102,6 +104,8 @@ public class NoticeController {
 					notice.setNoticeFilePath(filePath);
 				}
 			}
+			HttpSession session = request.getSession();
+			notice.setNoticeWriter(((Manager) (session.getAttribute("loginManager"))).getManagerName());
 			int result = nService.registerNotice(notice);
 			if(result > 0) {
 				mv.setViewName("redirect:/notice/list.kh");

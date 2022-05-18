@@ -3,7 +3,9 @@ package org.kh.campus.recruitment.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.kh.campus.manager.domain.Manager;
 import org.kh.campus.recruitment.domain.PageInfo;
 import org.kh.campus.recruitment.domain.Pagination;
 import org.kh.campus.recruitment.domain.Recruitment;
@@ -86,8 +88,10 @@ public class RecruitmentController {
 	//채용공고 등록 실행
 	@RequestMapping(value="/recruitment/register.kh", method=RequestMethod.POST)
 	public ModelAndView recruitmentRegister(ModelAndView mv
-			,@ModelAttribute Recruitment recruitment) {
+			,@ModelAttribute Recruitment recruitment
+			,HttpSession session) {
 		try {
+			recruitment.setRecruitmentWriter(((Manager) (session.getAttribute("loginManager"))).getManagerName());
 			int result = rService.registerRecruitment(recruitment);
 			if(result > 0) {
 				mv.setViewName("redirect:/recruitment/list.kh");

@@ -11,11 +11,14 @@
 #s1{
 	width:7%;
 }
+#s2{
+	width:10%;
+}
 </style>
 <link rel="stylesheet" href="/resources/menuBar.css">
 <link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
-<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script>
 		$(function(){
 			var chkObj = document.getElementsByName("RowCheck");
@@ -88,16 +91,19 @@
 
 			<div class="c-title">
 				<div class="b-title"><h2>지원현황</h2></div>
-																
+				<c:if test="${sessionScope.loginUser ne null}">													
 				<div class="btn_1"><input class="btn" type="button" value="취소" class="btn-delete" onclick="deleteValue();"></div>
+				</c:if>
 			</div>
 	<table class="type01">
 	<thead>
 		<tr>
+			<c:if test="${sessionScope.loginUser ne null}">
 			<th id="s0"><input id="allCheck" type="checkbox" name="allCheck"></th>
-			<th id="s1">번호</th>
+			</c:if>
+			<th id="s1">학번</th>
 			<th>제목</th>
-			<th id="s1">지원자</th>
+			<th id="s2">지원자</th>
 			<th id="s1">지원일</th>
 			<th>이력서</th>
 			<th>포트폴리오</th>
@@ -106,10 +112,12 @@
 	<tbody>
 		<c:forEach items="${sList }" var="support">
 			<tr>
+				<c:if test="${sessionScope.loginUser ne null}">
 				<td><input type="checkbox" name="RowCheck" value="${support.supportNo}"></td>
-				<td>${support.supportNo }</td>
-				<td>${support.recruitmentTitle }</td>
+				</c:if>
 				<td>${support.studentNo }</td>
+				<td>${support.recruitmentTitle }</td>
+				<td>${support.studentName }</td> 
 				<td>${support.supportDate }</td>
 				<td>
 				<a href="../../../resources/supportUploadFiles/${support.supFileRename }"download>${support.supFileName }</a><br>
@@ -126,12 +134,14 @@
 	<br>
 	<div align="center">
 		<form action="/support/list.kh" method="get">
+			<c:if test="${sessionScope.loginManager ne null}">
 			<select name="searchCondition">
 				<option value="title">제목</option>
 				<option value="writer">지원자</option>
 			</select>
 			<input type="text" name="searchValue"> 
 			<input class="btn"type="submit" value="검색">
+			</c:if>
 		</form>
 	</div>
 	<div class="paging"  align="center">

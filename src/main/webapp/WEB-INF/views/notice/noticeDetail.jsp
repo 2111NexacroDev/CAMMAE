@@ -80,8 +80,10 @@ table.type05 thead th {
 				<c:url var="nDelete" value="/notice/delete.kh">
 					<c:param name="noticeNo" value="${notice.noticeNo }"></c:param>
 				</c:url>
-				<button class="btn" onclick="location.href='${nModify}'">수정</button>
-				<button class="btn" onclick="location.href='${nDelete}'">삭제</button>
+				<c:if test="${sessionScope.loginManager ne null}">
+					<button class="btn" onclick="location.href='${nModify}'">수정</button>
+					<button class="btn" onclick="location.href='${nDelete}'">삭제</button>
+				</c:if>
 				<button style="width: 50px" class="btn" onclick="location.href='/notice/list.kh'">목록</button>
 				</div>
 			</div>
