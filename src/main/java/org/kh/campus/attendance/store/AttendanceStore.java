@@ -10,4 +10,8 @@ public interface AttendanceStore {
 
 	List<Attendance> selectAttStudent(SqlSession sqlSession, HashMap<String, String> attInfo);
 
+	List<Attendance> selectAttProf(SqlSession sqlSession, HashMap<String, String> attInfo);
+
+	List<Attendance> selectAttProfSearchStu(SqlSession sqlSession, HashMap<String, String> attInfo);
+
 }

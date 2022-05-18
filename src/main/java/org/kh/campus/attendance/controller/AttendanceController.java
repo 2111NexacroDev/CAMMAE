@@ -26,19 +26,17 @@ public class AttendanceController {
 	private AttendanceService aService;
 	
 	
-	@RequestMapping(value = "/attendance/subInfo.kh", method = RequestMethod.POST)
-	public NexacroResult printStu(HttpSession session, @ParamDataSet(name="in_attendance")DataSet attendance) throws Exception {
-		int nErrorCode = 0;
+	@RequestMapping(value = "/attendance/subInfo.kh", method = RequestMethod.GET)
+	public NexacroResult printStu(HttpSession session) {
 		String strErrorMsg = "START";
+		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
 		/*
 		 * int studentNo =
 		 * (((Student)(session.getAttribute("loginUser"))).getStudentNo());
 		 */
 		int studentNo = 0;
-		String lectureName = dsGet(attendance, 0, "lectureName");
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
-		attInfo.put("lectureName", lectureName);
 		attInfo.put("studentNo", Integer.toString(studentNo));
 		List<Attendance>aList = aService.printAttStudent(attInfo);
 	
@@ -47,6 +45,53 @@ public class AttendanceController {
 		result.addVariable("ErrorMsg", strErrorMsg);
 		return result;
 	}
+	
+	@RequestMapping(value = "/attendance/profInfo.kh", method = RequestMethod.GET)
+	public NexacroResult printProf(HttpSession session) {
+		String strErrorMsg = "START";
+		int nErrorCode= 0;
+		NexacroResult result = new NexacroResult();
+		/*
+		 * int studentNo =
+		 * (((Student)(session.getAttribute("loginUser"))).getStudentNo());
+		 */
+		int professorNo = 0;
+		HashMap<String , String> attInfo = new HashMap<String ,String>();
+		attInfo.put("professorNo", Integer.toString(professorNo));
+		List<Attendance>aList = aService.printAttProfessor(attInfo);
+	
+		result.addDataSet("out_subject", aList);
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
+		return result;
+	}
+	
+	@RequestMapping(value = "/attendance/profSeachStuInfo.kh", method = RequestMethod.POST)
+	public NexacroResult printProfSearchStu(HttpSession session, @ParamDataSet(name="in_subject")DataSet subject) throws Exception {
+		String strErrorMsg = "START";
+		int nErrorCode= 0;
+		NexacroResult result = new NexacroResult();
+		/*
+		 * int studentNo =
+		 * (((Student)(session.getAttribute("loginUser"))).getStudentNo());
+		 */
+		int professorNo = 0;
+		String lectureName = dsGet(subject, 0, "lectureName");
+		HashMap<String , String> attInfo = new HashMap<String ,String>();
+		attInfo.put("professorNo", Integer.toString(professorNo));
+		attInfo.put("lectureName", lectureName);
+		
+		
+		List<Attendance>aList = aService.printAttProfessorSearchStu(attInfo);
+	
+		result.addDataSet("out_stuInfo", aList);
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
+		return result;
+	}
+	
+	
+	
 	
 	
 	public String dsGet(DataSet ds, int rowno, String colid) throws Exception {
