@@ -17,4 +17,16 @@ public class AttendanceStoreLogic implements AttendanceStore {
 		return aList;
 	}
 
+	@Override
+	public List<Attendance> selectAttProf(SqlSession sqlSession, HashMap<String, String> attInfo) {
+		List<Attendance>aList = sqlSession.selectList("AttendanceMapper.selectAttProf", attInfo);
+		return aList;
+	}
+
+	@Override
+	public List<Attendance> selectAttProfSearchStu(SqlSession sqlSession, HashMap<String, String> attInfo) {
+		List<Attendance>aList = sqlSession.selectList("AttendanceMapper.selectAttProfSearchStu", attInfo);
+		return aList;
+	}
+
 }

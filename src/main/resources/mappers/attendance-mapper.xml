@@ -9,19 +9,31 @@
   	<result property="attDate" column="ATT_DATE"/>
   	<result property="attStatus" column="ATT_STATUS"/>
   	<result property="attObjection" column="ATT_OBJECTION"/>
-  	<result property="lectureName" column="LECTURE_NAME"/>
+  	<result property="lectureName" column="GRADE_SUBJECT"/>
+  	<result property="studentName" column="STUDENT_NAME"/>
+  	
   	</resultMap>
   	 
   	 
+  	 
   	 <select id="selectAttStudent" resultMap="AttendanceResultMap">
-  	  SELECT * FROM GRADE_TBL G
-  	  JOIN ATTENDANCE_TBL A ON
-  	  (G.LECTURE_NO= A.LECTURE_NO AND A.STUDENT_NO = #{studentNo}
-  	 <if test='!null'>
-  	 	AND A.LECTURE_NAME = #{lectureName}
-  	 </if>
-  	 )
-  	 </select>
+	 SELECT * FROM GRADE_TBL  WHERE STUDENT_NO = #{studentNo} AND GRADE_YEAR = #{year} AND GRADE_SESSION = #{season}
+	  </select>
+	  
+  	<select id="selectAttProf" resultMap = "AttendanceResultMap">
+  	SELECT * FROM LECTURE_TBL L
+  	JOIN GRADE_TBL G ON
+  	(L.LECTURE_NO = G.LECTURE_NO AND G.PROFESSOR_NO = #{professorNo})
+  	</select>
+  	
+  	<select id="selectAttProfSearchStu" resultMap="AttendanceResultMap">
+  	SELECT * FROM STUDENT_TBL S
+  	JOIN GRADE_TBL G ON
+  	(S.PROFESSOR_NO = #{professorNo} AND STUDENT_STATE = '재학' AND GRADE_SUBJECT = #{lectureName})
+  	
+  	</select>
+  	
+  	
     </mapper>
     
     
