@@ -58,6 +58,21 @@
 			</beans:list>
 		</beans:property>
 	</beans:bean>
+	
+	<!-- 인터셉터 객체 생성 -->
+	<beans:bean id="AuthLoginInterceptor" class="org.kh.campus.login.controller.AuthLoginInterceptor">
+	</beans:bean>
+	<!-- Interceptor 설정 -->
+	<interceptors>
+	    <interceptor>
+	        <mapping path="/**"/>
+	        <exclude-mapping path="/resources/**"/>
+	        <exclude-mapping path="/main.kh"/>
+	        <exclude-mapping path="/login/**"/>
+	        <beans:ref bean="AuthLoginInterceptor"/>
+	    </interceptor>
+	</interceptors>
+		
 
 	<context:component-scan
 		base-package="org.kh.campus" />
