@@ -14,4 +14,12 @@ public interface AttendanceStore {
 
 	List<Attendance> selectAttProfSearchStu(SqlSession sqlSession, HashMap<String, String> attInfo);
 
+	int insertAttendance(SqlSession sqlSession, Attendance attendance);
+
+	List<Attendance> selectAttendanceStuInfo(SqlSession sqlSession, HashMap<String, String> attInfo);
+
+	List<Attendance> selectAttProfIssue(SqlSession sqlSession, HashMap<String, String> attInfo);
+
+	int updateObjectChange(SqlSession sqlSession, Attendance attendance);
+
 }

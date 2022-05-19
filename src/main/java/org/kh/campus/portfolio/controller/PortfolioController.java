@@ -256,7 +256,7 @@ public class PortfolioController {
 		if (!pList.isEmpty()) {
 			model.addAttribute("pList", pList);
 			model.addAttribute("pi", pi);
-			model.addAttribute("menu", "portfolio");
+			model.addAttribute("menu1", "portfolio1");
 			model.addAttribute("currentPage", currentPage);
 			return "portfolio/portfolioAdminListView";
 		} else {

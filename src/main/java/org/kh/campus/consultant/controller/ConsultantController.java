@@ -147,7 +147,7 @@ public class ConsultantController {
 		if(!cList.isEmpty()) {
 			model.addAttribute("cList", cList);
 			model.addAttribute("pi", pi);
-			model.addAttribute("menu", "consultant");
+			model.addAttribute("menu1", "consultant1");
 			model.addAttribute("currentPage", currentPage);
 			return "consultant/consultantAdminListView";
 		}else {
