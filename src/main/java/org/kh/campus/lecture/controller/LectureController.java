@@ -44,7 +44,7 @@ public class LectureController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/lecture/list2.kh", method = RequestMethod.GET , produces="application/json;charset=utf-8" )
+	@RequestMapping(value = "/lecture/list2.kh", method = RequestMethod.GET ,produces="application/json;charset=utf-8" )
 	public String enrollListView2(@RequestParam(value = "lecturedep", required = false) String lectureDepartment) {
 		try {
 			if(lectureDepartment.contentEquals("1")) {
