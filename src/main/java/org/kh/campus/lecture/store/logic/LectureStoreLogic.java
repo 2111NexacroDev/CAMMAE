@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public class LectureStoreLogic implements LectureStore{
 
 	@Override
-	public List<Lecture> selectAllLecture(SqlSession sqlSession) {
+	public List<Lecture> selectAllLecture(SqlSession sqlSession ) {
 		List<Lecture> lList = sqlSession.selectList("LectureMapper.selectAllLecture");
 		return lList;
 	}
