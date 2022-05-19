@@ -28,9 +28,9 @@ hr {
 	margin-bottom: 10px;
 }
 
-#summary{
+#summary {
 	height: 290px;
-	width:100%;
+	width: 100%;
 }
 
 #sImg {
@@ -55,6 +55,7 @@ hr {
 }
 
 #fileArea {
+	margin-top: 3px;
 	height: 15%;
 	width: 100%;
 }
@@ -99,7 +100,9 @@ hr {
 					<div id="summary">
 						<div id="sImg">
 							<div id="headImg">사진</div>
-							<input type="file" id="fileArea" name="uploadFile">
+							<div id="fileArea">
+								<input type="file" name="uploadFile">
+							</div>
 						</div>
 						<div id="sDetail">
 							<div>

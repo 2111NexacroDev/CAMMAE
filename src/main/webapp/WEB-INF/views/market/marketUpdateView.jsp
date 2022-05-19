@@ -26,6 +26,38 @@ hr {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
+
+#summary {
+	height: 290px;
+	width: 100%;
+}
+
+#sImg {
+	float: left;
+	width: 45%;
+	height: 290px;
+}
+
+#sDetail {
+	float: right;
+	width: 50%;
+	height: 290px;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+
+#headImg {
+	width: 100%;
+	height: 80%;
+	width: 100%;
+	border: 1px solid black;
+}
+
+#fileArea {
+	margin-top: 3px;
+	height: 20%;
+	width: 100%;
+}
 </style>
 </head>
 
@@ -43,7 +75,13 @@ hr {
 			<form action="/market/update" method="POST"
 				enctype="multipart/form-data">
 				<input type="hidden" name="marketNo" value="${market.marketNo }">
-
+				<!-- 파일 수정 하지않을 때 기존 파일 경로 그대로 사용하기 위해서  파일을 수정할 때는 기존 파일을 삭제하기 위해서-->
+				<input type="hidden" name="marketFileName"
+					value="${market.marketFileName }"> <input type="hidden"
+					name="marketFileReName" value="${market.marketFileReName }">
+				<input type="hidden" name="marketFilePath"
+					value="${market.marketFilePath }"> <input type="hidden"
+					name="marketDate" value="${market.marketDate }">
 
 				<div class="c-title">
 					<div class="b-title">
@@ -73,8 +111,30 @@ hr {
 
 					</div>
 					<hr>
+					<div id="summary">
+						<div id="sImg">
+							<div id="headImg">${market.marketFileName}</div>
+							<div id="fileArea">
+							<input type="file" name="reloadFile"><br>
+							 &emsp;&emsp;&emsp;&emsp;&emsp;<span style="font-size: 11px;">${market.marketFileName}</span>
+							</div>
+						</div>
+						<div id="sDetail">
+							<div>
+								<b>상품명</b> &emsp;<input type="text" size="30" name="marketGoods"
+									value="${market.marketGoods }"
+									style="border: none; padding: 10px;">
+							</div>
+							<div>
+								<b>판매가격</b> <input type="text" size="30" name="marketPrice"
+									value="${market.marketPrice }"
+									style="border: none; padding: 10px;"> <b>원</b>
+							</div>
+						</div>
+					</div>
 
-					<div>
+
+					<%-- 	<div>
 						상품명 &emsp;<input type="text" size="35" name="marketGoods"
 							value="${market.marketGoods }"
 							style="border: none; padding: 10px;">
@@ -83,11 +143,12 @@ hr {
 						판매가격 <input type="text" size="35" name="marketPrice"
 							value="${market.marketPrice }"
 							style="border: none; padding: 10px;"> 원
-					</div>
+					</div> --%>
 
 
 					<div class="content">
-						<textarea rows="20" cols="98" id="marketContent"name="marketContent">
+						<textarea rows="20" cols="98" id="marketContent"
+							name="marketContent">
 						${market.marketContent }
 						</textarea>
 					</div>
