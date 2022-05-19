@@ -54,6 +54,10 @@ hr {
 	width: 100%;
 	border: 1px solid #ccc;
 }
+img {
+	max-height: 100%;
+	max-width: 100%;
+}
 
 #fileArea {
 	margin-top: 3px;
@@ -100,9 +104,9 @@ hr {
 					<hr>
 					<div id="summary">
 						<div id="sImg">
-							<div id="headImg">사진</div>
+							<div id="headImg"><img id="preview"></div>
 							<div id="fileArea">
-								<input type="file" name="uploadFile">
+								<input type="file" name="uploadFile" onchange="readURL(this);">
 							</div>
 						</div>
 						<div id="sDetail">
@@ -110,6 +114,7 @@ hr {
 								<b>상품명</b> &emsp;<input type="text" size="30" name="marketGoods"
 									placeholder="상품명을 입력해주세요" style="border: none; padding: 10px;">
 							</div>
+							<br>
 							<div>
 								<b>판매가격</b> <input type="text" size="30" name="marketPrice"
 									placeholder="가격을 입력해주세요" style="border: none; padding: 10px;">
@@ -152,6 +157,18 @@ hr {
 				dialogDefinition.removeContents('Link'); // 링크탭 제거
 			}
 		});
+
+		function readURL(input) {
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					document.getElementById('preview').src = e.target.result;
+				};
+				reader.readAsDataURL(input.files[0]);
+			} else {
+				document.getElementById('preview').src = "";
+			}
+		}
 	</script>
 
 
