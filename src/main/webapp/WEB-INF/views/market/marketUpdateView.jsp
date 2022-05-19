@@ -28,20 +28,21 @@ hr {
 }
 
 #summary {
-	height: 290px;
+	height: 250px;
 	width: 100%;
 }
 
 #sImg {
 	float: left;
 	width: 45%;
-	height: 290px;
+	height: 250px;
 }
 
 #sDetail {
 	float: right;
+	font-size: 18px;
 	width: 50%;
-	height: 290px;
+	height: 250px;
 	padding-right: 15px;
 	padding-left: 15px;
 }
@@ -50,7 +51,7 @@ hr {
 	width: 100%;
 	height: 80%;
 	width: 100%;
-	border: 1px solid black;
+	border: 1px solid #ccc;
 }
 
 #fileArea {
@@ -113,7 +114,7 @@ hr {
 					<hr>
 					<div id="summary">
 						<div id="sImg">
-							<div id="headImg">${market.marketFileName}</div>
+							<div id="headImg"></div>
 							<div id="fileArea">
 							<input type="file" name="reloadFile"><br>
 							 &emsp;&emsp;&emsp;&emsp;&emsp;<span style="font-size: 11px;">${market.marketFileName}</span>
