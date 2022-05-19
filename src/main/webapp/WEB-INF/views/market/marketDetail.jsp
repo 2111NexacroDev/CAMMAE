@@ -151,7 +151,11 @@ hr {
 					<div id="mGoods">상품명 &emsp;${market.marketGoods }</div>
 					<div id="mPrice">판매가격 ${market.marketPrice } 원</div>
 					<div>
-						<button class="btn" onclick="chatOpen();">판매자와 채팅하기</button>
+						<c:url var="cRoom" value="/chat.kh">
+							<c:param name="marketNo" value="${market.marketNo }"></c:param>
+						</c:url>
+						<a href="${cRoom }"></a>
+							<a href="${cRoom }" onclick="window.open(this.href, '_blank','width=400, height=510, left=100, top=50'); return false;"><button class="btn">판매자와 채팅하기</button></a>
 					</div>
 
 					<div class="content" style="padding: 10px;">
@@ -186,11 +190,11 @@ hr {
 
 
 	<script>
-		function chatOpen() {
+	/* 	function chatOpen() {
 			window.open("/chat.kh", "marketChat",
 					"width=400, height=600, left=100, top=50");
 
-		}
+		} */
 	</script>
 
 	<!-- 댓글동작  -->
@@ -232,7 +236,8 @@ hr {
 			var marketNo = $("#marketNo").val();
 			var rWriter = "${loginUser.studentName}";
 			var rWriterId = "${loginUser.studentNo}";
-			$.ajax({
+			$
+					.ajax({
 						url : "/market/replyList",
 						type : "get",
 						data : {
@@ -273,7 +278,8 @@ hr {
 								$tr.append($rWriter);
 								$tr.append($rDate);
 								$tr2.append($rContent);
-								if (data[i].mReplyId == rWriterId && data[i].mReplyWriter == rWriter) {
+								if (data[i].mReplyId == rWriterId
+										&& data[i].mReplyWriter == rWriter) {
 									$tr2.append($btnArea);
 								}
 
@@ -318,8 +324,8 @@ hr {
 			var $tdModifyBtn = $("<td width='10%'>");
 			$tdModify
 					.append("<input type='text' size='86' value='"+mReplyContent+"' id='modifyData'>");
-			$tdModifyBtn.append("<button class='btn' onclick='modifyReply(" + marketNo
-					+ "," + marketReplyNo + ");'>수정</button>");
+			$tdModifyBtn.append("<button class='btn' onclick='modifyReply("
+					+ marketNo + "," + marketReplyNo + ");'>수정</button>");
 			$trModify.append($tdModify);
 			$trModify.append($tdModifyBtn);
 			$(obj).parent().parent().after($trModify);
@@ -346,7 +352,7 @@ hr {
 					alert("ajax 실패")
 				}
 			});
-		}// 댓글 수정 커밋(css)
+		}
 	</script>
 </body>
 </html>

@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.kh.campus.chat.domain.ChatRoom;
+import org.kh.campus.chat.service.ChatService;
 import org.kh.campus.market.domain.Market;
 import org.kh.campus.market.domain.MarketReply;
 import org.kh.campus.market.service.MarketService;
@@ -44,6 +46,8 @@ public class MarketController {
 
 	@Autowired
 	private MarketService mService;
+	@Autowired
+	private ChatService cService;
 
 	// 게시글 리스트
 	@RequestMapping(value = "/market/list", method = RequestMethod.GET)
@@ -84,9 +88,13 @@ public class MarketController {
 
 	// 게시글 상세 조회
 	@RequestMapping(value = "/market/detail", method = RequestMethod.GET)
-	public ModelAndView marketDetailView(ModelAndView mv, @RequestParam("marketNo") int marketNo) {
+	public ModelAndView marketDetailView(ModelAndView mv, @RequestParam("marketNo") Integer marketNo, HttpServletRequest request) {
 		try {
 			Market market = mService.printOneMarket(marketNo);
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("marketNo", marketNo);
+			
 			if (market != null) {
 				// 조회수 증가
 				mService.marketCountUpdate(market.getMarketNo());
@@ -133,10 +141,12 @@ public class MarketController {
 
 	// 게시글 등록
 	@RequestMapping(value = "/market/register", method = RequestMethod.POST)
-	public ModelAndView marketRegistr(ModelAndView mv, @ModelAttribute Market market) {
+	public ModelAndView marketRegistr(ModelAndView mv, @ModelAttribute Market market , @ModelAttribute ChatRoom chatRoom, HttpServletRequest request) {
 
 		int result = mService.registerMarket(market);
-		if (result > 0) {
+		result += cService.createChatRoom(chatRoom);
+		request.getSession().setAttribute("marketNo", chatRoom.getMarketNo());
+		if (result > 1) {
 			mv.setViewName("redirect:/market/list");
 		} else {
 			System.out.println("등록 실패");
