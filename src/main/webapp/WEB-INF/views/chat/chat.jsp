@@ -136,15 +136,16 @@
 }
 
 #chatTitle1 {
-	font-size: 25px;
+	font-size: 17px;
 	font-weight: bold;
 }
 
 #chatTitle2 {
-	font-size: 25px;
+	font-size: 20px;
 	font-weight: bold;
 	float: left;
 	width: 80%;
+	margin-top: 5.5px;
 }
 
 #chatExit {

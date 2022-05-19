@@ -4,14 +4,16 @@ public class ChatMessage {
 	private String marketNo;
 	private String cmd;
 	private String msg;
+	private String sessionId;
 	
 	public ChatMessage() {}
 
-	public ChatMessage(String marketNo, String cmd, String msg) {
+	public ChatMessage(String marketNo, String cmd, String msg, String sessionId) {
 		super();
 		this.marketNo = marketNo;
 		this.cmd = cmd;
 		this.msg = msg;
+		this.sessionId = sessionId;
 	}
 
 	public String getMarketNo() {
@@ -38,10 +40,20 @@ public class ChatMessage {
 		this.msg = msg;
 	}
 
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+
 	@Override
 	public String toString() {
-		return "ChatMessage [marketNo=" + marketNo + ", cmd=" + cmd + ", msg=" + msg + "]";
+		return "ChatMessage [marketNo=" + marketNo + ", cmd=" + cmd + ", msg=" + msg + ", sessionId=" + sessionId + "]";
 	}
+
+
 	
 	
 
