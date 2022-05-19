@@ -64,13 +64,13 @@ hr {
 					</div>
 					<hr>
 					<div>
-						상품명 &emsp;<input type="text" size="35" name="marketGoods"
+						<b>상품명</b> &emsp;<input type="text" size="35" name="marketGoods"
 							placeholder="상품명을 입력해주세요" style="border: none; padding: 10px;">
 					</div>
 					<div>
-						판매가격 <input type="text" size="35" name="marketPrice"
+						<b>판매가격</b> <input type="text" size="35" name="marketPrice"
 							placeholder="가격을 입력해주세요" style="border: none; padding: 10px;">
-						원
+						<b>원</b>
 					</div>
 
 					<div>

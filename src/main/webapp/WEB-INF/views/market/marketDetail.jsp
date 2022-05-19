@@ -148,14 +148,14 @@ hr {
 
 					<hr>
 
-					<div id="mGoods">상품명 &emsp;${market.marketGoods }</div>
-					<div id="mPrice">판매가격 ${market.marketPrice } 원</div>
+					<div id="mGoods"><b>상품명</b>&emsp;&emsp;${market.marketGoods }</div>
+					<div id="mPrice"><b>판매가격</b>&emsp;${market.marketPrice } <b>원</b></div>
 					<div>
 						<c:url var="cRoom" value="/chat.kh">
 							<c:param name="marketNo" value="${market.marketNo }"></c:param>
 						</c:url>
 						<a href="${cRoom }"></a>
-							<a href="${cRoom }" onclick="window.open(this.href, '_blank','width=400, height=450, left=100, top=50'); return false;"><button class="btn">판매자와 채팅하기</button></a>
+							<a href="${cRoom }" onclick="window.open(this.href, '_blank','width=400, height=500, left=100, top=50'); return false;"><button class="btn">판매자와 채팅하기</button></a>
 					</div>
 
 					<div class="content" style="padding: 10px;">
