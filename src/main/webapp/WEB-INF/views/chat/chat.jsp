@@ -200,7 +200,7 @@
 			<div id="inputArea">
 				<input id="inputMsgBox" type="text"
 					style="width: 95%; height: 100px;"
-					onkeypress="inputMsgBox_onkeypress()">
+					onkeypress="inputMsgBox_onkeypress()" placeholder="메시지를 입력하세요">
 			</div>
 			<div id="sendBtnArea">
 				<button id="sendButton" class="btn" value="Send" type="button"
