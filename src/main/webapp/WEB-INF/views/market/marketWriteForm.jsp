@@ -16,15 +16,47 @@
 	width: 740px;
 	padding: 30px 30px 30px 30px;
 	margin-top: 45px;
-    margin-right: 10px;
-    margin-bottom: 20px;
-    margin-left: 0px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+	margin-left: 0px;
 }
+
 hr {
 	width: 740px;
 	text-align: center;
-	margin-top:10px;
-	margin-bottom:10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#summary{
+	height: 290px;
+	width:100%;
+}
+
+#sImg {
+	float: left;
+	width: 45%;
+	height: 290px;
+}
+
+#sDetail {
+	float: right;
+	width: 50%;
+	height: 290px;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+
+#headImg {
+	width: 100%;
+	height: 85%;
+	width: 100%;
+	border: 1px solid black;
+}
+
+#fileArea {
+	height: 15%;
+	width: 100%;
 }
 </style>
 </head>
@@ -43,13 +75,14 @@ hr {
 			<form action="/market/register" method="POST"
 				enctype="multipart/form-data">
 				<div class="c-title">
-				<div class="b-title">
-					<h2>중고거래게시판</h2>
-				</div>
+					<div class="b-title">
+						<h2>중고거래게시판</h2>
+					</div>
 				</div>
 				<div class="c-main">
-				<input type="hidden" name="marketWriter" value="${loginUser.studentName}">
-				<input type="hidden" name="marketId" value="${loginUser.studentNo}">
+					<input type="hidden" name="marketWriter"
+						value="${loginUser.studentName}"> <input type="hidden"
+						name="marketId" value="${loginUser.studentNo}">
 					<div class="selectBox" style="padding: 10px;">
 						<select id="marketType" name="marketType"
 							style="border: none; width: 250px;">
@@ -63,23 +96,32 @@ hr {
 							placeholder="제목을 입력하세요" style="border: none; padding: 10px;">
 					</div>
 					<hr>
-					<div>
-						<b>상품명</b> &emsp;<input type="text" size="35" name="marketGoods"
-							placeholder="상품명을 입력해주세요" style="border: none; padding: 10px;">
+					<div id="summary">
+						<div id="sImg">
+							<div id="headImg">사진</div>
+							<input type="file" id="fileArea" name="uploadFile">
+						</div>
+						<div id="sDetail">
+							<div>
+								<b>상품명</b> &emsp;<input type="text" size="30" name="marketGoods"
+									placeholder="상품명을 입력해주세요" style="border: none; padding: 10px;">
+							</div>
+							<div>
+								<b>판매가격</b> <input type="text" size="30" name="marketPrice"
+									placeholder="가격을 입력해주세요" style="border: none; padding: 10px;">
+								<b>원</b>
+							</div>
+						</div>
 					</div>
 					<div>
-						<b>판매가격</b> <input type="text" size="35" name="marketPrice"
-							placeholder="가격을 입력해주세요" style="border: none; padding: 10px;">
-						<b>원</b>
-					</div>
-
-					<div>
-						<textarea rows="20" cols="98" name="marketContent" id="marketContent"></textarea>
+						<textarea rows="20" cols="98" name="marketContent"
+							id="marketContent"></textarea>
 					</div>
 					<hr>
 					<div align="center" style="padding: 15px;">
 						<button class="btn" type="submit">등록</button>
-						<button type="reset" class="btn" onclick="location.href='/market/list'">취소</button>
+						<button type="reset" class="btn"
+							onclick="location.href='/market/list'">취소</button>
 					</div>
 				</div>
 			</form>
