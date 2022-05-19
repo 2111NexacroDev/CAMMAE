@@ -20,7 +20,7 @@ public class ChatServiceImpl implements ChatService {
 		int result = cStore.insertChatRoom(chatRoom, sqlSession);
 		return result;
 	}
-
+	
 	@Override
 	public ChatRoom visitChatRoom(Integer marketNo) {
 		ChatRoom chatRoom = cStore.selectOneChatRoom(sqlSession, marketNo);

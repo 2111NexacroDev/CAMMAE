@@ -22,21 +22,17 @@ public class ChatSocketHandler extends TextWebSocketHandler {
 	// 접속한 유저의 http세션을 조회하여 userId를 얻는 함수
 	private String getUserName(WebSocketSession session) {
 		Map<String, Object> httpSession = session.getAttributes();
-		// String userId = (String) httpSession.get("loginName"); // 세션에 저장된 userId 기준
-		// 조회
 		String userName = ((Student) httpSession.get("loginUser")).getStudentName();
 		return userName == null ? null : userName;
 	}
 
-	/**
-	 * websocket 연결 성공 시
-	 */
-	
 	/*
-	 * @Override public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-	 * }
+	 * websocket 연결 성공 시
+	 * 
+	 * @Override public void afterConnectionEstablished(WebSocketSession session)
+	 * throws Exception { }
 	 */
-	
+
 	/**
 	 * websocket 메세지 수신 및 송신
 	 */
@@ -57,7 +53,6 @@ public class ChatSocketHandler extends TextWebSocketHandler {
 			sessions.add(infoMap);
 
 			// 채팅 전달
-
 			for (Map<String, Object> sMap : sessions) {
 				System.out.println("sessionsTest : " + sessions);
 				WebSocketSession mSession = (WebSocketSession) sMap.get("session");
@@ -69,16 +64,11 @@ public class ChatSocketHandler extends TextWebSocketHandler {
 
 		}
 		if (cmd.equals("CMD_MSG_SEND")) {
-			/*
-			 * Map<String, Object> infoMap = new HashMap<String, Object>();
-			 * infoMap.put("boardNo", boardNo); infoMap.put("session", session); // 채팅방에 접속한
-			 * 사용자 세션을 리스트에 저장 sessions.add(infoMap);
-			 */
 
 			// 채팅 전달
 			for (Map<String, Object> sMap : sessions) {
 				WebSocketSession mSession = (WebSocketSession) sMap.get("session");
-				// 내가 접속하려는 방 번호와 디비에서 가져온 방 번호가 같을 때 채팅방에 들어가는것
+				// 내가 접속하려는 방 번호와 디비에서 가져온 방 번호가 같을 때 채팅방에 입장
 				if (((String) sMap.get("marketNo")).equals(marketNo)) {
 					mSession.sendMessage(new TextMessage(senderName + " : " + cMsg.getMsg()));
 				}

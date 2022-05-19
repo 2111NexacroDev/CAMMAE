@@ -92,6 +92,7 @@ public class MarketController {
 		try {
 			Market market = mService.printOneMarket(marketNo);
 			
+			//채팅
 			HttpSession session = request.getSession();
 			session.setAttribute("marketNo", marketNo);
 			
@@ -144,6 +145,7 @@ public class MarketController {
 	public ModelAndView marketRegistr(ModelAndView mv, @ModelAttribute Market market , @ModelAttribute ChatRoom chatRoom, HttpServletRequest request) {
 
 		int result = mService.registerMarket(market);
+		//채팅방 생성
 		result += cService.createChatRoom(chatRoom);
 		request.getSession().setAttribute("marketNo", chatRoom.getMarketNo());
 		if (result > 1) {

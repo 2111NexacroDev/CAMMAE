@@ -18,6 +18,8 @@ public class ChatController {
 
 	@RequestMapping(value = "/chat.kh", method = RequestMethod.GET)
 	public String chatView(String roomTitle, Locale locale, Model model, @RequestParam("marketNo") Integer marketNo) {
+		
+		//채팅방선택
 		ChatRoom chatRoom = cService.visitChatRoom(marketNo);
 		if (chatRoom != null) {
 			model.addAttribute("chatRoom", chatRoom);
