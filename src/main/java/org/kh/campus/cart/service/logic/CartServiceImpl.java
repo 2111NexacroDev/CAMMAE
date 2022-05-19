@@ -96,8 +96,14 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public List<Lecture> printAllenroll2(String lectureDepartment) {
-		List<Lecture> lList = cStore.selectAllEnroll2(sqlSession, lectureDepartment);
-		return lList;
+		if(lectureDepartment.contentEquals("전체")) {
+			List<Lecture> lList = cStore.selectAllEnroll(sqlSession, lectureDepartment);
+			return lList;
+
+		}else {
+			List<Lecture> lList = cStore.selectAllEnroll2(sqlSession, lectureDepartment);
+			return lList;
+		}
 	}
 
 	
