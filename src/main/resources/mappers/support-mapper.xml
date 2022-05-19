@@ -27,6 +27,10 @@
 			<if test="searchCondition.toString() == 'writer'">
 				WHERE STUDENT_NO LIKE '%' || #{searchValue} || '%'
 			</if>
+			<if test="searchCondition.toString() == 'writerName'">
+				WHERE STUDENT_NAME LIKE '%' || #{searchValue} || '%'
+			</if>
+			
 		</if>
 		ORDER BY SUPPORT_NO DESC
 	</select>
@@ -39,6 +43,9 @@
 			</if>
 			<if test="searchCondition.toString() == 'writer'">
 				WHERE STUDENT_NO LIKE '%' || #{searchValue} || '%'
+			</if>
+			<if test="searchCondition.toString() == 'writerName'">
+				WHERE STUDENT_NAME LIKE '%' || #{searchValue} || '%'
 			</if>
 		</if> 
 		ORDER BY SUPPORT_NO DESC

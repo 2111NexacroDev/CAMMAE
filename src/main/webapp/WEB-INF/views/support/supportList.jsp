@@ -137,7 +137,8 @@
 			<c:if test="${sessionScope.loginManager ne null}">
 			<select name="searchCondition">
 				<option value="title">제목</option>
-				<option value="writer">지원자</option>
+				<option value="writer">학번</option>
+				<option value="writerName">지원자</option>
 			</select>
 			<input type="text" name="searchValue"> 
 			<input class="btn"type="submit" value="검색">

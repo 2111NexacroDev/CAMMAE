@@ -6,7 +6,11 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+
 <style>
+div{
+	display: inline-block;
+} 
 #modal.modal-overlay {
 	width: 100%;
 	height: 100%;
@@ -79,12 +83,12 @@ label {
 	height: 100%;
 	cursor: pointer;
 	float: left;
-	font-size: 24px;
+	font-size: 16px;
 	font-weight: bold;
-	line-height: 80px;
+	line-height: 30px;
 	/* border-right: 1px solid #ccc; */
 	color: rgb(30, 57, 50);
-	background-color: white;
+	background-color: #ccc;
 	
 }
 #radio{
@@ -95,11 +99,11 @@ label {
 	height: 100%;
 	
 	float: left;
-	font-size: 24px;
+	font-size: 16px;
 	font-weight: bold;
-	line-height: 80px;
+	line-height: 30px;
 	/* border-right: 1px solid #ccc; */
-	color: white;
+	color: #ccc;
 	background-color: rgb(58, 66, 74);
 }
 input[name="login_type"] {
@@ -135,49 +139,21 @@ h1 a {
 	margin-left: 95px;
 }
 
-#main_1 {
-	magin: 0px;
-	padding: 0px;
-	width: 100%;
-	height: 700px;
-}
-
-#main_2 {
-	magin: 0px;
-	padding: 0px;
-	width: 100%;
-	height: 50%;
-	background-image: url("/resources/img/mainimg.jpg");
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-}
-.form_1{
-	background-image: url("/resources/img/lawn.jpg");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-}
-form{
-    background-color: rgba(169, 191, 159, 0.72);
-}
-html, body, div {
-	margin: -1;
-	padding: -1;
-}
 
 .login_form {
 	
-	/* border: 1px solid black; */
-	height: 400px;
-	width: 800px;
-	position: relative;
-	bottom: 180px;
-	left: 450px;
-	background-color: white;
+	border: 1px solid black; 
+	/* height: 400px;
+	width: 600px; */
+	/* position: relative; */
+	/* bottom: 180px;
+	left: 450px; */
+	background-color: #ccc;
 }
 
 .login_form1 {
 	width: 100%;
-	height: 20%;
+	height: 10%;
 }
 
 .login_form1_1 {
@@ -211,9 +187,93 @@ table input {
 .logoTitle {
 	top: 50px;
 	position: relative;
+	height: 300px;
+}
+#main_1{
+	width: 100%;
+	height: 100%;
+	
 }
 </style>
-<script>
+
+</head>
+<body>
+			<div id="main_1">
+			<div class="logoTitle">
+				<h1>
+					<img src="../resources/img/logo.png" style="width: 80px; height: 80px;">
+					<a href="../main.kh">
+						<span id="lnb_title">대일대학교1</span>
+					</a>
+						<span id="lnb_subtitle">DAILE UNIVERSITY</span>
+				</h1>
+			</div>
+		
+			<div class="login_form">
+				<form action="/login/login.kh" method="post" >
+
+				<div class="login_form1">
+					<label id="" class="login_form1_1">
+						<input type="radio" name="login_type" value="student" checked="checked">학생 
+					</label>
+					<label id="radio" class="login_form1_2">
+						<input type="radio" name="login_type" value="professor">교수 
+					</label>
+					<label id="radio" class="login_form1_3">
+						<input type="radio" name="login_type" value="manager">관리자
+					</label>
+				</div>
+
+				
+					<table class="type00" align="center">
+						<tr>
+							<td></td>
+						</tr>
+						<tr>
+							<td><input type="text" name="user-id"></td>
+						</tr>
+						<tr>
+							<td><input type="password" name="user-pwd"></td>
+						</tr>
+						<tr>
+							<td><input type="submit" value="로그인"></td>
+						</tr>
+						<tr>
+							<td><input type="button" value="비밀번호 찾기" class="btn-modal"></td>
+						</tr>
+					</table>
+					</form>
+				</div>
+			</div>
+
+		
+
+<%-- <!-- footer -->
+	<jsp:include page="../common/footer.jsp"></jsp:include> --%>	
+
+
+	<!-- 모달 영역 -->
+	<div id="modal" class="modal-overlay">
+		<div class="modal-window">
+			<div class="close-area">X</div>
+			<div class="content">
+				<p id="check" style="display: none; color: red;">정확한 정보를 입력해주세요</p>
+				<input type="radio" name="type" value="student" checked="checked">학생
+				<input type="radio" name="type" value="professor">교수 <input
+					type="radio" name="type" value="manager">관리자
+
+				<p>학번을 입력해주세요</p>
+				<input type="text" id="user-no">
+				<p>이름을 입력해주세요</p>
+				<input type="text" id="user-name">
+				<p>휴대폰 번호를 입력해주세요</p>
+				<input type="text" id="user-phone"> <br> <br> <br>
+				<button id="findPwd">OK</button>
+			</div>
+		</div>
+	</div>
+	
+	<script>
 window.onload = function(){
 	const modal = document.getElementById("modal");
 	function modalOn() {
@@ -296,84 +356,6 @@ window.onload = function(){
 
 }
 </script>
-</head>
-<body>
-	<div class="lnb" id="main_1">
-		<div id="main_2">
-			<div class="logoTitle">
-				<h1>
-					<img src="../resources/img/logo.png" style="width: 80px; height: 80px;">
-					<a href="../main.kh">
-						<span id="lnb_title">대일대학교</span>
-					</a>
-						<span id="lnb_subtitle">DAILE UNIVERSITY</span>
-				</h1>
-			</div>
-		</div>
-		<div class="form_1">
-		<form action="/login/login.kh" method="post" >
-			<div class="login_form">
-
-				<div class="login_form1">
-					<label id="" class="login_form1_1">
-						<input type="radio" name="login_type" value="student" checked="checked">학생 
-					</label>
-					<label id="radio" class="login_form1_2">
-						<input type="radio" name="login_type" value="professor">교수 
-					</label>
-					<label id="radio" class="login_form1_3">
-						<input type="radio" name="login_type" value="manager">관리자
-					</label>
-				</div>
-
-				<div class="login_form2" >
-					<table class="type00" align="center">
-						<tr>
-							<td></td>
-						</tr>
-						<tr>
-							<td><input type="text" name="user-id"></td>
-						</tr>
-						<tr>
-							<td><input type="password" name="user-pwd"></td>
-						</tr>
-						<tr>
-							<td><input type="submit" value="로그인"></td>
-						</tr>
-						<tr>
-							<td><input type="button" value="비밀번호 찾기" class="btn-modal"></td>
-						</tr>
-					</table>
-				</div>
-
-			</div>
-		</form>
-		</div>
-	</div>
-
-<!-- footer -->
-	<jsp:include page="../common/footer.jsp"></jsp:include>	
-
-
-	<!-- 모달 영역 -->
-	<div id="modal" class="modal-overlay">
-		<div class="modal-window">
-			<div class="close-area">X</div>
-			<div class="content">
-				<p id="check" style="display: none; color: red;">정확한 정보를 입력해주세요</p>
-				<input type="radio" name="type" value="student" checked="checked">학생
-				<input type="radio" name="type" value="professor">교수 <input
-					type="radio" name="type" value="manager">관리자
-
-				<p>학번을 입력해주세요</p>
-				<input type="text" id="user-no">
-				<p>이름을 입력해주세요</p>
-				<input type="text" id="user-name">
-				<p>휴대폰 번호를 입력해주세요</p>
-				<input type="text" id="user-phone"> <br> <br> <br>
-				<button id="findPwd">OK</button>
-			</div>
-		</div>
-	</div>
+	
 </body>
 </html>
