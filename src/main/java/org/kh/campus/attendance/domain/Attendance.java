@@ -31,6 +31,24 @@ public class Attendance {
 		this.lectureName = lectureName;
 	}
 
+	public Attendance(String studentName, String lectureName, int lectureNo, int studentNo, String attStatus) {
+		super();
+		this.studentNo = studentNo;
+		this.lectureNo = lectureNo;
+		this.lectureName = lectureName;
+		this.studentName = studentName;
+		this.attStatus = attStatus;
+	}
+
+
+
+	public Attendance(int lectureNo, int studentNo) {
+		this.studentNo = studentNo;
+		this.lectureNo = lectureNo;
+	}
+
+
+
 	public int getStudentNo() {
 		return studentNo;
 	}

@@ -20,18 +20,6 @@ public class AttendanceServiceImpl implements AttendanceService{
 	private SqlSession sqlSession;
 	
 	@Override
-	public List<Attendance> printAllAttendance() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<AttendanceIssue> printAllAttendanceIssue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Attendance> printAttStudent(HashMap<String, String> attInfo) {
 		// 현재 날짜를 가지고와서 년도와 학기 구하기
 		Calendar now = Calendar.getInstance();
@@ -61,6 +49,30 @@ public class AttendanceServiceImpl implements AttendanceService{
 	public List<Attendance> printAttProfessorSearchStu(HashMap<String, String> attInfo) {
 		List<Attendance>aList= aStore.selectAttProfSearchStu(sqlSession, attInfo);	
 		return aList;
+	}
+
+	@Override
+	public int registerAttendance(Attendance attendance) {
+		int result = aStore.insertAttendance(sqlSession, attendance);
+		return result;
+	}
+
+	@Override
+	public List<Attendance> printAttStudentInfo(HashMap<String, String> attInfo) {
+		List<Attendance> aList = aStore.selectAttendanceStuInfo(sqlSession, attInfo);
+		return aList;
+	}
+
+	@Override
+	public List<Attendance> printAttProfIssue(HashMap<String, String> attInfo) {
+		List<Attendance> aList = aStore.selectAttProfIssue(sqlSession, attInfo);
+		return aList;
+	}
+
+	@Override
+	public int modifyObjectChange(Attendance attendance) {
+		int result = aStore.updateObjectChange(sqlSession, attendance);
+		return result;
 	}
 	
 }

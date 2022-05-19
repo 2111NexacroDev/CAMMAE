@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -78,9 +79,29 @@
 				<div class="contents_1bar_2 ${menu eq 'notice' ? 'active' : '' }"> <a href="/notice/list.kh">&nbsp;&nbsp;&nbsp;공지사항</a></div>
 				<div class="contents_1bar_2 ${menu eq 'recruitment' ? 'active' : '' }"><a href="/recruitment/list.kh">&nbsp;&nbsp;&nbsp;채용공고</a></div>
 				<div class="contents_1bar_2 ${menu eq 'support' ? 'active' : '' }"><a href="/support/list.kh">&nbsp;&nbsp;&nbsp;지원현황</a></div>
-				<div class="contents_1bar_2 ${menu eq 'consultant' ? 'active' : '' }"><a href="/consultant/list.kh">&nbsp;&nbsp;&nbsp;상담관리</a></div>
-				<div class="contents_1bar_2 ${menu eq 'portfolio' ? 'active' : '' }" ><a href="/portfolio/listView.kh">&nbsp;&nbsp;&nbsp;포트폴리오 관리</a></div>
+				<c:choose>
+					<c:when test="${not empty sessionScope.loginUser }">
+						<div class="contents_1bar_2 ${menu eq 'consultant' ? 'active' : '' }"><a href="/consultant/list.kh">&nbsp;&nbsp;&nbsp;상담관리</a></div>
+					</c:when>
+					<c:when test="${not empty sessionScope.loginManager}">
+						<div class="contents_1bar_2 ${menu1 eq 'consultant1' ? 'active' : '' }"><a href="/consultant/adlist.kh">&nbsp;&nbsp;&nbsp;상담관리</a></div>
+					</c:when>
+				</c:choose>
+				
+				<c:choose>
+					<c:when test="${not empty sessionScope.loginUser }">
+							<div class="contents_1bar_2 ${menu eq 'portfolio' ? 'active' : '' }" ><a href="/portfolio/listView.kh">&nbsp;&nbsp;&nbsp;포트폴리오 관리</a></div>
+					</c:when>
+					<c:when test="${not empty sessionScope.loginManager}">
+								<div class="contents_1bar_2 ${menu1 eq 'portfolio1' ? 'active' : '' }" ><a href="/portfolio/adminListView.kh">&nbsp;&nbsp;&nbsp;포트폴리오 관리</a></div>
+					</c:when>
+				</c:choose>
+				
+			
+				
+			
 			</div>
+			
 		</div>
 </body>
 </html>
