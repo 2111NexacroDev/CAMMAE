@@ -339,9 +339,22 @@ public class MarketController {
 
 	// 게시글 수정
 	@RequestMapping(value = "/market/update", method = RequestMethod.POST)
-	public ModelAndView marketUpdate(ModelAndView mv, @ModelAttribute Market market) {
+	public ModelAndView marketUpdate(ModelAndView mv, @ModelAttribute Market market, @RequestParam(value = "reloadFile", required = false) MultipartFile reloadFile,HttpServletRequest request) {
 
 		try {
+			if (reloadFile != null && !reloadFile.isEmpty()) {
+				// 기존 파일 삭제 (파일 이름 필요)
+				deleteFile(market.getMarketFilePath(), request); // 해당파일 이름 삭제
+				// 새로운 파일 업로드
+				HashMap<String, String> fileMap = saveFile(reloadFile, request);// 새롭게 저장
+				String savePath = fileMap.get("filePath");
+				String fileRename = fileMap.get("fileName");
+				if (savePath != null) {
+					market.setMarketFileName(reloadFile.getOriginalFilename()); // 파일이름이 저장
+					market.setMarketFileReName(fileRename);
+					market.setMarketFilePath(savePath); // 새로운 경로로 업데이트
+				}
+			}
 
 			int result = mService.modifyMarket(market);
 			if (result > 0) {
@@ -353,6 +366,15 @@ public class MarketController {
 			System.out.println(e.toString());
 		}
 		return mv;
+	}
+	
+	public void deleteFile(String filePath, HttpServletRequest request) {
+		// 저장 폴더 선택
+		File deleteFile = new File(filePath);
+		if (deleteFile.exists()) {
+			// 파일이 존재하면 파일 삭제
+			deleteFile.delete();
+		}
 	}
 
 	// 게시글 삭제

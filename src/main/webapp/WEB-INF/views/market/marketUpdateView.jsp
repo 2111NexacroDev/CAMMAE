@@ -54,6 +54,11 @@ hr {
 	border: 1px solid #ccc;
 }
 
+img {
+	max-height: 100%;
+	max-width: 100%;
+}
+
 #fileArea {
 	margin-top: 3px;
 	height: 20%;
@@ -114,10 +119,15 @@ hr {
 					<hr>
 					<div id="summary">
 						<div id="sImg">
-							<div id="headImg"></div>
+							<div id="headImg">
+								<c:if test="${not empty market.marketFileReName }">
+									<img id="preview"
+										src="/resources/marketuploadFiles/${market.marketFileReName }">
+								</c:if>
+							</div>
 							<div id="fileArea">
-							<input type="file" name="reloadFile"><br>
-							 &emsp;&emsp;&emsp;&emsp;&emsp;<span style="font-size: 11px;">${market.marketFileName}</span>
+								<input type="file" name="reloadFile" onchange="readURL(this);"><br>
+								&emsp;&emsp;&emsp;&emsp;&emsp;<span style="font-size: 11px;">${market.marketFileName}</span>
 							</div>
 						</div>
 						<div id="sDetail">
@@ -126,6 +136,7 @@ hr {
 									value="${market.marketGoods }"
 									style="border: none; padding: 10px;">
 							</div>
+							<br>
 							<div>
 								<b>판매가격</b> <input type="text" size="30" name="marketPrice"
 									value="${market.marketPrice }"
@@ -184,6 +195,18 @@ hr {
 				dialogDefinition.removeContents('Link'); // 링크탭 제거
 			}
 		});
+		
+		function readURL(input) {
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					document.getElementById('preview').src = e.target.result;
+				};
+				reader.readAsDataURL(input.files[0]);
+			} else {
+				document.getElementById('preview').src = "";
+			}
+		}
 	</script>
 </body>
 </html>
