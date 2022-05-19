@@ -22,6 +22,9 @@
 #L4{
 	width:13%;
 }
+.btn{
+	margin: 0;
+}
 </style>
 </head>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -35,10 +38,22 @@
 		</div>
 		<!-- contents-main -->
 		<div id="center">
-			<div class="c-title">
+			<div class="c-title" style="height:80px;">
 				<div class="b-title">
 					<h2>수강개설목록</h2>
 				</div>
+				<div class="btn_1">
+					<%-- <c:url var="lWrite" value="/lecture/writeView.kh">
+							<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
+						</c:url>
+						<a href="${lWrite }">등록하기</a> --%>
+
+					<button style="width: 80px" class="btn"
+						onclick="location.href='/lecture/writeView.kh'">수강개설</button>
+				</div>
+			</div>
+			
+	<div>
 				<label for="lectureSelect">학과</label>
 	<select id="lecList"> 
 		<option value="전체" >전체</option> 
@@ -50,20 +65,12 @@
 		<option value="6">국어국문학과</option>
 	</select>
 	<input type="button" value="검색"  onclick="getList();">
-				<div class="btn_1">
-					<%-- <c:url var="lWrite" value="/lecture/writeView.kh">
-							<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
-						</c:url>
-						<a href="${lWrite }">등록하기</a> --%>
-
-					<button style="width: 80px" class="btn"
-						onclick="location.href='/lecture/writeView.kh'">수강개설</button>
-				</div>
+	</div>
+	<br>			
 				
-			</div>
 			<table class="type01" id="lectureTable">
 				<thead>
-					<tr class="lecTr">
+					<tr>
 						<th id="L2">강의코드</th>
 						<!-- <th id="L3">단과대학</th> -->
 						<th id="L4">이수구분</th>
@@ -79,7 +86,7 @@
 				</thead>
 				<tbody>
 					<c:forEach items="${lList }" var="lecture">
-						<tr>
+						<tr class="lecTr">
 							<c:url var="lDetail" value="/lecture/Detail.kh">
 								<c:param name="lectureNo" value="${lecture.lectureNo}"></c:param>
 							</c:url>

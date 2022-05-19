@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link rel="stylesheet" href="/resources/contents.css">
 <link rel="stylesheet" href="/resources/menuBar.css">
 <link rel="stylesheet" href="/resources/common.css">
@@ -60,6 +61,7 @@ table {
 }
 </style>
 </head>
+
 <body>
 	<!-- header  -->
 	<jsp:include page="../common/menuBar.jsp"></jsp:include>
@@ -88,27 +90,34 @@ table {
 						<td><input type="text" name="universityCollege"
 							value="${lecture.universityCollege }"></td>
 					</tr>
+<%-- 					<option value="">전체</option>
+    <c:forEach items="${test}" var="testList">
+      <option value="${testList.testNo}" ${testList.testNo == 1 ? 'selected="selected"' : ''}>${testList.testNo}</option>
+    </c:forEach> --%>
 					<tr>
 						<td id="n1">이수구분</td>
-						<td><select name="lectureDivision">
-								<option>선택하세요</option>
-								<option>전공필수</option>
-								<option>전공선택</option>
-								<option>교양필수</option>
-								<option>교양선택</option>
-
-						</select></td>
+						<td><select name="lectureDivision" onchange="">
+    <option value="0" ${test == '0' ? 'selected="selected"' : '' }>선택하세요</option>
+    <option value="전공필수" ${test == '전공필수' ? 'selected="selected"' : '' }>전공필수</option>
+    <option value="전공선택" ${test == '전공선택' ? 'selected="selected"' : '' }>전공선택</option>
+    <option value="교양필수" ${test == '교양필수' ? 'selected="selected"' : '' }>교양필수</option>
+    <option value="교양선택" ${test == '교양선택' ? 'selected="selected"' : '' }>교양선택</option>
+</select></td>
+						
+						
 					</tr>
 
 					<tr>
 						<td id="n1">개설학과</td>
-						<td class="td_right"><select id="universityName"
-							name="lectureDepartment" onclick="selUniversityName()">
-								<option value="">선택하세요.</option>
-								<c:forEach var="lList" items="${lList}">
-									<option value="${lList.universityName }">${lList.universityName }</option>
-								</c:forEach>
-						</select></td>
+							<td class="td_right">
+							<!-- <select id="universityName" name="lectureDepartment" onclick="selUniversityName()"> -->
+							<select id="lectureDepartment" name="lectureDepartment" onchange="getProName()">
+									<option value="선택하세요.">${lecture.lectureDepartment }</option>
+									<c:forEach var="pList" items="${pList}">
+										<option value="${pList.departmentName }">${pList.departmentName }</option>
+									</c:forEach>
+							</select>
+							</td>
 					</tr>
 					<tr>
 						<td id="n1">강의명</td>
@@ -118,11 +127,11 @@ table {
 					<tr>
 						<td id="n1">교수명</td>
 						<td class="td_right"><select id="professorName"
-							name="professorName" onclick="selProfessorName()">
-								<option value="">선택하세요.</option>
-								<c:forEach var="lList" items="${lList}">
+							name="professorName" > 
+								<option value="선택하세요">${lecture.professorName }</option>
+								<%-- <c:forEach var="lList" items="${lList}">
 									<option value="${lList.professorName }">${lList.professorName }</option>
-								</c:forEach>
+								</c:forEach> --%>
 						</select></td>
 					</tr>
 					<tr>
@@ -166,7 +175,29 @@ table {
 
 
 	<script type="text/javascript">
-		var mIndex = 0;
+	function getProName(){
+		var lectureDepartment = $("#lectureDepartment").val();
+		var target = $("#professorName");
+		$.ajax({
+			url : "/lecture/selectProfessor",
+			type : "get",
+			data : {"lectureDepartment" : lectureDepartment},
+			success : function(data){
+				$("#professorName option").remove();
+				for(var i= 0; i<data.length; i++){
+					$("#professorName").append(
+							"<option value="+data[i].professorName+">" + data[i].professorName + "</option>");
+				}
+			},
+			error : function(){
+				alert("ajax 실패");
+			}
+			
+		})
+		
+	}
+	
+/* 		var mIndex = 0;
 		var uIndex = 0;
 		function selProfessorName() {
 			if (mIndex == 0) {
@@ -218,7 +249,7 @@ table {
 				})
 				uIndex++;
 			}
-		}
+		} */
 	</script>
 	<!-- footer -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>

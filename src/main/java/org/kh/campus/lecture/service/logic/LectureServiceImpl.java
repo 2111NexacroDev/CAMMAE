@@ -69,8 +69,8 @@ public class LectureServiceImpl implements LectureService {
 	}
 
 	@Override
-	public List<Professor> printAllProName(String universityName) {
-		List<Professor> pList = lStore.selectProName(sqlSession,universityName);
+	public List<Professor> printAllProName(String lectureDepartment) {
+		List<Professor> pList = lStore.selectProName(sqlSession,lectureDepartment);
 		return pList;
 	}
 
