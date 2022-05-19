@@ -79,9 +79,9 @@ label {
 	height: 100%;
 	cursor: pointer;
 	float: left;
-	font-size: 24px;
+	font-size: 12px;
 	font-weight: bold;
-	line-height: 80px;
+	line-height: 30px;
 	/* border-right: 1px solid #ccc; */
 	color: rgb(30, 57, 50);
 	background-color: white;
@@ -95,9 +95,9 @@ label {
 	height: 100%;
 	
 	float: left;
-	font-size: 24px;
+	font-size: 12px;
 	font-weight: bold;
-	line-height: 80px;
+	line-height: 30px;
 	/* border-right: 1px solid #ccc; */
 	color: white;
 	background-color: rgb(58, 66, 74);
@@ -140,6 +140,7 @@ h1 a {
 	padding: 0px;
 	width: 100%;
 	height: 700px;
+	background-color: rgb(245,245,245);
 }
 
 #main_2 {
@@ -147,17 +148,18 @@ h1 a {
 	padding: 0px;
 	width: 100%;
 	height: 50%;
-	background-image: url("/resources/img/mainimg.jpg");
+	background-color: rgb(245,245,245);
+/* 	background-image: url("/resources/img/mainimg.jpg");
 	background-repeat: no-repeat;
-	background-size: 100% 100%;
+	background-size: 100% 100%; */
 }
 .form_1{
-	background-image: url("/resources/img/lawn.jpg");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+	top: 130px;
+	position: relative;
 }
 form{
-    background-color: rgba(169, 191, 159, 0.72);
+  /*   background-color: rgba(169, 191, 159, 0.72); */
+  		background-color: rgb(245,245,245);
 }
 html, body, div {
 	margin: -1;
@@ -167,27 +169,33 @@ html, body, div {
 .login_form {
 	
 	/* border: 1px solid black; */
-	height: 400px;
-	width: 800px;
+	height: 100px;
+	width: 400px;
 	position: relative;
-	bottom: 180px;
-	left: 450px;
+	bottom: 230px;
+	left: 670px;
 	background-color: white;
+	border-top-left-radius: 25px; 
+	border-top-right-radius: 25px;
+	border-bottom-left-radius: 25px; 
+	border-bottom-right-radius: 25px;
 }
 
 .login_form1 {
-	width: 100%;
-	height: 20%;
+	width: 400px;
+	height: 30px;
+	position:relative;
+	left: 670px;
+	bottom: 200px;
+	
 }
 
 .login_form1_1 {
 	width: 33%;
-	border-right: 0.5px solid #ccc; 
 }
 
 .login_form1_2 {
 	width: 33.8%;
-	border-right: 0.5px solid #ccc;
 }
 
 .login_form1_3 {
@@ -197,21 +205,40 @@ html, body, div {
 .login_form2 {
 	width: 100%;
 	height: 80%;
+	margin-top: 50px;
+	left: 100px;
+	position: relative;
 }
 .type00{
 	margin-top: 50px;
 }
 
-table input {
-	width: 300px;
-	height: 30px;
-	text-align: center;
-}
-
 .logoTitle {
-	top: 50px;
+	top: 150px;
 	position: relative;
 }
+
+#info{
+	position:relative;
+	top: 10px;
+	width: 200px;
+	height: 25px;
+	text-align: center;
+	border: 1px solid green;
+ 	 border-radius: 12.5px;
+}
+#login_btn{
+	width: 200px;
+	height: 35px;
+	top:30px;
+	position: relative;
+	left:103px;
+}
+#pass_btn{
+	position: relative;
+	top:50px;
+}
+input:focus {outline: 2px solid green;}
 </style>
 <script>
 window.onload = function(){
@@ -304,7 +331,7 @@ window.onload = function(){
 				<h1>
 					<img src="../resources/img/logo.png" style="width: 80px; height: 80px;">
 					<a href="../main.kh">
-						<span id="lnb_title">대일대학교</span>
+						<span id="lnb_title">대일대학교1</span>
 					</a>
 						<span id="lnb_subtitle">DAILE UNIVERSITY</span>
 				</h1>
@@ -312,7 +339,6 @@ window.onload = function(){
 		</div>
 		<div class="form_1">
 		<form action="/login/login.kh" method="post" >
-			<div class="login_form">
 
 				<div class="login_form1">
 					<label id="" class="login_form1_1">
@@ -326,26 +352,13 @@ window.onload = function(){
 					</label>
 				</div>
 
+			<div class="login_form">
 				<div class="login_form2" >
-					<table class="type00" align="center">
-						<tr>
-							<td></td>
-						</tr>
-						<tr>
-							<td><input type="text" name="user-id"></td>
-						</tr>
-						<tr>
-							<td><input type="password" name="user-pwd"></td>
-						</tr>
-						<tr>
-							<td><input type="submit" value="로그인"></td>
-						</tr>
-						<tr>
-							<td><input type="button" value="비밀번호 찾기" class="btn-modal"></td>
-						</tr>
-					</table>
+						<input type="text" name="user-id" id="info" placeholder="아이디를 입력해주세요."><br><br>
+						<input type="password" name="user-pwd" id="info" placeholder="비밀번호를 입력해주세요."><br>
 				</div>
-
+						<input id="login_btn" type="submit" value="로그인">
+						<input id="pass_btn" type="button" value="비밀번호 찾기" class="btn-modal">
 			</div>
 		</form>
 		</div>
