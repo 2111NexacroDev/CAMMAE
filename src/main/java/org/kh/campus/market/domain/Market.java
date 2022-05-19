@@ -12,12 +12,15 @@ public class Market {
 	private String marketDate;
 	private String marketUpdateDate;
 	private int marketCount;
+	private String marketFileName;
+	private String marketFileReName;
+	private String marketFilePath;
 	
 	public Market() {}
 
 	public Market(int marketNo, String marketType, String marketGoods, String marketPrice, String marketTitle,
 			String marketContent, int marketId, String marketWriter, String marketDate, String marketUpdateDate,
-			int marketCount) {
+			int marketCount, String marketFileName, String marketFileReName, String marketFilePath) {
 		super();
 		this.marketNo = marketNo;
 		this.marketType = marketType;
@@ -30,6 +33,9 @@ public class Market {
 		this.marketDate = marketDate;
 		this.marketUpdateDate = marketUpdateDate;
 		this.marketCount = marketCount;
+		this.marketFileName = marketFileName;
+		this.marketFileReName = marketFileReName;
+		this.marketFilePath = marketFilePath;
 	}
 
 	public int getMarketNo() {
@@ -120,16 +126,41 @@ public class Market {
 		this.marketCount = marketCount;
 	}
 
+	public String getMarketFileName() {
+		return marketFileName;
+	}
+
+	public void setMarketFileName(String marketFileName) {
+		this.marketFileName = marketFileName;
+	}
+
+	public String getMarketFileReName() {
+		return marketFileReName;
+	}
+
+	public void setMarketFileReName(String marketFileReName) {
+		this.marketFileReName = marketFileReName;
+	}
+
+	public String getMarketFilePath() {
+		return marketFilePath;
+	}
+
+	public void setMarketFilePath(String marketFilePath) {
+		this.marketFilePath = marketFilePath;
+	}
+
 	@Override
 	public String toString() {
 		return "Market [marketNo=" + marketNo + ", marketType=" + marketType + ", marketGoods=" + marketGoods
 				+ ", marketPrice=" + marketPrice + ", marketTitle=" + marketTitle + ", marketContent=" + marketContent
 				+ ", marketId=" + marketId + ", marketWriter=" + marketWriter + ", marketDate=" + marketDate
-				+ ", marketUpdateDate=" + marketUpdateDate + ", marketCount=" + marketCount + "]";
+				+ ", marketUpdateDate=" + marketUpdateDate + ", marketCount=" + marketCount + ", marketFileName="
+				+ marketFileName + ", marketFileReName=" + marketFileReName + ", marketFilePath=" + marketFilePath
+				+ "]";
 	}
 
 	
-
 
 	
 	

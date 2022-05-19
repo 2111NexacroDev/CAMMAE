@@ -16,15 +16,53 @@
 	width: 740px;
 	padding: 30px 30px 30px 30px;
 	margin-top: 45px;
-    margin-right: 10px;
-    margin-bottom: 20px;
-    margin-left: 0px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+	margin-left: 0px;
 }
+
 hr {
 	width: 740px;
 	text-align: center;
-	margin-top:10px;
-	margin-bottom:10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#summary {
+	height: 250px;
+	width: 100%;
+}
+
+#sImg {
+	float: left;
+	width: 45%;
+	height: 250px;
+}
+
+#sDetail {
+	float: right;
+	font-size: 18px;
+	width: 50%;
+	height: 250px;
+	padding-right: 15px;
+	padding-left: 15px;
+}
+
+#headImg {
+	width: 100%;
+	height: 85%;
+	width: 100%;
+	border: 1px solid #ccc;
+}
+img {
+	max-height: 100%;
+	max-width: 100%;
+}
+
+#fileArea {
+	margin-top: 3px;
+	height: 15%;
+	width: 100%;
 }
 </style>
 </head>
@@ -43,13 +81,14 @@ hr {
 			<form action="/market/register" method="POST"
 				enctype="multipart/form-data">
 				<div class="c-title">
-				<div class="b-title">
-					<h2>중고거래게시판</h2>
-				</div>
+					<div class="b-title">
+						<h2>중고거래게시판</h2>
+					</div>
 				</div>
 				<div class="c-main">
-				<input type="hidden" name="marketWriter" value="${loginUser.studentName}">
-				<input type="hidden" name="marketId" value="${loginUser.studentNo}">
+					<input type="hidden" name="marketWriter"
+						value="${loginUser.studentName}"> <input type="hidden"
+						name="marketId" value="${loginUser.studentNo}">
 					<div class="selectBox" style="padding: 10px;">
 						<select id="marketType" name="marketType"
 							style="border: none; width: 250px;">
@@ -63,23 +102,35 @@ hr {
 							placeholder="제목을 입력하세요" style="border: none; padding: 10px;">
 					</div>
 					<hr>
-					<div>
-						<b>상품명</b> &emsp;<input type="text" size="35" name="marketGoods"
-							placeholder="상품명을 입력해주세요" style="border: none; padding: 10px;">
+					<div id="summary">
+						<div id="sImg">
+							<div id="headImg"><img id="preview"></div>
+							<div id="fileArea">
+								<input type="file" name="uploadFile" onchange="readURL(this);">
+							</div>
+						</div>
+						<div id="sDetail">
+							<div>
+								<b>상품명</b> &emsp;<input type="text" size="30" name="marketGoods"
+									placeholder="상품명을 입력해주세요" style="border: none; padding: 10px;">
+							</div>
+							<br>
+							<div>
+								<b>판매가격</b> <input type="text" size="30" name="marketPrice"
+									placeholder="가격을 입력해주세요" style="border: none; padding: 10px;">
+								<b>원</b>
+							</div>
+						</div>
 					</div>
 					<div>
-						<b>판매가격</b> <input type="text" size="35" name="marketPrice"
-							placeholder="가격을 입력해주세요" style="border: none; padding: 10px;">
-						<b>원</b>
-					</div>
-
-					<div>
-						<textarea rows="20" cols="98" name="marketContent" id="marketContent"></textarea>
+						<textarea rows="20" cols="98" name="marketContent"
+							id="marketContent"></textarea>
 					</div>
 					<hr>
 					<div align="center" style="padding: 15px;">
 						<button class="btn" type="submit">등록</button>
-						<button type="reset" class="btn" onclick="location.href='/market/list'">취소</button>
+						<button type="reset" class="btn"
+							onclick="location.href='/market/list'">취소</button>
 					</div>
 				</div>
 			</form>
@@ -106,6 +157,18 @@ hr {
 				dialogDefinition.removeContents('Link'); // 링크탭 제거
 			}
 		});
+
+		function readURL(input) {
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					document.getElementById('preview').src = e.target.result;
+				};
+				reader.readAsDataURL(input.files[0]);
+			} else {
+				document.getElementById('preview').src = "";
+			}
+		}
 	</script>
 
 

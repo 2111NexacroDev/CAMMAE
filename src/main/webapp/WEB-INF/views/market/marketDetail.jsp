@@ -87,19 +87,37 @@ hr {
 	margin-bottom: 10px
 }
 
-#rMarketWriter {
-	width: 80%;
-	float: left;
+#summary {
+	height: 250px;
+	width: 100%;
 }
 
-#rMarketDate {
-	width: 20%;
+#sImg {
 	float: left;
+	width: 45%;
+	height: 250px;
 }
 
-#rMarketContent {
-	width: 80%;
-	float: left;
+#sDetail {
+	float: right;
+	font-size: 18px;
+	width: 50%;
+	height: 250px;
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-top: 20px;
+}
+
+#headImg {
+	width: 100%;
+	height: 100%;
+	width: 100%;
+	/* border: 1px solid #ccc; */
+}
+
+img {
+	max-height: 100%;
+	max-width: 100%;
 }
 </style>
 </head>
@@ -147,15 +165,34 @@ hr {
 					</div>
 
 					<hr>
+					<div id="summary">
+						<div id="sImg">
+							<div id="headImg">
+								<c:if test="${not empty market.marketFileReName }">
+									<img
+										src="/resources/marketuploadFiles/${market.marketFileReName }">
 
-					<div id="mGoods"><b>상품명</b>&emsp;&emsp;${market.marketGoods }</div>
-					<div id="mPrice"><b>판매가격</b>&emsp;${market.marketPrice } <b>원</b></div>
-					<div>
-						<c:url var="cRoom" value="/chat.kh">
-							<c:param name="marketNo" value="${market.marketNo }"></c:param>
-						</c:url>
-						<a href="${cRoom }"></a>
-							<a href="${cRoom }" onclick="window.open(this.href, '_blank','width=400, height=500, left=100, top=50'); return false;"><button class="btn">판매자와 채팅하기</button></a>
+								</c:if>
+							</div>
+						</div>
+						<div id="sDetail">
+							<div id="mGoods">
+								<b>상품명</b>&emsp;&emsp;${market.marketGoods }
+							</div>
+							<br>
+							<div id="mPrice">
+								<b>판매가격</b>&emsp;${market.marketPrice } <b>원</b>
+							</div>
+							<br>
+							<div>
+								<c:url var="cRoom" value="/chat.kh">
+									<c:param name="marketNo" value="${market.marketNo }"></c:param>
+								</c:url>
+								<a href="${cRoom }"
+									onclick="window.open(this.href, '_blank','width=400, height=500, left=100, top=50'); return false;"><button
+										class="btn">판매자와 채팅하기</button></a>
+							</div>
+						</div>
 					</div>
 
 					<div class="content" style="padding: 10px;">
@@ -190,11 +227,11 @@ hr {
 
 
 	<script>
-	/* 	function chatOpen() {
-			window.open("/chat.kh", "marketChat",
-					"width=400, height=600, left=100, top=50");
+		/* 	function chatOpen() {
+				window.open("/chat.kh", "marketChat",
+						"width=400, height=600, left=100, top=50");
 
-		} */
+			} */
 	</script>
 
 	<!-- 댓글동작  -->
