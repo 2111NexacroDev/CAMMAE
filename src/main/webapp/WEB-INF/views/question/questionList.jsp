@@ -6,26 +6,64 @@
 <head>
 <meta charset="UTF-8">
 <title>질의응답게시판</title>
-<link rel="stylesheet" href="/resources/common.css">
+<!-- <link rel="stylesheet" href="/resources/common.css"> -->
 <link rel="stylesheet" href="/resources/contents.css">
 <style>
-#q1{
-	width:10%;
+p{
+	margin:0;
 }
-#q2{
-	width:22%;
+h2{
+	color: rgb(0, 74, 38)
 }
-#q3{
-	width:33%;
+table.type01 {
+  border-collapse: collapse;
+  text-align: center;
+  line-height: 1.5;
+  width: 800px;
 }
-#q4{
-	width:10%;
+
+table.type01 thead th {
+  font-weight: bold;
+  border-top: 1px solid #ccc;
+  height: 35px;
+  border-bottom: 1px solid #ccc;
+  background: rgb(231, 232, 226);
 }
-#q5{
-	width:15%;
+
+table.type01 td {
+  width: 350px;
+  vertical-align: middle;
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #ccc;
 }
-#q6{
-	width:10%;
+table.type01 td a {
+	text-decoration: none;
+	color: black;
+}
+
+#q1 {
+	width: 10%;
+}
+
+#q2 {
+	width: 22%;
+}
+
+#q3 {
+	width: 33%;
+}
+
+#q4 {
+	width: 10%;
+}
+
+#q5 {
+	width: 15%;
+}
+
+#q6 {
+	width: 10%;
 }
 </style>
 </head>
@@ -41,16 +79,21 @@
 		<!-- contents-main -->
 		<div id="center">
 			<div class="c-title">
-				<div class="b-title"><h2>질의응답게시판</h2></div>
+				<div class="b-title">
+					<h2>질의응답게시판</h2>
+				</div>
 				<c:if test="${sessionScope.loginUser ne null}">
-				<div class="btn_1"><button class="btn" style="width: 80px"onclick="location.href='/question/registerView'">글쓰기</button></div>
-			</c:if>
+					<div class="btn_1">
+						<button class="btn" style="width: 80px"
+							onclick="location.href='/question/registerView'">글쓰기</button>
+					</div>
+				</c:if>
 			</div>
 			<table class="type01">
 				<thead>
 					<tr>
 						<th id="q1">번호</th>
-						<th id="q2">담당교수 및 강의명</th>
+						<th id="q2" >담당교수 및 강의명</th>
 						<th id="q3">제목</th>
 						<th id="q4">작성자</th>
 						<th id="q5">작성일</th>
@@ -61,7 +104,9 @@
 					<c:forEach items="${qList }" var="question">
 						<tr>
 							<td>${question.questionNo }</td>
-							<td >${question.professorName }_${question.lectureName }</td>
+							<td >${question.professorName }<br>
+								${question.lectureName }
+							</td>
 							<c:url var="qDetail" value="/question/detail">
 								<c:param name="questionNo" value="${question.questionNo}"></c:param>
 							</c:url>
@@ -108,7 +153,8 @@
 							<c:param name="page" value="${p }"></c:param>
 						</c:url>
 					</c:if>
-					 <a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
+					<a href="${pagination }"><button
+							class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
 
 			</c:forEach>
 				<c:if test="${pi.next && pi.endNavi > 0}">

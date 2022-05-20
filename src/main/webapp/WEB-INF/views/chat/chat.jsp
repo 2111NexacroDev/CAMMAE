@@ -120,27 +120,37 @@
 	}
 </script>
 <style>
+
+/* 채팅 입장  */
+#enter {
+	/* display: flex; */
+	width: 100%;
+	height: 100%;
+}
+
 #chatEnter {
 	position: absolute;
-	left: 40%;
-	top: 30%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 #chatTitle1 {
-	font-size: 50px;
+	font-size: 17px;
 	font-weight: bold;
 }
 
 #chatTitle2 {
-	font-size: 25px;
+	font-size: 20px;
 	font-weight: bold;
 	float: left;
-	width: 70%;
+	width: 80%;
+	margin-top: 5.5px;
 }
 
 #chatExit {
 	float: left;
-	width: 30%;
+	width: 20%;
 	text-align: right;
 	margin-top: 5.5px;
 }
@@ -173,15 +183,18 @@
 	padding: 5px 10px;
 	font-size: 13px;
 	font-weight: bold;
+	
 }
 </style>
 </head>
 <body>
 	<!-- 채팅방 참여 -->
-	<div id="chatEnter" align="center">
-		<div id="chatTitle1">${chatRoom.marketTitle}</div>
-		<br> <input id="enterButton" class="btn" value="입장하기"
-			type="button" onclick="enterButton_onclick()">
+	<div id="enter">
+		<div id="chatEnter" align="center">
+			<div id="chatTitle1">${chatRoom.marketTitle}</div>
+			<br> <input id="enterButton" class="btn" value="입장하기"
+				type="button" onclick="enterButton_onclick()">
+		</div>
 	</div>
 	<!-- 채팅방 -->
 	<div id="chatContent" style="display: none;">

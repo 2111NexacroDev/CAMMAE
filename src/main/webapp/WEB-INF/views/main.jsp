@@ -47,7 +47,7 @@
                 </h1>
                 <ul class="lnb_nav_dep1">
                     <li><a href="/board/list.kh" class="btn_lnb_dep1">게시판</a></li>
-                    <li><a href="#" class="btn_lnb_dep1">수강신청</a></li>
+                    <li><a href="/cart/preCartListView.kh" class="btn_lnb_dep1">수강신청</a></li>
                     <li><a href="#" class="btn_lnb_dep1">캠퍼스매니저</a></li>
                     <li><a href="/notice/list.kh" class="btn_lnb_dep1">취업지원센터</a></li>
                 </ul>
@@ -63,8 +63,8 @@
           <div id="content3">
               
                 <div id="submenu1">
-                    <div id="submenu1_1"><a href="#" style="color:white">수강신청</a></div>
-                    <div id="submenu1_2"><a href="#"><span class="material-icons" id="ico1" style="font-size:30px; color: rgba(255, 255, 255, 0.5);">arrow_right_alt</span> </a></div>
+                    <div id="submenu1_1"><a href="/cart/preCartListView.kh" style="color:white">수강신청</a></div>
+                    <div id="submenu1_2"><a href="/cart/preCartListView.kh"><span class="material-icons" id="ico1" style="font-size:30px; color: rgba(255, 255, 255, 0.5);">arrow_right_alt</span> </a></div>
                 </div>
                 
                 <div id="submenu2">
@@ -73,8 +73,8 @@
                 </div>
 
                 <div id="submenu3">
-                <div id="submenu3_1"><a href="#"><span class="material-icons" style="font-size:50px; color: rgba(255, 255, 255, 0.5);">local_library</span></a></div>
-                <div id="submenu3_2"><a href="#" style="color:white">시간표</a></div>
+                <div id="submenu3_1"><a href="/lecture/list.kh"><span class="material-icons" style="font-size:50px; color: rgba(255, 255, 255, 0.5);">local_library</span></a></div>
+                <div id="submenu3_2"><a href="/lecture/list.kh" style="color:white">수강개설(변경예정)</a></div>
                 </div>
 
             <div id="submenu4">

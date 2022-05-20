@@ -11,58 +11,32 @@
 <link rel="stylesheet" href="/resources/contents.css">
 <style>
 
-
 .bbs {
 	position: relative;
 	margin-bottom: 40px;
 }
 
-.bbs table {
-	width: 1000px;
-	border-top: 1px solid #343434;
+#q1{
+	width:5%;
 }
-
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
+#q2{
+	width:17%;
 }
-
-thead {
-	background: rgb(237, 237, 237);
-	height: 50px;
-	border-bottom: 2px solid #c2c2c2;
+#q3{
+	width:17%;
 }
-
-tr {
-	display: table-row;
-	border-color: inherit;
+#q4{
+	width:13%;
 }
-
-tbody {
-	display: table-row-group;
-	vertical-align: middle;
-	border-color: inherit;
+#q5{
+	width:10%;
 }
-
-.bbs_ table th, .bbs table td {
-	padding: 12px 10px;
-	border-bottom: 1px solid #c2c2c2;
-	font-size: 16px;
+#q6{
+	width:27%;
 }
-
-.bbs table .space {
-	background: #fdfdfd;
+#q7{
+	width:11%;
 }
-
-.ta {
-	text-align: center;
-}
-
-td a{
-	text-decoration: none;
-	color: black;
-}
-
 </style>
 
 </head>
@@ -88,21 +62,17 @@ td a{
 				<div class="bbs">
 
 
-					<table>
+					<table class="type01">
 
 						<thead>
 							<tr>
-								<th>번호</th>
-								<th>제목</th>
-								<th>이름</th>
-								<th>학번</th>
-								<th>학과명</th>
-								<th>상담희망날짜</th>
-								<th>상담희망시간</th>
-								<th>상담사</th>
-								<th>상담내용</th>
-								<th>상담현황</th>
-								<th>단과대학</th>
+								<th id="q1">번호</th>
+								<th id="q2">제목</th>
+								<th id="q3">상담희망날짜</th>
+								<th id="q4">상담희망시간</th>
+								<th id="q5">상담사</th>
+								<th id="q6">상담내용</th>
+								<th id="q7">상담현황</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -113,18 +83,13 @@ td a{
 										<c:param name="cons_student_no" value="${loginUser.studentNo}"></c:param>
 										<c:param name="cons_no" value="${consultant.cons_no}"></c:param>
 									</c:url>
-
 									<td class="ta" id="title" ><a href="${cDetail}">${consultant.cons_title }</a></td>
-										
-									<td class="ta" id="writer">${consultant.cons_student_name}</td>
-									<td class="ta" id="stu_number">${consultant.cons_student_no}</td>
-									<td class="ta" id="college">${consultant.cons_college}</td>
 									<td class="ta" id="date">${consultant.cons_date}</td>
 									<td class="ta" id="time">${consultant.cons_time}</td>
 									<td class="ta" id="counselor">${consultant.cons_counselor}</td>
 									<td class="ta" id="counselor">${consultant.cons_content}</td>
 									<td class="ta" id="status">${consultant.cons_status == 'Y' ? "상담완료": "상담대기"}</td>
-									<td class="ta" id="univ_code">${consultant.cons_university_code}</td>
+									
 								</tr>
 							</c:forEach>
 						</tbody>

@@ -43,16 +43,20 @@ public class SupportController {
 			, @ModelAttribute PageInfo pageInfo
 			, HttpSession session) {
 		int currentPage = (page != null) ? page : 1;
+		
+		//학생으로 로그인 한 경우 페이징처리 리스트를 학번으로 하는코드
+		if(session.getAttribute("loginUser")!= null) {
+			pageInfo.setSearchCondition("writer");
+			pageInfo.setSearchValue(Integer.toString(((Student) (session.getAttribute("loginUser"))).getStudentNo()));
+		}
+		
 		int totalCount = sService.getListCount(pageInfo);
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
 		mv.addObject("pi",pi);
 		pi.setSearchCondition(pageInfo.getSearchCondition());
 		pi.setSearchValue(pageInfo.getSearchValue());
 		//학생일때 학번으로 검색
-		if(session.getAttribute("loginUser")!= null) {
-			pi.setSearchCondition("writer");
-			pi.setSearchValue(Integer.toString(((Student) (session.getAttribute("loginUser"))).getStudentNo()));
-		}
+		
 		List<Support> sList = sService.printAllSupport(pi);
 		try {
 			

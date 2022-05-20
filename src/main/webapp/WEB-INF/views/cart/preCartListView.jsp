@@ -87,8 +87,6 @@ table.type01 td a {
 				</div>
 			</div>
 			<div>
-			<button>에에엥</button>
-			<input type="button" class="btn" onClick="location.href='/lecture/list.kh'">
 			</div>
 				<div>
 					<label id="searchLabel" for="lectureSelect">학과</label> 

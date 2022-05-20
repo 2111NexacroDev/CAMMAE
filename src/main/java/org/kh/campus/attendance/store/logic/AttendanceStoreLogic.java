@@ -29,4 +29,28 @@ public class AttendanceStoreLogic implements AttendanceStore {
 		return aList;
 	}
 
+	@Override
+	public int insertAttendance(SqlSession sqlSession, Attendance attendance) {
+		int result = sqlSession.insert("AttendanceMapper.insertAttendance", attendance);
+		return result;
+	}
+
+	@Override
+	public List<Attendance> selectAttendanceStuInfo(SqlSession sqlSession, HashMap<String, String> attInfo) {
+		 List<Attendance> aList = sqlSession.selectList("AttendanceMapper.selectAttendanceStuInfo", attInfo);
+		return aList;
+	}
+
+	@Override
+	public List<Attendance> selectAttProfIssue(SqlSession sqlSession, HashMap<String, String> attInfo) {
+		 List<Attendance> aList = sqlSession.selectList("AttendanceMapper.selectAttProfIssue", attInfo);
+		 return aList;
+	}
+
+	@Override
+	public int updateObjectChange(SqlSession sqlSession, Attendance attendance) {
+		int result = sqlSession.update("AttendanceMapper.updateObjectChange", attendance);
+		return result;
+	}
+
 }

@@ -54,11 +54,9 @@ public class ChatSocketHandler extends TextWebSocketHandler {
 
 			// 채팅 전달
 			for (Map<String, Object> sMap : sessions) {
-				System.out.println("sessionsTest : " + sessions);
 				WebSocketSession mSession = (WebSocketSession) sMap.get("session");
-				System.out.println("sessionTest : " + session);
 				if (((String) sMap.get("marketNo")).equals(marketNo)) {
-					mSession.sendMessage(new TextMessage(senderName + "님이 입장하셨습니다."));
+					mSession.sendMessage(new TextMessage(senderName + "님이 입장하셨습니다.\n"));
 				}
 			}
 
@@ -70,7 +68,7 @@ public class ChatSocketHandler extends TextWebSocketHandler {
 				WebSocketSession mSession = (WebSocketSession) sMap.get("session");
 				// 내가 접속하려는 방 번호와 디비에서 가져온 방 번호가 같을 때 채팅방에 입장
 				if (((String) sMap.get("marketNo")).equals(marketNo)) {
-					mSession.sendMessage(new TextMessage(senderName + " : " + cMsg.getMsg()));
+					mSession.sendMessage(new TextMessage(senderName + "\n: " + cMsg.getMsg()));
 				}
 
 			}
@@ -95,7 +93,7 @@ public class ChatSocketHandler extends TextWebSocketHandler {
 		for (Map<String, Object> sMap : sessions) {
 			if (((String) sMap.get("marketNo")).equals(marketNo)) {
 				WebSocketSession mSession = (WebSocketSession) sMap.get("session");
-				mSession.sendMessage(new TextMessage(senderName + "님이 퇴장하셨습니다."));
+				mSession.sendMessage(new TextMessage(senderName + "님이 퇴장하셨습니다.\n"));
 			}
 		}
 	}
