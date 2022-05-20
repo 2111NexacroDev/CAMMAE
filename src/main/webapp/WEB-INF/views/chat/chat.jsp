@@ -121,7 +121,7 @@
 </script>
 <style>
 
-
+/* 채팅 입장  */
 #enter {
 	/* display: flex; */
 	width: 100%;
