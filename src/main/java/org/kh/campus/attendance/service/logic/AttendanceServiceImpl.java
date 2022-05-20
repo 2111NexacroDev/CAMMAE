@@ -74,5 +74,13 @@ public class AttendanceServiceImpl implements AttendanceService{
 		int result = aStore.updateObjectChange(sqlSession, attendance);
 		return result;
 	}
+
+	@Override
+	public int modifyStatusChange(Attendance attendance) {
+
+	   int result = aStore.updateStatus(sqlSession, attendance);
+	   return result;
+		
+	}
 	
 }
