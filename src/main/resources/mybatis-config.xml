@@ -27,6 +27,11 @@
 			alias="QuestionReply" />
 		<typeAlias type="org.kh.campus.market.domain.MarketReply"
 			alias="MarketReply" />
+		<typeAlias type="org.kh.campus.chat.domain.ChatRoom"
+			alias="ChatRoom" />
+		<typeAlias type="org.kh.campus.chat.domain.ChatMessage"
+			alias="ChatMessage" />
+
 		<typeAlias type="org.kh.campus.board.domain.Board"
 			alias="Board" />
 		<typeAlias type="org.kh.campus.lecture.domain.Lecture"
@@ -63,6 +68,8 @@
 
 		<typeAlias type="org.kh.campus.graduation.domain.Graduation"
 			alias="Graduation" />
+		<typeAlias type="org.kh.campus.attendance.domain.Attendance"
+			alias="Attendance" />
 
 	</typeAliases>
 	<mappers>
@@ -75,6 +82,7 @@
 		<mapper resource="mappers/grade-mapper.xml" />
 		<mapper resource="mappers/question-mapper.xml" />
 		<mapper resource="mappers/market-mapper.xml" />
+		<mapper resource="mappers/chat-mapper.xml" />
 		<mapper resource="mappers/board-mapper.xml" />
 		<mapper resource="mappers/lecture-mapper.xml" />
 		<mapper resource="mappers/consultant-mapper.xml" />
@@ -85,6 +93,7 @@
 		<mapper resource="mappers/support-mapper.xml" />
 		<mapper resource="mappers/tuition-mapper.xml" />
 		<mapper resource="mappers/graduation-mapper.xml" />
+		<mapper resource="mappers/attendance-mapper.xml" />
 
 	</mappers>
 </configuration>

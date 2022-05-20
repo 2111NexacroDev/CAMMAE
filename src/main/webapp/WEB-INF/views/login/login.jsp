@@ -6,11 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
-
 <style>
-div{
-	display: inline-block;
-} 
 #modal.modal-overlay {
 	width: 100%;
 	height: 100%;
@@ -42,18 +38,15 @@ div{
 	top: 50px;
 	padding: 10px;
 }
-
 #modal .title {
 	padding-left: 10px;
 	display: inline;
 	text-shadow: 1px 1px 2px gray;
 	color: white;
 }
-
 #modal .title h2 {
 	display: inline;
 }
-
 #modal .close-area {
 	display: inline;
 	float: right;
@@ -62,7 +55,6 @@ div{
 	text-shadow: 1px 1px 2px gray;
 	color: white;
 }
-
 #modal .content {
 	margin-top: 20px;
 	padding: 0px 10px;
@@ -70,12 +62,10 @@ div{
 	color: white;
 	text-align: center;
 }
-
 #modal #reportContents {
 	width: 350px;
 	height: 200px;
 }
-
 label {
 	text-align: center;
 	padding: 0;
@@ -83,12 +73,12 @@ label {
 	height: 100%;
 	cursor: pointer;
 	float: left;
-	font-size: 16px;
+	font-size: 12px;
 	font-weight: bold;
 	line-height: 30px;
 	/* border-right: 1px solid #ccc; */
 	color: rgb(30, 57, 50);
-	background-color: #ccc;
+	background-color: white;
 	
 }
 #radio{
@@ -99,18 +89,17 @@ label {
 	height: 100%;
 	
 	float: left;
-	font-size: 16px;
+	font-size: 12px;
 	font-weight: bold;
 	line-height: 30px;
 	/* border-right: 1px solid #ccc; */
-	color: #ccc;
+	color: white;
 	background-color: rgb(58, 66, 74);
 }
 input[name="login_type"] {
 	display: none;
 	
 }
-
 h1 {
 	margin-top: 0px; 
 	font-size : 2em;
@@ -118,7 +107,6 @@ h1 {
 	margin-left: 720px;
 	font-size: 2em;
 }
-
 h1 a {
 	margin-rigth: 200px;
 	text-align: left;
@@ -129,7 +117,6 @@ h1 a {
 	position: absolute;
 	color: rgb(0, 74, 38);
 }
-
 #lnb_subtitle {
 	display: flex;
 	font-size: 14px;
@@ -138,142 +125,103 @@ h1 a {
 	position: absolute;
 	margin-left: 95px;
 }
-
-
+#main_1 {
+	magin: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 700px;
+	background-color: rgb(245,245,245);
+}
+#main_2 {
+	magin: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 50%;
+	background-color: rgb(245,245,245);
+/* 	background-image: url("/resources/img/mainimg.jpg");
+	background-repeat: no-repeat;
+	background-size: 100% 100%; */
+}
+.form_1{
+	top: 130px;
+	position: relative;
+}
+form{
+  /*   background-color: rgba(169, 191, 159, 0.72); */
+  		background-color: rgb(245,245,245);
+}
+html, body, div {
+	margin: -1;
+	padding: -1;
+}
 .login_form {
 	
-	border: 1px solid black; 
-	/* height: 400px;
-	width: 600px; */
-	/* position: relative; */
-	/* bottom: 180px;
-	left: 450px; */
-	background-color: #ccc;
+	/* border: 1px solid black; */
+	height: 100px;
+	width: 400px;
+	position: relative;
+	bottom: 230px;
+	left: 670px;
+	background-color: white;
+	border-top-left-radius: 25px; 
+	border-top-right-radius: 25px;
+	border-bottom-left-radius: 25px; 
+	border-bottom-right-radius: 25px;
 }
-
 .login_form1 {
-	width: 100%;
-	height: 10%;
+	width: 400px;
+	height: 30px;
+	position:relative;
+	left: 670px;
+	bottom: 200px;
+	
 }
-
 .login_form1_1 {
 	width: 33%;
-	border-right: 0.5px solid #ccc; 
 }
-
 .login_form1_2 {
 	width: 33.8%;
-	border-right: 0.5px solid #ccc;
 }
-
 .login_form1_3 {
 	width: 33%;	
 }
-
 .login_form2 {
 	width: 100%;
 	height: 80%;
+	margin-top: 50px;
+	left: 100px;
+	position: relative;
 }
 .type00{
 	margin-top: 50px;
 }
-
-table input {
-	width: 300px;
-	height: 30px;
-	text-align: center;
-}
-
 .logoTitle {
-	top: 50px;
+	top: 150px;
 	position: relative;
-	height: 300px;
 }
-#main_1{
-	width: 100%;
-	height: 100%;
-	
+#info{
+	position:relative;
+	top: 10px;
+	width: 200px;
+	height: 25px;
+	text-align: center;
+	border: 1px solid green;
+ 	 border-radius: 12.5px;
 }
+#login_btn{
+	width: 200px;
+	height: 35px;
+	top:30px;
+	position: relative;
+	left:103px;
+}
+#pass_btn{
+	position: relative;
+	top:50px;
+}
+input:focus {outline: 2px solid green;}
 </style>
-
-</head>
-<body>
-			<div id="main_1">
-			<div class="logoTitle">
-				<h1>
-					<img src="../resources/img/logo.png" style="width: 80px; height: 80px;">
-					<a href="../main.kh">
-						<span id="lnb_title">대일대학교1</span>
-					</a>
-						<span id="lnb_subtitle">DAILE UNIVERSITY</span>
-				</h1>
-			</div>
-		
-			<div class="login_form">
-				<form action="/login/login.kh" method="post" >
-
-				<div class="login_form1">
-					<label id="" class="login_form1_1">
-						<input type="radio" name="login_type" value="student" checked="checked">학생 
-					</label>
-					<label id="radio" class="login_form1_2">
-						<input type="radio" name="login_type" value="professor">교수 
-					</label>
-					<label id="radio" class="login_form1_3">
-						<input type="radio" name="login_type" value="manager">관리자
-					</label>
-				</div>
-
-				
-					<table class="type00" align="center">
-						<tr>
-							<td></td>
-						</tr>
-						<tr>
-							<td><input type="text" name="user-id"></td>
-						</tr>
-						<tr>
-							<td><input type="password" name="user-pwd"></td>
-						</tr>
-						<tr>
-							<td><input type="submit" value="로그인"></td>
-						</tr>
-						<tr>
-							<td><input type="button" value="비밀번호 찾기" class="btn-modal"></td>
-						</tr>
-					</table>
-					</form>
-				</div>
-			</div>
-
-		
-
-<%-- <!-- footer -->
-	<jsp:include page="../common/footer.jsp"></jsp:include> --%>	
-
-
-	<!-- 모달 영역 -->
-	<div id="modal" class="modal-overlay">
-		<div class="modal-window">
-			<div class="close-area">X</div>
-			<div class="content">
-				<p id="check" style="display: none; color: red;">정확한 정보를 입력해주세요</p>
-				<input type="radio" name="type" value="student" checked="checked">학생
-				<input type="radio" name="type" value="professor">교수 <input
-					type="radio" name="type" value="manager">관리자
-
-				<p>학번을 입력해주세요</p>
-				<input type="text" id="user-no">
-				<p>이름을 입력해주세요</p>
-				<input type="text" id="user-name">
-				<p>휴대폰 번호를 입력해주세요</p>
-				<input type="text" id="user-phone"> <br> <br> <br>
-				<button id="findPwd">OK</button>
-			</div>
-		</div>
-	</div>
-	
-	<script>
+<script>
 window.onload = function(){
 	const modal = document.getElementById("modal");
 	function modalOn() {
@@ -353,9 +301,72 @@ window.onload = function(){
 				label[2].setAttribute("id", "");
 			}
 	});
-
 }
 </script>
-	
+</head>
+<body>
+	<div class="lnb" id="main_1">
+		<div id="main_2">
+			<div class="logoTitle">
+				<h1>
+					<img src="../resources/img/logo.png" style="width: 80px; height: 80px;">
+					<a href="../main.kh">
+						<span id="lnb_title">대일대학교1</span>
+					</a>
+						<span id="lnb_subtitle">DAILE UNIVERSITY</span>
+				</h1>
+			</div>
+		</div>
+		<div class="form_1">
+		<form action="/login/login.kh" method="post" >
+
+				<div class="login_form1">
+					<label id="" class="login_form1_1">
+						<input type="radio" name="login_type" value="student" checked="checked">학생 
+					</label>
+					<label id="radio" class="login_form1_2">
+						<input type="radio" name="login_type" value="professor">교수 
+					</label>
+					<label id="radio" class="login_form1_3">
+						<input type="radio" name="login_type" value="manager">관리자
+					</label>
+				</div>
+
+			<div class="login_form">
+				<div class="login_form2" >
+						<input type="text" name="user-id" id="info" placeholder="아이디를 입력해주세요."><br><br>
+						<input type="password" name="user-pwd" id="info" placeholder="비밀번호를 입력해주세요."><br>
+				</div>
+						<input id="login_btn" type="submit" value="로그인">
+						<input id="pass_btn" type="button" value="비밀번호 찾기" class="btn-modal">
+			</div>
+		</form>
+		</div>
+	</div>
+
+<!-- footer -->
+	<jsp:include page="../common/footer.jsp"></jsp:include>	
+
+
+	<!-- 모달 영역 -->
+	<div id="modal" class="modal-overlay">
+		<div class="modal-window">
+			<div class="close-area">X</div>
+			<div class="content">
+				<p id="check" style="display: none; color: red;">정확한 정보를 입력해주세요</p>
+				<input type="radio" name="type" value="student" checked="checked">학생
+				<input type="radio" name="type" value="professor">교수 <input
+					type="radio" name="type" value="manager">관리자
+
+				<p>학번을 입력해주세요</p>
+				<input type="text" id="user-no">
+				<p>이름을 입력해주세요</p>
+				<input type="text" id="user-name">
+				<p>휴대폰 번호를 입력해주세요</p>
+				<input type="text" id="user-phone"> <br> <br> <br>
+				<button id="findPwd">OK</button>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

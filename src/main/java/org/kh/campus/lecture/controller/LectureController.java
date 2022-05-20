@@ -44,7 +44,7 @@ public class LectureController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/lecture/list2.kh", method = RequestMethod.GET , produces="application/json;charset=utf-8" )
+	@RequestMapping(value = "/lecture/list2.kh", method = RequestMethod.GET ,produces="application/json;charset=utf-8" )
 	public String enrollListView2(@RequestParam(value = "lecturedep", required = false) String lectureDepartment) {
 		try {
 			if(lectureDepartment.contentEquals("1")) {
@@ -57,8 +57,10 @@ public class LectureController {
 				lectureDepartment = "중국어학과";
 			} else if(lectureDepartment.contentEquals("5")) {
 				lectureDepartment = "유비쿼터스학과";
-			} else {
+			} else if(lectureDepartment.contentEquals("6")){
 				lectureDepartment = "국어국문학과";
+			} else {
+				lectureDepartment = "전체";
 			}
 			List<Lecture> lList = lService.printAlllecture2(lectureDepartment);
 			if (!lList.isEmpty()) {
@@ -90,10 +92,10 @@ public class LectureController {
 	// 셀렉트박스
 	@ResponseBody
 	@RequestMapping(value="/lecture/selectProfessor", method =RequestMethod.GET, produces = "application/json;charset=utf-8")
-	public String lectureProList(@RequestParam("universityName") String universityName) {
-		List<Professor> pList = lService.printAllProName(universityName);
-		  
-		  if (!pList.isEmpty()) { 
+	public String lectureProList(@RequestParam("lectureDepartment") String lectureDepartment) {
+		List<Professor> pList = lService.printAllProName(lectureDepartment);
+		 
+		if (!pList.isEmpty()) { 
 			 Gson gson = new Gson();
 			 return gson.toJson(pList);
 		  }
@@ -115,19 +117,26 @@ public class LectureController {
 		}
 	}
 	// 강의 수정 페이지
-	@RequestMapping(value = "/lecture/modifyView.kh", method = RequestMethod.GET)
-	public String lectureModify(Model model, 
-			@RequestParam("lectureNo") int lectureNo) {
-		Lecture lecture = lService.printOneLecture(lectureNo);
-		if(lecture != null ) {
-			model.addAttribute("lecture", lecture );
-			model.addAttribute("menu", "lecture");
-			return "lecture/lectureUpdateView";
-		}else {
-			model.addAttribute("msg", "과목 수정 실패");
-			return "common/errorPage";
+		@RequestMapping(value = "/lecture/modifyView.kh", method = RequestMethod.GET)
+		public ModelAndView lectureModify(ModelAndView mv, @RequestParam("lectureNo") int lectureNo) {
+			try {
+				Lecture lecture = lService.printOneLecture(lectureNo);
+				if(lecture != null ) {
+					List<Professor> pList = lService.PrintAllUni();
+					mv.addObject("pList", pList);
+					mv.addObject("lecture", lecture);
+					mv.addObject("menu", "lecture");
+					mv.setViewName("lecture/lectureUpdateView");
+				}else {
+					System.out.println("데이터 없음");
+				}
+				
+			} catch (Exception e) {
+				System.out.println(e.toString());
+			}
+			return mv;
 		}
-	}
+		
 	
 	//강의 수 정 실 행
 	@RequestMapping(value="/lecture/update.kh", method=RequestMethod.POST)

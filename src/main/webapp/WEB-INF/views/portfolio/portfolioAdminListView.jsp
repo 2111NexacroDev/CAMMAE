@@ -96,12 +96,11 @@ td a{
 										<th>작성자</th>
 										<th>학번</th>
 										<th>학과명</th>
-										<th>전화번호</th>
 										<th>자격증첨부</th>
 										<th>수상이력첨부</th>
 										<th>작성날짜</th>
-										<th>내용</th>
-										<th>단과대학</th>
+										
+										
 									</tr>
 								</thead>
 								<tbody>
@@ -116,12 +115,11 @@ td a{
 											<td class="ta" id="writer">${portfolio.port_name}</td>
 											<td class="ta" id="stu_number">${portfolio.port_student_no}</td>
 											<td class="ta" id="college">${portfolio.port_college}</td>
-											<td class="ta" id="stu_phonenumber">${portfolio.port_student_number}</td>
 											<td class="ta" id="license">${portfolio.port_license}</td>
 											<td class="ta" id="award_history">${portfolio.port_award_history}</td>
 											<td class="ta" id="writeDate">${portfolio.port_writerDate}</td>
-											<td>${portfolio.port_content}</td>	
-											<td class="ta" id="univ_code">${portfolio.port_university_code }</td>	
+										
+											
 										</tr>
 									</c:forEach>
 								</tbody>

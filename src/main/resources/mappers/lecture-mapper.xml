@@ -21,9 +21,9 @@
 	
 	<select id="selectAllLecture" resultMap="lectureResultMap" parameterType="String">
 	SELECT * FROM LECTURE_TBL
- 		<if test="lectureDepartment!=null">
+ 		<!-- <if test="lectureDepartment!=null">
  			WHERE LECTURE_DEPARTMENT = #{lectureDepartment}
- 		</if>
+ 		</if> -->
 	</select>
 	
 	<select id="selectAllLecture2" resultMap="lectureResultMap" parameterType="String">

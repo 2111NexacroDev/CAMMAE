@@ -15,6 +15,10 @@
 		<result property="marketDate" column="MARKET_DATE"></result>
 		<result property="marketUpdateDate" column="MARKET_UPDATEDATE"></result>
 		<result property="marketCount" column="MARKET_COUNT"></result>
+		<result property="marketFileName" column="MARKET_FILENAME"></result>
+		<result property="marketFileReName" column="MARKET_FILERENAME"></result>
+		<result property="marketFilePath" column="MARKET_FILEPATH"></result>
+		
 	</resultMap>
 
 	<select id="selectAllMarket" resultMap="marketResultMap">
@@ -96,7 +100,7 @@
 	<insert id="insertMarket">
 		INSERT INTO MARKET_TBL VALUES(SEQ_MARKET_NO.NEXTVAL,
 		#{marketType}, #{marketGoods}, #{marketPrice}, #{marketTitle},
-		#{marketContent},#{marketId}, #{marketWriter}, DEFAULT, DEFAULT,DEFAULT)
+		#{marketContent},#{marketId}, #{marketWriter}, DEFAULT, DEFAULT,DEFAULT ,#{marketFileName}, #{marketFileReName},#{marketFilePath})
 	</insert>
 
 	<update id="updateCount">
@@ -110,7 +114,7 @@
 		MARKET_GOODS = #{marketGoods}, MARKET_PRICE = #{marketPrice},
 		MARKET_TITLE =
 		#{marketTitle}, MARKET_CONTENT = #{marketContent},
-		MARKET_UPDATEDATE = DEFAULT WHERE MARKET_NO =
+		MARKET_UPDATEDATE = DEFAULT, MARKET_FILENAME = #{marketFileName},MARKET_FILERENAME = #{marketFileReName},MARKET_FILEPATH = #{marketFilePath}  WHERE MARKET_NO =
 		#{marketNo}
 	</update>
 

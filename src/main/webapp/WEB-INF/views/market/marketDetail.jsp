@@ -87,19 +87,37 @@ hr {
 	margin-bottom: 10px
 }
 
-#rMarketWriter {
-	width: 80%;
-	float: left;
+#summary {
+	height: 250px;
+	width: 100%;
 }
 
-#rMarketDate {
-	width: 20%;
+#sImg {
 	float: left;
+	width: 45%;
+	height: 250px;
 }
 
-#rMarketContent {
-	width: 80%;
-	float: left;
+#sDetail {
+	float: right;
+	font-size: 18px;
+	width: 50%;
+	height: 250px;
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-top: 20px;
+}
+
+#headImg {
+	width: 100%;
+	height: 100%;
+	width: 100%;
+	/* border: 1px solid #ccc; */
+}
+
+img {
+	max-height: 100%;
+	max-width: 100%;
 }
 </style>
 </head>
@@ -147,11 +165,34 @@ hr {
 					</div>
 
 					<hr>
+					<div id="summary">
+						<div id="sImg">
+							<div id="headImg">
+								<c:if test="${not empty market.marketFileReName }">
+									<img
+										src="/resources/marketuploadFiles/${market.marketFileReName }">
 
-					<div id="mGoods">상품명 &emsp;${market.marketGoods }</div>
-					<div id="mPrice">판매가격 ${market.marketPrice } 원</div>
-					<div>
-						<button class="btn" onclick="chatOpen();">판매자와 채팅하기</button>
+								</c:if>
+							</div>
+						</div>
+						<div id="sDetail">
+							<div id="mGoods">
+								<b>상품명</b>&emsp;&emsp;${market.marketGoods }
+							</div>
+							<br>
+							<div id="mPrice">
+								<b>판매가격</b>&emsp;${market.marketPrice } <b>원</b>
+							</div>
+							<br>
+							<div>
+								<c:url var="cRoom" value="/chat.kh">
+									<c:param name="marketNo" value="${market.marketNo }"></c:param>
+								</c:url>
+								<a href="${cRoom }"
+									onclick="window.open(this.href, '_blank','width=400, height=500, left=100, top=50'); return false;"><button
+										class="btn">판매자와 채팅하기</button></a>
+							</div>
+						</div>
 					</div>
 
 					<div class="content" style="padding: 10px;">
@@ -186,11 +227,11 @@ hr {
 
 
 	<script>
-		function chatOpen() {
-			window.open("/chat.kh", "marketChat",
-					"width=400, height=600, left=100, top=50");
+		/* 	function chatOpen() {
+				window.open("/chat.kh", "marketChat",
+						"width=400, height=600, left=100, top=50");
 
-		}
+			} */
 	</script>
 
 	<!-- 댓글동작  -->
@@ -232,7 +273,8 @@ hr {
 			var marketNo = $("#marketNo").val();
 			var rWriter = "${loginUser.studentName}";
 			var rWriterId = "${loginUser.studentNo}";
-			$.ajax({
+			$
+					.ajax({
 						url : "/market/replyList",
 						type : "get",
 						data : {
@@ -273,7 +315,8 @@ hr {
 								$tr.append($rWriter);
 								$tr.append($rDate);
 								$tr2.append($rContent);
-								if (data[i].mReplyId == rWriterId && data[i].mReplyWriter == rWriter) {
+								if (data[i].mReplyId == rWriterId
+										&& data[i].mReplyWriter == rWriter) {
 									$tr2.append($btnArea);
 								}
 
@@ -318,8 +361,8 @@ hr {
 			var $tdModifyBtn = $("<td width='10%'>");
 			$tdModify
 					.append("<input type='text' size='86' value='"+mReplyContent+"' id='modifyData'>");
-			$tdModifyBtn.append("<button class='btn' onclick='modifyReply(" + marketNo
-					+ "," + marketReplyNo + ");'>수정</button>");
+			$tdModifyBtn.append("<button class='btn' onclick='modifyReply("
+					+ marketNo + "," + marketReplyNo + ");'>수정</button>");
 			$trModify.append($tdModify);
 			$trModify.append($tdModifyBtn);
 			$(obj).parent().parent().after($trModify);
@@ -346,7 +389,7 @@ hr {
 					alert("ajax 실패")
 				}
 			});
-		}// 댓글 수정 커밋(css)
+		}
 	</script>
 </body>
 </html>

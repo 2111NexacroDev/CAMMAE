@@ -1,6 +1,8 @@
 package org.kh.campus.login.controller;
 
 import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.kh.campus.login.service.LoginService;
 import org.kh.campus.manager.domain.Manager;
@@ -34,6 +36,7 @@ public class LoginController {
 	// 타입에 따라 로그인
 	@RequestMapping(value="/login/login.kh", method=RequestMethod.POST)
 	public ModelAndView login(ModelAndView mv
+			, HttpServletRequest request
 			, HttpSession session
 			, @RequestParam("user-id") int id
 			, @RequestParam("user-pwd") String pw

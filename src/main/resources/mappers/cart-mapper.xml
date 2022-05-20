@@ -66,6 +66,7 @@
 		, #{lectureNo}
 		, DEFAULT
 		, '1학기'
+		, #{lecturePeople}
  )	
 	</insert>
 	
@@ -85,9 +86,9 @@ FROM CART_TBL  JOIN  LECTURE_TBL
  	
  	<select id="selectAllEnroll" resultMap="lectureResultMap" parameterType="String"> 
  		SELECT * FROM LECTURE_TBL
- 		<if test="lectureDepartment!=null">
+ 		<!-- <if test="lectureDepartment!=null">
  			WHERE LECTURE_DEPARTMENT = #{lectureDepartment}
- 		</if>
+ 		</if> -->
  	</select> 
  	
  	<select id="selectAllEnroll2" resultMap="lectureResultMap" parameterType="String"> 

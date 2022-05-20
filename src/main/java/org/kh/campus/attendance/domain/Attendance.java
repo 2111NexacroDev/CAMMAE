@@ -6,17 +6,48 @@ public class Attendance {
 	private String attDate;
 	private String attStatus;
 	private String attObjection;
+	private String lectureName;
+	private String studentName;
 	
 	public Attendance() {}
 
-	public Attendance(int studentNo, int lectureNo, String attDate, String attStatus, String attObjection) {
+
+
+	public Attendance(int studentNo, int lectureNo, String attDate, String attStatus, String attObjection,
+			String lectureName, String studentName) {
 		super();
 		this.studentNo = studentNo;
 		this.lectureNo = lectureNo;
 		this.attDate = attDate;
 		this.attStatus = attStatus;
 		this.attObjection = attObjection;
+		this.lectureName = lectureName;
+		this.studentName = studentName;
 	}
+
+
+
+	public Attendance(String lectureName) {
+		this.lectureName = lectureName;
+	}
+
+	public Attendance(String studentName, String lectureName, int lectureNo, int studentNo, String attStatus) {
+		super();
+		this.studentNo = studentNo;
+		this.lectureNo = lectureNo;
+		this.lectureName = lectureName;
+		this.studentName = studentName;
+		this.attStatus = attStatus;
+	}
+
+
+
+	public Attendance(int lectureNo, int studentNo) {
+		this.studentNo = studentNo;
+		this.lectureNo = lectureNo;
+	}
+
+
 
 	public int getStudentNo() {
 		return studentNo;
@@ -58,11 +89,40 @@ public class Attendance {
 		this.attObjection = attObjection;
 	}
 
+	
+	public String getLectureName() {
+		return lectureName;
+	}
+
+	public void setLectureName(String lectureName) {
+		this.lectureName = lectureName;
+	}
+
+	
+	
+	
+	public String getStudentName() {
+		return studentName;
+	}
+
+
+
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
+	}
+
+
+
 	@Override
 	public String toString() {
 		return "Attendance [studentNo=" + studentNo + ", lectureNo=" + lectureNo + ", attDate=" + attDate
-				+ ", attStatus=" + attStatus + ", attObjection=" + attObjection + "]";
+				+ ", attStatus=" + attStatus + ", attObjection=" + attObjection + ", lectureName=" + lectureName
+				+ ", studentName=" + studentName + "]";
 	}
 
+
+
+
+	
 	
 }

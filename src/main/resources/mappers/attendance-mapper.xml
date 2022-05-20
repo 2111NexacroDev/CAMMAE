@@ -9,6 +9,60 @@
   	<result property="attDate" column="ATT_DATE"/>
   	<result property="attStatus" column="ATT_STATUS"/>
   	<result property="attObjection" column="ATT_OBJECTION"/>
+  	<result property="lectureName" column="GRADE_SUBJECT"/>
+  	<result property="studentName" column="STUDENT_NAME"/>
+  	</resultMap>
+  	
+  	<resultMap type="Attendance" id="AttendanceResultMap2">
+  	<id property="studentNo" column="STUDENT_NO"></id>
+  	<result property="lectureNo" column="LECTURE_NO"/>
+  	<result property="attDate" column="ATT_DATE"/>
+  	<result property="attStatus" column="ATT_STATUS"/>
+  	<result property="attObjection" column="ATT_OBJECTION"/>
+  	<result property="lectureName" column="GRADE_SUBJECT"/>
+  	<result property="studentName" column="ATT_STUDENT_NAME"/>
   	</resultMap>
   	 
+  	 
+  	 
+  	 <select id="selectAttStudent" resultMap="AttendanceResultMap">
+	 SELECT * FROM GRADE_TBL  WHERE STUDENT_NO = #{studentNo} AND GRADE_YEAR = #{year} AND GRADE_SESSION = #{season}
+	  </select>
+	  
+  	<select id="selectAttProf" resultMap = "AttendanceResultMap">
+  	SELECT * FROM LECTURE_TBL L
+  	JOIN GRADE_TBL G ON
+  	(L.LECTURE_NO = G.LECTURE_NO AND G.PROFESSOR_NO = #{professorNo})
+  	</select>
+  	
+  	<select id="selectAttProfSearchStu" resultMap="AttendanceResultMap">
+  	SELECT * FROM STUDENT_TBL S
+  	JOIN GRADE_TBL G ON
+  	(S.PROFESSOR_NO = #{professorNo} AND STUDENT_STATE = '재학' AND GRADE_SUBJECT = #{lectureName})
+  	
+  	</select>
+  	
+  	<insert id="insertAttendance">
+  	 INSERT INTO ATTENDANCE_TBL VALUES(#{studentNo}, #{lectureNo}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), #{attStatus},'N', #{lectureName}, #{studentName})
+  	</insert>
+  	
+  	
+  	<select id="selectAttendanceStuInfo" resultMap= "AttendanceResultMap">
+  	 SELECT * FROM ATTENDANCE_TBL WHERE STUDENT_NO  = #{studentNo} AND LECTURE_NAME = #{lectureName}
+  	</select>
+  	
+  	<select id="selectAttProfIssue" resultMap= "AttendanceResultMap2">
+  	SELECT * FROM ATTENDANCE_TBL A
+	JOIN GRADE_TBL P ON
+	(P.LECTURE_NO = A.LECTURE_NO AND  P.PROFESSOR_NO = #{professorNo} AND ATT_OBJECTION = 'Y' )
+  	
+  	</select>
+  	
+  	<update id="updateObjectChange">
+  	UPDATE ATTENDANCE_TBL SET ATT_OBJECTION = 'Y'
+  	WHERE LECTURE_NO = #{lectureNo} AND STUDENT_NO = #{studentNo}
+  	
+  	</update>
     </mapper>
+    
+    

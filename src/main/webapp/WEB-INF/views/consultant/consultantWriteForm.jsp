@@ -54,8 +54,10 @@ button { cursor:pointer; }
 			<!-- contents-main -->
 			<div id="center">
 				<form action="/consultant/register.kh" method="post">
-					<h3 id="b-title">상담관리</h3>
-					<br>
+					<div class="c-title">
+						<h2 id="b-title">상담관리</h2>
+					</div>
+					<br><br>
 					<div id="c-main" style="width: 800px; height: 800px;">
 					<table>
 					<tr>

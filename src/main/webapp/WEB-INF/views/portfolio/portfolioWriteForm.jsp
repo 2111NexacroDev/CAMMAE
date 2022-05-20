@@ -47,11 +47,15 @@ table td {
 			</div>
 			<!-- contents-main -->
 			<div id="center">
-				<h3 id="b-title">포트폴리오 게시판</h3>
-				<br>
+				
 				<div>
 					<form action="/portfolio/register.kh" method="post"
 						enctype="multipart/form-data">
+
+						<div class="c-title">
+							<h2 id="b-title">포트폴리오 게시판</h2>
+						</div>
+						<br><br>
 
 						<table>
 							<tr>

@@ -7,6 +7,11 @@ import org.kh.campus.graduation.domain.Graduation;
 
 public interface GraduationStore {
 
-	List<Graduation> selectPrintStu(SqlSession sqlSession, Graduation graduation);
+
+	int insertGraduation(SqlSession sqlSession, Graduation graduation);
+
+	List<Graduation> selectGraduResult(SqlSession sqlSession, Graduation graduation);
+
+	int updateGraduationAccept(SqlSession sqlSession, Graduation graduation);
 
 }
