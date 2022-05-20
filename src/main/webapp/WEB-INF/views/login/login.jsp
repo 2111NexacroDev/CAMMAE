@@ -38,18 +38,15 @@
 	top: 50px;
 	padding: 10px;
 }
-
 #modal .title {
 	padding-left: 10px;
 	display: inline;
 	text-shadow: 1px 1px 2px gray;
 	color: white;
 }
-
 #modal .title h2 {
 	display: inline;
 }
-
 #modal .close-area {
 	display: inline;
 	float: right;
@@ -58,7 +55,6 @@
 	text-shadow: 1px 1px 2px gray;
 	color: white;
 }
-
 #modal .content {
 	margin-top: 20px;
 	padding: 0px 10px;
@@ -66,12 +62,10 @@
 	color: white;
 	text-align: center;
 }
-
 #modal #reportContents {
 	width: 350px;
 	height: 200px;
 }
-
 label {
 	text-align: center;
 	padding: 0;
@@ -106,7 +100,6 @@ input[name="login_type"] {
 	display: none;
 	
 }
-
 h1 {
 	margin-top: 0px; 
 	font-size : 2em;
@@ -114,7 +107,6 @@ h1 {
 	margin-left: 720px;
 	font-size: 2em;
 }
-
 h1 a {
 	margin-rigth: 200px;
 	text-align: left;
@@ -125,7 +117,6 @@ h1 a {
 	position: absolute;
 	color: rgb(0, 74, 38);
 }
-
 #lnb_subtitle {
 	display: flex;
 	font-size: 14px;
@@ -134,7 +125,6 @@ h1 a {
 	position: absolute;
 	margin-left: 95px;
 }
-
 #main_1 {
 	magin: 0px;
 	padding: 0px;
@@ -142,7 +132,6 @@ h1 a {
 	height: 700px;
 	background-color: rgb(245,245,245);
 }
-
 #main_2 {
 	magin: 0px;
 	padding: 0px;
@@ -165,7 +154,6 @@ html, body, div {
 	margin: -1;
 	padding: -1;
 }
-
 .login_form {
 	
 	/* border: 1px solid black; */
@@ -180,7 +168,6 @@ html, body, div {
 	border-bottom-left-radius: 25px; 
 	border-bottom-right-radius: 25px;
 }
-
 .login_form1 {
 	width: 400px;
 	height: 30px;
@@ -189,19 +176,15 @@ html, body, div {
 	bottom: 200px;
 	
 }
-
 .login_form1_1 {
 	width: 33%;
 }
-
 .login_form1_2 {
 	width: 33.8%;
 }
-
 .login_form1_3 {
 	width: 33%;	
 }
-
 .login_form2 {
 	width: 100%;
 	height: 80%;
@@ -212,12 +195,10 @@ html, body, div {
 .type00{
 	margin-top: 50px;
 }
-
 .logoTitle {
 	top: 150px;
 	position: relative;
 }
-
 #info{
 	position:relative;
 	top: 10px;
@@ -320,7 +301,6 @@ window.onload = function(){
 				label[2].setAttribute("id", "");
 			}
 	});
-
 }
 </script>
 </head>
