@@ -78,7 +78,7 @@ label {
 	line-height: 30px;
 	/* border-right: 1px solid #ccc; */
 	color: rgb(30, 57, 50);
-	background-color: white;
+	background-color: rgba(16, 65, 44, 0.5);
 	
 }
 #radio{
@@ -94,7 +94,7 @@ label {
 	line-height: 30px;
 	/* border-right: 1px solid #ccc; */
 	color: white;
-	background-color: rgb(58, 66, 74);
+	background-color: rgba(16, 65, 44, 0.2);
 }
 input[name="login_type"] {
 	display: none;
@@ -129,7 +129,7 @@ h1 a {
 	magin: 0px;
 	padding: 0px;
 	width: 100%;
-	height: 700px;
+	height: 773px;
 	background-color: rgb(245,245,245);
 }
 #main_2 {
@@ -151,8 +151,8 @@ form{
   		background-color: rgb(245,245,245);
 }
 html, body, div {
-	margin: -1;
-	padding: -1;
+	margin: 0;
+	padding: 0;
 }
 .login_form {
 	
@@ -162,7 +162,7 @@ html, body, div {
 	position: relative;
 	bottom: 230px;
 	left: 670px;
-	background-color: white;
+	background-color: rgba(240,240,240,0.7);
 	border-top-left-radius: 25px; 
 	border-top-right-radius: 25px;
 	border-bottom-left-radius: 25px; 
@@ -174,16 +174,19 @@ html, body, div {
 	position:relative;
 	left: 670px;
 	bottom: 200px;
-	
 }
 .login_form1_1 {
 	width: 33%;
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
 }
 .login_form1_2 {
 	width: 33.8%;
 }
 .login_form1_3 {
 	width: 33%;	
+	border-top-right-radius: 15px;
+	border-bottom-right-radius: 15px;
 }
 .login_form2 {
 	width: 100%;
@@ -205,21 +208,56 @@ html, body, div {
 	width: 200px;
 	height: 25px;
 	text-align: center;
-	border: 1px solid green;
- 	 border-radius: 12.5px;
+	border: 1px solid #10412C;
+ 	border-radius: 12.5px;
 }
 #login_btn{
-	width: 200px;
+	width: 400px;
 	height: 35px;
 	top:30px;
 	position: relative;
-	left:103px;
+	border: 0px;
+	background-color: #10412C;
+	color: white;
+	cursor: pointer;
+	font-weight: bold;
+	border-bottom-left-radius: 17.5px;
+	border-top-left-radius: 17.5px;
+	border-bottom-right-radius: 17.5px;
+	border-top-right-radius: 17.5px;
 }
+
 #pass_btn{
-	position: relative;
+	width: 200px;
+	height: 35px;
 	top:50px;
+	position: relative;
+	left:103px;
+	background-color: rgb(245,245,245);
+	border: 0px;
+	outline: none;
+	cursor: pointer;
+	color: #727272;
+	font-weight: 400;
 }
-input:focus {outline: 2px solid green;}
+footer div {
+	font-size: 12px;
+	text-align: center;
+}
+
+#footer_tit {
+	position: relative;
+	width: 500px;
+	right: 47px;
+}
+#footer_bottom {
+	position: relative;
+	top: 5px;
+}
+#fot {
+	color: #005eb5;
+}
+input:focus {outline: 1px solid #10412C;}
 </style>
 <script>
 window.onload = function(){
@@ -311,7 +349,7 @@ window.onload = function(){
 				<h1>
 					<img src="../resources/img/logo.png" style="width: 80px; height: 80px;">
 					<a href="../main.kh">
-						<span id="lnb_title">대일대학교1</span>
+						<span id="lnb_title">대일대학교</span>
 					</a>
 						<span id="lnb_subtitle">DAILE UNIVERSITY</span>
 				</h1>
@@ -339,15 +377,22 @@ window.onload = function(){
 				</div>
 						<input id="login_btn" type="submit" value="로그인">
 						<input id="pass_btn" type="button" value="비밀번호 찾기" class="btn-modal">
+						<hr>
+						<br>
+						<br>
+						<footer>
+							<div id="footer_tit">
+								서울특별시 중구 남대문로 120 대일빌딩 2F, 3F (T:<span id="fot">1544-9970</span>) / F: 02-722-0858)
+							</div>
+							<div id="footer_bottom">
+								Copyright © 1998-2022 <span id="fot">DI University</span> AllRight Reserved
+							</div>
+						</footer>
 			</div>
 		</form>
 		</div>
 	</div>
-
-<!-- footer -->
-	<jsp:include page="../common/footer.jsp"></jsp:include>	
-
-
+	
 	<!-- 모달 영역 -->
 	<div id="modal" class="modal-overlay">
 		<div class="modal-window">
