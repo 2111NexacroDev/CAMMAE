@@ -162,7 +162,7 @@ public class ConsultantController {
 		Consultant consultant = cService.printAdminDetailCons(consultant_no);
 		if(consultant != null) {
 			model.addAttribute("consultant", consultant);
-			model.addAttribute("menu", "consultant");
+			model.addAttribute("menu1", "consultant1");
 			return "consultant/consultantAdminDetailView";		
 		}else {
 			model.addAttribute("msg", "관리자 상담 디테일 조회 실패");

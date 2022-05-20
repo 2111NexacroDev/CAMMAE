@@ -30,6 +30,10 @@ table td {
 .td_sub {
 	border: none;
 }
+
+.submit{
+	color:
+}
 </style>
 </head>
 <body>
@@ -120,7 +124,7 @@ table td {
 
 							<tr>
 								<td colspan="2" align="center" class="td_sub"><input
-									type="submit" value="등록" class="submit"></td>
+									type="submit" value="등록" class="btn" style="cursor:pointer;"></td>
 							</tr>
 
 						</table>

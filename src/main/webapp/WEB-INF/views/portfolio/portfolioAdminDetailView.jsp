@@ -7,48 +7,42 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="/resources/contents.css">
+<link rel="stylesheet" href="/resources/common.css">
 <style>
-.tb1{
-position: relative;
-border-top: 1px solid #ccc;
-font-size: 16px;
+table.type05 {
+	border-bottom: 1.5px solid rgb(30, 57, 50);
+	border-top: 1.5px solid rgb(30, 57, 50);
+	border-collapse: collapse;
+	text-align: left;
+	line-height: 1.5;
+	margin-top: 10px;
+	width: 800px;
 }
 
-.tb1 table{
-position: relative;
-border-top: 1px solid #fff;
-width: 100%;
-}
-colgroup {
-    display: table-column-group;
-}
-tbody {
-    display: table-row-group;
-    vertical-align: middle;
-    border-color: inherit;
-}
-tr {
-    display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;
-}
-.tb1 table tbody th {
-    padding: 17px 12px;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    color: white;
-    background: #10412C;
+table.type05 thead {
+	background: rgb(231, 232, 226);
 }
 
-.tb1 table tbody td {
-    padding: 17px 12px;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    color: #000;
+table.type05 thead th {
+	padding: 10px;
+	vertical-align: top;
+	color: black;
+}
+
+.ta_l{
+	width: 15%;
+	background: rgb(231, 232, 226);
+	text-align: center;
+	font-weight: bold;
 }
 
 .ta_l {
     text-align: left !important;
+
+}
+td {
+	padding: 7px;
+	border-bottom: 1px solid #CCC;
 }
 
 
@@ -89,7 +83,7 @@ tr {
 				<input type="hidden" name="port_no" value="${portfolio.port_no}">
 					
 					<div class="tb1">
-					<table>
+					<table class="type05">
 						<colgroup>
 							<col style="width:180px;">
 							<col>
@@ -97,44 +91,44 @@ tr {
 						<tbody>
 							<tr>
 								<th scope="row" class="ta_l">제목</th>
-								<td class="ta_l">${portfolio.port_title}</td>
+								<td >${portfolio.port_title}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">이름</th>
-								<td class="ta_l">${portfolio.port_name}</td>
+								<td >${portfolio.port_name}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">학번</th>
-								<td class="ta_l">${portfolio.port_student_no}</td>
+								<td >${portfolio.port_student_no}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">학과명</th>
-								<td class="ta_l">${portfolio.port_college}</td>
+								<td >${portfolio.port_college}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">단과대학</th>
-								<td class="ta_l">${portfolio.port_university_code}</td>
+								<td>${portfolio.port_university_code}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">전화번호</th>
-								<td class="ta_l">${portfolio.port_student_number}</td>
+								<td >${portfolio.port_student_number}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">자격증 첨부</th>
-								<td class="ta_l"><a href="../../../resources/puploadFiles/${portfolio.port_licenseRename}" download>${portfolio.port_license}</a></td>
+								<td ><a href="../../../resources/puploadFiles/${portfolio.port_licenseRename}" download>${portfolio.port_license}</a></td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">수상이력 첨부</th>
-								<td class="ta_l"><a href="../../../resources/puploadFiles/${portfolio.port_award_historyRename}" download>${portfolio.port_award_history}</a></td>
+								<td ><a href="../../../resources/puploadFiles/${portfolio.port_award_historyRename}" download>${portfolio.port_award_history}</a></td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">작성날짜</th>
-								<td class="ta_l">${portfolio.port_writerDate}</td>
+								<td >${portfolio.port_writerDate}</td>
 							</tr>
 							
 							<tr>
 								<th scope="row" class="ta_l">내용</th>
-								<td class="ta_l">${portfolio.port_content}</td>
+								<td >${portfolio.port_content}</td>
 							</tr>
 						</tbody>
 					</table>
