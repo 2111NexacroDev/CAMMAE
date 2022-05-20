@@ -63,8 +63,8 @@
           <div id="content3">
               
                 <div id="submenu1">
-                    <div id="submenu1_1"><a href="#" style="color:white">수강신청</a></div>
-                    <div id="submenu1_2"><a href="#"><span class="material-icons" id="ico1" style="font-size:30px; color: rgba(255, 255, 255, 0.5);">arrow_right_alt</span> </a></div>
+                    <div id="submenu1_1"><a href="/cart/preCartListView.kh" style="color:white">수강신청</a></div>
+                    <div id="submenu1_2"><a href="/cart/preCartListView.kh"><span class="material-icons" id="ico1" style="font-size:30px; color: rgba(255, 255, 255, 0.5);">arrow_right_alt</span> </a></div>
                 </div>
                 
                 <div id="submenu2">
