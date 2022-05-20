@@ -183,6 +183,26 @@ public class AttendanceController {
 		return result;
 	}
 	 
+	   
+	   @RequestMapping(value = "attendance/prfIssueUpdate.kh", method = RequestMethod.POST)
+	   public NexacroResult updateStatus(
+	         @ParamDataSet(name = "in_profIssue") DataSet updateIssue) throws Exception {
+	      int nErrorCode = 0;
+	      String strErrorMsg = "START";
+	      NexacroResult result = new NexacroResult();
+
+	      int lectureNo = Integer.parseInt(dsGet(updateIssue, 0, "lectureNo"));
+	      int studentNo = Integer.parseInt(dsGet(updateIssue, 0, "studentNo"));
+	      String attStatus = dsGet(updateIssue, 0, "attStatus");
+	      Attendance attendance = new Attendance(lectureNo, studentNo, attStatus);
+
+	      aService.modifyStatusChange(attendance);
+
+	      result.addVariable("ErrorCode", nErrorCode);
+	      result.addVariable("ErrorMsg", strErrorMsg);
+
+	      return result;
+	   }
 	
 	public String dsGet(DataSet ds, int rowno, String colid) throws Exception {
 		String value;

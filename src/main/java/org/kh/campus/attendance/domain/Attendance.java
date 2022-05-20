@@ -49,6 +49,14 @@ public class Attendance {
 
 
 
+	public Attendance(int lectureNo, int studentNo, String attStatus) {
+		this.studentNo = studentNo;
+		this.lectureNo = lectureNo;
+		this.attStatus = attStatus;
+	}
+
+
+
 	public int getStudentNo() {
 		return studentNo;
 	}
