@@ -8,31 +8,53 @@
 <title>학생 포트폴리오 등록 페이지</title>
 <link rel="stylesheet" href="/resources/contents.css">
 <style>
-table {
+table.type05 {
+	border-top: 1.5px solid rgb(30, 57, 50);
 	border-collapse: collapse;
-	border-spacing: 0;
+	text-align: left;
+	line-height: 1.5;
+	margin-top: 10px;
+	width: 800px;
 }
 
-table td* {
-	vertical-align: middle;
+table.type05 thead {
+	background: rgb(231, 232, 226);
 }
 
-table td {
-	padding: 15px 5px;
-	border-bottom: 1px solid #c2c2c2;
-	font-size: 16px;
+table.type05 thead th {
+	padding: 10px;
+	vertical-align: top;
+	color: black;
 }
 
-.td-left {
-	width: 100px;
+td {
+	padding: 7px;
+	border-bottom: 1px solid #CCC;
+}
+
+.td_left {
+	width: 15%;
+	background: rgb(231, 232, 226);
+	text-align: center;
+	font-weight: bold;
 }
 
 .td_sub {
-	border: none;
+	border-bottom: none;
 }
 
-.submit{
-	color:
+#td_content {
+	
+	border-bottom: 1px solid rgb(30, 57, 50);
+}
+
+.btn {
+	margin-top: 30px;
+}
+
+button {
+	cursor: pointer;
+}
 }
 </style>
 </head>
@@ -51,17 +73,16 @@ table td {
 			</div>
 			<!-- contents-main -->
 			<div id="center">
-				
+
 				<div>
 					<form action="/portfolio/register.kh" method="post"
 						enctype="multipart/form-data">
-
 						<div class="c-title">
-							<h2 id="b-title">포트폴리오 게시판</h2>
+							<div class="b-title">
+								<h2>포트폴리오관리</h2>
+							</div>
 						</div>
-						<br><br>
-
-						<table>
+						<table class="type05">
 							<tr>
 
 								<td class="td_left">제목</td>
@@ -74,62 +95,46 @@ table td {
 								<td class="td_right"><input type="text" name="port_name"
 									value="${loginUser.studentName}"></td>
 							</tr>
-
 							<tr>
 								<td class="td_left">학번</td>
 								<td class="td_right"><input type="text"
 									name="port_student_no" value="${loginUser.studentNo}"></td>
 							</tr>
-
-
 							<tr>
 								<td class="td_left">단과대학</td>
 								<td class="td_right"><input type="text"
-									name="port_university_code" value="${loginUser.universityCollege}" /></td>
+									name="port_university_code"
+									value="${loginUser.universityCollege}" /></td>
 							</tr>
-							
 							<tr>
 								<td class="td_left">학과명</td>
 								<td class="td_right"><input type="text" name="port_college"
 									value="${loginUser.departmentName}"></td>
 							</tr>
-
 							<tr>
 								<td class="td_left">전화번호</td>
 								<td class="td_right"><input type="text"
 									name="port_student_number"
 									value="${loginUser.studentPhonenumber}"></td>
 							</tr>
-
 							<tr>
 								<td class="td_left">자격증 첨부</td>
 								<td class="td_right"><input type="file" name="uploadFile"
 									value="첨부파일" multiple="multiple"></td>
 							</tr>
-
-
 							<tr>
 								<td class="td_left">수상이력 첨부</td>
 								<td class="td_right"><input type="file" name="uploadFile1"
 									value="첨부파일" multiple="multiple"></td>
 							</tr>
-
-
-							
-
 							<tr>
-								<td class="td_left">내용</td>
-								<td class="td_right"><textarea name="port_content"></textarea></td>
+								<td class="td_left" id="td_content">내용</td>
+								<td class="td_right" id="td_content"><textarea name="port_content"></textarea></td>
 							</tr>
-
 							<tr>
-								<td colspan="2" align="center" class="td_sub"><input
-									type="submit" value="등록" class="btn" style="cursor:pointer;"></td>
+								<td colspan="2" align="center" class="td_sub"><button class="btn" type="submit">등록</button></td>
 							</tr>
-
 						</table>
-
-
 					</form>
 				</div>
 			</div>

@@ -62,7 +62,8 @@ public class ConsultantController {
 	
 	//학생 상담신청 등록
 	@RequestMapping(value="/consultant/writeView.kh", method=RequestMethod.GET)
-	public String consultantWriteView() {
+	public String consultantWriteView(Model model) {
+		model.addAttribute("menu", "consultant");
 		return "consultant/consultantWriteForm";
 		
 	}
@@ -81,7 +82,6 @@ public class ConsultantController {
 		Consultant studentOne = cService.printOneByStNo(studentNo);
 			if(studentOne != null) {
 			model.addAttribute("consultant", studentOne);
-			model.addAttribute("menu", "consultant");
 			return "redirect:/consultant/list.kh";	
 			}else {
 				model.addAttribute("msg", "등록실패");

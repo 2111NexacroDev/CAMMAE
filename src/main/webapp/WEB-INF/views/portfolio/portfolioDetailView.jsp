@@ -70,9 +70,17 @@ td {
 		<!-- contents-main -->
 		<div id="center">
 			<div class="c-title">
-					<h2 class="b-title">포트폴리오</h2>
-					</div>
-					<br><br>
+				<div class="b-title">
+					<h2>포트폴리오</h2>
+				</div>	
+			<div class="btn_1">
+				<a id="list_l"
+					href="/portfolio/updateView.kh?port_no=${portfolio.port_no}"><button  id="btn" class="btn">수정</button></a>
+				<a id="list_l"
+					href="/portfolio/delete.kh?port_no=${portfolio.port_no}"><button id="btn" class="btn">삭제</button></a>
+				<a href="/portfolio/listView.kh" id="list_l"><button id="btn" class="btn">목록</button></a>		
+			</div>		
+			</div>
 		<div class="bbs">
 			
 			<input type="hidden" name="port_no" value="${portfolio.port_no}" />
@@ -129,15 +137,6 @@ td {
 					</table>
 					<br>
 				</div>
-			<div class="list_btn">
-				<a id="list_l"
-					href="/portfolio/updateView.kh?port_no=${portfolio.port_no}"><button  id="btn" class="btn">수정</button></a>
-				<a id="list_l"
-					href="/portfolio/delete.kh?port_no=${portfolio.port_no}"><button id="btn" class="btn">삭제</button></a><br>
-			</div>
-			<div class="list_btn1">
-				<a href="/portfolio/listView.kh" id="list_l"><button id="btn" class="btn">목록</button></a>	
-			</div>
 		</div>
 	</div>
 </div>
