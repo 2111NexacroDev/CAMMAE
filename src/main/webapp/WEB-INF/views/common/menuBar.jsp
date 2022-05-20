@@ -39,7 +39,7 @@
                 </h1>
                 <ul class="lnb_nav_dep1">
                     <li><a href="/board/list.kh" class="btn_lnb_dep1">게시판</a></li>
-                    <li><a href="#" class="btn_lnb_dep1">수강신청</a></li>
+                    <li><a href="/cart/preCartListView.kh" class="btn_lnb_dep1">수강신청</a></li>
                     <li><a href="#" class="btn_lnb_dep1">캠퍼스매니저</a></li>
                     <li><a href="/notice/list.kh" class="btn_lnb_dep1">취업지원센터</a></li>
                 </ul>
