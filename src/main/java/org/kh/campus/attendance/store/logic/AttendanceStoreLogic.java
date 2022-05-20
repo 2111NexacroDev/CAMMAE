@@ -53,4 +53,10 @@ public class AttendanceStoreLogic implements AttendanceStore {
 		return result;
 	}
 
+	@Override
+	public int updateStatus(SqlSession sqlSession, Attendance attendance) {
+		int result = sqlSession.update("AttendanceMapper.updateStatus", attendance);
+		return result;
+	}
+
 }

@@ -22,4 +22,6 @@ public interface AttendanceStore {
 
 	int updateObjectChange(SqlSession sqlSession, Attendance attendance);
 
+	int updateStatus(SqlSession sqlSession, Attendance attendance);
+
 }
