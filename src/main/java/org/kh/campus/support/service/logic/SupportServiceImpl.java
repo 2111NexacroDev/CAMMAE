@@ -1,5 +1,6 @@
 package org.kh.campus.support.service.logic;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -27,7 +28,7 @@ public class SupportServiceImpl implements SupportService{
 	@Override
 	public int insertSuport(Support support) {
 		int result = sStore.insertSupport(sqlSession, support);
-		return result;
+		return result;			
 	}
 
 	@Override
@@ -39,6 +40,12 @@ public class SupportServiceImpl implements SupportService{
 	@Override
 	public int checkDelete(int supportNo) {
 		int result = sStore.deletCheck(supportNo, sqlSession);
+		return result;
+	}
+
+	@Override
+	public int countSupport(HashMap<String, Integer> countInfo) {
+		int result = sStore.selectOneSupport(sqlSession, countInfo);
 		return result;
 	}
 	

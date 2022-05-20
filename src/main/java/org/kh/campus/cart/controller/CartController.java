@@ -142,8 +142,10 @@ public class CartController {
 				lectureDepartment = "중국어학과";
 			} else if(lectureDepartment.contentEquals("5")) {
 				lectureDepartment = "유비쿼터스학과";
-			} else {
+			} else if(lectureDepartment.contentEquals("6")){
 				lectureDepartment = "국어국문학과";
+			}else {
+				lectureDepartment = "전체";
 			}
 			List<Lecture> lList = cService.printAllenroll2(lectureDepartment);
 			if (!lList.isEmpty()) {

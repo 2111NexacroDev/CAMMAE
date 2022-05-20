@@ -86,11 +86,14 @@ table.type01 td a {
 					<h2>예비수강신청</h2>
 				</div>
 			</div>
-			
+			<div>
+			<button>에에엥</button>
+			<input type="button" class="btn" onClick="location.href='/lecture/list.kh'">
+			</div>
 				<div>
-					<label id="searchLabel" for="lectureSelect">학과</label> <select
-						id="lecList">
-						<option value="전체">전체</option>
+					<label id="searchLabel" for="lectureSelect">학과</label> 
+					<select	id="lecList">
+						<option value="0">전체</option>
 						<option value="1">컴퓨터공학과</option>
 						<option value="2">전자전기공학과</option>
 						<option value="3">산업디자인학과</option>

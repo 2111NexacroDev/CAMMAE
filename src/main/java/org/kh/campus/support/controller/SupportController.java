@@ -8,7 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.kh.campus.manager.domain.Manager;
+import org.kh.campus.student.domain.Student;
 import org.kh.campus.support.domain.PageInfo;
 import org.kh.campus.support.domain.Pagination;
 import org.kh.campus.support.domain.Support;
@@ -24,6 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 @Controller
 public class SupportController {
 
@@ -34,13 +40,19 @@ public class SupportController {
 	@RequestMapping(value="/support/list.kh", method=RequestMethod.GET)
 	public ModelAndView supportListView(ModelAndView mv
 			, @RequestParam(value="page", required=false)Integer page
-			, @ModelAttribute PageInfo pageInfo) {
+			, @ModelAttribute PageInfo pageInfo
+			, HttpSession session) {
 		int currentPage = (page != null) ? page : 1;
 		int totalCount = sService.getListCount(pageInfo);
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
 		mv.addObject("pi",pi);
 		pi.setSearchCondition(pageInfo.getSearchCondition());
 		pi.setSearchValue(pageInfo.getSearchValue());
+		//학생일때 학번으로 검색
+		if(session.getAttribute("loginUser")!= null) {
+			pi.setSearchCondition("writer");
+			pi.setSearchValue(Integer.toString(((Student) (session.getAttribute("loginUser"))).getStudentNo()));
+		}
 		List<Support> sList = sService.printAllSupport(pi);
 		try {
 			
@@ -51,6 +63,7 @@ public class SupportController {
 				mv.addObject("menu", "support");
 				mv.setViewName("support/supportList");
 			}else {
+				mv.addObject("menu", "support");
 				mv.setViewName("support/supportList");
 			}
 		}catch(Exception e) {
@@ -84,6 +97,9 @@ public class SupportController {
 					support.setSupPortFilePath(filePath1);
 				}
 			}
+			HttpSession session = request.getSession();
+			support.setStudentNo(((Student) (session.getAttribute("loginUser"))).getStudentNo());
+			support.setStudentName(((Student)(session.getAttribute("loginUser"))).getStudentName());
 			int result = sService.insertSuport(support);
 			if(result > 0) {
 				mv.setViewName("redirect:/recruitment/detail.kh?recruitmentNo=" + recruitmentNo);
@@ -98,12 +114,28 @@ public class SupportController {
 		return mv;
 	}
 	
+	//중복 지원 막기
+	@ResponseBody
+	@RequestMapping(value = "/countSupport", method = RequestMethod.POST)
+	public String countSupport (@RequestParam(value="recruitmentNo")int recruitmentNo,
+			HttpSession session) {
+		Gson gson = new Gson();
+		int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
+		
+		HashMap<String, Integer> countInfo = new HashMap<String, Integer>();
+		 countInfo.put("recruitmentNo", recruitmentNo);
+		 countInfo.put("studentNo", studentNo);
+		int result = sService.countSupport(countInfo);
+		
+		return gson.toJson(result);
+	}
+	
 	 // 파일 경로
 	   public HashMap<String, String> saveFile(MultipartFile file, HttpServletRequest request, MultipartFile uploadFile) {
 	      String filePath = "";
 	      String filePath1 = "";
 	      HashMap<String, String> fileMap = new HashMap<String, String>();
-	      String root = request.getSession().getServletContext().getRealPath("resources");
+	      String root = request.getSession().getServletContext().getRealPath("resources"	);
 	      String savePath = root + "\\supportUploadFiles";
 	      
 	      File folder = new File(savePath);

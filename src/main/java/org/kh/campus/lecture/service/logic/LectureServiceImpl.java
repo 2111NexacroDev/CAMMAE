@@ -20,7 +20,7 @@ public class LectureServiceImpl implements LectureService {
 	private SqlSession sqlSession;
 
 	@Override
-	public List<Lecture> printAllLecture() {
+	public List<Lecture> printAllLecture( ) {
 		List<Lecture> lList = lStore.selectAllLecture(sqlSession);
 		return lList;
 	}
@@ -76,6 +76,11 @@ public class LectureServiceImpl implements LectureService {
 
 	@Override
 	public List<Lecture> printAlllecture2(String lectureDepartment) {
+		if(lectureDepartment.contentEquals("전체")) {
+			List<Lecture> lList = lStore.selectAllLecture(sqlSession);
+			return lList;
+			
+		}
 		List<Lecture> lList = lStore.selectAllLecture2(sqlSession, lectureDepartment);
 		return lList;
 	}

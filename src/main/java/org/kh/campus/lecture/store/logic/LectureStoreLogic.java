@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public class LectureStoreLogic implements LectureStore{
 
 	@Override
-	public List<Lecture> selectAllLecture(SqlSession sqlSession) {
+	public List<Lecture> selectAllLecture(SqlSession sqlSession ) {
 		List<Lecture> lList = sqlSession.selectList("LectureMapper.selectAllLecture");
 		return lList;
 	}
@@ -68,7 +68,7 @@ public class LectureStoreLogic implements LectureStore{
 
 	@Override
 	public List<Lecture> selectAllLecture2(SqlSession sqlSession, String lectureDepartment) {
-		List<Lecture> lList = sqlSession.selectList("LectureMapper.selectAllLecture2");
+		List<Lecture> lList = sqlSession.selectList("LectureMapper.selectAllLecture2", lectureDepartment);
 		return lList;
 	}
 }

@@ -9,7 +9,7 @@ import org.kh.campus.professor.domain.Professor;
 
 public interface LectureStore {
 
-	List<Lecture> selectAllLecture(SqlSession sqlSession);
+	List<Lecture> selectAllLecture(SqlSession sqlSession );
 
 	int insertLecture(SqlSession sqlSession, Lecture lecture);
 

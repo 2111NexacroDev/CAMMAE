@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script
@@ -226,8 +226,10 @@ span {
 						<c:param name="recruitmentNo"
 							value="${recruitment.recruitmentNo }"></c:param>
 					</c:url>
+					<c:if test="${sessionScope.loginManager ne null}">
 					<button class="btn" onclick="location.href='${rModify}'">수정</button>
 					<button class="btn" onclick="location.href='${rDelete}'">삭제</button>
+					</c:if>
 					<button style="width: 50px" class="btn"
 						onclick="location.href='/recruitment/list.kh'">목록</button>
 				</div>
@@ -279,7 +281,9 @@ span {
 			<br>
 
 			<div align="center">
+				<c:if test="${sessionScope.loginUser ne null}">
 				<button id="btn1" class="btn-modal">지원하기</button>
+				</c:if>
 			</div>
 
 
@@ -310,7 +314,7 @@ span {
 						
 						</tbody>
 					</table>
-					<input type="hidden" value="${recruitment.recruitmentNo }" name="recruitmentNo"> 
+					<input type="hidden" value="${recruitment.recruitmentNo }" name="recruitmentNo" id="recruitmentNo"> 
 					<input type="hidden" value="${recruitment.recruitmentTitle }" name="recruitmentTitle"><br>
 					<button type="submit" id="completion">완료</button>
 				</div>
@@ -407,18 +411,36 @@ span {
 	   var endDate = $("#endDate").html();
 	   let endDate2 =  new Date(endDate);
 	        btnModal[0].addEventListener("click", function(event){
-	           if(endDate2 > today){
-				   modalOn();
-			   }else{
-				   alert("마감되었습니다.");
-			   }
+				var recruitmentNo = $('#recruitmentNo').val();
+	        	
+	        	$.ajax({
+					url : "/countSupport",
+					type : 'POST',
+					traditional : true,
+					data : {
+						recruitmentNo : recruitmentNo
+					},
+					success : function(jdata){
+						if(jdata>0) {
+							alert("이미 접수되었습니다.")
+							return false;
+						} 
+						if(endDate2 > today){
+							   modalOn();
+						   }else{
+							   alert("마감되었습니다.");
+						   }
+					}
+				});
 			  
 	        });
 	    
 	    // 모달에서 완료 버튼 클릭시
 	       var findPwd = document.querySelector("#completion");
 	       findPwd.addEventListener("click", function() {
+	    	   alert("지원 접수되었습니다.");
 	    	   modalOff();
+	    	   
 	       });
 	    
 	}

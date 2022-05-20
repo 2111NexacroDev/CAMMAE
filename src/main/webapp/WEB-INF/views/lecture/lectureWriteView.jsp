@@ -122,7 +122,7 @@ button { cursor:pointer; }
 							<td id="n1">개설학과</td>
 							<td class="td_right">
 							<!-- <select id="universityName" name="lectureDepartment" onclick="selUniversityName()"> -->
-							<select id="universityName" name="lectureDepartment" onchange="getProName()">
+							<select id="lectureDepartment" name="lectureDepartment" onchange="getProName()">
 									<option value="">선택하세요.</option>
 									<c:forEach var="pList" items="${pList}">
 										<option value="${pList.departmentName }">${pList.departmentName }</option>
@@ -214,12 +214,12 @@ button { cursor:pointer; }
 
 	<script type="text/javascript">
 		function getProName(){
-			var universityName = $("#universityName").val();
+			var lectureDepartment = $("#lectureDepartment").val();
 			var target = $("#professorName");
 			$.ajax({
 				url : "/lecture/selectProfessor",
 				type : "get",
-				data : {"universityName" : universityName},
+				data : {"lectureDepartment" : lectureDepartment},
 				success : function(data){
 					$("#professorName option").remove();
 					for(var i= 0; i<data.length; i++){

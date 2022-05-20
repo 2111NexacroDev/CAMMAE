@@ -12,12 +12,13 @@ public class Support {
 	private String supPortFileName;
 	private String supPortFileRename;
 	private String supPortFilePath;
+	private String studentName;
 	
 	public Support () {}
 
 	public Support(int supportNo, int recruitmentNo, String recruitmentTitle, int studentNo, String supportDate,
 			String supFileName, String supFileRename, String supFilePath, String supPortFileName,
-			String supPortFileRename, String supPortFilePath) {
+			String supPortFileRename, String supPortFilePath, String studentName) {
 		super();
 		this.supportNo = supportNo;
 		this.recruitmentNo = recruitmentNo;
@@ -30,6 +31,7 @@ public class Support {
 		this.supPortFileName = supPortFileName;
 		this.supPortFileRename = supPortFileRename;
 		this.supPortFilePath = supPortFilePath;
+		this.studentName = studentName;
 	}
 
 	public int getSupportNo() {
@@ -120,14 +122,23 @@ public class Support {
 		this.supPortFilePath = supPortFilePath;
 	}
 
+	public String getStudentName() {
+		return studentName;
+	}
+
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
+	}
+
 	@Override
 	public String toString() {
 		return "Support [supportNo=" + supportNo + ", recruitmentNo=" + recruitmentNo + ", recruitmentTitle="
 				+ recruitmentTitle + ", studentNo=" + studentNo + ", supportDate=" + supportDate + ", supFileName="
 				+ supFileName + ", supFileRename=" + supFileRename + ", supFilePath=" + supFilePath
 				+ ", supPortFileName=" + supPortFileName + ", supPortFileRename=" + supPortFileRename
-				+ ", supPortFilePath=" + supPortFilePath + "]";
+				+ ", supPortFilePath=" + supPortFilePath + ", studentName=" + studentName + "]";
 	}
 
+	
 	
 }

@@ -44,7 +44,7 @@ public class LectureController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/lecture/list2.kh", method = RequestMethod.GET , produces="application/json;charset=utf-8" )
+	@RequestMapping(value = "/lecture/list2.kh", method = RequestMethod.GET ,produces="application/json;charset=utf-8" )
 	public String enrollListView2(@RequestParam(value = "lecturedep", required = false) String lectureDepartment) {
 		try {
 			if(lectureDepartment.contentEquals("1")) {
@@ -57,8 +57,10 @@ public class LectureController {
 				lectureDepartment = "중국어학과";
 			} else if(lectureDepartment.contentEquals("5")) {
 				lectureDepartment = "유비쿼터스학과";
-			} else {
+			} else if(lectureDepartment.contentEquals("6")){
 				lectureDepartment = "국어국문학과";
+			} else {
+				lectureDepartment = "전체";
 			}
 			List<Lecture> lList = lService.printAlllecture2(lectureDepartment);
 			if (!lList.isEmpty()) {

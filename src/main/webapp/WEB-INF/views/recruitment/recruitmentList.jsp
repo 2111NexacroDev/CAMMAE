@@ -32,7 +32,9 @@
 
 			<div class="c-title">
 				<div class="b-title"><h2>채용공고</h2></div>
+				<c:if test="${sessionScope.loginManager ne null}">
 				<div class="btn_1"><button style="width: 80px" class="btn"onclick="location.href='/recruitment/writeView.kh'">글쓰기</button></div>
+				</c:if>
 			</div>
 			<table class="type01">
 				<thead>
