@@ -38,8 +38,8 @@ public class LoginController {
 	public ModelAndView login(ModelAndView mv
 			, HttpServletRequest request
 			, HttpSession session
-			, @RequestParam("user-id") int id
-			, @RequestParam("user-pwd") String pw
+			, @RequestParam(value = "user-id", required = false) int id
+			, @RequestParam(value = "user-pwd", required = false) String pw
 			, @RequestParam(value = "login_type", required = false) String type) {
 	
 		try {	// 학생
@@ -50,6 +50,7 @@ public class LoginController {
 				Student loginUser = lService.loginStudent(student);
 				if(loginUser != null) {
 					session.setAttribute("loginUser", loginUser);
+					mv.setViewName("redirect:/main.kh");
 				}
 				// 교수
 			} else if(type.equals("professor")) {
@@ -60,9 +61,10 @@ public class LoginController {
 				Professor loginProfessor = lService.loginProfessor(professor);
 				if(loginProfessor != null) {
 					session.setAttribute("loginProfessor", loginProfessor);
+					mv.setViewName("redirect:/main.kh");
 				}
 				// 관리자
-			} else {
+			} else if(type.equals("manager")) {
 				Manager manager = new Manager();
 				manager.setManagerNo(id);
 				manager.setManagerPassword(pw);
@@ -70,10 +72,11 @@ public class LoginController {
 				Manager loginManager = lService.loginManager(manager);
 				if(loginManager != null) {
 					session.setAttribute("loginManager", loginManager);
+					mv.setViewName("redirect:/main.kh");
 				}
 			}
+			mv.addObject("msg", "로그인 정보가 일치하지 않습니다.");
 			
-			mv.setViewName("redirect:/main.kh");
 		} catch (Exception e) {
 			mv.addObject("msg", e.toString());
 			mv.setViewName("common/errorPage");
