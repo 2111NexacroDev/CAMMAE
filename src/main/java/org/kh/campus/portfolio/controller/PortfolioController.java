@@ -58,7 +58,8 @@ public class PortfolioController {
 
 	// 학생 포트폴리오 등록
 	@RequestMapping(value = "/portfolio/writeView.kh", method = RequestMethod.GET)
-	public String portWriteView() {
+	public String portWriteView(Model model) {
+		model.addAttribute("menu", "portfolio");
 		return "portfolio/portfolioWriteForm";
 	}
 

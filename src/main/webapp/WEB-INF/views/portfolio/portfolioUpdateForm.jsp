@@ -28,12 +28,13 @@ table.type05 thead th {
 	color: black;
 }
 
-.ta_l{
+.ta_l {
 	width: 15%;
 	background: rgb(231, 232, 226);
 	text-align: center;
 	font-weight: bold;
 }
+
 td {
 	padding: 7px;
 	border-bottom: 1px solid #CCC;
@@ -102,29 +103,28 @@ td {
 									</tr>
 									<tr>
 										<th scope="row" class="ta_l">이름</th>
-										<td><input type="text" name="port_name"
+										<td><input type="text" name="port_name" readonly
 											value="${portfolio.port_name}"></td>
 									</tr>
 									<tr>
 										<th scope="row" class="ta_l">학번</th>
-										<td><input type="text" name="port_college"
+										<td><input type="text" name="port_college" readonly
 											readonly value="${portfolio.port_college }"></td>
 									</tr>
 									<tr>
 										<th scope="row" class="ta_l">학과명</th>
-										<td><input type="text"
+										<td><input type="text" readonly
 											name="port_student_number"
 											value="${portfolio.port_student_number}" readonly></td>
 									</tr>
 									<tr>
 										<th scope="row" class="ta_l">단과대학</th>
-										<td><input type="text"
-											name="port_university_code"
+										<td><input type="text" name="port_university_code"
 											value="${portfolio.port_university_code }" /></td>
 									</tr>
 									<tr>
 										<th scope="row" class="ta_l">전화번호</th>
-										<td><input type="text"
+										<td><input type="text" readonly
 											name="port_student_number"
 											value="${portfolio.port_student_number}" readonly></td>
 									</tr>
@@ -152,7 +152,10 @@ td {
 							<br>
 							<div class="enr_btn">
 								<div class="input-btn">
-									<input type="submit" id="btn" class="btn" value="수정"><br>
+									<input type="submit" id="btn" class="btn" value="수정"> <a
+										href="/portfolio/listView.kh" id="list_l">
+										<button class="btn" id="btn">취소</button>
+									</a>
 								</div>
 							</div>
 						</div>
@@ -161,11 +164,7 @@ td {
 
 				<br>
 
-				<div class="a-btn">
-					<a href="/portfolio/listView.kh" id="list_l">
-						<button class="btn" id="btn">목록</button>
-					</a>
-				</div>
+
 			</div>
 
 		</div>

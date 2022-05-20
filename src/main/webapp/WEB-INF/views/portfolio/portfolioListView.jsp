@@ -47,13 +47,14 @@
 		<!-- contents-main -->
 		<div id="center">
 				<div class="c-title">
-				<h2 id="b-title">포트폴리오 관리</h2>
+				<div class="b-title">
+					<h2>포트폴리오관리</h2>	
 				</div>
 				<div class="btn_1"><button style="width: 80px; cursor:pointer;" class="btn"onclick="location.href='/portfolio/writeView.kh'">글쓰기</button></div>
-				<br><br><br>
-				  <div class="bbs">
-							<table class="type01">
-								
+				</div>
+				
+				
+							<table class="type01">	
 								<thead>
 									<tr >
 										<th id="q1">번호</th>
@@ -110,8 +111,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
-			
+		
 				<!-- footer -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>
 	</c:if>
