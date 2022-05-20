@@ -63,6 +63,11 @@
   	WHERE LECTURE_NO = #{lectureNo} AND STUDENT_NO = #{studentNo}
   	
   	</update>
+  	
+  	<update id="updateStatus">
+  	UPDATE ATTENDANCE_TBL SET ATT_STATUS = #{attStatus}
+  	WHERE LECTURE_NO = #{lectureNo} AND STUDENT_NO = #{studentNo} 
+  	</update>
     </mapper>
     
     

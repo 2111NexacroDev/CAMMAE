@@ -199,7 +199,7 @@ public class BoardController {
 		String filePath = "";
 		HashMap<String, String> fileMap = new HashMap<String, String>();
 		String root = request.getSession().getServletContext().getRealPath("resources");
-		String savePath = root + "\\unploadFiles";
+		String savePath = root + "\\boardUploadFiles";
 		File folder = new File(savePath);
 		if (!folder.exists())
 			folder.mkdir();

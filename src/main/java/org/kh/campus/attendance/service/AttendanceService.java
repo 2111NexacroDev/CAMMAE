@@ -22,4 +22,6 @@ public interface AttendanceService {
 
 		public int modifyObjectChange(Attendance attendance);
 
+		public int modifyStatusChange(Attendance attendance);
+
 }
