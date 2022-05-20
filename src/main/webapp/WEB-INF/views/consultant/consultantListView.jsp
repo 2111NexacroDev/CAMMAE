@@ -57,6 +57,7 @@
 				<div class="c-title">
 				<h2 id="b-title">상담관리</h2>
 				</div>
+				<div class="btn_1"><button style="width: 80px; cursor:pointer;" class="btn"onclick="location.href='/consultant/writeView.kh'">글쓰기</button></div>
 				<br><br><br>
 
 				<div class="bbs">

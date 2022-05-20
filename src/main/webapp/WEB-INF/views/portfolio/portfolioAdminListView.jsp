@@ -16,43 +16,6 @@
 	margin-bottom: 40px;
 }
 
-.bbs table {
-	width: 1000px;
-	border-top: 1px solid #343434;
-}
-
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
-thead {
-	background: rgb(237, 237, 237);
-	height: 50px;
-	border-bottom: 2px solid #c2c2c2;
-}
-
-tr {
-	display: table-row;
-	border-color: inherit;
-}
-
-tbody {
-	display: table-row-group;
-	vertical-align: middle;
-	border-color: inherit;
-}
-
-.bbs_ table th, .bbs table td {
-	padding: 12px 10px;
-	border-bottom: 1px solid #c2c2c2;
-	font-size: 16px;
-}
-
-.bbs table .space {
-	background: #fdfdfd;
-}
-
 .ta {
 	text-align: center;
 }
@@ -62,6 +25,30 @@ td a{
 	color: black;
 }
 
+ #q1{
+	width:5%;
+}
+#q2{
+	width:22%;
+}
+#q3{
+	width:7%;
+}
+#q4{
+	width:11%;
+}
+#q5{
+	width:15%;
+}
+#q6{
+	width:15%;
+}
+#q7{
+	width:15%;
+}
+#q8{
+	width: 6%;
+}
 </style>
 
 </head>
@@ -87,18 +74,18 @@ td a{
 			<br><br><br>
 			<div class="bbs">
 							
-							<table >
+							<table class="type01" >
 								
 								<thead>
 									<tr>
-										<th>번호</th>
-										<th>제목</th>
-										<th>작성자</th>
-										<th>학번</th>
-										<th>학과명</th>
-										<th>자격증첨부</th>
-										<th>수상이력첨부</th>
-										<th>작성날짜</th>
+										<th id="q1">번호</th>
+										<th id="q2">제목</th>
+										<th id="q3">작성자</th>
+										<th id="q4">학번</th>
+										<th id="q5">학과명</th>
+										<th id="q6">자격증첨부</th>
+										<th id="q7">수상이력첨부</th>
+										<th id="q8">작성날짜</th>
 										
 										
 									</tr>

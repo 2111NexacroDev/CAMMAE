@@ -272,7 +272,7 @@ public class PortfolioController {
 		Portfolio portfolio = pService.printAdminDetailPort(port_no);
 		if (portfolio != null) {
 			model.addAttribute("portfolio", portfolio);
-			model.addAttribute("menu", "portfolio");
+			model.addAttribute("menu1", "portfolio1");
 			return "portfolio/portfolioAdminDetailView";
 		} else {
 			model.addAttribute("msg", "관리자 포트폴리오 디테일 조회 실패");
