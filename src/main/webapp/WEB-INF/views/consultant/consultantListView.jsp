@@ -53,7 +53,9 @@
 				<div class="b-title">
 					<h2>상담관리</h2>	
 				</div>
+				<c:if test="${not empty sessionScope.loginUser}">
 				<div class="btn_1"><button style="width: 80px; cursor:pointer;" class="btn"onclick="location.href='/consultant/writeView.kh'">글쓰기</button></div>
+				</c:if>
 				</div>
 	
 					<table class="type01">
