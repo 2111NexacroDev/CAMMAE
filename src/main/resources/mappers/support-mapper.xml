@@ -58,17 +58,6 @@
 		RECRUITMENT_NO = #{recruitmentNo} AND STUDENT_NO = #{studentNo}
 	</select>
 	
-	
-	<!-- <select id="selectSearchSupport" resultMap="supportResultMap">
-		SELECT * FROM SUPPORT_TBL
-		<if test="searchCondition.toString() == 'title'">
-			WHERE RECRUITMENT_TITLE LIKE '%' || #{searchValue} || '%'
-		</if>
-		<if test="searchCondition.toString() == 'writer'">
-			WHERE STUDENT_NO LIKE '%' || #{searchValue} || '%'
-		</if>
-	</select> -->
-	
 	<insert id="insertSupport" parameterType="Support">
 		INSERT INTO SUPPORT_TBL VALUES(SEQ_SUPPORT_NO.NEXTVAL
 		, #{recruitmentNo} 
