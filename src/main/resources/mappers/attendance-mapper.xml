@@ -43,7 +43,7 @@
   	</select>
   	
   	<insert id="insertAttendance">
-  	 INSERT INTO ATTENDANCE_TBL VALUES(#{studentNo}, #{lectureNo}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), #{attStatus},'N', #{lectureName}, #{studentName})
+  	 INSERT INTO ATTENDANCE_TBL VALUES(#{studentNo}, #{lectureNo}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), #{attStatus},'N', #{lectureName}, #{studentName}, SEQ_ATT_NO.NEXTVAL)
   	</insert>
   	
   	

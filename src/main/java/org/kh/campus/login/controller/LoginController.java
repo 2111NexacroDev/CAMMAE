@@ -140,13 +140,24 @@ public class LoginController {
 	// 비밀번호 일치여부 확인
 	@PostMapping("/login/pwdSame.kh")
 	public NexacroResult pwdSame(
-			@ParamVariable(name="in_pwd") String pwd) {
+			@ParamVariable(name="in_pwd") String pwd
+			,HttpSession session) {
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
+		String type = "";
+		int id =0;
 		
 		// 로그인 연동시 타입과 아이디 같이 넘겨주기
-		int id = 0;
-		String type = "std";
+		if(session.getAttribute("loginUser")!= null) {
+			type = "std";
+			id = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
+		} else if (session.getAttribute("loginProfessor")!= null) {
+			type = "prf";
+			id = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
+		} else {
+			type = "mag";
+			id = ((Manager) (session.getAttribute("loginManager"))).getManagerNo();
+		}
 		
 		int result1 = lService.pwdSame(type ,id, pwd);
 		
@@ -157,13 +168,25 @@ public class LoginController {
 	
 	@PostMapping("/login/pwdChange.kh")
 	public NexacroResult pwdChange(
-			@ParamVariable(name="in_pwd") String pwd) {
+			@ParamVariable(name="in_pwd") String pwd, HttpSession session) {
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
 		// 로그인 연동시 타입과 아이디 같이 넘겨주기
-		int id = 0;
-		String type = "std";
+		String type = "";
+		int id =0;
+		
+		// 로그인 연동시 타입과 아이디 같이 넘겨주기
+		if(session.getAttribute("loginUser")!= null) {
+			type = "std";
+			id = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
+		} else if (session.getAttribute("loginProfessor")!= null) {
+			type = "prf";
+			id = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
+		} else {
+			type = "mag";
+			id = ((Manager) (session.getAttribute("loginManager"))).getManagerNo();
+		}
 		
 		int result1 = lService.pwdChange(type ,id, pwd);
 		

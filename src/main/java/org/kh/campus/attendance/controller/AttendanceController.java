@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.nexacro.uiadapter17.spring.core.annotation.ParamDataSet;
+import com.nexacro.uiadapter17.spring.core.annotation.ParamVariable;
 import com.nexacro.uiadapter17.spring.core.data.NexacroResult;
 import com.nexacro17.xapi.data.DataSet;
 
@@ -79,7 +80,7 @@ public class AttendanceController {
 	
 	
 	@RequestMapping(value = "/attendance/register.kh", method = RequestMethod.POST)
-	public NexacroResult registerScholar(@ParamDataSet(name = "insInfo", required = false) DataSet inStu, HttpSession session) throws Exception {
+	public NexacroResult registerScholar(@ParamDataSet(name = "insInfo", required = false) DataSet inStu, @ParamVariable(name="lectureName") String lectureName,HttpSession session) throws Exception {
 
 		int nErrorCode = 0;
 		String strErrorMsg = "START";
@@ -88,7 +89,6 @@ public class AttendanceController {
 			String studentName =dsGet(inStu,0, "studentName");
 			int lectureNo = Integer.parseInt(dsGet(inStu, 0, "lectureNo"));
 			int studentNo = Integer.parseInt(dsGet(inStu, 0, "studentNo"));
-			String lectureName = dsGet(inStu, 0, "lectureName");
 			String attStatus = dsGet(inStu, 0, "attStatus");
 	
 			Attendance attendance = new Attendance(
@@ -111,12 +111,11 @@ public class AttendanceController {
 	
 	
 	@RequestMapping(value = "/attendance/stuInfo.kh", method = RequestMethod.POST)
-	public NexacroResult printStuInfo(HttpSession session,@ParamDataSet(name="in_dssubject")DataSet sub ) throws Exception {
+	public NexacroResult printStuInfo(HttpSession session,@ParamVariable(name="lectureName") String lectureName) throws Exception {
 		String strErrorMsg = "START";
 		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
 		int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
-		String lectureName = dsGet(sub, 0, "lectureName");
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
 		attInfo.put("studentNo", Integer.toString(studentNo));
 		attInfo.put("lectureName", lectureName);

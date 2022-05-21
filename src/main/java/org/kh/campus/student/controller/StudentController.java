@@ -1,6 +1,8 @@
 package org.kh.campus.student.controller;
 
 
+import javax.servlet.http.HttpSession;
+
 import org.kh.campus.student.domain.Student;
 import org.kh.campus.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,11 @@ public class StudentController {
 	
 	// 학생 정보 조회
 	@RequestMapping(value="/student/stdInfo.kh", method=RequestMethod.GET)
-	public NexacroResult printStudent() {
+	public NexacroResult printStudent(HttpSession session) {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
-		int studentNo = 0;
+		int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
 		
 		Student student = sService.printStudent(studentNo);
 		
@@ -38,11 +40,11 @@ public class StudentController {
 	@RequestMapping(value="/student/stdUpdate.kh", method=RequestMethod.POST)
 	public NexacroResult modifyStudent(
 			 @ParamDataSet(name="in_std") 	DataSet inStd
-			) throws Exception {
+			,HttpSession session) throws Exception {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
-		int studentNo = 0;
+		int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
 		String strSucc = "";
 		
 		String studentPhonenumber = dsGet(inStd, 0, "studentPhonenumber");
