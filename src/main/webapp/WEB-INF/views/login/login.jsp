@@ -14,58 +14,90 @@
 	left: 0;
 	top: 0;
 	display: none;
-	flex-direction: column;
+	/* flex-direction: column; */
 	align-items: center;
 	justify-content: center;
-	background: rgba(255, 255, 255, 0.25);
-	box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-	backdrop-filter: blur(1.5px);
-	-webkit-backdrop-filter: blur(1.5px);
+	/* background: rgba(255, 255, 255, 0.25);
+	box-shadow: 0 8px 32px 0 gray; */
+	/* backdrop-filter: blur(1.5px);
+	-webkit-backdrop-filter: blur(1.5px); */
 	border-radius: 10px;
 	border: 1px solid rgba(255, 255, 255, 0.18);
+	z-index: 1000;
 }
 /*         modal창 (파란색 배경) */
 #modal .modal-window {
-	background: rgba(69, 139, 197, 0.70);
-	box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+	background: white;
+	box-shadow: 0 8px 32px 0 gray;
 	backdrop-filter: blur(13.5px);
-	-webkit-backdrop-filter: blur(13.5px);
+	webkit-backdrop-filter: blur(13.5px);
 	border-radius: 10px;
-	border: 1px solid rgba(255, 255, 255, 0.18);
+	border: 20px solid #10412C;
 	width: 400px;
-	height: 400px;
+	height: 280px;
 	position: relative;
 	top: 50px;
 	padding: 10px;
 }
+
 #modal .title {
 	padding-left: 10px;
 	display: inline;
 	text-shadow: 1px 1px 2px gray;
 	color: white;
 }
+
 #modal .title h2 {
 	display: inline;
 }
+
 #modal .close-area {
 	display: inline;
 	float: right;
 	padding-right: 10px;
 	cursor: pointer;
-	text-shadow: 1px 1px 2px gray;
-	color: white;
+	color: black;
 }
+
 #modal .content {
 	margin-top: 20px;
 	padding: 0px 10px;
-	text-shadow: 1px 1px 2px gray;
-	color: white;
+	color: black;
 	text-align: center;
 }
+
 #modal #reportContents {
 	width: 350px;
 	height: 200px;
 }
+
+table.type04 {
+  border-collapse: collapse;
+  text-align: left;
+  line-height: 1.5;
+  border-left: 1px solid #ccc;
+  /* margin: 20px 10px; */
+}
+
+table.type04 tbody th {
+  width: 150px;
+  padding: 10px;
+  vertical-align: top;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  background: rgb(231, 232, 226);
+}
+table.type04 td {
+  width: 350px;
+  padding: 10px;
+  vertical-align: top;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+}
+#r1{
+	width: 30%;
+}
+
 label {
 	text-align: center;
 	padding: 0;
@@ -73,7 +105,7 @@ label {
 	height: 100%;
 	cursor: pointer;
 	float: left;
-	font-size: 12px;
+	font-size: 13px;
 	font-weight: bold;
 	line-height: 30px;
 	/* border-right: 1px solid #ccc; */
@@ -89,11 +121,11 @@ label {
 	height: 100%;
 	
 	float: left;
-	font-size: 12px;
+	font-size: 13px;
 	font-weight: bold;
 	line-height: 30px;
 	/* border-right: 1px solid #ccc; */
-	color: white;
+	color: rgb(87, 87, 87);
 	background-color: rgba(16, 65, 44, 0.2);
 }
 input[name="login_type"] {
@@ -205,6 +237,7 @@ html, body, div {
 #info{
 	position:relative;
 	top: 10px;
+	right: 15px;
 	width: 200px;
 	height: 25px;
 	text-align: center;
@@ -214,7 +247,7 @@ html, body, div {
 #login_btn{
 	width: 400px;
 	height: 35px;
-	top:30px;
+	top:50px;
 	position: relative;
 	border: 0px;
 	background-color: #10412C;
@@ -230,7 +263,7 @@ html, body, div {
 #pass_btn{
 	width: 200px;
 	height: 35px;
-	top:50px;
+	top:70px;
 	position: relative;
 	left:103px;
 	background-color: rgb(245,245,245);
@@ -238,7 +271,18 @@ html, body, div {
 	outline: none;
 	cursor: pointer;
 	color: #727272;
-	font-weight: 400;
+	font-weight: 600;
+}
+
+#error{
+	margin:0;
+	padding:0;
+	position: absolute;
+  	top: 106px;
+	font-size: 12px;
+	color: red;
+	left: 120px;
+	text-align: center;
 }
 footer div {
 	font-size: 12px;
@@ -257,10 +301,51 @@ footer div {
 #fot {
 	color: #005eb5;
 }
+#findPwd {
+	background-color: #10412C;
+	color: white;
+	cursor: pointer;
+	font-weight: bold;
+	border: 0px;
+	width: 50px;
+	height: 20px;
+	font-size: 12px;
+}
 input:focus {outline: 1px solid #10412C;}
+
+input[type='radio'] {
+    -webkit-appearance:none;
+    width:14px;
+    height:14px;
+    border:1px solid darkgray;
+    border-radius:50%;
+    outline:none;
+  }
+  input[type='radio']:before {
+    content:'';
+    display:block;
+    width:60%;
+    height:60%;
+    margin: 20% auto;  
+    border-radius:50%;  
+  }
+  input[type='radio']:checked:before {
+  	background:#008675;
+  }
+  #img_id {
+  	position: relative;
+  	top: 15px;
+  	right: 20px;
+  }
+  #img_pw {
+  	position: relative;
+  	top: 15px;
+  	right: 20px;
+  }
 </style>
 <script>
 window.onload = function(){
+	
 	const modal = document.getElementById("modal");
 	function modalOn() {
 	    modal.style.display = "flex"
@@ -320,6 +405,7 @@ window.onload = function(){
 	    		});
 	    	}
 	    });
+	    
     	var label = document.querySelectorAll("label");
 	    $("input[name='login_type']:radio").change(function () {
 	        //라디오 버튼 값을 가져온다.
@@ -339,6 +425,27 @@ window.onload = function(){
 				label[2].setAttribute("id", "");
 			}
 	});
+
+	var findPwd = document.querySelector("#login_btn");
+	    findPwd.addEventListener("click", function() {
+	    	var error =  document.querySelector("#error");
+			var id = document.querySelector("input[name='user-id']");
+			var pw = document.querySelector("input[name='user-pwd']");
+			var login = $('#login');
+			if(id.value=="") {
+				id.focus();
+				error.innerHTML = "";
+				error.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;아이디를 입력해주세요";
+			} else if(pw.value=="") {
+				pw.focus();
+				error.innerHTML = "";
+				error.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;비밀번호를 입력해주세요";
+			} else {
+				login.submit(); 
+			}
+			
+	});
+	    
 }
 </script>
 </head>
@@ -356,7 +463,7 @@ window.onload = function(){
 			</div>
 		</div>
 		<div class="form_1">
-		<form action="/login/login.kh" method="post" >
+		<form id="login" action="/login/login.kh" method="post">
 
 				<div class="login_form1">
 					<label id="" class="login_form1_1">
@@ -372,11 +479,20 @@ window.onload = function(){
 
 			<div class="login_form">
 				<div class="login_form2" >
-						<input type="text" name="user-id" id="info" placeholder="아이디를 입력해주세요."><br><br>
-						<input type="password" name="user-pwd" id="info" placeholder="비밀번호를 입력해주세요."><br>
+						<img src="../resources/img/login_id.gif" id="img_id">
+						<input type="text" name="user-id" id="info" placeholder="아이디를 입력해주세요.">
+						<br><br>
+						<img src="../resources/img/login_pw.gif" id="img_pw">
+						<input type="password" name="user-pwd" id="info" placeholder="비밀번호를 입력해주세요.">
+						<br>
 				</div>
-						<input id="login_btn" type="submit" value="로그인">
+						<span id="error">
+							${msg }
+						</span>
+						<button id="login_btn" type="button">로그인</button>
 						<input id="pass_btn" type="button" value="비밀번호 찾기" class="btn-modal">
+						<br>
+						<br>
 						<hr>
 						<br>
 						<br>
@@ -402,14 +518,26 @@ window.onload = function(){
 				<input type="radio" name="type" value="student" checked="checked">학생
 				<input type="radio" name="type" value="professor">교수 <input
 					type="radio" name="type" value="manager">관리자
-
-				<p>학번을 입력해주세요</p>
-				<input type="text" id="user-no">
-				<p>이름을 입력해주세요</p>
-				<input type="text" id="user-name">
-				<p>휴대폰 번호를 입력해주세요</p>
-				<input type="text" id="user-phone"> <br> <br> <br>
-				<button id="findPwd">OK</button>
+				<br><br>
+				<table class="type04">
+					<tbody>
+						<tr>
+							<th id="r1" scope="row">학번</th>
+							<td><input type="text" id="user-no"></td>
+						<tr>
+						<tr>
+							<th id="r1" scope="row">이름</th>
+							<td><input type="text" id="user-name"></td>
+						</tr>
+						<tr>
+							<th id="r1" scope="row">연락처</th>
+							<td><input type="text" id="user-phone"></td>
+						</tr>
+					
+					</tbody>
+				</table>
+				<br>
+				<button id="findPwd">찾기</button>
 			</div>
 		</div>
 	</div>
