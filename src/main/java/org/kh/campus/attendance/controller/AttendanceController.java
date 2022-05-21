@@ -7,9 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.kh.campus.attendance.domain.Attendance;
 import org.kh.campus.attendance.service.AttendanceService;
-import org.kh.campus.grade.domain.Grade;
-import org.kh.campus.graduation.domain.Graduation;
-import org.kh.campus.scholarship.domain.Scholarship;
+import org.kh.campus.professor.domain.Professor;
 import org.kh.campus.student.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,11 +30,7 @@ public class AttendanceController {
 		String strErrorMsg = "START";
 		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
-		/*
-		 * int studentNo =
-		 * (((Student)(session.getAttribute("loginUser"))).getStudentNo());
-		 */
-		int studentNo = 0;
+		int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
 		attInfo.put("studentNo", Integer.toString(studentNo));
 		List<Attendance>aList = aService.printAttStudent(attInfo);
@@ -52,11 +46,7 @@ public class AttendanceController {
 		String strErrorMsg = "START";
 		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
-		/*
-		 * int studentNo =
-		 * (((Student)(session.getAttribute("loginUser"))).getStudentNo());
-		 */
-		int professorNo = 0;
+		int professorNo = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
 		attInfo.put("professorNo", Integer.toString(professorNo));
 		List<Attendance>aList = aService.printAttProfessor(attInfo);
@@ -72,11 +62,7 @@ public class AttendanceController {
 		String strErrorMsg = "START";
 		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
-		/*
-		 * int studentNo =
-		 * (((Student)(session.getAttribute("loginUser"))).getStudentNo());
-		 */
-		int professorNo = 0;
+		int professorNo = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
 		String lectureName = dsGet(subject, 0, "lectureName");
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
 		attInfo.put("professorNo", Integer.toString(professorNo));
@@ -129,11 +115,7 @@ public class AttendanceController {
 		String strErrorMsg = "START";
 		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
-		/*
-		 * int studentNo =
-		 * (((Student)(session.getAttribute("loginUser"))).getStudentNo());
-		 */
-		int studentNo = 0;
+		int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
 		String lectureName = dsGet(sub, 0, "lectureName");
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
 		attInfo.put("studentNo", Integer.toString(studentNo));
@@ -150,12 +132,9 @@ public class AttendanceController {
 		String strErrorMsg = "START";
 		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
-		int professorNo = 0;
-		/* int lectureNo = Integer.parseInt(dsGet(issue, 0, "lectureNo")); */
-
+		int professorNo = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
 		attInfo.put("professorNo", Integer.toString(professorNo));
-		/* attInfo.put("lectureNo", Integer.toString(lectureNo)); */
 		List<Attendance>aList = aService.printAttProfIssue(attInfo);
 		result.addDataSet("out_prfIssue", aList);
 		result.addVariable("ErrorCode", nErrorCode);
