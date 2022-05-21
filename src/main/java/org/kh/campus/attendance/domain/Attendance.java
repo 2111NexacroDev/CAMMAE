@@ -8,13 +8,18 @@ public class Attendance {
 	private String attObjection;
 	private String lectureName;
 	private String studentName;
+	private int attNo;
 	
 	public Attendance() {}
 
 
 
+	
+
+
+
 	public Attendance(int studentNo, int lectureNo, String attDate, String attStatus, String attObjection,
-			String lectureName, String studentName) {
+			String lectureName, String studentName, int attNo) {
 		super();
 		this.studentNo = studentNo;
 		this.lectureNo = lectureNo;
@@ -23,7 +28,12 @@ public class Attendance {
 		this.attObjection = attObjection;
 		this.lectureName = lectureName;
 		this.studentName = studentName;
+		this.attNo = attNo;
 	}
+
+
+
+
 
 
 
@@ -118,6 +128,28 @@ public class Attendance {
 	public void setStudentName(String studentName) {
 		this.studentName = studentName;
 	}
+	
+	
+
+
+
+	public int getAttNo() {
+		return attNo;
+	}
+
+
+
+
+
+
+
+	public void setAttNo(int attNo) {
+		this.attNo = attNo;
+	}
+
+
+
+
 
 
 
@@ -125,8 +157,13 @@ public class Attendance {
 	public String toString() {
 		return "Attendance [studentNo=" + studentNo + ", lectureNo=" + lectureNo + ", attDate=" + attDate
 				+ ", attStatus=" + attStatus + ", attObjection=" + attObjection + ", lectureName=" + lectureName
-				+ ", studentName=" + studentName + "]";
+				+ ", studentName=" + studentName + ", attNo=" + attNo + "]";
 	}
+
+
+
+
+
 
 
 

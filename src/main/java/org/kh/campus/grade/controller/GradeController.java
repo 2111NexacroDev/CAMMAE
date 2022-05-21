@@ -4,8 +4,12 @@ package org.kh.campus.grade.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.kh.campus.grade.domain.Grade;
 import org.kh.campus.grade.service.GradeService;
+import org.kh.campus.professor.domain.Professor;
+import org.kh.campus.student.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,14 +28,15 @@ public class GradeController {
 	
 	// 학생 성적 조회
 	@PostMapping("/grade/stdGrade.kh")
-	public NexacroResult printGradeStudent(@ParamDataSet(name="In_stdSearch") DataSet search) throws Exception {
+	public NexacroResult printGradeStudent(@ParamDataSet(name="In_stdSearch") DataSet search
+			,HttpSession session) throws Exception {
 		
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
 		// 세션에서 학번 가져오기
-		int studentNo = 0;
+		int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
 		
 		// 데이터셋에서 search key와 value 가져오기
 		String year = dsGet(search, 0, "gradeYear");
@@ -55,13 +60,14 @@ public class GradeController {
 	
 	// 학생 이의신청 피드백 조회
 	@PostMapping("/grade/stdObjection.kh")
-	public NexacroResult printFeedbackStudent(@ParamDataSet(name="In_stdSearch") DataSet search) throws Exception {
+	public NexacroResult printFeedbackStudent(@ParamDataSet(name="In_stdSearch") DataSet search
+			,HttpSession session) throws Exception {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 
 		// 세션에서 학번 가져오기
-		int studentNo = 0;
+		int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
 		
 		// 데이터셋에서 search key와 value 가져오기
 		String year = dsGet(search, 0, "gradeYear");
@@ -87,14 +93,14 @@ public class GradeController {
 	@RequestMapping(value="/grade/std_objection.kh", method=RequestMethod.POST)
 	public NexacroResult registerObjection(
 			@ParamDataSet(name="in_obj") DataSet stdObj
-			) throws Exception {
+			,HttpSession session) throws Exception {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
 		int lectureNo = Integer.parseInt(dsGet(stdObj, 0, "lectureNo"));
 		String objectionContent = dsGet(stdObj, 0, "objectionContent");
-		int studentNo = 0;
+		int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
 		
 		Grade grade = new Grade(lectureNo, studentNo, objectionContent);
 		
@@ -108,13 +114,14 @@ public class GradeController {
 	
 	// 교수의 교과목 조회
 	@PostMapping("/grade/subject.kh")
-	public NexacroResult printSubject(@ParamDataSet(name="In_stdSearch") DataSet search) throws Exception {
+	public NexacroResult printSubject(@ParamDataSet(name="In_stdSearch") DataSet search
+			,HttpSession session) throws Exception {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
 		// 세션에서 교수번호 가져오기
-		int prfNo = 0;
+		int prfNo = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
 		
 		// 데이터셋에서 search key와 value 가져오기
 		String year = dsGet(search, 0, "gradeYear");
@@ -143,13 +150,14 @@ public class GradeController {
 	
 	// 교수 성적 조회
 	@PostMapping("/grade/prfGrade.kh")
-	public NexacroResult printGradeProfessor(@ParamDataSet(name="In_stdSearch") DataSet search) throws Exception {
+	public NexacroResult printGradeProfessor(@ParamDataSet(name="In_stdSearch") DataSet search
+			,HttpSession session) throws Exception {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
 		// 세션에서 교수번호 가져오기
-		int prfNo = 0;
+		int prfNo = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
 		
 		// 데이터셋에서 search key와 value 가져오기
 		String year = dsGet(search, 0, "gradeYear");
@@ -200,13 +208,14 @@ public class GradeController {
 	
 	// 교수 이의신청 조회
 	@PostMapping("/grade/prfObjection.kh")
-	public NexacroResult printFeedbackProfessor(@ParamDataSet(name="In_stdSearch") DataSet search) throws Exception {
+	public NexacroResult printFeedbackProfessor(@ParamDataSet(name="In_stdSearch") DataSet search
+			,HttpSession session) throws Exception {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
 		// 세션에서 교수번호 가져오기
-		int prfNo = 0;
+		int prfNo = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
 		
 		// 데이터셋에서 search key와 value 가져오기
 		String year = dsGet(search, 0, "gradeYear");

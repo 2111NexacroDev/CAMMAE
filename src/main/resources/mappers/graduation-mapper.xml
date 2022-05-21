@@ -25,7 +25,7 @@
   	</select>
   	
   	<insert id="insertGraduation">
-  		INSERT INTO GRADUATION_TBL VALUES(#{studentNo}, DEFAULT, NULL, NULL, NULL,#{graduationStuName}, #{graduationStuDep}, #{graduationStuGrade}, DEFAULT, DEFAULT)
+  		INSERT INTO GRADUATION_TBL VALUES(#{studentNo}, DEFAULT, NULL, NULL, NULL,#{graduationStuName}, #{graduationStuDep}, #{graduationStuGrade}, TO_CHAR(SYSDATE, 'YYYY'), DEFAULT)
   		
   	</insert>
   	
