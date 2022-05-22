@@ -1,6 +1,6 @@
 package org.kh.campus.lecture.domain;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Lecture {
 	private int lectureNo;
@@ -19,15 +19,15 @@ public class Lecture {
 	private String gradeYear;
 	private String gradeSession; 
 	private String lectureTerm;
-	private Date lectureStart;
-	private Date lectureEnd;
+	private String lectureStart;
+	private String lectureEnd;
 	
 	public Lecture() {}
 
 	public Lecture(int lectureNo, int professorNo, String universityCollege, String lectureDepartment,
 			String lectureName, String professorName, String lectureDivision, int lectureGrade, String lectureRoom,
 			int lecturePeople, String lectureStartTime, String lectureEndTime, int studentNo, String gradeYear,
-			String gradeSession, String lectureTerm, Date lectureStart, Date lectureEnd) {
+			String gradeSession, String lectureTerm, String lectureStart, String lectureEnd) {
 		super();
 		this.lectureNo = lectureNo;
 		this.professorNo = professorNo;
@@ -177,19 +177,19 @@ public class Lecture {
 		this.lectureTerm = lectureTerm;
 	}
 
-	public Date getLectureStart() {
+	public String getLectureStart() {
 		return lectureStart;
 	}
 
-	public void setLectureStart(Date lectureStart) {
+	public void setLectureStart(String lectureStart) {
 		this.lectureStart = lectureStart;
 	}
 
-	public Date getLectureEnd() {
+	public String getLectureEnd() {
 		return lectureEnd;
 	}
 
-	public void setLectureEnd(Date lectureEnd) {
+	public void setLectureEnd(String lectureEnd) {
 		this.lectureEnd = lectureEnd;
 	}
 
@@ -204,4 +204,5 @@ public class Lecture {
 				+ lectureTerm + ", lectureStart=" + lectureStart + ", lectureEnd=" + lectureEnd + "]";
 	}
 
+	
 }	

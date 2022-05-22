@@ -123,8 +123,12 @@
 	<update id="updateLecturePeriod">
 		UPDATE LECTURE_TBL 
 		SET 
-		LECTURE_START  = #{lectureStart} 
-		, LECTURE_END  = #{lectureEnd} 
+	<!-- 	LECTURE_START  = TO_CHAR(#{lectureStart},'YYYY-MM-DDTHH24:MI')
+		, LECTURE_END  = TO_CHAR(#{lectureEnd}, 'YYYY-MM-DDTHH24:MI') -->
+		<!-- 	LECTURE_START  = #{lectureStart}
+		, LECTURE_END  = #{lectureEnd} -->
+			LECTURE_START  = #{lectureStart}
+		, LECTURE_END  = #{lectureEnd}
 	</update>
 	
 </mapper>
