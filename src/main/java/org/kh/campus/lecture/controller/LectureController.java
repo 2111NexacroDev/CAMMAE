@@ -13,6 +13,7 @@ import org.kh.campus.professor.domain.Professor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -194,9 +195,14 @@ public class LectureController {
 	}
 	
 	//수강 기간 설정
+
 	@RequestMapping(value="/lecture/lecturePeriod.kh", method=RequestMethod.POST)
 	public ModelAndView lecturePeriod(ModelAndView mv
 			, @ModelAttribute Lecture lecture
+	/*
+	 * , @RequestParam("lectureStart") String lectureStart
+	 * , @RequestParam("lectureEnd") String lectureEnd
+	 */
 			){
 		int result = lService.modifyPeriod(lecture);
 		if(result > 0) {

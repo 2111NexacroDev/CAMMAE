@@ -212,16 +212,16 @@
 					</p>
 					<table class="type04">
 						<tbody>
-							<tr>
+						 	 <tr>
 								<th id="r1" scope="row">시작일</th>
-								<td><input type="Date" size="50"
-									name="lectureStart"></td>
+								<td><input type="dateTime-local" size="20"
+									name="lectureStart" value=""></td>
 							<tr>
 							<tr>
 								<th id="r1" scope="row">종료일</th>
-								<td><input type="Date" size="50"
-									name="lectureEnd"></td>
-							</tr>
+								<td><input type="dateTime-local" size="20"
+									name="lectureEnd" value=""></td>
+							</tr> 
 
 						</tbody>
 					</table>
