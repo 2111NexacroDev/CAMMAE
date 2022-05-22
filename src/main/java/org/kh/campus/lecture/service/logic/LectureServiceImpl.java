@@ -85,4 +85,11 @@ public class LectureServiceImpl implements LectureService {
 		return lList;
 	}
 
+	@Override
+	public int modifyPeriod(Lecture lecture) {
+		int result = lStore.updateLecturePeriod(sqlSession, lecture);
+		return result;
+	}
+
+
 }
