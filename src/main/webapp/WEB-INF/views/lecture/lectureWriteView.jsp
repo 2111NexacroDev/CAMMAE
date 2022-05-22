@@ -61,43 +61,6 @@ table {
 	margin-bottom: 10px;
 }
 
-/* .lecwritediv {
-	border: 3px solid #c8c8c8;
-	border-radius: 5px;
-	width: 740px;
-	padding: 20px 30px 30px 30px;
-	margin-top: 45px;
-	margin-right: 10px;
-	margin-bottom: 20px;
-	margin-left: 0px;
-}
-
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
-table td* {
-	vertical-align: middle;
-}
-
-table td {
-	padding: 15px 5px;
-	border-bottom: 1px solid #c2c2c2;
-	font-size: 16px;
-}
-
-.td-left {
-	width: 100px;
-}
-
-.td_sub {
-	border: none;
-}
-
-button { cursor:pointer; }
-	
-} */
 </style>
 </head>
 <body>
@@ -194,6 +157,15 @@ button { cursor:pointer; }
 							<td id="n1">수업 종료시간</td>
 							<td class="td_right"><input type="time"
 								name="lectureEndTime"></td>
+						</tr>
+						
+						<tr>
+							<td id="n1">학기</td>
+							<td class="td_right">
+							<select name="lectureTerm">
+									<option>1학기</option>
+									<option>2학기</option>
+							</select></td>
 						</tr>
 
 					</table>

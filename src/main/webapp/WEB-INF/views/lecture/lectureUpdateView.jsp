@@ -68,6 +68,7 @@ table {
 	<!-- contents -->
 	<div id="content">
 		<form action="/lecture/update.kh" method="post">
+		 <input type="hidden" name="lectureNo" value="${lecture.lectureNo }"> 
 			<div id="left">
 				<jsp:include page="../common/sideLMenu.jsp"></jsp:include>
 			</div>
@@ -82,29 +83,49 @@ table {
 				<table class="type05" align="center">
 					<tr>
 						<td id="n1">강의코드</td>
-						<td><input type="text" name="lectureNo"
-							value="${lecture.lectureNo }"></td>
+						<td>${lecture.lectureNo }
+				<%-- 		<input type="text" name="lectureNo"
+							value="${lecture.lectureNo }" readonly /> --%>
+							
+							</td>
 					</tr>
-					<tr>
-						<td id="n1">단과대학</td>
-						<td><input type="text" name="universityCollege"
-							value="${lecture.universityCollege }"></td>
-					</tr>
+				
 <%-- 					<option value="">전체</option>
     <c:forEach items="${test}" var="testList">
       <option value="${testList.testNo}" ${testList.testNo == 1 ? 'selected="selected"' : ''}>${testList.testNo}</option>
     </c:forEach> --%>
 					<tr>
 						<td id="n1">이수구분</td>
-						<td><select name="lectureDivision" onchange="">
-    <option value="0" ${test == '0' ? 'selected="selected"' : '' }>선택하세요</option>
-    <option value="전공필수" ${test == '전공필수' ? 'selected="selected"' : '' }>전공필수</option>
-    <option value="전공선택" ${test == '전공선택' ? 'selected="selected"' : '' }>전공선택</option>
-    <option value="교양필수" ${test == '교양필수' ? 'selected="selected"' : '' }>교양필수</option>
-    <option value="교양선택" ${test == '교양선택' ? 'selected="selected"' : '' }>교양선택</option>
-</select></td>
-						
-						
+						<td><select id="lectureDivision" name="lectureDivision">
+								<option value="${lecture.lectureDivision }">
+									<c:if test="${lecture.lectureDivision eq '전공필수' }">전공필수</c:if>
+									<c:if test="${lecture.lectureDivision eq '전공선택'}">전공선택</c:if>
+									<c:if test="${lecture.lectureDivision eq '교양필수'}">교양필수</c:if>
+									<c:if test="${lecture.lectureDivision eq '교양선택'}">교양선택</c:if>
+								</option>
+								<c:if test="${lecture.lectureDivision eq '전공필수' }">
+									<option value="전공선택">전공선택</option>
+									<option value="교양필수">교양필수</option>
+									<option value="교양선택">교양선택</option>
+								</c:if>
+								<c:if test="${lecture.lectureDivision eq '전공선택'}">
+									<option value="전공필수">전공필수</option>
+									<option value="교양필수">교양필수</option>
+									<option value="교양선택">교양선택</option>
+								</c:if>
+								<c:if test="${lecture.lectureDivision eq '교양필수' }">
+									<option value="전공필수">전공필수</option>
+									<option value="전공선택">전공선택</option>
+									<option value="교양선택">교양선택</option>
+								</c:if>
+								<c:if test="${lecture.lectureDivision eq '교양선택'}">
+									<option value="전공필수">전공필수</option>
+									<option value="전공선택">전공선택</option>
+									<option value="교양필수">교양필수</option>
+								</c:if>
+						</select></td>
+
+
 					</tr>
 
 					<tr>
@@ -112,7 +133,7 @@ table {
 							<td class="td_right">
 							<!-- <select id="universityName" name="lectureDepartment" onclick="selUniversityName()"> -->
 							<select id="lectureDepartment" name="lectureDepartment" onchange="getProName()">
-									<option value="선택하세요.">${lecture.lectureDepartment }</option>
+									<option value="${lecture.lectureDepartment }">${lecture.lectureDepartment }</option>
 									<c:forEach var="pList" items="${pList}">
 										<option value="${pList.departmentName }">${pList.departmentName }</option>
 									</c:forEach>
@@ -128,7 +149,7 @@ table {
 						<td id="n1">교수명</td>
 						<td class="td_right"><select id="professorName"
 							name="professorName" > 
-								<option value="선택하세요">${lecture.professorName }</option>
+								<option value="${lecture.professorName }">${lecture.professorName }</option>
 								<%-- <c:forEach var="lList" items="${lList}">
 									<option value="${lList.professorName }">${lList.professorName }</option>
 								</c:forEach> --%>
@@ -158,6 +179,21 @@ table {
 						<td id="n1">강의인원</td>
 						<td><input type="number" name="lecturePeople"
 							value="${lecture.lecturePeople }"></td>
+					</tr>
+					<tr>
+						<td id="n1">학기</td>
+						<td><select id="lectureTerm" name="lectureTerm">
+							<option value="${lecture.lectureTerm }">
+								<c:if test="${lecture.lectureTerm eq '1학기' }">1학기</c:if>
+								<c:if test="${lecture.lectureTerm eq '2학기'}">2학기</c:if>
+							</option>
+							<c:if test="${lecture.lectureTerm eq '1학기' }">
+								<option value="2학기">2학기</option>
+							</c:if>
+							<c:if test="${lecture.lectureTerm eq '2학기'}">
+								<option value="1학기">1학기</option>
+							</c:if>
+						</select></td>
 					</tr>
 				</table>
 				<div align="center">

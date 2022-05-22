@@ -30,6 +30,9 @@ public interface LectureStore {
 	List<Lecture> selectAllLecture2(SqlSession sqlSession, String lectureDepartment);
 
 
+	public int updateLecturePeriod(SqlSession sqlSession, Lecture lecture);
+
+
 
 
 }
