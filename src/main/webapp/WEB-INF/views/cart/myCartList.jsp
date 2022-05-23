@@ -112,7 +112,7 @@ table.type01 td a {
 				<td>
 				<c:url var="lPick" value="/cart/cartEnroll.kh">
 				<c:param name="lectureNo" value="${cart.lectureNo }"></c:param></c:url>
-					<a href="${lPick }"  >신청</a>
+					<a href="${lPick }">신청</a>
 				</td>
 				<%-- <td>${cart.cartNo }</td>
 				<td>${cart.lectureNo }</td> --%>
