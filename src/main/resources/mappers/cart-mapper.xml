@@ -85,15 +85,17 @@ FROM CART_TBL  JOIN  LECTURE_TBL
  	</delete>
  	
  	<select id="selectAllEnroll" resultMap="lectureResultMap" parameterType="String"> 
- 		SELECT * FROM LECTURE_TBL
+ 		<![CDATA[SELECT * FROM LECTURE_TBL WHERE LECTURE_START <= TO_CHAR(SYSDATE,'YYYY-MM-DDHH24:MI') AND TO_CHAR(SYSDATE,'YYYY-MM-DDHH24:MI') <= LECTURE_END]]>
  		<!-- <if test="lectureDepartment!=null">
  			WHERE LECTURE_DEPARTMENT = #{lectureDepartment}
  		</if> -->
  	</select> 
  	
  	<select id="selectAllEnroll2" resultMap="lectureResultMap" parameterType="String"> 
- 		SELECT * FROM LECTURE_TBL
- 			WHERE LECTURE_DEPARTMENT = #{lectureDepartment}
+ 	<!-- 	SELECT * FROM LECTURE_TBL
+ 			WHERE LECTURE_DEPARTMENT = #{lectureDepartment} -->
+ 		<![CDATA[SELECT * FROM (SELECT * FROM LECTURE_TBL
+ 			WHERE LECTURE_DEPARTMENT = #{lectureDepartment}) WHERE LECTURE_START <= TO_CHAR(SYSDATE,'YYYY-MM-DDHH24:MI') AND TO_CHAR(SYSDATE,'YYYY-MM-DDHH24:MI') <= LECTURE_END]]>	
  	</select> 
  	
  	<insert id="insertEnroll" parameterType="Lecture">

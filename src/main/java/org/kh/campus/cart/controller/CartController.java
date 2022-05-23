@@ -1,7 +1,10 @@
 package org.kh.campus.cart.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.kh.campus.cart.domain.Cart;
 import org.kh.campus.cart.service.CartService;
@@ -78,9 +81,15 @@ public class CartController {
 
 //	 예비수강신청 내역 목록
 	@RequestMapping(value = "/cart/myCartList.kh", method = RequestMethod.GET)
-	public ModelAndView myCartList(ModelAndView mv) {
+	public ModelAndView myCartList(ModelAndView mv/* , @RequestParam("lectureNo") int lectureNo */
+			) {
 		int studentNo = 0;
 		List<Cart> cList = cService.printMyCart(studentNo);
+		/*
+		 * Lecture lOne = lService.printOneLecture(lectureNo); String lectureStart =
+		 * lOne.getLectureStart(); String lectureEnd = lOne.getLectureEnd(); String
+		 * aFlag = "N"; Date today = new Date(); System.out.println(today);
+		 */
 		try {
 			if (!cList.isEmpty()) {
 				mv.addObject("menu", "cartlist");
