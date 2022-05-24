@@ -68,7 +68,7 @@ public class ChatSocketHandler extends TextWebSocketHandler {
 				WebSocketSession mSession = (WebSocketSession) sMap.get("session");
 				// 내가 접속하려는 방 번호와 디비에서 가져온 방 번호가 같을 때 채팅방에 입장
 				if (((String) sMap.get("marketNo")).equals(marketNo)) {
-					mSession.sendMessage(new TextMessage(senderName + "\n: " + cMsg.getMsg()+"\n"));
+					mSession.sendMessage(new TextMessage(senderName + "\n: " + cMsg.getMsg()));
 				}
 
 			}
