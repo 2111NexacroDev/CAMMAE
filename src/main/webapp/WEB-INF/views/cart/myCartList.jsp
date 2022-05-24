@@ -110,9 +110,11 @@ table.type01 td a {
 		<c:forEach items="${cList }" var="cart">
 			<tr>
 				<td>
+				<c:if test="${aFlag == 'Y'}">
 				<c:url var="lPick" value="/cart/cartEnroll.kh">
 				<c:param name="lectureNo" value="${cart.lectureNo }"></c:param></c:url>
 					<a href="${lPick }">신청</a>
+				</c:if>
 				</td>
 				<%-- <td>${cart.cartNo }</td>
 				<td>${cart.lectureNo }</td> --%>
