@@ -130,10 +130,10 @@ hr {
 				<hr>
 				<div class="content" style="padding: 10px;">
 					${question.questionContent }
-					<c:if test="${not empty question.questionFileReNeme }">
+					<c:if test="${not empty question.questionFileReName }">
 						<br>
 						<span> <img
-							src="/resources/questionUploadFiles/${question.questionFileReNeme }"
+							src="/resources/questionUploadFiles/${question.questionFileReName }"
 							style="width: 500px;">
 						</span>
 					</c:if>
