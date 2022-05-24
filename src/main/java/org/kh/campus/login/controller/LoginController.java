@@ -43,6 +43,8 @@ public class LoginController {
 			, @RequestParam(value = "login_type", required = false) String type) {
 	
 		try {	// 학생
+			String url = (String)session.getAttribute("url");
+			System.out.println(url +" test11");
 			if(type.equals("student")) {
 				Student student = new Student();
 				student.setStudentNo(id);
@@ -50,7 +52,14 @@ public class LoginController {
 				Student loginUser = lService.loginStudent(student);
 				if(loginUser != null) {
 					session.setAttribute("loginUser", loginUser);
-					mv.setViewName("redirect:/main.kh");
+					if(url!=null) {
+						mv.setViewName("redirect:" +url);
+						session.removeAttribute("url");
+					} else {
+						mv.setViewName("redirect:/main.kh");
+					}
+				} else {
+					mv.addObject("msg", "로그인 정보가 일치하지 않습니다.");
 				}
 				// 교수
 			} else if(type.equals("professor")) {
@@ -61,7 +70,14 @@ public class LoginController {
 				Professor loginProfessor = lService.loginProfessor(professor);
 				if(loginProfessor != null) {
 					session.setAttribute("loginProfessor", loginProfessor);
-					mv.setViewName("redirect:/main.kh");
+					if(url!=null) {
+						mv.setViewName("redirect:.kh" +url);
+						session.removeAttribute("url");
+					} else {
+						mv.setViewName("redirect:/main.kh");
+					}
+				}else {
+					mv.addObject("msg", "로그인 정보가 일치하지 않습니다.");
 				}
 				// 관리자
 			} else if(type.equals("manager")) {
@@ -72,11 +88,16 @@ public class LoginController {
 				Manager loginManager = lService.loginManager(manager);
 				if(loginManager != null) {
 					session.setAttribute("loginManager", loginManager);
-					mv.setViewName("redirect:/main.kh");
+					if(url!=null) {
+						mv.setViewName("redirect:.kh" +url);
+						session.removeAttribute("url");
+					} else {
+						mv.setViewName("redirect:/main.kh");
+					}
+				} else {
+					mv.addObject("msg", "로그인 정보가 일치하지 않습니다.");
 				}
 			}
-			mv.addObject("msg", "로그인 정보가 일치하지 않습니다.");
-			
 		} catch (Exception e) {
 			mv.addObject("msg", e.toString());
 			mv.setViewName("common/errorPage");
