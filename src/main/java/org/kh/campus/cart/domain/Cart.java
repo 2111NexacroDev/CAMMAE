@@ -7,6 +7,7 @@ public class Cart {
 	private String lectureNo;
 	private String cartYear;
 	private String cartTerm;
+	private int lecturePeople;
 	private String lectureDivision; 
 	private int lectureGrade; 
 	private String professorName; 
@@ -14,20 +15,22 @@ public class Cart {
 	private String lectureDepartment; 
 	private String lectureStartTime;
 	private String lectureEndTime;
+	private String lectureStart;
+	private String lectureEnd;
 	
 	public Cart() {}
 
-	
-	
-	public Cart(int cartNo, int studentNo, String lectureNo, String cartYear, String cartTerm, String lectureDivision,
-			int lectureGrade, String professorName, String lectureName, String lectureDepartment,
-			String lectureStartTime, String lectureEndTime) {
+	public Cart(int cartNo, int studentNo, String lectureNo, String cartYear, String cartTerm, int lecturePeople,
+			String lectureDivision, int lectureGrade, String professorName, String lectureName,
+			String lectureDepartment, String lectureStartTime, String lectureEndTime, String lectureStart,
+			String lectureEnd) {
 		super();
 		this.cartNo = cartNo;
 		this.studentNo = studentNo;
 		this.lectureNo = lectureNo;
 		this.cartYear = cartYear;
 		this.cartTerm = cartTerm;
+		this.lecturePeople = lecturePeople;
 		this.lectureDivision = lectureDivision;
 		this.lectureGrade = lectureGrade;
 		this.professorName = professorName;
@@ -35,9 +38,9 @@ public class Cart {
 		this.lectureDepartment = lectureDepartment;
 		this.lectureStartTime = lectureStartTime;
 		this.lectureEndTime = lectureEndTime;
+		this.lectureStart = lectureStart;
+		this.lectureEnd = lectureEnd;
 	}
-
-
 
 	public int getCartNo() {
 		return cartNo;
@@ -77,6 +80,14 @@ public class Cart {
 
 	public void setCartTerm(String cartTerm) {
 		this.cartTerm = cartTerm;
+	}
+
+	public int getLecturePeople() {
+		return lecturePeople;
+	}
+
+	public void setLecturePeople(int lecturePeople) {
+		this.lecturePeople = lecturePeople;
 	}
 
 	public String getLectureDivision() {
@@ -135,15 +146,30 @@ public class Cart {
 		this.lectureEndTime = lectureEndTime;
 	}
 
+	public String getLectureStart() {
+		return lectureStart;
+	}
 
+	public void setLectureStart(String lectureStart) {
+		this.lectureStart = lectureStart;
+	}
+
+	public String getLectureEnd() {
+		return lectureEnd;
+	}
+
+	public void setLectureEnd(String lectureEnd) {
+		this.lectureEnd = lectureEnd;
+	}
 
 	@Override
 	public String toString() {
 		return "Cart [cartNo=" + cartNo + ", studentNo=" + studentNo + ", lectureNo=" + lectureNo + ", cartYear="
-				+ cartYear + ", cartTerm=" + cartTerm + ", lectureDivision=" + lectureDivision + ", lectureGrade="
-				+ lectureGrade + ", professorName=" + professorName + ", lectureName=" + lectureName
-				+ ", lectureDepartment=" + lectureDepartment + ", lectureStartTime=" + lectureStartTime
-				+ ", lectureEndTime=" + lectureEndTime + "]";
+				+ cartYear + ", cartTerm=" + cartTerm + ", lecturePeople=" + lecturePeople + ", lectureDivision="
+				+ lectureDivision + ", lectureGrade=" + lectureGrade + ", professorName=" + professorName
+				+ ", lectureName=" + lectureName + ", lectureDepartment=" + lectureDepartment + ", lectureStartTime="
+				+ lectureStartTime + ", lectureEndTime=" + lectureEndTime + ", lectureStart=" + lectureStart
+				+ ", lectureEnd=" + lectureEnd + "]";
 	}
 
 	
