@@ -105,11 +105,13 @@ hr {
 				</div>
 				<div class="btn_1">
 					<c:if
-						test="${sessionScope.loginUser.studentNo eq question.questionId || sessionScope.loginManager ne null}">
+						test="${sessionScope.loginUser.studentNo eq question.questionId}">
 						<c:url var="qModify" value="/question/modifyView">
 							<c:param name="questionNo" value="${question.questionNo }"></c:param>
 						</c:url>
 						<button class="btn" onclick="location.href='${qModify }'">수정</button>
+					</c:if>
+					<c:if test="${sessionScope.loginUser.studentNo eq question.questionId || sessionScope.loginManager ne null}">
 						<c:url var="qDelete" value="/question/delete">
 							<c:param name="questionNo" value="${question.questionNo }"></c:param>
 						</c:url>
@@ -130,10 +132,10 @@ hr {
 				<hr>
 				<div class="content" style="padding: 10px;">
 					${question.questionContent }
-					<c:if test="${not empty question.questionFileReNeme }">
+					<c:if test="${not empty question.questionFileReName }">
 						<br>
 						<span> <img
-							src="/resources/questionUploadFiles/${question.questionFileReNeme }"
+							src="/resources/questionUploadFiles/${question.questionFileReName }"
 							style="width: 500px;">
 						</span>
 					</c:if>

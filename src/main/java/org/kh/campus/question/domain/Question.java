@@ -12,14 +12,14 @@ public class Question {
 	private String questionUpdateDate;
 	private int questionCount;
 	private String questionFileName;
-	private String questionFileReNeme;
+	private String questionFileReName;
 	private String questionFilePath;
 	
 	public Question() {}
 
 	public Question(int questionNo, String professorName, String lectureName, String questionTitle,
 			String questionContent, int questionId, String questionWriter, String questionDate,
-			String questionUpdateDate, int questionCount, String questionFileName, String questionFileReNeme,
+			String questionUpdateDate, int questionCount, String questionFileName, String questionFileReName,
 			String questionFilePath) {
 		super();
 		this.questionNo = questionNo;
@@ -33,7 +33,7 @@ public class Question {
 		this.questionUpdateDate = questionUpdateDate;
 		this.questionCount = questionCount;
 		this.questionFileName = questionFileName;
-		this.questionFileReNeme = questionFileReNeme;
+		this.questionFileReName = questionFileReName;
 		this.questionFilePath = questionFilePath;
 	}
 
@@ -125,12 +125,12 @@ public class Question {
 		this.questionFileName = questionFileName;
 	}
 
-	public String getQuestionFileReNeme() {
-		return questionFileReNeme;
+	public String getQuestionFileReName() {
+		return questionFileReName;
 	}
 
-	public void setQuestionFileReNeme(String questionFileReNeme) {
-		this.questionFileReNeme = questionFileReNeme;
+	public void setQuestionFileReName(String questionFileReName) {
+		this.questionFileReName = questionFileReName;
 	}
 
 	public String getQuestionFilePath() {
@@ -147,13 +147,10 @@ public class Question {
 				+ lectureName + ", questionTitle=" + questionTitle + ", questionContent=" + questionContent
 				+ ", questionId=" + questionId + ", questionWriter=" + questionWriter + ", questionDate=" + questionDate
 				+ ", questionUpdateDate=" + questionUpdateDate + ", questionCount=" + questionCount
-				+ ", questionFileName=" + questionFileName + ", questionFileReNeme=" + questionFileReNeme
+				+ ", questionFileName=" + questionFileName + ", questionFileReName=" + questionFileReName
 				+ ", questionFilePath=" + questionFilePath + "]";
 	}
 
-	
-	
-	
 	
 
 }

@@ -199,10 +199,6 @@ public class LectureController {
 	@RequestMapping(value="/lecture/lecturePeriod.kh", method=RequestMethod.POST)
 	public ModelAndView lecturePeriod(ModelAndView mv
 			, @ModelAttribute Lecture lecture
-	/*
-	 * , @RequestParam("lectureStart") String lectureStart
-	 * , @RequestParam("lectureEnd") String lectureEnd
-	 */
 			){
 		int result = lService.modifyPeriod(lecture);
 		if(result > 0) {

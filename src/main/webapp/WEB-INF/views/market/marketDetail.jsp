@@ -139,11 +139,13 @@ img {
 				</div>
 				<div class="btn_1">
 					<c:if
-						test="${sessionScope.loginUser.studentNo eq market.marketId || sessionScope.loginManager ne null}">
+						test="${sessionScope.loginUser.studentNo eq market.marketId}">
 						<c:url var="mModify" value="/market/modifyView">
 							<c:param name="marketNo" value="${market.marketNo }"></c:param>
 						</c:url>
 						<button class="btn" onclick="location.href='${mModify }'">수정</button>
+						</c:if>
+						<c:if test="${sessionScope.loginUser.studentNo eq market.marketId || sessionScope.loginManager ne null}">
 						<c:url var="mDelete" value="/market/delete">
 							<c:param name="marketNo" value="${market.marketNo }"></c:param>
 						</c:url>

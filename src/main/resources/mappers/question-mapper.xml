@@ -16,7 +16,7 @@
 			column="QUESTION_UPDATEDATE" />
 		<result property="questionCount" column="QUESTION_COUNT" />
 		<result property="questionFileName" column="QUESTION_FILENAME" />
-		<result property="questionFileReNeme"
+		<result property="questionFileReName"
 			column="QUESTION_FILERENAME" />
 		<result property="questionFilePath" column="QUESTION_FILEPATH" />
 	</resultMap>
@@ -102,7 +102,7 @@
 		INSERT INTO QUESTION_TBL
 		VALUES(SEQ_QUESTION_NO.NEXTVAL, #{professorName}, #{lectureName},
 		#{questionTitle}, #{questionContent}, #{questionId}, #{questionWriter}, DEFAULT,
-		DEFAULT, DEFAULT, #{questionFileName}, #{questionFileReNeme},
+		DEFAULT, DEFAULT, #{questionFileName}, #{questionFileReName},
 		#{questionFilePath})
 	</insert>
 
@@ -111,7 +111,7 @@
 		#{professorName}, LECTURE_NAME = #{lectureName}, QUESTION_TITLE =
 		#{questionTitle}, QUESTION_CONTENT = #{questionContent},
 		QUESTION_UPDATEDATE = DEFAULT, QUESTION_FILENAME =
-		#{questionFileName}, QUESTION_FILERENAME = #{questionFileReNeme},
+		#{questionFileName}, QUESTION_FILERENAME = #{questionFileReName},
 		QUESTION_FILEPATH = #{questionFilePath} WHERE QUESTION_NO =
 		#{questionNo}
 	</update>

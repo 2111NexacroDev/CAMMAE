@@ -35,6 +35,7 @@ table.type05 thead th {
 	background: rgb(231, 232, 226);
 	text-align: center;
 	font-weight: bold;
+	border-bottom: 1px solid #CCC;
 }
 td {
 	padding: 7px;
@@ -94,7 +95,7 @@ td {
 						<tbody>
 							<tr>
 								<th scope="row" class="ta_l">제목</th>
-								<td >${portfolio.port_title}</td>
+								<td>${portfolio.port_title}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">이름</th>
@@ -102,36 +103,36 @@ td {
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">학번</th>
-								<td >${portfolio.port_student_no}</td>
+								<td>${portfolio.port_student_no}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">학과명</th>
-								<td >${portfolio.port_college}</td>
+								<td>${portfolio.port_college}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">단과대학</th>
-								<td >${portfolio.port_university_code}</td>
+								<td>${portfolio.port_university_code}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">전화번호</th>
-								<td >${portfolio.port_student_number}</td>
+								<td>${portfolio.port_student_number}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">자격증 첨부</th>
-								<td >${portfolio.port_license}</td>
+								<td>${portfolio.port_license}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">수상이력 첨부</th>
-								<td >${portfolio.port_award_history}</td>
+								<td>${portfolio.port_award_history}</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ta_l">작성날짜</th>
-								<td >${portfolio.port_writerDate}</td>
+								<td>${portfolio.port_writerDate}</td>
 							</tr>
 							
 							<tr>
 								<th scope="row" class="ta_l">내용</th>
-								<td >${portfolio.port_content}</td>
+								<td>${portfolio.port_content}</td>
 							</tr>
 						</tbody>
 					</table>

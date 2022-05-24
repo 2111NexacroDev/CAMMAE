@@ -2,12 +2,14 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- <mapper namespace="CartMapper">
-	<resultMap type="Lecture"  id="lectureResultMap">
+<mapper namespace="CartMapper">
+	<resultMap type="Lecture" id="lectureResultMap">
 		<id property="lectureNo" column="LECTURE_NO" />
-		<result property ="professorNo" column= "PROFESSOR_NO" />
-		<result property="universityCollege" column="UNIVERSITY_COLLEGE" />
-		<result property="lectureDepartment" column="LECTURE_DEPARTMENT" />
+		<result property="professorNo" column="PROFESSOR_NO" />
+		<result property="universityCollege"
+			column="UNIVERSITY_COLLEGE" />
+		<result property="lectureDepartment"
+			column="LECTURE_DEPARTMENT" />
 		<result property="lectureName" column="LECTURE_NAME" />
 		<result property="professorName" column="PROFESSOR_NAME" />
 		<result property="lectureDivision" column="LECTURE_DIVISION" />
@@ -16,132 +18,132 @@
 		<result property="lecturePeople" column="LECTURE_PEOPLE" />
 		<result property="lectureStartTime" column="LECTURE_START_TIME" />
 		<result property="lectureEndTime" column="LECTURE_ENDTIME" />
-		<result property="studentNo" column="STUDENT_NO"/>
-		<result property="gradeYear" column="GRADE_YEAR"/>
-		<result property="gradeSession" column="GRADE_SESSION"/>
+		<result property="studentNo" column="STUDENT_NO" />
+		<result property="gradeYear" column="GRADE_YEAR" />
+		<result property="gradeSession" column="GRADE_SESSION" />
 	</resultMap>
-	
+
 	<resultMap type="Cart" id="cartResultMap">
-		<id property="cartNo" column="CART_NO"/>
+		<id property="cartNo" column="CART_NO" />
 		<result property="studentNo" column="STUDENT_NO" />
 		<result property="lectureNo" column="LECTURE_NO" />
 		<result property="cartYear" column="CART_YEAR" />
 		<result property="cartTerm" column="CART_TERM" />
 		<result property="lectureDivision" column="LECTURE_DIVISION" />
-		<result property="lectureGrade" column="LECTURE_GRADE"/>
+		<result property="lectureGrade" column="LECTURE_GRADE" />
 		<result property="professorName" column="PROFESSOR_NAME" />
 		<result property="lectureName" column="LECTURE_NAME" />
 		<result property="lectureDepartment" column="LECTURE_DEPARTMENT" />
 		<result property="lectureStartTime" column="LECTURE_START_TIME" />
 		<result property="lectureEndTime" column="LECTURE_ENDTIME" />
+		<result property="lectureStart" column="LECTURE_START" />
+		<result property="lectureEnd" column="LECTURE_END" />
 	</resultMap>
-	
+
 	<resultMap type="Grade" id="gradeResultMap">
-		<id property="lectureNo" column="LECTURE_NO"/>
-		<result property="studentNo" column="STUDENT_NO"/>
-		<result property="gradeYear" column="GRADE_YEAR"/>
-		<result property="gradeSession" column="GRADE_SESSION"/>
-		<result property="gradeSubject" column="GRADE_SUBJECT"/>
-		<result property="gradeComplete" column="LECTURE_DIVISION"/>
-		<result property="lectureGrade" column="LECTURE_GRADE"/>
-		<result property="gradeAvg" column="GRADE_AVG"/>
-		<result property="gradeFeedback" column="GRADE_FEEDBACK"/>
-		<result property="gradeObjection" column="GRADE_OBJECTION"/>
-		<result property="gradeChange" column="GRADE_CHANGE"/>
-		
+		<id property="lectureNo" column="LECTURE_NO" />
+		<result property="studentNo" column="STUDENT_NO" />
+		<result property="gradeYear" column="GRADE_YEAR" />
+		<result property="gradeSession" column="GRADE_SESSION" />
+		<result property="gradeSubject" column="GRADE_SUBJECT" />
+		<result property="gradeComplete" column="LECTURE_DIVISION" />
+		<result property="lectureGrade" column="LECTURE_GRADE" />
+		<result property="gradeAvg" column="GRADE_AVG" />
+		<result property="gradeFeedback" column="GRADE_FEEDBACK" />
+		<result property="gradeObjection" column="GRADE_OBJECTION" />
+		<result property="gradeChange" column="GRADE_CHANGE" />
 	</resultMap>
-	
-<!--  	<resultMap type="org.kh.campus.cart.domain.Total" id="totalResultMap">
-		<collection property="Lecture" resultMap="lectureResultMap"/>
-		<collection property="Cart" resultMap="cartResultMap"/>
-	</resultMap>   -->
-	
+
+	<!-- <resultMap type="org.kh.campus.cart.domain.Total" id="totalResultMap"> 
+		<collection property="Lecture" resultMap="lectureResultMap"/> <collection 
+		property="Cart" resultMap="cartResultMap"/> </resultMap> -->
+
 	<select id="selectAllCart" resultMap="lectureResultMap">
-		SELECT * FROM LECTURE_TBL  
+		SELECT * FROM LECTURE_TBL
 	</select>
-	
-	<insert id="insertCart" parameterType="hashmap" >
-		INSERT INTO CART_TBL VALUES(SEQ_CART_NO.NEXTVAL
+
+	<insert id="insertCart" parameterType="hashmap">
+		INSERT INTO
+		CART_TBL VALUES(SEQ_CART_NO.NEXTVAL
 		, #{studentNo}
 		, #{lectureNo}
-		, DEFAULT
+		,
+		DEFAULT
 		, '1학기'
 		, #{lecturePeople}
- )	
+		)
 	</insert>
-	
-	<select id="selectMyCart" resultMap="cartResultMap">
-	SELECT *
-    FROM CART_TBL C JOIN LECTURE_TBL L
-    ON C.LECTURE_NO = L.LECTURE_NO
-    WHERE C.STUDENT_NO = #{studentNo}
-	<!-- SELECT *
-FROM CART_TBL  JOIN  LECTURE_TBL
-     ON CART_TBL.LECTURE_NO = LECTURE_TBL.LECTURE_NO; -->
-	</select>
- 
- 	<delete id="deleteCart">
- 		DELETE FROM CART_TBL WHERE CART_NO=#{cartNo}
- 	</delete>
- 	
- 	<select id="selectAllEnroll" resultMap="lectureResultMap" parameterType="String"> 
- 		SELECT * FROM LECTURE_TBL
- 		<!-- <if test="lectureDepartment!=null">
- 			WHERE LECTURE_DEPARTMENT = #{lectureDepartment}
- 		</if> -->
- 	</select> 
- 	
- 	<select id="selectAllEnroll2" resultMap="lectureResultMap" parameterType="String"> 
- 		SELECT * FROM LECTURE_TBL
- 			WHERE LECTURE_DEPARTMENT = #{lectureDepartment}
- 	</select> 
- 	
- 	<insert id="insertEnroll" parameterType="Lecture">
- 	 INSERT INTO GRADE_TBL(LECTURE_NO
-, STUDENT_NO, PROFESSOR_NO, 
-GRADE_YEAR, GRADE_SESSION
-,GRADE_SUBJECT , LECTURE_DIVISION, LECTURE_GRADE)
- 	 VALUES(#{lectureNo}
- 	 , #{studentNo}
- 	 , #{professorNo}
- 	 , #{gradeYear}
- 	 , #{gradeSession}
- 	 , #{lectureName}
- 	 , #{lectureDivision}
- 	 , #{lectureGrade}) 
- 	</insert>
- 	
- 	<select id="selectMyEnroll" resultMap="lectureResultMap">
- 	 <!-- SELECT LECTURE_NO, STUDENT_NO, GRADE_YEAR, GRADE_SESSION, GRADE_SUBJECT
- 	 , LECTURE_DIVISION, LECTURE_GRADE, GRADE_AVG, GRADE_FEEDBACK
- 	 , GRADE_OBJECTION, GRADE_CHANGE FROM GRADE_TBL -->
-<!--  	SELECT * FROM LECTURE_TBL L 
-	RIGHT JOIN GRADE_TBL G ON 
-	G.LECTURE_NO = L.LECTURE_NO -->
-SELECT G.LECTURE_NO
-	, G.STUDENT_NO
-	, G.GRADE_YEAR
-	, G.GRADE_SESSION
- 	 , G.LECTURE_DIVISION
- 	 , G.LECTURE_GRADE 
- 	 , L.PROFESSOR_NAME
- 	 , L.LECTURE_NAME
-     , L.LECTURE_DEPARTMENT
-     , L.UNIVERSITY_COLLEGE
-     , L.LECTURE_ROOM
-     , L.LECTURE_PEOPLE
-     , L.LECTURE_START_TIME
-     , L.LECTURE_ENDTIME
-     FROM GRADE_TBL G INNER JOIN LECTURE_TBL L
-     ON G.LECTURE_NO = L.LECTURE_NO
- 	</select>
- 	
- 	<delete id="deleteEnroll" parameterType="hashmap"> 
- 	 DELETE FROM GRADE_TBL WHERE LECTURE_NO=#{lectureNo} AND STUDENT_NO=#{studentNo}
- 	</delete>
- 	
-<!--  	<select id="selectEnrollCount">
- 	SELECT COUNT(*) FROM CART_TBL
- 	</select> -->
 
- </mapper>
+	<select id="selectMyCart" resultMap="cartResultMap">
+		SELECT *
+		FROM CART_TBL C JOIN LECTURE_TBL L
+		ON C.LECTURE_NO = L.LECTURE_NO
+		WHERE C.STUDENT_NO = #{studentNo}
+		<!-- SELECT * FROM CART_TBL JOIN LECTURE_TBL ON CART_TBL.LECTURE_NO = LECTURE_TBL.LECTURE_NO; -->
+	</select>
+
+	<delete id="deleteCart">
+		DELETE FROM CART_TBL WHERE CART_NO=#{cartNo}
+	</delete>
+
+	<select id="selectAllEnroll" resultMap="lectureResultMap"
+		parameterType="String"> 
+ 		<![CDATA[SELECT * FROM LECTURE_TBL WHERE LECTURE_START <= TO_CHAR(SYSDATE,'YYYY-MM-DDHH24:MI') AND TO_CHAR(SYSDATE,'YYYY-MM-DDHH24:MI') <= LECTURE_END]]>
+		<!-- <if test="lectureDepartment!=null"> WHERE LECTURE_DEPARTMENT = #{lectureDepartment} 
+			</if> -->
+	</select>
+
+	<select id="selectAllEnroll2" resultMap="lectureResultMap"
+		parameterType="String">
+		<!-- SELECT * FROM LECTURE_TBL WHERE LECTURE_DEPARTMENT = #{lectureDepartment} -->
+ 		<![CDATA[SELECT * FROM (SELECT * FROM LECTURE_TBL
+ 			WHERE LECTURE_DEPARTMENT = #{lectureDepartment}) WHERE LECTURE_START <= TO_CHAR(SYSDATE,'YYYY-MM-DDHH24:MI') AND TO_CHAR(SYSDATE,'YYYY-MM-DDHH24:MI') <= LECTURE_END]]>
+	</select>
+
+	<insert id="insertEnroll" parameterType="Lecture">
+		INSERT INTO GRADE_TBL(LECTURE_NO
+		, STUDENT_NO, PROFESSOR_NO,
+		GRADE_YEAR, GRADE_SESSION
+		,GRADE_SUBJECT , LECTURE_DIVISION, LECTURE_GRADE)
+		VALUES(#{lectureNo}
+		, #{studentNo}
+		, #{professorNo}
+		, #{gradeYear}
+		, #{gradeSession}
+		, #{lectureName}
+		, #{lectureDivision}
+		, #{lectureGrade})
+	</insert>
+
+	<select id="selectMyEnroll" resultMap="lectureResultMap">
+		<!-- SELECT LECTURE_NO, STUDENT_NO, GRADE_YEAR, GRADE_SESSION, GRADE_SUBJECT 
+			, LECTURE_DIVISION, LECTURE_GRADE, GRADE_AVG, GRADE_FEEDBACK , GRADE_OBJECTION, 
+			GRADE_CHANGE FROM GRADE_TBL -->
+		<!-- SELECT * FROM LECTURE_TBL L RIGHT JOIN GRADE_TBL G ON G.LECTURE_NO 
+			= L.LECTURE_NO -->
+		SELECT G.LECTURE_NO
+		, G.STUDENT_NO
+		, G.GRADE_YEAR
+		, G.GRADE_SESSION
+		, G.LECTURE_DIVISION
+		, G.LECTURE_GRADE
+		, L.PROFESSOR_NAME
+		, L.LECTURE_NAME
+		, L.LECTURE_DEPARTMENT
+		, L.UNIVERSITY_COLLEGE
+		, L.LECTURE_ROOM
+		, L.LECTURE_PEOPLE
+		, L.LECTURE_START_TIME
+		, L.LECTURE_ENDTIME
+		FROM GRADE_TBL G INNER JOIN LECTURE_TBL L
+		ON G.LECTURE_NO = L.LECTURE_NO
+	</select>
+
+	<delete id="deleteEnroll" parameterType="hashmap">
+		DELETE FROM GRADE_TBL WHERE LECTURE_NO=#{lectureNo} AND
+		STUDENT_NO=#{studentNo}
+	</delete>
+
+	<!-- <select id="selectEnrollCount"> SELECT COUNT(*) FROM CART_TBL </select> -->
+
+</mapper>
