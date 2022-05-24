@@ -58,13 +58,13 @@ hr {
 					<div class="selectBox" style="padding: 10px;">
 						<select id="professorName" name="professorName"
 							onchange="getProName()" style="border: none; width: 330px;">
-							<option value="교수를 선택하세요">${question.professorName}</option>
+							<option value="${question.professorName}">${question.professorName}</option>
 							<c:forEach var="lList" items="${lList}">
 								<option value="${lList.professorName }">${lList.professorName }</option>
 							</c:forEach>
 						</select> &emsp;&emsp; <select id="lectureName" name="lectureName"
 							style="border: none; width: 330px;">
-							<option value="강의를 선택하세요">${question.lectureName}</option>
+							<option value="${question.lectureName}">${question.lectureName}</option>
 						</select>
 					</div>
 					<div class="title">

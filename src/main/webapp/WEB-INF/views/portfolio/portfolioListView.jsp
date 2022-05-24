@@ -12,51 +12,23 @@
 .bbs {
 	position: relative;
 	margin-bottom: 40px;
+}#q1{
+	width:5%;
 }
-
-.bbs table {
-	width: 1000px;
-	border-top: 1px solid #343434;
+#q2{
+	width:23%;
 }
-
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
+#q3{
+	width:13%;
 }
-
-thead {
-	background: rgb(237, 237, 237);
-	height: 50px;
-	border-bottom: 2px solid #c2c2c2;
+#q4{
+	width:20%;
 }
-
-tr {
-	display: table-row;
-	border-color: inherit;
+#q5{
+	width:20%;
 }
-
-tbody {
-	display: table-row-group;
-	vertical-align: middle;
-	border-color: inherit;
-}
-
-.bbs_ table th, .bbs table td {
-	padding: 12px 10px;
-	border-bottom: 1px solid #c2c2c2;
-	font-size: 16px;
-}
-
-.bbs table .space {
-	background: #fdfdfd;
-}
-
-.ta {
-	text-align: center;
-}
-td a{
-	text-decoration: none;
-	color: black;
+#q6{
+	width:19%;
 }
 </style>
 </head>
@@ -75,21 +47,22 @@ td a{
 		<!-- contents-main -->
 		<div id="center">
 				<div class="c-title">
-				<h2 id="b-title">포트폴리오 관리</h2>
+				<div class="b-title">
+					<h2>포트폴리오관리</h2>	
 				</div>
-				<br><br><br>
-				  <div class="bbs">
-							<table>
-								
+				<div class="btn_1"><button style="width: 80px; cursor:pointer;" class="btn"onclick="location.href='/portfolio/writeView.kh'">글쓰기</button></div>
+				</div>
+				
+				
+							<table class="type01">	
 								<thead>
 									<tr >
-										<th>번호</th>
-										<th>제목</th>
-										<th>작성자</th>
-										<th>내용</th>
-										<th>자격증첨부</th>
-										<th>수상이력첨부</th>
-										<th>작성날짜</th>	
+										<th id="q1">번호</th>
+										<th id="q2">제목</th>
+										<th id="q3">작성자</th>
+										<th id="q4">자격증첨부</th>
+										<th id="q5">수상이력첨부</th>
+										<th id="q6">작성날짜</th>	
 									</tr>
 								</thead>
 								<tbody>
@@ -101,7 +74,6 @@ td a{
 											</c:url>
 											<td class="ta"><a href="${pDetail}">${portfolio.port_title }</a></td>
 											<td>${portfolio.port_name}</td>
-											<td >${portfolio.port_content}</td>	
 											<td class="ta" id="license">${portfolio.port_license}</td>
 											<td class="ta" id="award_history">${portfolio.port_award_history}</td>
 											<td class="ta" id="writeDate">${portfolio.port_writerDate}</td>		
@@ -139,8 +111,7 @@ td a{
 								</div>
 							</div>
 						</div>
-					</div>
-			
+		
 				<!-- footer -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>
 	</c:if>

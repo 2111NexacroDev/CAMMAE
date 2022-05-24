@@ -76,9 +76,19 @@
 					<div class="contents_1bar_1_1"><a href="#" style="color:white">&nbsp;&nbsp;취업지원센터</a></div>
 					<div class="contents_1bar_1_2"><img src="../../../resources/img/logo2.png" style="width:90px; height:85px;  opacity: 0.4; filter: alpha(opacity=40);"></div>
 				</div>
-				<div class="contents_1bar_2 ${menu eq 'notice' ? 'active' : '' }"> <a href="/notice/list.kh">&nbsp;&nbsp;&nbsp;공지사항</a></div>
+				
+				<c:choose>
+					<c:when test="${not empty sessionScope.loginProfessor }">
+						<div class="contents_1bar_2 ${menu eq 'notice' ? 'active' : '' }"> <a href="/notice/list.kh">&nbsp;&nbsp;&nbsp;공지사항</a></div>
+					</c:when>
+					<c:otherwise>
+							<div class="contents_1bar_2 ${menu eq 'notice' ? 'active' : '' }"> <a href="/notice/list.kh">&nbsp;&nbsp;&nbsp;공지사항</a></div>
 				<div class="contents_1bar_2 ${menu eq 'recruitment' ? 'active' : '' }"><a href="/recruitment/list.kh">&nbsp;&nbsp;&nbsp;채용공고</a></div>
 				<div class="contents_1bar_2 ${menu eq 'support' ? 'active' : '' }"><a href="/support/list.kh">&nbsp;&nbsp;&nbsp;지원현황</a></div>
+					</c:otherwise>
+				</c:choose>
+				
+			
 				<c:choose>
 					<c:when test="${not empty sessionScope.loginUser }">
 						<div class="contents_1bar_2 ${menu eq 'consultant' ? 'active' : '' }"><a href="/consultant/list.kh">&nbsp;&nbsp;&nbsp;상담관리</a></div>
@@ -95,11 +105,7 @@
 					<c:when test="${not empty sessionScope.loginManager}">
 								<div class="contents_1bar_2 ${menu1 eq 'portfolio1' ? 'active' : '' }" ><a href="/portfolio/adminListView.kh">&nbsp;&nbsp;&nbsp;포트폴리오 관리</a></div>
 					</c:when>
-				</c:choose>
-				
-			
-				
-			
+				</c:choose>		
 			</div>
 			
 		</div>

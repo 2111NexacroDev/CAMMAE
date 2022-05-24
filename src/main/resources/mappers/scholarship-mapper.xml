@@ -24,7 +24,7 @@
   	
   	<select id="selectAllScholar" resultMap="scholarshipResultMap">
   	 SELECT * FROM SCHOLARSHIP_TBL 
-  	 WHERE SCHOLARSHIP_YEAR = #{scholarship_year} AND SCHOLARSHIP_TEAM= #{scholarship_term} AND SCHOLARSHIP_COLLEGE = #{scholarship_college} AND SCHOLARSHIP_MANG_NO = #{scholarship_manager_no}
+  	 WHERE SCHOLARSHIP_YEAR = #{scholarship_year} AND SCHOLARSHIP_TEAM= #{scholarship_term} AND SCHOLARSHIP_COLLEGE = #{scholarship_college}
   	</select>
   	
   	<select id="selectResult" resultMap="scholarshipResultMap">

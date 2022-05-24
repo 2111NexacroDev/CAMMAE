@@ -1,5 +1,7 @@
 package org.kh.campus.professor.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.kh.campus.professor.domain.Professor;
 import org.kh.campus.professor.service.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,11 @@ public class ProfessorController {
 	
 	// 교수 정보 조회
 	@RequestMapping(value="/professor/prfInfo.kh", method=RequestMethod.GET)
-	public NexacroResult printProfessor() {
+	public NexacroResult printProfessor(HttpSession session) {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
-		int professorNo = 0;
+		int professorNo = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
 		
 		Professor professor = pService.printProfessor(professorNo);
 		
@@ -38,11 +40,11 @@ public class ProfessorController {
 	@RequestMapping(value="/professor/prfUpdate.kh", method=RequestMethod.POST)
 	public NexacroResult modifyProfessor(
 			@ParamDataSet(name="in_prf") 	DataSet inPrf
-			) throws Exception {
+			,HttpSession session) throws Exception {
 		int 	nErrorCode = 0;
 		String  strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
-		int professorNo = 0;
+		int professorNo = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
 		
 		String professorAddress = dsGet(inPrf, 0, "professorAddress");
 		String professorPhonenumber = dsGet(inPrf, 0, "professorPhonenumber");

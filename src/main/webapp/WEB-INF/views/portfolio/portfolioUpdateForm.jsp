@@ -8,47 +8,36 @@
 <title>학생 포트폴리오 수정 페이지</title>
 <link rel="stylesheet" href="/resources/contents.css">
 <style>
-.tb1 {
-	position: relative;
-	border-top: 1px solid #ccc;
-	font-size: 16px;
+table.type05 {
+	border-bottom: 1.5px solid rgb(30, 57, 50);
+	border-top: 1.5px solid rgb(30, 57, 50);
+	border-collapse: collapse;
+	text-align: left;
+	line-height: 1.5;
+	margin-top: 10px;
+	width: 800px;
 }
 
-.tb1 table {
-	position: relative;
-	border-top: 1px solid #fff;
-	width: 100%;
+table.type05 thead {
+	background: rgb(231, 232, 226);
 }
 
-colgroup {
-	display: table-column-group;
+table.type05 thead th {
+	padding: 10px;
+	vertical-align: top;
+	color: black;
 }
 
-tbody {
-	display: table-row-group;
-	vertical-align: middle;
-	border-color: inherit;
+.ta_l {
+	width: 15%;
+	background: rgb(231, 232, 226);
+	text-align: center;
+	font-weight: bold;
 }
 
-tr {
-	display: table-row;
-	vertical-align: inherit;
-	border-color: inherit;
-}
-
-.tb1 table tbody th {
-	padding: 17px 12px;
-	border-right: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	color: white;
-	background: #10412C;
-}
-
-.tb1 table tbody td {
-	padding: 17px 12px;
-	border-right: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	color: #000;
+td {
+	padding: 7px;
+	border-bottom: 1px solid #CCC;
 }
 
 .ta_l {
@@ -101,7 +90,7 @@ tr {
 
 
 						<div class="tb1">
-							<table>
+							<table class="type05">
 								<colgroup>
 									<col style="width: 180px;">
 									<col>
@@ -109,53 +98,52 @@ tr {
 								<tbody>
 									<tr>
 										<th scope="row" class="ta_l">제목</th>
-										<td class="ta_l"><input type="text" name="port_title"
+										<td><input type="text" name="port_title"
 											value="${portfolio.port_title}"></td>
 									</tr>
 									<tr>
 										<th scope="row" class="ta_l">이름</th>
-										<td class="ta_l"><input type="text" name="port_name"
+										<td><input type="text" name="port_name" readonly
 											value="${portfolio.port_name}"></td>
 									</tr>
 									<tr>
 										<th scope="row" class="ta_l">학번</th>
-										<td class="ta_l"><input type="text" name="port_college"
+										<td><input type="text" name="port_college" readonly
 											readonly value="${portfolio.port_college }"></td>
 									</tr>
 									<tr>
 										<th scope="row" class="ta_l">학과명</th>
-										<td class="ta_l"><input type="text"
+										<td><input type="text" readonly
 											name="port_student_number"
 											value="${portfolio.port_student_number}" readonly></td>
 									</tr>
 									<tr>
 										<th scope="row" class="ta_l">단과대학</th>
-										<td class="ta_l"><input type="text"
-											name="port_university_code"
+										<td><input type="text" name="port_university_code"
 											value="${portfolio.port_university_code }" /></td>
 									</tr>
 									<tr>
 										<th scope="row" class="ta_l">전화번호</th>
-										<td class="ta_l"><input type="text"
+										<td><input type="text" readonly
 											name="port_student_number"
 											value="${portfolio.port_student_number}" readonly></td>
 									</tr>
 									<tr>
 										<th scope="row" class="ta_l">자격증 첨부</th>
-										<td class="ta_l"><input type="file" name="reloadFile">${portfolio.port_license}</td>
+										<td><input type="file" name="reloadFile">${portfolio.port_license}</td>
 									</tr>
 									<tr>
 										<th scope="row" class="ta_l">수상이력 첨부</th>
-										<td class="ta_l"><input type="file" name="reloadFile1">${portfolio.port_award_history}</td>
+										<td><input type="file" name="reloadFile1">${portfolio.port_award_history}</td>
 									</tr>
 									<tr>
 										<th scope="row" class="ta_l">작성날짜</th>
-										<td class="ta_l">${portfolio.port_writerDate}</td>
+										<td>${portfolio.port_writerDate}</td>
 									</tr>
 
 									<tr>
 										<th scope="row" class="ta_l">내용</th>
-										<td class="ta_l"><input type="text" name="port_content"
+										<td><input type="text" name="port_content"
 											value="${portfolio.port_content}"></td>
 									</tr>
 								</tbody>
@@ -164,7 +152,10 @@ tr {
 							<br>
 							<div class="enr_btn">
 								<div class="input-btn">
-									<input type="submit" id="btn" class="btn" value="수정"><br>
+									<input type="submit" id="btn" class="btn" value="수정"> <a
+										href="/portfolio/listView.kh" id="list_l">
+										<button class="btn" id="btn">취소</button>
+									</a>
 								</div>
 							</div>
 						</div>
@@ -173,11 +164,7 @@ tr {
 
 				<br>
 
-				<div class="a-btn">
-					<a href="/portfolio/listView.kh" id="list_l">
-						<button class="btn" id="btn">목록</button>
-					</a>
-				</div>
+
 			</div>
 
 		</div>

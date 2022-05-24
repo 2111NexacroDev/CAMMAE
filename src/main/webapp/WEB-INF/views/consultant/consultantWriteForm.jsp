@@ -10,29 +10,46 @@
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link rel="stylesheet" href="/resources/contents.css">
 <style>
-table {
+table.type05 {
+	border-top: 1.5px solid rgb(30, 57, 50);
 	border-collapse: collapse;
-	border-spacing: 0;
+	text-align: left;
+	line-height: 1.5;
+	margin-top: 10px;
+	width: 800px;
 }
 
-table td* {
-	vertical-align: middle;
+table.type05 thead {
+	background: rgb(231, 232, 226);
 }
 
-table td {
-	padding: 15px 5px;
-	border-bottom: 1px solid #c2c2c2;
-	font-size: 16px;
+table.type05 thead th {
+	padding: 10px;
+	vertical-align: top;
+	color: black;
 }
 
-.td-left {
-	width: 100px;
+td {
+	padding: 7px;
+	border-bottom: 1px solid #CCC;
+}
+.td_left{
+	width: 15%;
+	background: rgb(231, 232, 226);
+	text-align: center;
+	font-weight: bold;
 }
 
 .td_sub {
-	border: none;
+	border-bottom: none;
+}
+#td_content{
+	border-bottom: 1.5px solid rgb(30, 57, 50);
 }
 
+.btn{
+	margin-top: 30px;
+}
 button { cursor:pointer; }
 	
 }
@@ -55,13 +72,13 @@ button { cursor:pointer; }
 			<div id="center">
 				<form action="/consultant/register.kh" method="post">
 					<div class="c-title">
-						<h2 id="b-title">상담관리</h2>
-					</div>
-					<br><br>
-					<div id="c-main" style="width: 800px; height: 800px;">
-					<table>
+						<div class="b-title">
+							<h2>상담관리</h2>
+						</div>	
+					</div>	
+					<table class="type05">
 					<tr>
-						<td class="td_left">상담제목</td>
+						<td class="td_left" id="">상담제목</td>
 						<td class="td_right"><input type="text" name="cons_title"></td>
 					</tr>
 					
@@ -113,19 +130,17 @@ button { cursor:pointer; }
 							 </select>
 						</td>
 					</tr>
-						
-					
-					
+
 					<tr>
-						<td class="td_left">상담내용</td>
-						<td class="td_right"><textarea name="cons_content"></textarea></td>
+						<td class="td_left" id="td_content">상담내용</td>
+						<td class="td_right" id="td_content"><textarea name="cons_content"></textarea></td>
 					</tr>
 					
 					<tr>
 						<td colspan="2" align="center" class="td_sub"><button class="btn" type="submit"  >상담신청</button></td>
 					</tr>
 					</table>
-					</div>
+					
 				</form>
 			</div>
 

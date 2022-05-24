@@ -7,9 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.kh.campus.attendance.domain.Attendance;
 import org.kh.campus.attendance.service.AttendanceService;
-import org.kh.campus.grade.domain.Grade;
-import org.kh.campus.graduation.domain.Graduation;
-import org.kh.campus.scholarship.domain.Scholarship;
+import org.kh.campus.professor.domain.Professor;
 import org.kh.campus.student.domain.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.nexacro.uiadapter17.spring.core.annotation.ParamDataSet;
+import com.nexacro.uiadapter17.spring.core.annotation.ParamVariable;
 import com.nexacro.uiadapter17.spring.core.data.NexacroResult;
 import com.nexacro17.xapi.data.DataSet;
 
@@ -32,11 +31,7 @@ public class AttendanceController {
 		String strErrorMsg = "START";
 		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
-		/*
-		 * int studentNo =
-		 * (((Student)(session.getAttribute("loginUser"))).getStudentNo());
-		 */
-		int studentNo = 0;
+		int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
 		attInfo.put("studentNo", Integer.toString(studentNo));
 		List<Attendance>aList = aService.printAttStudent(attInfo);
@@ -52,11 +47,7 @@ public class AttendanceController {
 		String strErrorMsg = "START";
 		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
-		/*
-		 * int studentNo =
-		 * (((Student)(session.getAttribute("loginUser"))).getStudentNo());
-		 */
-		int professorNo = 0;
+		int professorNo = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
 		attInfo.put("professorNo", Integer.toString(professorNo));
 		List<Attendance>aList = aService.printAttProfessor(attInfo);
@@ -72,11 +63,7 @@ public class AttendanceController {
 		String strErrorMsg = "START";
 		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
-		/*
-		 * int studentNo =
-		 * (((Student)(session.getAttribute("loginUser"))).getStudentNo());
-		 */
-		int professorNo = 0;
+		int professorNo = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
 		String lectureName = dsGet(subject, 0, "lectureName");
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
 		attInfo.put("professorNo", Integer.toString(professorNo));
@@ -93,7 +80,7 @@ public class AttendanceController {
 	
 	
 	@RequestMapping(value = "/attendance/register.kh", method = RequestMethod.POST)
-	public NexacroResult registerScholar(@ParamDataSet(name = "insInfo", required = false) DataSet inStu, HttpSession session) throws Exception {
+	public NexacroResult registerScholar(@ParamDataSet(name = "insInfo", required = false) DataSet inStu, @ParamVariable(name="lectureName") String lectureName,HttpSession session) throws Exception {
 
 		int nErrorCode = 0;
 		String strErrorMsg = "START";
@@ -102,7 +89,6 @@ public class AttendanceController {
 			String studentName =dsGet(inStu,0, "studentName");
 			int lectureNo = Integer.parseInt(dsGet(inStu, 0, "lectureNo"));
 			int studentNo = Integer.parseInt(dsGet(inStu, 0, "studentNo"));
-			String lectureName = dsGet(inStu, 0, "lectureName");
 			String attStatus = dsGet(inStu, 0, "attStatus");
 	
 			Attendance attendance = new Attendance(
@@ -125,16 +111,11 @@ public class AttendanceController {
 	
 	
 	@RequestMapping(value = "/attendance/stuInfo.kh", method = RequestMethod.POST)
-	public NexacroResult printStuInfo(HttpSession session,@ParamDataSet(name="in_dssubject")DataSet sub ) throws Exception {
+	public NexacroResult printStuInfo(HttpSession session,@ParamVariable(name="lectureName") String lectureName) throws Exception {
 		String strErrorMsg = "START";
 		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
-		/*
-		 * int studentNo =
-		 * (((Student)(session.getAttribute("loginUser"))).getStudentNo());
-		 */
-		int studentNo = 0;
-		String lectureName = dsGet(sub, 0, "lectureName");
+		int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
 		attInfo.put("studentNo", Integer.toString(studentNo));
 		attInfo.put("lectureName", lectureName);
@@ -150,12 +131,9 @@ public class AttendanceController {
 		String strErrorMsg = "START";
 		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
-		int professorNo = 0;
-		/* int lectureNo = Integer.parseInt(dsGet(issue, 0, "lectureNo")); */
-
+		int professorNo = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
 		attInfo.put("professorNo", Integer.toString(professorNo));
-		/* attInfo.put("lectureNo", Integer.toString(lectureNo)); */
 		List<Attendance>aList = aService.printAttProfIssue(attInfo);
 		result.addDataSet("out_prfIssue", aList);
 		result.addVariable("ErrorCode", nErrorCode);
@@ -183,6 +161,26 @@ public class AttendanceController {
 		return result;
 	}
 	 
+	   
+	   @RequestMapping(value = "attendance/prfIssueUpdate.kh", method = RequestMethod.POST)
+	   public NexacroResult updateStatus(
+	         @ParamDataSet(name = "in_profIssue") DataSet updateIssue) throws Exception {
+	      int nErrorCode = 0;
+	      String strErrorMsg = "START";
+	      NexacroResult result = new NexacroResult();
+
+	      int lectureNo = Integer.parseInt(dsGet(updateIssue, 0, "lectureNo"));
+	      int studentNo = Integer.parseInt(dsGet(updateIssue, 0, "studentNo"));
+	      String attStatus = dsGet(updateIssue, 0, "attStatus");
+	      Attendance attendance = new Attendance(lectureNo, studentNo, attStatus);
+
+	      aService.modifyStatusChange(attendance);
+
+	      result.addVariable("ErrorCode", nErrorCode);
+	      result.addVariable("ErrorMsg", strErrorMsg);
+
+	      return result;
+	   }
 	
 	public String dsGet(DataSet ds, int rowno, String colid) throws Exception {
 		String value;

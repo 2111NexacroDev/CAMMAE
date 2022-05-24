@@ -43,7 +43,7 @@
   	</select>
   	
   	<insert id="insertAttendance">
-  	 INSERT INTO ATTENDANCE_TBL VALUES(#{studentNo}, #{lectureNo}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), #{attStatus},'N', #{lectureName}, #{studentName})
+  	 INSERT INTO ATTENDANCE_TBL VALUES(#{studentNo}, #{lectureNo}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), #{attStatus},'N', #{lectureName}, #{studentName}, SEQ_ATT_NO.NEXTVAL)
   	</insert>
   	
   	
@@ -62,6 +62,11 @@
   	UPDATE ATTENDANCE_TBL SET ATT_OBJECTION = 'Y'
   	WHERE LECTURE_NO = #{lectureNo} AND STUDENT_NO = #{studentNo}
   	
+  	</update>
+  	
+  	<update id="updateStatus">
+  	UPDATE ATTENDANCE_TBL SET ATT_STATUS = #{attStatus}
+  	WHERE LECTURE_NO = #{lectureNo} AND STUDENT_NO = #{studentNo} 
   	</update>
     </mapper>
     

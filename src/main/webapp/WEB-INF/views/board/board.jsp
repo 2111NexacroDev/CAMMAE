@@ -191,7 +191,8 @@ hr {
 			var boardNo = "${board.boardNo}";
 			var rWriter = "${loginUser.studentName}";
 			var rWriterId = "${loginUser.studentNo}";
-			$.ajax({
+			$
+					.ajax({
 						url : "/board/replyList.kh",
 						type : "get",
 						data : {
@@ -232,8 +233,9 @@ hr {
 								$tr.append($rWriter);
 								$tr.append($rDate);
 								$tr2.append($rContent);
-								if (data[i].boardId == rWriterId&& data[i].boardReplyWriter == rWriter) {
-								$tr2.append($btnArea);
+								if (data[i].boardId == rWriterId
+										&& data[i].boardreplyWriter == rWriter) {
+									$tr2.append($btnArea);
 								}
 								$tableBody.append($tr);
 								$tableBody.append($tr2);
@@ -276,8 +278,8 @@ hr {
 			var $tdModifyBtn = $("<td  width='10%'>");
 			$tdModify
 					.append("<input type='text' size='86' value='"+boardReplyContent+"' id='modifyData'>");
-			$tdModifyBtn.append("<button class='btn' onclick='modifyReply(" + boardNo + ","
-					+ boardReplyNo + ");'>수정</button>");
+			$tdModifyBtn.append("<button class='btn' onclick='modifyReply("
+					+ boardNo + "," + boardReplyNo + ");'>수정</button>");
 			$trModify.append($tdModify);
 			$trModify.append($tdModifyBtn);
 			$(obj).parent().parent().after($trModify);

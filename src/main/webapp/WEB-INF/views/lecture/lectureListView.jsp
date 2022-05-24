@@ -29,6 +29,82 @@
 .btn {
 	margin: 0;
 }
+
+#btn1 {
+	border: 1px solid #10412C;
+	background-color: #10412C;
+	color: white;
+	border-radius: 5px;
+	padding: 5px 10px;
+	font-size: 13px;
+	font-weight: bold;
+	margin-right: 5px;
+}
+
+/* 모달창 css */
+#modal.modal-overlay {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: none;
+	/* flex-direction: column; */
+	align-items: center;
+	justify-content: center;
+	/* background: rgba(255, 255, 255, 0.25);
+	box-shadow: 0 8px 32px 0 gray; */
+	/* backdrop-filter: blur(1.5px);
+	-webkit-backdrop-filter: blur(1.5px); */
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	z-index: 1000;
+}
+/*         modal창 (파란색 배경) */
+#modal .modal-window {
+	background: white;
+	box-shadow: 0 8px 32px 0 gray;
+	backdrop-filter: blur(13.5px);
+	webkit-backdrop-filter: blur(13.5px);
+	border-radius: 10px;
+	border: 20px solid #10412C;
+	width: 400px;
+	height: 200px;
+	position: relative;
+	top: 50px;
+	padding: 10px;
+}
+
+#modal .title {
+	padding-left: 10px;
+	display: inline;
+	text-shadow: 1px 1px 2px gray;
+	color: white;
+}
+
+#modal .title h2 {
+	display: inline;
+}
+
+#modal .close-area {
+	display: inline;
+	float: right;
+	padding-right: 10px;
+	cursor: pointer;
+	color: black;
+}
+
+#modal .content {
+	margin-top: 20px;
+	padding: 0px 10px;
+	color: black;
+	text-align: center;
+}
+
+#modal #reportContents {
+	width: 350px;
+	height: 200px;
+}
 </style>
 </head>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -51,7 +127,7 @@
 							<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
 						</c:url>
 						<a href="${lWrite }">등록하기</a> --%>
-
+					<button id="btn1" class="btn-modal">기간부여</button>
 					<button style="width: 80px" class="btn"
 						onclick="location.href='/lecture/writeView.kh'">수강개설</button>
 				</div>
@@ -85,6 +161,9 @@
 						<th>종료시간</th>
 						<th>강의실</th> -->
 						<th id="L1">인원</th>
+						<th id="L2">학기</th>
+						<th id="L1">시작</th>
+						<th id="L1">종료</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -103,7 +182,9 @@
 							<td>${lecture.professorName }</td>
 							<td>${lecture.lectureGrade }</td>
 							<td>${lecture.lecturePeople }</td>
-							<%-- <td>${lecture.lectureRoom }</td> --%>
+							<td>${lecture.lectureTerm }</td>
+							<td>${lecture.lectureStart }</td>
+							<td>${lecture.lectureEnd }</td>							<%-- <td>${lecture.lectureRoom }</td> --%>
 							<%-- <td>${lecture.lectureStartTime }</td>
 							<td>${lecture.lectureEndTime }</td> --%>
 							<%-- <td><c:url var="lRemove" value="/lecture/remove.kh">
@@ -116,6 +197,119 @@
 
 		</div>
 	</div>
+
+
+	<!-- 모달 div 영역 -->
+	<form action="/lecture/lecturePeriod.kh" method="post">
+		<div id="modal" class="modal-overlay">
+			<div class="modal-window">
+				<div class="close-area">
+					<b>X</b>
+				</div>
+				<div class="content">
+					<p>
+						<b>수강신청 기간설정</b>
+					</p>
+					<table class="type04">
+						<tbody>
+						 	 <tr>
+								<th id="r1" scope="row">시작일</th>
+								<td><input type="dateTime-local" size="20"
+									name="lectureStart" value=""></td>
+							<tr>
+							<tr>
+								<th id="r1" scope="row">종료일</th>
+								<td><input type="dateTime-local" size="20"
+									name="lectureEnd" value=""></td>
+							</tr> 
+
+						</tbody>
+					</table>
+					<br>
+					<button type="submit" id="completion">완료</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	<script>
+	window.onload = function(){
+	   const modal = document.getElementById("modal")
+	   function modalOn() {
+	       modal.style.display = "flex"
+	   }
+	   function isModalOn() {
+	       return modal.style.display === "flex"
+	   }
+	   function modalOff() {
+	       modal.style.display = "none"
+	   }
+	   
+	   const closeBtn = modal.querySelector(".close-area")
+	   closeBtn.addEventListener("click", e => {
+	       modalOff()
+	   })
+	   modal.addEventListener("click", e => {
+	       const evTarget = e.target
+	       if(evTarget.classList.contains("modal-overlay")) {
+	           modalOff()
+	       }
+	   })
+	   window.addEventListener("keyup", e => {
+	       if(isModalOn() && e.key === "Escape") {
+	           modalOff()
+	       }
+	   })
+	   // 모달 온, 이력서 지원하기 뛰우기
+	    var btnModal = document.querySelectorAll(".btn-modal");
+	   btnModal[0].addEventListener("click", function(event){
+       	modalOn();
+       });
+	  /*  let today = new Date();
+	   let year = today.getFullYear(); // 년도
+	   let month = today.getMonth() + 1;  // 월
+	   let date = today.getDate();  // 날짜
+	   let day = today.getDay();  // 요일
+	   var endDate = $("#endDate").html();
+	   let endDate2 =  new Date(endDate);
+	        btnModal[0].addEventListener("click", function(event){
+				var recruitmentNo = $('#recruitmentNo').val();
+	        	
+	        	$.ajax({
+					url : "/countSupport",
+					type : 'POST',
+					traditional : true,
+					data : {
+						recruitmentNo : recruitmentNo
+					},
+					success : function(jdata){
+						if(jdata>0) {
+							alert("이미 접수되었습니다.")
+							return false;
+						} 
+						if(endDate2 > today){
+							   modalOn();
+						   }else{
+							   alert("마감되었습니다.");
+						   }
+					}
+				});
+			  
+	        });  */
+	    
+	    // 모달에서 완료 버튼 클릭시
+	       var findPwd = document.querySelector("#completion");
+	       findPwd.addEventListener("click", function() {
+	    	   
+	    	   alert("수강신청기간이 설정 되었습니다.");
+	    	   modalOff();
+	    	   
+	       });
+	    
+	}
+</script>
+
+
+
 
 	<script>
 		function getList() {
@@ -138,6 +332,7 @@
 					var $lecGrade;
 					/* var $lecRoom; */
 					var $lecPeople;
+					var $lecTerm;
 					var $tr;
 					if (data.length > 0) {
 						for ( var i in data) {
@@ -158,6 +353,8 @@
 									data[i].lectureRoom); */
 							$lecPeople = $("<td width='100'>").text(
 									data[i].lecturePeople);
+							$lecPeople = $("<td width='100'>").text(
+									data[i].lectureTerm);
 							/* $lecTime = $("<td width='100'>").text(
 									data[i].lectureTime); */
 							$tr.append($lecNo);
@@ -169,6 +366,7 @@
 							$tr.append($lecGrade);
 							/* $tr.append($lecRoom); */
 							$tr.append($lecPeople);
+							$tr.append($lecTerm);
 							/* $tr.append($lecTime); */
 							$tableBody.append($tr);
 						}
@@ -180,5 +378,5 @@
 			});
 		}
 	</script>
-</body>
+	</ body>
 </html>

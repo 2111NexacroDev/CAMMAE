@@ -1,5 +1,7 @@
 package org.kh.campus.lecture.domain;
 
+import java.util.Date;
+
 public class Lecture {
 	private int lectureNo;
 	private int professorNo;
@@ -16,13 +18,16 @@ public class Lecture {
 	private int studentNo;
 	private String gradeYear;
 	private String gradeSession; 
+	private String lectureTerm;
+	private String lectureStart;
+	private String lectureEnd;
 	
 	public Lecture() {}
 
 	public Lecture(int lectureNo, int professorNo, String universityCollege, String lectureDepartment,
 			String lectureName, String professorName, String lectureDivision, int lectureGrade, String lectureRoom,
 			int lecturePeople, String lectureStartTime, String lectureEndTime, int studentNo, String gradeYear,
-			String gradeSession) {
+			String gradeSession, String lectureTerm, String lectureStart, String lectureEnd) {
 		super();
 		this.lectureNo = lectureNo;
 		this.professorNo = professorNo;
@@ -39,6 +44,9 @@ public class Lecture {
 		this.studentNo = studentNo;
 		this.gradeYear = gradeYear;
 		this.gradeSession = gradeSession;
+		this.lectureTerm = lectureTerm;
+		this.lectureStart = lectureStart;
+		this.lectureEnd = lectureEnd;
 	}
 
 	public int getLectureNo() {
@@ -161,6 +169,30 @@ public class Lecture {
 		this.gradeSession = gradeSession;
 	}
 
+	public String getLectureTerm() {
+		return lectureTerm;
+	}
+
+	public void setLectureTerm(String lectureTerm) {
+		this.lectureTerm = lectureTerm;
+	}
+
+	public String getLectureStart() {
+		return lectureStart;
+	}
+
+	public void setLectureStart(String lectureStart) {
+		this.lectureStart = lectureStart;
+	}
+
+	public String getLectureEnd() {
+		return lectureEnd;
+	}
+
+	public void setLectureEnd(String lectureEnd) {
+		this.lectureEnd = lectureEnd;
+	}
+
 	@Override
 	public String toString() {
 		return "Lecture [lectureNo=" + lectureNo + ", professorNo=" + professorNo + ", universityCollege="
@@ -168,7 +200,8 @@ public class Lecture {
 				+ ", professorName=" + professorName + ", lectureDivision=" + lectureDivision + ", lectureGrade="
 				+ lectureGrade + ", lectureRoom=" + lectureRoom + ", lecturePeople=" + lecturePeople
 				+ ", lectureStartTime=" + lectureStartTime + ", lectureEndTime=" + lectureEndTime + ", studentNo="
-				+ studentNo + ", gradeYear=" + gradeYear + ", gradeSession=" + gradeSession + "]";
+				+ studentNo + ", gradeYear=" + gradeYear + ", gradeSession=" + gradeSession + ", lectureTerm="
+				+ lectureTerm + ", lectureStart=" + lectureStart + ", lectureEnd=" + lectureEnd + "]";
 	}
 
 	

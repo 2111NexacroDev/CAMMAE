@@ -4,6 +4,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
+import org.kh.campus.student.domain.Student;
 import org.kh.campus.tuition.domain.Tuition;
 import org.kh.campus.tuition.service.TuitionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,7 +181,8 @@ public class TuitionController {
 	
 	//학생 등록금 고지서 조회
 		@RequestMapping(value = "tuition/studentList.kh",method = RequestMethod.POST)
-		public NexacroResult printOne(@ParamDataSet(name="searchAll")DataSet searchAll) throws Exception {
+		public NexacroResult printOne(@ParamDataSet(name="searchAll")DataSet searchAll
+				,HttpSession session) throws Exception {
 			NexacroResult result = new NexacroResult();
 			int nErrorCode = 0;
 			String strErrorMsg = "START";
@@ -191,17 +195,20 @@ public class TuitionController {
 			search.put("season",season);
 			
 			// 세션에서 학번 가져오기
-			int studentNo = 3;
-			search.put("studentNo",Integer.toBinaryString(studentNo));
+			int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
+			search.put("studentNo",Integer.toString(studentNo));
 			
 			List<Tuition> tList = tService.printOneList(search);
 			
-			if (!tList.isEmpty()) {
-				nErrorCode = 0;
-				strErrorMsg = "SUCC";
-			} else {
+			System.out.println(tList.toString());
+			
+			if (tList.isEmpty()) {
 				nErrorCode = 0;
 				strErrorMsg = "Fail";
+			} else {
+				nErrorCode = 1;
+				strErrorMsg = "SUCC";
+				System.out.println("성공");
 			}
 
 			result.addDataSet("tuitionList", tList);
