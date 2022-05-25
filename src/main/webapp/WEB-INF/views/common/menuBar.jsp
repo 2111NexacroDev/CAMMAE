@@ -40,7 +40,7 @@
                 <ul class="lnb_nav_dep1">
                     <li><a href="/board/list.kh" class="btn_lnb_dep1">게시판</a></li>
                     <li><a href="/cart/preCartListView.kh" class="btn_lnb_dep1">수강신청</a></li>
-                    <li><a href="/home.kh" class="btn_lnb_dep1">캠퍼스매니저</a></li>
+                    <li><a href="javascript:void(window.open('/home.kh', '캠퍼스매니저','width=1000px, height=500px'))" class="btn_lnb_dep1">캠퍼스매니저</a></li>
                     <li><a href="/notice/list.kh" class="btn_lnb_dep1">취업지원센터</a></li>
                 </ul>
             </div>
