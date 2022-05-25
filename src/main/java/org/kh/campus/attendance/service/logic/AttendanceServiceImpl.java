@@ -70,8 +70,8 @@ public class AttendanceServiceImpl implements AttendanceService{
 	}
 
 	@Override
-	public int modifyObjectChange(Attendance attendance) {
-		int result = aStore.updateObjectChange(sqlSession, attendance);
+	public int modifyObjectChange(int attNo) {
+		int result = aStore.updateObjectChange(sqlSession, attNo);
 		return result;
 	}
 

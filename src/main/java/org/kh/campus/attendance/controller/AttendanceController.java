@@ -59,15 +59,17 @@ public class AttendanceController {
 	}
 	
 	@RequestMapping(value = "/attendance/profSeachStuInfo.kh", method = RequestMethod.POST)
-	public NexacroResult printProfSearchStu(HttpSession session, @ParamDataSet(name="in_subject")DataSet subject) throws Exception {
+	public NexacroResult printProfSearchStu(HttpSession session, @ParamDataSet(name="in_subject")DataSet subject
+			, @ParamVariable(name="lectureName") String lectureName) throws Exception {
 		String strErrorMsg = "START";
 		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
 		int professorNo = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
-		String lectureName = dsGet(subject, 0, "lectureName");
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
 		attInfo.put("professorNo", Integer.toString(professorNo));
 		attInfo.put("lectureName", lectureName);
+		
+		System.out.println(lectureName +"name");
 		
 		
 		List<Attendance>aList = aService.printAttProfessorSearchStu(attInfo);
@@ -144,16 +146,16 @@ public class AttendanceController {
 	
 	@RequestMapping(value = "/attendance/stu_prfIssue.kh", method = RequestMethod.POST)
 	public NexacroResult updateProfIssue(
-			@ParamDataSet(name = "in_stu_profIssue") DataSet stuProfIssue) throws Exception {
+			@ParamVariable (name = "attNo") int attNo) throws Exception {
 		int nErrorCode = 0;
 		String strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
+		
+//		int lectureNo = Integer.parseInt(dsGet(stuProfIssue, 0, "lectureNo"));
+//		int studentNo = Integer.parseInt(dsGet(stuProfIssue, 0, "studentNo"));
+		
 
-		int lectureNo = Integer.parseInt(dsGet(stuProfIssue, 0, "lectureNo"));
-		int studentNo = Integer.parseInt(dsGet(stuProfIssue, 0, "studentNo"));
-		Attendance attendance = new Attendance(lectureNo, studentNo);
-
-		aService.modifyObjectChange(attendance);
+		aService.modifyObjectChange(attNo);
 
 		result.addVariable("ErrorCode", nErrorCode);
 		result.addVariable("ErrorMsg", strErrorMsg);
