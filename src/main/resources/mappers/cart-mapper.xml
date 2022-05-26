@@ -38,6 +38,7 @@
 		<result property="lectureDepartment" column="LECTURE_DEPARTMENT" />
 		<result property="lectureStartTime" column="LECTURE_START_TIME" />
 		<result property="lectureEndTime" column="LECTURE_ENDTIME" />
+	    <result property="lectureTerm" column="LECTURE_TERM" />
 		<result property="lectureStart" column="LECTURE_START" />
 		<result property="lectureEnd" column="LECTURE_END" />
 	</resultMap>
