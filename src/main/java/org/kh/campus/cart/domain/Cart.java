@@ -15,6 +15,7 @@ public class Cart {
 	private String lectureDepartment; 
 	private String lectureStartTime;
 	private String lectureEndTime;
+	private String lectureTerm;
 	private String lectureStart;
 	private String lectureEnd;
 	
@@ -22,8 +23,8 @@ public class Cart {
 
 	public Cart(int cartNo, int studentNo, String lectureNo, String cartYear, String cartTerm, int lecturePeople,
 			String lectureDivision, int lectureGrade, String professorName, String lectureName,
-			String lectureDepartment, String lectureStartTime, String lectureEndTime, String lectureStart,
-			String lectureEnd) {
+			String lectureDepartment, String lectureStartTime, String lectureEndTime, String lectureTerm,
+			String lectureStart, String lectureEnd) {
 		super();
 		this.cartNo = cartNo;
 		this.studentNo = studentNo;
@@ -38,6 +39,7 @@ public class Cart {
 		this.lectureDepartment = lectureDepartment;
 		this.lectureStartTime = lectureStartTime;
 		this.lectureEndTime = lectureEndTime;
+		this.lectureTerm = lectureTerm;
 		this.lectureStart = lectureStart;
 		this.lectureEnd = lectureEnd;
 	}
@@ -146,6 +148,14 @@ public class Cart {
 		this.lectureEndTime = lectureEndTime;
 	}
 
+	public String getLectureTerm() {
+		return lectureTerm;
+	}
+
+	public void setLectureTerm(String lectureTerm) {
+		this.lectureTerm = lectureTerm;
+	}
+
 	public String getLectureStart() {
 		return lectureStart;
 	}
@@ -168,12 +178,10 @@ public class Cart {
 				+ cartYear + ", cartTerm=" + cartTerm + ", lecturePeople=" + lecturePeople + ", lectureDivision="
 				+ lectureDivision + ", lectureGrade=" + lectureGrade + ", professorName=" + professorName
 				+ ", lectureName=" + lectureName + ", lectureDepartment=" + lectureDepartment + ", lectureStartTime="
-				+ lectureStartTime + ", lectureEndTime=" + lectureEndTime + ", lectureStart=" + lectureStart
-				+ ", lectureEnd=" + lectureEnd + "]";
+				+ lectureStartTime + ", lectureEndTime=" + lectureEndTime + ", lectureTerm=" + lectureTerm
+				+ ", lectureStart=" + lectureStart + ", lectureEnd=" + lectureEnd + "]";
 	}
 
-	
-	
-	
+
 	
 }

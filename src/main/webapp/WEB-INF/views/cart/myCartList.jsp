@@ -119,7 +119,7 @@ table.type01 td a {
 				<%-- <td>${cart.cartNo }</td>
 				<td>${cart.lectureNo }</td> --%>
 				<%-- <td>${cart.studentNo }</td> --%>
-				<td>${cart.cartTerm }</td>
+				<td>${cart.lectureTerm }</td>
 				<td>${cart.lectureDepartment }</td>
 				<td>${cart.lectureDivision }</td>
 				<td>${cart.lectureName }</td>
