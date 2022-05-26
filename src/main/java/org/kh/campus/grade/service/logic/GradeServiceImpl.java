@@ -23,6 +23,11 @@ public class GradeServiceImpl implements GradeService {
 		return gList;
 	}
 	@Override
+	public double printAVG(HashMap<String, Integer> grade) {
+		double avg = gStore.selectAvg(grade, sqlSession);
+		return avg;
+	}
+	@Override
 	public List<Grade> printFeedbackStudent(HashMap<String, String> searchInfo) {
 		List<Grade> gList = gStore.selectFeedbackStudent(searchInfo, sqlSession);
 		return gList;

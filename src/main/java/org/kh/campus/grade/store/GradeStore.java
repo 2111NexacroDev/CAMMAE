@@ -29,4 +29,6 @@ public interface GradeStore {
 	public int updateFeedBack(Grade grade, SqlSession sqlSession);
 
 	public int deleteFeedBack(int pNo, SqlSession sqlSession);
+
+	public double selectAvg(HashMap<String, Integer> grade, SqlSession sqlSession);
 }
