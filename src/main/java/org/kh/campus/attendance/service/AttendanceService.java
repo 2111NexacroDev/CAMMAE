@@ -20,7 +20,7 @@ public interface AttendanceService {
 
 		public List<Attendance> printAttProfIssue(HashMap<String, String> attInfo);
 
-		public int modifyObjectChange(Attendance attendance);
+		public int modifyObjectChange(int attNo);
 
 		public int modifyStatusChange(Attendance attendance);
 

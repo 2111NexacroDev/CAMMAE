@@ -48,8 +48,8 @@ public class AttendanceStoreLogic implements AttendanceStore {
 	}
 
 	@Override
-	public int updateObjectChange(SqlSession sqlSession, Attendance attendance) {
-		int result = sqlSession.update("AttendanceMapper.updateObjectChange", attendance);
+	public int updateObjectChange(SqlSession sqlSession, int attNo) {
+		int result = sqlSession.update("AttendanceMapper.updateObjectChange", attNo);
 		return result;
 	}
 

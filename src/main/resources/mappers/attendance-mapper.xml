@@ -11,6 +11,7 @@
   	<result property="attObjection" column="ATT_OBJECTION"/>
   	<result property="lectureName" column="GRADE_SUBJECT"/>
   	<result property="studentName" column="STUDENT_NAME"/>
+  	<result property="attNo" column="ATT_NO"/>
   	</resultMap>
   	
   	<resultMap type="Attendance" id="AttendanceResultMap2">
@@ -21,6 +22,7 @@
   	<result property="attObjection" column="ATT_OBJECTION"/>
   	<result property="lectureName" column="GRADE_SUBJECT"/>
   	<result property="studentName" column="ATT_STUDENT_NAME"/>
+  	<result property="attNo" column="ATT_NO"/>
   	</resultMap>
   	 
   	 
@@ -60,7 +62,7 @@
   	
   	<update id="updateObjectChange">
   	UPDATE ATTENDANCE_TBL SET ATT_OBJECTION = 'Y'
-  	WHERE LECTURE_NO = #{lectureNo} AND STUDENT_NO = #{studentNo}
+  	WHERE ATT_NO = #{attNo}
   	
   	</update>
   	

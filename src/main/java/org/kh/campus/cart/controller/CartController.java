@@ -85,28 +85,24 @@ public class CartController {
 	public ModelAndView myCartList(ModelAndView mv) {
 		int studentNo = 0;
 		List<Cart> cList = cService.printMyCart(studentNo);
-		System.out.println("cList Test : " + cList);
+
 		
 		// 수강 기간 값 가져오기
 		String lectureStart = ((Cart) cList.get(0)).getLectureStart();
 		String lectureEnd = ((Cart) cList.get(0)).getLectureEnd();
-		System.out.println("lectureStart test : " + lectureStart);
-		System.out.println("lectureEnd test : " + lectureEnd);
+		
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 		Date today = new Date();
-		System.out.println("today test : " + today);
 		String sToday = dateFormat.format(today);
-		System.out.println("sToday test : " + sToday);
 
 		int result1 = sToday.compareTo(lectureStart); // sToday가 start보다 큼 (양수)
 		int result2 = sToday.compareTo(lectureEnd); // sToday가 end보다 작음 (음수)
 
-		System.out.println("result1 test : " + result1);
-		System.out.println("result2 test2 : " + result2);
+
 
 		String aFlag = "N";
-		if (result1 > 1 && result2 < -1) {
+		if (result1 >= 1 && result2 <= -1) {
 			aFlag = "Y";
 		}
 
@@ -232,10 +228,35 @@ public class CartController {
 	@RequestMapping(value = "/cart/enrollList.kh", method = RequestMethod.GET)
 	public ModelAndView enrollMyListView(ModelAndView mv) {
 		List<Lecture> lList = cService.printMyEnroll();
+		System.out.println("lList Test : " + lList);
+		String lectureStart = ((Lecture) lList.get(0)).getLectureStart();
+		String lectureEnd = ((Lecture) lList.get(0)).getLectureEnd();
+		System.out.println("lectureStart test : " + lectureStart);
+		System.out.println("lectureEnd test : " + lectureEnd);
+
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+		Date today = new Date();
+		System.out.println("today test : " + today);
+		String sToday = dateFormat.format(today);
+		System.out.println("sToday test : " + sToday);
+		
+		int result1 = sToday.compareTo(lectureStart); // sToday가 start보다 큼 (양수)
+		int result2 = sToday.compareTo(lectureEnd); // sToday가 end보다 작음 (음수)
+
+		System.out.println("result1 test : " + result1);
+		System.out.println("result2 test2 : " + result2);
+		
+		String aFlag = "N";
+		if (result1 >= 1 && result2 <= -1) {
+			aFlag = "Y";
+		}
+		
 		try {
 			if (!lList.isEmpty()) {
 				mv.addObject("menu", "enrolllist");
 				mv.addObject("lList", lList);
+				mv.addObject("aFlag", aFlag);
 				mv.setViewName("cart/enrollList");
 				System.out.println(lList.toString());
 

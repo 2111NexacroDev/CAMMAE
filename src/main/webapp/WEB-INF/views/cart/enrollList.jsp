@@ -120,9 +120,13 @@ table.type01 td a {
 				<td>${lecture.lectureRoom }</td>
 				<%-- <td>${lecture.lecturePeople }</td> --%>
 				<td>${lecture.lectureStartTime} ${lecture.lectureEndTime}</td>
-				<td><c:url var="gRemove" value="/cart/enrollRemove.kh">
+				<td>
+				<c:if test="${aFlag == 'Y'}">
+				<c:url var="gRemove" value="/cart/enrollRemove.kh">
 						<c:param name="lectureNo" value="${lecture.lectureNo }"></c:param>
-					</c:url> <a href="${gRemove }">삭제</a></td>
+					</c:url> <a href="${gRemove }">삭제</a>
+					</c:if>
+					</td>
 			</tr>
 
 		</c:forEach>

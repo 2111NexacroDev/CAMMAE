@@ -21,6 +21,8 @@
 		<result property="studentNo" column="STUDENT_NO" />
 		<result property="gradeYear" column="GRADE_YEAR" />
 		<result property="gradeSession" column="GRADE_SESSION" />
+		<result property="lectureStart" column="LECTURE_START" />
+		<result property="lectureEnd" column="LECTURE_END" />
 	</resultMap>
 
 	<resultMap type="Cart" id="cartResultMap">
@@ -36,6 +38,7 @@
 		<result property="lectureDepartment" column="LECTURE_DEPARTMENT" />
 		<result property="lectureStartTime" column="LECTURE_START_TIME" />
 		<result property="lectureEndTime" column="LECTURE_ENDTIME" />
+	    <result property="lectureTerm" column="LECTURE_TERM" />
 		<result property="lectureStart" column="LECTURE_START" />
 		<result property="lectureEnd" column="LECTURE_END" />
 	</resultMap>
@@ -67,9 +70,8 @@
 		CART_TBL VALUES(SEQ_CART_NO.NEXTVAL
 		, #{studentNo}
 		, #{lectureNo}
-		,
-		DEFAULT
-		, '1학기'
+		, DEFAULT
+		, #{lectureTerm}
 		, #{lecturePeople}
 		)
 	</insert>
@@ -135,6 +137,8 @@
 		, L.LECTURE_PEOPLE
 		, L.LECTURE_START_TIME
 		, L.LECTURE_ENDTIME
+		, L.LECTURE_START
+		, L.LECTURE_END
 		FROM GRADE_TBL G INNER JOIN LECTURE_TBL L
 		ON G.LECTURE_NO = L.LECTURE_NO
 	</select>
