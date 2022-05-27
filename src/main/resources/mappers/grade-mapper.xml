@@ -32,6 +32,11 @@
 		</if>
 	</select>
 	
+	<select id="selectAvg" resultType="_double">
+	SELECT AVG(GRADE_AVG) FROM GRADE_TBL
+	WHERE STUDENT_NO=#{studentNo} AND GRADE_YEAR = #{gradeYear} AND GRADE_SESSION = #{gradeSession}
+	</select>
+	
 	<select id="selectFeedbackStudent" resultMap="gradeResultMap">
 		SELECT * FROM GRADE_OBJECTION O
 		INNER JOIN GRADE_TBL G ON
