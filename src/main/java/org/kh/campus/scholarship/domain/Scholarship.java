@@ -1,7 +1,7 @@
 package org.kh.campus.scholarship.domain;
 public class Scholarship {
 	private int scholarship_inno;
-	private int scholarship_avg_grade;
+	private double scholarship_avg_grade;
 	private String scholarship_year;
 	private String scholarship_term;
 	private String scholarship_status;
@@ -39,7 +39,7 @@ public class Scholarship {
 
 	
 
-	public Scholarship(int scholarship_inno, int scholarship_avg_grade, String scholarship_year,
+	public Scholarship(int scholarship_inno, double scholarship_avg_grade, String scholarship_year,
 			String scholarship_term, String scholarship_status, int scholarship_amount, String scholarship_name,
 			String scholarship_phonenumber, String scholarship_college, int scholarship_student_no, String chk,
 			int scholarship_manager_no) {
@@ -71,11 +71,11 @@ public class Scholarship {
 		this.scholarship_inno = scholarship_inno;
 	}
 
-	public int getScholarship_avg_grade() {
+	public double getScholarship_avg_grade() {
 		return scholarship_avg_grade;
 	}
 
-	public void setScholarship_avg_grade(int scholarship_avg_grade) {
+	public void setScholarship_avg_grade(double scholarship_avg_grade) {
 		this.scholarship_avg_grade = scholarship_avg_grade;
 	}
 

@@ -32,6 +32,7 @@
 		</if>
 	</select>
 	
+	<!-- 학생 성적 구하기 학번, 년도, 학기 -->
 	<select id="selectAvg" resultType="_double">
 	SELECT AVG(GRADE_AVG) FROM GRADE_TBL
 	WHERE STUDENT_NO=#{studentNo} AND GRADE_YEAR = #{gradeYear} AND GRADE_SESSION = #{gradeSession}
