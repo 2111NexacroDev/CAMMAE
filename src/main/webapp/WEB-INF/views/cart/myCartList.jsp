@@ -71,6 +71,10 @@ table.type01 td a {
 #d6 {
 	width: 30%;
 }
+#pick:hover{
+	color: blue;
+	font-weight:bold;
+}
 </style>
 </head>
 <body>
@@ -113,7 +117,7 @@ table.type01 td a {
 				<c:if test="${aFlag == 'Y'}">
 				<c:url var="lPick" value="/cart/cartEnroll.kh">
 				<c:param name="lectureNo" value="${cart.lectureNo }"></c:param></c:url>
-					<a href="${lPick }">신청</a>
+					<a id="pick" href="${lPick }">신청</a>
 				</c:if>
 				</td>
 				<%-- <td>${cart.cartNo }</td>
