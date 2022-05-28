@@ -37,11 +37,12 @@
   	(L.LECTURE_NO = G.LECTURE_NO AND G.PROFESSOR_NO = #{professorNo})
   	</select>
   	
+  	<!-- attinsert_prf -->
   	<select id="selectAttProfSearchStu" resultMap="AttendanceResultMap">
   	SELECT * FROM STUDENT_TBL S
   	JOIN GRADE_TBL G ON
   	(S.PROFESSOR_NO = #{professorNo} AND STUDENT_STATE = '재학' AND GRADE_SUBJECT = #{lectureName})
-  	
+  	ORDER BY G.STUDENT_NO, S.STUDENT_NAME
   	</select>
   	
   	<insert id="insertAttendance">
@@ -53,11 +54,12 @@
   	 SELECT * FROM ATTENDANCE_TBL WHERE STUDENT_NO  = #{studentNo} AND LECTURE_NAME = #{lectureName}
   	</select>
   	
+  	
   	<select id="selectAttProfIssue" resultMap= "AttendanceResultMap2">
   	SELECT * FROM ATTENDANCE_TBL A
 	JOIN GRADE_TBL P ON
 	(P.LECTURE_NO = A.LECTURE_NO AND  P.PROFESSOR_NO = #{professorNo} AND ATT_OBJECTION = 'Y' )
-  	
+  	ORDER BY A.LECTURE_NAME, ATT_STUDENT_NAME
   	</select>
   	
   	<update id="updateObjectChange">

@@ -70,6 +70,10 @@ table.type01 td a {
 #d6 {
 	width: 30%;
 }
+#pick:hover{
+color:blue;
+font-weight: bold;
+}
 </style>
 </head>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -122,7 +126,7 @@ table.type01 td a {
 						<tr class="lecTr">
 							<td><c:url var="lPick" value="/cart/lectureEnroll.kh">
 									<c:param name="lectureNo" value="${lList.lectureNo }"></c:param>
-								</c:url> <a href="${lPick }">신청</a></td>
+								</c:url> <a id="pick" href="${lPick }">신청</a></td>
 							<td>${lList.lectureNo }</td>
 							<%-- <td>${lList.universityCollege }</td> --%>
 							<td>${lList.lectureDepartment }</td>

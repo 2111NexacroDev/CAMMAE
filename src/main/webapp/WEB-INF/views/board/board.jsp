@@ -98,11 +98,15 @@ hr {
 					<c:url var="bModify" value="/board/modifyView.kh">
 						<c:param name="boardNo" value="${board.boardNo }"></c:param>
 					</c:url>
+					
+					<c:if test="${not empty sessionScope.loginUser ||not empty sessionScope.loginManager }">
 					<button class="btn" onclick="location.href='${bModify }'">수정</button>
+					
 					<c:url var="bDelete" value="/board/delete.kh">
 						<c:param name="boardNo" value="${board.boardNo }"></c:param>
 					</c:url>
 					<button class="btn" onclick="location.href='${bDelete }'">삭제</button>
+					</c:if>
 					<button class="btn"
 						onclick="location.href='/board/list.kh?universityCode=${universityCode}'">목록</button>
 				</div>
@@ -164,7 +168,7 @@ hr {
 			var boardNo = "${board.boardNo}";
 			var rContents = $("#rContents").val();
 			<c:if test="${empty sessionScope.loginUser }">
-			alert("로그인을 해주세요.");
+			alert("학생만이용 가능한 공간입니다");
 			</c:if>
 			<c:if test="${not empty loginUser }">
 			$.ajax({
