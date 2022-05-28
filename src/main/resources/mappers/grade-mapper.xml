@@ -30,6 +30,7 @@
 		<if test='!season.equals("전체")'>
 			AND GRADE_SESSION = #{season}
 		</if>
+		ORDER BY GRADE_SUBJECT
 	</select>
 	
 	<!-- 학생 성적 구하기 학번, 년도, 학기 -->
@@ -50,6 +51,7 @@
 		</if>
 		)
 		LEFT JOIN FEEDBACK_TBL F ON (F.STUDENT_NO = O.STUDENT_NO AND F.LECTURE_NO = O.LECTURE_NO)
+		ORDER BY G.GRADE_SUBJECT
 	</select>
 	
 	<insert id="insertObjection">
@@ -89,6 +91,7 @@
 			AND G.GRADE_SUBJECT = #{subject}
 		</if>
 		)
+		ORDER BY GRADE_SESSION, STUDENT_NAME
 	</select>
 	
 	<!-- 교수의 이의신청 조회 -->
@@ -108,6 +111,7 @@
 		)
 		LEFT JOIN FEEDBACK_TBL F ON (F.STUDENT_NO = O.STUDENT_NO AND F.LECTURE_NO = O.LECTURE_NO)
         LEFT JOIN STUDENT_TBL S ON (S.STUDENT_NO = O.STUDENT_NO)
+        ORDER BY GRADE_YEAR, GRADE_SESSION, GRADE_SUBJECT, STUDENT_NAME
 	</select>
 	
 	<update id="updateGrade">

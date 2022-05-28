@@ -22,6 +22,7 @@
   		SELECT *
   		FROM GRADUATION_TBL
   		WHERE  GRADUATION_YEAR = #{graduationYear} AND GRADUATION_STU_DEP = #{graduationStuDep}
+  		ORDER BY GRADUATION_STU_NAME
   	</select>
   	
   	<insert id="insertGraduation">
