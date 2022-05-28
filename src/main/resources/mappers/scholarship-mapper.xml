@@ -25,11 +25,13 @@
   	<select id="selectAllScholar" resultMap="scholarshipResultMap">
   	 SELECT * FROM SCHOLARSHIP_TBL 
   	 WHERE SCHOLARSHIP_YEAR = #{scholarship_year} AND SCHOLARSHIP_TEAM= #{scholarship_term} AND SCHOLARSHIP_COLLEGE = #{scholarship_college}
+  	 ORDER BY SCHOLARSHIP_NAME
   	</select>
   	
   	<select id="selectResult" resultMap="scholarshipResultMap">
   	SELECT SCHOLARSHIP_INNO, SCHOLARSHIP_NAME, SCHOLARSHIP_STU_NO, SCHOLARSHIP_COLLEGE, SCHOLARSHIP_PHONENUMBER, SCHOLARSHIP_YEAR , SCHOLARSHIP_TEAM, SCHOLARSHIP_STATUS 
   	FROM SCHOLARSHIP_TBL WHERE SCHOLARSHIP_STU_NO = #{studentNo}
+  	ORDER BY SCHOLARSHIP_YEAR ASC, SCHOLARSHIP_TEAM
   	</select>
   	
   	<update id="updateScholarAccept" >

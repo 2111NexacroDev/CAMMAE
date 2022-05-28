@@ -25,10 +25,11 @@
 	<select id="selectStudentList" resultMap="studentResultMap" parameterType="String">
 		SELECT * FROM STUDENT_TBL
 		WHERE UNIVERSITY_CODE = #{uniCode}
+		ORDER BY STUDENT_GRADE, STUDENT_NAME
 	</select>
 	
 	<select id="selectStudentAllList" resultMap="studentResultMap">
-		SELECT * FROM STUDENT_TBL
+		SELECT * FROM STUDENT_TBL ORDER BY DEPARTMENT_NAME, STUDENT_GRADE, STUDENT_NAME
 	</select>
 	
 	<insert id="insertStudent">
@@ -73,12 +74,12 @@
 	</resultMap>
 	
 	<select id="selectProfessorAllList" resultMap="professorResultMap">
-		SELECT * FROM Professor_TBL
+		SELECT * FROM Professor_TBL ORDER BY DEPARTMENT_NAME, PROFESSOR_NAME
 	</select>
 	
 	<select id="selectProfessorList" resultMap="professorResultMap" parameterType="String">
 		SELECT * FROM Professor_TBL
-		WHERE UNIVERSITY_CODE = #{uniCode}
+		WHERE UNIVERSITY_CODE = #{uniCode} ORDER BY PROFESSOR_NAME
 	</select>
 	
 	<insert id="insertProfessor">
@@ -116,12 +117,12 @@
 	</resultMap>
 	
 	<select id="selectManagerAllList" resultMap="managerResultMap">
-		SELECT * FROM MANAGER_TBL
+		SELECT * FROM MANAGER_TBL ORDER BY MANAGER_TEAM, MANAGER_NAME
 	</select>
 	
 	<select id="selectManagerList" resultMap="managerResultMap" parameterType="String">
 		SELECT * FROM MANAGER_TBL
-		WHERE MANAGER_TEAM = #{teamCode}
+		WHERE MANAGER_TEAM = #{teamCode} ORDER BY MANAGER_NAME
 	</select>
 	
 	<insert id="insertManager">
