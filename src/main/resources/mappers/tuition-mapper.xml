@@ -69,7 +69,7 @@
 		<if test='!uniCode.equals("0")'>
 			AND S.UNIVERSITY_CODE= #{uniCode}
 		</if>
-		)
+		) ORDER BY DEPARTMENT_NAME, TUITION_TERM, T.STUDENT_NO	
   	</select>
   	
 	<select id="selectTuition" resultMap="tuitionResultMap">
