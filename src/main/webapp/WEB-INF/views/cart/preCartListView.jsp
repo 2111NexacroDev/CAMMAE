@@ -98,7 +98,7 @@ font-weight: bold;
 					<select	id="lecList">
 						<option value="0">전체</option>
 						<option value="1">컴퓨터공학과</option>
-						<option value="2">전자전기공학과</option>
+						<option value="2">전기전자학과</option>
 						<option value="3">산업디자인학과</option>
 						<option value="4">중국어학과</option>
 						<option value="5">유비쿼터스학과</option>
