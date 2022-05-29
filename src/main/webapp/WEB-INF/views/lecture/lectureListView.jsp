@@ -138,7 +138,7 @@
 					id="lecList">
 					<option value="전체">전체</option>
 					<option value="1">컴퓨터공학과</option>
-					<option value="2">전자전기공학과</option>
+					<option value="2">전기전자학과</option>
 					<option value="3">산업디자인학과</option>
 					<option value="4">중국어학과</option>
 					<option value="5">유비쿼터스학과</option>
@@ -150,7 +150,7 @@
 			<table class="type01" id="lectureTable">
 				<thead>
 					<tr>
-						<th id="L2">강의코드</th>
+						<th id="L1">강의코드</th>
 						<!-- <th id="L3">단과대학</th> -->
 						<th id="L4">이수구분</th>
 						<th id="L3">개설학과</th>
@@ -177,14 +177,14 @@
 							<%-- <td>${lecture.professorNo }</td> --%>
 							<%-- <td>${lecture.universityCollege }</td> --%>
 							<td>${lecture.lectureDivision }</td>
-							<td>${lecture.lectureDepartment }</td>
-							<td><a href="${lDetail}">${lecture.lectureName }</a></td>
+							<td style='line-height:90%'>${lecture.lectureDepartment }</td>
+							<td style='line-height:100%'><a href="${lDetail}">${lecture.lectureName }</a></td>
 							<td>${lecture.professorName }</td>
 							<td>${lecture.lectureGrade }</td>
 							<td>${lecture.lecturePeople }</td>
 							<td>${lecture.lectureTerm }</td>
-							<td>${lecture.lectureStart }</td>
-							<td>${lecture.lectureEnd }</td>							<%-- <td>${lecture.lectureRoom }</td> --%>
+							<td style='line-height:90%'>${lecture.lectureStart }</td>
+							<td style='line-height:90%'>${lecture.lectureEnd }</td>							<%-- <td>${lecture.lectureRoom }</td> --%>
 							<%-- <td>${lecture.lectureStartTime }</td>
 							<td>${lecture.lectureEndTime }</td> --%>
 							<%-- <td><c:url var="lRemove" value="/lecture/remove.kh">
@@ -333,6 +333,8 @@
 					/* var $lecRoom; */
 					var $lecPeople;
 					var $lecTerm;
+					var $lecStart;
+					var $lecEnd;
 					var $tr;
 					if (data.length > 0) {
 						for ( var i in data) {
@@ -341,9 +343,9 @@
 									data[i].lectureNo);
 							$lecDivision = $("<td width='100'>").text(
 									data[i].lectureDivision);
-							$lecDep = $("<td width='100'>").text(
+							$lecDep = $("<td width='100' style='line-height:90%'>").text(
 									data[i].lectureDepartment);
-							$lecName = $("<td width='100'>").text(
+							$lecName = $("<td width='100' style='line-height:90%'>").text(
 									data[i].lectureName);
 							$lecProName = $("<td width='100'>").text(
 									data[i].professorName);
@@ -353,8 +355,12 @@
 									data[i].lectureRoom); */
 							$lecPeople = $("<td width='100'>").text(
 									data[i].lecturePeople);
-							$lecPeople = $("<td width='100'>").text(
+							$lecTerm = $("<td width='100'>").text(
 									data[i].lectureTerm);
+							$lecStart = $("<td width='100' style='line-height:90%'>").text(
+									data[i].lectureStart);
+							$lecEnd = $("<td width='100' style='line-height:90%'>").text(
+									data[i].lectureEnd);
 							/* $lecTime = $("<td width='100'>").text(
 									data[i].lectureTime); */
 							$tr.append($lecNo);
@@ -367,6 +373,8 @@
 							/* $tr.append($lecRoom); */
 							$tr.append($lecPeople);
 							$tr.append($lecTerm);
+							$tr.append($lecStart);
+							$tr.append($lecEnd);
 							/* $tr.append($lecTime); */
 							$tableBody.append($tr);
 						}

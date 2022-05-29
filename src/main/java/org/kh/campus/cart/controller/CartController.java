@@ -190,7 +190,7 @@ public class CartController {
 			if (lectureDepartment.contentEquals("1")) {
 				lectureDepartment = "컴퓨터공학과";
 			} else if (lectureDepartment.contentEquals("2")) {
-				lectureDepartment = "전자전기공학과";
+				lectureDepartment = "전기전자학과";
 			} else if (lectureDepartment.contentEquals("3")) {
 				lectureDepartment = "산업디자인학과";
 			} else if (lectureDepartment.contentEquals("4")) {
@@ -229,10 +229,8 @@ public class CartController {
 		}
 		mv.addObject("studentNo", student.getStudentNo());
 		try {
-			HashMap<String, Integer> map = new HashMap<String, Integer>();
-			map.put("lectureNo", lectureNo);
-			map.put("studentNo", studentNo);
 			Lecture lecture = lService.printOneLecture(lectureNo);
+			lecture.setStudentNo(studentNo);
 			int result = cService.registerEnroll(lecture);
 			if (result > 0) {
 				mv.setViewName("redirect:/cart/myCartList.kh");

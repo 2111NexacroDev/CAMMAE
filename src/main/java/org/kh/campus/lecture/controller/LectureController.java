@@ -52,7 +52,7 @@ public class LectureController {
 			if(lectureDepartment.contentEquals("1")) {
 				lectureDepartment = "컴퓨터공학과";
 			} else if(lectureDepartment.contentEquals("2")) {
-				lectureDepartment = "전자전기공학과";
+				lectureDepartment = "전기전자학과";
 			} else if(lectureDepartment.contentEquals("3")) {
 				lectureDepartment = "산업디자인학과";
 			} else if(lectureDepartment.contentEquals("4")) {
