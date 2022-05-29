@@ -250,15 +250,16 @@ public class CartController {
 	@RequestMapping(value = "/cart/lectureEnroll.kh", method = RequestMethod.GET)
 	public ModelAndView enrollListInsert(ModelAndView mv, @RequestParam("lectureNo") int lectureNo
 			, HttpSession session) {
-		Student student = stdService.printStudent(((Student) (session.getAttribute("loginUser"))).getStudentNo());
-		student.getStudentNo();
+		int studentNo = (((Student) (session.getAttribute("loginUser"))).getStudentNo());
+	
 
 		if (session.getAttribute("loginUser") == null) {
 			mv.setViewName("/login/login");
 		}
-		mv.addObject("studentNo", student.getStudentNo());
+		mv.addObject("studentNo", studentNo);
 		try {
-			Lecture lecture = lService.printOneLecture(lectureNo);
+			Lecture lecture = lService.printOneLecture(lectureNo );
+			lecture.setStudentNo(studentNo);
 			int result = cService.registerEnroll(lecture);
 			if (result > 0) {
 				mv.setViewName("redirect:/cart/enrollRegister.kh");
@@ -275,15 +276,14 @@ public class CartController {
 	// 수강 내역 목록 출력
 	@RequestMapping(value = "/cart/enrollList.kh", method = RequestMethod.GET)
 	public ModelAndView enrollMyListView(ModelAndView mv, HttpSession session) {
-		Student student = stdService.printStudent(((Student) (session.getAttribute("loginUser"))).getStudentNo());
-		student.getStudentNo();
+		int studentNo = (((Student) (session.getAttribute("loginUser"))).getStudentNo());
 
 		if (session.getAttribute("loginUser") == null) {
 			mv.setViewName("/login/login");
 		}
-		mv.addObject("studentNo", student.getStudentNo());
+		mv.addObject("studentNo",studentNo);
 		
-		List<Lecture> lList = cService.printMyEnroll();
+		List<Lecture> lList = cService.printMyEnroll(studentNo);
 		
 		System.out.println("lList Test : " + lList);
 		String lectureStart = ((Lecture) lList.get(0)).getLectureStart();
@@ -322,7 +322,7 @@ public class CartController {
 //				System.out.println(count);
 
 			} else {
-				System.out.println("실패했습니다.");
+				mv.setViewName("common/errorPage");
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());

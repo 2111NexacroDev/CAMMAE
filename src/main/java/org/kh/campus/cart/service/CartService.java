@@ -31,7 +31,7 @@ public interface CartService {
 	public int registerEnroll(Lecture lecture);
 	
 	// 수강신청 내역 출력
-	public List<Lecture> printMyEnroll();
+	public List<Lecture> printMyEnroll(int studentNo);
 
 	// 수강신청 신청 취소(신청취소)
 	public int removeEnroll(HashMap<String, Integer> map);
