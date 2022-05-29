@@ -7,12 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.kh.campus.cart.domain.Cart;
 import org.kh.campus.cart.service.CartService;
 import org.kh.campus.grade.domain.Grade;
 import org.kh.campus.lecture.domain.Lecture;
 import org.kh.campus.lecture.service.LectureService;
+import org.kh.campus.student.domain.Student;
+import org.kh.campus.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,14 +37,23 @@ public class CartController {
 
 	@Autowired
 	private LectureService lService;
+	
+	@Autowired
+	private StudentService stdService;
 
 	// 되돌리다가 원본 훼손 방지 라인
 
 	// 예비수강신청 목록, 등록페이지
 	@RequestMapping(value = "/cart/preCartListView.kh", method = RequestMethod.GET)
-	public ModelAndView cartListView(ModelAndView mv) {
+	public ModelAndView cartListView(ModelAndView mv , HttpSession session) {
 		List<Lecture> lList = cService.printAllCart();
+		Student student = stdService.printStudent(((Student) (session.getAttribute("loginUser"))).getStudentNo());
+		student.getStudentNo();
 
+		if (session.getAttribute("loginUser") == null) {
+			mv.setViewName("/login/login");
+		}
+		mv.addObject("studentNo", student.getStudentNo());
 		try {
 			if (!lList.isEmpty()) {
 				mv.addObject("lList", lList);
@@ -59,15 +71,24 @@ public class CartController {
 
 	// 예비수강신청 등록 기능
 	@RequestMapping(value = "/cart/cartPick.kh", method = RequestMethod.GET)
-	public ModelAndView cartRegister(ModelAndView mv, @RequestParam("lectureNo") int lectureNo) {
+	public ModelAndView cartRegister(ModelAndView mv, @RequestParam("lectureNo") int lectureNo
+			, HttpSession session) {
+		
+		Student student = stdService.printStudent(((Student) (session.getAttribute("loginUser"))).getStudentNo());
+		int studentNo = student.getStudentNo();
+
+		if (session.getAttribute("loginUser") == null) {
+			mv.setViewName("/login/login");
+		}
+		mv.addObject("studentNo", student.getStudentNo());
 		try {
-			int studentNo = 0;
 			HashMap<String, Integer> map = new HashMap<String, Integer>();
 			map.put("lectureNo", lectureNo);
 			map.put("studentNo", studentNo);
 			int result = cService.registerCart(map);
 			if (result > 0) {
-
+//				Student student = stdService.printStudent(((Student) (session.getAttribute("loginUser"))).getStudentNo());
+//				int studentNo1 = student.getStudentNo();
 				mv.setViewName("redirect:/cart/preCartListView.kh");
 			} else {
 				mv.addObject("msg", "실패했습니다");
@@ -82,8 +103,14 @@ public class CartController {
 
 //	 예비수강신청 내역 목록
 	@RequestMapping(value = "/cart/myCartList.kh", method = RequestMethod.GET)
-	public ModelAndView myCartList(ModelAndView mv) {
-		int studentNo = 0;
+	public ModelAndView myCartList(ModelAndView mv, HttpSession session) {
+		Student student = stdService.printStudent(((Student) (session.getAttribute("loginUser"))).getStudentNo());
+		int studentNo = student.getStudentNo();
+
+		if (session.getAttribute("loginUser") == null) {
+			mv.setViewName("/login/login");
+		}
+		mv.addObject("studentNo", student.getStudentNo());
 		List<Cart> cList = cService.printMyCart(studentNo);
 
 		
@@ -136,7 +163,9 @@ public class CartController {
 	// 수강신청 신청목록 페이지 보여주는곳
 	@RequestMapping(value = "/cart/enrollRegister.kh", method = RequestMethod.GET)
 	public ModelAndView enrollListView(ModelAndView mv,
+			HttpSession session, 
 			@RequestParam(value = "lecturedep", required = false) String lectureDepartment) {
+		
 		try {
 			List<Lecture> lList = cService.printAllenroll(lectureDepartment);
 			if (!lList.isEmpty()) {
@@ -156,7 +185,7 @@ public class CartController {
 	// 수강신청 신청목록 페이지 리스트 출력기능
 	@ResponseBody
 	@RequestMapping(value = "/cart/enrollRegister2.kh", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-	public String enrollListView2(@RequestParam(value = "lecturedep", required = false) String lectureDepartment) {
+	public String enrollListView2(Model model, @RequestParam(value = "lecturedep", required = false) String lectureDepartment,HttpSession session) {
 		try {
 			if (lectureDepartment.contentEquals("1")) {
 				lectureDepartment = "컴퓨터공학과";
@@ -173,6 +202,7 @@ public class CartController {
 			} else {
 				lectureDepartment = "전체";
 			}
+		
 			List<Lecture> lList = cService.printAllenroll2(lectureDepartment);
 			if (!lList.isEmpty()) {
 				Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
@@ -190,8 +220,18 @@ public class CartController {
 
 	// 예비수강신청 목록에서 수강신청 목록으로 넣어주는 기능
 	@RequestMapping(value = "/cart/cartEnroll.kh", method = RequestMethod.GET)
-	public ModelAndView cartListInsert(ModelAndView mv, @RequestParam("lectureNo") int lectureNo) {
+	public ModelAndView cartListInsert(ModelAndView mv, @RequestParam("lectureNo") int lectureNo, HttpSession session) {
+		Student student = stdService.printStudent(((Student) (session.getAttribute("loginUser"))).getStudentNo());
+		int studentNo = student.getStudentNo();
+
+		if (session.getAttribute("loginUser") == null) {
+			mv.setViewName("/login/login");
+		}
+		mv.addObject("studentNo", student.getStudentNo());
 		try {
+			HashMap<String, Integer> map = new HashMap<String, Integer>();
+			map.put("lectureNo", lectureNo);
+			map.put("studentNo", studentNo);
 			Lecture lecture = lService.printOneLecture(lectureNo);
 			int result = cService.registerEnroll(lecture);
 			if (result > 0) {
@@ -208,7 +248,15 @@ public class CartController {
 
 	// 수강신청 등록 기능
 	@RequestMapping(value = "/cart/lectureEnroll.kh", method = RequestMethod.GET)
-	public ModelAndView enrollListInsert(ModelAndView mv, @RequestParam("lectureNo") int lectureNo) {
+	public ModelAndView enrollListInsert(ModelAndView mv, @RequestParam("lectureNo") int lectureNo
+			, HttpSession session) {
+		Student student = stdService.printStudent(((Student) (session.getAttribute("loginUser"))).getStudentNo());
+		student.getStudentNo();
+
+		if (session.getAttribute("loginUser") == null) {
+			mv.setViewName("/login/login");
+		}
+		mv.addObject("studentNo", student.getStudentNo());
 		try {
 			Lecture lecture = lService.printOneLecture(lectureNo);
 			int result = cService.registerEnroll(lecture);
@@ -226,8 +274,17 @@ public class CartController {
 
 	// 수강 내역 목록 출력
 	@RequestMapping(value = "/cart/enrollList.kh", method = RequestMethod.GET)
-	public ModelAndView enrollMyListView(ModelAndView mv) {
+	public ModelAndView enrollMyListView(ModelAndView mv, HttpSession session) {
+		Student student = stdService.printStudent(((Student) (session.getAttribute("loginUser"))).getStudentNo());
+		student.getStudentNo();
+
+		if (session.getAttribute("loginUser") == null) {
+			mv.setViewName("/login/login");
+		}
+		mv.addObject("studentNo", student.getStudentNo());
+		
 		List<Lecture> lList = cService.printMyEnroll();
+		
 		System.out.println("lList Test : " + lList);
 		String lectureStart = ((Lecture) lList.get(0)).getLectureStart();
 		String lectureEnd = ((Lecture) lList.get(0)).getLectureEnd();
@@ -253,6 +310,7 @@ public class CartController {
 		}
 		
 		try {
+			
 			if (!lList.isEmpty()) {
 				mv.addObject("menu", "enrolllist");
 				mv.addObject("lList", lList);
