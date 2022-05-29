@@ -100,7 +100,6 @@ table.type01 td a {
 			<!-- <th id="n1">장바구니번호</th>
 			<th id="n1">과목코드</th> -->
 		<!-- 	<th id="n1">학번</th> -->
-			<th id="d2">학기</th>
 			<th id="d4">개설학과</th>
 			<th id="d5">이수구분</th>
 			<th >교과목명</th>
@@ -123,7 +122,6 @@ table.type01 td a {
 				<%-- <td>${cart.cartNo }</td>
 				<td>${cart.lectureNo }</td> --%>
 				<%-- <td>${cart.studentNo }</td> --%>
-				<td>${cart.lectureTerm }</td>
 				<td>${cart.lectureDepartment }</td>
 				<td>${cart.lectureDivision }</td>
 				<td>${cart.lectureName }</td>
