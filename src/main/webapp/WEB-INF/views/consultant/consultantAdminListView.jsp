@@ -15,13 +15,13 @@
 	margin-bottom: 40px;
  }
  #q1{
-	width:5%;
+	width:4%;
 }
 #q2{
 	width:11%;
 }
 #q3{
-	width:9%;
+	width:10%;
 }
 #q4{
 	width:11%;
