@@ -55,8 +55,8 @@ public class CartStoreLogic implements CartStore {
 	}
 
 	@Override
-	public List<Lecture> selectMyEnroll(SqlSession sqlSession) {
-		List<Lecture> lList = sqlSession.selectList("CartMapper.selectMyEnroll");
+	public List<Lecture> selectMyEnroll(SqlSession sqlSession, int studentNo) {
+		List<Lecture> lList = sqlSession.selectList("CartMapper.selectMyEnroll", studentNo);
 		return lList;
 	}
 

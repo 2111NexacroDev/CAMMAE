@@ -141,6 +141,7 @@
 		, L.LECTURE_END
 		FROM GRADE_TBL G INNER JOIN LECTURE_TBL L
 		ON G.LECTURE_NO = L.LECTURE_NO
+		WHERE G.STUDENT_NO = #{studentNo}
 	</select>
 
 	<delete id="deleteEnroll" parameterType="hashmap">
