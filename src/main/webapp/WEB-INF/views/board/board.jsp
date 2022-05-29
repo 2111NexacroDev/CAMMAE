@@ -124,7 +124,7 @@ hr {
 						<c:if test="${not empty board.boardFilerename}">
 							<br>
 							<span> <img
-								src="/resources/boardUploadFiles/${board.boardFilerename }"
+								src="../../../resources/boardUploadFiles/${board.boardFilerename }"
 								style="width: 500px;">
 							</span>
 						</c:if>
