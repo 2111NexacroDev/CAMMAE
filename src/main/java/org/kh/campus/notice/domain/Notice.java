@@ -11,13 +11,12 @@ public class Notice {
 	private String noticeFileName;
 	private String noticeFileRename;
 	private String noticeFilePath;
-	private String nStatus;
 	
 	public Notice() {}
 
 	public Notice(int noticeNo, String noticeTitle, String noticeContent, String noticeWriter, String noticeDate,
 			String noticeUpdateDate, int noticeCount, String noticeFileName, String noticeFileRename,
-			String noticeFilePath, String nStatus) {
+			String noticeFilePath) {
 		super();
 		this.noticeNo = noticeNo;
 		this.noticeTitle = noticeTitle;
@@ -29,7 +28,6 @@ public class Notice {
 		this.noticeFileName = noticeFileName;
 		this.noticeFileRename = noticeFileRename;
 		this.noticeFilePath = noticeFilePath;
-		this.nStatus = nStatus;
 	}
 
 	public int getNoticeNo() {
@@ -112,22 +110,14 @@ public class Notice {
 		this.noticeFilePath = noticeFilePath;
 	}
 
-	public String getnStatus() {
-		return nStatus;
-	}
-
-	public void setnStatus(String nStatus) {
-		this.nStatus = nStatus;
-	}
-
 	@Override
 	public String toString() {
 		return "Notice [noticeNo=" + noticeNo + ", noticeTitle=" + noticeTitle + ", noticeContent=" + noticeContent
 				+ ", noticeWriter=" + noticeWriter + ", noticeDate=" + noticeDate + ", noticeUpdateDate="
 				+ noticeUpdateDate + ", noticeCount=" + noticeCount + ", noticeFileName=" + noticeFileName
-				+ ", noticeFileRename=" + noticeFileRename + ", noticeFilePath=" + noticeFilePath + ", nStatus="
-				+ nStatus + "]";
+				+ ", noticeFileRename=" + noticeFileRename + ", noticeFilePath=" + noticeFilePath + "]";
 	}
+	
 
 	
 }
