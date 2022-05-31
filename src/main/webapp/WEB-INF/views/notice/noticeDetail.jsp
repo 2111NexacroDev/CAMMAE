@@ -104,10 +104,7 @@ table.type05 thead th {
 		</tr>
 	</thead>	
 	</table>
-	<br>
-	<div id="content1">
-		${notice.noticeContent }	
-	</div>
+	<div id="content1" style="white-space:pre;">${notice.noticeContent }</div>
 	<hr style="width: 800px; color: #ccc;">
 		</div>
 	</div>

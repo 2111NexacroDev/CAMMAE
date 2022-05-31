@@ -1,13 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <link rel="stylesheet" href="/resources/menuBar.css">
 
 <style>
+	#col1{
+		width: 5%;
+	}
+	#col2{
+		width: 45%;
+	}
+	#col3{
+		width: 20%;
+	}
+	#col4{
+		width: 20%;
+	}
 	
+	#col5{
+		width: 10%;
+	}
 </style>
 <meta charset="UTF-8">
 <title>공지사항</title>
@@ -34,11 +51,11 @@
 			<table class="type01">
 				<thead>
 					<tr>
-						<th scope="cols">번호</th>
-						<th scope="cols">제목</th>
-						<th scope="cols">작성자</th>
-						<th scope="cols">작성일</th>
-						<th scope="cols">조회수</th>
+						<th id="col1" scope="cols">번호</th>
+						<th id="col2" scope="cols">제목</th>
+						<th id="col3" scope="cols">작성자</th>
+						<th id="col4" scope="cols">작성일</th>
+						<th id="col5" scope="cols">조회수</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -49,10 +66,10 @@
 				
 				</c:if>
 					<c:forEach items="${nList }" var="notice">
-						<tr>
-							<td scope="row">${notice.noticeNo }</td>
+						<tr id="tr1">
+							<td scope="row" class="noticeNo">${notice.noticeNo }</td>
 							<c:url var="nDetail" value="/notice/detail.kh">
-								<c:param name="noticeNo" value="${notice.noticeNo }"></c:param>
+								<c:param name="noticeNo"  value="${notice.noticeNo }"></c:param>
 							</c:url>
 							<td scope="row"><a href="${nDetail }">${notice.noticeTitle }</a></td>
 							<td scope="row">${notice.noticeWriter }</td>
@@ -99,6 +116,17 @@
 		</div>
 
 	</div>
+	
+	<script>
+		var tr1= document.getElementById('tr1');
+		var noticeNo = $(".noticeNo").html();
+		console.log(noticeNo);
+		if(noticeNo == 61){
+				tr1.style.backgroundColor = "#D3D3D3";
+		}
+			
+		
+	</script>
 
 	<!-- footer -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>
