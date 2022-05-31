@@ -13,17 +13,17 @@
 		width: 5%;
 	}
 	#col2{
-		width: 30%;
+		width: 45%;
 	}
 	#col3{
 		width: 20%;
 	}
 	#col4{
-		width: 25%;
+		width: 20%;
 	}
 	
 	#col5{
-		width: 25%;
+		width: 10%;
 	}
 </style>
 <meta charset="UTF-8">
