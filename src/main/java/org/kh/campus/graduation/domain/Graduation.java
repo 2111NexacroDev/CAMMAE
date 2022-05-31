@@ -3,9 +3,6 @@ package org.kh.campus.graduation.domain;
 public class Graduation {
 	private int studentNo;
 	private String graduationStatus;
-	private String graduationFilename;
-	private String graduationFilerename;
-	private String graduationFilepath;
 	private String graduationStuName;    
 	private	String graduationStuDep;	
 	private int graduationStuGrade;
@@ -16,24 +13,29 @@ public class Graduation {
 	public Graduation() {}
 
 
-
-	public Graduation(int studentNo, String graduationStatus, String graduationFilename, String graduationFilerename,
-			String graduationFilepath, String graduationStuName, String graduationStuDep, int graduationStuGrade,
-			String graduationYear, String chk) {
+	public Graduation(int studentNo, String graduationStatus, String graduationStuName, String graduationStuDep,
+			int graduationStuGrade, String graduationYear, String chk) {
 		super();
 		this.studentNo = studentNo;
 		this.graduationStatus = graduationStatus;
-		this.graduationFilename = graduationFilename;
-		this.graduationFilerename = graduationFilerename;
-		this.graduationFilepath = graduationFilepath;
 		this.graduationStuName = graduationStuName;
 		this.graduationStuDep = graduationStuDep;
 		this.graduationStuGrade = graduationStuGrade;
 		this.graduationYear = graduationYear;
 		this.chk = chk;
-		
 	}
+	
+	
 
+
+
+
+
+
+	public Graduation(int studentNo) {
+		super();
+		this.studentNo = studentNo;
+	}
 
 
 	public Graduation(String graduationStuName, String graduationStuDep, int graduationStuGrade) {
@@ -55,10 +57,6 @@ public class Graduation {
 
 
 
-	public Graduation(int studentNo) {
-		super();
-		this.studentNo = studentNo;
-	}
 
 
 
@@ -67,11 +65,9 @@ public class Graduation {
 	}
 
 
-
 	public void setStudentNo(int studentNo) {
 		this.studentNo = studentNo;
 	}
-
 
 
 	public String getGraduationStatus() {
@@ -79,47 +75,9 @@ public class Graduation {
 	}
 
 
-
 	public void setGraduationStatus(String graduationStatus) {
 		this.graduationStatus = graduationStatus;
 	}
-
-
-
-	public String getGraduationFilename() {
-		return graduationFilename;
-	}
-
-
-
-	public void setGraduationFilename(String graduationFilename) {
-		this.graduationFilename = graduationFilename;
-	}
-
-
-
-	public String getGraduationFilerename() {
-		return graduationFilerename;
-	}
-
-
-
-	public void setGraduationFilerename(String graduationFilerename) {
-		this.graduationFilerename = graduationFilerename;
-	}
-
-
-
-	public String getGraduationFilepath() {
-		return graduationFilepath;
-	}
-
-
-
-	public void setGraduationFilepath(String graduationFilepath) {
-		this.graduationFilepath = graduationFilepath;
-	}
-
 
 
 	public String getGraduationStuName() {
@@ -127,11 +85,9 @@ public class Graduation {
 	}
 
 
-
 	public void setGraduationStuName(String graduationStuName) {
 		this.graduationStuName = graduationStuName;
 	}
-
 
 
 	public String getGraduationStuDep() {
@@ -139,14 +95,9 @@ public class Graduation {
 	}
 
 
-
 	public void setGraduationStuDep(String graduationStuDep) {
 		this.graduationStuDep = graduationStuDep;
 	}
-
-
-
-
 
 
 	public int getGraduationStuGrade() {
@@ -154,11 +105,9 @@ public class Graduation {
 	}
 
 
-
 	public void setGraduationStuGrade(int graduationStuGrade) {
 		this.graduationStuGrade = graduationStuGrade;
 	}
-
 
 
 	public String getGraduationYear() {
@@ -166,13 +115,9 @@ public class Graduation {
 	}
 
 
-
 	public void setGraduationYear(String graduationYear) {
 		this.graduationYear = graduationYear;
 	}
-
-	
-	
 
 
 	public String getChk() {
@@ -180,22 +125,20 @@ public class Graduation {
 	}
 
 
-
 	public void setChk(String chk) {
 		this.chk = chk;
 	}
 
 
-
 	@Override
 	public String toString() {
-		return "Graduation [studentNo=" + studentNo + ", graduationStatus=" + graduationStatus + ", graduationFilename="
-				+ graduationFilename + ", graduationFilerename=" + graduationFilerename + ", graduationFilepath="
-				+ graduationFilepath + ", graduationStuName=" + graduationStuName + ", graduationStuDep="
-				+ graduationStuDep + ", graduationStuGrade=" + graduationStuGrade + ", graduationYear=" + graduationYear
-				+ ", chk=" + chk + "]";
+		return "Graduation [studentNo=" + studentNo + ", graduationStatus=" + graduationStatus + ", graduationStuName="
+				+ graduationStuName + ", graduationStuDep=" + graduationStuDep + ", graduationStuGrade="
+				+ graduationStuGrade + ", graduationYear=" + graduationYear + ", chk=" + chk + "]";
 	}
 
+
+	
 	
 
 }
