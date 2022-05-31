@@ -14,7 +14,6 @@
 		<result property="noticeFileName" column="NOTICE_FILE_NAME"/>
 		<result property="noticeFileRename" column="NOTICE_FILE_RENAME"/>
 		<result property="noticeFilePath" column="NOTICE_FILE_PATH"/>
-		<result property="nStatus" column="NOTICE_NSTAUTS" />
 	</resultMap>
 	
 	<select id="selectListCount" resultType="_int">
@@ -40,7 +39,6 @@
 		, #{noticeFileName}
 		, #{noticeFileRename}
 		, #{noticeFilePath}
-		, DEFAULT
 		)
 	</insert>
 	
