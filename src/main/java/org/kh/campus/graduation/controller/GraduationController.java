@@ -37,16 +37,13 @@ public class GraduationController {
 		Student student = stdService.printStudent(((Student) (session.getAttribute("loginUser"))).getStudentNo());
 		int studentNo = student.getStudentNo();
 		String graduationStatus = "";
-		String graduationFilename = "";
-		String graduationFilerename = "";
-		String graduationFilepath = "";
 		String graduationStuName = dsGet(inGra, 0, "graduationStuName");
 		String graduationStuDep = dsGet(inGra, 0, "graduationStuDep");
 		int graduationStuGrade = Integer.parseInt(dsGet(inGra,0, "graduationStuGrade"));
 		String graduationYear ="";
 		String chk = "";
 	
-		Graduation graduation = new Graduation(studentNo,graduationStatus,graduationFilename ,graduationFilerename, graduationFilepath, graduationStuName, graduationStuDep, graduationStuGrade, graduationYear, chk);
+		Graduation graduation = new Graduation(studentNo,graduationStatus, graduationStuName, graduationStuDep, graduationStuGrade, graduationYear, chk);
 		int  studentGrade = student.getStudentGrade();
 		if(studentGrade >=4) {			
 			aResult = gService.registerGraduation(graduation);
