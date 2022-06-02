@@ -61,5 +61,12 @@ public class NoticeServiceImpl implements NoticeService{
 		return totalCount;
 	}
 
+	//상단공지
+	@Override
+	public List<Notice> printOne() {
+		List<Notice> nList2 = nStore.selectOne(sqlSession);
+		return nList2;
+	}
+
 
 }
