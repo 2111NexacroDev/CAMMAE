@@ -9,22 +9,25 @@
 <link rel="stylesheet" href="/resources/menuBar.css">
 
 <style>
-	#col1{
-		width: 5%;
-	}
-	#col2{
-		width: 45%;
-	}
-	#col3{
-		width: 20%;
-	}
-	#col4{
-		width: 20%;
-	}
-	
-	#col5{
-		width: 10%;
-	}
+#col1 {
+	width: 5%;
+}
+
+#col2 {
+	width: 45%;
+}
+
+#col3 {
+	width: 20%;
+}
+
+#col4 {
+	width: 20%;
+}
+
+#col5 {
+	width: 10%;
+}
 </style>
 <meta charset="UTF-8">
 <title>공지사항</title>
@@ -42,10 +45,15 @@
 		</div>
 
 		<div id="center">
-		<div class="c-title">
-				<div class="b-title"><h2>공지사항</h2></div>
+			<div class="c-title">
+				<div class="b-title">
+					<h2>공지사항</h2>
+				</div>
 				<c:if test="${sessionScope.loginManager ne null}">
-					<div class="btn_1"><button style="width: 80px" class="btn"onclick="location.href='/notice/writeView.kh'">글쓰기</button></div>
+					<div class="btn_1">
+						<button style="width: 80px" class="btn"
+							onclick="location.href='/notice/writeView.kh'">글쓰기</button>
+					</div>
 				</c:if>
 			</div>
 			<table class="type01">
@@ -59,17 +67,29 @@
 					</tr>
 				</thead>
 				<tbody>
-				<c:if test="${nList eq null}">
-					<tr>
-						<td colspan="5"></td>
-					</tr>
-				
-				</c:if>
+					<c:forEach items="${nList2 }" var="notice2">
+						<tr id="tr1">
+							<td scope="row" class="noticeNo">${notice2.noticeNo }</td>
+							<c:url var="nDetail2" value="/notice/detail.kh">
+								<c:param name="noticeNo" value="${notice2.noticeNo }"></c:param>
+							</c:url>
+							<td scope="row"><a href="${nDetail2 }">${notice2.noticeTitle }</a></td>
+							<td scope="row">${notice2.noticeWriter }</td>
+							<td scope="row">${notice2.noticeDate }</td>
+							<td scope="row">${notice2.noticeCount }</td>
+						</tr>
+					</c:forEach>
+					<c:if test="${nList eq null}">
+						<tr>
+							<td colspan="5"></td>
+						</tr>
+
+					</c:if>
 					<c:forEach items="${nList }" var="notice">
 						<tr id="tr1">
 							<td scope="row" class="noticeNo">${notice.noticeNo }</td>
 							<c:url var="nDetail" value="/notice/detail.kh">
-								<c:param name="noticeNo"  value="${notice.noticeNo }"></c:param>
+								<c:param name="noticeNo" value="${notice.noticeNo }"></c:param>
 							</c:url>
 							<td scope="row"><a href="${nDetail }">${notice.noticeTitle }</a></td>
 							<td scope="row">${notice.noticeWriter }</td>
@@ -80,11 +100,13 @@
 				</tbody>
 			</table>
 			<br>
-			<div class="paging" align="center" >
+			<div class="paging" align="center">
 
 				<c:if test="${pi.startNavi !=1 }">
 
-					<a href="/notice/list.kh?page=1"> <button class="pbtn">＜</button></a>
+					<a href="/notice/list.kh?page=1">
+						<button class="pbtn">＜</button>
+					</a>
 
 				</c:if>
 				<c:if test="${pi.prev}">
@@ -102,30 +124,29 @@
 						<c:param name="page" value="${p }"></c:param>
 					</c:url>
 
-					<a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
+					<a href="${pagination }"><button
+							class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
 																		
 									</c:forEach>
 
 
 				<c:if test="${pi.next && pi.endNavi > 0}">
 
-					<a href="/notice/list.kh?page=${pi.endNavi+1}"> <button class="pbtn">＞</button>
+					<a href="/notice/list.kh?page=${pi.endNavi+1}">
+						<button class="pbtn">＞</button>
 					</a>
 				</c:if>
 			</div>
 		</div>
 
 	</div>
-	
+
 	<script>
-		var tr1= document.getElementById('tr1');
+		var tr1 = document.getElementById('tr1');
 		var noticeNo = $(".noticeNo").html();
-		console.log(noticeNo);
-		if(noticeNo == 61){
-				tr1.style.backgroundColor = "#D3D3D3";
+		if (noticeNo == 1) {
+			tr1.style.backgroundColor = "#D3D3D3";
 		}
-			
-		
 	</script>
 
 	<!-- footer -->

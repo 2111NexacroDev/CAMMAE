@@ -16,4 +16,7 @@ public interface NoticeStore {
 	public int updateCountNotice(int noticeNo, SqlSession sqlSession);
 	public int deleteNotice(int noticeNo, SqlSession sqlSession);
 	public int selectListCount(SqlSession sqlSession);
+	
+	//상단공지
+	public List<Notice> selectOne(SqlSession sqlSession);
 }
