@@ -330,9 +330,10 @@ public class CartController {
 
 	// 수강신청 내역 내 삭제(신청취소)
 	@RequestMapping(value = "/cart/enrollRemove.kh", method = RequestMethod.GET)
-	public String lectureRemove(Model model, @RequestParam("lectureNo") int lectureNo) {
+	public String lectureRemove(Model model, @RequestParam("lectureNo") int lectureNo
+			,HttpSession session) {
 		try {
-			int studentNo = 0;
+			int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
 			HashMap<String, Integer> map = new HashMap<String, Integer>();
 			map.put("lectureNo", lectureNo);
 			map.put("studentNo", studentNo);
