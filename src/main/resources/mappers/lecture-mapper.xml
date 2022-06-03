@@ -62,6 +62,7 @@
 		SET 
 		LECTURE_NAME = #{lectureName}
 		,LECTURE_DEPARTMENT = #{lectureDepartment}
+		, PROFESSOR_NO = #{professorNo}
 		, PROFESSOR_NAME = #{professorName}
 		, LECTURE_DIVISION = #{lectureDivision}
 		, LECTURE_GRADE = #{lectureGrade}
