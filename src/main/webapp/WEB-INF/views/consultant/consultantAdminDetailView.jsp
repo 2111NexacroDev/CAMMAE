@@ -287,7 +287,7 @@ hr {
 				},
 				success : function(data) {
 					if (data == "success") {
-						alert("업데이트 성공");
+						/* alert("업데이트 성공"); */
 
 					} else {
 						alert("업데이트 실패");
