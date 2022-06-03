@@ -25,6 +25,13 @@
 
 
 ## 3. 사용기술 및 개발환경
+Category	Detail
+FrontEnd	HTML5, JS, CSS3, JQuery
+BackEnd	Java(JDK 1.8), Spring/JSP
+OS	Windows 10, 11
+IDE	Eclipse, Visual Studio Code
+Server	Apatch Tomcat(v8.5)
+DataBase	Oracle(11g) - SQL Developer
 ![image](https://user-images.githubusercontent.com/56354642/171804188-6fc0be59-1126-41d3-b134-9cc229ecbfd5.png)
 
 
