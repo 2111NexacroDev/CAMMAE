@@ -10,20 +10,20 @@ import org.kh.campus.professor.domain.Professor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class LectureStoreLogic implements LectureStore{
+public class LectureStoreLogic implements LectureStore {
 
 	@Override
-	public List<Lecture> selectAllLecture(SqlSession sqlSession ) {
+	public List<Lecture> selectAllLecture(SqlSession sqlSession) {
 		List<Lecture> lList = sqlSession.selectList("LectureMapper.selectAllLecture");
 		return lList;
 	}
-	
+
 	@Override
 	public List<Professor> selectAllProName(SqlSession sqlSession) {
 		List<Professor> lList = sqlSession.selectList("LectureMapper.selectAllProName");
 		return lList;
 	}
-	
+
 	@Override
 	public List<University> selectAllDept(SqlSession sqlSession) {
 		List<University> lList = sqlSession.selectList("LectureMapper.selectAllDept");
@@ -37,7 +37,7 @@ public class LectureStoreLogic implements LectureStore{
 	}
 
 	@Override
-	public int updateLecture(SqlSession sqlSession,Lecture lecture) {
+	public int updateLecture(SqlSession sqlSession, Lecture lecture) {
 		int result = sqlSession.update("LectureMapper.updateLecture", lecture);
 		return result;
 	}
@@ -62,7 +62,7 @@ public class LectureStoreLogic implements LectureStore{
 
 	@Override
 	public List<Professor> selectProName(SqlSession sqlSession, String lectureDepartment) {
-		List<Professor> pList = sqlSession.selectList("LectureMapper.selectProName",lectureDepartment);
+		List<Professor> pList = sqlSession.selectList("LectureMapper.selectProName", lectureDepartment);
 		return pList;
 	}
 
@@ -76,5 +76,12 @@ public class LectureStoreLogic implements LectureStore{
 	public int updateLecturePeriod(SqlSession sqlSession, Lecture lecture) {
 		int result = sqlSession.update("LectureMapper.updateLecturePeriod", lecture);
 		return result;
+	}
+
+	// 교수번호
+	@Override
+	public List<Professor> selectAllProNo(SqlSession sqlSession, String professorName) {
+		List<Professor> pList = sqlSession.selectList("LectureMapper.selectProNo", professorName);
+		return pList;
 	}
 }

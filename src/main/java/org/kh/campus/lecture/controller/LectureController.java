@@ -104,6 +104,20 @@ public class LectureController {
 		  
 		  return null;
 	}
+	
+	//교수번호
+	@ResponseBody
+	@RequestMapping(value="/lecture/selectProfessorNo", method =RequestMethod.GET, produces = "application/json;charset=utf-8")
+	public String lectureProNo(@RequestParam("professorName") String professorName) {
+		List<Professor> pList = lService.printAllProNo(professorName);
+		 
+		if (!pList.isEmpty()) { 
+			 Gson gson = new Gson();
+			 return gson.toJson(pList);
+		  }
+		  
+		  return null;
+	}
 		
 
 	//수강 개설 등록 실행
