@@ -154,7 +154,7 @@ table {
 									<option value="${lList.professorName }">${lList.professorName }</option>
 								</c:forEach> --%>
 						</select>
-						<input type="hidden" name="professorNo" id="professorNo" value="${lecture.professorNo }">
+						<input type="hidden"name="professorNo" id="professorNo" value="${lecture.professorNo }">
 						</td>
 					</tr>
 					<tr>
