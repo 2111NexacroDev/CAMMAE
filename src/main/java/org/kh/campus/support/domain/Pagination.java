@@ -4,7 +4,7 @@ public class Pagination {
 	public static PageInfo getPageInfo(int currentPage, int totalCount) {
 		PageInfo pi = null;
 		
-		int supportLimit = 5;
+		int supportLimit = 10;
 		int naviLimit = 5;
 		int maxPage;
 		int startNavi;
