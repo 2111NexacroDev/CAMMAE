@@ -21,9 +21,7 @@
 	</select>
 	
 	<select id="selectAllNotice" resultMap="noticeResultMap">
-		SELECT * FROM NOTICE_TBL WHERE NOTICE_NO = 61
-         UNION ALL
-         SELECT * FROM NOTICE_TBL
+         SELECT * FROM NOTICE_TBL ORDER BY NOTICE_NO DESC
 	</select>
 	
 	<select id="selectOneNotice" resultMap="noticeResultMap">

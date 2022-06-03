@@ -32,7 +32,7 @@
             this.addChild(obj.name, obj);
             
             // UI Components Initialize
-            obj = new Div("Div04","0","70","800","60",null,null,null,null,null,null,this);
+            obj = new Div("Div04","0","90","800","60",null,null,null,null,null,null,this);
             obj.set_taborder("6");
             obj.set_text("");
             obj.set_background("rgb(231, 232, 226)");
@@ -45,12 +45,12 @@
             obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"48\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"이름\"/><Cell col=\"1\" text=\"학년도\"/><Cell col=\"2\" text=\"학기\"/><Cell col=\"3\" text=\"교과목\"/><Cell col=\"4\" text=\"학점\"/><Cell col=\"5\" text=\"점수\"/><Cell col=\"6\" text=\"평점\"/></Band><Band id=\"body\"><Cell text=\"bind:studentName\"/><Cell col=\"1\" text=\"bind:gradeYear\" textAlign=\"center\"/><Cell col=\"2\" text=\"bind:gradeSession\" textAlign=\"center\"/><Cell col=\"3\" text=\"bind:gradeSubject\" textAlign=\"center\"/><Cell col=\"4\" text=\"bind:lectureGrade\" textAlign=\"center\" edittype=\"text\"/><Cell col=\"5\" text=\"bind:gradeScore\" edittype=\"text\" textAlign=\"center\"/><Cell col=\"6\" text=\"bind:gradeAvg\" edittype=\"mask\" textAlign=\"center\" displaytype=\"normal\" maskedittype=\"number\" maskeditlimitbymask=\"both\" maskeditformat=\"###.###\"/></Band></Format></Formats>");
             this.addChild(obj.name, obj);
 
-            obj = new Button("Button01","709","85","60","25",null,null,null,null,null,null,this);
+            obj = new Button("Button01","709","108","60","25",null,null,null,null,null,null,this);
             obj.set_taborder("1");
             obj.set_text("저장");
             this.addChild(obj.name, obj);
 
-            obj = new Combo("Combo00","90","87","122","20",null,null,null,null,null,null,this);
+            obj = new Combo("Combo00","88","110","122","20",null,null,null,null,null,null,this);
             obj.set_taborder("2");
             obj.set_codecolumn("codecolumn");
             obj.set_datacolumn("datacolumn");
@@ -62,7 +62,7 @@
             obj.set_index("0");
             this.addChild(obj.name, obj);
 
-            obj = new Combo("Combo01","252","87","163","20",null,null,null,null,null,null,this);
+            obj = new Combo("Combo01","250","110","163","20",null,null,null,null,null,null,this);
             obj.set_taborder("3");
             obj.set_codecolumn("codecolumn");
             obj.set_datacolumn("datacolumn");
@@ -74,12 +74,12 @@
             obj.set_index("0");
             this.addChild(obj.name, obj);
 
-            obj = new Button("Button00","630","85","60","25",null,null,null,null,null,null,this);
+            obj = new Button("Button00","630","108","60","25",null,null,null,null,null,null,this);
             obj.set_taborder("4");
             obj.set_text("검색");
             this.addChild(obj.name, obj);
 
-            obj = new Combo("Combo02","454","87","163","20",null,null,null,null,null,null,this);
+            obj = new Combo("Combo02","452","110","163","20",null,null,null,null,null,null,this);
             obj.set_taborder("5");
             obj.set_innerdataset("ds_subject");
             obj.set_codecolumn("gradeSubject");
@@ -109,19 +109,19 @@
             obj.set_background("rgb(0, 74, 38)");
             this.addChild(obj.name, obj);
 
-            obj = new Static("Static00_00","60","83","60","30",null,null,null,null,null,null,this);
+            obj = new Static("Static00_00","60","105","60","30",null,null,null,null,null,null,this);
             obj.set_taborder("10");
             obj.set_text("년도");
             obj.set_font("normal bold 10pt/normal \"Arial\"");
             this.addChild(obj.name, obj);
 
-            obj = new Static("Static00_00_00","420","83","60","30",null,null,null,null,null,null,this);
+            obj = new Static("Static00_00_00","220","105","60","30",null,null,null,null,null,null,this);
             obj.set_taborder("11");
             obj.set_text("학기");
             obj.set_font("normal bold 10pt/normal \"Arial\"");
             this.addChild(obj.name, obj);
 
-            obj = new Static("Static00_00_01","220","83","60","30",null,null,null,null,null,null,this);
+            obj = new Static("Static00_00_01","423","105","60","30",null,null,null,null,null,null,this);
             obj.set_taborder("12");
             obj.set_text("과목");
             obj.set_font("normal bold 10pt/normal \"Arial\"");
@@ -244,6 +244,8 @@
         	this.fn_subject();
         };
 
+
+
         });
         
         // Regist UI Components Event
@@ -254,6 +256,7 @@
             this.Combo00.addEventHandler("onitemchanged",this.Combo00_onitemchanged,this);
             this.Combo01.addEventHandler("onitemchanged",this.Combo01_onitemchanged,this);
             this.Button00.addEventHandler("onclick",this.Button00_onclick,this);
+            this.Combo02.addEventHandler("onitemchanged",this.Combo02_onitemchanged,this);
         };
         this.loadIncludeScript("prf_grade.xfdl");
         this.loadPreloadList();

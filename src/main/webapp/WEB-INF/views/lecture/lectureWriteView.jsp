@@ -100,7 +100,7 @@ table {
 						<tr>
 							<td id="n1">교수명</td>
 							<td class="td_right"><select id="professorName"
-								name="professorName">
+								name="professorNo">
 									<option value="">선택하세요.</option>
 									<%-- <c:forEach var="lList" items="${lList}">
 										<option value="${lList.professorName }">${lList.professorName }</option>
@@ -196,7 +196,7 @@ table {
 					$("#professorName option").remove();
 					for(var i= 0; i<data.length; i++){
 						$("#professorName").append(
-								"<option value="+data[i].professorName+">" + data[i].professorName + "</option>");
+								"<option value="+data[i].professorNo+">" + data[i].professorName + "</option>");
 					}
 				},
 				error : function(){
