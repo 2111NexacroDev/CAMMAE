@@ -148,12 +148,14 @@ table {
 					<tr>
 						<td id="n1">교수명</td>
 						<td class="td_right"><select id="professorName"
-							name="professorName" > 
+							name="professorName" onchange="getProNo()" > 
 								<option value="${lecture.professorName }">${lecture.professorName }</option>
 								<%-- <c:forEach var="lList" items="${lList}">
 									<option value="${lList.professorName }">${lList.professorName }</option>
 								</c:forEach> --%>
-						</select></td>
+						</select>
+						<input type="text" name="professorNo" id="professorNo" value="${lecture.professorNo }">
+						</td>
 					</tr>
 					<tr>
 						<td id="n1">학점</td>
@@ -224,6 +226,7 @@ table {
 					$("#professorName").append(
 							"<option value="+data[i].professorName+">" + data[i].professorName + "</option>");
 				}
+				$('input[name=professorNo]').attr('value',data[0].professorNo);
 			},
 			error : function(){
 				alert("ajax 실패");
@@ -233,59 +236,29 @@ table {
 		
 	}
 	
-/* 		var mIndex = 0;
-		var uIndex = 0;
-		function selProfessorName() {
-			if (mIndex == 0) {
-				var professorName = $("professorName").val();
-				var target = $("#professorName");
-				$.ajax({
-					url : "/lecture/selectLecture.kh",
-					type : "get",
-					data : {
-						"professorName" : professorName
-					},
-					success : function(lList) {
-						for (var i = 0; i < lList.length; i++) {
-							$("#professorName").append(
-									"<option value="+lList[i].professorName+">"
-											+ lList[i].professorName
-											+ "</option>");
-						}
-					},
-					error : function() {
-						alert("ajax 실패");
-					}
-				})
-				mIndex++;
+	function getProNo(){
+		var professorName = $("#professorName").val();
+		var target = $("#professorNo");
+		$.ajax({
+			url : "/lecture/selectProfessorNo",
+			type : "get",
+			data : {"professorName" : professorName},
+			success : function(data){
+				/*  $("#professorName option").remove(); */
+				for(var i= 0; i<data.length; i++){
+					/* $("#professorName").append(
+							"<option value="+data[i].professorNo+">" + data[i].professorName + "</option>"); */
+				$('input[name=professorNo]').attr('value',data[i].professorNo);
+				}
+				
+			},
+			error : function(){
+				alert("ajax 실패");
 			}
-		}
-
-		function selUniversityName() {
-			if (uIndex == 0) {
-				var universityName = $("universityName").val();
-				var target = $("#universityName");
-				$.ajax({
-					url : "/lecture/selectDepartment.kh",
-					type : "get",
-					data : {
-						"universityName" : universityName
-					},
-					success : function(lList) {
-						for (var i = 0; i < lList.length; i++) {
-							$("#universityName").append(
-									"<option value="+lList[i].universityName+">"
-											+ lList[i].universityName
-											+ "</option>");
-						}
-					},
-					error : function() {
-						alert("ajax 실패");
-					}
-				})
-				uIndex++;
-			}
-		} */
+			
+		})
+		
+	}
 	</script>
 	<!-- footer -->
 	<jsp:include page="../common/footer.jsp"></jsp:include>

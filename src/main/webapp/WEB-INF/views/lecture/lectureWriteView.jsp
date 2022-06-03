@@ -106,7 +106,7 @@ table {
 										<option value="${lList.professorName }">${lList.professorName }</option>
 									</c:forEach> --%>
 							</select>
-							<input type="hidden" name="professorNo" id="professorNo">
+							<input type="text" name="professorNo" id="professorNo">
 							</td>
 						</tr>
 
@@ -195,11 +195,13 @@ table {
 				type : "get",
 				data : {"lectureDepartment" : lectureDepartment},
 				success : function(data){
-					/* $("#professorName option").remove(); */
+					$("#professorName option").remove();
 					for(var i= 0; i<data.length; i++){
+				
 						$("#professorName").append(
 								"<option value="+data[i].professorName+">" + data[i].professorName + "</option>");
 					}
+					$('input[name=professorNo]').attr('value',data[0].professorNo);
 					
 				},
 				error : function(){
