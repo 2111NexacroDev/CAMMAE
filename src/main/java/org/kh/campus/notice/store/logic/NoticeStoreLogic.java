@@ -59,5 +59,11 @@ public class NoticeStoreLogic implements NoticeStore{
 		return totalCount;
 	}
 
+	@Override
+	public List<Notice> selectOne(SqlSession sqlSession) {
+		List<Notice> nList2 = sqlSession.selectList("NoticeMapper.selectOne");
+		return nList2;
+	}
+
 
 }

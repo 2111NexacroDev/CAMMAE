@@ -150,7 +150,7 @@ public class QuestionController {
 				String fileRename = fileMap.get("fileName");
 				if (filePath != null) {
 					question.setQuestionFileName(uploadFile.getOriginalFilename());
-					question.setQuestionFileReNeme(fileRename);
+					question.setQuestionFileReName(fileRename);
 					question.setQuestionFilePath(filePath);
 				}
 			}
@@ -241,7 +241,7 @@ public class QuestionController {
 				String fileRename = fileMap.get("fileName");
 				if (savePath != null) {
 					question.setQuestionFileName(reloadFile.getOriginalFilename()); // 파일이름이 저장
-					question.setQuestionFileReNeme(fileRename);
+					question.setQuestionFileReName(fileRename);
 					question.setQuestionFilePath(savePath); // 새로운 경로로 업데이트
 				}
 			}

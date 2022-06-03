@@ -15,5 +15,8 @@ public interface NoticeService {
 	public int noticeCountUpdate(int noticeNo);//공지사항 조회수
 	public int removeNotice(int noticeNo);//공지사항 삭제
 	public int getListCount();
+	
+	//상단공지
+	public List<Notice> printOne();
 
 }

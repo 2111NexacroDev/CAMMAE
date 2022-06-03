@@ -6,9 +6,6 @@
   	<resultMap type="Graduation" id="graduationResultMap">
   	<id property="studentNo" column="STUDENT_NO"></id>
   	<result property="graduationStatus" column="GRADUATION_STATUS"/>
-  	<result property="graduationFilename" column="GRADUATION_FILENAME"/>
-  	<result property=" graduationFilerename" column="GRADUATION_FILERENAME"/>
-  	<result property="graduationFilepath" column="GRADUATION_FILEPATH"/>
   	<result property="graduationStuName" column="GRADUATION_STU_NAME"/>
   	<result property="graduationStuDep" column="GRADUATION_STU_DEP"/>
   	<result property="graduationStuGrade" column="GRADUATION_STU_Grade"/>
@@ -22,10 +19,11 @@
   		SELECT *
   		FROM GRADUATION_TBL
   		WHERE  GRADUATION_YEAR = #{graduationYear} AND GRADUATION_STU_DEP = #{graduationStuDep}
+  		ORDER BY GRADUATION_STU_NAME
   	</select>
   	
   	<insert id="insertGraduation">
-  		INSERT INTO GRADUATION_TBL VALUES(#{studentNo}, DEFAULT, NULL, NULL, NULL,#{graduationStuName}, #{graduationStuDep}, #{graduationStuGrade}, DEFAULT, DEFAULT)
+  		INSERT INTO GRADUATION_TBL VALUES(#{studentNo}, DEFAULT,#{graduationStuName}, #{graduationStuDep}, #{graduationStuGrade}, TO_CHAR(SYSDATE, 'YYYY'), DEFAULT)
   		
   	</insert>
   	

@@ -16,6 +16,9 @@
 		<result property="lecturePeople" column="LECTURE_PEOPLE" />
 		<result property="lectureStartTime" column="LECTURE_START_TIME" />
 		<result property="lectureEndTime" column="LECTURE_ENDTIME" />
+		<result property="lectureTerm" column="LECTURE_TERM" />
+		<result property="lectureStart" column="LECTURE_START" />
+		<result property="lectureEnd" column="LECTURE_END" />
 		
 	</resultMap>
 	
@@ -48,6 +51,9 @@
 	, #{lecturePeople}
 	, #{lectureStartTime}
 	, #{lectureEndTime}
+	, #{lectureTerm}
+	, SYSDATE
+	, SYSDATE
 	)
 	</insert>
 			
@@ -56,6 +62,7 @@
 		SET 
 		LECTURE_NAME = #{lectureName}
 		,LECTURE_DEPARTMENT = #{lectureDepartment}
+		, PROFESSOR_NO = #{professorNo}
 		, PROFESSOR_NAME = #{professorName}
 		, LECTURE_DIVISION = #{lectureDivision}
 		, LECTURE_GRADE = #{lectureGrade}
@@ -63,8 +70,10 @@
 		, LECTURE_PEOPLE =  #{lecturePeople}
 		, LECTURE_START_TIME  = #{lectureStartTime} 
 		, LECTURE_ENDTIME  = #{lectureEndTime} 
+		, LECTURE_TERM  = #{lectureTerm} 
 		WHERE LECTURE_NO = #{lectureNo} 
 	</update>
+	
 	<delete id="deleteLecture">
 		DELETE FROM LECTURE_TBL WHERE LECTURE_NO = #{lectureNo}
 	</delete>
@@ -108,6 +117,23 @@
 	</select>
 	
 	<select id="selectProName" resultMap="professorResultMap">
-		SELECT DISTINCT PROFESSOR_NAME FROM PROFESSOR_TBL WHERE DEPARTMENT_NAME=#{departmentName} ORDER BY PROFESSOR_NAME ASC
+		SELECT DISTINCT PROFESSOR_NO ,PROFESSOR_NAME FROM PROFESSOR_TBL WHERE DEPARTMENT_NAME=#{departmentName} ORDER BY PROFESSOR_NAME ASC
 	</select>
+	
+	<select id="selectProNo" resultMap="professorResultMap">
+		SELECT DISTINCT PROFESSOR_NO FROM PROFESSOR_TBL WHERE PROFESSOR_NAME=#{professorName}
+	</select>
+	
+	<!-- 수강기간 설정 updateLecturePeriod -->
+	<update id="updateLecturePeriod">
+		UPDATE LECTURE_TBL 
+		SET 
+	<!-- 	LECTURE_START  = TO_CHAR(#{lectureStart},'YYYY-MM-DDTHH24:MI')
+		, LECTURE_END  = TO_CHAR(#{lectureEnd}, 'YYYY-MM-DDTHH24:MI') -->
+		<!-- 	LECTURE_START  = #{lectureStart}
+		, LECTURE_END  = #{lectureEnd} -->
+			LECTURE_START  = #{lectureStart}
+		, LECTURE_END  = #{lectureEnd}
+	</update>
+	
 </mapper>

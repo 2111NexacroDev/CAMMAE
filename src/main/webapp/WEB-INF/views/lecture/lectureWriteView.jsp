@@ -61,43 +61,6 @@ table {
 	margin-bottom: 10px;
 }
 
-/* .lecwritediv {
-	border: 3px solid #c8c8c8;
-	border-radius: 5px;
-	width: 740px;
-	padding: 20px 30px 30px 30px;
-	margin-top: 45px;
-	margin-right: 10px;
-	margin-bottom: 20px;
-	margin-left: 0px;
-}
-
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
-table td* {
-	vertical-align: middle;
-}
-
-table td {
-	padding: 15px 5px;
-	border-bottom: 1px solid #c2c2c2;
-	font-size: 16px;
-}
-
-.td-left {
-	width: 100px;
-}
-
-.td_sub {
-	border: none;
-}
-
-button { cursor:pointer; }
-	
-} */
 </style>
 </head>
 <body>
@@ -137,12 +100,14 @@ button { cursor:pointer; }
 						<tr>
 							<td id="n1">교수명</td>
 							<td class="td_right"><select id="professorName"
-								name="professorName">
+								name="professorName" onchange="getProNo()">
 									<option value="">선택하세요.</option>
 									<%-- <c:forEach var="lList" items="${lList}">
 										<option value="${lList.professorName }">${lList.professorName }</option>
 									</c:forEach> --%>
-							</select></td>
+							</select>
+							<input type="hidden" name="professorNo" id="professorNo">
+							</td>
 						</tr>
 
 						<tr>
@@ -195,6 +160,15 @@ button { cursor:pointer; }
 							<td class="td_right"><input type="time"
 								name="lectureEndTime"></td>
 						</tr>
+						
+						<tr>
+							<td id="n1">학기</td>
+							<td class="td_right">
+							<select name="lectureTerm">
+									<option>1학기</option>
+									<option>2학기</option>
+							</select></td>
+						</tr>
 
 					</table>
 					<div align="center">
@@ -223,9 +197,12 @@ button { cursor:pointer; }
 				success : function(data){
 					$("#professorName option").remove();
 					for(var i= 0; i<data.length; i++){
+				
 						$("#professorName").append(
 								"<option value="+data[i].professorName+">" + data[i].professorName + "</option>");
 					}
+					$('input[name=professorNo]').attr('value',data[0].professorNo);
+					
 				},
 				error : function(){
 					alert("ajax 실패");
@@ -234,64 +211,30 @@ button { cursor:pointer; }
 			})
 			
 		}
-	
-	
-	
-	
-		
-		/* var mIndex = 0;
-		var uIndex = 0;
-		function selProfessorName() {
-			if (mIndex == 0) {
-				var professorName = $("professorName").val();
-				var target = $("#professorName");
-				$.ajax({
-					url : "/lecture/selectLecture.kh",
-					type : "get",
-					data : {
-						"professorName" : professorName
-					},
-					success : function(lList) {
-						for (var i = 0; i < lList.length; i++) {
-							$("#professorName").append(
-									"<option value="+lList[i].professorName+">"
-											+ lList[i].professorName
-											+ "</option>");
-						}
-					},
-					error : function() {
-						alert("ajax 실패");
+		function getProNo(){
+			var professorName = $("#professorName").val();
+			var target = $("#professorNo");
+			$.ajax({
+				url : "/lecture/selectProfessorNo",
+				type : "get",
+				data : {"professorName" : professorName},
+				success : function(data){
+					/*  $("#professorName option").remove(); */
+					for(var i= 0; i<data.length; i++){
+						/* $("#professorName").append(
+								"<option value="+data[i].professorNo+">" + data[i].professorName + "</option>"); */
+					$('input[name=professorNo]').attr('value',data[i].professorNo);
 					}
-				})
-				mIndex++;
-			}
+					
+				},
+				error : function(){
+					alert("ajax 실패");
+				}
+				
+			})
+			
 		}
-
-		function selUniversityName() {
-			if (uIndex == 0) {
-				var universityName = $("universityName").val();
-				var target = $("#universityName");
-				$.ajax({
-					url : "/lecture/selectDepartment.kh",
-					type : "get",
-					data : {
-						"universityName" : universityName
-					},
-					success : function(lList) {
-						for (var i = 0; i < lList.length; i++) {
-							$("#universityName").append(
-									"<option value="+lList[i].universityName+">"
-											+ lList[i].universityName
-											+ "</option>");
-						}
-					},
-					error : function() {
-						alert("ajax 실패");
-					}
-				})
-				uIndex++;
-			}
-		} */
+		
 	</script>
 </body>
 </html>

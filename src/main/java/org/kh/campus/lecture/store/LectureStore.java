@@ -30,6 +30,11 @@ public interface LectureStore {
 	List<Lecture> selectAllLecture2(SqlSession sqlSession, String lectureDepartment);
 
 
+	public int updateLecturePeriod(SqlSession sqlSession, Lecture lecture);
+	//교수번호
+	List<Professor> selectAllProNo(SqlSession sqlSession, String professorName);
+
+
 
 
 }

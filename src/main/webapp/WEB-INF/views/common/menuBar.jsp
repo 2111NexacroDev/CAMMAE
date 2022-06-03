@@ -1,14 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/resources/menuBar.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/resources/menuBar.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
 <title>menuBar</title>
 </head>
 <body>
@@ -29,25 +30,42 @@
 		</div>
 	</div>
 	<!-- local navigation bar -->
-        <div id="lnb">
-            <div class="inner lnb_nav">
-                <h1>
-                    <img src="/resources/img/logo.png" style="width:80px; height:80px; " >
-                    <a href="/main.kh">  
-                    <span id="lnb_title"> 대일대학교</span></a>
-                    <span id="lnb_subtitle">DAILE UNIVERSITY</span>
-                </h1>
-                <ul class="lnb_nav_dep1">
-                    <li><a href="/board/list.kh" class="btn_lnb_dep1">게시판</a></li>
-                    <li><a href="/cart/preCartListView.kh" class="btn_lnb_dep1">수강신청</a></li>
-                    <li><a href="#" class="btn_lnb_dep1">캠퍼스매니저</a></li>
-                    <li><a href="/notice/list.kh" class="btn_lnb_dep1">취업지원센터</a></li>
-                </ul>
-            </div>
-        </div>
-        <div id="line">
-        <img src="/resources/img/menubar3.jpg" style="width:100%; height:100%;">
-        </div>
+	<div id="lnb">
+		<div class="inner lnb_nav">
+			<h1>
+				<img src="/resources/img/logo.png"
+					style="width: 80px; height: 80px;"> <a href="/main.kh">
+					<span id="lnb_title"> 대일대학교</span>
+				</a> <span id="lnb_subtitle">DAILE UNIVERSITY</span>
+			</h1>
+			<ul class="lnb_nav_dep1">
+				<!-- <li><a href="/board/list.kh" class="btn_lnb_dep1">게시판</a></li>
+                    <li><a href="/cart/preCartListView.kh" class="btn_lnb_dep1">수강신청</a></li> -->
+				<li><a href="/board/unlist.kh" class="btn_lnb_dep1">게시판</a></li>
+				<c:if test="${empty sessionScope}">
+					<li><a href="/cart/preCartListView.kh" class="btn_lnb_dep1">수강신청</a></li>
+				</c:if>
+				<c:if test="${not empty sessionScope}">
+					<c:if test="${sessionScope.loginUser ne null}">
+						<li><a href="/cart/preCartListView.kh" class="btn_lnb_dep1">수강신청</a></li>
+					</c:if>
+					<c:if
+						test="${sessionScope.loginManager ne null || sessionScope.loginProfessor ne null}">
+						<li><a href="/lecture/list.kh" class="btn_lnb_dep1">수강개설</a></li>
+					</c:if>
+				</c:if>
+				<li><a
+					href="javascript:void(window.open('/home.kh', '캠퍼스매니저','width=1000px, height=500px'))"
+					class="btn_lnb_dep1">캠퍼스매니저</a></li>
+				<li><a href="/notice/list.kh" class="btn_lnb_dep1">취업지원센터</a></li>
+			</ul>
+		</div>
+	</div>
+	<br>
+	<div id="line">
+		<img src="/resources/img/menubar3.jpg"
+			style="width: 100%; height: 100%;">
+	</div>
 
 </body>
 </html>

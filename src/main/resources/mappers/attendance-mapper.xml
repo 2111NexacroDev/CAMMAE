@@ -11,6 +11,7 @@
   	<result property="attObjection" column="ATT_OBJECTION"/>
   	<result property="lectureName" column="GRADE_SUBJECT"/>
   	<result property="studentName" column="STUDENT_NAME"/>
+  	<result property="attNo" column="ATT_NO"/>
   	</resultMap>
   	
   	<resultMap type="Attendance" id="AttendanceResultMap2">
@@ -21,6 +22,7 @@
   	<result property="attObjection" column="ATT_OBJECTION"/>
   	<result property="lectureName" column="GRADE_SUBJECT"/>
   	<result property="studentName" column="ATT_STUDENT_NAME"/>
+  	<result property="attNo" column="ATT_NO"/>
   	</resultMap>
   	 
   	 
@@ -30,20 +32,25 @@
 	  </select>
 	  
   	<select id="selectAttProf" resultMap = "AttendanceResultMap">
-  	SELECT * FROM LECTURE_TBL L
+ 	 SELECT DISTINCT G.GRADE_SUBJECT, L.LECTURE_NO
+  	FROM LECTURE_TBL L
   	JOIN GRADE_TBL G ON
   	(L.LECTURE_NO = G.LECTURE_NO AND G.PROFESSOR_NO = #{professorNo})
   	</select>
   	
+  	<!-- attinsert_prf -->
   	<select id="selectAttProfSearchStu" resultMap="AttendanceResultMap">
-  	SELECT * FROM STUDENT_TBL S
-  	JOIN GRADE_TBL G ON
-  	(S.PROFESSOR_NO = #{professorNo} AND STUDENT_STATE = '재학' AND GRADE_SUBJECT = #{lectureName})
-  	
+    SELECT * FROM GRADE_TBL G
+    JOIN STUDENT_TBL S
+    ON S.STUDENT_NO = G.STUDENT_NO
+    LEFT JOIN ATTENDANCE_TBL A
+    ON A.STUDENT_NO = S.STUDENT_NO
+    WHERE G.PROFESSOR_NO=#{professorNo} AND GRADE_SUBJECT = #{lectureName}
+    ORDER BY G.STUDENT_NO, S.STUDENT_NAME
   	</select>
   	
   	<insert id="insertAttendance">
-  	 INSERT INTO ATTENDANCE_TBL VALUES(#{studentNo}, #{lectureNo}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), #{attStatus},'N', #{lectureName}, #{studentName})
+  	 INSERT INTO ATTENDANCE_TBL VALUES(#{studentNo}, #{lectureNo}, TO_CHAR(SYSDATE, 'YYYY-MM-DD'), #{attStatus},'N', #{lectureName}, #{studentName}, SEQ_ATT_NO.NEXTVAL)
   	</insert>
   	
   	
@@ -51,16 +58,17 @@
   	 SELECT * FROM ATTENDANCE_TBL WHERE STUDENT_NO  = #{studentNo} AND LECTURE_NAME = #{lectureName}
   	</select>
   	
+  	
   	<select id="selectAttProfIssue" resultMap= "AttendanceResultMap2">
   	SELECT * FROM ATTENDANCE_TBL A
 	JOIN GRADE_TBL P ON
 	(P.LECTURE_NO = A.LECTURE_NO AND  P.PROFESSOR_NO = #{professorNo} AND ATT_OBJECTION = 'Y' )
-  	
+  	ORDER BY A.LECTURE_NAME, ATT_STUDENT_NAME
   	</select>
   	
   	<update id="updateObjectChange">
   	UPDATE ATTENDANCE_TBL SET ATT_OBJECTION = 'Y'
-  	WHERE LECTURE_NO = #{lectureNo} AND STUDENT_NO = #{studentNo}
+  	WHERE ATT_NO = #{attNo}
   	
   	</update>
   	
@@ -68,6 +76,12 @@
   	UPDATE ATTENDANCE_TBL SET ATT_STATUS = #{attStatus}
   	WHERE LECTURE_NO = #{lectureNo} AND STUDENT_NO = #{studentNo} 
   	</update>
+  	
+  	<select id="selectCount" resultType="_int">
+  		SELECT COUNT(*) FROM ATTENDANCE_TBL
+		WHERE STUDENT_NO= #{studentNo} AND LECTURE_NO = #{lectureNo}
+		AND ATT_DATE = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+  	</select>
     </mapper>
     
     

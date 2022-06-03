@@ -44,7 +44,7 @@ hr {
 				<!-- 파일 수정 하지않을 때 기존 파일 경로 그대로 사용하기 위해서  파일을 수정할 때는 기존 파일을 삭제하기 위해서-->
 				<input type="hidden" name="questionFileName"
 					value="${question.questionFileName }"> <input type="hidden"
-					name="questionFileReName" value="${question.questionFileReNeme }">
+					name="questionFileReName" value="${question.questionFileReName }">
 				<input type="hidden" name="questionFilePath"
 					value="${question.questionFilePath }"> <input type="hidden"
 					name="questionDate" value="${question.questionDate }">
@@ -58,13 +58,13 @@ hr {
 					<div class="selectBox" style="padding: 10px;">
 						<select id="professorName" name="professorName"
 							onchange="getProName()" style="border: none; width: 330px;">
-							<option value="교수를 선택하세요">${question.professorName}</option>
+							<option value="${question.professorName}">${question.professorName}</option>
 							<c:forEach var="lList" items="${lList}">
 								<option value="${lList.professorName }">${lList.professorName }</option>
 							</c:forEach>
 						</select> &emsp;&emsp; <select id="lectureName" name="lectureName"
 							style="border: none; width: 330px;">
-							<option value="강의를 선택하세요">${question.lectureName}</option>
+							<option value="${question.lectureName}">${question.lectureName}</option>
 						</select>
 					</div>
 					<div class="title">

@@ -119,7 +119,7 @@ hr {
 					</div>
 					<div class="btn_1">
 						<button class="btn" id="btn1"
-							onclick="location.href='/consultant/list.kh'">목록</button>
+							onclick="location.href='/consultant/adlist.kh'">목록</button>
 					</div>
 				</div>
 				<div>
@@ -287,7 +287,7 @@ hr {
 				},
 				success : function(data) {
 					if (data == "success") {
-						alert("업데이트 성공");
+						/* alert("업데이트 성공"); */
 
 					} else {
 						alert("업데이트 실패");

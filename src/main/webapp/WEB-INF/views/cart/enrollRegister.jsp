@@ -70,6 +70,10 @@ table.type01 td a {
 #d6 {
 	width: 30%;
 }
+#pick:hover{
+color:blue;
+font-weight: bold;
+}
 </style>
 </head>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -92,7 +96,7 @@ table.type01 td a {
 			 <label for="lectureSelect">학과</label> <select id="lecList">
 				<option value="전체">전체</option>
 				<option value="1">컴퓨터공학과</option>
-				<option value="2">전자전기공학과</option>
+				<option value="2">전기전자학과</option>
 				<option value="3">산업디자인학과</option>
 				<option value="4">중국어학과</option>
 				<option value="5">유비쿼터스학과</option>
@@ -122,7 +126,7 @@ table.type01 td a {
 						<tr class="lecTr">
 							<td><c:url var="lPick" value="/cart/lectureEnroll.kh">
 									<c:param name="lectureNo" value="${lList.lectureNo }"></c:param>
-								</c:url> <a href="${lPick }">신청</a></td>
+								</c:url> <a id="pick" href="${lPick }">신청</a></td>
 							<td>${lList.lectureNo }</td>
 							<%-- <td>${lList.universityCollege }</td> --%>
 							<td>${lList.lectureDepartment }</td>

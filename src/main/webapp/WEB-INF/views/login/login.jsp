@@ -480,7 +480,7 @@ window.onload = function(){
 			<div class="login_form">
 				<div class="login_form2" >
 						<img src="../resources/img/login_id.gif" id="img_id">
-						<input type="text" name="user-id" id="info" placeholder="아이디를 입력해주세요.">
+						<input type="number" name="user-id" id="info" placeholder="아이디를 입력해주세요.">
 						<br><br>
 						<img src="../resources/img/login_pw.gif" id="img_pw">
 						<input type="password" name="user-pwd" id="info" placeholder="비밀번호를 입력해주세요.">
@@ -523,7 +523,7 @@ window.onload = function(){
 					<tbody>
 						<tr>
 							<th id="r1" scope="row">학번</th>
-							<td><input type="text" id="user-no"></td>
+							<td><input type="number" id="user-no"></td>
 						<tr>
 						<tr>
 							<th id="r1" scope="row">이름</th>

@@ -98,11 +98,15 @@ hr {
 					<c:url var="bModify" value="/board/modifyView.kh">
 						<c:param name="boardNo" value="${board.boardNo }"></c:param>
 					</c:url>
+					
+					<c:if test="${not empty sessionScope.loginUser ||not empty sessionScope.loginManager }">
 					<button class="btn" onclick="location.href='${bModify }'">수정</button>
+					
 					<c:url var="bDelete" value="/board/delete.kh">
 						<c:param name="boardNo" value="${board.boardNo }"></c:param>
 					</c:url>
 					<button class="btn" onclick="location.href='${bDelete }'">삭제</button>
+					</c:if>
 					<button class="btn"
 						onclick="location.href='/board/list.kh?universityCode=${universityCode}'">목록</button>
 				</div>
@@ -120,7 +124,7 @@ hr {
 						<c:if test="${not empty board.boardFilerename}">
 							<br>
 							<span> <img
-								src="/resources/boardUploadFiles/${board.boardFilerename }"
+								src="../../../resources/boardUploadFiles/${board.boardFilerename }"
 								style="width: 500px;">
 							</span>
 						</c:if>
@@ -164,7 +168,7 @@ hr {
 			var boardNo = "${board.boardNo}";
 			var rContents = $("#rContents").val();
 			<c:if test="${empty sessionScope.loginUser }">
-			alert("로그인을 해주세요.");
+			alert("학생만이용 가능한 공간입니다");
 			</c:if>
 			<c:if test="${not empty loginUser }">
 			$.ajax({
@@ -191,7 +195,8 @@ hr {
 			var boardNo = "${board.boardNo}";
 			var rWriter = "${loginUser.studentName}";
 			var rWriterId = "${loginUser.studentNo}";
-			$.ajax({
+			$
+					.ajax({
 						url : "/board/replyList.kh",
 						type : "get",
 						data : {
@@ -232,8 +237,9 @@ hr {
 								$tr.append($rWriter);
 								$tr.append($rDate);
 								$tr2.append($rContent);
-								if (data[i].boardId == rWriterId&& data[i].boardReplyWriter == rWriter) {
-								$tr2.append($btnArea);
+								if (data[i].boardId == rWriterId
+										&& data[i].boardreplyWriter == rWriter) {
+									$tr2.append($btnArea);
 								}
 								$tableBody.append($tr);
 								$tableBody.append($tr2);
@@ -276,8 +282,8 @@ hr {
 			var $tdModifyBtn = $("<td  width='10%'>");
 			$tdModify
 					.append("<input type='text' size='86' value='"+boardReplyContent+"' id='modifyData'>");
-			$tdModifyBtn.append("<button class='btn' onclick='modifyReply(" + boardNo + ","
-					+ boardReplyNo + ");'>수정</button>");
+			$tdModifyBtn.append("<button class='btn' onclick='modifyReply("
+					+ boardNo + "," + boardReplyNo + ");'>수정</button>");
 			$trModify.append($tdModify);
 			$trModify.append($tdModifyBtn);
 			$(obj).parent().parent().after($trModify);

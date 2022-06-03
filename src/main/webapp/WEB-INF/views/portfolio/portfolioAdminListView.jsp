@@ -29,10 +29,10 @@ td a{
 	width:5%;
 }
 #q2{
-	width:22%;
+	width:20%;
 }
 #q3{
-	width:7%;
+	width:9%;
 }
 #q4{
 	width:11%;
@@ -98,7 +98,7 @@ td a{
 												<c:param name="port_no" value="${portfolio.port_no}"></c:param>
 											</c:url>
 											
-											<td class="ta" id="detail" style="text-align:left"><a href="${pDetail}">${portfolio.port_title }</a></td>
+											<td class="ta" id="detail" style="text-align:center"><a href="${pDetail}">${portfolio.port_title }</a></td>
 											<td class="ta" id="writer">${portfolio.port_name}</td>
 											<td class="ta" id="stu_number">${portfolio.port_student_no}</td>
 											<td class="ta" id="college">${portfolio.port_college}</td>

@@ -39,8 +39,12 @@ public class NoticeController {
 			int totalCount = nService.getListCount();
 			PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
 			List<Notice> nList = nService.printAllNotice(pi);
+			//상단공지
+			List<Notice> nList2 = nService.printOne();
 			if(!nList.isEmpty()) {
 				mv.addObject("nList", nList);
+				//상단공지
+				mv.addObject("nList2", nList2);
 				mv.addObject("pi", pi);
 				mv.addObject("menu", "notice");
 				mv.addObject("currentPage", currentPage);

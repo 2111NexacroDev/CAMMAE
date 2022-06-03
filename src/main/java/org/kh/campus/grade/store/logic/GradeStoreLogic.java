@@ -77,4 +77,10 @@ public class GradeStoreLogic implements GradeStore {
 		int result = sqlSession.delete("");
 		return result;
 	}
+
+	@Override
+	public double selectAvg(HashMap<String, String> grade, SqlSession sqlSession) {
+		double result = sqlSession.selectOne("GradeMapper.selectAvg", grade);
+		return result;
+	}
 }

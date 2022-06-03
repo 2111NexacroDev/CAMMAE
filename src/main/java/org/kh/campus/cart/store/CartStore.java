@@ -19,7 +19,7 @@ public interface CartStore {
 
 	List<Lecture> selectAllEnroll(SqlSession sqlSession, String lectureDepartment);
 
-	List<Lecture> selectMyEnroll(SqlSession sqlSession);
+	List<Lecture> selectMyEnroll(SqlSession sqlSession, int studentNo);
 
 	int insertEnroll(SqlSession sqlSession, Lecture lecture);
 

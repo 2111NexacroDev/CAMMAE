@@ -85,10 +85,7 @@ table {
 						<td id="n1">교수코드</td>
 						<td>${lecture.professorNo }</td>
 					</tr> --%>
-					<tr>
-						<td id="n1">단과대학</td>
-						<td>${lecture.universityCollege }</td>
-					</tr>
+				
 					<tr>
 						<td id="n1">이수구분</td>
 						<td>${lecture.lectureDivision }</td>
@@ -124,6 +121,10 @@ table {
 					<tr>
 						<td id="n1">강의인원</td>
 						<td>${lecture.lecturePeople }</td>
+					</tr>
+					<tr>
+						<td id="n1">학기</td>
+						<td>${lecture.lectureTerm }</td>
 					</tr>
 				</table>
 				<div align="center">

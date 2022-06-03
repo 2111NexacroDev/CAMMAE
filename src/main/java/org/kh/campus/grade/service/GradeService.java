@@ -9,6 +9,9 @@ public interface GradeService {
 	// 학생
 	// 학생의 학년 학기로 조회
 	public List<Grade> printGradeStudent(HashMap<String, String> searchInfo);
+	
+	// 학생의 년도 학기의 평균 점수
+	public double printAVG(HashMap<String, String> grade);
 
 	// 이의신청 조회
 	public List<Grade> printFeedbackStudent(HashMap<String, String> searchInfo);

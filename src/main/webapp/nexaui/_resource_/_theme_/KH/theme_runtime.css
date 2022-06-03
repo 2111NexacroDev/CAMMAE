@@ -1,0 +1,371 @@
+﻿
+        
+.nexainput.nexaleftalign
+{
+  text-align:left;
+}
+.nexainput.nexarightalign
+{
+  text-align:right;
+}
+.nexainput.nexacenteralign
+{
+  text-align:center;
+}
+
+.nexacontentsbox.nexaleftalign
+{
+  text-align:left;
+}
+.nexacontentsbox.nexarightalign
+{
+  text-align:right;
+}
+.nexacontentsbox.nexacenteralign
+{
+  text-align:center;
+}
+.celltreeline
+{
+  border : 1px dotted #999999;
+}
+.Edit, .MaskEdit, .TextArea, .EditControl, .MaskEditControl, .TextAreaControl
+{
+  cursor:text;
+}
+.Button .nexacontentsbox, .ButtonControl .nexacontentsbox
+{
+  text-align:center;
+}
+
+.FileDownload  .nexacontentsbox, .FileDownloadControl .nexacontentsbox
+{
+  text-align:center;
+}
+
+.IconTextControl .nexacontentsbox, .IconControl .nexacontentsbox
+{
+  text-align:center;
+}
+
+.DatePickerDayItemControl .nexacontentsbox, .DatePickerWeekItemControl .nexacontentsbox, .TitleBarButtonControl .nexacontentsbox
+{
+  text-align:center;
+}
+
+.MainFrame, .VScrollBarControl, .HScrollBarControl
+{
+  cursor:default;
+}
+
+.Sketch .nexacontentsbox
+{
+   text-align:center;
+}
+
+.nexainput
+{
+  cursor:inherit;
+}
+
+.Button
+{
+	border : 1px solid #9c9c9c;
+	background : linear-gradient(#ffffff 0%,#e1e1e1 100%);
+	letter-spacing : 3px;
+}
+.Form
+{
+	background : #ffffff;
+	color : #222222;
+	font : 12px "Malgun Gothic";
+}
+.Button.btn_TF_Delete
+{
+	background : purple;
+	color : #ffffff;
+}
+.Button.btn_WF_Save
+{
+	border : 1px solid #edada2;
+	background : linear-gradient(#ffffff 0%,#f9cbc3 100%);
+	color : #a1210b;
+	letter-spacing : 0px;
+}
+.Button.btn_WF_Save .nexacontentsbox
+{
+	text-decoration : underline;
+}
+.Button.btn_WF_Add
+{
+	border : 1px solid #263a7d;
+	background : url('./images/img_WF_RepeatX.png') repeat-x center bottom /auto;
+	color : #ffffff;
+}
+.Combo
+{
+	border : 1px solid #9c9c9c;
+	background : #ffffff;
+}
+.Combo .comboedit
+{
+	padding : 0px 0px 0px 10px;
+}
+.ListBoxControl.popupCombocombolist.dummy
+{
+	border : 1px solid #9c9c9c;
+	background : #ffffff;
+}
+.ListBoxControl.popupCombocombolist.dummy .listboxitem
+{
+	color : red;
+}
+.Calendar
+{
+	border : 1px solid #9c9c9c;
+	background : #ffffff;
+}
+.Calendar .calendaredit
+{
+	padding : 0px 0px 0px 10px;
+}
+.Calendar .datepicker
+{
+	border : 1px solid #9c9c9c;
+	background : #ffffff;
+}
+.DatePickerControl.popupCalendardatepicker
+{
+	border : 1px solid #9c9c9c;
+	background : #ffffff;
+}
+.Calendar .datepicker .head
+{
+	background : #f44a26;
+}
+.DatePickerControl.popupCalendardatepicker .head
+{
+	background : #f44a26;
+}
+.Calendar .datepicker .head .monthspin .spinedit
+{
+	color : #ffffff;
+}
+.DatePickerControl.popupCalendardatepicker .head .monthspin .spinedit
+{
+	color : #ffffff;
+}
+.Calendar .datepicker .head .monthstatic
+{
+	color : #ffffff;
+	font : bold 12px "Malgun Gothic";
+}
+.DatePickerControl.popupCalendardatepicker .head .monthstatic
+{
+	color : #ffffff;
+	font : bold 12px "Malgun Gothic";
+}
+.Calendar .datepicker .head .yearspin .spinedit
+{
+	color : #ffffff;
+}
+.DatePickerControl.popupCalendardatepicker .head .yearspin .spinedit
+{
+	color : #ffffff;
+}
+.Calendar .datepicker .head .yearstatic
+{
+	color : #ffffff;
+	font : bold 12px "Malgun Gothic";
+}
+.DatePickerControl.popupCalendardatepicker .head .yearstatic
+{
+	color : #ffffff;
+	font : bold 12px "Malgun Gothic";
+}
+.Calendar .datepicker .body .weekband
+{
+	background : #e8e8e8;
+}
+.DatePickerControl.popupCalendardatepicker .body .weekband
+{
+	background : #e8e8e8;
+}
+.Calendar .calendarspindownbutton
+{
+	background : teal;
+}
+.Calendar .calendarspinupbutton
+{
+	background : pink;
+}
+.Grid
+{
+	border : 1px solid #9c9c9c;
+	background : #ffffff;
+}
+.Grid .head .row .cell
+{
+	background : #555a5e;
+	color : #ffffff;
+	border : 1px solid lightgray;
+}
+.Grid .head .row .cell .nexacontentsbox
+{
+	text-align : center;
+}
+.Grid .body .row .cell
+{
+	background : #ffffff;
+	border : 1px solid lightgray;
+}
+.Grid .body .row .cell.oddcell
+{
+	background : #f7f7f7;
+}
+.Grid .summary .row .cell
+{
+	background : #aaacae;
+	color : #ffffff;
+	font : bold 12px "Malgun Gothic";
+	border : 1px solid lightgray;
+}
+.Grid .summary .row .cell .nexacontentsbox
+{
+	text-align : center;
+}
+.GridCellControl .cellbutton
+{
+	border : 1px solid teal;
+	background : darkseagreen;
+}
+.Grid.grd_WF_HeadP .head .row .cell
+{
+	background : purple;
+}
+.Grid .body .row .cell.cell_WF_BodyY
+{
+	background : yellow;
+}
+.Grid .body .row .cell.cell_WF_BodyY.oddcell
+{
+	background : yellow;
+}
+.Grid .body .row .cell.cell_WF_BtnB .cellbutton
+{
+	background : blue;
+}
+.GridCellControl .celledit
+{
+	border : 1px solid #9c9c9c;
+	background : #ffffff;
+}
+.Grid .body .row .cell.cell_WF_Ess .celledit
+{
+	border : 1px solid orangered;
+	background : #faedeb;
+}
+.Button[status=mouseover]
+{
+	border : 1px solid #f44528;
+}
+.Button[status=focused]
+{
+	border : 1px solid #f44528;
+}
+.Calendar .datepicker .body .dayitem[status=mouseover]
+{
+	background : #e8e8e8;
+}
+.DatePickerControl.popupCalendardatepicker .body .dayitem[status=mouseover]
+{
+	background : #e8e8e8;
+}
+.Grid .body .row .cell[status=mouseover]
+{
+	background : #fff7f6;
+}
+.Grid .body .row .cell.oddcell[status=mouseover]
+{
+	background : #fff7f6;
+}
+.Button[userstatus=pushed]
+{
+	border : 1px solid #f44528;
+	background : #f44528;
+	color : #ffffff;
+}
+.Calendar .datepicker .body .dayitem[userstatus=trailingday]
+{
+	color : darkgray;
+}
+.DatePickerControl.popupCalendardatepicker .body .dayitem[userstatus=trailingday]
+{
+	color : darkgray;
+}
+.Calendar .datepicker .body .dayitem[userstatus=saturday]
+{
+	color : blue;
+}
+.DatePickerControl.popupCalendardatepicker .body .dayitem[userstatus=saturday]
+{
+	color : blue;
+}
+.Calendar .datepicker .body .dayitem[userstatus=sunday]
+{
+	color : red;
+}
+.DatePickerControl.popupCalendardatepicker .body .dayitem[userstatus=sunday]
+{
+	color : red;
+}
+.Calendar .datepicker .body .dayitem[userstatus=selected]
+{
+	color : #ffffff;
+	background : #cf2d06;
+	font : bold 12px "Malgun Gothic";
+}
+.DatePickerControl.popupCalendardatepicker .body .dayitem[userstatus=selected]
+{
+	color : #ffffff;
+	background : #cf2d06;
+	font : bold 12px "Malgun Gothic";
+}
+.Calendar .datepicker .body .dayitem[userstatus=today]
+{
+	color : #ffffff;
+	background : #f17158;
+}
+.DatePickerControl.popupCalendardatepicker .body .dayitem[userstatus=today]
+{
+	color : #ffffff;
+	background : #f17158;
+}
+.Calendar .datepicker .body .weekitem[userstatus=saturday]
+{
+	color : blue;
+}
+.DatePickerControl.popupCalendardatepicker .body .weekitem[userstatus=saturday]
+{
+	color : blue;
+}
+.Calendar .datepicker .body .weekitem[userstatus=sunday]
+{
+	color : red;
+}
+.DatePickerControl.popupCalendardatepicker .body .weekitem[userstatus=sunday]
+{
+	color : red;
+}
+.Grid .body .row .cell[userstatus=selected]
+{
+	background : #f17158;
+}
+.Grid .body .row .cell.oddcell[userstatus=selected]
+{
+	background : #f17158;
+}
+.Button[status=disabled]
+{
+	opacity : 0.5;
+}

@@ -1,0 +1,2064 @@
+﻿
+        
+.nexainput.nexaleftalign
+{
+  text-align:left;
+}
+.nexainput.nexarightalign
+{
+  text-align:right;
+}
+.nexainput.nexacenteralign
+{
+  text-align:center;
+}
+
+.nexacontentsbox.nexaleftalign
+{
+  text-align:left;
+}
+.nexacontentsbox.nexarightalign
+{
+  text-align:right;
+}
+.nexacontentsbox.nexacenteralign
+{
+  text-align:center;
+}
+.celltreeline
+{
+  border : 1px dotted #999999;
+}
+.Edit, .MaskEdit, .TextArea, .EditControl, .MaskEditControl, .TextAreaControl
+{
+  cursor:text;
+}
+.Button .nexacontentsbox, .ButtonControl .nexacontentsbox
+{
+  text-align:center;
+}
+
+.FileDownload  .nexacontentsbox, .FileDownloadControl .nexacontentsbox
+{
+  text-align:center;
+}
+
+.IconTextControl .nexacontentsbox, .IconControl .nexacontentsbox
+{
+  text-align:center;
+}
+
+.DatePickerDayItemControl .nexacontentsbox, .DatePickerWeekItemControl .nexacontentsbox, .TitleBarButtonControl .nexacontentsbox
+{
+  text-align:center;
+}
+
+.MainFrame, .VScrollBarControl, .HScrollBarControl
+{
+  cursor:default;
+}
+
+.Sketch .nexacontentsbox
+{
+   text-align:center;
+}
+
+.nexainput
+{
+  cursor:inherit;
+}
+
+.Form
+{
+	font : 10pt "Malgun Gothic";
+	color : #000000;
+}
+.FrameSet
+{
+	background : #ffffff;
+}
+.VFrameSet
+{
+	background : #ffffff;
+}
+.HFrameSet
+{
+	background : #ffffff;
+}
+.ChildFrame
+{
+	background : #ffffff;
+}
+.TileFrameSet
+{
+	background : #ffffff;
+}
+.MainFrame
+{
+	border : 1px solid #0078d6;
+}
+.TitleBarControl
+{
+	background : #f5f5f5;
+	border : 1px solid #cccccc;
+}
+.TitleBarControl .titleicon
+{
+	font : bold 10pt "Malgun Gothic";
+}
+.StatusBarControl
+{
+	background : #f2f2f2;
+	border : 1px solid #cccccc;
+}
+.StatusBarControl .statustext
+{
+	font : 8pt "Malgun Gothic";
+}
+.StatusBarControl .progressbar
+{
+	color : #ffffff;
+	background : #f2f2f2;
+	border : 1px solid #e5e5e5;
+}
+.StatusBarControl .progressbar .progressbaritem
+{
+	background : #4ca0e2;
+}
+.StatusBarControl .resizegrip .nexacontentsbox
+{
+	vertical-align : bottom;
+}
+.Button
+{
+	background : #10412C;
+	color : white;
+}
+.Edit
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+	padding : 0px 3px 0px 3px;
+}
+.MaskEdit
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+	padding : 0px 3px 0px 3px;
+}
+.TextArea
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+	padding : 3px 3px 3px 3px;
+}
+.TextAreaControl
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+	padding : 3px 3px 3px 3px;
+}
+.Spin
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+}
+.Spin .spinedit
+{
+	padding : 0px 3px 0px 3px;
+}
+.Spin .spinedit .nexainput
+{
+	text-align : right;
+}
+.Spin .spinedit .nexacontentsbox
+{
+	text-align : right;
+}
+.Spin .spinupbutton
+{
+	background : #f2f2f2;
+	border : 1px solid #f2f2f2;
+}
+.Spin .spindownbutton
+{
+	background : #f2f2f2;
+	border : 1px solid #f2f2f2;
+}
+.Tab .tabpageTab
+{
+	background : #ffffff;
+	border : 1px solid #cccccc;
+}
+.Tab .tabbuttonitemTab
+{
+	background : rgba(16, 65, 44, 0.2);
+	color : rgb(87, 87, 87);
+	border : 1px solid #cccccc;
+}
+.Tab .nextbuttonTab
+{
+	background : #e5e5e5;
+	border : 1px solid #cccccc;
+}
+.Tab .prevbuttonTab
+{
+	background : #e5e5e5;
+	border : 1px solid #cccccc;
+}
+.Calendar
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+}
+.CalendarControl
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+}
+.Calendar .calendaredit
+{
+	padding : 0px 3px 0px 3px;
+}
+.CalendarControl .calendaredit
+{
+	padding : 0px 3px 0px 3px;
+}
+.Calendar .dropbutton
+{
+	background : #f2f2f2;
+}
+.CalendarControl .dropbutton
+{
+	background : #f2f2f2;
+}
+.Calendar .calendarspinupbutton
+{
+	background : #f2f2f2;
+}
+.CalendarControl .calendarspinupbutton
+{
+	background : #f2f2f2;
+}
+.Calendar .calendarspindownbutton
+{
+	background : #f2f2f2;
+}
+.CalendarControl .calendarspindownbutton
+{
+	background : #f2f2f2;
+}
+.DatePickerControl
+{
+	background : #ffffff;
+	border : 1px solid #e5e5e5;
+}
+.DatePickerControl .head
+{
+	font : 12pt "Malgun Gothic";
+	border : 0px none, 0px none, 1px solid #e5e5e5, 0px none;
+}
+.DatePickerControl .head .nextbutton
+{
+	background : #ffffff;
+}
+.DatePickerControl .head .prevbutton
+{
+	background : #ffffff;
+}
+.DatePickerControl .head .yearspin
+{
+	background : #ffffff;
+	border : 1px solid #cccccc;
+}
+.DatePickerControl .head .monthspin
+{
+	background : #ffffff;
+	border : 1px solid #cccccc;
+}
+.DatePickerControl .head .yearspin .spinedit
+{
+	font : 8pt "Malgun Gothic";
+	color : #333333;
+	background : #ffffff;
+}
+.DatePickerControl .head .yearspin .spinupbutton
+{
+	background : #ffffff;
+}
+.DatePickerControl .head .monthspin .spinupbutton
+{
+	background : #ffffff;
+}
+.DatePickerControl .head .yearspin .spindownbutton
+{
+	background : #ffffff;
+}
+.DatePickerControl .head .monthspin .spindownbutton
+{
+	background : #ffffff;
+}
+.DatePickerControl .head .monthspin .spinedit
+{
+	font : 8pt "Malgun Gothic";
+	color : #333333;
+	background : #ffffff;
+}
+.DatePickerControl .body
+{
+	background : #ffffff;
+}
+.DatePickerControl .body .weekitem
+{
+	font : 8pt "Malgun Gothic";
+	color : #222222;
+}
+.DatePickerControl .body .weekband
+{
+	background : #ffffff;
+	border : 1px solid #e5e5e5, 0px none, 1px solid #e5e5e5, 0px none;
+}
+.DatePickerControl .body .dayitem
+{
+	font : 8pt "Malgun Gothic";
+	background : #ffffff;
+	border : 1px solid #e5e5e5;
+}
+.VScrollBarControl
+{
+	background : #f2f2f2;
+}
+.HScrollBarControl
+{
+	background : #f2f2f2;
+}
+.VScrollBarControl .incbutton
+{
+	background : #f2f2f2;
+}
+.VScrollBarControl .decbutton
+{
+	background : #f2f2f2;
+}
+.VScrollBarControl .trackbar
+{
+	background : #cccccc;
+	border : 2px solid transparent;
+}
+.HScrollBarControl .trackbar
+{
+	background : #cccccc;
+	border : 2px solid transparent;
+}
+.HScrollBarControl .incbutton
+{
+	background : #f2f2f2;
+}
+.HScrollBarControl .decbutton
+{
+	background : #f2f2f2;
+}
+.VScrollIndicatorControl
+{
+	background : #f2f2f2;
+}
+.HScrollIndicatorControl
+{
+	background : #f2f2f2;
+}
+.VScrollIndicatorControl .trackbar
+{
+	background : #cccccc;
+	border : 2px solid transparent;
+}
+.HScrollIndicatorControl .trackbar
+{
+	background : #cccccc;
+	border : 2px solid transparent;
+}
+.Combo
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+}
+.ComboControl
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+}
+.Combo .comboedit
+{
+	padding : 0px 0px 0px 3px;
+}
+.ComboControl .comboedit
+{
+	padding : 0px 0px 0px 3px;
+}
+.Combo .dropbutton
+{
+	background : rgb(58, 66, 74);
+}
+.ComboControl .dropbutton
+{
+	background : rgb(58, 66, 74);
+}
+.ListBoxControl.popupCombocombolist.dummy
+{
+	background : #f5f5f5;
+	border : 1px solid #cccccc;
+}
+.ListBoxControl.popupComboControlcombolist.dummy
+{
+	background : #f5f5f5;
+	border : 1px solid #cccccc;
+}
+.ListBoxControl.popupCombocombolist.dummy .listboxitem
+{
+	font : 8pt "Malgun Gothic";
+}
+.ListBoxControl.popupComboControlcombolist.dummy .listboxitem
+{
+	font : 8pt "Malgun Gothic";
+}
+.ListBox
+{
+	background : #f5f5f5;
+	border : 1px solid #cccccc;
+}
+.ListBoxControl
+{
+	background : #f5f5f5;
+	border : 1px solid #cccccc;
+}
+.Menu
+{
+	background : #f5f5f5;
+	border : 1px solid #cccccc;
+}
+.Menu .nextbutton
+{
+	background : #f2f2f2;
+	border : 1px solid #f2f2f2;
+}
+.Menu .prevbutton
+{
+	background : #f2f2f2;
+	border : 1px solid #f2f2f2;
+}
+.PopupMenu
+{
+	background : #ffffff;
+	border : 1px solid #cccccc;
+}
+.PopupMenuControl
+{
+	background : #ffffff;
+	border : 1px solid #cccccc;
+}
+.PopupMenu .prevbutton
+{
+	background : #f2f2f2;
+	border : 1px solid #f2f2f2;
+}
+.PopupMenuControl .prevbutton
+{
+	background : #f2f2f2;
+	border : 1px solid #f2f2f2;
+}
+.PopupMenu .nextbutton
+{
+	background : #f2f2f2;
+	border : 1px solid #f2f2f2;
+}
+.PopupMenuControl .nextbutton
+{
+	background : #f2f2f2;
+	border : 1px solid #f2f2f2;
+}
+.PopupMenu .popupmenuitem .popupmenuitemhotkeytext
+{
+	font : 8pt "Malgun Gothic";
+	color : #7a7a7a;
+}
+.PopupMenu .popupmenuitem .popupmenuitemhotkeytext .nexacontentsbox
+{
+	text-align : right;
+}
+.PopupMenuControl .popupmenuitem .popupmenuitemhotkeytext
+{
+	font : 8pt "Malgun Gothic";
+	color : #7a7a7a;
+}
+.PopupMenuControl .popupmenuitem .popupmenuitemhotkeytext .nexacontentsbox
+{
+	text-align : right;
+}
+.ProgressBar
+{
+	background : #f2f2f2;
+	border : 1px solid #e5e5e5;
+}
+.ProgressBarControl
+{
+	background : #f2f2f2;
+	border : 1px solid #e5e5e5;
+}
+.ProgressBar .progressbaritem
+{
+	background : #4ca0e2;
+}
+.ProgressBarControl .progressbaritem
+{
+	background : #4ca0e2;
+}
+.ProgressBar .progressbartext
+{
+	font : 8pt "Malgun Gothic";
+}
+.ProgressBar .progressbartext .nexacontentsbox
+{
+	text-align : center;
+}
+.ProgressBarControl .progressbartext
+{
+	font : 8pt "Malgun Gothic";
+}
+.ProgressBarControl .progressbartext .nexacontentsbox
+{
+	text-align : center;
+}
+.ImageViewer
+{
+	background : #ffffff;
+	border : 1px solid #e5e5e5;
+}
+.ImageViewer .imagetext .nexacontentsbox
+{
+	text-align : center;
+}
+.Div
+{
+	background : #ffffff;
+	border : 1px solid #e5e5e5;
+}
+.PopupDiv
+{
+	background : #ffffff;
+	border : 1px solid #e5e5e5;
+}
+.View
+{
+	background : #ffffff;
+	border : 1px solid #e5e5e5;
+}
+.GroupBox .groupboxcontents
+{
+	background : #ffffff;
+	border : 1px solid #e5e5e5;
+}
+.GroupBox .groupboxtitle
+{
+	background : #ffffff;
+}
+.FileUpload .fileuploaditem .fileuploaditemedit
+{
+	color : #666666;
+	background : #ffffff;
+	border : 1px solid #cccccc;
+	padding : 0px 3px 0px 3px;
+}
+.FileUpload .fileuploaditem .fileuploaditembutton
+{
+	background : #e5e5e5;
+	border : 1px solid #cccccc;
+}
+.FileDownload
+{
+	background : #e5e5e5;
+	border : 1px solid #cccccc;
+}
+.Grid
+{
+	border : 1px solid #cccccc;
+}
+.Grid .body .row .cell.cell_style1
+{
+	color : #66666;
+	border : 1px solid #dbdee2;
+	background : rgba(246, 189, 185, 0.46);
+}
+.Grid .body .row .cell.cell_style1.oddcell
+{
+	background : rgba(246, 189, 185, 0.46);
+}
+.Grid .head
+{
+	background : rgb(231, 232, 226);
+}
+.Grid .head .row .cell
+{
+	font : normal bold 11pt/normal "Malgun Gothic";
+	border : 1px solid #c6c6c6;
+}
+.Grid .head .row .cell .nexacontentsbox
+{
+	text-align : center;
+}
+.Grid .head .row .cell .cellbutton
+{
+	background : #e5e5e5;
+	border : 1px solid #cccccc;
+}
+.Grid .summary .row .cell
+{
+	background : #f7d09d;
+	border : 1px solid #e5e5e5;
+}
+.Grid .summary .row .cell .nexacontentsbox
+{
+	text-align : center;
+}
+.Grid .body .row .cell
+{
+	background : #ffffff;
+	border : 1px solid #e5e5e5;
+}
+.Grid .body .row .cell.oddcell
+{
+	background : #f7f7f7;
+}
+.Grid .body .row .cell .subcell
+{
+	background : #ffffff;
+	border : 1px solid #e5e5e5;
+}
+.Grid .body .row .cell .subcell.oddcell
+{
+	background : #f7f7f7;
+}
+.Grid .body .selection
+{
+	border : 2px solid #0078d6;
+}
+.Grid .body .row .cell .cellbutton
+{
+	border : 1px solid #cccccc;
+	background : #10412C;
+	color : white;
+}
+.Grid .body .row .cell .cellexpandbutton
+{
+	background : #ffffff;
+}
+.Grid .body .row .cell .celledit
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+	padding : 0px 3px 0px 3px;
+}
+.Grid .body .row .cell .cellmaskedit
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+	padding : 0px 3px 0px 3px;
+}
+.Grid .body .row .cell .celltextarea
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+	padding : 3px 3px 3px 3px;
+}
+.Grid .body .row .cell .celltreeline
+{
+	border : 1px dotted #999999;
+}
+.Plugin
+{
+	border : 1px solid #e5e5e5;
+}
+.PluginControl
+{
+	border : 1px solid #e5e5e5;
+}
+.WebBrowser
+{
+	border : 1px solid #e5e5e5;
+}
+.WebBrowserControl
+{
+	border : 1px solid #e5e5e5;
+}
+.WebView
+{
+	border : 1px solid #e5e5e5;
+}
+.WebViewControl
+{
+	border : 1px solid #e5e5e5;
+}
+.Sketch
+{
+	background : #ffffff;
+	border : 1px solid #e5e5e5;
+}
+.ListView
+{
+	border : 1px solid #cccccc;
+	background : #ebecee;
+	color : #000000;
+}
+.ListView .body
+{
+	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
+	background : #ffffff;
+	font : normal 10pt/normal "Malgun Gothic";
+}
+.ListView .detail
+{
+	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
+	background : #f9f9f9;
+	font : normal 10pt/normal "Malgun Gothic";
+}
+.ListViewDetailBandControl.popupListViewdetail
+{
+	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
+	background : #f9f9f9;
+	font : normal 10pt/normal "Malgun Gothic";
+}
+.ListView .body .cell
+{
+	border : 1px solid #dbdee2;
+}
+.ListView .detail .cell
+{
+	border : 1px solid #dbdee2;
+}
+.ListViewDetailBandControl.popupListViewdetail .cell
+{
+	border : 1px solid #dbdee2;
+}
+.ListViewCellControl .cellbutton
+{
+	background : #e5e5e5;
+	border : 1px solid #cccccc;
+}
+.ListViewCellControl .cellexpandbutton
+{
+	background : #ffffff;
+}
+.ListViewCellControl .celledit
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+	padding : 0px 3px 0px 3px;
+}
+.ListViewCellControl .cellmaskedit
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+	padding : 0px 3px 0px 3px;
+}
+.ListViewCellControl .celltextarea
+{
+	background : #ffffff;
+	border : 1px solid #999999;
+	padding : 3px 3px 3px 3px;
+}
+.ListView .body .expandbar
+{
+	background : #e5e5e5;
+	cursor : pointer;
+	border : 1px solid #cccccc;
+}
+.Grid .body .row .cell.blue_font
+{
+	color : blue;
+}
+.Grid .body .row .cell.red_font
+{
+	color : red;
+}
+.MainFrame[status=deactivate]
+{
+	border : 1px solid #e5e5e5;
+}
+.TitleBarControl .titleicon[status=deactivate]
+{
+	color : #adadad;
+}
+.TitleBarControl .maxbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.TitleBarControl .minbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.TitleBarControl .normalbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.TitleBarControl .closebutton[status=mouseover]
+{
+	background : #e81223;
+}
+.Button[status=mouseover]
+{
+	background : #10412C;
+	color : white;
+}
+.Button[status=focused]
+{
+	background : #10412C;
+	color : white;
+}
+.Edit[status=focused]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.MaskEdit[status=focused]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.TextArea[status=focused]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.TextAreaControl[status=focused]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.Edit[status=readonly]
+{
+	background : #f9f9f9;
+	border : 1px solid #cccccc;
+}
+.MaskEdit[status=readonly]
+{
+	background : #f9f9f9;
+	border : 1px solid #cccccc;
+}
+.TextArea[status=readonly]
+{
+	background : #f9f9f9;
+	border : 1px solid #cccccc;
+}
+.TextAreaControl[status=readonly]
+{
+	background : #f9f9f9;
+	border : 1px solid #cccccc;
+}
+.Edit[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.MaskEdit[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.TextArea[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.TextAreaControl[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.Spin[status=readonly]
+{
+	background : #f9f9f9;
+	border : 1px solid #cccccc;
+}
+.Spin[status=mouseover]
+{
+	border : 1px solid #0078d6;
+}
+.Spin .spinupbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.Spin .spindownbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.Tab .tabbuttonitemTab[status=mouseover]
+{
+	background : #e0effa;
+	border : 1px solid #4ca0e2;
+}
+.Tab .nextbuttonTab[status=focused]
+{
+	background : #e5e5e5;
+	border : 1px solid #cccccc;
+}
+.Tab .prevbuttonTab[status=focused]
+{
+	background : #e5e5e5;
+	border : 1px solid #cccccc;
+}
+.Tab .nextbuttonTab[status=mouseover]
+{
+	background : #cccccc;
+	border : 1px solid #666666;
+}
+.Tab .prevbuttonTab[status=mouseover]
+{
+	background : #cccccc;
+	border : 1px solid #666666;
+}
+.Calendar .dropbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.CalendarControl .dropbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.Calendar .calendarspinupbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.CalendarControl .calendarspinupbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.Calendar .calendarspindownbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.CalendarControl .calendarspindownbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.DatePickerControl .head .nextbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.DatePickerControl .head .prevbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.DatePickerControl .head .yearspin .spinupbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.DatePickerControl .head .monthspin .spinupbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.DatePickerControl .head .yearspin .spindownbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.DatePickerControl .head .monthspin .spindownbutton[status=mouseover]
+{
+	background : #e5e5e5;
+}
+.VScrollBarControl .incbutton[status=mouseover]
+{
+	background : #cccccc;
+}
+.VScrollBarControl .decbutton[status=mouseover]
+{
+	background : #cccccc;
+}
+.VScrollBarControl .trackbar[status=mouseover]
+{
+	background : #999999;
+}
+.HScrollBarControl .trackbar[status=mouseover]
+{
+	background : #999999;
+}
+.HScrollBarControl .incbutton[status=mouseover]
+{
+	background : #cccccc;
+}
+.HScrollBarControl .decbutton[status=mouseover]
+{
+	background : #cccccc;
+}
+.VScrollIndicatorControl .trackbar[status=mouseover]
+{
+	background : #999999;
+}
+.HScrollIndicatorControl .trackbar[status=mouseover]
+{
+	background : #999999;
+}
+.Combo .dropbutton[status=mouseover]
+{
+	background : rgb(58, 66, 74);
+}
+.ComboControl .dropbutton[status=mouseover]
+{
+	background : rgb(58, 66, 74);
+}
+.ListBox .listboxitem[status=mouseover]
+{
+	background : #cce4f7;
+}
+.ListBoxControl .listboxitem[status=mouseover]
+{
+	background : #cce4f7;
+}
+.Menu .menuitem[status=mouseover]
+{
+	background : #cce4f7;
+}
+.PopupMenu .popupmenuitem[status=mouseover]
+{
+	background : #cce4f7;
+}
+.PopupMenuControl .popupmenuitem[status=mouseover]
+{
+	background : #cce4f7;
+}
+.ImageViewer[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #99c9ef;
+}
+.Div[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #99c9ef;
+}
+.PopupDiv[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #99c9ef;
+}
+.View[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #99c9ef;
+}
+.FileUpload .fileuploaditem .fileuploaditemedit[status=mouseover]
+{
+	border : 1px solid #0078d6;
+}
+.FileUpload .fileuploaditem .fileuploaditembutton[status=mouseover]
+{
+	background : #cccccc;
+	border : 1px solid #666666;
+}
+.FileDownload[status=mouseover]
+{
+	background : #cccccc;
+	border : 1px solid #666666;
+}
+.Grid .body .row .cell.cell_style1[status=mouseover]
+{
+	color : #66666;
+	border : 1px solid #dbdee2;
+	background : rgba(246, 189, 185, 0.46);
+}
+.Grid .body .row .cell.cell_style1.oddcell[status=mouseover]
+{
+	background : rgba(246, 189, 185, 0.46);
+}
+.Grid .head .row .cell .cellbutton[status=mouseover]
+{
+	background : #cccccc;
+	border : 1px solid #666666;
+}
+.Grid .body .row .cell .subcell[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #e5e5e5;
+}
+.Grid .body .row .cell .subcell.oddcell[status=mouseover]
+{
+	background : #f7f7f7;
+}
+.Grid .body .row .cell .cellbutton[status=mouseover]
+{
+	background : #10412C;
+	color : white;
+	border : 1px solid #666666;
+}
+.Grid .body .row .cell .cellbutton[status=focused]
+{
+	background : #10412C;
+	color : white;
+	border : 2px solid #0078d6;
+}
+.Grid .body .row .cell .cellexpandbutton[status=focused]
+{
+	background : #ffffff;
+}
+.Grid .body .row .cell .cellexpandbutton[status=mouseover]
+{
+	background : #4ca0e2;
+}
+.Grid .body .row .cell .celledit[status=focused]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.Grid .body .row .cell .cellmaskedit[status=focused]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.Grid .body .row .cell .celltextarea[status=focused]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.Grid .body .row .cell .celledit[status=readonly]
+{
+	background : #f9f9f9;
+	border : 1px solid #cccccc;
+}
+.Grid .body .row .cell .cellmaskedit[status=readonly]
+{
+	background : #f9f9f9;
+	border : 1px solid #cccccc;
+}
+.Grid .body .row .cell .celltextarea[status=readonly]
+{
+	background : #f9f9f9;
+	border : 1px solid #cccccc;
+}
+.Grid .body .row .cell .celledit[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.Grid .body .row .cell .cellmaskedit[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.Grid .body .row .cell .celltextarea[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.ListView[status=readonly]
+{
+	border : 1px solid #cccccc;
+	background : #ebecee;
+	color : #000000;
+}
+.ListView[status=mouseover]
+{
+	border : 1px solid #0078d6;
+}
+.ListView[status=focused]
+{
+	border : 1px solid #0078d6;
+}
+.ListView .body[status=readonly]
+{
+	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
+	background : #ffffff;
+	font : normal 10pt/normal "Malgun Gothic";
+}
+.ListView .detail[status=readonly]
+{
+	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
+	background : #ffffff;
+	font : normal 10pt/normal "Malgun Gothic";
+}
+.ListViewDetailBandControl.popupListViewdetail[status=readonly]
+{
+	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
+	background : #ffffff;
+	font : normal 10pt/normal "Malgun Gothic";
+}
+.ListView .body[status=focused]
+{
+	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
+	background : #ffffff;
+	font : normal 10pt/normal "Malgun Gothic";
+}
+.ListView .detail[status=focused]
+{
+	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
+	background : #ffffff;
+	font : normal 10pt/normal "Malgun Gothic";
+}
+.ListViewDetailBandControl.popupListViewdetail[status=focused]
+{
+	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
+	background : #ffffff;
+	font : normal 10pt/normal "Malgun Gothic";
+}
+.ListView .body[status=mouseover]
+{
+	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
+	background : #ffffff;
+	font : normal 10pt/normal "Malgun Gothic";
+}
+.ListView .detail[status=mouseover]
+{
+	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
+	background : #ffffff;
+	font : normal 10pt/normal "Malgun Gothic";
+}
+.ListViewDetailBandControl.popupListViewdetail[status=mouseover]
+{
+	border : 0px none, 0px none, 1px solid #dbdee2, 0px none;
+	background : #ffffff;
+	font : normal 10pt/normal "Malgun Gothic";
+}
+.ListView .body .cell[status=readonly]
+{
+	border : 1px solid #dbdee2;
+}
+.ListView .detail .cell[status=readonly]
+{
+	border : 1px solid #dbdee2;
+}
+.ListViewDetailBandControl.popupListViewdetail .cell[status=readonly]
+{
+	border : 1px solid #dbdee2;
+}
+.ListView .body .cell[status=focused]
+{
+	border : 1px solid #dbdee2;
+}
+.ListView .detail .cell[status=focused]
+{
+	border : 1px solid #dbdee2;
+}
+.ListViewDetailBandControl.popupListViewdetail .cell[status=focused]
+{
+	border : 1px solid #dbdee2;
+}
+.ListView .body .cell[status=mouseover]
+{
+	border : 1px solid #c4c9cf;
+}
+.ListView .detail .cell[status=mouseover]
+{
+	border : 1px solid #c4c9cf;
+}
+.ListViewDetailBandControl.popupListViewdetail .cell[status=mouseover]
+{
+	border : 1px solid #c4c9cf;
+}
+.ListViewCellControl .cellbutton[status=mouseover]
+{
+	background : #cccccc;
+	border : 1px solid #666666;
+}
+.ListViewCellControl .cellbutton[status=focused]
+{
+	background : #e5e5e5;
+	border : 2px solid #0078d6;
+}
+.ListViewCellControl .cellexpandbutton[status=focused]
+{
+	background : #ffffff;
+}
+.ListViewCellControl .cellexpandbutton[status=mouseover]
+{
+	background : #4ca0e2;
+}
+.ListViewCellControl .celledit[status=focused]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.ListViewCellControl .cellmaskedit[status=focused]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.ListViewCellControl .celltextarea[status=focused]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.ListViewCellControl .celledit[status=readonly]
+{
+	background : #f9f9f9;
+	border : 1px solid #cccccc;
+}
+.ListViewCellControl .cellmaskedit[status=readonly]
+{
+	background : #f9f9f9;
+	border : 1px solid #cccccc;
+}
+.ListViewCellControl .celltextarea[status=readonly]
+{
+	background : #f9f9f9;
+	border : 1px solid #cccccc;
+}
+.ListViewCellControl .celledit[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.ListViewCellControl .cellmaskedit[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.ListViewCellControl .celltextarea[status=mouseover]
+{
+	background : #ffffff;
+	border : 1px solid #0078d6;
+}
+.ListView .body .expandbar[status=mouseover]
+{
+	background : #cccccc;
+	border : 1px solid #666666;
+}
+.ListView .body .expandbar[status=focused]
+{
+	background : #e5e5e5;
+	border : 2px solid #0078d6;
+}
+.TitleBarControl .maxbutton[userstatus=pushed]
+{
+	background : #cccccc;
+}
+.TitleBarControl .minbutton[userstatus=pushed]
+{
+	background : #cccccc;
+}
+.TitleBarControl .normalbutton[userstatus=pushed]
+{
+	background : #cccccc;
+}
+.TitleBarControl .closebutton[userstatus=pushed]
+{
+	background : #f1717b;
+}
+.Button[userstatus=pushed]
+{
+	background : #10412C;
+	color : white;
+}
+.Button[userstatus=selected]
+{
+	background : #10412C;
+	color : white;
+}
+.Edit[userstatus=nulltext]
+{
+	color : #999999;
+}
+.EditControl[userstatus=nulltext]
+{
+	color : #999999;
+}
+.MaskEdit[userstatus=nulltext]
+{
+	color : #999999;
+}
+.MaskEditControl[userstatus=nulltext]
+{
+	color : #999999;
+}
+.TextArea[userstatus=nulltext]
+{
+	color : #999999;
+}
+.TextAreaControl[userstatus=nulltext]
+{
+	color : #999999;
+}
+.Calendar[userstatus=invalidtext]
+{
+	color : #999999;
+}
+.CalendarControl[userstatus=invalidtext]
+{
+	color : #999999;
+}
+.MaskEdit[userstatus=invalidtext]
+{
+	color : #999999;
+}
+.MaskEditControl[userstatus=invalidtext]
+{
+	color : #999999;
+}
+.Spin[userstatus=invalidtext]
+{
+	color : #999999;
+}
+.SpinControl[userstatus=invalidtext]
+{
+	color : #999999;
+}
+.Spin .spinupbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.Spin .spindownbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.Tab .tabbuttonitemTab[userstatus=selected]
+{
+	background : rgb(231, 232, 226);
+	color : rgb(30, 57, 50);
+	border : 1px solid #cccccc, 1px solid #cccccc, 1px solid transparent, 1px solid #cccccc;
+	font : normal bold 10pt/normal "Arial";
+}
+.Tab .nextbuttonTab[userstatus=pushed]
+{
+	background : #606060;
+	border : 1px solid #cccccc;
+}
+.Tab .prevbuttonTab[userstatus=pushed]
+{
+	background : #606060;
+	border : 1px solid #cccccc;
+}
+.Calendar .dropbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.CalendarControl .dropbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.Calendar .calendarspinupbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.CalendarControl .calendarspinupbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.Calendar .calendarspindownbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.CalendarControl .calendarspindownbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.DatePickerControl .head .prevbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.DatePickerControl .head .nextbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.DatePickerControl .head .yearspin .spinupbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.DatePickerControl .head .monthspin .spinupbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.DatePickerControl .head .yearspin .spindownbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.DatePickerControl .head .monthspin .spindownbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.DatePickerControl .body .dayitem[userstatus=selected]
+{
+	color : #ffffff;
+	background : #0078d6;
+	border : 1px solid #0078d6;
+}
+.DatePickerControl .body .dayitem[userstatus=today]
+{
+	background : #e0effa;
+	border : 1px solid #0078d6;
+}
+.DatePickerControl .body .dayitem[userstatus=trailingday]
+{
+	background : #f2f2f2;
+	border : 1px solid #e5e5e5;
+}
+.VScrollBarControl .incbutton[userstatus=pushed]
+{
+	background : #606060;
+}
+.VScrollBarControl .decbutton[userstatus=pushed]
+{
+	background : #606060;
+}
+.VScrollBarControl .trackbar[userstatus=pushed]
+{
+	background : #606060;
+}
+.HScrollBarControl .trackbar[userstatus=pushed]
+{
+	background : #606060;
+}
+.HScrollBarControl .incbutton[userstatus=pushed]
+{
+	background : #606060;
+}
+.HScrollBarControl .decbutton[userstatus=pushed]
+{
+	background : #606060;
+}
+.VScrollIndicatorControl .trackbar[userstatus=pushed]
+{
+	background : #606060;
+}
+.HScrollIndicatorControl .trackbar[userstatus=pushed]
+{
+	background : #606060;
+}
+.Combo .dropbutton[userstatus=pushed]
+{
+	background : rgb(58, 66, 74);
+}
+.ComboControl .dropbutton[userstatus=pushed]
+{
+	background : rgb(58, 66, 74);
+}
+.ListBox .listboxitem[userstatus=selected]
+{
+	background : #99c9ef;
+}
+.ListBoxControl .listboxitem[userstatus=selected]
+{
+	background : #99c9ef;
+}
+.Menu .nextbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.Menu .prevbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.Menu .menuitem[userstatus=selected]
+{
+	background : #99c9ef;
+}
+.PopupMenu .prevbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.PopupMenuControl .prevbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.PopupMenu .nextbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.PopupMenuControl .nextbutton[userstatus=pushed]
+{
+	background : #999999;
+}
+.PopupMenu .popupmenuitem[userstatus=selected]
+{
+	background : #99c9ef;
+}
+.PopupMenuControl .popupmenuitem[userstatus=selected]
+{
+	background : #99c9ef;
+}
+.FileDownload[userstatus=pushed]
+{
+	color : #ffffff;
+	background : #606060;
+}
+.Grid .body .row .cell.cell_style1[userstatus=selected]
+{
+	color : #66666;
+	border : 1px solid #dbdee2;
+	background : rgba(246, 189, 185, 0.46);
+}
+.Grid .body .row .cell.cell_style1.oddcell[userstatus=selected]
+{
+	background : rgba(246, 189, 185, 0.46);
+}
+.Grid .head .row .cell .cellbutton[userstatus=pushed]
+{
+	color : #ffffff;
+	background : #606060;
+}
+.Grid .head .row .cell .cellbutton[userstatus=selected]
+{
+	background : #e5e5e5;
+	border : 2px solid #0078d6;
+}
+.Grid .body .row .cell[userstatus=selected]
+{
+	background : rgba(16, 65, 44, 0.2);
+}
+.Grid .body .row .cell.oddcell[userstatus=selected]
+{
+	background : rgba(16, 65, 44, 0.2);
+}
+.Grid .body .row .cell .subcell[userstatus=selected]
+{
+	background : #99c9ef;
+}
+.Grid .body .row .cell .subcell.oddcell[userstatus=selected]
+{
+	background : #99c9ef;
+}
+.Grid .body .row .cell .subcell[userstatus=blinked]
+{
+	background : #0078d6;
+	color : #ffffff;
+}
+.Grid .body .row .cell .cellbutton[userstatus=pushed]
+{
+	background : #10412C;
+	color : white;
+	border : 0px none;
+}
+.Grid .body .row .cell .cellbutton[userstatus=selected]
+{
+	background : #10412C;
+	color : white;
+	border : 2px solid #0078d6;
+}
+.Grid .body .row .cell .cellexpandbutton[userstatus=selected]
+{
+	background : #ffffff;
+}
+.Grid .body .row .cell .cellexpandbutton[userstatus=pushed]
+{
+	background : #4ca0e2;
+}
+.Grid .body .row .cell[userstatus=blinked]
+{
+	background : #0078d6;
+	color : #ffffff;
+}
+.ListView .body[userstatus=selected]
+{
+	background : #99c9ef;
+}
+.ListView .detail[userstatus=selected]
+{
+	background : #95c3e8;
+}
+.ListViewDetailBandControl.popupListViewdetail[userstatus=selected]
+{
+	background : #95c3e8;
+}
+.ListViewCellControl .cellbutton[userstatus=pushed]
+{
+	color : #ffffff;
+	background : #606060;
+	border : 0px none;
+}
+.ListViewCellControl .cellexpandbutton[userstatus=pushed]
+{
+	background : #4ca0e2;
+}
+.Static[status=disabled]
+{
+	color : #999999;
+}
+.StaticControl[status=disabled]
+{
+	color : #999999;
+}
+.Button[status=disabled]
+{
+	background : #10412C;
+	color : white;
+}
+.Edit[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #cccccc;
+}
+.MaskEdit[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #cccccc;
+}
+.TextArea[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #cccccc;
+}
+.TextAreaControl[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #cccccc;
+}
+.Spin[status=disabled]
+{
+	border : 1px solid #cccccc;
+}
+.Spin .spinedit[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+}
+.Spin .spinupbutton[status=disabled]
+{
+	background : #f2f2f2;
+}
+.Spin .spindownbutton[status=disabled]
+{
+	background : #f2f2f2;
+}
+.Tab .tabbuttonitemTab[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #e5e5e5;
+}
+.Tab .nextbuttonTab[status=disabled]
+{
+	background : #d9d9d9;
+	border : 1px solid #f0f0f0;
+}
+.Tab .prevbuttonTab[status=disabled]
+{
+	background : #d9d9d9;
+	border : 1px solid #f0f0f0;
+}
+.CheckBox[status=disabled]
+{
+	color : #999999;
+}
+.Radio .radioitem[status=disabled]
+{
+	color : #999999;
+}
+.Calendar .calendaredit[status=disabled]
+{
+	color : #999999;
+}
+.CalendarControl .calendaredit[status=disabled]
+{
+	color : #999999;
+}
+.Calendar .dropbutton[status=disabled]
+{
+	background : #f0f0f0;
+}
+.CalendarControl .dropbutton[status=disabled]
+{
+	background : #f0f0f0;
+}
+.Calendar .calendarspinupbutton[status=disabled]
+{
+	background : #f0f0f0;
+}
+.CalendarControl .calendarspinupbutton[status=disabled]
+{
+	background : #f0f0f0;
+}
+.Calendar .calendarspindownbutton[status=disabled]
+{
+	background : #f0f0f0;
+}
+.CalendarControl .calendarspindownbutton[status=disabled]
+{
+	background : #f0f0f0;
+}
+.DatePickerControl .head .yearspin .spinedit[status=disabled]
+{
+	color : #999999;
+}
+.DatePickerControl .head .monthspin .spinedit[status=disabled]
+{
+	color : #999999;
+}
+.DatePickerControl .body .weekitem[status=disabled]
+{
+	color : #999999;
+}
+.DatePickerControl .body .dayitem[status=disabled]
+{
+	color : #999999;
+}
+.Combo .comboedit[status=disabled]
+{
+	color : #999999;
+}
+.ComboControl .comboedit[status=disabled]
+{
+	color : #999999;
+}
+.Combo .dropbutton[status=disabled]
+{
+	background : rgb(58, 66, 74);
+}
+.ComboControl .dropbutton[status=disabled]
+{
+	background : rgb(58, 66, 74);
+}
+.ListBox[status=disabled]
+{
+	background : #f2f2f2;
+	border : 1px solid #cccccc;
+}
+.ListBoxControl[status=disabled]
+{
+	background : #f2f2f2;
+	border : 1px solid #cccccc;
+}
+.ListBox .listboxitem[status=disabled]
+{
+	color : #999999;
+	background : #e5e5e5;
+}
+.ListBoxControl .listboxitem[status=disabled]
+{
+	color : #999999;
+	background : #e5e5e5;
+}
+.Menu .nextbutton[status=disabled]
+{
+	background : #f2f2f2;
+}
+.Menu .prevbutton[status=disabled]
+{
+	background : #f2f2f2;
+}
+.PopupMenu .prevbutton[status=disabled]
+{
+	background : #f2f2f2;
+}
+.PopupMenuControl .prevbutton[status=disabled]
+{
+	background : #f2f2f2;
+}
+.PopupMenu .nextbutton[status=disabled]
+{
+	background : #f2f2f2;
+}
+.PopupMenuControl .nextbutton[status=disabled]
+{
+	background : #f2f2f2;
+}
+.ProgressBar[status=disabled]
+{
+	background : #e5e5e5;
+	border : 1px solid #cccccc;
+}
+.ProgressBarControl[status=disabled]
+{
+	background : #e5e5e5;
+	border : 1px solid #cccccc;
+}
+.ProgressBar .progressbaritem[status=disabled]
+{
+	background : #cccccc;
+}
+.ProgressBarControl .progressbaritem[status=disabled]
+{
+	background : #cccccc;
+}
+.ImageViewer[status=disabled]
+{
+	background : #f2f2f2;
+	border : 1px solid #e5e5e5;
+}
+.ImageViewer .imagetext[status=disabled]
+{
+	color : #999999;
+}
+.Div[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #e5e5e5;
+}
+.PopupDiv[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #e5e5e5;
+}
+.View[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #e5e5e5;
+}
+.GroupBox .groupboxcontents[status=disabled]
+{
+	background : #ffffff;
+	border : 1px solid #f2f2f2;
+}
+.GroupBox .groupboxtitle[status=disabled]
+{
+	color : #999999;
+	background : #ffffff;
+}
+.FileUpload .fileuploaditem .fileuploaditemedit[status=disabled]
+{
+	background : #f2f2f2;
+	border : 1px solid #e5e5e5;
+}
+.FileUpload .fileuploaditem .fileuploaditembutton[status=disabled]
+{
+	color : #999999;
+	background : #cccccc;
+	border : 1px solid #cccccc;
+}
+.FileDownload[status=disabled]
+{
+	color : #999999;
+	background : #cccccc;
+}
+.Grid .body .row .cell.cell_style1[status=disabled]
+{
+	color : #66666;
+	border : 1px solid #dbdee2;
+	background : rgba(246, 189, 185, 0.46);
+}
+.Grid .body .row .cell.cell_style1.oddcell[status=disabled]
+{
+	background : rgba(246, 189, 185, 0.46);
+}
+.Grid .head .row .cell .cellbutton[status=disabled]
+{
+	color : #999999;
+	background : #cccccc;
+}
+.Grid .body .row .cell .subcell[status=disabled]
+{
+	background : #ffffff;
+	border : 1px solid #e5e5e5;
+}
+.Grid .body .row .cell .subcell.oddcell[status=disabled]
+{
+	background : #f7f7f7;
+}
+.Grid .body .row .cell .cellbutton[status=disabled]
+{
+	background : #10412C;
+	color : white;
+	border : 0px none;
+}
+.Grid .body .row .cell .cellexpandbutton[status=disabled]
+{
+	opacity : 0.40;
+}
+.Grid .body .row .cell .celledit[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #cccccc;
+}
+.Grid .body .row .cell .cellmaskedit[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #cccccc;
+}
+.Grid .body .row .cell .celltextarea[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #cccccc;
+}
+.Sketch[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #e5e5e5;
+}
+.ListView[status=disabled]
+{
+	background : #666666;
+}
+.ListView .body[status=disabled]
+{
+	color : #999999;
+}
+.ListView .detail[status=disabled]
+{
+	color : #999999;
+}
+.ListViewDetailBandControl.popupListViewdetail[status=disabled]
+{
+	color : #999999;
+}
+.ListView .body .cell[status=disabled]
+{
+	border : 1px solid #dbdee2;
+}
+.ListView .detail .cell[status=disabled]
+{
+	border : 1px solid #dbdee2;
+}
+.ListViewDetailBandControl.popupListViewdetail .cell[status=disabled]
+{
+	border : 1px solid #dbdee2;
+}
+.ListViewCellControl .cellbutton[status=disabled]
+{
+	color : #999999;
+	background : #cccccc;
+	border : 0px none;
+}
+.ListViewCellControl .cellexpandbutton[status=disabled]
+{
+	opacity : 0.40;
+}
+.ListViewCellControl .celledit[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #cccccc;
+}
+.ListViewCellControl .cellmaskedit[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #cccccc;
+}
+.ListViewCellControl .celltextarea[status=disabled]
+{
+	color : #999999;
+	background : #f2f2f2;
+	border : 1px solid #cccccc;
+}
+.ListView .body .expandbar[status=disabled]
+{
+	color : #999999;
+	background : #cccccc;
+	opacity : 0.50;
+}
+.Tab .tabbuttonitemTab[status=focused][userstatus=selected]
+{
+	background : rgb(231, 232, 226);
+	color : rgb(30, 57, 50);
+	border : 1px solid #cccccc, 1px solid #cccccc, 1px solid transparent, 1px solid #cccccc;
+	font : normal bold 10pt/normal "Arial";
+}
+.CheckBox[status=disabled][userstatus=selected]
+{
+	color : #999999;
+}
+.Radio .radioitem[status=disabled][userstatus=selected]
+{
+	color : #999999;
+}
+.ListBox .listboxitem[status=disabled][userstatus=selected]
+{
+	background : #e5e5e5;
+}
+.ListBoxControl .listboxitem[status=disabled][userstatus=selected]
+{
+	background : #e5e5e5;
+}

@@ -1,9 +1,11 @@
 package org.kh.campus.scholarship.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.kh.campus.grade.service.GradeService;
 import org.kh.campus.manager.domain.Manager;
 import org.kh.campus.manager.service.ManagerService;
 import org.kh.campus.scholarship.domain.Scholarship;
@@ -27,6 +29,8 @@ public class ScholarshipController {
 	private ScholarshipService sService;
 	@Autowired
 	private StudentService stdService;
+	@Autowired
+	private GradeService gService;
 
 	@RequestMapping(value = "/scholarship/scholarAccept.kh", method = RequestMethod.POST)
 	public NexacroResult updateScholarAccept(
@@ -94,6 +98,7 @@ public class ScholarshipController {
 		Scholarship scholarship = new Scholarship(scholarship_year, scholarship_term, scholarship_college,
 				scholarship_manager_no);
 		List<Scholarship> sList = sService.printAllScholar(scholarship);
+		
 		result.addDataSet("out_scholarship", sList);
 		result.addVariable("ErrorCode", nErrorCode);
 		result.addVariable("ErrorMsg", strErrorMsg);
@@ -112,11 +117,21 @@ public class ScholarshipController {
 		Student student = stdService.printStudent(((Student) (session.getAttribute("loginUser"))).getStudentNo());
 
 		int scholarship_inno = 0;
-		int scholarship_avg_grade = student.getStudentGrade();
 		String scholarship_year = dsGet(inYear, 0, "scholarship_year");
 		String scholarship_term = dsGet(inTerm, 0, "scholarship_term");
+		
+		// 성적 평균 값 가져오기
+		HashMap<String, String> grade = new HashMap<String, String>();
+		grade.put("studentNo", Integer.toString(student.getStudentNo()));
+		grade.put("gradeYear", scholarship_year);
+		grade.put("gradeSession", scholarship_term);
+		
+		double avg = gService.printAVG(grade);
+		
+		double scholarship_avg_grade = avg;
+		
 		String scholarship_status = "";
-		int scholarship_amount = 0;
+		int scholarship_amount = 0; 
 		String scholarship_name = student.getStudentName();
 		String scholarship_phonenumber = student.getStudentPhonenumber();
 		String scholarship_college = student.getDepartmentName();
@@ -126,6 +141,8 @@ public class ScholarshipController {
 		Scholarship scholarship = new Scholarship(scholarship_inno, scholarship_avg_grade, scholarship_year,
 				scholarship_term, scholarship_status, scholarship_amount, scholarship_name, scholarship_phonenumber,
 				scholarship_college, scholarship_student_no, chk, scholarship_manager_no);
+		
+
 		aResult = sService.registerScholar(scholarship);
 		return result;
 

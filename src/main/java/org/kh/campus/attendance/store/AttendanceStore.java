@@ -20,8 +20,10 @@ public interface AttendanceStore {
 
 	List<Attendance> selectAttProfIssue(SqlSession sqlSession, HashMap<String, String> attInfo);
 
-	int updateObjectChange(SqlSession sqlSession, Attendance attendance);
+	int updateObjectChange(SqlSession sqlSession, int attNo );
 
 	int updateStatus(SqlSession sqlSession, Attendance attendance);
+
+	int selectCount(SqlSession sqlSession, Attendance attendance);
 
 }
