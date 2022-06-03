@@ -44,14 +44,14 @@ public class PortfolioController {
 				model.addAttribute("pi", pi);
 				model.addAttribute("menu", "portfolio");
 				model.addAttribute("currentPage", currentPage);
-				return "portfolio/portfolioListView";
+				
 			} else {
-				model.addAttribute("msg", "포트폴리오 전체조회 실패");
-				return "common/errorPage";
+				model.addAttribute("pList", null);
 			}
-
+			return "portfolio/portfolioListView";
 		} catch (Exception e) {
-			return "login/login";
+			model.addAttribute("msg", "포트폴리오 전체조회 실패");
+			return "common/errorPage";
 		}
 
 	}
