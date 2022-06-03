@@ -116,7 +116,11 @@
 	</select>
 	
 	<select id="selectProName" resultMap="professorResultMap">
-		SELECT DISTINCT PROFESSOR_NAME FROM PROFESSOR_TBL WHERE DEPARTMENT_NAME=#{departmentName} ORDER BY PROFESSOR_NAME ASC
+		SELECT DISTINCT PROFESSOR_NO ,PROFESSOR_NAME FROM PROFESSOR_TBL WHERE DEPARTMENT_NAME=#{departmentName} ORDER BY PROFESSOR_NAME ASC
+	</select>
+	
+	<select id="selectProNo" resultMap="professorResultMap">
+		SELECT DISTINCT PROFESSOR_NO FROM PROFESSOR_TBL WHERE PROFESSOR_NAME=#{professorName}
 	</select>
 	
 	<!-- 수강기간 설정 updateLecturePeriod -->

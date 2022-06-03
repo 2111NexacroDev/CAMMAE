@@ -90,6 +90,12 @@ public class LectureServiceImpl implements LectureService {
 		int result = lStore.updateLecturePeriod(sqlSession, lecture);
 		return result;
 	}
+	//교수번호
+	@Override
+	public List<Professor> printAllProNo(String professorName) {
+		List<Professor> pList = lStore.selectAllProNo(sqlSession,professorName);
+		return pList;
+	}
 
 
 }

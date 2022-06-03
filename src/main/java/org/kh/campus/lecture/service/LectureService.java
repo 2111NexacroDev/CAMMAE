@@ -23,4 +23,6 @@ public interface LectureService {
 	public List<Professor> printAllProName(String lectureDepartment);
 	public List<Lecture> printAlllecture2(String lectureDepartment);
 	public int modifyPeriod(Lecture lecture);
+	//교수번호
+	public List<Professor> printAllProNo(String professorName);
 }
