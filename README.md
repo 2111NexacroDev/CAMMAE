@@ -19,19 +19,24 @@
 
 
 ## 1. 개요
+-캠퍼스매니저는 학교 관계자들의 업무를 관리하는 시스템입니다.
+ 학생은 학교 생활 및 취업에 대한 정보를 확인 할 수 있고, 교수는 학생 관리를 손쉽게 할 수 있습니다.
+관리자는 교수와 학생들의 정보를 관리할 뿐 아니라 학교생활의 전반적인 정보를 관리하여 모든이용자가 
+편리한 대학생활을 할 수 있도록 도와줍니다.
+ 학사행정 시스템을 이용하여 학교생활의 필수 정보에 접근성과 편의성을 높여 교수와 학생 및 교직원의
+원할한 커뮤니케이션을 할 수 있습니다.
+
 
 
 ## 2. 설계의 주안점
+1. 
+2.
+3.
+4.
 
 
 ## 3. 사용기술 및 개발환경
-Category	Detail
-FrontEnd	HTML5, JS, CSS3, JQuery
-BackEnd	Java(JDK 1.8), Spring/JSP
-OS	Windows 10, 11
-IDE	Eclipse, Visual Studio Code
-Server	Apatch Tomcat(v8.5)
-DataBase	Oracle(11g) - SQL Developer
+
 ![image](https://user-images.githubusercontent.com/56354642/171804188-6fc0be59-1126-41d3-b134-9cc229ecbfd5.png)
 
 
