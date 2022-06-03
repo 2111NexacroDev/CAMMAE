@@ -31,7 +31,7 @@ public class ConsultantController {
 	@Autowired
 	private ConsultantService cService;
 	
-	//í•™ìƒ ìƒë‹´ì‹ ì²­ ëª©ë¡ ì¡°íšŒ
+	//ÇĞ»ı »ó´ã½ÅÃ» ¸ñ·Ï Á¶È¸
 	@RequestMapping(value="/consultant/list.kh", method=RequestMethod.GET)
 	public String consultantListView(Model model, HttpServletRequest request, @RequestParam(value = "page", required = false) Integer page) {
 		try {
@@ -48,19 +48,19 @@ public class ConsultantController {
 			model.addAttribute("pi", pi);
 			model.addAttribute("menu", "consultant");
 			model.addAttribute("currentPage", currentPage);
-			return "consultant/consultantListView";
-		}else {
-			model.addAttribute("msg", "ìƒë‹´ ì „ì²´ ì¡°íšŒ ì‹¤íŒ¨");
-			return "common/errorPage";
-			}
 		
+		}else {
+			model.addAttribute("cList", null);
+			}
+			return "consultant/consultantListView";
 		}catch(Exception e) {
-			return "login/login";
+			model.addAttribute("msg", "»ó´ãÁ¶È¸ ½ÇÆĞ");
+			return "common/errorPage";
 		}
 		
 	}
 	
-	//í•™ìƒ ìƒë‹´ì‹ ì²­ ë“±ë¡
+	//ÇĞ»ı »ó´ã½ÅÃ» µî·Ï
 	@RequestMapping(value="/consultant/writeView.kh", method=RequestMethod.GET)
 	public String consultantWriteView(Model model) {
 		model.addAttribute("menu", "consultant");
@@ -68,7 +68,7 @@ public class ConsultantController {
 		
 	}
 
-	//í•™ìƒ ìƒë‹´ì‹ ì²­ ë“±ë¡ ì‹¤í–‰
+	//ÇĞ»ı »ó´ã½ÅÃ» µî·Ï ½ÇÇà
 	@RequestMapping(value="/consultant/register.kh", method=RequestMethod.POST)
 	public String consultantRegister(Model model, @ModelAttribute Consultant consultant,
 			HttpServletRequest request) {
@@ -84,18 +84,18 @@ public class ConsultantController {
 			model.addAttribute("consultant", studentOne);
 			return "redirect:/consultant/list.kh";	
 			}else {
-				model.addAttribute("msg", "ë“±ë¡ì‹¤íŒ¨");
+				model.addAttribute("msg", "µî·Ï½ÇÆĞ");
 				return "common/errorPage";
 			}
 		  }else {
-			model.addAttribute("msg", "ìƒë‹´ì‹ ì²­ ë“±ë¡ ì‹¤íŒ¨");
+			model.addAttribute("msg", "»ó´ã½ÅÃ» µî·Ï ½ÇÆĞ");
 			return "common/errorPage";
 	
 		}
 		
 	}
 	
-	//í•™ìƒ ìƒë‹´ì‹ ì²­ ìƒì„¸ì¡°íšŒ
+	//ÇĞ»ı »ó´ã½ÅÃ» »ó¼¼Á¶È¸
 	@RequestMapping(value="/consultant/Detail.kh", method=RequestMethod.GET)
 	public String consultantDetailView(Model model, @RequestParam("cons_student_no")int cons_student_no, @RequestParam("cons_no") int cons_no) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
@@ -107,12 +107,12 @@ public class ConsultantController {
 			model.addAttribute("menu", "consultant");
 			return "consultant/consultantDetailView";		
 		}else {
-			model.addAttribute("msg", "ê´€ë¦¬ì ìƒë‹´ ì „ì²´ ì¡°íšŒ ì‹¤íŒ¨");
+			model.addAttribute("msg", "°ü¸®ÀÚ »ó´ã ÀüÃ¼ Á¶È¸ ½ÇÆĞ");
 			return "common/errorPage";
 		}
 	}
 	
-	//í•™ìƒ ìƒë‹´ì‹ ì²­ ì·¨ì†Œ
+	//ÇĞ»ı »ó´ã½ÅÃ» Ãë¼Ò
 	@RequestMapping(value="/consultant/cancel.kh", method=RequestMethod.GET)
 	public String consultantCancel(Model model, @RequestParam("cons_no") int cons_no,
 			HttpServletRequest request) {
@@ -124,18 +124,18 @@ public class ConsultantController {
 			 
 			 return "redirect:/consultant/list.kh";
 		 }else {
-			 model.addAttribute("msg", "ìƒë‹´ì·¨ì†Œ ì‹¤íŒ¨");
+			 model.addAttribute("msg", "»ó´ãÃë¼Ò ½ÇÆĞ");
 				return "common/errorPage";
 		 }
 		 
 		}else {
-			request.setAttribute("message", "ìƒë‹´ì·¨ì†Œë¥¼ í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤."); 
+			request.setAttribute("message", "»ó´ãÃë¼Ò¸¦ ÇÒ ¼ö ¾ø½À´Ï´Ù."); 
 			request.setAttribute("url", "/consultant/list.kh");
 			return "common/message";
 		}
 	}
 	
-	//ê´€ë¦¬ì ìƒë‹´ì‹ ì²­ ëª©ë¡ ì¡°íšŒ
+	//°ü¸®ÀÚ »ó´ã½ÅÃ» ¸ñ·Ï Á¶È¸
 	@RequestMapping(value="/consultant/adlist.kh", method=RequestMethod.GET)
 	public String consultantAdminListView(Model model, @RequestParam(value = "page", required = false) Integer page,  HttpServletRequest request) {
 		int currentPage = (page != null) ? page : 1;
@@ -151,12 +151,12 @@ public class ConsultantController {
 			model.addAttribute("currentPage", currentPage);
 			return "consultant/consultantAdminListView";
 		}else {
-			model.addAttribute("msg", "ìƒë‹´ ì „ì²´ ì¡°íšŒ ì‹¤íŒ¨");
+			model.addAttribute("msg", "»ó´ã ÀüÃ¼ Á¶È¸ ½ÇÆĞ");
 			return "common/errorPage";
 		}
 	}
 	
-	//ê´€ë¦¬ì ìƒë‹´ì‹ ì²­ ìƒì„¸ì¡°íšŒ
+	//°ü¸®ÀÚ »ó´ã½ÅÃ» »ó¼¼Á¶È¸
 	@RequestMapping(value="/consultant/adDetail.kh", method=RequestMethod.GET)
 	public String consultantAdminDetailView(Model model,  @RequestParam("consultant_no")Integer consultant_no) {	
 		Consultant consultant = cService.printAdminDetailCons(consultant_no);
@@ -165,14 +165,14 @@ public class ConsultantController {
 			model.addAttribute("menu1", "consultant1");
 			return "consultant/consultantAdminDetailView";		
 		}else {
-			model.addAttribute("msg", "ê´€ë¦¬ì ìƒë‹´ ë””í…Œì¼ ì¡°íšŒ ì‹¤íŒ¨");
+			model.addAttribute("msg", "°ü¸®ÀÚ »ó´ã µğÅ×ÀÏ Á¶È¸ ½ÇÆĞ");
 			return "common/errorPage";
 		}
 		
 		
 	}
 	
-	//ê´€ë¦¬ì ìƒë‹´ì‹ ì²­ ëŒ“ê¸€ ë“±ë¡
+	//°ü¸®ÀÚ »ó´ã½ÅÃ» ´ñ±Û µî·Ï
 	@ResponseBody
 	@RequestMapping(value="/consultant/replyAdd.kh", method=RequestMethod.POST) 
 	public String consultantAdminWriteReply(Model model, @ModelAttribute ConsultantReply consultantreply) {
@@ -184,7 +184,7 @@ public class ConsultantController {
 		}
 	}
 	
-	//ê´€ë¦¬ì ë° í•™ìƒ ìƒë‹´ì‹ ì²­ ëŒ“ê¸€ ì¡°íšŒ
+	//°ü¸®ÀÚ ¹× ÇĞ»ı »ó´ã½ÅÃ» ´ñ±Û Á¶È¸
 	@ResponseBody
 	@RequestMapping(value="/consultant/replyList.kh", method=RequestMethod.GET,
 		produces="application/json;charset=utf-8")
@@ -197,7 +197,7 @@ public class ConsultantController {
 		return null;
 	}
 	
-	//ê´€ë¦¬ì ìƒë‹´í˜„í™© ìˆ˜ì •
+	//°ü¸®ÀÚ »ó´ãÇöÈ² ¼öÁ¤
 	@ResponseBody
 	@RequestMapping(value="/consultant/statusChange.kh" , method=RequestMethod.POST)
 	 	public String consultantStatusUpdate(@RequestParam("cons_no") int cons_no, Model model) {
@@ -210,7 +210,7 @@ public class ConsultantController {
 		}
 	}
 	
-	//ìƒë‹´ì‚¬  ì •ë³´ ê°€ì ¸ì˜¤ê¸°
+	//»ó´ã»ç  Á¤º¸ °¡Á®¿À±â
 		@ResponseBody
 		@RequestMapping(value = "/consultant/JoinViewCounselor.kh", method=RequestMethod.GET, produces="application/json;charset=utf-8")
 		public String consJoinViewCounselor(Model model) throws UnsupportedEncodingException {
