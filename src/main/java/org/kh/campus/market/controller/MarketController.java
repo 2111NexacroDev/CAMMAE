@@ -64,10 +64,6 @@ public class MarketController {
 				pageInfo.getSearchValue());
 
 		mv.addObject("pi", pi);
-		/*
-		 * pi.setSearchCondition(pageInfo.getSearchCondition());
-		 * pi.setSearchValue(pageInfo.getSearchValue());
-		 */
 
 		List<Market> mList = mService.printAllMarket(pi);
 		try {
