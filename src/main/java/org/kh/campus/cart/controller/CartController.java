@@ -174,9 +174,11 @@ public class CartController {
 				mv.setViewName("cart/enrollRegister");
 
 			} else {
+				mv.addObject("menu", "enroll");
 				System.out.println("실패했습니다.");
 			}
 		} catch (Exception e) {
+			mv.addObject("menu", "enroll");
 			System.out.println(e.toString());
 		}
 		return mv;
