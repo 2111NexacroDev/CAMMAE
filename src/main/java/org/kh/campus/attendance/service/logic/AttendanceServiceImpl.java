@@ -82,5 +82,11 @@ public class AttendanceServiceImpl implements AttendanceService{
 	   return result;
 		
 	}
+
+	@Override
+	public int countAttendance(Attendance attendance) {
+		int result = aStore.selectCount(sqlSession, attendance);
+		return result;
+	}
 	
 }

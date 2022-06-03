@@ -51,6 +51,8 @@ public class AttendanceController {
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
 		attInfo.put("professorNo", Integer.toString(professorNo));
 		List<Attendance>aList = aService.printAttProfessor(attInfo);
+		
+		System.out.println(aList.toString() +"test11");
 	
 		result.addDataSet("out_subject", aList);
 		result.addVariable("ErrorCode", nErrorCode);
@@ -88,10 +90,12 @@ public class AttendanceController {
 		String strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		int aResult = 0;
-			String studentName =dsGet(inStu,0, "studentName");
-			int lectureNo = Integer.parseInt(dsGet(inStu, 0, "lectureNo"));
-			int studentNo = Integer.parseInt(dsGet(inStu, 0, "studentNo"));
-			String attStatus = dsGet(inStu, 0, "attStatus");
+		int count = 0;
+		for(int i = 0; i < inStu.getRowCount(); i++) {
+			String studentName =dsGet(inStu,i, "studentName");
+			int lectureNo = Integer.parseInt(dsGet(inStu, i, "lectureNo"));
+			int studentNo = Integer.parseInt(dsGet(inStu, i, "studentNo"));
+			String attStatus = dsGet(inStu, i, "attStatus");
 	
 			Attendance attendance = new Attendance(
 					studentName,
@@ -100,8 +104,13 @@ public class AttendanceController {
 					studentNo,
 					attStatus
 					);
+			
+			count = aService.countAttendance(attendance);
+			
+			if(attStatus!=null && attStatus!="" && count ==0) {
 			aResult = aService.registerAttendance(attendance); 
-				
+			}
+		}
 		
 		result.addVariable("ErrorCode", nErrorCode);
 		result.addVariable("ErrorMsg", strErrorMsg);

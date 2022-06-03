@@ -24,4 +24,6 @@ public interface AttendanceStore {
 
 	int updateStatus(SqlSession sqlSession, Attendance attendance);
 
+	int selectCount(SqlSession sqlSession, Attendance attendance);
+
 }

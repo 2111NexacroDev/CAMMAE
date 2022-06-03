@@ -15,6 +15,8 @@ public interface AttendanceService {
 		public List<Attendance> printAttProfessorSearchStu(HashMap<String, String> attInfo);
 
 		public int registerAttendance(Attendance attendance);
+		
+		public int countAttendance(Attendance attendance);
 
 		public List<Attendance> printAttStudentInfo(HashMap<String, String> attInfo);
 

@@ -59,4 +59,10 @@ public class AttendanceStoreLogic implements AttendanceStore {
 		return result;
 	}
 
+	@Override
+	public int selectCount(SqlSession sqlSession, Attendance attendance) {
+		int result = sqlSession.selectOne("AttendanceMapper.selectCount", attendance);
+		return result;
+	}
+
 }
