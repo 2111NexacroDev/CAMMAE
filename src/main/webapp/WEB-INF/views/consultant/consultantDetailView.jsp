@@ -116,6 +116,7 @@ hr{
 					<h2>상담관리</h2>	
 				</div>
 				<div class="btn_1">
+					<button class="btn" id="btn1" onclick="location.href='/consultant/cancel.kh?cons_no=${consultant.cons_no}'">취소</button>
 					<button class="btn" id="btn1" onclick="location.href='/consultant/list.kh'">목록</button>
 				</div>
 				</div>
