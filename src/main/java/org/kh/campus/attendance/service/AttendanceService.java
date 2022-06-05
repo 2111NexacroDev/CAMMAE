@@ -26,4 +26,6 @@ public interface AttendanceService {
 
 		public int modifyStatusChange(Attendance attendance);
 
+		public List<Attendance> printAttProfessorAllSearchStu(HashMap<String, String> attInfo);
+
 }

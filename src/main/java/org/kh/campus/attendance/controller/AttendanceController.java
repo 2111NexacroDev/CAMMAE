@@ -83,6 +83,30 @@ public class AttendanceController {
 	}
 	
 	
+	@RequestMapping(value = "/attendance/profSeachAllStuInfo.kh", method = RequestMethod.POST)
+	public NexacroResult printProfAllSearchStu(HttpSession session, @ParamDataSet(name="in_subject")DataSet subject
+			, @ParamVariable(name="lectureName") String lectureName) throws Exception {
+		String strErrorMsg = "START";
+		int nErrorCode= 0;
+		NexacroResult result = new NexacroResult();
+		HashMap<String , String> attInfo = new HashMap<String ,String>();
+		attInfo.put("lectureName", lectureName);
+		
+		System.out.println(lectureName +"name");
+		
+		
+		List<Attendance>aList = aService.printAttProfessorAllSearchStu(attInfo);
+	
+		result.addDataSet("out_stuInfo", aList);
+		result.addVariable("ErrorCode", nErrorCode);
+		result.addVariable("ErrorMsg", strErrorMsg);
+		return result;
+	}
+	
+	
+	
+	
+	
 	@RequestMapping(value = "/attendance/register.kh", method = RequestMethod.POST)
 	public NexacroResult registerScholar(@ParamDataSet(name = "insInfo", required = false) DataSet inStu, @ParamVariable(name="lectureName") String lectureName,HttpSession session) throws Exception {
 
