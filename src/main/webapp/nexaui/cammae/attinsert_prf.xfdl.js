@@ -23,7 +23,7 @@
 
 
             obj = new Dataset("ds_stuInfo", this);
-            obj._setContents("<ColumnInfo><Column id=\"studentName\" type=\"STRING\" size=\"256\"/><Column id=\"attStatus\" type=\"STRING\" size=\"256\"/><Column id=\"lectureNo\" type=\"STRING\" size=\"256\"/><Column id=\"studentNo\" type=\"STRING\" size=\"256\"/></ColumnInfo><Rows><Row/></Rows>");
+            obj._setContents("<ColumnInfo><Column id=\"studentName\" type=\"STRING\" size=\"256\"/><Column id=\"attStatus\" type=\"STRING\" size=\"256\"/><Column id=\"lectureNo\" type=\"STRING\" size=\"256\"/><Column id=\"studentNo\" type=\"STRING\" size=\"256\"/><Column id=\"attDate\" type=\"STRING\" size=\"256\"/></ColumnInfo><Rows><Row/></Rows>");
             this.addChild(obj.name, obj);
 
 
@@ -55,7 +55,7 @@
             obj.set_taborder("2");
             obj.set_binddataset("ds_stuInfo");
             obj.set_autofittype("col");
-            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"48\"/><Column size=\"51\"/><Column size=\"55\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"학번\"/><Cell col=\"1\" text=\"이름\"/><Cell col=\"2\" text=\"출석여부\"/></Band><Band id=\"body\"><Cell text=\"bind:studentNo\" textAlign=\"center\"/><Cell col=\"1\" text=\"bind:studentName\" textAlign=\"center\"/><Cell col=\"2\" text=\"bind:attStatus\" displaytype=\"combocontrol\" edittype=\"combo\" combodataset=\"ds_status\" combodatacol=\"attStatus\" combocodecol=\"attStatus\" textAlign=\"center\" controlautosizingtype=\"both\" combopopuptype=\"normal\"/></Band></Format></Formats>");
+            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"48\"/><Column size=\"48\"/><Column size=\"51\"/><Column size=\"55\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"날짜\" textAlign=\"center\"/><Cell col=\"1\" text=\"학번\" textAlign=\"center\"/><Cell col=\"2\" text=\"이름\" textAlign=\"center\"/><Cell col=\"3\" text=\"출석여부\" textAlign=\"center\"/></Band><Band id=\"body\"><Cell text=\"bind:attDate\" textAlign=\"center\"/><Cell col=\"1\" text=\"bind:studentNo\" textAlign=\"center\"/><Cell col=\"2\" text=\"bind:studentName\" textAlign=\"center\"/><Cell col=\"3\" displaytype=\"text\" edittype=\"text\" combodataset=\"ds_status\" combodatacol=\"attStatus\" combocodecol=\"attStatus\" textAlign=\"center\" controlautosizingtype=\"both\" combopopuptype=\"normal\" text=\"bind:attStatus\" expr=\"attStatus==null ? &quot;O&quot;: attStatus==&quot;O&quot; ? &quot;O&quot; : &quot;X&quot;\"/></Band></Format></Formats>");
             this.addChild(obj.name, obj);
 
             obj = new Button("btn_insert","633","85","60","25",null,null,null,null,null,null,this);

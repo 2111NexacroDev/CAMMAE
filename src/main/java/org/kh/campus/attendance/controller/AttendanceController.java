@@ -131,8 +131,11 @@ public class AttendanceController {
 			
 			count = aService.countAttendance(attendance);
 			
-			if(attStatus!=null && attStatus!="" && count ==0) {
-			aResult = aService.registerAttendance(attendance); 
+			if(count ==0) {
+				if(attStatus=="") {
+					attendance.setAttStatus("O");
+				}
+				aResult = aService.registerAttendance(attendance); 
 			}
 		}
 		
@@ -162,13 +165,13 @@ public class AttendanceController {
 	}
 	
 	@RequestMapping(value = "/attendance/prfIssue.kh", method = RequestMethod.POST)
-	public NexacroResult printProfIssue(HttpSession session, @ParamDataSet(name="in_profIssue")DataSet issue ) throws Exception {
+	public NexacroResult printProfIssue(@ParamVariable(name = "lectureName") String lectureName ) throws Exception {
 		String strErrorMsg = "START";
 		int nErrorCode= 0;
 		NexacroResult result = new NexacroResult();
-		int professorNo = ((Professor) (session.getAttribute("loginProfessor"))).getProfessorNo();
 		HashMap<String , String> attInfo = new HashMap<String ,String>();
-		attInfo.put("professorNo", Integer.toString(professorNo));
+		attInfo.put("lectureName", lectureName);
+		System.out.println(lectureName +" test11");
 		List<Attendance>aList = aService.printAttProfIssue(attInfo);
 		result.addDataSet("out_prfIssue", aList);
 		result.addVariable("ErrorCode", nErrorCode);

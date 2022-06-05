@@ -65,7 +65,7 @@
             obj.set_taborder("3");
             obj.set_binddataset("sub");
             obj.set_autofittype("col");
-            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"67\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"요일\"/><Cell col=\"1\" text=\"상태\"/><Cell col=\"2\" text=\"이의신청\"/></Band><Band id=\"body\"><Cell text=\"bind:attDate\" textAlign=\"center\"/><Cell col=\"1\" text=\"bind:attStatus\" textAlign=\"center\"/><Cell col=\"2\" text=\"신청\" displaytype=\"buttoncontrol\" edittype=\"button\" textAlign=\"center\" controlautosizingtype=\"height\"/></Band></Format></Formats>");
+            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"67\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"날짜\"/><Cell col=\"1\" text=\"상태\"/><Cell col=\"2\" text=\"이의신청\"/></Band><Band id=\"body\"><Cell text=\"bind:attDate\" textAlign=\"center\"/><Cell col=\"1\" text=\"bind:attStatus\" textAlign=\"center\"/><Cell col=\"2\" text=\"신청\" displaytype=\"buttoncontrol\" edittype=\"button\" textAlign=\"center\" controlautosizingtype=\"height\"/></Band></Format></Formats>");
             this.addChild(obj.name, obj);
 
             obj = new Button("btn_search","709","85","60","25",null,null,null,null,null,null,this);
