@@ -88,5 +88,11 @@ public class AttendanceServiceImpl implements AttendanceService{
 		int result = aStore.selectCount(sqlSession, attendance);
 		return result;
 	}
+
+	@Override
+	public List<Attendance> printAttProfessorAllSearchStu(HashMap<String, String> attInfo) {
+		List<Attendance>aList= aStore.selectAttProfAllSearchStu(sqlSession, attInfo);	
+		return aList;
+	}
 	
 }

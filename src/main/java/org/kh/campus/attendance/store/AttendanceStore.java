@@ -26,4 +26,6 @@ public interface AttendanceStore {
 
 	int selectCount(SqlSession sqlSession, Attendance attendance);
 
+	List<Attendance> selectAttProfAllSearchStu(SqlSession sqlSession, HashMap<String, String> attInfo);
+
 }
