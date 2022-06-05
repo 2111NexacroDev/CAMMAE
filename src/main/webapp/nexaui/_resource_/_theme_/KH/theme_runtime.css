@@ -1,135 +1,157 @@
 ﻿
         
-.nexainput.nexaleftalign
+* .nexainput.nexaleftalign
 {
   text-align:left;
 }
-.nexainput.nexarightalign
+.nexainput.nexartl.nexaleftalign
 {
   text-align:right;
 }
-.nexainput.nexacenteralign
+* .nexainput.nexarightalign
 {
-  text-align:center;
+  text-align:right;
 }
-
-.nexacontentsbox.nexaleftalign
+.nexainput.nexartl.nexarightalign
 {
   text-align:left;
 }
-.nexacontentsbox.nexarightalign
-{
-  text-align:right;
-}
-.nexacontentsbox.nexacenteralign
+* .nexainput.nexacenteralign
 {
   text-align:center;
 }
-.celltreeline
+* .nexacontentsbox.nexaleftalign
+{
+  text-align:left;
+}
+.nexacontentsbox.nexartl.nexaleftalign
+{
+  text-align:right;
+}
+* .nexacontentsbox.nexarightalign
+{
+  text-align:right;
+}
+.nexacontentsbox.nexartl.nexarightalign
+{
+  text-align:left;
+}
+* .nexacontentsbox.nexacenteralign
+{
+  text-align:center;
+}
+* .celltreeline
 {
   border : 1px dotted #999999;
 }
-.Edit, .MaskEdit, .TextArea, .EditControl, .MaskEditControl, .TextAreaControl
+* .Edit, * .MaskEdit, * .TextArea, * .EditControl, * .MaskEditControl, * .TextAreaControl
 {
   cursor:text;
 }
-.Button .nexacontentsbox, .ButtonControl .nexacontentsbox
+* .Button .nexacontentsbox, * .ButtonControl .nexacontentsbox
 {
   text-align:center;
 }
 
-.FileDownload  .nexacontentsbox, .FileDownloadControl .nexacontentsbox
+* .FileDownload  .nexacontentsbox, * .FileDownloadControl .nexacontentsbox
 {
   text-align:center;
 }
 
-.IconTextControl .nexacontentsbox, .IconControl .nexacontentsbox
+* .IconTextControl .nexacontentsbox, * .IconControl .nexacontentsbox
 {
   text-align:center;
 }
 
-.DatePickerDayItemControl .nexacontentsbox, .DatePickerWeekItemControl .nexacontentsbox, .TitleBarButtonControl .nexacontentsbox
+* .DatePickerDayItemControl .nexacontentsbox, * .DatePickerWeekItemControl .nexacontentsbox, * .TitleBarButtonControl .nexacontentsbox
 {
   text-align:center;
 }
 
-.MainFrame, .VScrollBarControl, .HScrollBarControl
+* .Sketch .nexacontentsbox
+{
+  text-align:center;
+}
+
+* .MainFrame, * .VScrollBarControl, * .HScrollBarControl
 {
   cursor:default;
 }
-
-.Sketch .nexacontentsbox
-{
-   text-align:center;
-}
-
 .nexainput
 {
   cursor:inherit;
 }
 
-.Button
+* .Button
 {
 	border : 1px solid #9c9c9c;
 	background : linear-gradient(#ffffff 0%,#e1e1e1 100%);
 	letter-spacing : 3px;
 }
-.Form
+* .Form
 {
 	background : #ffffff;
 	color : #222222;
 	font : 12px "Malgun Gothic";
 }
-.Button.btn_TF_Delete
+* .Button.btn_TF_Delete
 {
 	background : purple;
 	color : #ffffff;
 }
-.Button.btn_WF_Save
+* .Button.btn_WF_Save
 {
 	border : 1px solid #edada2;
 	background : linear-gradient(#ffffff 0%,#f9cbc3 100%);
 	color : #a1210b;
 	letter-spacing : 0px;
 }
-.Button.btn_WF_Save .nexacontentsbox
+* .Button.btn_WF_Save .nexacontentsbox
 {
 	text-decoration : underline;
 }
-.Button.btn_WF_Add
+* .Button.btn_WF_Add
 {
 	border : 1px solid #263a7d;
 	background : url('./images/img_WF_RepeatX.png') repeat-x center bottom /auto;
 	color : #ffffff;
 }
-.Combo
+* .Combo
 {
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
 }
-.Combo .comboedit
+* .Combo .comboedit
 {
 	padding : 0px 0px 0px 10px;
 }
-.ListBoxControl.popupCombocombolist.dummy
+.Combo.nexartl .comboedit
+{
+	padding : 0px 10px 0px 0px;
+}
+* .ListBoxControl.popupCombocombolist.dummy
 {
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
 }
-.ListBoxControl.popupCombocombolist.dummy .listboxitem
+* .ListBoxControl.popupCombocombolist.dummy .listboxitem
 {
 	color : red;
 }
-.Calendar
+* .Calendar
 {
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
 }
-.Calendar .calendaredit
+* .Calendar .calendaredit
 {
 	padding : 0px 0px 0px 10px;
 }
-.Calendar .datepicker
+.Calendar.nexartl .calendaredit
+{
+	padding : 0px 10px 0px 0px;
+}
+* .Calendar .datepicker
 {
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
@@ -139,7 +161,7 @@
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
 }
-.Calendar .datepicker .head
+* .Calendar .datepicker .head
 {
 	background : #f44a26;
 }
@@ -147,7 +169,7 @@
 {
 	background : #f44a26;
 }
-.Calendar .datepicker .head .monthspin .spinedit
+* .Calendar .datepicker .head .monthspin .spinedit
 {
 	color : #ffffff;
 }
@@ -155,7 +177,7 @@
 {
 	color : #ffffff;
 }
-.Calendar .datepicker .head .monthstatic
+* .Calendar .datepicker .head .monthstatic
 {
 	color : #ffffff;
 	font : bold 12px "Malgun Gothic";
@@ -165,7 +187,7 @@
 	color : #ffffff;
 	font : bold 12px "Malgun Gothic";
 }
-.Calendar .datepicker .head .yearspin .spinedit
+* .Calendar .datepicker .head .yearspin .spinedit
 {
 	color : #ffffff;
 }
@@ -173,7 +195,7 @@
 {
 	color : #ffffff;
 }
-.Calendar .datepicker .head .yearstatic
+* .Calendar .datepicker .head .yearstatic
 {
 	color : #ffffff;
 	font : bold 12px "Malgun Gothic";
@@ -183,7 +205,7 @@
 	color : #ffffff;
 	font : bold 12px "Malgun Gothic";
 }
-.Calendar .datepicker .body .weekband
+* .Calendar .datepicker .body .weekband
 {
 	background : #e8e8e8;
 }
@@ -191,89 +213,89 @@
 {
 	background : #e8e8e8;
 }
-.Calendar .calendarspindownbutton
+* .Calendar .calendarspindownbutton
 {
 	background : teal;
 }
-.Calendar .calendarspinupbutton
+* .Calendar .calendarspinupbutton
 {
 	background : pink;
 }
-.Grid
+* .Grid
 {
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
 }
-.Grid .head .row .cell
+* .Grid .head .row .cell
 {
 	background : #555a5e;
 	color : #ffffff;
 	border : 1px solid lightgray;
 }
-.Grid .head .row .cell .nexacontentsbox
+* .Grid .head .row .cell .nexacontentsbox
 {
 	text-align : center;
 }
-.Grid .body .row .cell
+* .Grid .body .row .cell
 {
 	background : #ffffff;
 	border : 1px solid lightgray;
 }
-.Grid .body .row .cell.oddcell
+* .Grid .body .row .cell.oddcell
 {
 	background : #f7f7f7;
 }
-.Grid .summary .row .cell
+* .Grid .summary .row .cell
 {
 	background : #aaacae;
 	color : #ffffff;
 	font : bold 12px "Malgun Gothic";
 	border : 1px solid lightgray;
 }
-.Grid .summary .row .cell .nexacontentsbox
+* .Grid .summary .row .cell .nexacontentsbox
 {
 	text-align : center;
 }
-.GridCellControl .cellbutton
+* .GridCellControl .cellbutton
 {
 	border : 1px solid teal;
 	background : darkseagreen;
 }
-.Grid.grd_WF_HeadP .head .row .cell
+* .Grid.grd_WF_HeadP .head .row .cell
 {
 	background : purple;
 }
-.Grid .body .row .cell.cell_WF_BodyY
+* .Grid .body .row .cell.cell_WF_BodyY
 {
 	background : yellow;
 }
-.Grid .body .row .cell.cell_WF_BodyY.oddcell
+* .Grid .body .row .cell.cell_WF_BodyY.oddcell
 {
 	background : yellow;
 }
-.Grid .body .row .cell.cell_WF_BtnB .cellbutton
+* .Grid .body .row .cell.cell_WF_BtnB .cellbutton
 {
 	background : blue;
 }
-.GridCellControl .celledit
+* .GridCellControl .celledit
 {
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
 }
-.Grid .body .row .cell.cell_WF_Ess .celledit
+* .Grid .body .row .cell.cell_WF_Ess .celledit
 {
 	border : 1px solid orangered;
 	background : #faedeb;
 }
-.Button[status=mouseover]
+* .Button[status=mouseover]
 {
 	border : 1px solid #f44528;
 }
-.Button[status=focused]
+* .Button[status=focused]
 {
 	border : 1px solid #f44528;
 }
-.Calendar .datepicker .body .dayitem[status=mouseover]
+* .Calendar .datepicker .body .dayitem[status=mouseover]
 {
 	background : #e8e8e8;
 }
@@ -281,21 +303,21 @@
 {
 	background : #e8e8e8;
 }
-.Grid .body .row .cell[status=mouseover]
+* .Grid .body .row .cell[status=mouseover]
 {
 	background : #fff7f6;
 }
-.Grid .body .row .cell.oddcell[status=mouseover]
+* .Grid .body .row .cell.oddcell[status=mouseover]
 {
 	background : #fff7f6;
 }
-.Button[userstatus=pushed]
+* .Button[userstatus=pushed]
 {
 	border : 1px solid #f44528;
 	background : #f44528;
 	color : #ffffff;
 }
-.Calendar .datepicker .body .dayitem[userstatus=trailingday]
+* .Calendar .datepicker .body .dayitem[userstatus=trailingday]
 {
 	color : darkgray;
 }
@@ -303,7 +325,7 @@
 {
 	color : darkgray;
 }
-.Calendar .datepicker .body .dayitem[userstatus=saturday]
+* .Calendar .datepicker .body .dayitem[userstatus=saturday]
 {
 	color : blue;
 }
@@ -311,7 +333,7 @@
 {
 	color : blue;
 }
-.Calendar .datepicker .body .dayitem[userstatus=sunday]
+* .Calendar .datepicker .body .dayitem[userstatus=sunday]
 {
 	color : red;
 }
@@ -319,7 +341,7 @@
 {
 	color : red;
 }
-.Calendar .datepicker .body .dayitem[userstatus=selected]
+* .Calendar .datepicker .body .dayitem[userstatus=selected]
 {
 	color : #ffffff;
 	background : #cf2d06;
@@ -331,7 +353,7 @@
 	background : #cf2d06;
 	font : bold 12px "Malgun Gothic";
 }
-.Calendar .datepicker .body .dayitem[userstatus=today]
+* .Calendar .datepicker .body .dayitem[userstatus=today]
 {
 	color : #ffffff;
 	background : #f17158;
@@ -341,7 +363,7 @@
 	color : #ffffff;
 	background : #f17158;
 }
-.Calendar .datepicker .body .weekitem[userstatus=saturday]
+* .Calendar .datepicker .body .weekitem[userstatus=saturday]
 {
 	color : blue;
 }
@@ -349,7 +371,7 @@
 {
 	color : blue;
 }
-.Calendar .datepicker .body .weekitem[userstatus=sunday]
+* .Calendar .datepicker .body .weekitem[userstatus=sunday]
 {
 	color : red;
 }
@@ -357,15 +379,15 @@
 {
 	color : red;
 }
-.Grid .body .row .cell[userstatus=selected]
+* .Grid .body .row .cell[userstatus=selected]
 {
 	background : #f17158;
 }
-.Grid .body .row .cell.oddcell[userstatus=selected]
+* .Grid .body .row .cell.oddcell[userstatus=selected]
 {
 	background : #f17158;
 }
-.Button[status=disabled]
+* .Button[status=disabled]
 {
 	opacity : 0.5;
 }

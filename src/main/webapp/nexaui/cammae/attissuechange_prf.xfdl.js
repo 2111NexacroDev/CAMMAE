@@ -25,6 +25,11 @@
             obj = new Dataset("ds_status", this);
             obj._setContents("<ColumnInfo><Column id=\"attStatus\" type=\"STRING\" size=\"256\"/></ColumnInfo><Rows><Row><Col id=\"attStatus\">O</Col></Row><Row><Col id=\"attStatus\">X</Col></Row></Rows>");
             this.addChild(obj.name, obj);
+
+
+            obj = new Dataset("ds_subject", this);
+            obj._setContents("<ColumnInfo><Column id=\"lectureName\" type=\"STRING\" size=\"256\"/><Column id=\"lectureNo\" type=\"STRING\" size=\"256\"/></ColumnInfo><Rows><Row/></Rows>");
+            this.addChild(obj.name, obj);
             
             // UI Components Initialize
             obj = new Div("Div04","0","70","800","60",null,null,null,null,null,null,this);
@@ -64,6 +69,25 @@
             obj.set_text("");
             obj.set_background("rgb(0, 74, 38)");
             this.addChild(obj.name, obj);
+
+            obj = new Static("Static00","420","83","60","30",null,null,null,null,null,null,this);
+            obj.set_taborder("6");
+            obj.set_text("과목 선택");
+            obj.set_font("normal bold 10pt/normal \"Arial\"");
+            this.addChild(obj.name, obj);
+
+            obj = new Button("btn_search","630","85","60","25",null,null,null,null,null,null,this);
+            obj.set_taborder("7");
+            obj.set_text("조회");
+            this.addChild(obj.name, obj);
+
+            obj = new Combo("Combo00","490","87","130","20",null,null,null,null,null,null,this);
+            obj.set_taborder("8");
+            obj.set_innerdataset("ds_subject");
+            obj.set_datacolumn("lectureName");
+            obj.set_codecolumn("lectureName");
+            obj.set_text("");
+            this.addChild(obj.name, obj);
             // Layout Functions
             //-- Default Layout : this
             obj = new Layout("default","",800,600,this,function(p){});
@@ -85,12 +109,13 @@
         // User Script
         this.registerScript("attissuechange_prf.xfdl", function() {
         this.fn_attIssueChange = function(){
+        var lectureName = this.Combo00.value;
         	this.transaction(
         			"attr_send"// 1.ID
         			,"CmURL::attendance/prfIssue.kh"// 2.URL
-        			,"in_profIssue=ds_prfIssue"// 3.InDs : F->S jsp(I,U,D)
+        			,""// 3.InDs : F->S jsp(I,U,D)
         			,"ds_prfIssue=out_prfIssue" // 4.OutDs : S->F jsp(SELECT)
-        			,"" // 5.InVar : F->S(var)
+        			,"lectureName="+lectureName // 5.InVar : F->S(var)
         			,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
         		);
         	}
@@ -98,7 +123,14 @@
 
         this.attissuechange_prf_onload = function(obj,e)
         {
-        	this.fn_attIssueChange();
+        	this.transaction(
+        		"attr_subject"// 1.ID
+        		,"CmURL::attendance/profInfo.kh"// 2.URL
+        		,""// 3.InDs : F->S jsp(I,U,D)
+        		,"ds_subject=out_subject" // 4.OutDs : S->F jsp(SELECT)
+        		,"" // 5.InVar : F->S(var)
+        		,"fn_callback_tran" // 6.callback function(transaction 완료시 호출되는 함수)
+        	);
         };
 
         this.fn_callback_tran = function(id, nErrorCode, sErrorMsg, sSuccessMsg)
@@ -142,6 +174,11 @@
            );
         };
 
+        this.btn_search_onclick = function(obj,e)
+        {
+        	this.fn_attIssueChange();
+        };
+
         });
         
         // Regist UI Components Event
@@ -149,6 +186,8 @@
         {
             this.addEventHandler("onload",this.attissuechange_prf_onload,this);
             this.btn_strore.addEventHandler("onclick",this.btn_strore_onclick,this);
+            this.btn_search.addEventHandler("onclick",this.btn_search_onclick,this);
+            this.Combo00.addEventHandler("onitemchanged",this.Combo00_onitemchanged,this);
         };
         this.loadIncludeScript("attissuechange_prf.xfdl");
         this.loadPreloadList();

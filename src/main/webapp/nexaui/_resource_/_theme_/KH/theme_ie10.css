@@ -57,8 +57,7 @@ input::-ms-clear,input::-ms-reveal
 }
 
 
-
-.nexacontainer
+div.nexacontainer
 {
   position:absolute;
   left:0px;
@@ -66,21 +65,34 @@ input::-ms-clear,input::-ms-reveal
   width:100%;
   height:100%;
 }
-.nexacontainer.withvscroll
-{
-  right:14px;
-}
-.nexacontainer.withhscroll
-{
-  bottom:14px;
-}
-.nexacontainer.withbothscroll
-{
-  right:14px;
-  bottom:14px;
+.nexacontainer.nexartl
+{ 
+  right:0px;
 }
 
-.nexalefttop
+div.nexacontainer.withvscroll
+{
+  right:14px;
+}
+.nexacontainer.nexartl.withvscroll
+{
+  left:14px;
+}
+div.nexacontainer.withhscroll
+{
+  bottom:14px;
+}
+div.nexacontainer.withbothscroll
+{
+  right:14px;
+  bottom:14px;
+}
+.nexacontainer.nexartl.withbothscroll
+{
+  left:14px;
+  bottom:14px;
+}
+div.nexalefttop
 {
   left:0px;
   top:0px;
@@ -88,7 +100,11 @@ input::-ms-clear,input::-ms-reveal
   background-position:left top;
   font-size:1px;
 }
-.nexaleftbottom
+.nexalefttop.nexartl
+{
+  background-position:right top;
+}
+div.nexaleftbottom
 {
   left:0px;
   bottom:0px;
@@ -96,7 +112,11 @@ input::-ms-clear,input::-ms-reveal
   background-position:left bottom;
   font-size:1px;
 }
-.nexarightbottom
+.nexaleftbottom.nexartl
+{
+  background-position:right bottom;
+}
+div.nexarightbottom
 {
   right:0px;
   bottom:0px;
@@ -104,40 +124,50 @@ input::-ms-clear,input::-ms-reveal
   background-position:right bottom;
   font-size:1px;
 }
-.nexarighttop
+.nexarightbottom.nexartl
+{
+  background-position:left bottom;
+}
+div.nexarighttop
 {
   right:0px;
   top:0px;
   background-repeat:no-repeat;
   background-position:right top;
 }
-.nexaedge
+.nexarighttop.nexartl
+{
+  background-position:left top;
+}
+div.nexaedge
 {
   width:100%;
   height:100%;
 }
-.nexamodaloverlay
+div.nexamodaloverlay
 {
   width:100%;
   height:100%;
 }
-.nexainnercontainer
+div.nexainnercontainer
 {
   transform : translate3d(0px, 0px, 0);
 }
-
-.nexatransform
+div.nexatransform
 {
   transform : translate3d(0px, 0px, 0);
 }
-
-.nexacontentsbox
+div.nexacontentsbox
 {
   position:relative;
   display:table-cell;
   background-position:left center;
   background-repeat:no-repeat;
   vertical-align:middle;
+}
+.nexacontentsbox.nexartl
+{
+  background-position:right center;
 }
 .nexatextitem
 {
@@ -155,7 +185,6 @@ input::-ms-clear,input::-ms-reveal
   background-position:center center;
   background-repeat:no-repeat;
 }
-
 .nexainput
 {
   font:inherit;
@@ -168,7 +197,6 @@ input::-ms-clear,input::-ms-reveal
   background:transparent;
   padding : 0px;
 }
-
 .nexatextarea
 {
   font:inherit;
@@ -185,95 +213,93 @@ input::-ms-clear,input::-ms-reveal
   background:transparent;
   padding : 0px;
 }
-
-.nexaleftalign
+div.nexaleftalign, input.nexaleftalign
 {
   text-align:left;
 }
-
-.nexarightalign
+.nexaleftalign.nexartl
 {
   text-align:right;
 }
-
-.nexacenteralign
+div.nexarightalign, input.nexarightalign
+{
+  text-align:right;
+}
+.nexarightalign.nexartl
+{
+  text-align:left;
+}
+div.nexacenteralign,input.nexacenteralign
 {
   text-align:center;
 }
-
-.nexamap div *
+div.nexamap div *
 {
   overflow:visible;
 }
-
-.nexanativescroll
+div.nexanativescroll
 {
   overflow:scroll;
   -ms-overflow-style:none;
 }
 
-.celltreeline
+div.celltreeline
 {
   border : 1px dotted #999999;
 }
 
-.Edit, .MaskEdit, .TextArea, .EditControl, .MaskEditControl, .TextAreaControl
+div.Edit, div.MaskEdit, div.TextArea, div.EditControl, div.MaskEditControl, div.TextAreaControl
 {
   cursor:text;
 }
-.Button .nexacontentsbox, .ButtonControl .nexacontentsbox
+div.Button .nexacontentsbox, div.ButtonControl .nexacontentsbox
 {
   text-align:center;
   background-position:center center;
 }
-
-.FileDownload  .nexacontentsbox, .FileDownloadControl .nexacontentsbox
+div.FileDownload  .nexacontentsbox, div.FileDownloadControl .nexacontentsbox
 {
   text-align:center;
   background-position:center center;
 }
-
-.IconTextControl .nexacontentsbox, .IconControl .nexacontentsbox
+div.IconTextControl .nexacontentsbox, div.IconControl .nexacontentsbox
 {
   text-align:center;
   background-position:center center;
 }
-
-.DatePickerDayItemControl .nexacontentsbox, .DatePickerWeekItemControl .nexacontentsbox, .TitleBarButtonControl .nexacontentsbox
+div.DatePickerDayItemControl .nexacontentsbox, div.DatePickerWeekItemControl .nexacontentsbox, div.TitleBarButtonControl .nexacontentsbox
 {
   text-align:center;
   background-position:center center;
 }
-
-.Sketch .nexacontentsbox
+div.Sketch .nexacontentsbox
 {
-   text-align:center;
+  text-align:center;
 }
-
-.MainFrame, .VScrollBarControl, .HScrollBarControl
+div.MainFrame, div.VScrollBarControl, div.HScrollBarControl
 {
   cursor:default;
 }
 
-.Button
+div.Button
 {
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
 	background : linear-gradient(#ffffff 0%,#e1e1e1 100%);
 	letter-spacing : 3px;
 }
-.Form
+div.Form
 {
 	background : #ffffff;
 	color : #222222;
 	font : 12px "Malgun Gothic";
 }
-.Button.btn_TF_Delete
+div.Button.btn_TF_Delete
 {
 	background : purple;
 	color : #ffffff;
 }
-.Button.btn_WF_Save
+div.Button.btn_WF_Save
 {
 	border : 1px solid #edada2;
 	background : #ffffff;
@@ -281,44 +307,52 @@ input::-ms-clear,input::-ms-reveal
 	color : #a1210b;
 	letter-spacing : 0px;
 }
-.Button.btn_WF_Save .nexacontentsbox
+div.Button.btn_WF_Save .nexacontentsbox
 {
 	text-decoration : underline;
 }
-.Button.btn_WF_Add
+div.Button.btn_WF_Add
 {
 	border : 1px solid #263a7d;
 	background : url('./images/img_WF_RepeatX.png') repeat-x center bottom /auto;
 	color : #ffffff;
 }
-.Combo
+div.Combo
 {
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
 }
-.Combo .comboedit .nexainput
+div.Combo .comboedit .nexainput
 {
 	padding : 0px 0px 0px 10px;
 }
-.ListBoxControl.popupCombocombolist.dummy
+.Combo.nexartl .comboedit .nexainput
+{
+	padding : 0px 10px 0px 0px;
+}
+div.ListBoxControl.popupCombocombolist.dummy
 {
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
 }
-.ListBoxControl.popupCombocombolist.dummy .listboxitem
+div.ListBoxControl.popupCombocombolist.dummy .listboxitem
 {
 	color : red;
 }
-.Calendar
+div.Calendar
 {
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
 }
-.Calendar .calendaredit .nexainput
+div.Calendar .calendaredit .nexainput
 {
 	padding : 0px 0px 0px 10px;
 }
-.Calendar .datepicker
+.Calendar.nexartl .calendaredit .nexainput
+{
+	padding : 0px 10px 0px 0px;
+}
+div.Calendar .datepicker
 {
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
@@ -328,7 +362,7 @@ input::-ms-clear,input::-ms-reveal
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
 }
-.Calendar .datepicker .head
+div.Calendar .datepicker .head
 {
 	background : #f44a26;
 }
@@ -336,7 +370,7 @@ input::-ms-clear,input::-ms-reveal
 {
 	background : #f44a26;
 }
-.Calendar .datepicker .head .monthspin .spinedit
+div.Calendar .datepicker .head .monthspin .spinedit
 {
 	color : #ffffff;
 }
@@ -344,7 +378,7 @@ input::-ms-clear,input::-ms-reveal
 {
 	color : #ffffff;
 }
-.Calendar .datepicker .head .monthstatic
+div.Calendar .datepicker .head .monthstatic
 {
 	color : #ffffff;
 	font : bold 12px "Malgun Gothic";
@@ -354,7 +388,7 @@ input::-ms-clear,input::-ms-reveal
 	color : #ffffff;
 	font : bold 12px "Malgun Gothic";
 }
-.Calendar .datepicker .head .yearspin .spinedit
+div.Calendar .datepicker .head .yearspin .spinedit
 {
 	color : #ffffff;
 }
@@ -362,7 +396,7 @@ input::-ms-clear,input::-ms-reveal
 {
 	color : #ffffff;
 }
-.Calendar .datepicker .head .yearstatic
+div.Calendar .datepicker .head .yearstatic
 {
 	color : #ffffff;
 	font : bold 12px "Malgun Gothic";
@@ -372,7 +406,7 @@ input::-ms-clear,input::-ms-reveal
 	color : #ffffff;
 	font : bold 12px "Malgun Gothic";
 }
-.Calendar .datepicker .body .weekband
+div.Calendar .datepicker .body .weekband
 {
 	background : #e8e8e8;
 }
@@ -380,91 +414,91 @@ input::-ms-clear,input::-ms-reveal
 {
 	background : #e8e8e8;
 }
-.Calendar .calendarspindownbutton
+div.Calendar .calendarspindownbutton
 {
 	background : teal;
 }
-.Calendar .calendarspinupbutton
+div.Calendar .calendarspinupbutton
 {
 	background : pink;
 }
-.Grid
+div.Grid
 {
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
 }
-.Grid .head .row .cell
+div.Grid .head .row .cell
 {
 	background : #555a5e;
 	color : #ffffff;
 	border : 1px solid lightgray;
 }
-.Grid .head .row .cell > .nexacontentsbox
+div.Grid .head .row .cell > .nexacontentsbox
 {
 	text-align : center;
 	background-position-x : center;
 }
-.Grid .body .row .cell
+div.Grid .body .row .cell
 {
 	background : #ffffff;
 	border : 1px solid lightgray;
 }
-.Grid .body .row .cell.oddcell
+div.Grid .body .row .cell.oddcell
 {
 	background : #f7f7f7;
 }
-.Grid .summary .row .cell
+div.Grid .summary .row .cell
 {
 	background : #aaacae;
 	color : #ffffff;
 	font : bold 12px "Malgun Gothic";
 	border : 1px solid lightgray;
 }
-.Grid .summary .row .cell > .nexacontentsbox
+div.Grid .summary .row .cell > .nexacontentsbox
 {
 	text-align : center;
 	background-position-x : center;
 }
-.GridCellControl .cellbutton
+div.GridCellControl .cellbutton
 {
 	border : 1px solid teal;
 	background : darkseagreen;
 }
-.Grid.grd_WF_HeadP .head .row .cell
+div.Grid.grd_WF_HeadP .head .row .cell
 {
 	background : purple;
 }
-.Grid .body .row .cell.cell_WF_BodyY.dummy.dummy.dummy
+div.Grid .body .row .cell.cell_WF_BodyY.dummy.dummy.dummy
 {
 	background : yellow;
 }
-.Grid .body .row .cell.cell_WF_BodyY.dummy.dummy.dummy.oddcell
+div.Grid .body .row .cell.cell_WF_BodyY.dummy.dummy.dummy.oddcell
 {
 	background : yellow;
 }
-.Grid .body .row .cell.cell_WF_BtnB.dummy.dummy.dummy .cellbutton
+div.Grid .body .row .cell.cell_WF_BtnB.dummy.dummy.dummy .cellbutton
 {
 	background : blue;
 }
-.GridCellControl .celledit
+div.GridCellControl .celledit
 {
 	border : 1px solid #9c9c9c;
 	background : #ffffff;
 }
-.Grid .body .row .cell.cell_WF_Ess.dummy.dummy.dummy .celledit
+div.Grid .body .row .cell.cell_WF_Ess.dummy.dummy.dummy .celledit
 {
 	border : 1px solid orangered;
 	background : #faedeb;
 }
-#nexacontainer .Button[status=mouseover]
+div#nexacontainer .Button[status=mouseover]
 {
 	border : 1px solid #f44528;
 }
-#nexacontainer .Button[status=focused]
+div#nexacontainer .Button[status=focused]
 {
 	border : 1px solid #f44528;
 }
-#nexacontainer .Calendar .datepicker .body .dayitem[status=mouseover]
+div#nexacontainer .Calendar .datepicker .body .dayitem[status=mouseover]
 {
 	background : #e8e8e8;
 }
@@ -472,21 +506,21 @@ input::-ms-clear,input::-ms-reveal
 {
 	background : #e8e8e8;
 }
-#nexacontainer .Grid .body .row .cell[status=mouseover]
+div#nexacontainer .Grid .body .row .cell[status=mouseover]
 {
 	background : #fff7f6;
 }
-#nexacontainer .Grid .body .row .cell.oddcell[status=mouseover]
+div#nexacontainer .Grid .body .row .cell.oddcell[status=mouseover]
 {
 	background : #fff7f6;
 }
-#nexacontainer .Button[userstatus=pushed]
+div#nexacontainer .Button[userstatus=pushed]
 {
 	border : 1px solid #f44528;
 	background : #f44528;
 	color : #ffffff;
 }
-#nexacontainer .Calendar .datepicker .body .dayitem[userstatus=trailingday]
+div#nexacontainer .Calendar .datepicker .body .dayitem[userstatus=trailingday]
 {
 	color : darkgray;
 }
@@ -494,7 +528,7 @@ input::-ms-clear,input::-ms-reveal
 {
 	color : darkgray;
 }
-#nexacontainer .Calendar .datepicker .body .dayitem[userstatus=saturday]
+div#nexacontainer .Calendar .datepicker .body .dayitem[userstatus=saturday]
 {
 	color : blue;
 }
@@ -502,7 +536,7 @@ input::-ms-clear,input::-ms-reveal
 {
 	color : blue;
 }
-#nexacontainer .Calendar .datepicker .body .dayitem[userstatus=sunday]
+div#nexacontainer .Calendar .datepicker .body .dayitem[userstatus=sunday]
 {
 	color : red;
 }
@@ -510,7 +544,7 @@ input::-ms-clear,input::-ms-reveal
 {
 	color : red;
 }
-#nexacontainer .Calendar .datepicker .body .dayitem[userstatus=selected]
+div#nexacontainer .Calendar .datepicker .body .dayitem[userstatus=selected]
 {
 	color : #ffffff;
 	background : #cf2d06;
@@ -522,7 +556,7 @@ input::-ms-clear,input::-ms-reveal
 	background : #cf2d06;
 	font : bold 12px "Malgun Gothic";
 }
-#nexacontainer .Calendar .datepicker .body .dayitem[userstatus=today]
+div#nexacontainer .Calendar .datepicker .body .dayitem[userstatus=today]
 {
 	color : #ffffff;
 	background : #f17158;
@@ -532,7 +566,7 @@ input::-ms-clear,input::-ms-reveal
 	color : #ffffff;
 	background : #f17158;
 }
-#nexacontainer .Calendar .datepicker .body .weekitem[userstatus=saturday]
+div#nexacontainer .Calendar .datepicker .body .weekitem[userstatus=saturday]
 {
 	color : blue;
 }
@@ -540,7 +574,7 @@ input::-ms-clear,input::-ms-reveal
 {
 	color : blue;
 }
-#nexacontainer .Calendar .datepicker .body .weekitem[userstatus=sunday]
+div#nexacontainer .Calendar .datepicker .body .weekitem[userstatus=sunday]
 {
 	color : red;
 }
@@ -548,15 +582,15 @@ input::-ms-clear,input::-ms-reveal
 {
 	color : red;
 }
-#nexacontainer .Grid .body .row .cell[userstatus=selected]
+div#nexacontainer .Grid .body .row .cell[userstatus=selected]
 {
 	background : #f17158;
 }
-#nexacontainer .Grid .body .row .cell.oddcell[userstatus=selected]
+div#nexacontainer .Grid .body .row .cell.oddcell[userstatus=selected]
 {
 	background : #f17158;
 }
-#nexacontainer .Button[status=disabled]
+div#nexacontainer .Button[status=disabled]
 {
 	opacity : 0.5;
 }
