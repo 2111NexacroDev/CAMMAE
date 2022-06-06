@@ -153,6 +153,8 @@
 
 
 ### ERD
+[0531새내기_ERD.pdf](https://github.com/1129khNexapring/CAMMAE/files/8843298/0531._ERD.pdf)
+![erd전체](https://user-images.githubusercontent.com/98931301/172133466-9c3833d3-805c-45b5-9b04-99bb0b599c5c.PNG)
 ### Class Diagram
 ### Squence Diagram
 
