@@ -40,7 +40,7 @@
   <tr>
     <td rowspan="2">개발 언어</td>
     <td>FRONT</td>
-    <td>html5, css3, javascript, jquery</td>
+    <td>html5, css3, javascript, nexacro</td>
   </tr>
   <tr>
     <td>BACK</td>
