@@ -141,6 +141,7 @@
 
 ## 6. Document
 ### Use Case Diagram
+![캠퍼스매니저_유즈케이스(최종수정)](https://user-images.githubusercontent.com/98931301/172117742-cda21af3-9109-4bc4-9045-2ee34a7d9420.jpg)
 ### Flowchart 
 ### ERD
 ### Class Diagram
