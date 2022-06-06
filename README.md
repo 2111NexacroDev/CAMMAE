@@ -49,7 +49,7 @@
   </tr>
   <tr>
     <td>IDE</td>
-    <td colspan="2">eclipse, sqldeveloper, visual studio code</td>
+    <td colspan="2">eclipse, visual studio code, sqldeveloper</td>
   </tr>
   <tr>
     <td>SERVER</td>
