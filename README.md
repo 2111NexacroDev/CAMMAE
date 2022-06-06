@@ -144,11 +144,11 @@
 ![캠퍼스매니저_유즈케이스(최종수정)](https://user-images.githubusercontent.com/98931301/172117742-cda21af3-9109-4bc4-9045-2ee34a7d9420.jpg)
 
 ### Flowchart
-#####학생
+##### -학생
 ![캠퍼스매니저 플로우차트-취합_학생](https://user-images.githubusercontent.com/98931301/172131890-8b779f5f-7615-4084-8e2c-a0778025e512.jpg)
-#####교수
+##### -교수
 ![캠퍼스매니저 플로우차트-취합_교수](https://user-images.githubusercontent.com/98931301/172132285-49c8374d-af15-4988-b831-0e904640533b.jpg)
-#####관리자
+##### -관리자
 ![캠퍼스매니저 플로우차트-취합_관리자](https://user-images.githubusercontent.com/98931301/172132968-e3a93e84-9445-4797-8faa-38a8b1b42491.jpg)
 
 
