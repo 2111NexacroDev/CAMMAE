@@ -151,7 +151,7 @@
 ### Use Case Diagram
 [CAMPUSMANAGER_UseCase.pdf](https://github.com/1129khNexapring/CAMMAE/files/8843402/CAMPUSMANAGER_UseCase.pdf)
 ![캠퍼스매니저_유즈케이스(최종수정)](https://user-images.githubusercontent.com/98931301/172117742-cda21af3-9109-4bc4-9045-2ee34a7d9420.jpg)
-<hr>
+
 
 ### Flowchart
 [CAMPUSMANAGER_FlowChart.pdf](https://github.com/1129khNexapring/CAMMAE/files/8843386/CAMPUSMANAGER_FlowChart.pdf)
