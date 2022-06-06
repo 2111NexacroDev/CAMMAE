@@ -140,4 +140,9 @@
 
 
 ## 6. Document
+### Use Case Diagram
+### Flowchart 
+### ERD
+### Class Diagram
+### Squence Diagram
 
