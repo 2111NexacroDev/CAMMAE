@@ -32,6 +32,38 @@
 
 ## 3. 사용기술 및 개발환경
 
+<table>
+   <tr>
+    <th colspan="3">사용기술 및 개발환경</th>
+  </tr>
+  
+  <tr>
+    <td rowspan="2">개발 언어</td>
+    <td>FRONT</td>
+    <td>html5, css3, javascript, jquery</td>
+  </tr>
+  <tr>
+    <td>BACK</td>
+    <td> java, Spring/jsp</td>
+  </tr>
+  <tr>
+    <td>IDE</td>
+    <td colspan="2">eclipse, sqldeveloper, visual studio code</td>
+  </tr>
+  <tr>
+    <td>SERVER</td>
+    <td colspan="2">Apache Tomcat 8.5</td>
+  </tr>
+  <tr>
+    <td>DB</td>
+    <td colspan="2">oracle 11g </td>
+  </tr>
+  <tr>
+    <td>협업</td>
+    <td colspan="2">GitHub</td>
+  </tr>
+</table>
+
 ![image](https://user-images.githubusercontent.com/56354642/171804188-6fc0be59-1126-41d3-b134-9cc229ecbfd5.png)
 
 
