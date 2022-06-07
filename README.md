@@ -134,8 +134,7 @@
  
 ## 5. 주요 기능
 #### 1. 메인 페이지
-<img src="https://user-images.githubusercontent.com/98931301/172272754-5c347ca5-d14b-4c6b-b413-5fd7eaa641bb.png" width="50%">
-<img src="https://user-images.githubusercontent.com/98931301/172272813-0ee01434-ae39-495e-8ce1-34e73a206ca0.png" width="50%">
+<img src="https://user-images.githubusercontent.com/98931301/172272754-5c347ca5-d14b-4c6b-b413-5fd7eaa641bb.png" width="50%"><img src="https://user-images.githubusercontent.com/98931301/172272813-0ee01434-ae39-495e-8ce1-34e73a206ca0.png" width="50%">
 
 
 #### 2. 캠퍼스 매니저
