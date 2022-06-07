@@ -18,7 +18,7 @@
 		<result property="marketFileName" column="MARKET_FILENAME"></result>
 		<result property="marketFileReName" column="MARKET_FILERENAME"></result>
 		<result property="marketFilePath" column="MARKET_FILEPATH"></result>
-		
+
 	</resultMap>
 
 	<select id="selectAllMarket" resultMap="marketResultMap">
@@ -50,28 +50,6 @@
 		WHERE MARKET_NO = #{marketNo}
 	</select>
 
-	<!-- <select id="selectSearchMarket" resultMap="marketResultMap">
-		SELECT * FROM MARKET_TBL
-		<if test="searchCondition.toString() == 'writer'">
-			WHERE MARKET_WRITER LIKE '%' || #{searchValue} || '%'
-		</if>
-		<if test="searchCondition.toString() == 'title'">
-			WHERE MARKET_TITLE LIKE '%' || #{searchValue} || '%'
-		</if>
-		<if test="searchCondition.toString() == 'contents'">
-			WHERE MARKET_CONTENT LIKE '%' || #{searchValue} || '%'
-		</if>
-		<if test="searchCondition.toString() == 'all'">
-			WHERE MARKET_CONTENT LIKE '%' || #{searchValue} || '%'
-			OR
-			MARKET_TITLE LIKE '%' || #{searchValue} || '%'
-			OR MARKET_WRITER
-			LIKE
-			'%' || #{searchValue} || '%'
-		</if>
-		ORDER BY MARKET_NO DESC
-	</select> -->
-
 	<!-- 페이지 -->
 	<select id="selectListCount" resultType="_int">
 		SELECT COUNT(*) FROM MARKET_TBL
@@ -100,7 +78,9 @@
 	<insert id="insertMarket">
 		INSERT INTO MARKET_TBL VALUES(SEQ_MARKET_NO.NEXTVAL,
 		#{marketType}, #{marketGoods}, #{marketPrice}, #{marketTitle},
-		#{marketContent},#{marketId}, #{marketWriter}, DEFAULT, DEFAULT,DEFAULT ,#{marketFileName}, #{marketFileReName},#{marketFilePath})
+		#{marketContent},#{marketId}, #{marketWriter}, DEFAULT,
+		DEFAULT,DEFAULT ,#{marketFileName},
+		#{marketFileReName},#{marketFilePath})
 	</insert>
 
 	<update id="updateCount">
@@ -114,7 +94,10 @@
 		MARKET_GOODS = #{marketGoods}, MARKET_PRICE = #{marketPrice},
 		MARKET_TITLE =
 		#{marketTitle}, MARKET_CONTENT = #{marketContent},
-		MARKET_UPDATEDATE = DEFAULT, MARKET_FILENAME = #{marketFileName},MARKET_FILERENAME = #{marketFileReName},MARKET_FILEPATH = #{marketFilePath}  WHERE MARKET_NO =
+		MARKET_UPDATEDATE = DEFAULT, MARKET_FILENAME =
+		#{marketFileName},MARKET_FILERENAME =
+		#{marketFileReName},MARKET_FILEPATH = #{marketFilePath} WHERE
+		MARKET_NO =
 		#{marketNo}
 	</update>
 
@@ -143,7 +126,8 @@
 
 	<insert id="insertReply">
 		INSERT INTO MARKETREPLY_TBL
-		VALUES(SEQ_MARKETREPLY_NO.NEXTVAL, #{marketNo}, #{mReplyId}, #{mReplyWriter},
+		VALUES(SEQ_MARKETREPLY_NO.NEXTVAL, #{marketNo}, #{mReplyId},
+		#{mReplyWriter},
 		#{mReplyContent}, DEFAULT, DEFAULT)
 	</insert>
 
@@ -157,19 +141,5 @@
 		DELETE FROM MARKETREPLY_TBL WHERE
 		MARKET_NO=#{marketNo} AND MARKETREPLY_NO=#{marketReplyNo}
 	</delete>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </mapper>

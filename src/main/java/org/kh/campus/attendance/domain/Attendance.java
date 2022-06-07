@@ -9,14 +9,9 @@ public class Attendance {
 	private String lectureName;
 	private String studentName;
 	private int attNo;
-	
-	public Attendance() {}
 
-
-
-	
-
-
+	public Attendance() {
+	}
 
 	public Attendance(int studentNo, int lectureNo, String attDate, String attStatus, String attObjection,
 			String lectureName, String studentName, int attNo) {
@@ -31,12 +26,6 @@ public class Attendance {
 		this.attNo = attNo;
 	}
 
-
-
-
-
-
-
 	public Attendance(String lectureName) {
 		this.lectureName = lectureName;
 	}
@@ -50,22 +39,16 @@ public class Attendance {
 		this.attStatus = attStatus;
 	}
 
-
-
 	public Attendance(int lectureNo, int studentNo) {
 		this.studentNo = studentNo;
 		this.lectureNo = lectureNo;
 	}
-
-
 
 	public Attendance(int lectureNo, int studentNo, String attStatus) {
 		this.studentNo = studentNo;
 		this.lectureNo = lectureNo;
 		this.attStatus = attStatus;
 	}
-
-
 
 	public int getStudentNo() {
 		return studentNo;
@@ -107,7 +90,6 @@ public class Attendance {
 		this.attObjection = attObjection;
 	}
 
-	
 	public String getLectureName() {
 		return lectureName;
 	}
@@ -116,42 +98,21 @@ public class Attendance {
 		this.lectureName = lectureName;
 	}
 
-	
-	
-	
 	public String getStudentName() {
 		return studentName;
 	}
 
-
-
 	public void setStudentName(String studentName) {
 		this.studentName = studentName;
 	}
-	
-	
-
-
 
 	public int getAttNo() {
 		return attNo;
 	}
 
-
-
-
-
-
-
 	public void setAttNo(int attNo) {
 		this.attNo = attNo;
 	}
-
-
-
-
-
-
 
 	@Override
 	public String toString() {
@@ -160,14 +121,4 @@ public class Attendance {
 				+ ", studentName=" + studentName + ", attNo=" + attNo + "]";
 	}
 
-
-
-
-
-
-
-
-
-	
-	
 }

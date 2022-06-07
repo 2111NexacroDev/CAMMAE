@@ -80,19 +80,6 @@
 		ORDER BY QUESTION_NO DESC
 	</select>
 
-	<!-- <select id="selectSearchQuestion" resultMap="questionResultMap"> SELECT 
-		* FROM QUESTION_TBL <if test="searchCondition.toString() == 'writer'"> WHERE 
-		QUESTION_WRITER LIKE '%' || #{searchValue} || '%' </if> <if test="searchCondition.toString() 
-		== 'title'"> WHERE QUESTION_TITLE LIKE '%' || #{searchValue} || '%' </if> 
-		<if test="searchCondition.toString() == 'contents'"> WHERE QUESTION_CONTENT 
-		LIKE '%' || #{searchValue} || '%' </if> <if test="searchCondition.toString() 
-		== 'all'"> WHERE QUESTION_CONTENT LIKE '%' || #{searchValue} || '%' OR QUESTION_TITLE 
-		LIKE '%' || #{searchValue} || '%' OR QUESTION_WRITER LIKE '%' || #{searchValue} 
-		|| '%' </if> <if test="searchCondition.toString() == 'professor'"> WHERE 
-		PROFESSOR_NAME LIKE '%' || #{searchValue} || '%' </if> <if test="searchCondition.toString() 
-		== 'lecture'"> WHERE LECTURE_NAME LIKE '%' || #{searchValue} || '%' </if> 
-		ORDER BY QUESTION_NO DESC </select> -->
-
 	<select id="selectOneQuestion" resultMap="questionResultMap">
 		SELECT * FROM
 		QUESTION_TBL WHERE QUESTION_NO = #{questionNo}
@@ -195,12 +182,6 @@
 		DELETE FROM QUESTIONREPLY_TBL WHERE
 		QUESTION_NO=#{questionNo} AND QUESTIONREPLY_NO=#{questionReplyNo}
 	</delete>
-
-
-
-
-
-
 
 
 </mapper>

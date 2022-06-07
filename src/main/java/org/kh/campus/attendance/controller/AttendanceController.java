@@ -187,9 +187,6 @@ public class AttendanceController {
 		String strErrorMsg = "START";
 		NexacroResult result = new NexacroResult();
 		
-//		int lectureNo = Integer.parseInt(dsGet(stuProfIssue, 0, "lectureNo"));
-//		int studentNo = Integer.parseInt(dsGet(stuProfIssue, 0, "studentNo"));
-		
 
 		aService.modifyObjectChange(attNo);
 

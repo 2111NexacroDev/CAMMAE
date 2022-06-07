@@ -112,18 +112,6 @@ public class MarketController {
 		return mv;
 	}
 
-	// 게시글 검색
-	/*
-	 * @RequestMapping(value = "/market/search", method = RequestMethod.GET) public
-	 * ModelAndView questionSearchList(ModelAndView mv, @ModelAttribute Search
-	 * search) {
-	 * 
-	 * try { List<Market> searchList = mService.printSearchMarket(search); if
-	 * (!searchList.isEmpty()) { mv.addObject("mList", searchList);
-	 * mv.setViewName("market/marketList"); } } catch (Exception e) {
-	 * System.out.println(e.toString()); } return mv; }
-	 */
-
 	// 게시글 등록 페이지
 	@RequestMapping(value = "/market/registerView")
 	public String marketWirteView(Model model, HttpSession session) {
@@ -169,42 +157,41 @@ public class MarketController {
 
 		return mv;
 	}
-	
-	// 파일저장
-		public HashMap<String, String> saveFile(MultipartFile file, HttpServletRequest request) {
-			String filePath = "";
-			HashMap<String, String> fileMap = new HashMap<String, String>();
-			// 파일 경로 설정
-			String root = request.getSession().getServletContext().getRealPath("resources");
-			// 저장 폴더 선택
-			String savePath = root + "\\marketuploadFiles";
-			// 없으면 생성
-			File folder = new File(savePath);
-			if (!folder.exists())
-				folder.mkdir();
 
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-			// 업로드한 파일명
-			String originalFileName = file.getOriginalFilename();
-			// 파일확장자명
-			String extensionName = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-			// 변경할 파일명, 변경할 때에는 SimpleDataFormt 객체를 이용해서
-			// 업로드 당시 시각을 파일의 이름으로 바꿔줌
-			String renameFileName = sdf.format(new Date(System.currentTimeMillis())) + "." + extensionName;
-			filePath = folder + "\\" + renameFileName;
-			// 두 가지 값을 map에 저장하여 리턴
-			fileMap.put("filePath", filePath);
-			fileMap.put("fileName", renameFileName);
-			// 파일저장
-			try {
-				file.transferTo(new File(filePath));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			// 파일 경로 리턴
-			return fileMap;
+	// 파일저장
+	public HashMap<String, String> saveFile(MultipartFile file, HttpServletRequest request) {
+		String filePath = "";
+		HashMap<String, String> fileMap = new HashMap<String, String>();
+		// 파일 경로 설정
+		String root = request.getSession().getServletContext().getRealPath("resources");
+		// 저장 폴더 선택
+		String savePath = root + "\\marketuploadFiles";
+		// 없으면 생성
+		File folder = new File(savePath);
+		if (!folder.exists())
+			folder.mkdir();
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		// 업로드한 파일명
+		String originalFileName = file.getOriginalFilename();
+		// 파일확장자명
+		String extensionName = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+		// 변경할 파일명, 변경할 때에는 SimpleDataFormt 객체를 이용해서
+		// 업로드 당시 시각을 파일의 이름으로 바꿔줌
+		String renameFileName = sdf.format(new Date(System.currentTimeMillis())) + "." + extensionName;
+		filePath = folder + "\\" + renameFileName;
+		// 두 가지 값을 map에 저장하여 리턴
+		fileMap.put("filePath", filePath);
+		fileMap.put("fileName", renameFileName);
+		// 파일저장
+		try {
+			file.transferTo(new File(filePath));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-	
+		// 파일 경로 리턴
+		return fileMap;
+	}
 
 	// 에디터 이미지 업로드
 	@RequestMapping(value = "/market/imageUpload", method = RequestMethod.POST)
@@ -335,7 +322,9 @@ public class MarketController {
 
 	// 게시글 수정
 	@RequestMapping(value = "/market/update", method = RequestMethod.POST)
-	public ModelAndView marketUpdate(ModelAndView mv, @ModelAttribute Market market, @RequestParam(value = "reloadFile", required = false) MultipartFile reloadFile,HttpServletRequest request) {
+	public ModelAndView marketUpdate(ModelAndView mv, @ModelAttribute Market market,
+			@RequestParam(value = "reloadFile", required = false) MultipartFile reloadFile,
+			HttpServletRequest request) {
 
 		try {
 			if (reloadFile != null && !reloadFile.isEmpty()) {
@@ -363,7 +352,7 @@ public class MarketController {
 		}
 		return mv;
 	}
-	
+
 	public void deleteFile(String filePath, HttpServletRequest request) {
 		// 저장 폴더 선택
 		File deleteFile = new File(filePath);

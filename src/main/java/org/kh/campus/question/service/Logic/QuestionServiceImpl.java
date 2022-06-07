@@ -17,7 +17,7 @@ public class QuestionServiceImpl implements QuestionService {
 
 	@Autowired
 	private SqlSession sqlSession;
-	
+
 	@Autowired
 	private QuestionStore qStore;
 
@@ -26,20 +26,13 @@ public class QuestionServiceImpl implements QuestionService {
 		List<Question> qList = qStore.selectAllQuestion(sqlSession, pi);
 		return qList;
 	}
-	
 
-	/*
-	 * @Override public List<Question> printSearchQuestion(QuestionSearch
-	 * questionSearch) { List<Question> searchList =
-	 * qStore.selectSearchQuestion(questionSearch, sqlSession); return searchList; }
-	 */
-	
 	@Override
 	public Question printOneQuestion(int questionNo) {
 		Question question = qStore.selectOneQuestion(sqlSession, questionNo);
 		return question;
 	}
-	
+
 	@Override
 	public int registerQuestion(Question question) {
 		int result = qStore.insertQuestion(question, sqlSession);
@@ -51,20 +44,19 @@ public class QuestionServiceImpl implements QuestionService {
 		List<Lecture> lList = qStore.selectAllPro(sqlSession);
 		return lList;
 	}
-	
+
 	@Override
 	public List<Lecture> printAllLec(String professorName) {
-		List<Lecture> lList = qStore.selectAllLec(professorName,sqlSession);
+		List<Lecture> lList = qStore.selectAllLec(professorName, sqlSession);
 		return lList;
 	}
 
-	
 	@Override
 	public int modifyQuestion(Question question) {
 		int result = qStore.updateQuestion(question, sqlSession);
 		return result;
 	}
-	
+
 	@Override
 	public int questionCountUpdate(int questionNo) {
 		int result = qStore.updateCount(questionNo, sqlSession);
@@ -76,18 +68,15 @@ public class QuestionServiceImpl implements QuestionService {
 		int result = qStore.deleteQuestion(questionNo, sqlSession);
 		return result;
 	}
-	
-	//페이징
+
+	// 페이징
 	@Override
 	public int getListCount(PageInfo pageInfo) {
 		int totalCount = qStore.selectListCount(sqlSession, pageInfo);
 		return totalCount;
 	}
 
-
-	
-	//댓글
-	
+	// 댓글
 	@Override
 	public List<QuestionReply> printAllQuetionReply(int questionNo) {
 		List<QuestionReply> qReplyList = qStore.selectAllReply(questionNo, sqlSession);
@@ -105,23 +94,11 @@ public class QuestionServiceImpl implements QuestionService {
 		int result = qStore.updateReply(questionReply, sqlSession);
 		return result;
 	}
-	
+
 	@Override
 	public int removeQuestionReply(QuestionReply questionReply) {
 		int result = qStore.deleteReply(questionReply, sqlSession);
 		return result;
 	}
 
-
-
-
-
-
-
-
-
-
-	
-	
-	
 }

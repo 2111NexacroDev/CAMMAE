@@ -18,47 +18,38 @@ public class QuestionStoreLogic implements QuestionStore {
 	public List<Question> selectAllQuestion(SqlSession sqlSession, PageInfo pi) {
 		int limit = pi.getQuestionLimit();
 		int currentPage = pi.getCurrentPage();
-		int offset = (currentPage - 1 ) * limit;
-		
+		int offset = (currentPage - 1) * limit;
+
 		RowBounds rowBounds = new RowBounds(offset, limit);
 
 		List<Question> qList = sqlSession.selectList("QuestionMapper.selectAllQuestion", pi, rowBounds);
 		return qList;
 	}
-	
-	/*
-	 * @Override public List<Question> selectSearchQuestion(QuestionSearch
-	 * questionSearch, SqlSession sqlSession) { List<Question> qList =
-	 * sqlSession.selectList("QuestionMapper.selectSearchQuestion", questionSearch);
-	 * return qList; }
-	 */
-	
+
 	@Override
 	public Question selectOneQuestion(SqlSession sqlSession, int questionNo) {
 		Question question = sqlSession.selectOne("QuestionMapper.selectOneQuestion", questionNo);
 		return question;
 	}
-	
+
 	@Override
 	public int insertQuestion(Question question, SqlSession sqlSession) {
 		int result = sqlSession.insert("QuestionMapper.insertQuestion", question);
 		return result;
 	}
-	
+
 	@Override
 	public List<Lecture> selectAllPro(SqlSession sqlSession) {
 		List<Lecture> lList = sqlSession.selectList("QuestionMapper.selectAllPro");
 		return lList;
 	}
-	
+
 	@Override
 	public List<Lecture> selectAllLec(String professorName, SqlSession sqlSession) {
-		List<Lecture> lList = sqlSession.selectList("QuestionMapper.selectAllLec", professorName );
+		List<Lecture> lList = sqlSession.selectList("QuestionMapper.selectAllLec", professorName);
 		return lList;
 	}
 
-
-	
 	@Override
 	public int updateQuestion(Question question, SqlSession sqlSession) {
 		int result = sqlSession.update("QuestionMapper.updateQuestion", question);
@@ -70,27 +61,28 @@ public class QuestionStoreLogic implements QuestionStore {
 		int result = sqlSession.update("QuestionMapper.updateCount", questionNo);
 		return result;
 	}
-	
+
 	@Override
 	public int deleteQuestion(int questionNo, SqlSession sqlSession) {
 		int result = sqlSession.delete("QuestionMapper.deleteQuestion", questionNo);
 		return result;
 	}
-	//페이징
+
+	// 페이징
 	@Override
 	public int selectListCount(SqlSession sqlSession, PageInfo pageInfo) {
 		int totalCount = sqlSession.selectOne("QuestionMapper.selectListCount", pageInfo);
 		return totalCount;
 	}
-	
-	//댓글
+
+	// 댓글
 
 	@Override
 	public List<QuestionReply> selectAllReply(int questionNo, SqlSession sqlSession) {
 		List<QuestionReply> qReplyList = sqlSession.selectList("QuestionMapper.selectAllReply", questionNo);
 		return qReplyList;
 	}
-	
+
 	@Override
 	public int insertReply(QuestionReply questionReply, SqlSession sqlSession) {
 		int result = sqlSession.insert("QuestionMapper.insertReply", questionReply);
@@ -108,14 +100,5 @@ public class QuestionStoreLogic implements QuestionStore {
 		int result = sqlSession.delete("QuestionMapper.deleteReply", questionReply);
 		return result;
 	}
-
-
-
-
-
-
-
-
-
 
 }

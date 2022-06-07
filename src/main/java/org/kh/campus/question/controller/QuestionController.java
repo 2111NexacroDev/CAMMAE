@@ -69,18 +69,6 @@ public class QuestionController {
 		return mv;
 	}
 
-	// 게시글 검색
-	/*
-	 * @RequestMapping(value = "/question/search", method = RequestMethod.GET)
-	 * public ModelAndView questionSearchList(ModelAndView mv, @ModelAttribute
-	 * QuestionSearch questionSearch) {
-	 * 
-	 * try { List<Question> searchList =
-	 * qService.printSearchQuestion(questionSearch); if (!searchList.isEmpty()) {
-	 * mv.addObject("qList", searchList); mv.setViewName("question/questionList"); }
-	 * } catch (Exception e) { System.out.println(e.toString()); } return mv; }
-	 */
-
 	// 게시판 상세페이지 조회
 	@RequestMapping(value = "/question/detail", method = RequestMethod.GET)
 	public ModelAndView questionDetailView(ModelAndView mv, @RequestParam("questionNo") int questionNo) {
@@ -290,9 +278,6 @@ public class QuestionController {
 	@ResponseBody
 	@RequestMapping(value = "/question/replyAdd", method = RequestMethod.POST)
 	public String questionReplyAdd(@ModelAttribute QuestionReply questionReply) {
-		// 로그인 완성 후 변경 예정
-		// String questionReplyWriter = "교수";
-		// questionReply.setQuestionReplyWriter(questionReplyWriter);
 
 		int result = qService.registerReply(questionReply);
 		if (result > 0) {

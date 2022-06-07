@@ -150,7 +150,5 @@
 	<select id="selectAllManagerInfo" resultMap="managerResultMap">
 		SELECT * FROM MANAGER_TBL WHERE MANAGER_NO = #{managerNo} AND MANAGER_PASSWORD = #{managerPassword}
 	</select>
-
-	
 	
 </mapper>
