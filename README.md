@@ -139,19 +139,60 @@
 #### 2. 로그인
 <img src="https://user-images.githubusercontent.com/98931301/172272813-0ee01434-ae39-495e-8ce1-34e73a206ca0.png" width="50%">
 
+#### 3. 캠퍼스 매니저
+##### -학사정보
+<img src="https://user-images.githubusercontent.com/98931301/172273021-da667a95-312c-4d75-a0e5-cdae9ae40e70.png" width="50%">
 
-#### 2. 캠퍼스 매니저
-##### 학사정보, 성적관리, 졸업관리, 출석관리, 등록금관리, 장학관리  
+##### -성적관리
+<img src="https://user-images.githubusercontent.com/98931301/172273031-cd4f2176-69e6-454d-8455-de140e32c590.png" width="50%">
 
-#### 3. 게시판
-##### 학과게시판, 질의응답게시판, 중고거래게시판  
+##### -졸업관리
+<img src="https://user-images.githubusercontent.com/98931301/172273043-3e0ae6ae-eccd-4ed3-ab35-96a867adf281.png" width="50%">
 
-#### 4. 수강신청
-##### 수강개설, 예비수강신청, 수강신청  
+##### -출석관리
+<img src="https://user-images.githubusercontent.com/98931301/172273055-b447d4a8-36ab-4f0b-8dcc-8d79301a3474.png" width="50%">
 
-#### 5. 취업지원센터
-##### 공지사항, 채용공고, 지원현황, 상담관리, 포트폴리오  
+##### -장학관리  
+<img src="https://user-images.githubusercontent.com/98931301/172273069-bb2398bd-f7d1-42fc-a62d-97860ba79455.png" width="50%"><img src="https://user-images.githubusercontent.com/98931301/172273076-51b2c01d-8821-4477-bb4c-c7091eb5e39a.png" width="50%">
 
+##### -등록금관리
+<img src="https://user-images.githubusercontent.com/98931301/172273083-9f0beeac-3411-4f21-851c-49e95cd214ee.png" width="50%"><img src="https://user-images.githubusercontent.com/98931301/172273093-9f8ebe0f-a330-456a-a4ad-ca2028d699f4.png" width="50%">
+
+#### 4. 게시판
+##### -학과게시판
+<img src="https://user-images.githubusercontent.com/98931301/172272821-823cf203-4646-4203-973e-53d833ef1a9f.png" width="50%"><img src="https://user-images.githubusercontent.com/98931301/172272833-56828f96-f501-4944-88a4-2e6d93d1b1eb.png" width="50%">
+
+##### -질의응답게시판
+<img src="https://user-images.githubusercontent.com/98931301/172272844-cf2447e9-994a-48a4-8c2b-1b9869cef485.png" width="50%"><img src="https://user-images.githubusercontent.com/98931301/172272853-f188fa2d-4cf8-484c-91f4-e321bcbbb22d.png" width="50%">
+
+##### -중고거래게시판  
+<img src="https://user-images.githubusercontent.com/98931301/172272860-d43c068a-4638-41e7-8420-e1969e39f8ab.png" width="50%"><img src="https://user-images.githubusercontent.com/98931301/172272870-c7ed3b86-4cd7-4a14-8971-65e080f78419.png" width="50%">
+
+#### 5. 수강신청
+##### -수강개설
+<img src="https://user-images.githubusercontent.com/98931301/172272881-a5dc6536-45e2-45c4-b154-2e8f621bcbb9.png" width="50%"><img src="https://user-images.githubusercontent.com/98931301/172272886-592df062-5cd5-4c00-b187-237551085cb1.png" width="50%">
+
+##### -예비수강신청
+<img src="https://user-images.githubusercontent.com/98931301/172272892-2b88ce92-505b-45b0-8a21-c73e71b81c30.png" width="50%"><img src="https://user-images.githubusercontent.com/98931301/172272900-783a1468-0832-493e-b1b4-d81afc443284.png" width="50%">
+
+##### -수강신청  
+<img src="https://user-images.githubusercontent.com/98931301/172272907-faba9652-4ba7-4b4a-940e-8369079c9693.png" width="50%"><img src="https://user-images.githubusercontent.com/98931301/172272913-2025ef78-1881-464f-b80a-9dac72a3f21f.png" width="50%">
+
+#### 6. 취업지원센터
+##### -공지사항
+<img src="https://user-images.githubusercontent.com/98931301/172272930-46fee4cd-86aa-4f1a-ba75-b7591a5f1b2f.png" width="50%"><img src="https://user-images.githubusercontent.com/98931301/172272938-53a3f2e9-03c4-4b66-b514-fcc42080df6a.png" width="50%">
+
+##### -채용공고
+<img src="https://user-images.githubusercontent.com/98931301/172272946-0403ab96-aa4e-4542-bc23-b102d026d344.png" width="50%"><img src="https://user-images.githubusercontent.com/98931301/172272962-634b671a-ecf4-4fdf-8562-8ce06c56cc5e.png" width="50%">
+
+##### -지원현황
+<img src="https://user-images.githubusercontent.com/98931301/172272970-2ac8bdbd-1f17-4e5a-9ef0-574cea28990b.png" width="50%">
+
+##### -상담관리
+<img src="https://user-images.githubusercontent.com/98931301/172272987-76e8c136-cef9-4ab9-bd31-dbec3875612c.png" width="50%">
+
+##### -포트폴리오  
+<img src="https://user-images.githubusercontent.com/98931301/172273006-510626c8-25d9-489f-b1ca-d3e653e8a293.png" width="50%">
 
 
 ## 6. Document
