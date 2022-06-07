@@ -18,27 +18,22 @@ public class MarketServiceImpl implements MarketService {
 
 	@Autowired
 	private SqlSession sqlSession;
-	
+
 	@Autowired
 	private MarketStore mStore;
-	
+
 	@Override
 	public List<Market> printAllMarket(PageInfo pi) {
 		List<Market> mList = mStore.selectAllMarket(sqlSession, pi);
 		return mList;
 	}
-	
+
 	@Override
 	public Market printOneMarket(int marketNo) {
 		Market market = mStore.selectOneMarket(sqlSession, marketNo);
 		return market;
 	}
-	
-	/*
-	 * @Override public List<Market> printSearchMarket(Search search) { List<Market>
-	 * mList = mStore.selectSearchMarket(search, sqlSession); return mList; }
-	 */
-	
+
 	@Override
 	public int registerMarket(Market market) {
 		int result = mStore.insertMarket(market, sqlSession);
@@ -50,7 +45,7 @@ public class MarketServiceImpl implements MarketService {
 		int result = mStore.updateCount(marketNo, sqlSession);
 		return result;
 	}
-	
+
 	@Override
 	public int modifyMarket(Market market) {
 		int result = mStore.updateMarket(market, sqlSession);
@@ -62,50 +57,38 @@ public class MarketServiceImpl implements MarketService {
 		int result = mStore.deleteMarket(marketNo, sqlSession);
 		return result;
 	}
-	
-	//페이징
+
+	// 페이징
 	@Override
 	public int getListCount(PageInfo pageInfo) {
 		int totalCount = mStore.selectListCount(sqlSession, pageInfo);
 		return totalCount;
 	}
 
-	
-	
-	
-	//댓글
-	
-		@Override
-		public List<MarketReply> printAllMarketReply(int marketNo) {
-			List<MarketReply> mReplyList = mStore.selectAllReply(marketNo, sqlSession);
-			return mReplyList;
-		}
+	// 댓글
 
-		@Override
-		public int registerReply(MarketReply marketReply) {
-			int result = mStore.insertReply(marketReply, sqlSession);
-			return result;
-		}
+	@Override
+	public List<MarketReply> printAllMarketReply(int marketNo) {
+		List<MarketReply> mReplyList = mStore.selectAllReply(marketNo, sqlSession);
+		return mReplyList;
+	}
 
-		@Override
-		public int modifyMarketReply(MarketReply marketReply) {
-			int result = mStore.updateReply(marketReply, sqlSession);
-			return result;
-		}
-		
-		@Override
-		public int removeMarketReply(MarketReply marketReply) {
-			int result = mStore.deleteReply(marketReply, sqlSession);
-			return result;
-		}
+	@Override
+	public int registerReply(MarketReply marketReply) {
+		int result = mStore.insertReply(marketReply, sqlSession);
+		return result;
+	}
 
+	@Override
+	public int modifyMarketReply(MarketReply marketReply) {
+		int result = mStore.updateReply(marketReply, sqlSession);
+		return result;
+	}
 
-
-
-
-
-
-
-
+	@Override
+	public int removeMarketReply(MarketReply marketReply) {
+		int result = mStore.deleteReply(marketReply, sqlSession);
+		return result;
+	}
 
 }
