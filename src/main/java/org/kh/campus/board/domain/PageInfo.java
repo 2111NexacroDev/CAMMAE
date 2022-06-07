@@ -2,14 +2,14 @@ package org.kh.campus.board.domain;
 
 public class PageInfo {
 	private int currentPage;
-	private int boardLimit; // �� ������ �� �Խñ� ����
-	private int naviLimit;  // �� ������ �� pageNavi ��
-	private int startNavi;  // pageNavi ���۰�
-	private int endNavi;   //pageNavi ����
-	private int totalCount; // ��ü �Խñ� ����
-	private int maxPage;  // �������� ������ ��ȣ
-	private boolean prev;  //����
-	private boolean next; //����
+	private int boardLimit; 
+	private int naviLimit;  
+	private int startNavi;  
+	private int endNavi;   
+	private int totalCount; 
+	private int maxPage; 
+	private boolean prev;  
+	private boolean next; 
 	private String universityCode;
 	private String searchCondition;
 	private String searchValue;

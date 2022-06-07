@@ -4,8 +4,9 @@ public class University {
 	private String universityCode;
 	private String universityName;
 	private String universityCollege;
-	
-	public University() {}
+
+	public University() {
+	}
 
 	public University(String universityCode, String universityName, String universityCollege) {
 		super();
@@ -44,6 +45,4 @@ public class University {
 				+ ", universityCollege=" + universityCollege + "]";
 	}
 
-
-	
 }

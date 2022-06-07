@@ -30,202 +30,196 @@ import com.google.gson.GsonBuilder;
 public class ConsultantController {
 	@Autowired
 	private ConsultantService cService;
-	
-	//학생 상담신청 목록 조회
-	@RequestMapping(value="/consultant/list.kh", method=RequestMethod.GET)
-	public String consultantListView(Model model, HttpServletRequest request, @RequestParam(value = "page", required = false) Integer page) {
+
+	// 학생 상담신청 목록 조회
+	@RequestMapping(value = "/consultant/list.kh", method = RequestMethod.GET)
+	public String consultantListView(Model model, HttpServletRequest request,
+			@RequestParam(value = "page", required = false) Integer page) {
 		try {
-		HttpSession session = request.getSession();
-		int cons_student_no = ((Student)(session.getAttribute("loginUser"))).getStudentNo();
-		int currentPage = (page != null) ? page : 1;
-		int totalCount = cService.getListCount();
-		
-		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
-		List<Consultant> cList = cService.printAllCons(cons_student_no , pi);
-		
-		if(!cList.isEmpty()) {
-			model.addAttribute("cList", cList);
-			model.addAttribute("pi", pi);
-			model.addAttribute("menu", "consultant");
-			model.addAttribute("currentPage", currentPage);
-		
-		}else {
-			model.addAttribute("cList", null);
+			HttpSession session = request.getSession();
+			int cons_student_no = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
+			int currentPage = (page != null) ? page : 1;
+			int totalCount = cService.getListCount();
+
+			PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
+			List<Consultant> cList = cService.printAllCons(cons_student_no, pi);
+
+			if (!cList.isEmpty()) {
+				model.addAttribute("cList", cList);
+				model.addAttribute("pi", pi);
+				model.addAttribute("menu", "consultant");
+				model.addAttribute("currentPage", currentPage);
+
+			} else {
+				model.addAttribute("cList", null);
 			}
 			return "consultant/consultantListView";
-		}catch(Exception e) {
+		} catch (Exception e) {
 			model.addAttribute("msg", "상담조회 실패");
 			return "common/errorPage";
 		}
-		
+
 	}
-	
-	//학생 상담신청 등록
-	@RequestMapping(value="/consultant/writeView.kh", method=RequestMethod.GET)
+
+	// 학생 상담신청 등록
+	@RequestMapping(value = "/consultant/writeView.kh", method = RequestMethod.GET)
 	public String consultantWriteView(Model model) {
 		model.addAttribute("menu", "consultant");
 		return "consultant/consultantWriteForm";
-		
+
 	}
 
-	//학생 상담신청 등록 실행
-	@RequestMapping(value="/consultant/register.kh", method=RequestMethod.POST)
-	public String consultantRegister(Model model, @ModelAttribute Consultant consultant,
-			HttpServletRequest request) {
-		
+	// 학생 상담신청 등록 실행
+	@RequestMapping(value = "/consultant/register.kh", method = RequestMethod.POST)
+	public String consultantRegister(Model model, @ModelAttribute Consultant consultant, HttpServletRequest request) {
+
 		int result = cService.insertCons(consultant);
-	
-		if(result >0) {
+
+		if (result > 0) {
 			HttpSession session = request.getSession();
-			int studentNo = ((Student)(session.getAttribute("loginUser"))).getStudentNo();
-		
-		Consultant studentOne = cService.printOneByStNo(studentNo);
-			if(studentOne != null) {
-			model.addAttribute("consultant", studentOne);
-			return "redirect:/consultant/list.kh";	
-			}else {
+			int studentNo = ((Student) (session.getAttribute("loginUser"))).getStudentNo();
+
+			Consultant studentOne = cService.printOneByStNo(studentNo);
+			if (studentOne != null) {
+				model.addAttribute("consultant", studentOne);
+				return "redirect:/consultant/list.kh";
+			} else {
 				model.addAttribute("msg", "등록실패");
 				return "common/errorPage";
 			}
-		  }else {
+		} else {
 			model.addAttribute("msg", "상담신청 등록 실패");
 			return "common/errorPage";
-	
-		}
-		
-	}
-	
 
-	//학생 상담신청 상세조회
-	@RequestMapping(value="/consultant/Detail.kh", method=RequestMethod.GET)
-	public String consultantDetailView(Model model, @RequestParam("cons_student_no")int cons_student_no, @RequestParam("cons_no") int cons_no) {
+		}
+
+	}
+
+	// 학생 상담신청 상세조회
+	@RequestMapping(value = "/consultant/Detail.kh", method = RequestMethod.GET)
+	public String consultantDetailView(Model model, @RequestParam("cons_student_no") int cons_student_no,
+			@RequestParam("cons_no") int cons_no) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("cons_student_no", cons_student_no);
 		map.put("cons_no", cons_no);
 		Consultant consultant = cService.printDetailCons(map);
-		if(consultant != null) {
+		if (consultant != null) {
 			model.addAttribute("consultant", consultant);
 			model.addAttribute("menu", "consultant");
-			return "consultant/consultantDetailView";		
-		}else {
+			return "consultant/consultantDetailView";
+		} else {
 			model.addAttribute("msg", "상세조회 실패");
 			return "common/errorPage";
 		}
 	}
-	
-	//학생 상담신청 취소
-	@RequestMapping(value="/consultant/cancel.kh", method=RequestMethod.GET)
-	public String consultantCancel(Model model, @RequestParam("cons_no") int cons_no,
-			HttpServletRequest request) {
-		
+
+	// 학생 상담신청 취소
+	@RequestMapping(value = "/consultant/cancel.kh", method = RequestMethod.GET)
+	public String consultantCancel(Model model, @RequestParam("cons_no") int cons_no, HttpServletRequest request) {
+
 		int consultantReply = cService.countReply(cons_no);
-		if(consultantReply < 1) {
+		if (consultantReply < 1) {
 			int result = cService.printByNo(cons_no);
-		 if(result >0) {
-			 
-			 return "redirect:/consultant/list.kh";
-		 }else {
-			 model.addAttribute("msg", "상담취소 실패");
+			if (result > 0) {
+
+				return "redirect:/consultant/list.kh";
+			} else {
+				model.addAttribute("msg", "상담취소 실패");
 				return "common/errorPage";
-		 }
-		 
-		}else {
-			request.setAttribute("message", "상담취소를 할 수 없습니다.."); 
+			}
+
+		} else {
+			request.setAttribute("message", "상담취소를 할 수 없습니다..");
 			request.setAttribute("url", "/consultant/list.kh");
 			return "common/message";
 		}
 	}
-	
-	//관리자 상담신청 목록 조회
-	@RequestMapping(value="/consultant/adlist.kh", method=RequestMethod.GET)
-	public String consultantAdminListView(Model model, @RequestParam(value = "page", required = false) Integer page,  HttpServletRequest request) {
+
+	// 관리자 상담신청 목록 조회
+	@RequestMapping(value = "/consultant/adlist.kh", method = RequestMethod.GET)
+	public String consultantAdminListView(Model model, @RequestParam(value = "page", required = false) Integer page,
+			HttpServletRequest request) {
 		int currentPage = (page != null) ? page : 1;
 		int totalCount = cService.getListCount();
 		HttpSession session = request.getSession();
 		PageInfo pi = Pagination.getPageInfo(currentPage, totalCount);
-		int studentNo = ((Manager)(session.getAttribute("loginManager"))).getManagerNo();
-		List<Consultant>cList = cService.printAdminAllCons(pi, studentNo);
-		if(!cList.isEmpty()) {
+		int studentNo = ((Manager) (session.getAttribute("loginManager"))).getManagerNo();
+		List<Consultant> cList = cService.printAdminAllCons(pi, studentNo);
+		if (!cList.isEmpty()) {
 			model.addAttribute("cList", cList);
 			model.addAttribute("pi", pi);
 			model.addAttribute("menu1", "consultant1");
 			model.addAttribute("currentPage", currentPage);
 			return "consultant/consultantAdminListView";
-		}else {
+		} else {
 			model.addAttribute("msg", "관리자 상담 전체 조회 실패");
 			return "common/errorPage";
 		}
 	}
-	
-	//관리자 상담신청 상세조회
-	@RequestMapping(value="/consultant/adDetail.kh", method=RequestMethod.GET)
-	public String consultantAdminDetailView(Model model,  @RequestParam("consultant_no")Integer consultant_no) {	
+
+	// 관리자 상담신청 상세조회
+	@RequestMapping(value = "/consultant/adDetail.kh", method = RequestMethod.GET)
+	public String consultantAdminDetailView(Model model, @RequestParam("consultant_no") Integer consultant_no) {
 		Consultant consultant = cService.printAdminDetailCons(consultant_no);
-		if(consultant != null) {
+		if (consultant != null) {
 			model.addAttribute("consultant", consultant);
 			model.addAttribute("menu1", "consultant1");
-			return "consultant/consultantAdminDetailView";		
-		}else {
+			return "consultant/consultantAdminDetailView";
+		} else {
 			model.addAttribute("msg", "관리자 상담 상세 조회 실패");
 			return "common/errorPage";
 		}
-		
-		
+
 	}
-	
-	//관리자 상담신청 댓글 등록
+
+	// 관리자 상담신청 댓글 등록
 	@ResponseBody
-	@RequestMapping(value="/consultant/replyAdd.kh", method=RequestMethod.POST) 
+	@RequestMapping(value = "/consultant/replyAdd.kh", method = RequestMethod.POST)
 	public String consultantAdminWriteReply(Model model, @ModelAttribute ConsultantReply consultantreply) {
 		int result = cService.insertAdminConsReply(consultantreply);
-		if(result >0) {
+		if (result > 0) {
 			return "success";
-		}else {
+		} else {
 			return "fail";
 		}
 	}
-	
 
-	//관리자 및 학생 상담신청 댓글 조회
+	// 관리자 및 학생 상담신청 댓글 조회
 	@ResponseBody
-	@RequestMapping(value="/consultant/replyList.kh", method=RequestMethod.GET,
-		produces="application/json;charset=utf-8")
-	public String consultantAdminReplyList(@RequestParam("cons_no")int cons_no) {
-		List<ConsultantReply>crList = cService.printAllAdminReply(cons_no);
-		if(!crList.isEmpty()) {
+	@RequestMapping(value = "/consultant/replyList.kh", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+	public String consultantAdminReplyList(@RequestParam("cons_no") int cons_no) {
+		List<ConsultantReply> crList = cService.printAllAdminReply(cons_no);
+		if (!crList.isEmpty()) {
 			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			return gson.toJson(crList);
 		}
 		return null;
 	}
-	
-	//관리자 상담현황 수정
+
+	// 관리자 상담현황 수정
 	@ResponseBody
-	@RequestMapping(value="/consultant/statusChange.kh" , method=RequestMethod.POST)
-	 	public String consultantStatusUpdate(@RequestParam("cons_no") int cons_no, Model model) {
+	@RequestMapping(value = "/consultant/statusChange.kh", method = RequestMethod.POST)
+	public String consultantStatusUpdate(@RequestParam("cons_no") int cons_no, Model model) {
 		int result = cService.modifyStatus(cons_no);
-		if(result >0) {
+		if (result > 0) {
 			return "success";
-		}else {
-			
+		} else {
+
 			return "fail";
 		}
 	}
-	
-	//상담사  정보 가져오기
-		@ResponseBody
-		@RequestMapping(value = "/consultant/JoinViewCounselor.kh", method=RequestMethod.GET, produces="application/json;charset=utf-8")
-		public String consJoinViewCounselor(Model model) throws UnsupportedEncodingException {
-			List<Manager> mList = cService.printAllManager();
-			if(!mList.isEmpty()) {
-				
-				
-				return new Gson().toJson(mList);
-			}
-			
-			return null;
+
+	// 상담사 정보 가져오기
+	@ResponseBody
+	@RequestMapping(value = "/consultant/JoinViewCounselor.kh", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+	public String consJoinViewCounselor(Model model) throws UnsupportedEncodingException {
+		List<Manager> mList = cService.printAllManager();
+		if (!mList.isEmpty()) {
+
+			return new Gson().toJson(mList);
 		}
-		
-		
-		
+
+		return null;
+	}
+
 }
