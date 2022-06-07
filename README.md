@@ -150,17 +150,10 @@
 ## 6. Document
 ### Use Case Diagram
 [CAMPUSMANAGER_UseCase.pdf](https://github.com/1129khNexapring/CAMMAE/files/8843402/CAMPUSMANAGER_UseCase.pdf)
-![캠퍼스매니저_유즈케이스(최종수정)](https://user-images.githubusercontent.com/98931301/172117742-cda21af3-9109-4bc4-9045-2ee34a7d9420.jpg)
 
 
 ### Flowchart
 [CAMPUSMANAGER_FlowChart.pdf](https://github.com/1129khNexapring/CAMMAE/files/8843386/CAMPUSMANAGER_FlowChart.pdf)
-##### -학생
-![캠퍼스매니저 플로우차트-취합_학생](https://user-images.githubusercontent.com/98931301/172131890-8b779f5f-7615-4084-8e2c-a0778025e512.jpg)
-##### -교수
-![캠퍼스매니저 플로우차트-취합_교수](https://user-images.githubusercontent.com/98931301/172132285-49c8374d-af15-4988-b831-0e904640533b.jpg)
-##### -관리자
-![캠퍼스매니저 플로우차트-취합_관리자](https://user-images.githubusercontent.com/98931301/172132968-e3a93e84-9445-4797-8faa-38a8b1b42491.jpg)
 
 
 ### WireFrame
@@ -169,7 +162,6 @@
 
 ### ERD
 [CAMPUSMANAGR_ERD.pdf](https://github.com/1129khNexapring/CAMMAE/files/8843328/CAMPUSMANAGR_ERD.pdf)
-![erd전체](https://user-images.githubusercontent.com/98931301/172133466-9c3833d3-805c-45b5-9b04-99bb0b599c5c.PNG)
 
 
 ### Class Diagram
