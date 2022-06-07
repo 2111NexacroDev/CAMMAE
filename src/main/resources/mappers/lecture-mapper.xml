@@ -3,11 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="LectureMapper">
-	<resultMap type="Lecture"  id="lectureResultMap">
+	<resultMap type="Lecture" id="lectureResultMap">
 		<id property="lectureNo" column="LECTURE_NO" />
-		<result property ="professorNo" column= "PROFESSOR_NO" />
-		<result property="universityCollege" column="UNIVERSITY_COLLEGE" />
-		<result property="lectureDepartment" column="LECTURE_DEPARTMENT" />
+		<result property="professorNo" column="PROFESSOR_NO" />
+		<result property="universityCollege"
+			column="UNIVERSITY_COLLEGE" />
+		<result property="lectureDepartment"
+			column="LECTURE_DEPARTMENT" />
 		<result property="lectureName" column="LECTURE_NAME" />
 		<result property="professorName" column="PROFESSOR_NAME" />
 		<result property="lectureDivision" column="LECTURE_DIVISION" />
@@ -19,121 +21,136 @@
 		<result property="lectureTerm" column="LECTURE_TERM" />
 		<result property="lectureStart" column="LECTURE_START" />
 		<result property="lectureEnd" column="LECTURE_END" />
-		
+
 	</resultMap>
-	
-	<select id="selectAllLecture" resultMap="lectureResultMap" parameterType="String">
-	SELECT * FROM LECTURE_TBL
- 		<!-- <if test="lectureDepartment!=null">
- 			WHERE LECTURE_DEPARTMENT = #{lectureDepartment}
- 		</if> -->
+
+	<select id="selectAllLecture" resultMap="lectureResultMap"
+		parameterType="String">
+		SELECT * FROM LECTURE_TBL
+		<!-- <if test="lectureDepartment!=null"> WHERE LECTURE_DEPARTMENT = #{lectureDepartment} 
+			</if> -->
 	</select>
-	
-	<select id="selectAllLecture2" resultMap="lectureResultMap" parameterType="String">
-	SELECT * FROM LECTURE_TBL
- 			WHERE LECTURE_DEPARTMENT = #{lectureDepartment}  
+
+	<select id="selectAllLecture2" resultMap="lectureResultMap"
+		parameterType="String">
+		SELECT * FROM LECTURE_TBL
+		WHERE LECTURE_DEPARTMENT =
+		#{lectureDepartment}
 	</select>
-	
-	<select id="selectOneLecture" resultMap= "lectureResultMap">
-	SELECT * FROM LECTURE_TBL WHERE LECTURE_NO = #{lectureNo}
+
+	<select id="selectOneLecture" resultMap="lectureResultMap">
+		SELECT * FROM
+		LECTURE_TBL WHERE LECTURE_NO = #{lectureNo}
 	</select>
-	
-	<insert id="insertLecture"  parameterType="Lecture">
-	INSERT INTO LECTURE_TBL VALUES(SEQ_LEC_NO.NEXTVAL
-	, #{professorNo}
-	, #{universityCollege}
-	, #{lectureDepartment}
-	, #{lectureName}
-	, #{professorName}
-	, #{lectureDivision}
-	, #{lectureGrade}
-	, #{lectureRoom}
-	, #{lecturePeople}
-	, #{lectureStartTime}
-	, #{lectureEndTime}
-	, #{lectureTerm}
-	, SYSDATE
-	, SYSDATE
-	)
+
+	<insert id="insertLecture" parameterType="Lecture">
+		INSERT INTO LECTURE_TBL
+		VALUES(SEQ_LEC_NO.NEXTVAL
+		, #{professorNo}
+		, #{universityCollege}
+		,
+		#{lectureDepartment}
+		, #{lectureName}
+		, #{professorName}
+		,
+		#{lectureDivision}
+		, #{lectureGrade}
+		, #{lectureRoom}
+		, #{lecturePeople}
+		, #{lectureStartTime}
+		, #{lectureEndTime}
+		, #{lectureTerm}
+		, SYSDATE
+		,
+		SYSDATE
+		)
 	</insert>
-			
+
 	<update id="updateLecture">
-		UPDATE LECTURE_TBL 
-		SET 
+		UPDATE LECTURE_TBL
+		SET
 		LECTURE_NAME = #{lectureName}
 		,LECTURE_DEPARTMENT = #{lectureDepartment}
-		, PROFESSOR_NO = #{professorNo}
+		,
+		PROFESSOR_NO =
+		#{professorNo}
 		, PROFESSOR_NAME = #{professorName}
-		, LECTURE_DIVISION = #{lectureDivision}
+		,
+		LECTURE_DIVISION =
+		#{lectureDivision}
 		, LECTURE_GRADE = #{lectureGrade}
-		, LECTURE_ROOM = #{lectureRoom}
-		, LECTURE_PEOPLE =  #{lecturePeople}
-		, LECTURE_START_TIME  = #{lectureStartTime} 
-		, LECTURE_ENDTIME  = #{lectureEndTime} 
-		, LECTURE_TERM  = #{lectureTerm} 
-		WHERE LECTURE_NO = #{lectureNo} 
+		, LECTURE_ROOM =
+		#{lectureRoom}
+		, LECTURE_PEOPLE = #{lecturePeople}
+		,
+		LECTURE_START_TIME =
+		#{lectureStartTime}
+		, LECTURE_ENDTIME = #{lectureEndTime}
+		, LECTURE_TERM
+		= #{lectureTerm}
+		WHERE LECTURE_NO = #{lectureNo}
 	</update>
-	
+
 	<delete id="deleteLecture">
-		DELETE FROM LECTURE_TBL WHERE LECTURE_NO = #{lectureNo}
+		DELETE FROM LECTURE_TBL WHERE LECTURE_NO =
+		#{lectureNo}
 	</delete>
-	
-	<!-- <select id="selectAllProName" resultMap="lectureResultMap">
-		SELECT DISTINCT
-		PROFESSOR_NAME FROM LECTURE_TBL ORDER BY PROFESSOR_NAME ASC
-	</select> -->
-	
-	
+
 	<resultMap type="Professor" id="professorResultMap">
-		<id property="professorNo" column="PROFESSOR_NO"/>
-		<result property="departmentName" column="DEPARTMENT_NAME"/>
-		<result property="professorName" column="PROFESSOR_NAME"/>
-		<result property="professorBirth" column="PROFESSOR_BIRTH"/>
-		<result property="professorAddress" column="PROFESSOR_ADDRESS"/>
-		<result property="professorPhonenumber" column="PROFESSOR_PHONENUMBER"/>
-		<result property="professorEmail" column="PROFESSOR_EMAIL"/>
-		<result property="professorPassword" column="PROFESSOR_PASSWORD"/>
-		<result property="universityCode" column="UNIVERSITY_CODE"/>
-		<result property="chk" column="CHK"/>
+		<id property="professorNo" column="PROFESSOR_NO" />
+		<result property="departmentName" column="DEPARTMENT_NAME" />
+		<result property="professorName" column="PROFESSOR_NAME" />
+		<result property="professorBirth" column="PROFESSOR_BIRTH" />
+		<result property="professorAddress" column="PROFESSOR_ADDRESS" />
+		<result property="professorPhonenumber"
+			column="PROFESSOR_PHONENUMBER" />
+		<result property="professorEmail" column="PROFESSOR_EMAIL" />
+		<result property="professorPassword"
+			column="PROFESSOR_PASSWORD" />
+		<result property="universityCode" column="UNIVERSITY_CODE" />
+		<result property="chk" column="CHK" />
 	</resultMap>
-	
+
 	<select id="selectAllProName" resultMap="professorResultMap">
-		SELECT * FROM PROFESSOR_TBL
+		SELECT * FROM
+		PROFESSOR_TBL
 	</select>
 
 	<resultMap type="university" id="universityResultMap">
-		<id property="universityCode"        column="UNIVERSITY_CODE" />
-		<result property="universityName"    column="UNIVERSITY_NAME" />
-		<result property="universityCollege" column="UNIVERSITY_COLLEGE" />
+		<id property="universityCode" column="UNIVERSITY_CODE" />
+		<result property="universityName" column="UNIVERSITY_NAME" />
+		<result property="universityCollege"
+			column="UNIVERSITY_COLLEGE" />
 	</resultMap>
-	
+
 	<select id="selectAllDept" resultMap="universityResultMap">
-		SELECT * FROM UNIVERSITY_TBL
+		SELECT * FROM
+		UNIVERSITY_TBL
 	</select>
-	
-	
+
+
 	<select id="selectAllUniName" resultMap="professorResultMap">
-		SELECT DISTINCT DEPARTMENT_NAME FROM PROFESSOR_TBL ORDER BY DEPARTMENT_NAME ASC
+		SELECT DISTINCT
+		DEPARTMENT_NAME FROM PROFESSOR_TBL ORDER BY DEPARTMENT_NAME ASC
 	</select>
-	
+
 	<select id="selectProName" resultMap="professorResultMap">
-		SELECT DISTINCT PROFESSOR_NO ,PROFESSOR_NAME FROM PROFESSOR_TBL WHERE DEPARTMENT_NAME=#{departmentName} ORDER BY PROFESSOR_NAME ASC
+		SELECT DISTINCT
+		PROFESSOR_NO ,PROFESSOR_NAME FROM PROFESSOR_TBL WHERE
+		DEPARTMENT_NAME=#{departmentName} ORDER BY PROFESSOR_NAME ASC
 	</select>
-	
+
 	<select id="selectProNo" resultMap="professorResultMap">
-		SELECT DISTINCT PROFESSOR_NO FROM PROFESSOR_TBL WHERE PROFESSOR_NAME=#{professorName}
+		SELECT DISTINCT PROFESSOR_NO
+		FROM PROFESSOR_TBL WHERE PROFESSOR_NAME=#{professorName}
 	</select>
-	
+
 	<!-- 수강기간 설정 updateLecturePeriod -->
 	<update id="updateLecturePeriod">
-		UPDATE LECTURE_TBL 
-		SET 
-	<!-- 	LECTURE_START  = TO_CHAR(#{lectureStart},'YYYY-MM-DDTHH24:MI')
-		, LECTURE_END  = TO_CHAR(#{lectureEnd}, 'YYYY-MM-DDTHH24:MI') -->
-		<!-- 	LECTURE_START  = #{lectureStart}
-		, LECTURE_END  = #{lectureEnd} -->
-			LECTURE_START  = #{lectureStart}
-		, LECTURE_END  = #{lectureEnd}
+		UPDATE LECTURE_TBL
+		SET
+		LECTURE_START = #{lectureStart}
+		, LECTURE_END = #{lectureEnd}
 	</update>
-	
+
 </mapper>

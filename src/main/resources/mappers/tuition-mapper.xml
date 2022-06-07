@@ -21,45 +21,49 @@
 		<result property="professorName" column="PROFESSOR_NAME" />
 		<result property="universityCode" column="UNIVERSITY_CODE" />
 	</resultMap>
-	
+
 	<!-- JOIN해서 가져오는 resultMap -->
 	<resultMap type="Tuition" id="tuitionResultMap">
-	  	<id property="tuitionNo" column="TUITION_NO"></id>
-	  	<result property="studentNo" column="STUDENT_NO"/>
-	  	<result property="tutionYear" column="TUITION_YEYAR"/>
-	  	<result property="tuitionTerm" column="TUITION_TERM"/>
-	  	<result property="studentName" column="STUDENT_NAME"/>
-	  	<result property="tuitionFee" column="TUITION_FEE"/>
-	  	<result property="tuitionScholarship" column="SCHOLARSHIP_STATUS"/>
-	  	<result property="tuitionTotal" column="TUITION_TOTAL"/>
-	  	<result property="tuitionStatus" column="TUITION_STATUS"/>
-	  	<result property="chk" column="CHK"/>
-	  	<result property="departmentName" column="DEPARTMENT_NAME"/>
-	  	<result property="studentGrade" column="STUDENT_GRADE"/>		
-  	</resultMap>
-  	
-  	<!-- 등록금 테이블에서 가져오는 resultMap -->
-  	<resultMap type="Tuition" id="tuitionResultMap2">
-	  	<id property="tuitionNo" column="TUITION_NO"></id>
-	  	<result property="studentNo" column="STUDENT_NO"/>
-	  	<result property="tutionYear" column="TUITION_YEYAR"/>
-	  	<result property="tuitionTerm" column="TUITION_TERM"/>
-	  	<result property="studentName" column="STUDENT_NAME"/>
-	  	<result property="tuitionFee" column="TUITION_FEE"/>
-	  	<result property="tuitionScholarship" column="TUITION_SCHOLARSHIP"/>
-	  	<result property="tuitionTotal" column="TUITION_TOTAL"/>
-	  	<result property="tuitionStatus" column="TUITION_STATUS"/>
-	  	<result property="chk" column="CHK"/>
-	  	<result property="departmentName" column="DEPARTMENT_NAME"/>
-	  	<result property="studentGrade" column="STUDENT_GRADE"/>		
-  	</resultMap>
-  	
-  	
-  <!-- 	관리자 -->
-  	
-  	<select id="selectAll" resultMap="tuitionResultMap2" parameterType="hashmap">
-  		SELECT * FROM TUITION_TBL T
-		JOIN STUDENT_TBL S ON (T.STUDENT_NO = S.STUDENT_NO 
+		<id property="tuitionNo" column="TUITION_NO"></id>
+		<result property="studentNo" column="STUDENT_NO" />
+		<result property="tutionYear" column="TUITION_YEYAR" />
+		<result property="tuitionTerm" column="TUITION_TERM" />
+		<result property="studentName" column="STUDENT_NAME" />
+		<result property="tuitionFee" column="TUITION_FEE" />
+		<result property="tuitionScholarship"
+			column="SCHOLARSHIP_STATUS" />
+		<result property="tuitionTotal" column="TUITION_TOTAL" />
+		<result property="tuitionStatus" column="TUITION_STATUS" />
+		<result property="chk" column="CHK" />
+		<result property="departmentName" column="DEPARTMENT_NAME" />
+		<result property="studentGrade" column="STUDENT_GRADE" />
+	</resultMap>
+
+	<!-- 등록금 테이블에서 가져오는 resultMap -->
+	<resultMap type="Tuition" id="tuitionResultMap2">
+		<id property="tuitionNo" column="TUITION_NO"></id>
+		<result property="studentNo" column="STUDENT_NO" />
+		<result property="tutionYear" column="TUITION_YEYAR" />
+		<result property="tuitionTerm" column="TUITION_TERM" />
+		<result property="studentName" column="STUDENT_NAME" />
+		<result property="tuitionFee" column="TUITION_FEE" />
+		<result property="tuitionScholarship"
+			column="TUITION_SCHOLARSHIP" />
+		<result property="tuitionTotal" column="TUITION_TOTAL" />
+		<result property="tuitionStatus" column="TUITION_STATUS" />
+		<result property="chk" column="CHK" />
+		<result property="departmentName" column="DEPARTMENT_NAME" />
+		<result property="studentGrade" column="STUDENT_GRADE" />
+	</resultMap>
+
+
+	<!-- 관리자 -->
+
+	<select id="selectAll" resultMap="tuitionResultMap2"
+		parameterType="hashmap">
+		SELECT * FROM TUITION_TBL T
+		JOIN STUDENT_TBL S ON (T.STUDENT_NO =
+		S.STUDENT_NO
 		<if test='!year.equals("all")'>
 			AND T.TUITION_YEYAR = #{year}
 		</if>
@@ -70,23 +74,25 @@
 			AND S.UNIVERSITY_CODE= #{uniCode}
 		</if>
 		) ORDER BY S.STUDENT_GRADE, TUITION_TERM, STUDENT_NAME
-  	</select>
-  	
+	</select>
+
 	<select id="selectTuition" resultMap="tuitionResultMap">
 		SELECT * FROM STUDENT_TBL S
 		LEFT JOIN SCHOLARSHIP_TBL A ON
 		(S.STUDENT_NO=A.SCHOLARSHIP_STU_NO)
 		WHERE S.UNIVERSITY_CODE = #{uniCode}
-		ORDER BY S.STUDENT_GRADE, SCHOLARSHIP_TEAM, STUDENT_NAME
+		ORDER BY S.STUDENT_GRADE,
+		SCHOLARSHIP_TEAM, STUDENT_NAME
 	</select>
-	
+
 	<select id="selectCount" resultType="_int">
-		SELECT COUNT(*) FROM TUITION_TBL WHERE 
-		STUDENT_NO = #{studentNo} 
+		SELECT COUNT(*) FROM
+		TUITION_TBL WHERE
+		STUDENT_NO = #{studentNo}
 		AND TUITION_YEYAR = #{tutionYear}
 		AND TUITION_TERM = #{tuitionTerm}
 	</select>
-	
+
 	<insert id="insertTuition">
 		INSERT INTO TUITION_TBL VALUES(
 		SEQ_TUITION_NO.NEXTVAL
@@ -100,13 +106,14 @@
 		,DEFAULT
 		,#{studentGrade})
 	</insert>
-	
+
 	<update id="updateSave">
 		UPDATE TUITION_TBL SET
 		TUITION_FEE = #{tuitionFee}
 		,TUITION_TERM = #{tuitionTerm}
 		,TUITION_TOTAL = #{tuitionTotal}
-		, TUITION_STATUS = #{tuitionStatus}
+		,
+		TUITION_STATUS = #{tuitionStatus}
 		WHERE TUITION_NO = #{tuitionNo}
 
 	</update>
@@ -114,10 +121,12 @@
 
 
 	<!-- 학생 -->
-	
-	<select id="selectOne" resultMap="tuitionResultMap2" parameterType="hashmap">
+
+	<select id="selectOne" resultMap="tuitionResultMap2"
+		parameterType="hashmap">
 		SELECT * FROM TUITION_TBL T
-		JOIN STUDENT_TBL S ON (T.STUDENT_NO = S.STUDENT_NO AND T.STUDENT_NO = #{studentNo}
+		JOIN STUDENT_TBL S ON (T.STUDENT_NO =
+		S.STUDENT_NO AND T.STUDENT_NO = #{studentNo}
 		<if test='!year.equals("all")'>
 			AND T.STUDENT_GRADE = #{year}
 		</if>
@@ -126,18 +135,6 @@
 		</if>
 		)
 	</select>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
 </mapper>
