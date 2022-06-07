@@ -55,7 +55,7 @@
 					</c:if>
 				</c:if>
 				<li><a
-					href="javascript:void(window.open('/home.kh', '캠퍼스매니저','width=1000px, height=500px'))"
+					href="javascript:void(window.open('/home.kh', '캠퍼스매니저','width=1150px, height=700px'))"
 					class="btn_lnb_dep1">캠퍼스매니저</a></li>
 				<li><a href="/notice/list.kh" class="btn_lnb_dep1">취업지원센터</a></li>
 			</ul>
