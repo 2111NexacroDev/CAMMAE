@@ -16,10 +16,10 @@ import org.springframework.stereotype.Repository;
 public class ConsultantStoreLogic implements ConsultantStore {
 
 	@Override
-	public List<Consultant> selectAllCons(SqlSession sqlSession,  int cons_student_no, PageInfo pi) {
+	public List<Consultant> selectAllCons(SqlSession sqlSession, int cons_student_no, PageInfo pi) {
 		int limit = pi.getConsultantLimit();
 		int currentPage = pi.getCurrentPage();
-		int offset = (currentPage -1) * limit ;
+		int offset = (currentPage - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		List<Consultant> cList = sqlSession.selectList("ConsultantMapper.selectAllCons", cons_student_no, rowBounds);
 		return cList;
@@ -32,7 +32,7 @@ public class ConsultantStoreLogic implements ConsultantStore {
 	}
 
 	@Override
-	public Consultant selectDetailCons(SqlSession sqlSession, HashMap<String, Integer>map) {
+	public Consultant selectDetailCons(SqlSession sqlSession, HashMap<String, Integer> map) {
 		Consultant consultant = sqlSession.selectOne("ConsultantMapper.selectDetailCons", map);
 		return consultant;
 	}
@@ -41,9 +41,9 @@ public class ConsultantStoreLogic implements ConsultantStore {
 	public List<Consultant> selectAdminAllCons(SqlSession sqlSession, PageInfo pi, int studentNo) {
 		int limit = pi.getConsultantLimit();
 		int currentPage = pi.getCurrentPage();
-		int offset = (currentPage -1) * limit ;
+		int offset = (currentPage - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		List<Consultant> cList = sqlSession.selectList("ConsultantMapper.selectAdminAllCons" ,studentNo, rowBounds);
+		List<Consultant> cList = sqlSession.selectList("ConsultantMapper.selectAdminAllCons", studentNo, rowBounds);
 		return cList;
 	}
 
@@ -67,7 +67,7 @@ public class ConsultantStoreLogic implements ConsultantStore {
 
 	@Override
 	public List<ConsultantReply> selectAllAdminReply(SqlSession sqlSession, int cons_no) {
-		List<ConsultantReply>crList = sqlSession.selectList("ConsultantMapper.selectAllAdminReply", cons_no);
+		List<ConsultantReply> crList = sqlSession.selectList("ConsultantMapper.selectAllAdminReply", cons_no);
 		return crList;
 	}
 
@@ -85,7 +85,7 @@ public class ConsultantStoreLogic implements ConsultantStore {
 
 	@Override
 	public List<Manager> selectAllManager(SqlSession sqlSession) {
-		List<Manager>mList = sqlSession.selectList("ConsultantMapper.selectAllManager");
+		List<Manager> mList = sqlSession.selectList("ConsultantMapper.selectAllManager");
 		return mList;
 	}
 
@@ -101,5 +101,4 @@ public class ConsultantStoreLogic implements ConsultantStore {
 		return result;
 	}
 
-	
 }

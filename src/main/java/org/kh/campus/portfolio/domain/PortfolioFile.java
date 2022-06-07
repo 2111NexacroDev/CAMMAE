@@ -6,8 +6,9 @@ public class PortfolioFile {
 	private String port_fileName;
 	private String port_fileRename;
 	private String port_filePath;
-	
-	public PortfolioFile() {}
+
+	public PortfolioFile() {
+	}
 
 	public int getPort_fileNo() {
 		return port_fileNo;
@@ -54,7 +55,5 @@ public class PortfolioFile {
 		return "PortfolioFile [port_fileNo=" + port_fileNo + ", port_no=" + port_no + ", port_fileName=" + port_fileName
 				+ ", port_fileRename=" + port_fileRename + ", port_filePath=" + port_filePath + "]";
 	}
-	
-	
 
 }

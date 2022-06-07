@@ -12,14 +12,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PortfolioServiceImpl implements PortfolioService {
-	
+
 	@Autowired
 	private PortfolioStore pStore;
 	@Autowired
 	private SqlSession sqlSession;
+
 	@Override
 	public List<Portfolio> printAllPort(int studentNo, PageInfo pi) {
-		List<Portfolio>pList = pStore.selectAllPort(sqlSession, studentNo, pi);
+		List<Portfolio> pList = pStore.selectAllPort(sqlSession, studentNo, pi);
 		return pList;
 	}
 
@@ -28,7 +29,6 @@ public class PortfolioServiceImpl implements PortfolioService {
 		int result = pStore.insertPort(sqlSession, portfolio);
 		return result;
 	}
-
 
 	@Override
 	public List<Portfolio> printAdminAllPort(PageInfo pi) {
@@ -46,7 +46,7 @@ public class PortfolioServiceImpl implements PortfolioService {
 	public int getListCount() {
 		int totalCount = pStore.selectListCount(sqlSession);
 		return totalCount;
-		
+
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class PortfolioServiceImpl implements PortfolioService {
 
 	@Override
 	public int modifyPortfolio(Portfolio portfolio) {
-		int result = pStore.updatePortfolio(sqlSession,portfolio);
+		int result = pStore.updatePortfolio(sqlSession, portfolio);
 		return result;
 	}
 
@@ -78,7 +78,5 @@ public class PortfolioServiceImpl implements PortfolioService {
 		List<Portfolio> pList = pStore.selectBySt(sqlSession, port_student_no);
 		return pList;
 	}
-
-
 
 }

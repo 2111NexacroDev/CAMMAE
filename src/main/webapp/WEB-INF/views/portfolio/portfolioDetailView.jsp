@@ -9,7 +9,6 @@
 <link rel="stylesheet" href="/resources/contents.css">
 <link rel="stylesheet" href="/resources/common.css">
 <style>
-
 table.type05 {
 	border-bottom: 1.5px solid rgb(30, 57, 50);
 	border-top: 1.5px solid rgb(30, 57, 50);
@@ -30,28 +29,29 @@ table.type05 thead th {
 	color: black;
 }
 
-.ta_l{
+.ta_l {
 	width: 15%;
 	background: rgb(231, 232, 226);
 	text-align: center;
 	font-weight: bold;
 	border-bottom: 1px solid #CCC;
 }
+
 td {
 	padding: 7px;
 	border-bottom: 1px solid #CCC;
 }
 
-.list_btn{
-
+.list_btn {
 	text-align: center;
 }
-.list_btn1{
 
+.list_btn1 {
 	float: right;
 }
-#btn{
-	cursor:pointer;
+
+#btn {
+	cursor: pointer;
 }
 </style>
 </head>
@@ -61,87 +61,89 @@ td {
 	</c:if>
 
 	<c:if test="${not empty sessionScope.loginUser }">
-	<!-- header  -->
-	<jsp:include page="../common/menuBar.jsp"></jsp:include>
-	<!-- contents -->
-	<div id="content">
-		<div id="left">
-			<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
-		</div>
-		<!-- contents-main -->
-		<div id="center">
-			<div class="c-title">
-				<div class="b-title">
-					<h2>포트폴리오</h2>
-				</div>	
-			<div class="btn_1">
-				<a id="list_l"
-					href="/portfolio/updateView.kh?port_no=${portfolio.port_no}"><button  id="btn" class="btn">수정</button></a>
-				<a id="list_l"
-					href="/portfolio/delete.kh?port_no=${portfolio.port_no}"><button id="btn" class="btn">삭제</button></a>
-				<a href="/portfolio/listView.kh" id="list_l"><button id="btn" class="btn">목록</button></a>		
-			</div>		
+		<!-- header  -->
+		<jsp:include page="../common/menuBar.jsp"></jsp:include>
+		<!-- contents -->
+		<div id="content">
+			<div id="left">
+				<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
 			</div>
-		<div class="bbs">
-			
-			<input type="hidden" name="port_no" value="${portfolio.port_no}" />
-
-		<div class="tb1">
-					<table class="type05">
-						<colgroup>
-							<col style="width:180px;">
-							<col>
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="ta_l">제목</th>
-								<td>${portfolio.port_title}</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">이름</th>
-								<td >${portfolio.port_name}</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">학번</th>
-								<td>${portfolio.port_student_no}</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">학과명</th>
-								<td>${portfolio.port_college}</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">단과대학</th>
-								<td>${portfolio.port_university_code}</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">전화번호</th>
-								<td>${portfolio.port_student_number}</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">자격증 첨부</th>
-								<td>${portfolio.port_license}</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">수상이력 첨부</th>
-								<td>${portfolio.port_award_history}</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ta_l">작성날짜</th>
-								<td>${portfolio.port_writerDate}</td>
-							</tr>
-							
-							<tr>
-								<th scope="row" class="ta_l">내용</th>
-								<td>${portfolio.port_content}</td>
-							</tr>
-						</tbody>
-					</table>
-					<br>
+			<!-- contents-main -->
+			<div id="center">
+				<div class="c-title">
+					<div class="b-title">
+						<h2>포트폴리오</h2>
+					</div>
+					<div class="btn_1">
+						<a id="list_l"
+							href="/portfolio/updateView.kh?port_no=${portfolio.port_no}"><button
+								id="btn" class="btn">수정</button></a> <a id="list_l"
+							href="/portfolio/delete.kh?port_no=${portfolio.port_no}"><button
+								id="btn" class="btn">삭제</button></a> <a
+							href="/portfolio/listView.kh" id="list_l"><button id="btn"
+								class="btn">목록</button></a>
+					</div>
 				</div>
+				<div class="bbs">
+
+					<input type="hidden" name="port_no" value="${portfolio.port_no}" />
+
+					<div class="tb1">
+						<table class="type05">
+							<colgroup>
+								<col style="width: 180px;">
+								<col>
+							</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row" class="ta_l">제목</th>
+									<td>${portfolio.port_title}</td>
+								</tr>
+								<tr>
+									<th scope="row" class="ta_l">이름</th>
+									<td>${portfolio.port_name}</td>
+								</tr>
+								<tr>
+									<th scope="row" class="ta_l">학번</th>
+									<td>${portfolio.port_student_no}</td>
+								</tr>
+								<tr>
+									<th scope="row" class="ta_l">학과명</th>
+									<td>${portfolio.port_college}</td>
+								</tr>
+								<tr>
+									<th scope="row" class="ta_l">단과대학</th>
+									<td>${portfolio.port_university_code}</td>
+								</tr>
+								<tr>
+									<th scope="row" class="ta_l">전화번호</th>
+									<td>${portfolio.port_student_number}</td>
+								</tr>
+								<tr>
+									<th scope="row" class="ta_l">자격증 첨부</th>
+									<td>${portfolio.port_license}</td>
+								</tr>
+								<tr>
+									<th scope="row" class="ta_l">수상이력 첨부</th>
+									<td>${portfolio.port_award_history}</td>
+								</tr>
+								<tr>
+									<th scope="row" class="ta_l">작성날짜</th>
+									<td>${portfolio.port_writerDate}</td>
+								</tr>
+
+								<tr>
+									<th scope="row" class="ta_l">내용</th>
+									<td>${portfolio.port_content}</td>
+								</tr>
+							</tbody>
+						</table>
+						<br>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
-</div>
-<jsp:include page="../common/footer.jsp"></jsp:include>
-</c:if>
+		<jsp:include page="../common/footer.jsp"></jsp:include>
+	</c:if>
 </body>
 </html>

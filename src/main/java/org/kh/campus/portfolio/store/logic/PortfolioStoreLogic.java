@@ -16,7 +16,7 @@ public class PortfolioStoreLogic implements PortfolioStore {
 	public List<Portfolio> selectAllPort(SqlSession sqlSession, int studentNo, PageInfo pi) {
 		int limit = pi.getPortfolioLimit();
 		int currentPage = pi.getCurrentPage();
-		int offset = (currentPage -1) * limit ;
+		int offset = (currentPage - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
 		List<Portfolio> pList = sqlSession.selectList("PortfolioMapper.selectAllPort", studentNo, rowBounds);
 		return pList;
@@ -32,9 +32,9 @@ public class PortfolioStoreLogic implements PortfolioStore {
 	public List<Portfolio> selectAdminAllPort(SqlSession sqlSession, PageInfo pi) {
 		int limit = pi.getPortfolioLimit();
 		int currentPage = pi.getCurrentPage();
-		int offset = (currentPage -1) * limit ;
+		int offset = (currentPage - 1) * limit;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		List<Portfolio>pList = sqlSession.selectList("PortfolioMapper.selectAdminAllPort", pi,rowBounds );
+		List<Portfolio> pList = sqlSession.selectList("PortfolioMapper.selectAdminAllPort", pi, rowBounds);
 		return pList;
 	}
 
@@ -79,8 +79,5 @@ public class PortfolioStoreLogic implements PortfolioStore {
 		List<Portfolio> pList = sqlSession.selectList("PortfolioMapper.selectBySt", port_student_no);
 		return pList;
 	}
-
-
-	
 
 }

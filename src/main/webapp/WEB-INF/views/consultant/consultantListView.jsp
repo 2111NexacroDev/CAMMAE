@@ -9,28 +9,32 @@
 <link rel="stylesheet" href="/resources/common.css">
 <link rel="stylesheet" href="/resources/contents.css">
 <style>
+#q1 {
+	width: 5%;
+}
 
+#q2 {
+	width: 17%;
+}
 
-#q1{
-	width:5%;
+#q3 {
+	width: 17%;
 }
-#q2{
-	width:17%;
+
+#q4 {
+	width: 13%;
 }
-#q3{
-	width:17%;
+
+#q5 {
+	width: 10%;
 }
-#q4{
-	width:13%;
+
+#q6 {
+	width: 27%;
 }
-#q5{
-	width:10%;
-}
-#q6{
-	width:27%;
-}
-#q7{
-	width:11%;
+
+#q7 {
+	width: 11%;
 }
 </style>
 
@@ -50,81 +54,83 @@
 			<!-- contents-main -->
 			<div id="center">
 				<div class="c-title">
-				<div class="b-title">
-					<h2>상담관리</h2>	
-				</div>
-				
-				<c:if test="${not empty sessionScope.loginUser}">
-				<div class="btn_1"><button style="width: 80px; cursor:pointer;" class="btn"onclick="location.href='/consultant/writeView.kh'">글쓰기</button></div>
-				</c:if>
-				</div>
-	
-					<table class="type01">
+					<div class="b-title">
+						<h2>상담관리</h2>
+					</div>
 
-						<thead>
-							<tr>
-								<th id="q1">번호</th>
-								<th id="q2">제목</th>
-								<th id="q3">상담희망날짜</th>
-								<th id="q4">상담희망시간</th>
-								<th id="q5">상담사</th>
-								<th id="q6">상담내용</th>
-								<th id="q7">상담현황</th>
+					<c:if test="${not empty sessionScope.loginUser}">
+						<div class="btn_1">
+							<button style="width: 80px; cursor: pointer;" class="btn"
+								onclick="location.href='/consultant/writeView.kh'">글쓰기</button>
+						</div>
+					</c:if>
+				</div>
+
+				<table class="type01">
+
+					<thead>
+						<tr>
+							<th id="q1">번호</th>
+							<th id="q2">제목</th>
+							<th id="q3">상담희망날짜</th>
+							<th id="q4">상담희망시간</th>
+							<th id="q5">상담사</th>
+							<th id="q6">상담내용</th>
+							<th id="q7">상담현황</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${cList}" var="consultant">
+							<tr class="space">
+								<td class="ta" id="no">${consultant.cons_no}</td>
+								<c:url var="cDetail" value="/consultant/Detail.kh">
+									<c:param name="cons_student_no" value="${loginUser.studentNo}"></c:param>
+									<c:param name="cons_no" value="${consultant.cons_no}"></c:param>
+								</c:url>
+								<td class="ta" id="title"><a href="${cDetail}">${consultant.cons_title }</a></td>
+								<td class="ta" id="date">${consultant.cons_date}</td>
+								<td class="ta" id="time">${consultant.cons_time}</td>
+								<td class="ta" id="counselor">${consultant.cons_counselor}</td>
+								<td class="ta" id="counselor">${consultant.cons_content}</td>
+								<td class="ta" id="status">${consultant.cons_status == 'Y' ? "상담완료": "상담대기"}</td>
+
 							</tr>
-						</thead>
-						<tbody>
-							<c:forEach items="${cList}" var="consultant">
-								<tr class="space">
-									<td class="ta" id="no">${consultant.cons_no}</td>
-									<c:url var="cDetail" value="/consultant/Detail.kh">
-										<c:param name="cons_student_no" value="${loginUser.studentNo}"></c:param>
-										<c:param name="cons_no" value="${consultant.cons_no}"></c:param>
-									</c:url>
-									<td class="ta" id="title" ><a href="${cDetail}">${consultant.cons_title }</a></td>
-									<td class="ta" id="date">${consultant.cons_date}</td>
-									<td class="ta" id="time">${consultant.cons_time}</td>
-									<td class="ta" id="counselor">${consultant.cons_counselor}</td>
-									<td class="ta" id="counselor">${consultant.cons_content}</td>
-									<td class="ta" id="status">${consultant.cons_status == 'Y' ? "상담완료": "상담대기"}</td>
-									
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
-					<br>
-					<br>
-					<div class="paging" align="center">
+						</c:forEach>
+					</tbody>
+				</table>
+				<br> <br>
+				<div class="paging" align="center">
 
-						<c:if test="${pi.startNavi !=1}">
+					<c:if test="${pi.startNavi !=1}">
 
-							<a href="/consultant/list.kh?page=${pi.startNavi-1}">
-								<button class="pbtn">＜</button>
-							</a>
+						<a href="/consultant/list.kh?page=${pi.startNavi-1}">
+							<button class="pbtn">＜</button>
+						</a>
 
-						</c:if>
+					</c:if>
 
-						<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
-							<c:url var="pagination" value="/consultant/list.kh">
-								<c:param name="page" value="${p }"></c:param>
-							</c:url>
+					<c:forEach var="p" begin="${pi.startNavi }" end="${pi.endNavi }">
+						<c:url var="pagination" value="/consultant/list.kh">
+							<c:param name="page" value="${p }"></c:param>
+						</c:url>
 
-							<a href="${pagination }">
-								<button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button>
-							</a>&nbsp;
+						<a href="${pagination }">
+							<button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button>
+						</a>&nbsp;
 																		
 						</c:forEach>
 
 
-						<c:if test="${pi.next && pi.endNavi > 0}">
+					<c:if test="${pi.next && pi.endNavi > 0}">
 
-							<a href="/consultant/list.kh?page=${pi.endNavi+1}"> 
-								<button class="pbtn">＞</button>
-							</a>
-						</c:if>
+						<a href="/consultant/list.kh?page=${pi.endNavi+1}">
+							<button class="pbtn">＞</button>
+						</a>
+					</c:if>
 
-					</div>
 				</div>
 			</div>
+		</div>
 
 
 		<jsp:include page="../common/footer.jsp"></jsp:include>

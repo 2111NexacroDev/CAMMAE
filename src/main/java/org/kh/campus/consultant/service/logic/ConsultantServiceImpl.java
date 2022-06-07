@@ -19,16 +19,16 @@ public class ConsultantServiceImpl implements ConsultantService {
 	private ConsultantStore cStore;
 	@Autowired
 	private SqlSession sqlSession;
-		
+
 	@Override
 	public List<Consultant> printAllCons(int cons_student_no, PageInfo pi) {
-		List<Consultant> cList= cStore.selectAllCons(sqlSession, cons_student_no, pi);
+		List<Consultant> cList = cStore.selectAllCons(sqlSession, cons_student_no, pi);
 		return cList;
 	}
 
 	@Override
 	public int insertCons(Consultant consultant) {
-		int result = cStore.insertCons(sqlSession , consultant);
+		int result = cStore.insertCons(sqlSession, consultant);
 		return result;
 	}
 
@@ -56,8 +56,6 @@ public class ConsultantServiceImpl implements ConsultantService {
 		return result;
 	}
 
-	
-
 	@Override
 	public int getListCount() {
 		int totalCount = cStore.selectListCount(sqlSession);
@@ -66,7 +64,7 @@ public class ConsultantServiceImpl implements ConsultantService {
 
 	@Override
 	public List<ConsultantReply> printAllAdminReply(int cons_no) {
-		List<ConsultantReply>crList = cStore.selectAllAdminReply(sqlSession,cons_no);
+		List<ConsultantReply> crList = cStore.selectAllAdminReply(sqlSession, cons_no);
 		return crList;
 	}
 
@@ -76,16 +74,15 @@ public class ConsultantServiceImpl implements ConsultantService {
 		return result;
 	}
 
-	
-	  @Override public Consultant printOneByStNo(int studentNo) { 
-		  Consultant consultant = cStore.printByStNo(sqlSession, studentNo); 
-		  return consultant; 
-	  }
-	 
+	@Override
+	public Consultant printOneByStNo(int studentNo) {
+		Consultant consultant = cStore.printByStNo(sqlSession, studentNo);
+		return consultant;
+	}
 
 	@Override
 	public List<Manager> printAllManager() {
-		List<Manager>mList = cStore.selectAllManager(sqlSession);
+		List<Manager> mList = cStore.selectAllManager(sqlSession);
 		return mList;
 	}
 
@@ -100,6 +97,5 @@ public class ConsultantServiceImpl implements ConsultantService {
 		int result = cStore.deleteConsultant(sqlSession, cons_no);
 		return result;
 	}
-
 
 }

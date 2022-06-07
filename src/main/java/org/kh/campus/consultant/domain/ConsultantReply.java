@@ -6,8 +6,9 @@ public class ConsultantReply {
 	private String cons_reply_date;
 	private String cons_reply_writer;
 	private String cons_reply_content;
-	
-	public ConsultantReply() {}
+
+	public ConsultantReply() {
+	}
 
 	public int getCons_reply_no() {
 		return cons_reply_no;
@@ -55,6 +56,5 @@ public class ConsultantReply {
 				+ cons_reply_date + ", cons_reply_writer=" + cons_reply_writer + ", cons_reply_content="
 				+ cons_reply_content + "]";
 	}
-
 
 }
