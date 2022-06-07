@@ -1,20 +1,21 @@
 package org.kh.campus.consultant.domain;
 
 public class Consultant {
-	private int cons_no; 
+	private int cons_no;
 	private int cons_student_no;
 	private String cons_student_name;
 	private String cons_student_number;
 	private String cons_title;
-	private String cons_college; 
+	private String cons_college;
 	private String cons_content;
 	private String cons_date;
 	private String cons_time;
 	private String cons_status;
 	private String cons_counselor;
 	private String cons_university_code;
-	
-	public Consultant() {}
+
+	public Consultant() {
+	}
 
 	public int getCons_no() {
 		return cons_no;
@@ -103,8 +104,6 @@ public class Consultant {
 	public void setCons_counselor(String cons_counselor) {
 		this.cons_counselor = cons_counselor;
 	}
-	
-	
 
 	public String getCons_university_code() {
 		return cons_university_code;
@@ -122,8 +121,5 @@ public class Consultant {
 				+ ", cons_time=" + cons_time + ", cons_status=" + cons_status + ", cons_counselor=" + cons_counselor
 				+ ", cons_university_code=" + cons_university_code + "]";
 	}
-
-
-	
 
 }

@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/resources/contents.css">
 <link rel="stylesheet" href="/resources/common.css">
 <style>
-#b-title{
+#b-title {
 	color: rgb(0, 74, 38);
 }
 
@@ -34,11 +34,11 @@ table.type05 thead th {
 	color: black;
 }
 
+.ta_l {
+	text-align: left !important;
+}
 
 .ta_l {
-    text-align: left !important;
-}
-.ta_l{
 	width: 15%;
 	background: rgb(231, 232, 226);
 	text-align: center;
@@ -51,14 +51,15 @@ table.type05 thead th {
 	border-bottom: 1px solid #CCC;
 }
 
-#btn_d{
+#btn_d {
 	text-align: center;
 }
 
-#btn{
+#btn {
 	cursor: pointer;
 }
-#btn1{
+
+#btn1 {
 	float: right;
 	cursor: pointer;
 }
@@ -80,7 +81,6 @@ table.type05 thead th {
 	font-size: 14px;
 	width: 20%;
 	float: right;
-
 	position: absolute;
 	left: 1020px;
 }
@@ -88,23 +88,20 @@ table.type05 thead th {
 #rContents {
 	float: left;
 	width: 80%;
-	
 }
 
-hr{
+hr {
 	width: 800px;
 }
-
-
 </style>
-</head> 
+</head>
 <body>
 	<c:if test="${empty sessionScope}">
 		<jsp:forward page="/login/loginPage.kh" />
 	</c:if>
 	<c:if test="${not empty sessionScope.loginUser}">
-	<jsp:include page="../common/menuBar.jsp"></jsp:include>
-	
+		<jsp:include page="../common/menuBar.jsp"></jsp:include>
+
 		<div id="content">
 			<div id="left">
 				<jsp:include page="../common/sideRMenu.jsp"></jsp:include>
@@ -112,18 +109,20 @@ hr{
 			<!-- contents-main -->
 			<div id="center">
 				<div class="c-title">
-				<div class="b-title">
-					<h2>상담관리</h2>	
-				</div>
-				<div class="btn_1">
-					<button class="btn" id="btn1" onclick="location.href='/consultant/cancel.kh?cons_no=${consultant.cons_no}'">취소</button>
-					<button class="btn" id="btn1" onclick="location.href='/consultant/list.kh'">목록</button>
-				</div>
+					<div class="b-title">
+						<h2>상담관리</h2>
+					</div>
+					<div class="btn_1">
+						<button class="btn" id="btn1"
+							onclick="location.href='/consultant/cancel.kh?cons_no=${consultant.cons_no}'">취소</button>
+						<button class="btn" id="btn1"
+							onclick="location.href='/consultant/list.kh'">목록</button>
+					</div>
 				</div>
 				<div class="tb1">
 					<table class="type05">
 						<colgroup>
-							<col style="width:180px;">
+							<col style="width: 180px;">
 							<col>
 						</colgroup>
 						<tbody>
@@ -165,35 +164,34 @@ hr{
 							</tr>
 						</tbody>
 					</table>
-				
-		
+
+
 				</div>
 				<input type="hidden" name="cons_no" value="${consultant.cons_no}" />
-				<input type="hidden" name="cons_student_no" value="${consultant.cons_student_no}" />
-				<br>
-
-				
-				<br>
+				<input type="hidden" name="cons_student_no"
+					value="${consultant.cons_student_no}" /> <br> <br>
 				<!-- 댓글 갯수 -->
-				<div id="rCo"><b id="rCount"></b></div>
-					<hr>		
-					<div id="replyArea">
+				<div id="rCo">
+					<b id="rCount"></b>
+				</div>
+				<hr>
+				<div id="replyArea">
 					<!-- 댓글 목록 -->
-					<table align="left"  width="800px"  id="rtb">
+					<table align="left" width="800px" id="rtb">
 						<thead>
-							
+
 						</thead>
 						<tbody>
 						</tbody>
 					</table>
 				</div>
-				<br>	
+				<br>
 			</div>
-			
+
 		</div>
-	
-	<!-- footer -->
-	<jsp:include page="../common/footer.jsp"></jsp:include>
+
+		<!-- footer -->
+		<jsp:include page="../common/footer.jsp"></jsp:include>
 	</c:if>
 
 	<script>

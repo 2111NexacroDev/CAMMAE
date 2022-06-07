@@ -15,11 +15,10 @@ public class ScholarshipServiceImpl implements ScholarshipService {
 	private ScholarshipStore sStore;
 	@Autowired
 	private SqlSession sqlSession;
-	
-	
+
 	@Override
 	public List<Scholarship> printScholarResult(int studentNo) {
-		List<Scholarship>sList = sStore.selectResult(sqlSession, studentNo);
+		List<Scholarship> sList = sStore.selectResult(sqlSession, studentNo);
 		return sList;
 	}
 
@@ -34,21 +33,19 @@ public class ScholarshipServiceImpl implements ScholarshipService {
 		int result = sStore.updateScholarAccept(sqlSession, scholarship);
 		return result;
 	}
+
 	@Override
 	public List<Scholarship> printAllScholar(Scholarship scholarship) {
 		List<Scholarship> sList = sStore.selectAllScholar(sqlSession, scholarship);
 		return sList;
-		
-	}	
-   
+
+	}
 
 	@Override
 	public int modifyScholarDenine(Scholarship scholarship) {
 		int result = sStore.updateScholarDenine(sqlSession, scholarship);
 		return result;
-		
+
 	}
-
-
 
 }

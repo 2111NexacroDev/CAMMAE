@@ -44,7 +44,7 @@ public class PortfolioController {
 				model.addAttribute("pi", pi);
 				model.addAttribute("menu", "portfolio");
 				model.addAttribute("currentPage", currentPage);
-				
+
 			} else {
 				model.addAttribute("pList", null);
 			}
@@ -96,7 +96,7 @@ public class PortfolioController {
 				List<Portfolio> pList = pService.printOneByStNo(port_student_no);
 				if (pList != null) {
 					mv.addObject("pList", pList);
-					
+
 				}
 			} else {
 				mv.addObject("msg", "포트폴리오 등록실패");

@@ -9,41 +9,47 @@
 <link rel="stylesheet" href="/resources/contents.css">
 <link rel="stylesheet" href="/resources/common.css">
 <style>
-
 .bbs {
 	position: relative;
 	margin-bottom: 40px;
- }
- #q1{
-	width:4%;
 }
-#q2{
-	width:11%;
-}
-#q3{
-	width:10%;
-}
-#q4{
-	width:11%;
-}
-#q5{
-	width:13%;
-}
-#q6{
-	width:14%;
-}
-#q7{
-	width:15%;
-}
-#q8{
-	width: 11%;
-}
-#q9{
-	width: 11%;
-}
-  
-</style>
 
+#q1 {
+	width: 4%;
+}
+
+#q2 {
+	width: 11%;
+}
+
+#q3 {
+	width: 10%;
+}
+
+#q4 {
+	width: 11%;
+}
+
+#q5 {
+	width: 13%;
+}
+
+#q6 {
+	width: 14%;
+}
+
+#q7 {
+	width: 15%;
+}
+
+#q8 {
+	width: 11%;
+}
+
+#q9 {
+	width: 11%;
+}
+</style>
 <body>
 	<c:if test="${empty sessionScope}">
 		<jsp:forward page="/login/loginPage.kh" />
@@ -61,7 +67,9 @@
 				<div class="c-title">
 					<h2 id="b-title">상담관리</h2>
 				</div>
-				<br><br><br>
+				<br>
+				<br>
+				<br>
 				<div class="bbs">
 					<table class="type01">
 
@@ -75,7 +83,7 @@
 								<th id="q7">상담희망날짜</th>
 								<th id="q8">상담희망시간</th>
 								<th id="q9">상담현황</th>
-								
+
 							</tr>
 						</thead>
 						<tbody>
@@ -96,7 +104,7 @@
 										<td class="ta" id="date">${consultant.cons_date}</td>
 										<td class="ta" id="time">${consultant.cons_time}</td>
 										<td class="ta" id="status">${consultant.cons_status == 'Y' ? "상담완료" : "상담대기"}</td>
-										
+
 									</tr>
 								</c:if>
 							</c:forEach>
@@ -107,7 +115,7 @@
 
 						<c:if test="${pi.startNavi !=1}">
 
-							<a href="/consultant/adlist.kh?page=${pi.startNavi-1}"> 
+							<a href="/consultant/adlist.kh?page=${pi.startNavi-1}">
 								<button class="pbtn">＜</button>
 							</a>
 
@@ -118,14 +126,15 @@
 								<c:param name="page" value="${p }"></c:param>
 							</c:url>
 
-							<a href="${pagination }"><button class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
+							<a href="${pagination }"><button
+									class="page-btn ${p eq currentPage ? 'active' : '' }">${p }</button></a>&nbsp;
 																		
 						</c:forEach>
 
 
 						<c:if test="${pi.next && pi.endNavi > 0}">
 
-							<a href="/consultant/adlist.kh?page=${pi.endNavi+1}"> 
+							<a href="/consultant/adlist.kh?page=${pi.endNavi+1}">
 								<button class="pbtn">＞</button>
 							</a>
 						</c:if>

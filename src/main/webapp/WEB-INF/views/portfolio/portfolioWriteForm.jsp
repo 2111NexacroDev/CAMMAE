@@ -44,7 +44,6 @@ td {
 }
 
 #td_content {
-	
 	border-bottom: 1px solid rgb(30, 57, 50);
 }
 
@@ -129,10 +128,12 @@ button {
 							</tr>
 							<tr>
 								<td class="td_left" id="td_content">내용</td>
-								<td class="td_right" id="td_content"><textarea name="port_content"></textarea></td>
+								<td class="td_right" id="td_content"><textarea
+										name="port_content"></textarea></td>
 							</tr>
 							<tr>
-								<td colspan="2" align="center" class="td_sub"><button class="btn" type="submit">등록</button></td>
+								<td colspan="2" align="center" class="td_sub"><button
+										class="btn" type="submit">등록</button></td>
 							</tr>
 						</table>
 					</form>

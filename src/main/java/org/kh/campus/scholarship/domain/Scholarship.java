@@ -1,4 +1,5 @@
 package org.kh.campus.scholarship.domain;
+
 public class Scholarship {
 	private int scholarship_inno;
 	private double scholarship_avg_grade;
@@ -36,8 +37,6 @@ public class Scholarship {
 		this.scholarship_student_no = scholarship_student_no;
 		this.scholarship_phonenumber = scholarship_phonenumber;
 	}
-
-	
 
 	public Scholarship(int scholarship_inno, double scholarship_avg_grade, String scholarship_year,
 			String scholarship_term, String scholarship_status, int scholarship_amount, String scholarship_name,
@@ -168,7 +167,5 @@ public class Scholarship {
 				+ ", scholarship_college=" + scholarship_college + ", scholarship_student_no=" + scholarship_student_no
 				+ ", chk=" + chk + ", scholarship_manager_no=" + scholarship_manager_no + "]";
 	}
-
-
 
 }
