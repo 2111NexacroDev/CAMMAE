@@ -65,8 +65,6 @@
   </tr>
 </table>
 
-![image](https://user-images.githubusercontent.com/56354642/171804188-6fc0be59-1126-41d3-b134-9cc229ecbfd5.png)
-
 
 
 ## 4. 프로젝트 기능 구현
